@@ -1,0 +1,21 @@
+
+
+в хедере длинное имя как то поправить
+
+
+
+
+
+css bundle @webpack combine all css files@
+https://code.luasoftware.com/tutorials/webpack/merge-multiple-css-into-single-file/#:~:text=The%20best%20way%20to%20merge,%2Dtext%2Dwebpack%2Dplugin.&text=Edit%20webpack.,to%20include%20setup%20the%20plugin.
+
+
+
+
+
+
+
+
+
+
+

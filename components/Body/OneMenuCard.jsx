@@ -20,6 +20,13 @@ export default class OneMenuCard extends React.Component {
         this.titleRender = this.titleRender.bind(this);
         this.bodyRender = this.bodyRender.bind(this);
 
+        this.imageRender = this.imageRender.bind(this);
+        this.titleOnChange = this.titleOnChange.bind(this);
+        this.bodyOnChange = this.bodyOnChange.bind(this);
+        // this.bodyRender = this.bodyRender.bind(this);
+        // this.bodyRender = this.bodyRender.bind(this);
+
+
 
     }
 
@@ -38,12 +45,15 @@ export default class OneMenuCard extends React.Component {
     editOnClick() {
         let newState = Object.assign({}, this.state);
         newState.EditNow = true;
+        newState.NewState = Object.assign({}, newState.OldState);
         this.setState(newState);
     }
 
     cancelEditOnClick() {
         let newState = Object.assign({}, this.state);
         newState.EditNow = false;
+        newState.NewState = null;
+        // console.log(newState)
         this.setState(newState);
     }
 
@@ -55,29 +65,74 @@ export default class OneMenuCard extends React.Component {
     }
 
     saveOnClick() {
-        // this.state.set
-        // console.log(this.state);
+        let newState = Object.assign({}, this.state);
+        newState.EditNow = false;
+        newState.OldState = newState.NewState;
+        newState.NewState = null;
 
-
-        // console.log({...this.state, [name]: value});
+        this.setState(newState);
     }
 
     titleRender() {
+
         if (this.state.EditNow) {
-            return <input type="text" value={this.state.Title} />
+            if (this.state.NewState) {
+                return <input type="text" value={this.state.NewState.Title} onChange={this.titleOnChange} />
+            }
+            else {
+                return <input type="text" value={this.state.OldState.Title} onChange={this.titleOnChange} />
+            }
+
         }
         else {
-            return <h5 className="card-title">{this.state.Title}</h5>
+            if (this.state.NewState) {
+                return <h5 className="card-title" >{this.state.NewState.Title}</h5>
+            }
+            else {
+                return <h5 className="card-title" >{this.state.OldState.Title}</h5>
+            }
+
         }
     }
 
+    imageRender() {
+        return <img src={this.state.OldState.Image} className="card-img-top" alt="..." />
+    }
+
+
     bodyRender() {
         if (this.state.EditNow) {
-            return <input type="text" value={this.state.Body} />
+            if (this.state.NewState) {
+                return <input type="text" value={this.state.NewState.Body} onChange={this.bodyOnChange} />
+            }
+            else {
+                return <input type="text" value={this.state.NewState.Body} onChange={this.bodyOnChange} />
+            }
         }
         else {
-            return <p className="card-text">{this.state.Body}</p>
+            if (this.state.NewState) {
+                return <p className="card-text">{this.state.OldState.Body}</p>
+            }
+
+            else {
+                return <p className="card-text">{this.state.OldState.Body}</p>
+            }
+
         }
+    }
+
+    titleOnChange(e) {
+        // console.log(this.state);
+        let newState = Object.assign({}, this.state);
+        newState.NewState.Title = e.target.value;
+        // console.log(newState);
+        this.setState(newState);
+    }
+
+    bodyOnChange(e) {
+        let newState = Object.assign({}, this.state);
+        newState.NewState.Body = e.target.value;
+        this.setState(newState);
     }
 
     render() {
@@ -85,7 +140,7 @@ export default class OneMenuCard extends React.Component {
         return <div className='col-sm-6 col-md-4 col-lg-3' style={{ padding: '20px' }}>
             <div className="card one-menu-card-inner">
                 {this.actionButton()}
-                <img src={this.state.Image} className="card-img-top" alt="..." />
+                {this.imageRender()}
                 <div className="card-body">
                     {this.titleRender()}
                     {this.bodyRender()}

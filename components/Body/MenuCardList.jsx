@@ -9,16 +9,24 @@ export default class MenuCardList extends React.Component {
         this.state = {};
         this.state.elements = [
             {
-                Id: 1,
-                Title: 'header1',
-                Body: 'body1',
-                Image: '../../images/user_empty_image.png'
+                OldState: {
+                    Id: 1,
+                    Title: 'header1',
+                    Body: 'body1',
+                    Image: '../../images/user_empty_image.png'
+                },
+                NewState : null,
+                EditNow : false,
             },
             {
-                Id: 2,
-                Title: 'header2',
-                Body: 'body2',
-                Image: '../../images/user_empty_image.png'
+                OldState: {
+                    Id: 2,
+                    Title: 'header2',
+                    Body: 'body2',
+                    Image: '../../images/user_empty_image.png'
+                },
+                NewState : null,
+                EditNow : false,
             },
 
         ];
@@ -31,7 +39,7 @@ export default class MenuCardList extends React.Component {
         // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
         return <div className='row'>
             {this.state.elements.map(item => (
-                <OneMenuCard key={item.Id} data={item} />
+                <OneMenuCard key={item.OldState.Id} data={item} />
             ))}
         </div>
 

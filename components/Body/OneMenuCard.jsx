@@ -68,23 +68,26 @@ export default class OneMenuCard extends React.Component {
         //TODO отправляем запрос
         //как то отобразить что он пошел, и что то сделать с кнопками на время запросов
 
+        
         //запрос успешный
         let newState = Object.assign({}, this.state);
         newState.EditNow = false;
         newState.OldState = newState.NewState;
         newState.NewState = null;
+        // this.state.
+        this.props.updateElement(newState);
 
-        this.setState(newState);
+         this.setState(newState);//TODO возможно все редактирование придется переносить
     }
 
     titleRender() {
 
         if (this.state.EditNow) {
             if (this.state.NewState) {
-                return <input type="text" value={this.state.NewState.Title} onChange={this.titleOnChange} />
+                return <input type="text" className='persent-100-width form-control' value={this.state.NewState.Title} onChange={this.titleOnChange} />
             }
             else {
-                return <input type="text" value={this.state.OldState.Title} onChange={this.titleOnChange} />
+                return <input type="text" className='persent-100-width form-control' value={this.state.OldState.Title} onChange={this.titleOnChange} />
             }
 
         }
@@ -107,10 +110,10 @@ export default class OneMenuCard extends React.Component {
     bodyRender() {
         if (this.state.EditNow) {
             if (this.state.NewState) {
-                return <input type="text" value={this.state.NewState.Body} onChange={this.bodyOnChange} />
+                return <input type="text" className='persent-100-width form-control' value={this.state.NewState.Body} onChange={this.bodyOnChange} />
             }
             else {
-                return <input type="text" value={this.state.NewState.Body} onChange={this.bodyOnChange} />
+                return <input type="text" className='persent-100-width form-control' value={this.state.NewState.Body} onChange={this.bodyOnChange} />
             }
         }
         else {

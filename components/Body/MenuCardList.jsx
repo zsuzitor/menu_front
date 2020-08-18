@@ -33,13 +33,16 @@ export default class MenuCardList extends React.Component {
         // this.onTextChanged = this.onTextChanged.bind(this);
     }
 
+    updateElement(newElement){
+
+    }
 
 
     render() {
         // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
         return <div className='row'>
             {this.state.elements.map(item => (
-                <OneMenuCard key={item.OldState.Id} data={item} />
+                <OneMenuCard key={item.OldState.Id} data={item} updateElement={this.updateElement}/>
             ))}
         </div>
 

@@ -65,6 +65,10 @@ export default class OneMenuCard extends React.Component {
     }
 
     saveOnClick() {
+        //TODO отправляем запрос
+        //как то отобразить что он пошел, и что то сделать с кнопками на время запросов
+
+        //запрос успешный
         let newState = Object.assign({}, this.state);
         newState.EditNow = false;
         newState.OldState = newState.NewState;

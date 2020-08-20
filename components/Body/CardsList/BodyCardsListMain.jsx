@@ -116,6 +116,7 @@ export default class BodyCardsListMain extends React.Component {
     render() {
         // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
         return <div className='main-body container'>
+           
             <p>
                 <button className="btn btn-primary" type="button" data-toggle="collapse" data-target="#body-chosen-cards-section" aria-expanded="false" aria-controls="body-chosen-cards-section">Избранные</button>
             </p>

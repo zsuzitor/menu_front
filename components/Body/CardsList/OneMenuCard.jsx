@@ -1,5 +1,8 @@
 
 import React from 'react'
+import {
+    Link
+} from "react-router-dom";
 
 //export default 
 export default class OneMenuCard extends React.Component {
@@ -79,11 +82,11 @@ export default class OneMenuCard extends React.Component {
         let newState = Object.assign({}, this.state);
         newState.EditNow = false;
         // newState.OldState = newState.NewState;
-       
+
         // this.state.
         this.props.UpdateElement(newState);
         // newState.NewState = null;
-        let localState=Object.assign({}, newState);
+        let localState = Object.assign({}, newState);
         localState.NewState = null;
         this.setState(localState);//TODO возможно все редактирование придется переносить
     }
@@ -101,10 +104,10 @@ export default class OneMenuCard extends React.Component {
         }
         else {
             if (this.state.NewState) {
-                return <h5 className="card-title" >{this.state.NewState.Title}</h5>
+                return <Link to={"/detail/" + this.state.NewState.Id}><h5 className="card-title" >{this.state.NewState.Title}</h5></Link>
             }
             else {
-                return <h5 className="card-title" >{this.props.CardData.Title}</h5>
+                return <Link to={"/detail/" + this.props.CardData.Id}><h5 className="card-title" >{this.props.CardData.Title}</h5></Link>
             }
 
         }

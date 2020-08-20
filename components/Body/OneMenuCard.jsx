@@ -8,8 +8,11 @@ export default class OneMenuCard extends React.Component {
         super(props);
         // this.onTextChanged = this.onTextChanged.bind(this);
 
-        this.state = props.data;
-        // this.state
+        // this.state = props.data;
+        this.state = {
+            EditNow: false,
+            NewState: null,
+        };
 
         this.actionButton = this.actionButton.bind(this);
         this.editOnClick = this.editOnClick.bind(this);
@@ -45,7 +48,7 @@ export default class OneMenuCard extends React.Component {
     editOnClick() {
         let newState = Object.assign({}, this.state);
         newState.EditNow = true;
-        newState.NewState = Object.assign({}, newState.OldState);
+        newState.NewState = Object.assign({}, this.props.CardData);
         this.setState(newState);
     }
 
@@ -59,6 +62,9 @@ export default class OneMenuCard extends React.Component {
 
 
     followCard() {
+        //TODO запрос
+        this.props.FollowRequstSuccess(this.props.CardData.Id);
+
         let newState = Object.assign({}, this.state);
         newState.EditNow = false;
         this.setState(newState);
@@ -68,16 +74,18 @@ export default class OneMenuCard extends React.Component {
         //TODO отправляем запрос
         //как то отобразить что он пошел, и что то сделать с кнопками на время запросов
 
-        
+
         //запрос успешный
         let newState = Object.assign({}, this.state);
         newState.EditNow = false;
-        newState.OldState = newState.NewState;
-        newState.NewState = null;
+        // newState.OldState = newState.NewState;
+       
         // this.state.
-        this.props.updateElement(newState);
-
-         this.setState(newState);//TODO возможно все редактирование придется переносить
+        this.props.UpdateElement(newState);
+        // newState.NewState = null;
+        let localState=Object.assign({}, newState);
+        localState.NewState = null;
+        this.setState(localState);//TODO возможно все редактирование придется переносить
     }
 
     titleRender() {
@@ -87,7 +95,7 @@ export default class OneMenuCard extends React.Component {
                 return <input type="text" className='persent-100-width form-control' value={this.state.NewState.Title} onChange={this.titleOnChange} />
             }
             else {
-                return <input type="text" className='persent-100-width form-control' value={this.state.OldState.Title} onChange={this.titleOnChange} />
+                return <input type="text" className='persent-100-width form-control' value={this.props.CardData.Title} onChange={this.titleOnChange} />
             }
 
         }
@@ -96,14 +104,14 @@ export default class OneMenuCard extends React.Component {
                 return <h5 className="card-title" >{this.state.NewState.Title}</h5>
             }
             else {
-                return <h5 className="card-title" >{this.state.OldState.Title}</h5>
+                return <h5 className="card-title" >{this.props.CardData.Title}</h5>
             }
 
         }
     }
 
     imageRender() {
-        return <img src={this.state.OldState.Image} className="card-img-top" alt="..." />
+        return <img src={this.props.CardData.Image} className="card-img-top" alt="..." />
     }
 
 
@@ -118,11 +126,11 @@ export default class OneMenuCard extends React.Component {
         }
         else {
             if (this.state.NewState) {
-                return <p className="card-text">{this.state.OldState.Body}</p>
+                return <p className="card-text">{this.props.CardData.Body}</p>
             }
 
             else {
-                return <p className="card-text">{this.state.OldState.Body}</p>
+                return <p className="card-text">{this.props.CardData.Body}</p>
             }
 
         }

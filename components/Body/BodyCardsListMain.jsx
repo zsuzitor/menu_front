@@ -16,6 +16,8 @@ export default class BodyCardsListMain extends React.Component {
         };
 
         this.updateElement = this.updateElement.bind(this);
+        this.followRequstSuccess = this.followRequstSuccess.bind(this);
+
 
     }
 
@@ -25,47 +27,32 @@ export default class BodyCardsListMain extends React.Component {
         //грузим все
         let followed = [
             {
-                OldState: {
-                    Id: 1,
-                    Title: 'header1',
-                    Body: 'body1',
-                    Image: '../../images/user_empty_image.png'
-                },
-                NewState: null,
-                EditNow: false,
+                Id: 1,
+                Title: 'header1',
+                Body: 'body1',
+                Image: '../../images/user_empty_image.png'
+
             },
             {
-                OldState: {
-                    Id: 2,
-                    Title: 'header2',
-                    Body: 'body2',
-                    Image: '../../images/user_empty_image.png'
-                },
-                NewState: null,
-                EditNow: false,
-            },
+                Id: 2,
+                Title: 'header2',
+                Body: 'body2',
+                Image: '../../images/user_empty_image.png'
+            }
         ];
 
         let notFollowed = [
             {
-                OldState: {
-                    Id: 1,
-                    Title: 'header1',
-                    Body: 'body1',
-                    Image: '../../images/user_empty_image.png'
-                },
-                NewState: null,
-                EditNow: false,
+                Id: 3,
+                Title: 'header3',
+                Body: 'body3',
+                Image: '../../images/user_empty_image.png'
             },
             {
-                OldState: {
-                    Id: 2,
-                    Title: 'header2',
-                    Body: 'body2',
-                    Image: '../../images/user_empty_image.png'
-                },
-                NewState: null,
-                EditNow: false,
+                Id: 4,
+                Title: 'header4',
+                Body: 'body4',
+                Image: '../../images/user_empty_image.png'
             },
         ];
 
@@ -80,25 +67,51 @@ export default class BodyCardsListMain extends React.Component {
     }
 
     updateElement(newElement) {
-        let newState = Object.assign({}, this.state);
-        for(let i=0;i<newState.FollowedCards.length;++i){
-            if(newState.FollowedCards[i].Id==newElement.Id){
-                newState.FollowedCards[i]=newElement;
-                this.setState(newState);
-                return;
+        let updEl = (arr) => {
+            for (let i = 0; i < arr.length; ++i) {
+                if (arr[i].Id == newElement.NewState.Id) {
+                    arr[i] = newElement.NewState;
+                    this.setState(newState);
+                    return true;
+                }
             }
         }
 
-        for(let i=0;i<newState.NotFollowedCards.length;++i){
-            if(newState.NotFollowedCards[i].Id==newElement.Id){
-                newState.NotFollowedCards[i]=newElement;
-                this.setState(newState);
-                return;
-            }
+        // console.log(newElement);
+        let newState = Object.assign({}, this.state);
+
+        if (updEl(newState.FollowedCards)) {
+            return;
         }
+
+        updEl(newState.NotFollowedCards)
+
     }
 
 
+    followRequstSuccess(id) {
+        let moveFollow = (from, to) => {
+            for (let i = 0; i < from.length; ++i) {
+                if (from[i].Id == id) {
+                    to.push(from[i]);
+                    from.splice(i, 1);
+                    this.setState(newState);
+                    return true;
+                }
+            }
+        };
+
+        // console.log('follow-' + id);
+        let newState = Object.assign({}, this.state);
+       
+        if (moveFollow(newState.FollowedCards, newState.NotFollowedCards)) {
+            return;
+        }
+
+        moveFollow(newState.NotFollowedCards, newState.FollowedCards);
+
+
+    }
 
     render() {
         // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
@@ -109,7 +122,7 @@ export default class BodyCardsListMain extends React.Component {
             <div>
                 <div className="collapse" id="body-chosen-cards-section">
                     <div className="card card-body">
-                        <MenuCardList cardsList={this.state.FollowedCards} updateElement={this.updateElement}/>
+                        <MenuCardList CardsList={this.state.FollowedCards} updateElement={this.updateElement} FollowRequstSuccess={this.followRequstSuccess} />
                     </div>
                 </div>
             </div>
@@ -119,7 +132,7 @@ export default class BodyCardsListMain extends React.Component {
             <div>
                 <div className="collapse" id="body-all-cards-section">
                     <div className="card card-body">
-                        <MenuCardList cardsList={this.state.NotFollowedCards}  updateElement={this.updateElement}/>
+                        <MenuCardList CardsList={this.state.NotFollowedCards} updateElement={this.updateElement} FollowRequstSuccess={this.followRequstSuccess} />
                     </div>
                 </div>
             </div>

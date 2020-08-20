@@ -17,8 +17,8 @@ export default class MenuCardList extends React.Component {
     render() {
         // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
         return <div className='row'>
-            {this.props.cardsList.map(item => (
-                <OneMenuCard key={item.OldState.Id} data={item} updateElement={this.props.updateElement} />
+            {this.props.CardsList.map(item => (
+                <OneMenuCard key={item.Id} CardData={item} UpdateElement={this.props.updateElement} FollowRequstSuccess={this.props.FollowRequstSuccess}/>
             ))}
         </div>
 

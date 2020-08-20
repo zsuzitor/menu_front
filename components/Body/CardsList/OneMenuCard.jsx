@@ -29,6 +29,8 @@ export default class OneMenuCard extends React.Component {
         this.imageRender = this.imageRender.bind(this);
         this.titleOnChange = this.titleOnChange.bind(this);
         this.bodyOnChange = this.bodyOnChange.bind(this);
+        this.renderFollowButton = this.renderFollowButton.bind(this);
+
         // this.bodyRender = this.bodyRender.bind(this);
         // this.bodyRender = this.bodyRender.bind(this);
 
@@ -36,15 +38,35 @@ export default class OneMenuCard extends React.Component {
 
     }
 
+    renderFollowButton() {
+        if (this.props.CardData.Id > 0) {
+            return <div className='follow-one-card-button one-card-button' onClick={this.followCard}>
+
+            </div>
+        }
+        return <div></div>
+    }
+
     actionButton() {
         if (this.state.EditNow) {
-            return <div><div className='cancel-edit-one-card-button one-card-button' onClick={this.cancelEditOnClick}></div>
-                <div className='save-one-card-button one-card-button' onClick={this.saveOnClick}></div></div>
+            return <div>
+                <div className='cancel-edit-one-card-button one-card-button' onClick={this.cancelEditOnClick}>
+
+                </div>
+                <div className='save-one-card-button one-card-button' onClick={this.saveOnClick}>
+
+                </div>
+            </div>
         }
         else {
 
-            return <div><div className='edit-one-card-button one-card-button' onClick={this.editOnClick}></div>
-                <div className='follow-one-card-button one-card-button' onClick={this.followCard}></div></div>
+            return <div>
+                <div className='edit-one-card-button one-card-button' onClick={this.editOnClick}>
+
+                </div>
+                {this.renderFollowButton()}
+
+            </div>
         }
     }
 
@@ -65,6 +87,9 @@ export default class OneMenuCard extends React.Component {
 
 
     followCard() {
+        if (!this.props.FollowRequstSuccess) {
+            return;
+        }
         //TODO запрос
         this.props.FollowRequstSuccess(this.props.CardData.Id);
 
@@ -76,19 +101,29 @@ export default class OneMenuCard extends React.Component {
     saveOnClick() {
         //TODO отправляем запрос
         //как то отобразить что он пошел, и что то сделать с кнопками на время запросов
+        // console.log(this.NewState);
+        //если id<0 то запрос на создание 
+        if (this.state.NewState.Id < 1) {//TODO временный костыль тк бэка нет
+            this.state.NewState.Id = 99;
+        }
 
+        //дальше работаем и в компоненты выше передаем то что вернулось в бэка
 
         //запрос успешный
         let newState = Object.assign({}, this.state);
         newState.EditNow = false;
         // newState.OldState = newState.NewState;
-
+        let stateForUpdate = newState.NewState;
+        newState.NewState = null;
+        this.setState(newState);
         // this.state.
-        this.props.UpdateElement(newState);
+        this.props.UpdateElement(stateForUpdate);
         // newState.NewState = null;
-        let localState = Object.assign({}, newState);
-        localState.NewState = null;
-        this.setState(localState);//TODO возможно все редактирование придется переносить
+        // let localState = Object.assign({}, newState);
+        // localState.NewState = null;
+
+
+        // this.setState(localState);//TODO возможно все редактирование придется переносить
     }
 
     titleRender() {

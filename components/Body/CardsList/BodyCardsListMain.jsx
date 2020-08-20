@@ -13,11 +13,14 @@ export default class BodyCardsListMain extends React.Component {
         this.state = {
             FollowedCards: [],
             NotFollowedCards: [],
+            NewCardTemplate: null,
         };
 
         this.updateElement = this.updateElement.bind(this);
         this.followRequstSuccess = this.followRequstSuccess.bind(this);
+        this.showCreateTemplate = this.showCreateTemplate.bind(this);
 
+        this.state.EmptyImagePath = '../../images/user_empty_image.png';
 
     }
 
@@ -30,14 +33,14 @@ export default class BodyCardsListMain extends React.Component {
                 Id: 1,
                 Title: 'header1',
                 Body: 'body1',
-                Image: '../../images/user_empty_image.png'
+                Image: this.state.EmptyImagePath
 
             },
             {
                 Id: 2,
                 Title: 'header2',
                 Body: 'body2',
-                Image: '../../images/user_empty_image.png'
+                Image: this.state.EmptyImagePath
             }
         ];
 
@@ -46,13 +49,13 @@ export default class BodyCardsListMain extends React.Component {
                 Id: 3,
                 Title: 'header3',
                 Body: 'body3',
-                Image: '../../images/user_empty_image.png'
+                Image: this.state.EmptyImagePath
             },
             {
                 Id: 4,
                 Title: 'header4',
                 Body: 'body4',
-                Image: '../../images/user_empty_image.png'
+                Image: this.state.EmptyImagePath
             },
         ];
 
@@ -67,10 +70,13 @@ export default class BodyCardsListMain extends React.Component {
     }
 
     updateElement(newElement) {
+
+        let newState = Object.assign({}, this.state);
+
         let updEl = (arr) => {
             for (let i = 0; i < arr.length; ++i) {
-                if (arr[i].Id == newElement.NewState.Id) {
-                    arr[i] = newElement.NewState;
+                if (arr[i].Id == newElement.Id) {
+                    arr[i] = newElement;
                     this.setState(newState);
                     return true;
                 }
@@ -78,14 +84,20 @@ export default class BodyCardsListMain extends React.Component {
         }
 
         // console.log(newElement);
-        let newState = Object.assign({}, this.state);
+
 
         if (updEl(newState.FollowedCards)) {
             return;
         }
 
-        updEl(newState.NotFollowedCards)
-
+        if (updEl(newState.NotFollowedCards)) {
+            return;
+        }
+        // newElement.Id+=Math.floor(Math.random() * Math.floor(20));//TODO для теста
+        newState.NotFollowedCards.push(newElement);
+        newState.NewCardTemplate=null;
+        // console.log(newState);
+        this.setState(newState);
     }
 
 
@@ -103,7 +115,7 @@ export default class BodyCardsListMain extends React.Component {
 
         // console.log('follow-' + id);
         let newState = Object.assign({}, this.state);
-       
+
         if (moveFollow(newState.FollowedCards, newState.NotFollowedCards)) {
             return;
         }
@@ -113,16 +125,32 @@ export default class BodyCardsListMain extends React.Component {
 
     }
 
+    showCreateTemplate() {
+        if (this.state.NewCardTemplate) {
+            return;
+        }
+
+        let newState = Object.assign({}, this.state);
+        newState.NewCardTemplate = {
+            Id: -1,
+            Title: 'Новая',
+            Body: 'Новая',
+            Image: this.state.EmptyImagePath
+        };
+        this.setState(newState);
+    }
+
     render() {
         // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
         return <div className='main-body container'>
-           
+
             <p>
                 <button className="btn btn-primary" type="button" data-toggle="collapse" data-target="#body-chosen-cards-section" aria-expanded="false" aria-controls="body-chosen-cards-section">Избранные</button>
             </p>
             <div>
                 <div className="collapse" id="body-chosen-cards-section">
                     <div className="card card-body">
+
                         <MenuCardList CardsList={this.state.FollowedCards} updateElement={this.updateElement} FollowRequstSuccess={this.followRequstSuccess} />
                     </div>
                 </div>
@@ -133,7 +161,10 @@ export default class BodyCardsListMain extends React.Component {
             <div>
                 <div className="collapse" id="body-all-cards-section">
                     <div className="card card-body">
-                        <MenuCardList CardsList={this.state.NotFollowedCards} updateElement={this.updateElement} FollowRequstSuccess={this.followRequstSuccess} />
+                        <div>
+                            <button className='btn btn-primary' onClick={this.showCreateTemplate}>Добавить</button>
+                        </div>
+                        <MenuCardList NewCardTemplate={this.state.NewCardTemplate} CardsList={this.state.NotFollowedCards} updateElement={this.updateElement} FollowRequstSuccess={this.followRequstSuccess} />
                     </div>
                 </div>
             </div>

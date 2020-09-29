@@ -1,6 +1,9 @@
 // var React = require('react');
 import React from 'react'
-
+import {
+    Link,
+    BrowserRouter
+} from "react-router-dom";
 
 //export default 
 export default class HeaderUserMenu extends React.Component {
@@ -40,9 +43,9 @@ export default class HeaderUserMenu extends React.Component {
 
     logginedUser() {
         return <div className='header-user-block-inner'><div className='dropdown-toggle header-user-dropdown' data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span className='header-user-name-text d-inline-block'>Имя</span>
+            <span className='header-user-name-text d-inline-block'>{this.props.AuthInfo.User.Name}</span>
             <span className='d-inline-block header-user-img'>
-                {this.userImage(this.state.UserImage)}
+                {this.userImage(this.props.AuthInfo.User.Image)}
             </span>
         </div>
             <div className="dropdown-menu" style={{ backgroundColor: 'greenyellow' }}>
@@ -60,8 +63,11 @@ export default class HeaderUserMenu extends React.Component {
             Авторизация
         </div>
             <div className="dropdown-menu" style={{ backgroundColor: 'greenyellow' }}>
-                <a className="dropdown-item" href="#">Войти</a>
-                <a className="dropdown-item" href="#">Зарегистрироваться</a>
+                {/* TODO не уверен что так можно и что это будет работать  -- <BrowserRouter> */}
+            <BrowserRouter>
+            <Link className="dropdown-item" to="/login/">Войти</Link> </BrowserRouter>
+            <BrowserRouter>
+            <Link className="dropdown-item" to="/register/">Зарегистрироваться</Link> </BrowserRouter>
             </div>
         </div>
     }
@@ -69,7 +75,7 @@ export default class HeaderUserMenu extends React.Component {
     render() {
         // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
         return <div className='header-user-block col-8 col-md-3 nopadding '>
-            {this.logginedOrNot(this.state.IsLoggined)}
+            {this.logginedOrNot(this.props.AuthInfo.AuthSuccess)}
 
         </div>
     }

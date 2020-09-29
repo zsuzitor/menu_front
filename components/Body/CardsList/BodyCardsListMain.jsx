@@ -1,6 +1,7 @@
 
 import React from 'react'
 import MenuCardList from './MenuCardList.jsx'
+import CardsFilters from './CardsFilters.jsx'
 
 
 //export default 
@@ -193,12 +194,10 @@ export default class BodyCardsListMain extends React.Component {
                     </div>
                 </div>
             </div> */}
-            <div>
-                <p>Фильтры</p>
-                <div><input type="checkbox" defaultChecked={this.state.CardsListFilters.FollowOnly} onChange={this.changeFilterFollow} /></div>
-            </div>
+            <CardsFilters FollowOnly={this.state.CardsListFilters.FollowOnly} changed = {this.changeFilterFollow}/>
+            
             <p>
-                <button className="btn btn-primary" type="button" data-toggle="collapse" data-target="#body-all-cards-section" aria-expanded="false" aria-controls="body-all-cards-section">Остальные</button>
+                <button className="btn btn-primary" type="button" data-toggle="collapse" data-target="#body-all-cards-section" aria-expanded="false" aria-controls="body-all-cards-section">Карточки</button>
             </p>
             <div>
                 <div className="collapse" id="body-all-cards-section">

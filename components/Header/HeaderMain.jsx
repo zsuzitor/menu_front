@@ -25,7 +25,7 @@ export default class MainHeader extends React.Component {
                 <div className='main-header-row row'>
                     <HeaderLogo />
                     <div className='d-none d-md-inline-block col-md-7'></div>
-                    <MainUserMenu />
+                    <MainUserMenu AuthInfo={this.props.AuthInfo}/>
                 </div>
             </div>
         </div>

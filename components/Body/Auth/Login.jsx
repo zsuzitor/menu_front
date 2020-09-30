@@ -26,9 +26,9 @@ export default class Login extends React.Component {
     }
 
     passwordOnChange(e) {
-        var newLogin = e.target.value.trim();
+        var newPassword = e.target.value.trim();
         let newState = Object.assign({}, this.state);
-        newState.Login = newLogin;
+        newState.Password = newPassword;
 
         this.setState(newState);
     }
@@ -37,15 +37,19 @@ export default class Login extends React.Component {
     tryLogin() {
         //TODO отправляем запрос и чистим state
     }
-
+    //style={{align:"center"}}
     render() {
-        return <div className='row'>
-            <div className='col-sm-6 offset-sm-3' style={{align:"center"}}>
-            <div ><input style={{width:'100%'}} type='text' placeholder='login' onChange={this.loginOnChange}></input></div>
-            <div ><input style={{width:'100%'}} type='password' placeholder='password' onChange={this.passwordOnChange}></input></div>
-            <button style={{width:'100%'}} onClick={this.tryLogin}>Войти</button>
+        return <div className='persent-100-width'>
+            <div className='persent-100-width'>
+                <div className='persent-100-width padding-10-top'>
+                    <input className='form-control persent-100-width' type='text' placeholder='login' onChange={this.loginOnChange}></input>
+                </div>
+                <div className='persent-100-width padding-10-top'>
+                    <input className='form-control persent-100-width' type='password' placeholder='password' onChange={this.passwordOnChange}></input>
+                </div>
+                <button className='btn persent-100-width' onClick={this.tryLogin}>Войти</button>
             </div>
-            
+
 
         </div>
     }

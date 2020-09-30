@@ -64,10 +64,12 @@ export default class HeaderUserMenu extends React.Component {
         </div>
             <div className="dropdown-menu" style={{ backgroundColor: 'greenyellow' }}>
                 {/* TODO не уверен что так можно и что это будет работать  -- <BrowserRouter> */}
-            <BrowserRouter>
-            <Link className="dropdown-item" to="/login/">Войти</Link> </BrowserRouter>
-            <BrowserRouter>
-            <Link className="dropdown-item" to="/register/">Зарегистрироваться</Link> </BrowserRouter>
+                <BrowserRouter>
+                    <Link className="dropdown-item" to="/auth/login/">Войти</Link>
+                     </BrowserRouter>
+                <BrowserRouter>
+                    <Link className="dropdown-item" to="/auth/register/">Зарегистрироваться</Link> 
+                    </BrowserRouter>
             </div>
         </div>
     }

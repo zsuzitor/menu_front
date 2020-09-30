@@ -19,7 +19,7 @@ export default class MainComponent extends React.Component {
     componentDidMount() {
         //TODO запрос для определения?
         var auth = {};
-        auth.AuthSuccess = true;
+        auth.AuthSuccess = false;
         auth.User = {};
         auth.User.Name = "Тестовое имя";
         auth.User.Image = "../../images/user_empty_image.png";

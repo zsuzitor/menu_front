@@ -1,0 +1,70 @@
+
+import React from 'react'
+
+
+export default class Register extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {};
+        this.state.Login = null;
+        this.state.Password = null;
+        this.state.ConfirmPassword = null;
+
+        this.loginOnChange = this.loginOnChange.bind(this);
+        this.passwordOnChange = this.passwordOnChange.bind(this);
+        this.confirmPasswordOnChange = this.confirmPasswordOnChange.bind(this);
+        this.tryRegister = this.tryRegister.bind(this);
+
+    }
+
+    loginOnChange(e) {
+        var newLogin = e.target.value.trim();
+        let newState = Object.assign({}, this.state);
+        newState.Login = newLogin;
+
+        this.setState(newState);
+    }
+
+    passwordOnChange(e) {
+        var newPassword = e.target.value.trim();
+        let newState = Object.assign({}, this.state);
+        newState.Password = newPassword;
+
+        this.setState(newState);
+    }
+
+    confirmPasswordOnChange(e) {
+        var newPassword = e.target.value.trim();
+        let newState = Object.assign({}, this.state);
+        newState.ConfirmPassword = newPassword;
+
+        this.setState(newState);
+    }
+
+
+    tryRegister() {
+        //TODO отправляем запрос и чистим state
+    }
+    //style={{align:"center"}}
+    render() {
+        return <div className='persent-100-width'>
+            <div className='persent-100-width'>
+                <div className='persent-100-width padding-10-top'>
+                    <input className='form-control persent-100-width' type='text' placeholder='login' onChange={this.loginOnChange}></input>
+                </div>
+                <div className='persent-100-width padding-10-top'>
+                    <input className='form-control persent-100-width' type='password' placeholder='password' onChange={this.passwordOnChange}></input>
+                </div>
+                <div className='persent-100-width padding-10-top'>
+                    <input className='form-control persent-100-width' type='password' placeholder='confirm password' onChange={this.confirmPasswordOnChange}></input>
+                </div>
+                <button className='btn persent-100-width' onClick={this.tryRegister}>Зарегистрироваться</button>
+            </div>
+
+
+        </div>
+    }
+
+}

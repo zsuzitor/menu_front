@@ -24,7 +24,7 @@ export default class BodyMain extends React.Component {
 
 
     render() {
-        return <MainAuth login={true}/>
+        // return <MainAuth login={true}/>
         // return <BodyCardsListMain />
         //TODO попробовать достучаться незалогиненным по ссылкам и поправить то что вылезет
         return <Router>

@@ -1,0 +1,23 @@
+{
+  "name": "ts_react",
+  "version": "0.0.1",
+  "description": "ts react template \n http://typescript-lang.ru/docs/tutorials/React%20&%20Webpack.html  \n google->ts react webpack",
+  "main": "./dist/bundle.js",
+  "scripts": {
+    "buil": "webpack"
+  },
+  "author": "zsuzitor",
+  "license": "ISC",
+  "dependencies": {
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.1.6",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0"
+  },
+  "devDependencies": {
+    "source-map-loader": "^1.1.2",
+    "ts-loader": "^8.0.11"
+  }
+}

@@ -3,10 +3,10 @@ import {Login} from './Login'
 import {Register} from './Register'
 
 
-// import {
-//     Link,
-//     BrowserRouter
-// } from "react-router-dom";
+import {
+    Link,
+    BrowserRouter
+} from "react-router-dom";
 
 
 export interface IMainAuthProps {

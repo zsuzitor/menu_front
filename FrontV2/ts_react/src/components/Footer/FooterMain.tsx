@@ -5,7 +5,7 @@ import {SocialLinkGroup} from './SocialLinkGroup'
 // export interface IHeaderLogoProps {
 // }
 
-export class HeaderLogo extends React.Component<{}, {}> {
+export class FooterMain extends React.Component<{}, {}> {
 
     constructor(props:any) {
         super(props);

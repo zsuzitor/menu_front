@@ -4,6 +4,11 @@ import { IOneCardInListData } from '../../_ComponentsLink/OneCardInListData';
 // export interface IHeaderLogoProps {
 // }
 
+import {
+    Link,
+    BrowserRouter
+} from "react-router-dom";
+
 export interface IOneMenuCardProps {
     CardData: IOneCardInListData;
     FollowRequstSuccess?: (id: number) => void;

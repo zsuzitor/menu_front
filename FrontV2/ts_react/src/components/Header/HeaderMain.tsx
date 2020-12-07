@@ -2,6 +2,7 @@ import * as React from "react";
 // var HeaderLogo = require('./HeaderLogo.jsx');
 import {HeaderLogo} from './HeaderLogo';
 import {HeaderUserMenu} from './HeaderUserMenu';
+import {IAuthState} from '../_ComponentsLink/AuthState';
 
 export interface IHeaderMainProps {
      AuthInfo: IAuthState;

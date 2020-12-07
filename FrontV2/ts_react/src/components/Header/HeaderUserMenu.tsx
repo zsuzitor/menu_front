@@ -5,6 +5,11 @@ export interface IHeaderUserMenuProps {
     AuthInfo: IAuthState;
 }
 
+import {
+    Link,
+    BrowserRouter
+} from "react-router-dom";
+
 export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
 
     constructor(props:IHeaderUserMenuProps) {
@@ -60,14 +65,14 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
         </div>
             <div className="dropdown-menu" style={{ backgroundColor: 'greenyellow' }}>
                 {/* TODO не уверен что так можно и что это будет работать  -- <BrowserRouter> */}
-                <a className="dropdown-item" href="/auth/login">Войти</a>
-                <a className="dropdown-item" href="/auth/register/">Зарегистрироваться</a>
-                {/* <BrowserRouter>
+                {/* <a className="dropdown-item" href="/auth/login">Войти</a>
+                <a className="dropdown-item" href="/auth/register/">Зарегистрироваться</a> */}
+                <BrowserRouter>
                     <Link className="dropdown-item" to="/auth/login/">Войти</Link>
                      </BrowserRouter>
                 <BrowserRouter>
                     <Link className="dropdown-item" to="/auth/register/">Зарегистрироваться</Link> 
-                    </BrowserRouter> */}
+                    </BrowserRouter>
             </div>
         </div>
     }

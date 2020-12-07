@@ -1,10 +1,10 @@
 {
-  "name": "ts_react",
+  "name": "menu_front_v2",
   "version": "0.0.1",
   "description": "Menu Front",
   "main": "./dist/bundle.js",
   "scripts": {
-    "first-run": "npm install",
+    "first-run": "pre-first-run",
     "build": "webpack"
   },
   "author": "zsuzitor",

@@ -1,11 +1,16 @@
 ===в основном взято отсюда, внесены исправления согласно обновленным версиям либ, поправлены опечатки
 http://typescript-lang.ru/docs/tutorials/React%20&%20Webpack.html
 
+===первый запуск
+npm run pre-first-run
+===
+
+
 ===билд===
-npm install -g typescript typings webpack
----typings - это react типы на ts
-npm link typescript -- используем глобальную версию typescript
-npm run buil -- билдим
+npm install -g typescript webpack
+
+npm link typescript -- используем глобальную версию typescript, тут надо именно проследить, без этого будут проблемы(не сможет найти typescript)
+npm run build -- билдим
 
 ---
 ===full empty project create===
@@ -32,6 +37,8 @@ d webpack конфиге секция loaders устарела
 https://webpack.js.org/concepts/loaders/
 https://stackoverflow.com/questions/42060243/invalid-configuration-object-webpack-has-been-initialised-using-a-configuration
 
+
+---typings - это react типы на ts
 
 ---npm install --save @types/react-router-dom
 npm rm --save @types/react-router-dom

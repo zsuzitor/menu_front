@@ -18,16 +18,16 @@ module.exports = {
                 test: /\.js$/,
                 loader: "source-map-loader",
                 enforce: "pre"//новый синтаксис заменяющий preLoaders блок 'pre' | 'post'
+                ,
+                 exclude: /node_modules/,//возможно не нужно
             },
             // Все файлы с разрешениями '.ts' или '.tsx' будет обрабатывать 'ts-loader'
-            { test: /\.tsx?$/, loader: "ts-loader" }
+            { 
+                test: /\.tsx?$/,
+                 loader: "ts-loader",
+                 exclude: /node_modules/,//возможно не нужно
+            }
         ]
-        //,
-
-        // preLoaders: [
-        //     // Все карты кода для выходных '.js'-файлов будет дополнительно обрабатывать `source-map-loader`
-        //      { test: /\.js$/, loader: "source-map-loader" }
-        // ]
     },
 
     // При импортировании модуля, чей путь совпадает с одним из указанных ниже,

@@ -6,6 +6,9 @@ import {HeaderMain} from './Header/HeaderMain';
 import {BodyMain} from './Body/BodyMain';
 import {FooterMain} from './Footer/FooterMain';
 
+// import css from '../../style/main.css'
+require('../../style/main.css');
+
 export interface MainComponentProps {
 }
 

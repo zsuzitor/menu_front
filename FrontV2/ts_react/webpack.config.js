@@ -1,3 +1,6 @@
+
+
+
 module.exports = {
     entry: "./src/index.tsx",
     output: {
@@ -26,6 +29,10 @@ module.exports = {
                 test: /\.tsx?$/,
                  loader: "ts-loader",
                  exclude: /node_modules/,//возможно не нужно
+            },
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
             }
         ]
     },

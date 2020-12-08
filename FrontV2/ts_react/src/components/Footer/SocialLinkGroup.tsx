@@ -5,7 +5,7 @@ import * as React from "react";
 
 export class SocialLinkGroup extends React.Component<{}, {}> {
 
-    constructor(props:any) {
+    constructor(props: any) {
         super(props);
     }
 

@@ -1,6 +1,6 @@
 import * as React from "react";
-import {Login} from './Login'
-import {Register} from './Register'
+import { Login } from './Login'
+import { Register } from './Register'
 
 
 import {
@@ -10,12 +10,12 @@ import {
 
 
 export interface IMainAuthProps {
-LoginPage:boolean;
+    LoginPage: boolean;
 }
 
 export class MainAuth extends React.Component<IMainAuthProps, {}> {
 
-    constructor(props:any) {
+    constructor(props: any) {
         super(props);
 
         // this.state = {
@@ -50,7 +50,7 @@ export class MainAuth extends React.Component<IMainAuthProps, {}> {
         </div>
     }
 
-    
+
     render() {
         return <div className='main-auth-container'>
             <div className='auth-container-inner col-sm-6 col-md-5 col-lg-4 offset-sm-3 offset-lg-4'>

@@ -1,20 +1,20 @@
 import * as React from "react";
 
 export interface IRegisterState {
-    Login:string;
-    Password:string;
-    ConfirmPassword:string;
+    Login: string;
+    Password: string;
+    ConfirmPassword: string;
 }
 
 export class Register extends React.Component<{}, IRegisterState> {
 
-    constructor(props:any) {
+    constructor(props: any) {
         super(props);
 
-        let newState: IRegisterState= {
-            Login:null,
-            Password:null,
-            ConfirmPassword:null,
+        let newState: IRegisterState = {
+            Login: null,
+            Password: null,
+            ConfirmPassword: null,
         };
 
         this.state = newState;
@@ -26,26 +26,26 @@ export class Register extends React.Component<{}, IRegisterState> {
 
     }
 
-    LoginOnChange(e:any) {
+    LoginOnChange(e: any) {
         var newLogin = e.target.value.trim();
-        let newState = {...this.state};
+        let newState = { ...this.state };
         newState.Login = newLogin;
 
         this.setState(newState);
     }
 
-    PasswordOnChange(e:any) {
+    PasswordOnChange(e: any) {
         var newPassword = e.target.value.trim();
         // let newState = Object.assign({}, this.state);
-        let newState = {...this.state};
+        let newState = { ...this.state };
         newState.Password = newPassword;
 
         this.setState(newState);
     }
 
-    ConfirmPasswordOnChange(e:any) {
+    ConfirmPasswordOnChange(e: any) {
         var newPassword = e.target.value.trim();
-        let newState = {...this.state};
+        let newState = { ...this.state };
         newState.ConfirmPassword = newPassword;
 
         this.setState(newState);

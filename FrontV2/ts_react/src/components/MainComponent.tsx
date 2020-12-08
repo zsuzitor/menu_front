@@ -1,10 +1,10 @@
 import * as React from "react";
 
-import {IAuthState} from './_ComponentsLink/AuthState';
+import { IAuthState } from './_ComponentsLink/AuthState';
 
-import {HeaderMain} from './Header/HeaderMain';
-import {BodyMain} from './Body/BodyMain';
-import {FooterMain} from './Footer/FooterMain';
+import { HeaderMain } from './Header/HeaderMain';
+import { BodyMain } from './Body/BodyMain';
+import { FooterMain } from './Footer/FooterMain';
 
 // import css from '../../style/main.css'
 require('../../style/main.css');

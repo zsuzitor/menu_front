@@ -1,19 +1,19 @@
 import * as React from "react";
-import {OneMenuCard} from './OneMenuCard'
-import {ICardListFilters} from '../../_ComponentsLink/CardListFilters';
-import {IOneCardInListData} from '../../_ComponentsLink/OneCardInListData';
+import { OneMenuCard } from './OneMenuCard'
+import { ICardListFilters } from '../../_ComponentsLink/CardListFilters';
+import { IOneCardInListData } from '../../_ComponentsLink/OneCardInListData';
 
 export interface IHeaderLogoProps {
-    CardFilters:ICardListFilters;
-    NewCardTemplate:IOneCardInListData;
-    UpdateElement:(newElement:IOneCardInListData)=>void;
-    FollowRequstSuccess:(id:number)=>void;
-    CardsList:IOneCardInListData[];
+    CardFilters: ICardListFilters;
+    NewCardTemplate: IOneCardInListData;
+    UpdateElement: (newElement: IOneCardInListData) => void;
+    FollowRequstSuccess: (id: number) => void;
+    CardsList: IOneCardInListData[];
 }
 
 export class MenuCardList extends React.Component<IHeaderLogoProps, {}> {
 
-    constructor(props:any) {
+    constructor(props: any) {
         super(props);
         this.state = {};
         // this.state.elements = props.cardsList;
@@ -35,7 +35,7 @@ export class MenuCardList extends React.Component<IHeaderLogoProps, {}> {
         </div>
     }
 
-    RenderCardByFilters(item:IOneCardInListData) {
+    RenderCardByFilters(item: IOneCardInListData) {
 
         if (this.props.CardFilters.FollowOnly) {
             if (item.Followed) {

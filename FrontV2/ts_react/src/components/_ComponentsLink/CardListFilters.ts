@@ -1,3 +1,3 @@
 export interface ICardListFilters {
-    FollowOnly:boolean;
+    FollowOnly: boolean;
 }

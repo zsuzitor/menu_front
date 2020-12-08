@@ -1,13 +1,13 @@
 import * as React from "react";
-import {PostFooter} from './PostFooter'
-import {SocialLinkGroup} from './SocialLinkGroup'
+import { PostFooter } from './PostFooter'
+import { SocialLinkGroup } from './SocialLinkGroup'
 
 // export interface IHeaderLogoProps {
 // }
 
 export class FooterMain extends React.Component<{}, {}> {
 
-    constructor(props:any) {
+    constructor(props: any) {
         super(props);
     }
 
@@ -25,8 +25,8 @@ export class FooterMain extends React.Component<{}, {}> {
 
 
                     </div>
-                    <SocialLinkGroup/>
-                   
+                    <SocialLinkGroup />
+
                     <div className='col-md-4 footer-contacts'>
                         <p className='contacts-head'>Контакты</p>
                         <ul>
@@ -37,7 +37,7 @@ export class FooterMain extends React.Component<{}, {}> {
                 </div>
 
             </div>
-            <PostFooter/>
+            <PostFooter />
         </div>
 
     }

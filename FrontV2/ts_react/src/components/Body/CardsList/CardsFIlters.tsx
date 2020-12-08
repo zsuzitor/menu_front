@@ -5,13 +5,13 @@ import * as React from "react";
 // }
 
 export interface ICardListFiltersProps {
-    FollowOnly:boolean;
-    FollowOnlyChanged:(e:any)=>void;
+    FollowOnly: boolean;
+    FollowOnlyChanged: (e: any) => void;
 }
 
 export class CardsFilters extends React.Component<ICardListFiltersProps, {}> {
 
-    constructor(props:ICardListFiltersProps) {
+    constructor(props: ICardListFiltersProps) {
         super(props);
     }
 

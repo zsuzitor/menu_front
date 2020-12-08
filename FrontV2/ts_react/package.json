@@ -4,7 +4,7 @@
   "description": "Menu Front",
   "main": "./dist/bundle.js",
   "scripts": {
-    "first-run": "pre-first-run",
+    "setup": "npm install",
     "build": "webpack",
     "start": "lite-server"
   },

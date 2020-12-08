@@ -1,18 +1,18 @@
 import * as React from "react";
 // var HeaderLogo = require('./HeaderLogo.jsx');
-import {HeaderLogo} from './HeaderLogo';
-import {HeaderUserMenu} from './HeaderUserMenu';
-import {IAuthState} from '../_ComponentsLink/AuthState';
+import { HeaderLogo } from './HeaderLogo';
+import { HeaderUserMenu } from './HeaderUserMenu';
+import { IAuthState } from '../_ComponentsLink/AuthState';
 
 export interface IHeaderMainProps {
-     AuthInfo: IAuthState;
+    AuthInfo: IAuthState;
     // AuthInfo: any;
     // children: JSX.Element;//указав так, можно рендерить компонент вкладывая в него другой <HelloComponent name="foo"><h1>Hello World</h1></HelloComponent>
 }
 
 export class HeaderMain extends React.Component<IHeaderMainProps, {}> {
 
-    constructor(props:IHeaderMainProps) {
+    constructor(props: IHeaderMainProps) {
         super(props);
     }
     render() {
@@ -23,7 +23,7 @@ export class HeaderMain extends React.Component<IHeaderMainProps, {}> {
                 <div className='main-header-row row'>
                     <HeaderLogo />
                     <div className='d-none d-md-inline-block col-md-7'></div>
-                    <HeaderUserMenu AuthInfo={this.props.AuthInfo}/>
+                    <HeaderUserMenu AuthInfo={this.props.AuthInfo} />
                 </div>
             </div>
         </div>

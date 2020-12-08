@@ -1,8 +1,8 @@
 import * as React from "react";
 
 export interface ILoginState {
-    Login:string;
-    Password:string;
+    Login: string;
+    Password: string;
 }
 
 
@@ -10,12 +10,12 @@ export interface ILoginState {
 
 export class Login extends React.Component<{}, ILoginState> {
 
-    constructor(props:any) {
+    constructor(props: any) {
         super(props);
 
-        let newState:ILoginState = {
-            Login:null,
-            Password:null,
+        let newState: ILoginState = {
+            Login: null,
+            Password: null,
         };
 
         this.state = newState;
@@ -26,17 +26,17 @@ export class Login extends React.Component<{}, ILoginState> {
 
     }
 
-    LoginOnChange(e:any) {
+    LoginOnChange(e: any) {
         var newLogin = e.target.value.trim();
-        let newState = {...this.state};//Object.assign({}, this.state);
+        let newState = { ...this.state };//Object.assign({}, this.state);
         newState.Login = newLogin;
 
         this.setState(newState);
     }
 
-    PasswordOnChange(e:any) {
+    PasswordOnChange(e: any) {
         var newPassword = e.target.value.trim();
-        let newState = {...this.state};//Object.assign({}, this.state);
+        let newState = { ...this.state };//Object.assign({}, this.state);
         newState.Password = newPassword;
 
         this.setState(newState);

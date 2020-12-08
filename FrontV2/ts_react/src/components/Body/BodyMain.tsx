@@ -1,7 +1,7 @@
 import * as React from "react";
-import {BodyCardsListMain} from './CardsList/BodyCardsListMain'
-import {BodyOneCardDetailMain} from './OneCardDetail/BodyOneCardDetailMain'
-import {MainAuth} from './Auth/MainAuth'
+import { BodyCardsListMain } from './CardsList/BodyCardsListMain'
+import { BodyOneCardDetailMain } from './OneCardDetail/BodyOneCardDetailMain'
+import { MainAuth } from './Auth/MainAuth'
 // export interface IHeaderLogoProps {
 // }
 
@@ -18,7 +18,7 @@ import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 
 export class BodyMain extends React.Component<{}, {}> {
 
-    constructor(props:any) {
+    constructor(props: any) {
         super(props);
     }
 

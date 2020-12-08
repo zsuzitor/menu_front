@@ -5,7 +5,7 @@ export interface IHeaderLogoProps {
 
 export class HeaderLogo extends React.Component<IHeaderLogoProps, {}> {
 
-    constructor(props:IHeaderLogoProps) {
+    constructor(props: IHeaderLogoProps) {
         super(props);
     }
 

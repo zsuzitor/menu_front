@@ -5,7 +5,7 @@ import * as React from "react";
 
 export class PostFooter extends React.Component<{}, {}> {
 
-    constructor(props:any) {
+    constructor(props: any) {
         super(props);
     }
 

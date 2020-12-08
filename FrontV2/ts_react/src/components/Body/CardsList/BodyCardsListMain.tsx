@@ -1,8 +1,8 @@
 import * as React from "react";
-import {MenuCardList} from './MenuCardList';
-import {CardsFilters} from './CardsFilters';
-import {ICardListFilters} from '../../_ComponentsLink/CardListFilters';
-import {IOneCardInListData} from '../../_ComponentsLink/OneCardInListData';
+import { MenuCardList } from './MenuCardList';
+import { CardsFilters } from './CardsFilters';
+import { ICardListFilters } from '../../_ComponentsLink/CardListFilters';
+import { IOneCardInListData } from '../../_ComponentsLink/OneCardInListData';
 
 
 export interface IBodyCardsListMainProps {
@@ -11,22 +11,22 @@ export interface IBodyCardsListMainProps {
 
 
 // export interface INewCardTemplate {
-    
+
 // }
 
 
 
 
 export interface IBodyCardsListMainState {
-    EmptyImagePath:string;
-    AllCardsData:IOneCardInListData[];
-    NewCardTemplate:IOneCardInListData;
+    EmptyImagePath: string;
+    AllCardsData: IOneCardInListData[];
+    NewCardTemplate: IOneCardInListData;
     CardsListFilters: ICardListFilters
 }
 
 export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, IBodyCardsListMainState> {
 
-    constructor(props:IBodyCardsListMainProps) {
+    constructor(props: IBodyCardsListMainProps) {
         super(props);
         // this.onTextChanged = this.onTextChanged.bind(this);
 
@@ -36,7 +36,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             CardsListFilters: {
                 FollowOnly: false,
             },
-            EmptyImagePath:"../../images/user_empty_image.png",
+            EmptyImagePath: "../../images/user_empty_image.png",
         };
 
         this.UpdateElement = this.UpdateElement.bind(this);
@@ -97,12 +97,12 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
 
 
-    UpdateElement(newElement:IOneCardInListData) {
+    UpdateElement(newElement: IOneCardInListData) {
         // console.log(newElement);
         // let newState = Object.assign({}, this.state);
-        let newState = {...this.state};
+        let newState = { ...this.state };
 
-        let updEl = (arr:IOneCardInListData[]) => {
+        let updEl = (arr: IOneCardInListData[]) => {
             for (let i = 0; i < arr.length; ++i) {
                 if (arr[i].Id == newElement.Id) {
                     arr[i] = newElement;
@@ -131,7 +131,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
 
 
-    FollowRequstSuccess(id:number) {
+    FollowRequstSuccess(id: number) {
         // let moveFollow = (from, to) => {
         //     for (let i = 0; i < from.length; ++i) {
         //         if (from[i].Id == id) {
@@ -143,7 +143,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         //     }
         // };
 
-        let SetFollow = (arr:IOneCardInListData[]) => {
+        let SetFollow = (arr: IOneCardInListData[]) => {
             for (let i = 0; i < arr.length; ++i) {
                 if (arr[i].Id == id) {
                     arr[i].Followed = !arr[i].Followed;
@@ -177,20 +177,20 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             return;
         }
 
-        let newState = {...this.state};//Object.assign({}, this.state);
+        let newState = { ...this.state };//Object.assign({}, this.state);
         newState.NewCardTemplate = {
             Id: -1,
             Title: 'Новая',
             Body: 'Новая',
             Image: this.state.EmptyImagePath,
-            Followed:false,
+            Followed: false,
         };
 
         this.setState(newState);
     }
 
 
-    ChangeFilterFollow(e:any) {//TODO onChange для input
+    ChangeFilterFollow(e: any) {//TODO onChange для input
         // e.persist();
         let newState = Object.assign({}, this.state);
         // console.log(e);
@@ -219,8 +219,8 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
                     </div>
                 </div>
             </div> */}
-            <CardsFilters FollowOnly={this.state.CardsListFilters.FollowOnly} FollowOnlyChanged = {this.ChangeFilterFollow}/>
-            
+            <CardsFilters FollowOnly={this.state.CardsListFilters.FollowOnly} FollowOnlyChanged={this.ChangeFilterFollow} />
+
             <p>
                 <button className="btn btn-primary" type="button" data-toggle="collapse" data-target="#body-all-cards-section" aria-expanded="false" aria-controls="body-all-cards-section">Карточки</button>
             </p>

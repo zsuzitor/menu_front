@@ -1,5 +1,5 @@
 import * as React from "react";
-import {IAuthState} from '../_ComponentsLink/AuthState';
+import { IAuthState } from '../_ComponentsLink/AuthState';
 
 export interface IHeaderUserMenuProps {
     AuthInfo: IAuthState;
@@ -12,7 +12,7 @@ import {
 
 export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
 
-    constructor(props:IHeaderUserMenuProps) {
+    constructor(props: IHeaderUserMenuProps) {
         super(props);
     }
 
@@ -31,7 +31,7 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
     }
 
 
-    logginedOrNot(loggined:boolean) {
+    logginedOrNot(loggined: boolean) {
         if (loggined) {
             return this.logginedUser();
         }
@@ -69,10 +69,10 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
                 <a className="dropdown-item" href="/auth/register/">Зарегистрироваться</a> */}
                 <BrowserRouter>
                     <Link className="dropdown-item" to="/auth/login/">Войти</Link>
-                     </BrowserRouter>
+                </BrowserRouter>
                 <BrowserRouter>
-                    <Link className="dropdown-item" to="/auth/register/">Зарегистрироваться</Link> 
-                    </BrowserRouter>
+                    <Link className="dropdown-item" to="/auth/register/">Зарегистрироваться</Link>
+                </BrowserRouter>
             </div>
         </div>
     }

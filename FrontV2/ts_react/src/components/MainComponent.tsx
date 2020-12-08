@@ -8,6 +8,10 @@ import {FooterMain} from './Footer/FooterMain';
 
 // import css from '../../style/main.css'
 require('../../style/main.css');
+require('../../style/auth.css');
+require('../../style/body.css');
+require('../../style/footer.css');
+require('../../style/header.css');
 
 export interface MainComponentProps {
 }

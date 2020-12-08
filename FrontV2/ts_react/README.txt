@@ -9,7 +9,7 @@ npm run pre-first-run
 ===билд===
 npm install -g typescript webpack
 
-npm link typescript -- используем глобальную версию typescript, тут надо именно проследить, без этого будут проблемы(не сможет найти typescript)
+npm link typescript -- используем глобальную версию typescript, тут надо именно проследить, без этого будут проблемы(не сможет найти typescript).
 npm run build -- билдим
 
 ---

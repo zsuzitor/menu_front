@@ -3,7 +3,7 @@ import { OneMenuCard } from './OneMenuCard'
 import { ICardListFilters } from '../../_ComponentsLink/CardListFilters';
 import { IOneCardInListData } from '../../_ComponentsLink/OneCardInListData';
 
-export interface IHeaderLogoProps {
+export interface IMenuCardListProps {
     CardFilters: ICardListFilters;
     NewCardTemplate: IOneCardInListData;
     UpdateElement: (newElement: IOneCardInListData) => void;
@@ -11,9 +11,9 @@ export interface IHeaderLogoProps {
     CardsList: IOneCardInListData[];
 }
 
-export class MenuCardList extends React.Component<IHeaderLogoProps, {}> {
+export class MenuCardList extends React.Component<IMenuCardListProps, {}> {
 
-    constructor(props: any) {
+    constructor(props: IMenuCardListProps) {
         super(props);
         this.state = {};
         // this.state.elements = props.cardsList;
@@ -37,15 +37,15 @@ export class MenuCardList extends React.Component<IHeaderLogoProps, {}> {
 
     RenderCardByFilters(item: IOneCardInListData) {
 
-        if (this.props.CardFilters.FollowOnly) {
-            if (item.Followed) {
+        if (!this.props.CardFilters.FollowOnly||item.Followed) {
+            // if (item.Followed) {
                 return <OneMenuCard key={item.Id} CardData={item} UpdateElement={this.props.UpdateElement} FollowRequstSuccess={this.props.FollowRequstSuccess} />
-            }
-        }
-        else {
-            // console.log(item);
-            return <OneMenuCard key={item.Id} CardData={item} UpdateElement={this.props.UpdateElement} FollowRequstSuccess={this.props.FollowRequstSuccess} />
-        }
+            // }
+        // }
+        // else {
+        //     // console.log(item);
+        //     return <OneMenuCard key={item.Id} CardData={item} UpdateElement={this.props.UpdateElement} FollowRequstSuccess={this.props.FollowRequstSuccess} />
+         }
         // console.log(this.props);
         return null;
     }

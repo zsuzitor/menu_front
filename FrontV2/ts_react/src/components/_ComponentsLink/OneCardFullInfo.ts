@@ -1,4 +1,5 @@
-export interface IOneCardInListData {
+
+export interface IOneCardFullData {  //:IOneCardInListData??
     Id: number;
     Title: string;
     Body: string;

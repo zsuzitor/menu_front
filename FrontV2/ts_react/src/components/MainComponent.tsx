@@ -1,3 +1,5 @@
+/// <reference path="../../typings/globals.d.ts" />
+
 import * as React from "react";
 
 import { IAuthState } from './_ComponentsLink/AuthState';
@@ -12,6 +14,7 @@ require('../../style/auth.css');
 require('../../style/body.css');
 require('../../style/footer.css');
 require('../../style/header.css');
+require('../../style/menu_one_card.css');
 
 export interface MainComponentProps {
 }
@@ -44,7 +47,7 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
             AuthSuccess: false,
             User: {
                 Name: "Тестовое имя",
-                Image: "../../images/user_empty_image.png"
+                Image: G_EmptyImagePath//"../../images/user_empty_image.png"
             }
         };
 

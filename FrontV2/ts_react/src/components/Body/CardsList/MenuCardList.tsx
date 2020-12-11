@@ -1,5 +1,5 @@
 import * as React from "react";
-import { OneMenuCard } from './OneMenuCard'
+import { OneMenuCard } from './OneMenuCard';
 import { ICardListFilters } from '../../_ComponentsLink/CardListFilters';
 import { IOneCardInListData } from '../../_ComponentsLink/OneCardInListData';
 

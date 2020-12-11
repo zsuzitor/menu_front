@@ -1,3 +1,5 @@
+/// <reference path="../../../../typings/globals.d.ts" />
+
 import * as React from "react";
 import { MenuCardList } from './MenuCardList';
 import { CardsFilters } from './CardsFilters';
@@ -36,7 +38,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             CardsListFilters: {
                 FollowOnly: false,
             },
-            EmptyImagePath: "../../images/user_empty_image.png",
+            EmptyImagePath: G_EmptyImagePath,//"../../images/user_empty_image.png",
         };
 
         this.UpdateElement = this.UpdateElement.bind(this);

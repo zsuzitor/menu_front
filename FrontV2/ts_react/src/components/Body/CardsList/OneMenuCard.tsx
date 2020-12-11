@@ -1,3 +1,5 @@
+/// <reference path="../../../../typings/globals.d.ts" />
+
 import * as React from "react";
 import { IOneCardInListData } from '../../_ComponentsLink/OneCardInListData';
 
@@ -164,7 +166,12 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
     }
 
     ImageRender() {
-        return <img src={this.props.CardData.Image} className="card-img-top" alt="..." />
+        let localImagePath:string = this.props.CardData.Image;
+        if(!localImagePath){
+            localImagePath = G_EmptyImagePath;
+        }
+
+        return <img src={localImagePath} className="card-img-top" alt="..." />
     }
 
 

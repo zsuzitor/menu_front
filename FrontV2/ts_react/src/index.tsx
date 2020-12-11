@@ -1,3 +1,6 @@
+/// <reference path="../typings/globals.d.ts" />
+
+
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { MainComponent } from './components/MainComponent';
@@ -10,6 +13,14 @@ import { MainComponent } from './components/MainComponent';
 //     <Hello compiler="TypeScript" framework="React"/>,
 //     document.getElementById("example")
 // );
+
+//INIT CONST
+window.G_EmptyImagePath = "../../images/user_empty_image.png";
+
+
+//
+
+
 
 ReactDOM.render(
     <MainComponent />,

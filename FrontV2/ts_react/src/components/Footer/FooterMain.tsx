@@ -1,6 +1,6 @@
 import * as React from "react";
-import { PostFooter } from './PostFooter'
-import { SocialLinkGroup } from './SocialLinkGroup'
+import { PostFooter } from './PostFooter';
+import { SocialLinkGroup } from './SocialLinkGroup';
 
 // export interface IHeaderLogoProps {
 // }

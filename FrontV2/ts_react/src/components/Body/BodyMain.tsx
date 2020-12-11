@@ -1,7 +1,7 @@
 import * as React from "react";
-import { BodyCardsListMain } from './CardsList/BodyCardsListMain'
-import { BodyOneCardDetailMain } from './OneCardDetail/BodyOneCardDetailMain'
-import { MainAuth } from './Auth/MainAuth'
+import { BodyCardsListMain } from './CardsList/BodyCardsListMain';
+import { BodyOneCardDetailMain } from './OneCardDetail/BodyOneCardDetailMain';
+import { MainAuth } from './Auth/MainAuth';
 // export interface IHeaderLogoProps {
 // }
 

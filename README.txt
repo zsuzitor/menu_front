@@ -3,9 +3,10 @@ http://typescript-lang.ru/docs/tutorials/React%20&%20Webpack.html
 
 ===setup project
 npm run setup
-npm install -g typescript webpack
+npm install -g typescript webpack webpack-cli
 npm link typescript -- используем глобальную версию typescript, тут надо именно проследить, без этого будут проблемы(не сможет найти typescript).
-
+npm link webpack
+npm link webpack-cli
 ===build===
 npm run build -- билдим
 ===run test server=======
@@ -15,7 +16,7 @@ npm run build -- билдим
 
 ===full empty project create===
 npm init
-npm install -g typescript typings webpack
+npm install -g typescript typings webpack webpack-cli
 npm install --save react react-dom react-router-dom
 npm install --save-dev ts-loader source-map-loader
 npm link typescript

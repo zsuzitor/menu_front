@@ -1,9 +1,36 @@
+===в основном взято отсюда, внесены исправления согласно обновленным версиям либ, поправлены опечатки
+http://typescript-lang.ru/docs/tutorials/React%20&%20Webpack.html
 
-npm install
-npm run dev
-npm run build
+===setup project
+npm run setup
+npm install -g typescript webpack
+npm link typescript -- используем глобальную версию typescript, тут надо именно проследить, без этого будут проблемы(не сможет найти typescript).
+
+===build===
+npm run build -- билдим
+===run test server=======
+---
 
 
+
+===full empty project create===
+npm init
+npm install -g typescript typings webpack
+npm install --save react react-dom react-router-dom
+npm install --save-dev ts-loader source-map-loader
+npm link typescript
+{
+npm install --save @types/react
+npm install --save @types/react-dom
+npm install --save @types/react-router-dom
+===OR
+typings install --save dt~react
+typings install --save dt~react-dom
+typings install --global --save dt~react-router-dom
+}
+добавить tsconfig.json
+Создайте файл webpack.config.js
+---
 
 
 

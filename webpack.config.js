@@ -1,22 +1,48 @@
-var path = require('path');
- 
+
+
+
 module.exports = {
-    entry: "./app.jsx", // входная точка - исходный файл
-    output:{
-        path: path.resolve(__dirname, './public'),     // путь к каталогу выходных файлов - папка public
-        publicPath: '/public/',
-        filename: "bundle.js"       // название создаваемого файла
+    entry: "./src/index.tsx",
+    output: {
+        filename: "./bundle.js",
     },
-    module:{
-        rules:[   //загрузчик для jsx
+
+    // Включить карты кода для отладки вывода webpack
+    devtool: "source-map",
+
+    resolve: {
+        // Добавить разрешения '.ts' и '.tsx' к обрабатываемым
+        extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]// тут не должно быть пустых строк
+    },
+
+    module: {
+        rules: [//        loaders:
             {
-                test: /\.jsx?$/, // определяем тип файлов
-                exclude: /(node_modules)/,  // исключаем из обработки папку node_modules
-                loader: "babel-loader",   // определяем загрузчик
-                options:{
-                    presets:["@babel/preset-env", "@babel/preset-react"]    // используемые плагины
-                }
+                test: /\.js$/,
+                loader: "source-map-loader",
+                enforce: "pre"//новый синтаксис заменяющий preLoaders блок 'pre' | 'post'
+                ,
+                 exclude: /node_modules/,//возможно не нужно
+            },
+            // Все файлы с разрешениями '.ts' или '.tsx' будет обрабатывать 'ts-loader'
+            { 
+                test: /\.tsx?$/,
+                 loader: "ts-loader",
+                 exclude: /node_modules/,//возможно не нужно
+            },
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
             }
         ]
-    }
-}
+    },
+
+    // При импортировании модуля, чей путь совпадает с одним из указанных ниже,
+    // предположить, что соответствующая глобальная переменная существует, и использовать
+    // ее взамен. Это важно, так как позволяет избежать добавления в сборку всех зависимостей,
+    // что дает браузерам возможность кэшировать файлы библиотек между различными сборками.
+    externals: {
+        "react": "React",
+        "react-dom": "ReactDOM"
+    },
+};

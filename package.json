@@ -1,24 +1,29 @@
 {
-  "name": "menu",
-  "description": "menu app",
-  "version": "1.0.0",
-  "author": "zsuzitor",
+  "name": "menu_front_v2",
+  "version": "0.0.1",
+  "description": "Menu Front",
+  "main": "./dist/bundle.js",
   "scripts": {
-    "dev": "webpack-dev-server --hot --open --mode development",
-    "build": "webpack --mode production"
+    "setup": "npm install",
+    "build": "webpack",
+    "start": "lite-server"
   },
+  "author": "zsuzitor",
+  "license": "ISC",
   "dependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0"
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.1.6",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
+    "setup": "0.0.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.2",
-    "babel-loader": "^8.0.0",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/preset-react": "^7.0.0",
-    "webpack": "^4.20.0",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.9"
+    "css-loader": "^5.0.1",
+    "lite-server": "^2.6.1",
+    "source-map-loader": "^1.1.2",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^8.0.11"
   }
 }

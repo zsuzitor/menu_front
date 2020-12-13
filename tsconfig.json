@@ -6,7 +6,8 @@
         "module": "commonjs",
         "target": "es5",
         "removeComments": true,
-        "jsx": "react"
+        "jsx": "react",
+        "lib": ["esnext", "dom"]
     },
     "exclude":[
         "wwwroot",

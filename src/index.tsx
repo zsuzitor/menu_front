@@ -24,6 +24,7 @@ window.G_EmptyImagePath = "../../images/user_empty_image.png";
 
 ReactDOM.render(
     <MainComponent />,
+    // <div>test</div>,
     document.getElementById("example")
 );
 

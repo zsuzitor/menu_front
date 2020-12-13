@@ -12,7 +12,7 @@ export interface IBodyOneCardDetailMainProps {
 }
 
 
-export class BodyOneCardDetailMain extends React.Component<IBodyOneCardDetailMainProps, IOneCardFullData> {
+export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainProps, IOneCardFullData> {
 
     constructor(props: any) {
         super(props);

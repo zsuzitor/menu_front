@@ -1,6 +1,6 @@
 import * as React from "react";
 import { BodyCardsListMain } from './CardsList/BodyCardsListMain';
-import { BodyOneCardDetailMain } from './OneCardDetail/BodyOneCardDetailMain';
+import { OneCardDetailMain } from './OneCardDetail/OneCardDetailMain';
 import { MainAuth } from './Auth/MainAuth';
 // export interface IHeaderLogoProps {
 // }
@@ -30,7 +30,7 @@ export class BodyMain extends React.Component<{}, {}> {
         return <Router>
             <Switch>
                 <Route exact path="/" component={BodyCardsListMain} />
-                <Route path="/detail" component={BodyOneCardDetailMain} />
+                <Route path="/detail" component={OneCardDetailMain} />
                 <Route path="/auth/login" component={MainAuth} login={true} />
                 <Route path="/auth/register" component={MainAuth} login={false} />
                 {/* <Route component={NotFound} /> */}

@@ -5,12 +5,19 @@
 
 .one-card-header-info{
     border:2px solid black;
+    padding-bottom: 5px;
 }
 
 .one-card-header-image{
     border:2px solid black;
+    text-align: center;
 }
 
 .one-card-body-info{
     border:2px solid black;
+}
+
+.one-card-page-follow-button{
+    width: 20px;
+    height: 20px;
 }

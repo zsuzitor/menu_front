@@ -8,6 +8,11 @@
      width:100%;
  }
 
+ .persent-100-width-height{
+    width:100%;
+    height: 100%;
+ }
+
  .padding-10-top{
      padding-top: 10px;
  }

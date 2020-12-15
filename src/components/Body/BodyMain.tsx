@@ -12,7 +12,7 @@ import { MainAuth } from './Auth/MainAuth';
 //     Link
 // } from "react-router-dom";
 
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 
 
 
@@ -27,15 +27,19 @@ export class BodyMain extends React.Component<{}, {}> {
         // return <BodyCardsListMain />
         //TODO попробовать достучаться незалогиненным по ссылкам и поправить то что вылезет
         // return <BodyCardsListMain/> 
-        return <Router>
-            <Switch>
-                <Route exact path="/" component={BodyCardsListMain} />
-                <Route path="/detail" component={OneCardDetailMain} />
-                <Route path="/auth/login" component={MainAuth} login={true} />
-                <Route path="/auth/register" component={MainAuth} login={false} />
-                {/* <Route component={NotFound} /> */}
-            </Switch>
-        </Router>
+        return <Switch>
+            <Route exact path="/menu" component={BodyCardsListMain} />
+            <Route path="/menu/detail" component={OneCardDetailMain} />
+
+            <Route path="/menu/auth/login" render={(props) => (
+                <MainAuth {...props} LoginPage={true} />
+            )} />
+            <Route path="/menu/auth/register" render={(props) => (
+                <MainAuth {...props} LoginPage={false} />
+            )} />
+            {/* <Route component={NotFound} /> */}
+        </Switch>
+
     }
 }
 // </helloprops>

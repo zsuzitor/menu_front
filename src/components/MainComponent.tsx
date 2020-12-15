@@ -8,6 +8,9 @@ import { HeaderMain } from './Header/HeaderMain';
 import { BodyMain } from './Body/BodyMain';
 import { FooterMain } from './Footer/FooterMain';
 
+import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
+
+
 // import css from '../../style/main.css'
 require('../../style/main.css');
 require('../../style/auth.css');
@@ -61,10 +64,11 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
 
 
     render() {
-        return <div>
+        return <div><BrowserRouter>
             <HeaderMain AuthInfo={this.state.Auth} />
             <BodyMain />
             <FooterMain />
+            </BrowserRouter>
         </div>
     }
 }

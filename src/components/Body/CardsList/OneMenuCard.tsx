@@ -156,10 +156,10 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
         }
         else {
             if (this.state.NewState) {
-                return <Link to={"/detail/" + this.state.NewState.Id}><h5 className="card-title" >{this.state.NewState.Title}</h5></Link>
+                return <Link to={"/menu/detail/" + this.state.NewState.Id}><h5 className="card-title" >{this.state.NewState.Title}</h5></Link>
             }
             else {
-                return <Link to={"/detail/" + this.props.CardData.Id}><h5 className="card-title" >{this.props.CardData.Title}</h5></Link>
+                return <Link to={"/menu/detail/" + this.props.CardData.Id}><h5 className="card-title" >{this.props.CardData.Title}</h5></Link>
             }
 
         }

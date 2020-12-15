@@ -45,6 +45,23 @@ export class Login extends React.Component<{}, ILoginState> {
 
     TryLogin() {
         //TODO отправляем запрос и чистим state
+        let data = {
+            Email : "asdasd@mail.ru",
+            Password : "Password"
+        };
+        $.ajax({
+            type: "POST",
+            url: G_PathToServer + 'api/Authenticate/login',
+            data: data,
+            success: (plain, textStatus,jqXHR )=>{
+                debugger;
+                alert();
+            },
+            dataType: "json"
+          });
+
+
+
     }
     //style={{align:"center"}}
     render() {

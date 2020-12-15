@@ -4,7 +4,9 @@
   "description": "Menu Front",
   "main": "./dist/bundle.js",
   "scripts": {
+    "setup-global": "npm install -g typescript webpack webpack-cli",
     "setup": "npm install",
+    "fix-global-link":"npm link typescript && npm link webpack && npm link webpack-cli",
     "build": "webpack",
     "start": "lite-server"
   },
@@ -20,6 +22,7 @@
     "setup": "0.0.3"
   },
   "devDependencies": {
+    "@types/jquery": "^3.5.5",
     "@types/webpack-env": "^1.16.0",
     "css-loader": "^5.0.1",
     "lite-server": "^2.6.1",

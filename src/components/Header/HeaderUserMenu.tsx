@@ -14,6 +14,10 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
 
     constructor(props: IHeaderUserMenuProps) {
         super(props);
+
+        
+        this.logginedUser = this.logginedUser.bind(this);
+        
     }
 
     componentDidMount() {
@@ -23,7 +27,7 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
     userImage(imgPath: string) {
         let path = imgPath;
         if (!path) {
-            path = '../../images/user_empty_image.png';
+            path = G_PathToBaseImages + 'user_empty_image.png';
             // return <img className='header-user-img' src='../../images/user_empty_image.png'></img>
         }
 
@@ -65,14 +69,17 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
         </div>
             <div className="dropdown-menu" style={{ backgroundColor: 'greenyellow' }}>
                 {/* TODO не уверен что так можно и что это будет работать  -- <BrowserRouter> */}
-                {/* <a className="dropdown-item" href="/auth/login">Войти</a>
-                <a className="dropdown-item" href="/auth/register/">Зарегистрироваться</a> */}
-                <BrowserRouter>
-                    <Link className="dropdown-item" to="/auth/login/">Войти</Link>
+                {/* <a className="dropdown-item" href="/menu/auth/login">Войти</a>
+                <a className="dropdown-item" href="/menu/auth/register/">Зарегистрироваться</a> */}
+                {/* <BrowserRouter>
+                    <Link className="dropdown-item" to="/menu/auth/login/">Войти</Link>
                 </BrowserRouter>
                 <BrowserRouter>
-                    <Link className="dropdown-item" to="/auth/register/">Зарегистрироваться</Link>
-                </BrowserRouter>
+                    <Link className="dropdown-item" to="/menu/auth/register/">Зарегистрироваться</Link>
+                </BrowserRouter> */}
+
+                <Link className="dropdown-item" to="/menu/auth/login/">Войти</Link>
+                <Link className="dropdown-item" to="/menu/auth/register/">Зарегистрироваться</Link>
             </div>
         </div>
     }

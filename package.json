@@ -8,7 +8,7 @@
     "setup": "npm install",
     "fix-global-link":"npm link typescript && npm link webpack && npm link webpack-cli",
     "build": "webpack",
-    "start": "lite-server"
+    "start": "lite-server -c ./bs-config.json"
   },
   "author": "zsuzitor",
   "license": "ISC",

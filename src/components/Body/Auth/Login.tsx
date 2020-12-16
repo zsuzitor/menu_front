@@ -46,19 +46,87 @@ export class Login extends React.Component<{}, ILoginState> {
     TryLogin() {
         //TODO отправляем запрос и чистим state
         let data = {
-            Email : "asdasd@mail.ru",
-            Password : "Password"
+            'Email' : "asdasd@mail.ru",
+            'Password' : "Password"
         };
+
+        // $.post(G_PathToServer + 'api/Authenticate/login/',data,()=>{}, headers:);
+        
         $.ajax({
             type: "POST",
-            url: G_PathToServer + 'api/Authenticate/login',
+            url: G_PathToServer + 'api/Authenticate/login/',
             data: data,
+            // secure: true,
+            dataType: 'jsonp',//'jsonp',
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+            },
+            
+            contentType:'application/json',
+            
+
             success: (plain, textStatus,jqXHR )=>{
                 debugger;
                 alert();
             },
-            dataType: "json"
+            complete:()=>{
+                debugger;
+                alert();
+            },
+            // cors: true,
+
           });
+
+
+
+        // $.ajax({
+        //     url: G_PathToServer + 'api/Authenticate/login/',
+        //     method: 'post',
+        //     data: {
+        //         'Email' : "asdasd@mail.ru",
+        //         'Password' : "Password"
+        //     },
+        //         headers: {
+        //         'Access-Control-Allow-Origin': '*',
+        //     },
+        //     dataType: 'jsonp',
+        //     success: function (data) {
+        //         console.info(data);
+        //     }
+        // });
+
+
+
+        // $.ajax({
+        //     url: 'https://localhost:44305/' + 'api/Authenticate/login/',
+        //     method: 'post',
+        //     data: {
+        //         'Easdail' : "asdasru",
+        //         'Passasddword' : "Passcczxword"
+        //     },headers: {
+        //         'Access-Control-Allow-Origin': '*',
+        //     },
+        //     dataType: 'json',
+        //     success: function (data) {
+        //         console.info(data);
+        //     }
+        // });
+
+
+        // $.ajax({
+        //     url: 'http://localhost:3000/',
+        //     method: 'post',
+        //     data: {
+        //         'Easdail' : "asdasru",
+        //         'Passasddword' : "Passcczxword"
+        //     },headers: {
+        //         'Access-Control-Allow-Origin': '*',
+        //     },
+        //     dataType: 'json',
+        //     success: function (data) {
+        //         console.info(data);
+        //     }
+        // });
 
 
 

@@ -35,5 +35,9 @@ typings install --global --save dt~react-router-dom
 
 
 
+bs-config.json -- конфиг lite-server. можно удалить конфиг и убрать его из команды запуска
+
+
+
 
 

@@ -15,9 +15,10 @@ import { MainComponent } from './components/MainComponent';
 // );
 
 //INIT CONST
-window.G_PathToBaseImages = "../../images/";
+// window.G_PathToBaseImages = "../../images/";
+window.G_PathToBaseImages = "/images/";
 window.G_EmptyImagePath = G_PathToBaseImages + "user_empty_image.png";
-window.G_PathToServer = "https://localhost:44305/";
+window.G_PathToServer = "http://localhost:8000/";
 window.G_PathToServerMenu = G_PathToServer + "menu/";
 
 //

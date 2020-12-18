@@ -46,36 +46,130 @@ export class Login extends React.Component<{}, ILoginState> {
     TryLogin() {
         //TODO отправляем запрос и чистим state
         let data = {
-            'Email' : "asdasd@mail.ru",
-            'Password' : "Password"
+            'Email': "asdasd@mail.ru",
+            'Password': "Password"
         };
 
         // $.post(G_PathToServer + 'api/Authenticate/login/',data,()=>{}, headers:);
-        
+
         $.ajax({
             type: "POST",
             url: G_PathToServer + 'api/Authenticate/login/',
             data: data,
-            // secure: true,
-            dataType: 'jsonp',//'jsonp',
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-            },
-            
-            contentType:'application/json',
-            
+            // dataType: 'json',//'jsonp',
+            // headers: {                    
+            //     'Content-Type': 'application/json'
+            // },
 
-            success: (plain, textStatus,jqXHR )=>{
+            // secure: true,
+
+            // headers: {
+            //     'Access-Control-Allow-Origin': '*',
+            // },
+
+            //contentType: 'application/json',
+
+
+            success: (plain, textStatus, jqXHR) => {
                 debugger;
                 alert();
             },
-            complete:()=>{
+            complete: () => {
                 debugger;
                 alert();
             },
             // cors: true,
 
-          });
+        });
+
+
+
+
+
+        function goAjaxRequest(obj:any, fileLoad:boolean) {//TODO убрать any
+            if (!obj.type)
+                obj.type = 'GET';
+            //if (!obj.dataType)
+            //  obj.dataType = 'json';//html
+        
+            let ajaxObj : JQuery.AjaxSettings = {
+                type: obj.type,
+                data: obj.data,
+                url: obj.url,
+                //processData: false, // Не обрабатываем файлы
+                //contentType: false, // Так jQuery скажет серверу что это строковой запрос
+                success: function (xhr, status, jqXHR) {
+                    //if(jqXHR.status==200){//EXAMPLE STATUS
+                    //DO SOMETHING
+                    //}
+                    if (obj.funcSuccess) {
+                        try {
+                            obj.funcSuccess(xhr, status, jqXHR);
+                        }
+                        catch (e) {
+                            console.log('Ошибка ' + e.name + ":" + e.message + "\n" + e.stack);
+                        }
+        
+                    }
+                },
+                error: function (xhr, status, error) {
+                    //alert("ошибка загрузки");
+                    if (obj.funcError)
+                        obj.funcError(xhr, status, error);
+                },
+                // shows the loader element before sending.
+                beforeSend: function () {
+                    if (obj.funcBeforeSend)
+                        obj.funcBeforeSend();
+                    //  PreloaderShowChange(true);
+                },
+                headers: { 'Authorization': localStorage.getItem('access_token') },
+                // hides the loader after completion of request, whether successfull or failor.
+                complete: function (jqXHR, status) {
+                    if (jqXHR.status == 401) {
+                        //refreshToken();
+                    }
+                    if (obj.funcComplete) {
+                        try {
+                            obj.funcComplete(jqXHR, status);
+                        }
+                        catch (e) {
+                            console.log('Ошибка ' + e.name + ":" + e.message + "\n" + e.stack);
+                        }
+                    }
+        
+                    //PreloaderShowChange(false);
+                },
+                dataType: obj.dataType//'html'
+            };
+            // if(obj.dataType){
+            //     ajaxObj.dataType=obj.dataType
+            // }
+        
+            if (fileLoad) {
+                //processData: false, // Не обрабатываем файлы
+                //contentType: false,
+                ajaxObj.processData = false;
+                ajaxObj.contentType = false;
+            }
+        
+            trySend(ajaxObj);
+        
+        
+        }
+        
+        function trySend(ajaxObj: JQuery.AjaxSettings) {
+            if (tokenRequested) {//TODO
+                setTimeout(function () {
+                    trySend(ajaxObj);
+                }, 50);
+            }
+            else {
+                $.ajax(ajaxObj);
+            }
+        }
+
+
 
 
 

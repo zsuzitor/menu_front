@@ -50,111 +50,21 @@ export class Login extends React.Component<{}, ILoginState> {
         //TODO отправляем запрос и чистим state
         let data = {
             'Email': "asdasd@mail.ru",
-            'Password': "Password"
+            'Password': "Password",
         };
 
         // let ajx: AjaxHelper.IAjaxHelper = new AjaxHelper.AjaxHelper();
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
+            Type: "POST",
             FuncSuccess: (xhr, status, jqXHR) => {
                 console.log(JSON.stringify(xhr));
                 console.log(JSON.stringify(jqXHR));
                 debugger;
             },
-            Url: G_PathToServer,
+            Url: G_PathToServer + 'api/authenticate/login',
 
         });
-        // $.post(G_PathToServer + 'api/Authenticate/login/',data,()=>{}, headers:);
-
-        // $.ajax({
-        //     type: "POST",
-        //     url: G_PathToServer + 'api/Authenticate/login/',
-        //     data: data,
-        //     // dataType: 'json',//'jsonp',
-        //     // headers: {                    
-        //     //     'Content-Type': 'application/json'
-        //     // },
-
-        //     // secure: true,
-
-        //     // headers: {
-        //     //     'Access-Control-Allow-Origin': '*',
-        //     // },
-
-        //     //contentType: 'application/json',
-
-
-        //     success: (plain, textStatus, jqXHR) => {
-        //         debugger;
-        //         alert();
-        //     },
-        //     complete: () => {
-        //         debugger;
-        //         alert();
-        //     },
-        //     // cors: true,
-
-        // });
-
-
-
-
-
-
-
-
-
-
-
-        // $.ajax({
-        //     url: G_PathToServer + 'api/Authenticate/login/',
-        //     method: 'post',
-        //     data: {
-        //         'Email' : "asdasd@mail.ru",
-        //         'Password' : "Password"
-        //     },
-        //         headers: {
-        //         'Access-Control-Allow-Origin': '*',
-        //     },
-        //     dataType: 'jsonp',
-        //     success: function (data) {
-        //         console.info(data);
-        //     }
-        // });
-
-
-
-        // $.ajax({
-        //     url: 'https://localhost:44305/' + 'api/Authenticate/login/',
-        //     method: 'post',
-        //     data: {
-        //         'Easdail' : "asdasru",
-        //         'Passasddword' : "Passcczxword"
-        //     },headers: {
-        //         'Access-Control-Allow-Origin': '*',
-        //     },
-        //     dataType: 'json',
-        //     success: function (data) {
-        //         console.info(data);
-        //     }
-        // });
-
-
-        // $.ajax({
-        //     url: 'http://localhost:3000/',
-        //     method: 'post',
-        //     data: {
-        //         'Easdail' : "asdasru",
-        //         'Passasddword' : "Passcczxword"
-        //     },headers: {
-        //         'Access-Control-Allow-Origin': '*',
-        //     },
-        //     dataType: 'json',
-        //     success: function (data) {
-        //         console.info(data);
-        //     }
-        // });
-
 
 
     }

@@ -53,7 +53,27 @@ export class Register extends React.Component<{}, IRegisterState> {
 
 
     TryRegister() {
-        //TODO отправляем запрос и чистим state
+        //TODO отправляем запрос и чистим state?
+        let data = {
+            'email': this.state.Login,
+            'password': this.state.Password,
+            "password_confirm": this.state.ConfirmPassword,
+        };
+
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PUT",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                console.log(JSON.stringify(xhr));
+                console.log(JSON.stringify(jqXHR));
+                debugger;
+            },
+            Url: G_PathToServer + 'api/authenticate/register',
+
+        });
+
+
+
     }
     //style={{align:"center"}}
     render() {

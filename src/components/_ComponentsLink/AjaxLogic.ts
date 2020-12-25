@@ -6,7 +6,7 @@ export declare  interface IAjaxInputObject {
     Url: string;
     DataType?: string;
     FuncSuccess?: (xhr: any, status: JQuery.Ajax.SuccessTextStatus, jqXHR: JQuery.jqXHR) => void;
-    FuncError?: (xhr: any, status: JQuery.Ajax.ErrorTextStatus, jqXHR: string) => void;
+    FuncError?: (xhr: any, status: JQuery.Ajax.ErrorTextStatus, error: string) => void;
     FuncBeforeSend?: () => void;
     FuncComplete?: (jqxhr: JQuery.jqXHR, textStatus: JQuery.Ajax.TextStatus) => void;
 }

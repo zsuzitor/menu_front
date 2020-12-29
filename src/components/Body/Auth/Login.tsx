@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MainErrorObjectBack } from "../../_ComponentsLink/ErrorBack";
+import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
 
 export interface ILoginState {
     Login: string;
@@ -49,8 +49,8 @@ export class Login extends React.Component<{}, ILoginState> {
     TryLogin() {
         //TODO отправляем запрос и чистим state
         let data = {
-            'Email': this.state.Login,
-            'Password': this.state.Password,
+            'email': this.state.Login,
+            'password': this.state.Password,
         };
 
         // let ajx: AjaxHelper.IAjaxHelper = new AjaxHelper.AjaxHelper();

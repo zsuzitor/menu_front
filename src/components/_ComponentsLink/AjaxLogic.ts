@@ -26,6 +26,8 @@ export class AjaxHelper implements IAjaxHelper {
     }
 
     public GoAjaxRequest(obj: IAjaxInputObject, fileLoad: boolean = false): void {
+        let thisRef = this;
+
         if (!obj.Type)
             obj.Type = 'GET';
         if (!obj.DataType)
@@ -66,7 +68,7 @@ export class AjaxHelper implements IAjaxHelper {
             // hides the loader after completion of request, whether successfull or failor.
             complete: function (jqXHR, status) {
                 if (jqXHR.status == 401) {
-                    this.TryRefreshToken();
+                    thisRef.TryRefreshToken();
                 }
                 if (obj.FuncComplete) {
                     try {

@@ -4,7 +4,9 @@ import * as React from "react";
 import { MenuCardList } from './MenuCardList';
 import { CardsFilters } from './CardsFilters';
 import { ICardListFilters } from '../../_ComponentsLink/CardListFilters';
-import { IOneCardInListData } from '../../_ComponentsLink/OneCardInListData';
+import { IOneCardInListData, OneCardInListData } from '../../_ComponentsLink/OneCardInListData';
+import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
+import { IOneCardInListDataBack } from "../../_ComponentsLink/BackModel/OneCardInListDataBack";
 
 
 export interface IBodyCardsListMainProps {
@@ -52,53 +54,59 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
     componentDidMount() {
         //грузим все
-        let cardsData = [
-            {
-                Id: 1,
-                Title: 'header1',
-                Body: 'body1',
-                Image: this.state.EmptyImagePath,
-                Followed: false
 
+        // let ajx: AjaxHelper.IAjaxHelper = new AjaxHelper.AjaxHelper();
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {},
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    let dataBack = xhr as IOneCardInListDataBack[];
+                    let dataFront: OneCardInListData[] = [];
+                    dataBack.forEach(bk => {
+                        dataFront.push(new OneCardInListData(bk));
+                    });
+
+                    this.setState({
+                        AllCardsData: dataFront,
+                        // FollowedCards: followed,
+                        // NotFollowedCards: notFollowed,
+                    });
+
+                }
             },
-            {
-                Id: 2,
-                Title: 'header2',
-                Body: 'body2',
-                Image: this.state.EmptyImagePath,
-                Followed: false
-            },
-            {
-                Id: 3,
-                Title: 'header3',
-                Body: 'body3',
-                Image: this.state.EmptyImagePath,
-                Followed: true
-            },
-            {
-                Id: 4,
-                Title: 'header4',
-                Body: 'body4',
-                Image: this.state.EmptyImagePath,
-                Followed: true
-            },
-        ];
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/article/get-all-short-for-user',
 
-
-
-
-
-        this.setState({
-            AllCardsData: cardsData,
-            // FollowedCards: followed,
-            // NotFollowedCards: notFollowed,
         });
+
+        // let cardsData = [
+        //     {
+        //         Id: 1,
+        //         Title: 'header1',
+        //         Body: 'body1',
+        //         Image: this.state.EmptyImagePath,
+        //         Followed: false
+        //     }
+        // ];
+
+        // this.setState({
+        //     AllCardsData: cardsData,
+        //     // FollowedCards: followed,
+        //     // NotFollowedCards: notFollowed,
+        // });
 
 
     }
 
 
 
+
+    ///add or update
     UpdateElement(newElement: IOneCardInListData) {
         // console.log(newElement);
         // let newState = Object.assign({}, this.state);
@@ -107,8 +115,11 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         let updEl = (arr: IOneCardInListData[]) => {
             for (let i = 0; i < arr.length; ++i) {
                 if (arr[i].Id == newElement.Id) {
-                    arr[i] = newElement;
-                    this.setState(newState);
+                    //update
+                    this.EditCreateElementInListRequest(newElement, "edit","PATCH", () => {
+                        arr[i] = newElement;
+                        this.setState(newState);
+                    });
                     return true;
                 }
             }
@@ -120,54 +131,53 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         if (updEl(newState.AllCardsData)) {
             return;
         }
+        //TODO создать полную модуль с бэка и тут ее прокинуть в стайт
+        this.EditCreateElementInListRequest(newElement, "create","PUT", () => {
+            arr[i] = newElement;
+            this.setState(newState);
+        });
 
-        // if (updEl(newState.NotFollowedCards)) {
-        //     return;
-        // }
-        // newElement.Id+=Math.floor(Math.random() * Math.floor(20));//TODO для теста
-        newState.AllCardsData.push(newElement);
-        newState.NewCardTemplate = null;
-        // console.log(newState);
-        this.setState(newState);
     }
 
 
 
     FollowRequstSuccess(id: number) {
-        // let moveFollow = (from, to) => {
-        //     for (let i = 0; i < from.length; ++i) {
-        //         if (from[i].Id == id) {
-        //             to.push(from[i]);
-        //             from.splice(i, 1);
-        //             this.setState(newState);
-        //             return true;
-        //         }
-        //     }
-        // };
-
-        let SetFollow = (arr: IOneCardInListData[]) => {
+        let SetFollow = (arr: IOneCardInListData[], follow: boolean) => {
             for (let i = 0; i < arr.length; ++i) {
                 if (arr[i].Id == id) {
-                    arr[i].Followed = !arr[i].Followed;
-                    // to.push(from[i]);
-                    // from.splice(i, 1);
-                    // this.setState(newState);
+                    let newState = { ...this.state };
+                    newState.AllCardsData[i].Followed = follow;
+
                     return true;
                 }
             }
         };
 
-        let newState = Object.assign({}, this.state);
-        SetFollow(newState.AllCardsData);
+        let data = {
+            "id": id,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PATCH",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    if (xhr) {
 
-        // console.log('follow-' + id);
+                        SetFollow(this.state.AllCardsData, true);
+                    }
+                    else {
+                        SetFollow(this.state.AllCardsData, false);//TODO правильно ли так делать? может не bool возвращать а обертку?
+                    }
 
-
-        // if (moveFollow(newState.FollowedCards, newState.NotFollowedCards)) {
-        //     return;
-        // }
-
-        // moveFollow(newState.NotFollowedCards, newState.FollowedCards);
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/article/follow',
+        });
 
 
     }
@@ -194,7 +204,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
     ChangeFilterFollow(e: any) {//TODO onChange для input
         // e.persist();
-        let newState = Object.assign({}, this.state);
+        let newState = { ...this.state };
         // console.log(e);
         // if(e.target.value){
         //     newState.CardsListFilters.FollowOnly=true;
@@ -240,5 +250,49 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         </div>
 
     }
+
+
+
+
+    //----------------------------------------------------------------------------PRIVATE
+    private EditCreateElementInListRequest(newElement: IOneCardInListData, actionUrl: string, requestType: string, callBack: any) {//TODO callback на апдейт 
+        let data = {
+            "id": newElement.Id,
+            "title": newElement.Title,
+            "body": newElement.Body,
+            // "main_image_new":newElement.Image,
+        };
+
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: requestType,
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    //TODO правильно ли так делать? может не bool возвращать а обертку?
+
+                    if (xhr) {
+                        callBack();
+                    }
+                    else {
+                        //что то пошло не так?
+                    }
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/article/'+actionUrl,
+
+        });
+    }
+
+
+
+
+
+
+
 }
 // </helloprops>

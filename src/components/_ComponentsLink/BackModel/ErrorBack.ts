@@ -6,6 +6,8 @@ export class OneErrorBack {
     errors: string[];
 
 }
+
+
 export class MainErrorObjectBack {
 
     status?: number;

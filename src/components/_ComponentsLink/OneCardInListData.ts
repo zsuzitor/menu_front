@@ -6,6 +6,8 @@ export interface IOneCardInListData {
     Body: string;
     Image: string;
     Followed: boolean;
+
+    FillByBackModel(newData: IOneCardInListDataBack): void;
 }
 
 export class OneCardInListData implements IOneCardInListData {
@@ -15,10 +17,13 @@ export class OneCardInListData implements IOneCardInListData {
     Image: string;
     Followed: boolean;
 
-    constructor(backModel: IOneCardInListDataBack) {
- 
-        this.FillByBackModel(backModel);
+    constructor(backModel?: IOneCardInListDataBack) {
+        if (backModel) {
+            this.FillByBackModel(backModel);
+        }
+
     }
+
 
     FillByBackModel(backModel: IOneCardInListDataBack) {
         this.Id = backModel.id;

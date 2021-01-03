@@ -108,25 +108,20 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
 
     ///add or update
-    UpdateElement(newElement: IOneCardInListData) {
+    UpdateElement(newElement: IOneCardInListData) {//TODO async почитать
         // console.log(newElement);
         // let newState = Object.assign({}, this.state);
         let newState = { ...this.state };
-
+        // let thisRef = this;
         let updEl = (arr: IOneCardInListData[]) => {
             for (let i = 0; i < arr.length; ++i) {
                 if (arr[i].Id == newElement.Id) {
-                    //update
-                    // this.EditCreateElementInListRequest(newElement, "edit","PATCH", () => {
-                    //     arr[i] = newElement;
-                    //     this.setState(newState);
-                    // });
-
-
-
-
-
-
+                    this.EditCardInListRequest(newElement,
+                        () => {
+                            arr[i] = newElement;
+                            this.setState(newState);
+                        }
+                    );
 
                     return true;
                 }
@@ -139,10 +134,17 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         if (updEl(newState.AllCardsData)) {
             return;
         }
-        //TODO создать полную модель с бэка и тут ее прокинуть в стайт
-        this.EditCreateElementInListRequest(newElement, "create","PUT", () => {
-            arr[i] = newElement;
-            this.setState(newState);
+        
+        this.CreateCardInListRequest(newElement, (newEl: IOneCardInListDataBack) => {
+            // newState.AllCardsData.push(newElement);
+            for (let i = 0; i < newState.AllCardsData.length; ++i) {
+                if (newState.AllCardsData[i].Id <= 0) {
+                    newState.AllCardsData[i].FillByBackModel(newEl);
+                    this.setState(newState);
+                    return;
+                }
+            }
+
         });
 
     }
@@ -173,16 +175,16 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
                     //TODO ошибка
                 }
                 else {
-                     let boolRes = xhr as BoolResultBack;
-                    
-                    if (boolRes.result===true) {
+                    let boolRes = xhr as BoolResultBack;
+
+                    if (boolRes.result === true) {
 
                         SetFollow(this.state.AllCardsData, true);
                     }
-                    else if(boolRes.result===false){
+                    else if (boolRes.result === false) {
                         SetFollow(this.state.AllCardsData, false);//TODO правильно ли так делать? может не bool возвращать а обертку?
                     }
-                    else{
+                    else {
                         //что то не то вернулось
                     }
 
@@ -202,14 +204,14 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             return;
         }
 
-        let newState = { ...this.state };//Object.assign({}, this.state);
+        let newState = { ...this.state };
         newState.NewCardTemplate = {
             Id: -1,
             Title: 'Новая',
             Body: 'Новая',
             Image: this.state.EmptyImagePath,
             Followed: false,
-        };
+        } as OneCardInListData;//TODO надо проверить сломается что то или нет
 
         this.setState(newState);
     }
@@ -302,8 +304,8 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
     // }
 
 
-
-    private EditElementInListRequest(newElement: IOneCardInListData, callBack: any) {//TODO callback на апдейт 
+    ///редактирование именно из списка карт
+    private EditCardInListRequest(newElement: IOneCardInListData, callBack: any) {//TODO callback на апдейт 
         let data = {
             "id": newElement.Id,
             "title": newElement.Title,
@@ -321,20 +323,53 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
                 }
                 else {
                     let boolRes = xhr as BoolResultBack;
-                    if (boolRes.result===true) {
+                    if (boolRes.result === true) {
 
                         callBack();
                     }
-                    else if(boolRes.result===false){
-                        SetFollow(this.state.AllCardsData, false);//TODO правильно ли так делать? может не bool возвращать а обертку?
+                    else if (boolRes.result === false) {
+                        //какая то ошибка
                     }
-                    else{
+                    else {
                         //что то не то вернулось
                     }
                 }
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/article/edit',
+
+        });
+    }
+
+    ///создание именно из списка карт
+    private CreateCardInListRequest(newElement: IOneCardInListData, callBack: any) {//TODO callback на добавление 
+        let data = {
+            "title": newElement.Title,
+            "body": newElement.Body,
+            // "main_image_new":newElement.Image,
+        };
+
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PUT",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    let resBack = xhr as IOneCardInListDataBack;
+                    if (Number.isInteger(resBack.id) && resBack.id > 0) {
+
+                        callBack(resBack);
+                    }
+                    else {
+                        //что то не то вернулось
+                    }
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/article/create',
 
         });
     }

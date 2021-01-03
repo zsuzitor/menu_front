@@ -99,14 +99,14 @@ export class AjaxHelper implements IAjaxHelper {
 
     }
 
-    public TrySend(ajaxObj: JQuery.AjaxSettings): void {
+    public  TrySend(ajaxObj: JQuery.AjaxSettings) {//async       : Promise<any>
         // if (tokenRequested) {//TODO
         //     setTimeout(function () {
         //         trySend(ajaxObj);
         //     }, 50);
         // }
         // else {
-        $.ajax(ajaxObj);
+          $.ajax(ajaxObj);//await
         // }
     }
 }

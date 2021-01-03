@@ -116,31 +116,17 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
     }
 
     SaveOnClick() {
-        //TODO отправляем запрос
-        //как то отобразить что он пошел, и что то сделать с кнопками на время запросов
-        // console.log(this.NewState);
-        //если id<0 то запрос на создание 
-        if (this.state.NewState.Id < 1) {//TODO временный костыль тк бэка нет
-            this.state.NewState.Id = 99;
-        }
+       
 
         //дальше работаем и в компоненты выше передаем то что вернулось в бэка
-
-        //запрос успешный
         let newState = { ...this.state };
-        newState.EditNow = false;
-        // newState.OldState = newState.NewState;
+       
         let stateForUpdate = newState.NewState;
         newState.NewState = null;
+        newState.EditNow = false;
         this.setState(newState);
-        // this.state.
         this.props.UpdateElement(stateForUpdate);
-        // newState.NewState = null;
-        // let localState = Object.assign({}, newState);
-        // localState.NewState = null;
-
-
-        // this.setState(localState);//TODO возможно все редактирование придется переносить
+        
     }
 
     TitleRender() {

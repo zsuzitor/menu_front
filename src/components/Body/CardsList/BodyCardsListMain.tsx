@@ -26,7 +26,8 @@ export interface IBodyCardsListMainState {
     EmptyImagePath: string;
     AllCardsData: IOneCardInListData[];
     NewCardTemplate: IOneCardInListData;
-    CardsListFilters: ICardListFilters
+    CardsListFilters: ICardListFilters;
+    CardsLoaded: boolean;
 }
 
 export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, IBodyCardsListMainState> {
@@ -42,12 +43,14 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
                 FollowOnly: false,
             },
             EmptyImagePath: G_EmptyImagePath,//"../../images/user_empty_image.png",
+            CardsLoaded: false,
         };
 
         this.UpdateElement = this.UpdateElement.bind(this);
         this.FollowRequstSuccess = this.FollowRequstSuccess.bind(this);
         this.ShowCreateTemplate = this.ShowCreateTemplate.bind(this);
         this.ChangeFilterFollow = this.ChangeFilterFollow.bind(this);
+        this.RenderCardsOrPreloader = this.RenderCardsOrPreloader.bind(this);
 
 
     }
@@ -72,8 +75,9 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
                         dataFront.push(new OneCardInListData(bk));
                     });
 
-                    this.setState({
+                    this.setState({//смержит?????
                         AllCardsData: dataFront,
+                        CardsLoaded: true,
                         // FollowedCards: followed,
                         // NotFollowedCards: notFollowed,
                     });
@@ -118,6 +122,8 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
                 if (arr[i].Id == newElement.Id) {
                     this.EditCardInListRequest(newElement,
                         () => {
+                            console.log(i);
+                            console.log(JSON.stringify(newElement));
                             arr[i] = newElement;
                             this.setState(newState);
                         }
@@ -134,17 +140,22 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         if (updEl(newState.AllCardsData)) {
             return;
         }
-        
-        this.CreateCardInListRequest(newElement, (newEl: IOneCardInListDataBack) => {
-            // newState.AllCardsData.push(newElement);
-            for (let i = 0; i < newState.AllCardsData.length; ++i) {
-                if (newState.AllCardsData[i].Id <= 0) {
-                    newState.AllCardsData[i].FillByBackModel(newEl);
-                    this.setState(newState);
-                    return;
-                }
-            }
 
+        this.CreateCardInListRequest(newElement, (newEl: IOneCardInListDataBack) => {
+            // this.state.NewCardTemplate
+            let elForAdd = new OneCardInListData();
+            elForAdd.FillByBackModel(newEl);
+            newState.AllCardsData.push(elForAdd);
+            newState.NewCardTemplate = null;
+            // for (let i = 0; i < newState.AllCardsData.length; ++i) {
+            //     if (newState.AllCardsData[i].Id <= 0) {
+            //         newState.AllCardsData[i].FillByBackModel(newEl);
+            //         this.setState(newState);
+            //         return;
+            //     }
+            // }
+
+            this.setState(newState);
         });
 
     }
@@ -231,37 +242,40 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         this.setState(newState);
     }
 
-    render() {
-        // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
-        return <div className='main-body container'>
+    RenderCardsOrPreloader() {
+        if (this.state.CardsLoaded) {
+            return <div>
+                <CardsFilters FollowOnly={this.state.CardsListFilters.FollowOnly} FollowOnlyChanged={this.ChangeFilterFollow} />
 
-            {/* <p>
-                <button className="btn btn-primary" type="button" data-toggle="collapse" data-target="#body-chosen-cards-section" aria-expanded="false" aria-controls="body-chosen-cards-section">Избранные</button>
-            </p>
-            <div>
-                <div className="collapse" id="body-chosen-cards-section">
-                    <div className="card card-body">
-
-                        <MenuCardList CardsList={this.state.FollowedCards} updateElement={this.updateElement} FollowRequstSuccess={this.followRequstSuccess} />
-                    </div>
-                </div>
-            </div> */}
-            <CardsFilters FollowOnly={this.state.CardsListFilters.FollowOnly} FollowOnlyChanged={this.ChangeFilterFollow} />
-
-            <p>
-                <button className="btn btn-primary" type="button" data-toggle="collapse" data-target="#body-all-cards-section" aria-expanded="false" aria-controls="body-all-cards-section">Карточки</button>
-            </p>
-            <div>
-                <div className="collapse" id="body-all-cards-section">
-                    <div className="card card-body">
-                        <div>
-                            <button className='btn btn-primary' onClick={this.ShowCreateTemplate}>Добавить</button>
+                <p>
+                    <button className="btn btn-primary" type="button" data-toggle="collapse" data-target="#body-all-cards-section" aria-expanded="false" aria-controls="body-all-cards-section">Карточки</button>
+                </p>
+                <div>
+                    <div className="collapse" id="body-all-cards-section">
+                        <div className="card card-body">
+                            <div>
+                                <button className='btn btn-primary' onClick={this.ShowCreateTemplate}>Добавить</button>
+                            </div>
+                            <MenuCardList CardFilters={this.state.CardsListFilters} NewCardTemplate={this.state.NewCardTemplate}
+                                CardsList={this.state.AllCardsData} UpdateElement={this.UpdateElement} FollowRequstSuccess={this.FollowRequstSuccess} />
                         </div>
-                        <MenuCardList CardFilters={this.state.CardsListFilters} NewCardTemplate={this.state.NewCardTemplate}
-                            CardsList={this.state.AllCardsData} UpdateElement={this.UpdateElement} FollowRequstSuccess={this.FollowRequstSuccess} />
                     </div>
                 </div>
             </div>
+        }
+        else {
+            return <div className='card-list-preloader'>
+                <img src={G_PreloaderPath} className='persent-100-width-height'></img>
+            </div>
+        }
+    }
+
+    render() {
+        // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
+        return <div className='main-body container'>
+            {this.RenderCardsOrPreloader()}
+
+
         </div>
 
     }

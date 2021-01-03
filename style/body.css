@@ -43,3 +43,9 @@ div.save-one-card-button{
     left: 100%;
     margin-left: -60px;
 }
+
+div.card-list-preloader{
+    height: 400px;
+    width: 400px;
+    /* TODO  при маленьком экране фул криво */
+}

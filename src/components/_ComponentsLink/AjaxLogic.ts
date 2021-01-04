@@ -1,6 +1,6 @@
 
 
-export declare  interface IAjaxInputObject {
+export declare interface IAjaxInputObject {
     Type?: string;
     Data: any;//generic?
     Url: string;
@@ -13,7 +13,7 @@ export declare  interface IAjaxInputObject {
 
 export interface IAjaxHelper {
     TryRefreshToken(): void;
-    GoAjaxRequest(obj: IAjaxInputObject, fileLoad?: boolean): void;
+    GoAjaxRequest(obj: IAjaxInputObject, fileLoad?: boolean): Promise<any>;
     TrySend(ajaxObj: JQuery.AjaxSettings): void;
 }
 
@@ -25,7 +25,7 @@ export class AjaxHelper implements IAjaxHelper {
 
     }
 
-    public GoAjaxRequest(obj: IAjaxInputObject, fileLoad: boolean = false): void {
+    public async GoAjaxRequest(obj: IAjaxInputObject, fileLoad: boolean = false): Promise<any> {
         let thisRef = this;
 
         if (!obj.Type)
@@ -80,6 +80,7 @@ export class AjaxHelper implements IAjaxHelper {
                 }
 
                 //PreloaderShowChange(false);
+                // console.log("ajax complete");
             },
             dataType: obj.DataType//'html'
         };
@@ -94,19 +95,22 @@ export class AjaxHelper implements IAjaxHelper {
             ajaxObj.contentType = false;
         }
 
-        this.TrySend(ajaxObj);
-
+        try {
+            await this.TrySend(ajaxObj);
+        }
+        catch { }
 
     }
 
-    public  TrySend(ajaxObj: JQuery.AjaxSettings) {//async       : Promise<any>
+    public async TrySend(ajaxObj: JQuery.AjaxSettings): Promise<any> {//async       : Promise<any>
         // if (tokenRequested) {//TODO
         //     setTimeout(function () {
         //         trySend(ajaxObj);
         //     }, 50);
         // }
         // else {
-          $.ajax(ajaxObj);//await
+        await $.ajax(ajaxObj);//await
+
         // }
     }
 }

@@ -25,7 +25,7 @@ export interface IBodyCardsListMainProps {
 export interface IBodyCardsListMainState {
     EmptyImagePath: string;
     AllCardsData: IOneCardInListData[];
-    NewCardTemplate: IOneCardInListData;
+    NewCardTemplate: boolean;
     CardsListFilters: ICardListFilters;
     CardsLoaded: boolean;
 }
@@ -38,7 +38,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
         this.state = {
             AllCardsData: [],
-            NewCardTemplate: null,
+            NewCardTemplate: false,
             CardsListFilters: {
                 FollowOnly: false,
             },
@@ -51,22 +51,23 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         this.ShowCreateTemplate = this.ShowCreateTemplate.bind(this);
         this.ChangeFilterFollow = this.ChangeFilterFollow.bind(this);
         this.RenderCardsOrPreloader = this.RenderCardsOrPreloader.bind(this);
-
+        this.RemoveNewTemplate = this.RemoveNewTemplate.bind(this);
 
     }
 
 
-    componentDidMount() {
+    async componentDidMount() {
         //грузим все
 
         // let ajx: AjaxHelper.IAjaxHelper = new AjaxHelper.AjaxHelper();
-        G_AjaxHelper.GoAjaxRequest({
+        await G_AjaxHelper.GoAjaxRequest({
             Data: {},
             Type: "GET",
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
                     //TODO ошибка
+
                 }
                 else {
                     let dataBack = xhr as IOneCardInListDataBack[];
@@ -88,6 +89,9 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             Url: G_PathToServer + 'api/article/get-all-short-for-user',
 
         });
+        // .then(()=>{console.log("listmain");}).catch(e => {
+        //     console.log(e);
+        // });;
 
         // let cardsData = [
         //     {
@@ -104,7 +108,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         //     // FollowedCards: followed,
         //     // NotFollowedCards: notFollowed,
         // });
-
+        // console.log("listmain async");
 
     }
 
@@ -122,8 +126,8 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
                 if (arr[i].Id == newElement.Id) {
                     this.EditCardInListRequest(newElement,
                         () => {
-                            console.log(i);
-                            console.log(JSON.stringify(newElement));
+                            // console.log(i);
+                            // console.log(JSON.stringify(newElement));
                             arr[i] = newElement;
                             this.setState(newState);
                         }
@@ -137,7 +141,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         // console.log(newElement);
 
 
-        if (updEl(newState.AllCardsData)) {
+        if (newElement.Id > 0 && updEl(newState.AllCardsData)) {
             return;
         }
 
@@ -146,7 +150,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             let elForAdd = new OneCardInListData();
             elForAdd.FillByBackModel(newEl);
             newState.AllCardsData.push(elForAdd);
-            newState.NewCardTemplate = null;
+            newState.NewCardTemplate = false;
             // for (let i = 0; i < newState.AllCardsData.length; ++i) {
             //     if (newState.AllCardsData[i].Id <= 0) {
             //         newState.AllCardsData[i].FillByBackModel(newEl);
@@ -160,9 +164,13 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
     }
 
+    RemoveNewTemplate() {
+        let newState = { ...this.state };
+        newState.NewCardTemplate = false;
+        this.setState(newState);
+    }
 
-
-    FollowRequstSuccess(id: number) {
+    FollowRequstSuccess(id: number, result:boolean) {
         let SetFollow = (arr: IOneCardInListData[], follow: boolean) => {
             for (let i = 0; i < arr.length; ++i) {
                 if (arr[i].Id == id) {
@@ -174,36 +182,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             }
         };
 
-        let data = {
-            "id": id,
-        };
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "PATCH",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                }
-                else {
-                    let boolRes = xhr as BoolResultBack;
-
-                    if (boolRes.result === true) {
-
-                        SetFollow(this.state.AllCardsData, true);
-                    }
-                    else if (boolRes.result === false) {
-                        SetFollow(this.state.AllCardsData, false);//TODO правильно ли так делать? может не bool возвращать а обертку?
-                    }
-                    else {
-                        //что то не то вернулось
-                    }
-
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/article/follow',
-        });
+        SetFollow(this.state.AllCardsData, result);
 
 
     }
@@ -216,13 +195,14 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         }
 
         let newState = { ...this.state };
-        newState.NewCardTemplate = {
-            Id: -1,
-            Title: 'Новая',
-            Body: 'Новая',
-            Image: this.state.EmptyImagePath,
-            Followed: false,
-        } as OneCardInListData;//TODO надо проверить сломается что то или нет
+        newState.NewCardTemplate = true;
+        // {
+        //     Id: -1,
+        //     Title: 'Новая',
+        //     Body: 'Новая',
+        //     Image: this.state.EmptyImagePath,
+        //     Followed: false,
+        // } as OneCardInListData;//TODO надо проверить сломается что то или нет
 
         this.setState(newState);
     }
@@ -257,7 +237,9 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
                                 <button className='btn btn-primary' onClick={this.ShowCreateTemplate}>Добавить</button>
                             </div>
                             <MenuCardList CardFilters={this.state.CardsListFilters} NewCardTemplate={this.state.NewCardTemplate}
-                                CardsList={this.state.AllCardsData} UpdateElement={this.UpdateElement} FollowRequstSuccess={this.FollowRequstSuccess} />
+                                CardsList={this.state.AllCardsData} UpdateElement={this.UpdateElement} FollowRequstSuccess={this.FollowRequstSuccess}
+                                RemoveNewTemplate={this.RemoveNewTemplate}
+                            />
                         </div>
                     </div>
                 </div>

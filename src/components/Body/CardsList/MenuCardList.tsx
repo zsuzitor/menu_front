@@ -5,10 +5,11 @@ import { IOneCardInListData } from '../../_ComponentsLink/OneCardInListData';
 
 export interface IMenuCardListProps {
     CardFilters: ICardListFilters;
-    NewCardTemplate: IOneCardInListData;
+    NewCardTemplate: boolean;
     UpdateElement: (newElement: IOneCardInListData) => void;
-    FollowRequstSuccess: (id: number) => void;
+    FollowRequstSuccess: (id: number, result:boolean) => void;
     CardsList: IOneCardInListData[];
+    RemoveNewTemplate?: () => void;
 }
 
 export class MenuCardList extends React.Component<IMenuCardListProps, {}> {
@@ -26,9 +27,9 @@ export class MenuCardList extends React.Component<IMenuCardListProps, {}> {
     }
 
     RenderCreateTemplate() {
-        // console.log(this.props);
+        //  console.log(JSON.stringify(this.props));
         if (this.props.NewCardTemplate) {
-            return <OneMenuCard key={this.props.NewCardTemplate.Id} CardData={this.props.NewCardTemplate} UpdateElement={this.props.UpdateElement} />
+            return <OneMenuCard key={-1} IsNewTemplate={true} UpdateElement={this.props.UpdateElement} RemoveNewTemplate={this.props.RemoveNewTemplate} />
         }
 
         return <div>
@@ -37,15 +38,15 @@ export class MenuCardList extends React.Component<IMenuCardListProps, {}> {
 
     RenderCardByFilters(item: IOneCardInListData) {
 
-        if (!this.props.CardFilters.FollowOnly||item.Followed) {
+        if (!this.props.CardFilters.FollowOnly || item.Followed) {
             // if (item.Followed) {
-                return <OneMenuCard key={item.Id} CardData={item} UpdateElement={this.props.UpdateElement} FollowRequstSuccess={this.props.FollowRequstSuccess} />
+            return <OneMenuCard key={item.Id} CardData={item} UpdateElement={this.props.UpdateElement} FollowRequstSuccess={this.props.FollowRequstSuccess} />
             // }
-        // }
-        // else {
-        //     // console.log(item);
-        //     return <OneMenuCard key={item.Id} CardData={item} UpdateElement={this.props.UpdateElement} FollowRequstSuccess={this.props.FollowRequstSuccess} />
-         }
+            // }
+            // else {
+            //     // console.log(item);
+            //     return <OneMenuCard key={item.Id} CardData={item} UpdateElement={this.props.UpdateElement} FollowRequstSuccess={this.props.FollowRequstSuccess} />
+        }
         // console.log(this.props);
         return null;
     }

@@ -1,7 +1,7 @@
 /// <reference path="../../../../typings/globals.d.ts" />
 
 import * as React from "react";
-import { IOneCardInListData } from '../../_ComponentsLink/OneCardInListData';
+import { IOneCardInListData, OneCardInListData } from '../../_ComponentsLink/OneCardInListData';
 
 // export interface IHeaderLogoProps {
 // }
@@ -10,11 +10,15 @@ import {
     Link,
     BrowserRouter
 } from "react-router-dom";
+import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
+import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
 
 export interface IOneMenuCardProps {
-    CardData: IOneCardInListData;
-    FollowRequstSuccess?: (id: number) => void;
+    CardData?: IOneCardInListData;
+    FollowRequstSuccess?: (id: number, result: boolean) => void;
     UpdateElement: (newElement: IOneCardInListData) => void;
+    IsNewTemplate?: boolean;
+    RemoveNewTemplate?: () => void;
 }
 
 export interface IOneMenuCardState {
@@ -29,10 +33,13 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
         // this.onTextChanged = this.onTextChanged.bind(this);
 
         // this.state = props.data;
+
+
         this.state = {
             EditNow: false,
             NewState: null,
         };
+
 
         this.ActionButton = this.ActionButton.bind(this);
         this.EditOnClick = this.EditOnClick.bind(this);
@@ -55,10 +62,28 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
 
     }
 
-    RenderFollowButton() {
-        if (this.props.CardData.Id > 0) {
-            return <div className='follow-one-card-button one-card-button' onClick={this.FollowCard}>
 
+    componentDidMount() {
+        // console.log(JSON.stringify(this.props));
+        if (this.props.IsNewTemplate && !this.state.NewState) {
+            let newState = { ...this.state };
+
+            newState.EditNow = true;
+            newState.NewState = {
+                Id: -1,
+                Title: 'Новая',
+                Body: 'Новая',
+                Image: G_EmptyImagePath,
+                Followed: false,
+            } as OneCardInListData;//TODO надо проверить сломается что то или нет,
+            this.setState(newState);
+        }
+    }
+
+    RenderFollowButton() {
+        if (this.props.CardData && this.props.CardData.Id > 0) {
+            return <div className='follow-one-card-button one-card-button' onClick={this.FollowCard}>
+                fl
             </div>
         }
         return <div></div>
@@ -68,10 +93,10 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
         if (this.state.EditNow) {
             return <div>
                 <div className='cancel-edit-one-card-button one-card-button' onClick={this.CancelEditOnClick}>
-
+                    ce
                 </div>
                 <div className='save-one-card-button one-card-button' onClick={this.SaveOnClick}>
-
+                    sv
                 </div>
             </div>
         }
@@ -79,7 +104,7 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
 
             return <div>
                 <div className='edit-one-card-button one-card-button' onClick={this.EditOnClick}>
-
+                    ed
                 </div>
                 {this.RenderFollowButton()}
 
@@ -100,6 +125,11 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
         newState.NewState = null;
         // console.log(newState)
         this.setState(newState);
+        this.props.IsNewTemplate
+        if (this.props.IsNewTemplate && this.props.RemoveNewTemplate) {
+            this.props.RemoveNewTemplate();
+        }
+
     }
 
 
@@ -108,25 +138,58 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
             return;
         }
         //TODO запрос
-        this.props.FollowRequstSuccess(this.props.CardData.Id);
 
-        let newState = { ...this.state };
-        newState.EditNow = false;
-        this.setState(newState);
+
+        let data = {
+            "id": this.props.CardData.Id,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PATCH",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    let boolRes = xhr as BoolResultBack;
+
+                    if (boolRes.result === true) {
+
+                        this.props.FollowRequstSuccess(this.props.CardData.Id, true);
+                    }
+                    else if (boolRes.result === false) {
+                        this.props.FollowRequstSuccess(this.props.CardData.Id, false);
+                    }
+                    else {
+                        //что то не то вернулось
+                    }
+
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/article/follow',
+        });
+
+
+
+        // let newState = { ...this.state };
+        // newState.EditNow = false;
+        // this.setState(newState);
     }
 
     SaveOnClick() {
-       
+
 
         //дальше работаем и в компоненты выше передаем то что вернулось в бэка
         let newState = { ...this.state };
-       
+
         let stateForUpdate = newState.NewState;
         newState.NewState = null;
         newState.EditNow = false;
         this.setState(newState);
         this.props.UpdateElement(stateForUpdate);
-        
+
     }
 
     TitleRender() {
@@ -152,8 +215,8 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
     }
 
     ImageRender() {
-        let localImagePath:string = this.props.CardData.Image;
-        if(!localImagePath){
+        let localImagePath: string = this.props.CardData?.Image;
+        if (!localImagePath) {
             localImagePath = G_EmptyImagePath;
         }
 
@@ -171,12 +234,12 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
             }
         }
         else {
-            if (this.state.NewState) {
+            if (this.props.CardData) {
                 return <p className="card-text">{this.props.CardData.Body}</p>
             }
 
             else {
-                return <p className="card-text">{this.props.CardData.Body}</p>
+                return <p className="card-text"></p>
             }
 
         }
@@ -198,17 +261,22 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
 
     render() {
 
-        return <div className='col-sm-6 col-md-4 col-lg-3' style={{ padding: '20px' }}>
-            <div className="card one-menu-card-inner">
-                {this.ActionButton()}
-                {this.ImageRender()}
-                <div className="card-body">
-                    {this.TitleRender()}
-                    {this.BodyRender()}
+        if (this.props.CardData || this.state.NewState) {
+            return <div className='col-sm-6 col-md-4 col-lg-3' style={{ padding: '20px' }}>
+                <div className="card one-menu-card-inner">
+                    {this.ActionButton()}
+                    {this.ImageRender()}
+                    <div className="card-body">
+                        {this.TitleRender()}
+                        {this.BodyRender()}
 
+                    </div>
                 </div>
             </div>
-        </div>
+        }
+        else {
+            return null;
+        }
     }
 }
 // </helloprops>

@@ -46,7 +46,7 @@ export class Login extends React.Component<{}, ILoginState> {
     }
 
 
-    TryLogin() {
+    async TryLogin() {
         //TODO отправляем запрос и чистим state
         let data = {
             'email': this.state.Login,
@@ -70,7 +70,7 @@ export class Login extends React.Component<{}, ILoginState> {
             Url: G_PathToServer + 'api/authenticate/login',
 
         });
-
+// console.log("TryLogin");
 
     }
     //style={{align:"center"}}

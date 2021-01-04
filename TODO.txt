@@ -1,6 +1,6 @@
 "removeComments": false, ->true
-src\components\_ComponentsLink\AjaxLogic.ts   ---- надо тестануть использование await
-дописал src\components\Body\CardsList\BodyCardsListMain.tsx но без async, тестануть сначала так, а потом то что выше попробовать
+//src\components\_ComponentsLink\AjaxLogic.ts   ---- надо тестануть использование await
+//дописал src\components\Body\CardsList\BodyCardsListMain.tsx но без async, тестануть сначала так, а потом то что выше попробовать
 
 
 в хедере длинное имя как то поправить или вообще мб его выпилить

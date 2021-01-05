@@ -170,19 +170,29 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         this.setState(newState);
     }
 
-    FollowRequstSuccess(id: number, result:boolean) {
-        let SetFollow = (arr: IOneCardInListData[], follow: boolean) => {
-            for (let i = 0; i < arr.length; ++i) {
-                if (arr[i].Id == id) {
-                    let newState = { ...this.state };
-                    newState.AllCardsData[i].Followed = follow;
+    FollowRequstSuccess(id: number, result: boolean) {
+        for (let i = 0; i < this.state.AllCardsData.length; ++i) {
+            if (this.state.AllCardsData[i].Id == id) {
+                let newState = { ...this.state };
+                newState.AllCardsData[i].Followed = result;
 
-                    return true;
-                }
+                return;
             }
-        };
+        }
 
-        SetFollow(this.state.AllCardsData, result);
+
+        // let SetFollow = (arr: IOneCardInListData[], follow: boolean) => {
+        //     for (let i = 0; i < arr.length; ++i) {
+        //         if (arr[i].Id == id) {
+        //             let newState = { ...this.state };
+        //             newState.AllCardsData[i].Followed = follow;
+
+        //             return true;
+        //         }
+        //     }
+        // };
+
+        // SetFollow(this.state.AllCardsData, result);
 
 
     }

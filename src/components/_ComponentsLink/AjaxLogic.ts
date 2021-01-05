@@ -1,10 +1,13 @@
 
+import { MainErrorObjectBack } from "./BackModel/ErrorBack";
+
 
 export declare interface IAjaxInputObject {
     Type?: string;
     Data: any;//generic?
     Url: string;
     DataType?: string;
+    NeedTryRefreshToken?: boolean;
     FuncSuccess?: (xhr: any, status: JQuery.Ajax.SuccessTextStatus, jqXHR: JQuery.jqXHR) => void;
     FuncError?: (xhr: any, status: JQuery.Ajax.ErrorTextStatus, error: string) => void;
     FuncBeforeSend?: () => void;
@@ -12,7 +15,7 @@ export declare interface IAjaxInputObject {
 }
 
 export interface IAjaxHelper {
-    TryRefreshToken(): void;
+    TryRefreshToken(callBack: any): void;
     GoAjaxRequest(obj: IAjaxInputObject, fileLoad?: boolean): Promise<any>;
     TrySend(ajaxObj: JQuery.AjaxSettings): void;
 }
@@ -21,8 +24,27 @@ export interface IAjaxHelper {
 
 export class AjaxHelper implements IAjaxHelper {
 
-    public TryRefreshToken(): void {
+    public TryRefreshToken(callBack?: any): void {
+        this.GoAjaxRequest({
+            Data: {},
+            Type: "POST",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    //TODO записываем полученные токены
+                    if (callBack) {
+                        callBack();
+                    }
 
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/authenticate/refresh-access-token',
+
+        });
     }
 
     public async GoAjaxRequest(obj: IAjaxInputObject, fileLoad: boolean = false): Promise<any> {
@@ -32,6 +54,10 @@ export class AjaxHelper implements IAjaxHelper {
             obj.Type = 'GET';
         if (!obj.DataType)
             obj.DataType = 'json';//html
+
+        if (obj.NeedTryRefreshToken !== false) {
+            obj.NeedTryRefreshToken = true;
+        }
 
         let ajaxObj: JQuery.AjaxSettings = {
             type: obj.Type,
@@ -64,11 +90,18 @@ export class AjaxHelper implements IAjaxHelper {
                     obj.FuncBeforeSend();
                 //  PreloaderShowChange(true);
             },
-            headers: { 'Authorization_Access_Token': localStorage.getItem('access_token') },
             // hides the loader after completion of request, whether successfull or failor.
             complete: function (jqXHR, status) {
                 if (jqXHR.status == 401) {
-                    thisRef.TryRefreshToken();
+                    if (obj.NeedTryRefreshToken) {
+                        thisRef.TryRefreshToken(
+                            () => {
+                                obj.NeedTryRefreshToken = false;
+                                thisRef.GoAjaxRequest(obj, fileLoad);
+                            }
+                        );//TODO await или что то такое
+                    }
+
                 }
                 if (obj.FuncComplete) {
                     try {
@@ -95,6 +128,14 @@ export class AjaxHelper implements IAjaxHelper {
             ajaxObj.contentType = false;
         }
 
+        //TODO логику получения установки вынести в отдельный класс, встречается не только тут
+        let haders: any = { 'Authorization_Access_Token': localStorage.getItem('access_token') };
+        if (obj.NeedTryRefreshToken) {
+            haders['Authorization_Refresh_Token'] = localStorage.getItem('refresh_token');
+        }
+
+        ajaxObj.headers = haders;
+
         try {
             await this.TrySend(ajaxObj);
         }
@@ -103,15 +144,9 @@ export class AjaxHelper implements IAjaxHelper {
     }
 
     public async TrySend(ajaxObj: JQuery.AjaxSettings): Promise<any> {//async       : Promise<any>
-        // if (tokenRequested) {//TODO
-        //     setTimeout(function () {
-        //         trySend(ajaxObj);
-        //     }, 50);
-        // }
-        // else {
+
         await $.ajax(ajaxObj);//await
 
-        // }
     }
 }
 

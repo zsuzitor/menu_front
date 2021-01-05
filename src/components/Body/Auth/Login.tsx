@@ -63,6 +63,7 @@ export class Login extends React.Component<{}, ILoginState> {
                     //TODO ошибка
                 }
                 else {
+                    //TODO записываем полученные токены
                     document.location.href = "/menu";
                 }
             },

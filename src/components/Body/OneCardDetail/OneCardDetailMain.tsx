@@ -17,6 +17,8 @@ export interface IBodyOneCardDetailMainProps {
 
 export interface IOneCardDetailMainState {
     Card?: IOneCardFullData;
+    NewCardData?: IOneCardFullData;
+    EditNow: boolean;
 }
 
 
@@ -26,7 +28,9 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         super(props);
         //this.props.location.search
 
-        let newState: IOneCardDetailMainState = {};
+        let newState: IOneCardDetailMainState = {
+            EditNow: false,
+        };
 
         if (this.props.CardDataFromList) {
             //что то передали из списка, можно это отобразить пока грузятся норм данные
@@ -40,13 +44,19 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
 
         this.state = newState;
 
-        this.FollowBlock = this.FollowBlock.bind(this);
+        this.RenderFollowBlock = this.RenderFollowBlock.bind(this);
         this.FollowButtonClick = this.FollowButtonClick.bind(this);
 
-        this.TitleRender = this.TitleRender.bind(this);
+        this.RenderTitle = this.RenderTitle.bind(this);
         this.BodyTextRender = this.BodyTextRender.bind(this);
-        this.ImageRender = this.ImageRender.bind(this);
+        this.RenderImage = this.RenderImage.bind(this);
         this.RenderCardOrPreloader = this.RenderCardOrPreloader.bind(this);
+        this.RenderEditBlock = this.RenderEditBlock.bind(this);
+        this.EditButtonClick = this.EditButtonClick.bind(this);
+        this.CancelButtonClick = this.CancelButtonClick.bind(this);
+        this.RenderCancelBlock = this.RenderCancelBlock.bind(this);
+        this.TitleOnChange = this.TitleOnChange.bind(this);
+        this.BodyOnChange = this.BodyOnChange.bind(this);
 
 
     }
@@ -55,18 +65,18 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         //TODO по
         //надо как то прокинуть из урла
         let cardId: number = -1;
-        
+
         if (this.props.Id) {
             cardId = this.props.Id;
         }
         else {
             let urlArr = window.location.pathname.split('/');
-            
+
             // cardId = urlArr[urlArr.length - 1];
             let idStr = urlArr[urlArr.length - 1];
             // console.log(JSON.stringify(idStr));
             if (/^\d+$/.test(idStr)) {//TODO вынести в метод strContainsNum
-               
+
                 cardId = +idStr;
             }
             // console.log(JSON.stringify(cardId));
@@ -113,7 +123,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
     }
 
 
-    FollowBlock() {
+    RenderFollowBlock() {
 
         if (!this.state) {
             return <div></div>
@@ -130,9 +140,86 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
             imgPath += 'white_heart.jpg';
         }
 
-        return <div className='one-card-page-follow-button' onClick={this.FollowButtonClick}>
-            <img className='persent-100-width-height' src={imgPath} alt="Unfollowed" />
+        return <div className='one-card-page-follow-button datail-one-card-button' onClick={this.FollowButtonClick}>
+            <img className='persent-100-width-height' src={imgPath} alt="Follow" />
         </div>
+    }
+
+
+    RenderCancelBlock() {
+        if (!this.state) {
+            return null;
+        }
+
+        let imgPath = G_PathToBaseImages + 'cancel.png';
+        //стоит ли сюда прокидывать из списка событие?
+        // return <button>follow</button>
+
+        if (!this.state.EditNow) {
+            return null;
+        }
+
+        return <div className='one-card-page-cancel-button datail-one-card-button' onClick={this.CancelButtonClick}>
+            <img className='persent-100-width-height' src={imgPath} alt="Edit" />
+        </div>
+    }
+
+    RenderEditBlock() {
+
+        if (!this.state) {
+            return null;
+        }
+
+        let imgPath = G_PathToBaseImages + 'edit-1.svg';
+        //стоит ли сюда прокидывать из списка событие?
+        // return <button>follow</button>
+
+        if (this.state.EditNow) {
+            return null;
+        }
+
+        return <div className='one-card-page-edit-button datail-one-card-button' onClick={this.EditButtonClick}>
+            <img className='persent-100-width-height' src={imgPath} alt="Edit" />
+        </div>
+    }
+
+    RenderSaveBlock() {
+
+        if (!this.state) {
+            return null;
+        }
+
+        let imgPath = G_PathToBaseImages + 'save-icon.png';
+        //стоит ли сюда прокидывать из списка событие?
+        // return <button>follow</button>
+
+        if (!this.state.EditNow) {
+            return null;
+        }
+
+        return <div className='one-card-page-save-button datail-one-card-button' onClick={this.SaveButtonClick}>
+            <img className='persent-100-width-height' src={imgPath} alt="Save" />
+        </div>
+    }
+
+
+
+    EditButtonClick() {
+        let newState = { ...this.state };
+        newState.EditNow = true;
+        newState.NewCardData = { ...newState.Card };
+        this.setState(newState);
+    }
+
+    SaveButtonClick() {
+        //TODO
+    }
+
+    CancelButtonClick() {
+        let newState = { ...this.state };
+        newState.EditNow = false;
+        newState.NewCardData = null;
+        this.setState(newState);
     }
 
 
@@ -173,14 +260,37 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
             Url: G_PathToServer + 'api/article/follow',
         });
 
-
-
-
     }
 
-    TitleRender() {
-        if (this.state) {
-            return <h1>{this.state.Card.Title}</h1>
+
+    TitleOnChange(e: any) {
+        // console.log(this.state);
+        let newState = Object.assign({}, this.state);
+        newState.NewCardData.Title = e.target.value;
+        // console.log(newState);
+        this.setState(newState);
+    }
+
+    BodyOnChange(e: any) {
+        let newState = Object.assign({}, this.state);
+        newState.NewCardData.Body = e.target.value;
+        this.setState(newState);
+    }
+
+    RenderTitle() {
+        if (this.state?.Card) {
+            let title = this.state.Card.Title;
+            if (this.state.NewCardData) {
+                title = this.state.NewCardData.Title;
+            }
+
+            if (this.state.EditNow) {
+                return <input type="text" className='persent-100-width form-control' value={title} onChange={this.TitleOnChange} />
+            }
+            else {
+                return <h1>{title}</h1>
+            }
+
         }
         else {
             return <h1>WAITING</h1>
@@ -189,8 +299,19 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
     }
 
     BodyTextRender() {
-        if (this.state) {
-            return <p>{this.state.Card.Body}</p>
+        if (this.state?.Card) {
+            let body = this.state.Card.Body;
+            if (this.state.NewCardData) {
+                body = this.state.NewCardData.Body;
+            }
+
+            if (this.state.EditNow) {
+                return <input type="text" className='persent-100-width form-control' value={body} onChange={this.BodyOnChange} />
+            }
+            else {
+                return <p>{body}</p>
+            }
+
         }
         else {
             return <p>WAITING</p>
@@ -198,13 +319,23 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
 
     }
 
-    ImageRender() {
+    RenderImage() {
         let imgPath = G_EmptyImagePath;
         if (this.state && this.state.Card.Image) {
             imgPath = G_PathToBaseImages + this.state.Card.Image;
         }
 
         return <img src={imgPath} />
+    }
+
+    RenderActionButton() {
+        return <div>
+            {this.RenderTitle()}
+            {this.RenderFollowBlock()}
+            {this.RenderEditBlock()}
+            {this.RenderSaveBlock()}
+            {this.RenderCancelBlock()}
+        </div>
     }
 
 
@@ -218,21 +349,22 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
             return <div className="container">
                 <div>
                     <div className="one-card-header row padding-10-top">
-                        <div className='col-sm-6 col-md-8 one-card-header-info'>
+                        <div className='col-sm-6 col-md-7 one-card-header-info'>
                             {/* <p>{this.state ? this.state.Title : 'Loading'}</p> */}
-                            {this.TitleRender()}
-                            {this.FollowBlock()}
+                            {this.RenderActionButton()}
                         </div>
-                        <div className='col-sm-6 col-md-4 one-card-header-image'>
+                        <div className='col-md-1 col-sm-1 padding-10-top'></div>
+                        <div className='col-sm-5 col-md-4 one-card-header-image padding-10-top'>
 
                             {/* <img src={this.state?.Image} /> */}
-                            {this.ImageRender()}
+                            {this.RenderImage()}
 
                         </div>
-                        <div className="one-card-body-info padding-10-top persent-100-width">
-                            <div className='col-sm-12'>{this.BodyTextRender()}</div>
-                            <div className='col-sm-12'>MORE INFO</div>
-                        </div>
+                    </div>
+                    <div className='padding-10-top'></div>
+                    <div className="one-card-body-info row padding-10-top">
+                        <div className='col-sm-12'>{this.BodyTextRender()}</div>
+                        <div className='col-sm-12'>MORE INFO</div>
                     </div>
                 </div>
 

@@ -32,6 +32,7 @@ export class AjaxHelper implements IAjaxHelper {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
                     //TODO ошибка
+                    location.href = '/menu/auth/login/';
                 }
                 else {
                     //TODO записываем полученные токены

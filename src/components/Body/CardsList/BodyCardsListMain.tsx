@@ -175,7 +175,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             if (this.state.AllCardsData[i].Id == id) {
                 let newState = { ...this.state };
                 newState.AllCardsData[i].Followed = result;
-
+                this.setState(newState);
                 return;
             }
         }
@@ -234,7 +234,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
     RenderCardsOrPreloader() {
         if (this.state.CardsLoaded) {
-            return <div>
+            return <div className='card-list-body'>
                 <CardsFilters FollowOnly={this.state.CardsListFilters.FollowOnly} FollowOnlyChanged={this.ChangeFilterFollow} />
 
                 <p>

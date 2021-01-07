@@ -54,6 +54,7 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
         this.TitleOnChange = this.TitleOnChange.bind(this);
         this.BodyOnChange = this.BodyOnChange.bind(this);
         this.RenderFollowButton = this.RenderFollowButton.bind(this);
+        this.RenderFollowIcon = this.RenderFollowIcon.bind(this);
 
         // this.bodyRender = this.bodyRender.bind(this);
         // this.bodyRender = this.bodyRender.bind(this);
@@ -83,20 +84,34 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
     RenderFollowButton() {
         if (this.props.CardData && this.props.CardData.Id > 0) {
             return <div className='follow-one-card-button one-card-button' onClick={this.FollowCard}>
-                fl
+                {this.RenderFollowIcon()}
             </div>
         }
         return <div></div>
+    }
+
+    
+
+    RenderFollowIcon() {
+        // return <div></div>
+        let imgPath = G_PathToBaseImages;
+        if (this.props.CardData.Followed) {
+            imgPath += 'red_heart.png';
+        }
+        else {
+            imgPath += 'white_heart.jpg';
+        }
+        return <img className='persent-100-width-height' src={imgPath} alt="Follow" />
     }
 
     ActionButton() {
         if (this.state.EditNow) {
             return <div>
                 <div className='cancel-edit-one-card-button one-card-button' onClick={this.CancelEditOnClick}>
-                    ce
+                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" />
                 </div>
                 <div className='save-one-card-button one-card-button' onClick={this.SaveOnClick}>
-                    sv
+                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'} alt="Save" />
                 </div>
             </div>
         }
@@ -104,7 +119,7 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
 
             return <div>
                 <div className='edit-one-card-button one-card-button' onClick={this.EditOnClick}>
-                    ed
+                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'edit-1.svg'} alt="Edit" />
                 </div>
                 {this.RenderFollowButton()}
 
@@ -172,10 +187,6 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
         });
 
 
-
-        // let newState = { ...this.state };
-        // newState.EditNow = false;
-        // this.setState(newState);
     }
 
     SaveOnClick() {
@@ -193,24 +204,31 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
     }
 
     TitleRender() {
+        let title = this.state.NewState?.Title;
+        let id = this.state.NewState?.Id;
+        if (!this.state.NewState) {
+            title = this.props.CardData.Title;
+            id = this.props.CardData.Id;
+        }
 
         if (this.state.EditNow) {
-            if (this.state.NewState) {
-                return <input type="text" className='persent-100-width form-control' value={this.state.NewState.Title} onChange={this.TitleOnChange} />
-            }
-            else {
-                return <input type="text" className='persent-100-width form-control' value={this.props.CardData.Title} onChange={this.TitleOnChange} />
-            }
 
+            // if (this.state.NewState) {
+            //     return <input type="text" className='persent-100-width form-control' value={this.state.NewState.Title} onChange={this.TitleOnChange} />
+            // }
+            // else {
+            //     return <input type="text" className='persent-100-width form-control' value={this.props.CardData.Title} onChange={this.TitleOnChange} />
+            // }
+            return <input type="text" className='persent-100-width form-control' value={title} onChange={this.TitleOnChange} />
         }
         else {
-            if (this.state.NewState) {
-                return <Link to={"/menu/detail/" + this.state.NewState.Id}><h5 className="card-title" >{this.state.NewState.Title}</h5></Link>
-            }
-            else {
-                return <Link to={"/menu/detail/" + this.props.CardData.Id}><h5 className="card-title" >{this.props.CardData.Title}</h5></Link>
-            }
-
+            // if (this.state.NewState) {
+            //     return <Link to={"/menu/detail/" + this.state.NewState.Id}><h5 className="card-title" >{this.state.NewState.Title}</h5></Link>
+            // }
+            // else {
+            //     return <Link to={"/menu/detail/" + this.props.CardData.Id}><h5 className="card-title" >{this.props.CardData.Title}</h5></Link>
+            // }
+            return <Link to={"/menu/detail/" + id}><h5 className="card-title" >{title}</h5></Link>
         }
     }
 
@@ -226,12 +244,17 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
 
     BodyRender() {
         if (this.state.EditNow) {
-            if (this.state.NewState) {
-                return <input type="text" className='persent-100-width form-control' value={this.state.NewState.Body} onChange={this.BodyOnChange} />
+            let bodyText = this.state.NewState?.Body;
+            if (!this.state.NewState) {
+                bodyText = this.state.NewState.Body;
             }
-            else {
-                return <input type="text" className='persent-100-width form-control' value={this.state.NewState.Body} onChange={this.BodyOnChange} />
-            }
+            // if (this.state.NewState) {
+            //     return <input type="text" className='persent-100-width form-control' value={this.state.NewState.Body} onChange={this.BodyOnChange} />
+            // }
+            // else {
+            //     return <input type="text" className='persent-100-width form-control' value={this.state.NewState.Body} onChange={this.BodyOnChange} />
+            // }
+            return <input type="text" className='persent-100-width form-control' value={bodyText} onChange={this.BodyOnChange} />
         }
         else {
             if (this.props.CardData) {

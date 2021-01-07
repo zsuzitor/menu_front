@@ -1,23 +1,54 @@
 
 .one-card-header{
-    border:2px solid black;
+    /* border:2px solid black; */
+    /* box-shadow: 0 0 5px; */
 }
 
 .one-card-header-info{
-    border:2px solid black;
+    /* border:2px solid black; */
     padding-bottom: 5px;
+    box-shadow: 0 0 5px;
+    border-radius: 3px;
 }
 
 .one-card-header-image{
-    border:2px solid black;
+    /* border:2px solid black; */
     text-align: center;
+    box-shadow: 0 0 5px;
 }
 
 .one-card-body-info{
-    border:2px solid black;
+    /* border:2px solid black; */
+    box-shadow: 0 0 5px;
+    border-radius: 3px;
 }
 
 .one-card-page-follow-button{
-    width: 20px;
-    height: 20px;
+    /* width: 20px;
+    height: 20px; */
+}
+
+.one-card-page-edit-button{
+    /* width: 20px;
+    height: 20px; */
+}
+
+.one-card-page-save-button{
+    /* width: 20px;
+    height: 20px; */
+}
+
+.one-card-page-cancel-button{
+    /* width: 20px;
+    height: 20px; */
+}
+
+
+div.datail-one-card-button {
+    width: 30px;
+    height: 30px;
+    /* border: 2px solid black; */
+    /* position: absolute; */
+    z-index: 5;
+    cursor: pointer;
 }

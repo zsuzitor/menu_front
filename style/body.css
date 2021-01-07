@@ -1,6 +1,15 @@
+.body{
+    background-color: #edeef0;
+}
+
+.card-list-body{
+    background-color: white;
+}
+
 .main-body {
     /* height: 400px; */
-    border: 2px solid black;
+    /* border: 2px solid black; */
+    box-shadow: 0 0 5px;
     padding-top: 100px;
 }
 
@@ -18,7 +27,7 @@ div.one-menu-card-inner:hover {
 div.one-card-button {
     width: 30px;
     height: 30px;
-    border: 2px solid black;
+    /* border: 2px solid black; */
     position: absolute;
     z-index: 5;
     cursor: pointer;

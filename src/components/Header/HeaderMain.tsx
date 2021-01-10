@@ -1,13 +1,10 @@
 import * as React from "react";
-// var HeaderLogo = require('./HeaderLogo.jsx');
 import { HeaderLogo } from './HeaderLogo';
 import { HeaderUserMenu } from './HeaderUserMenu';
-import { IAuthState } from '../_ComponentsLink/AuthState';
+import { IAuthState } from '../_ComponentsLink/Models/AuthState';
 
 export interface IHeaderMainProps {
     AuthInfo: IAuthState;
-    // AuthInfo: any;
-    // children: JSX.Element;//указав так, можно рендерить компонент вкладывая в него другой <HelloComponent name="foo"><h1>Hello World</h1></HelloComponent>
 }
 
 export class HeaderMain extends React.Component<IHeaderMainProps, {}> {
@@ -16,7 +13,6 @@ export class HeaderMain extends React.Component<IHeaderMainProps, {}> {
         super(props);
     }
     render() {
-        // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
 
         return <div className='main-header'>
             <div className='main-header-inner container'>
@@ -29,4 +25,3 @@ export class HeaderMain extends React.Component<IHeaderMainProps, {}> {
         </div>
     }
 }
-// </helloprops>

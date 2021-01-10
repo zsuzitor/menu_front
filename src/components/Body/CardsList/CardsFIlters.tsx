@@ -1,8 +1,5 @@
 import * as React from "react";
-//import {ICardListFilters} from '../../_ComponentsLink/CardListFilters'
 
-// export interface IHeaderLogoProps {
-// }
 
 export interface ICardListFiltersProps {
     FollowOnly: boolean;

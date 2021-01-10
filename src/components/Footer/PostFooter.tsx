@@ -11,8 +11,7 @@ export class PostFooter extends React.Component<{}, {}> {
 
     render() {
         return <div className='sub-footer-under'>
-            {/* <h1>HELLO</h1> */}
+       
         </div>
     }
 }
-// </helloprops>

@@ -1,7 +1,6 @@
 import * as React from "react";
 
-// export interface IHeaderLogoProps {
-// }
+
 
 export class SocialLinkGroup extends React.Component<{}, {}> {
 
@@ -34,4 +33,3 @@ export class SocialLinkGroup extends React.Component<{}, {}> {
         </div>
     }
 }
-// </helloprops>

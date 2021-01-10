@@ -17,10 +17,7 @@ export class MainAuth extends React.Component<IMainAuthProps, {}> {
 
     constructor(props: IMainAuthProps) {
         super(props);
-        // console.log(this.props);
-        // this.state = {
-        //     login: true,
-        // };
+       
         this.SwithLogic = this.SwithLogic.bind(this);
         this.Switcher = this.Switcher.bind(this);
     }
@@ -39,16 +36,10 @@ export class MainAuth extends React.Component<IMainAuthProps, {}> {
 
         return <div className='row auth-switcher'>
             <div className='col-sm-6'>
-                {/* <BrowserRouter> */}
                     <Link className={('auth-switcher-link btn' + (this.props.LoginPage ? ' btn-primary' : ' btn-light'))} to="/menu/auth/login/">Вход</Link>
-                {/* </BrowserRouter> */}
-                {/* <button className={('btn' + (this.props.login ? ' btn-primary' : ''))}>Вход</button> */}
             </div>
             <div className='col-sm-6'>
-                {/* <BrowserRouter> */}
                     <Link className={('auth-switcher-link btn' + (!this.props.LoginPage ? ' btn-primary' : ' btn-light'))} to="/menu/auth/register/">Регистарция</Link>
-                {/* </BrowserRouter> */}
-                {/* <button className={('btn' + ((!this.props.login) ? ' btn-primary' : ''))}>Регистрация</button> */}
             </div>
         </div>
     }
@@ -62,4 +53,3 @@ export class MainAuth extends React.Component<IMainAuthProps, {}> {
         </div>
     }
 }
-// </helloprops>

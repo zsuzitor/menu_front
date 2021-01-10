@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IAuthState } from '../_ComponentsLink/AuthState';
+import { IAuthState } from '../_ComponentsLink/Models/AuthState';
 
 export interface IHeaderUserMenuProps {
     AuthInfo: IAuthState;
@@ -28,7 +28,6 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
         let path = imgPath;
         if (!path) {
             path = G_PathToBaseImages + 'user_empty_image.png';
-            // return <img className='header-user-img' src='../../images/user_empty_image.png'></img>
         }
 
         return <img className='header-user-img' src={path}></img>
@@ -68,15 +67,6 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
             Авторизация
         </div>
             <div className="dropdown-menu" style={{ backgroundColor: 'greenyellow' }}>
-                {/* TODO не уверен что так можно и что это будет работать  -- <BrowserRouter> */}
-                {/* <a className="dropdown-item" href="/menu/auth/login">Войти</a>
-                <a className="dropdown-item" href="/menu/auth/register/">Зарегистрироваться</a> */}
-                {/* <BrowserRouter>
-                    <Link className="dropdown-item" to="/menu/auth/login/">Войти</Link>
-                </BrowserRouter>
-                <BrowserRouter>
-                    <Link className="dropdown-item" to="/menu/auth/register/">Зарегистрироваться</Link>
-                </BrowserRouter> */}
 
                 <Link className="dropdown-item" to="/menu/auth/login/">Войти</Link>
                 <Link className="dropdown-item" to="/menu/auth/register/">Зарегистрироваться</Link>
@@ -87,11 +77,9 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
 
 
     render() {
-        // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
         return <div className='header-user-block col-8 col-md-3 nopadding '>
             {this.logginedOrNot(this.props.AuthInfo.AuthSuccess)}
 
         </div>
     }
 }
-// </helloprops>

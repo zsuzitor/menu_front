@@ -1,4 +1,4 @@
-import { IOneCardInListDataBack } from "./BackModel/OneCardInListDataBack";
+import { IOneCardInListDataBack } from "../BackModel/OneCardInListDataBack";
 
 export interface IOneCardInListData {
     Id: number;

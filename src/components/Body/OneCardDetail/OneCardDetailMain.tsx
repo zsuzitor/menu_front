@@ -5,8 +5,8 @@ import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
 import { IOneCardFullDataBack } from "../../_ComponentsLink/BackModel/OneCardFullDataBack";
 import { IOneCardInListDataBack } from "../../_ComponentsLink/BackModel/OneCardInListDataBack";
-import { IOneCardFullData, OneCardFullData } from '../../_ComponentsLink/OneCardFullData';
-import { IOneCardInListData } from '../../_ComponentsLink/OneCardInListData';
+import { IOneCardFullData, OneCardFullData } from '../../_ComponentsLink/Models/OneCardFullData';
+import { IOneCardInListData } from '../../_ComponentsLink/Models/OneCardInListData';
 // export interface IHeaderLogoProps {
 // }
 

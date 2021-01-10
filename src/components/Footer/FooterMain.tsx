@@ -42,4 +42,3 @@ export class FooterMain extends React.Component<{}, {}> {
 
     }
 }
-// </helloprops>

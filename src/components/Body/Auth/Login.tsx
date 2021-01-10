@@ -71,10 +71,9 @@ export class Login extends React.Component<{}, ILoginState> {
             Url: G_PathToServer + 'api/authenticate/login',
 
         });
-// console.log("TryLogin");
 
     }
-    //style={{align:"center"}}
+    
     render() {
         return <div className='persent-100-width'>
             <div className='persent-100-width'>
@@ -91,4 +90,3 @@ export class Login extends React.Component<{}, ILoginState> {
         </div>
     }
 }
-// </helloprops>

@@ -1,7 +1,7 @@
 /// <reference path="../../../../typings/globals.d.ts" />
 
 import * as React from "react";
-import { IOneCardInListData, OneCardInListData } from '../../_ComponentsLink/OneCardInListData';
+import { IOneCardInListData, OneCardInListData } from '../../_ComponentsLink/Models/OneCardInListData';
 
 // export interface IHeaderLogoProps {
 // }
@@ -213,21 +213,11 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
 
         if (this.state.EditNow) {
 
-            // if (this.state.NewState) {
-            //     return <input type="text" className='persent-100-width form-control' value={this.state.NewState.Title} onChange={this.TitleOnChange} />
-            // }
-            // else {
-            //     return <input type="text" className='persent-100-width form-control' value={this.props.CardData.Title} onChange={this.TitleOnChange} />
-            // }
+           
             return <input type="text" className='persent-100-width form-control' value={title} onChange={this.TitleOnChange} />
         }
         else {
-            // if (this.state.NewState) {
-            //     return <Link to={"/menu/detail/" + this.state.NewState.Id}><h5 className="card-title" >{this.state.NewState.Title}</h5></Link>
-            // }
-            // else {
-            //     return <Link to={"/menu/detail/" + this.props.CardData.Id}><h5 className="card-title" >{this.props.CardData.Title}</h5></Link>
-            // }
+           
             return <Link to={"/menu/detail/" + id}><h5 className="card-title" >{title}</h5></Link>
         }
     }
@@ -248,12 +238,7 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
             if (!this.state.NewState) {
                 bodyText = this.state.NewState.Body;
             }
-            // if (this.state.NewState) {
-            //     return <input type="text" className='persent-100-width form-control' value={this.state.NewState.Body} onChange={this.BodyOnChange} />
-            // }
-            // else {
-            //     return <input type="text" className='persent-100-width form-control' value={this.state.NewState.Body} onChange={this.BodyOnChange} />
-            // }
+           
             return <input type="text" className='persent-100-width form-control' value={bodyText} onChange={this.BodyOnChange} />
         }
         else {
@@ -302,4 +287,3 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
         }
     }
 }
-// </helloprops>

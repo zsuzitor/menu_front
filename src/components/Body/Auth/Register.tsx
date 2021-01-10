@@ -95,4 +95,3 @@ export class Register extends React.Component<{}, IRegisterState> {
         </div>
     }
 }
-// </helloprops>

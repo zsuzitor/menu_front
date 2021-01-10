@@ -3,8 +3,8 @@
 import * as React from "react";
 import { MenuCardList } from './MenuCardList';
 import { CardsFilters } from './CardsFilters';
-import { ICardListFilters } from '../../_ComponentsLink/CardListFilters';
-import { IOneCardInListData, OneCardInListData } from '../../_ComponentsLink/OneCardInListData';
+import { ICardListFilters } from '../../_ComponentsLink/Models/CardListFilters';
+import { IOneCardInListData, OneCardInListData } from '../../_ComponentsLink/Models/OneCardInListData';
 import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
 import { IOneCardInListDataBack } from "../../_ComponentsLink/BackModel/OneCardInListDataBack";
 import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
@@ -13,11 +13,6 @@ import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
 export interface IBodyCardsListMainProps {
 }
 
-
-
-// export interface INewCardTemplate {
-
-// }
 
 
 
@@ -89,27 +84,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             Url: G_PathToServer + 'api/article/get-all-short-for-user',
 
         });
-        // .then(()=>{console.log("listmain");}).catch(e => {
-        //     console.log(e);
-        // });;
-
-        // let cardsData = [
-        //     {
-        //         Id: 1,
-        //         Title: 'header1',
-        //         Body: 'body1',
-        //         Image: this.state.EmptyImagePath,
-        //         Followed: false
-        //     }
-        // ];
-
-        // this.setState({
-        //     AllCardsData: cardsData,
-        //     // FollowedCards: followed,
-        //     // NotFollowedCards: notFollowed,
-        // });
-        // console.log("listmain async");
-
+      
     }
 
 
@@ -151,14 +126,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             elForAdd.FillByBackModel(newEl);
             newState.AllCardsData.push(elForAdd);
             newState.NewCardTemplate = false;
-            // for (let i = 0; i < newState.AllCardsData.length; ++i) {
-            //     if (newState.AllCardsData[i].Id <= 0) {
-            //         newState.AllCardsData[i].FillByBackModel(newEl);
-            //         this.setState(newState);
-            //         return;
-            //     }
-            // }
-
+         
             this.setState(newState);
         });
 
@@ -180,21 +148,6 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             }
         }
 
-
-        // let SetFollow = (arr: IOneCardInListData[], follow: boolean) => {
-        //     for (let i = 0; i < arr.length; ++i) {
-        //         if (arr[i].Id == id) {
-        //             let newState = { ...this.state };
-        //             newState.AllCardsData[i].Followed = follow;
-
-        //             return true;
-        //         }
-        //     }
-        // };
-
-        // SetFollow(this.state.AllCardsData, result);
-
-
     }
 
 
@@ -206,14 +159,6 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
         let newState = { ...this.state };
         newState.NewCardTemplate = true;
-        // {
-        //     Id: -1,
-        //     Title: 'Новая',
-        //     Body: 'Новая',
-        //     Image: this.state.EmptyImagePath,
-        //     Followed: false,
-        // } as OneCardInListData;//TODO надо проверить сломается что то или нет
-
         this.setState(newState);
     }
 
@@ -221,13 +166,6 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
     ChangeFilterFollow(e: any) {//TODO onChange для input
         // e.persist();
         let newState = { ...this.state };
-        // console.log(e);
-        // if(e.target.value){
-        //     newState.CardsListFilters.FollowOnly=true;
-        // }
-        // else{
-        //     newState.CardsListFilters.FollowOnly=false;
-        // }
         newState.CardsListFilters.FollowOnly = !newState.CardsListFilters.FollowOnly;
         this.setState(newState);
     }
@@ -276,40 +214,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
 
     //----------------------------------------------------------------------------PRIVATE
-    // private EditCreateElementInListRequest(newElement: IOneCardInListData, actionUrl: string, requestType: string, callBack: any) {//TODO callback на апдейт 
-    //     let data = {
-    //         "id": newElement.Id,
-    //         "title": newElement.Title,
-    //         "body": newElement.Body,
-    //         // "main_image_new":newElement.Image,
-    //     };
-
-    //     G_AjaxHelper.GoAjaxRequest({
-    //         Data: data,
-    //         Type: requestType,
-    //         FuncSuccess: (xhr, status, jqXHR) => {
-    //             let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-    //             if (resp.errors) {
-    //                 //TODO ошибка
-    //             }
-    //             else {
-    //                 //TODO правильно ли так делать? может не bool возвращать а обертку?
-
-    //                 if (xhr) {
-    //                     callBack();
-    //                 }
-    //                 else {
-    //                     //что то пошло не так?
-    //                 }
-    //             }
-    //         },
-    //         FuncError: (xhr, status, error) => { },
-    //         Url: G_PathToServer + 'api/article/'+actionUrl,
-
-    //     });
-    // }
-
-
+   
     ///редактирование именно из списка карт
     private EditCardInListRequest(newElement: IOneCardInListData, callBack: any) {//TODO callback на апдейт 
         let data = {

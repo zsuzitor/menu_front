@@ -1,4 +1,4 @@
-import { IOneCardFullDataBack } from "./BackModel/OneCardFullDataBack";
+import { IOneCardFullDataBack } from "../BackModel/OneCardFullDataBack";
 
 export interface IOneCardFullData {  //:IOneCardInListData??
     Id: number;

@@ -5,15 +5,19 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { MainComponent } from './components/MainComponent';
 import { AjaxHelper } from './components/_ComponentsLink/AjaxLogic';
-import { MainErrorHandler } from './components/_ComponentsLink/ErrorHandleLogic';
+import { MainErrorHandler } from './components/_ComponentsLink/Models/ErrorHandleLogic';
 
-//относительный путь к index.tsx — это важно. Если бы это было не так, то TypeScript искал бы этот файл в папке node_modules
-// import { Hello } from "./components/Hello";
 
-// ReactDOM.render(
-//     <Hello compiler="TypeScript" framework="React"/>,
-//     document.getElementById("example")
-// );
+
+
+require('../style/main.css');
+require('../style/auth.css');
+require('../style/body.css');
+require('../style/footer.css');
+require('../style/header.css');
+require('../style/menu_one_card.css');
+require('../style/alerts.css');
+
 
 //INIT CONST
 // window.G_PathToBaseImages = "../../images/";

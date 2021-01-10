@@ -1,0 +1,11 @@
+.main-alert-section {
+    border: 2px solid black;
+    /* height: 20px; */
+    position: fixed;
+    /* width: 100%; */
+    bottom: 0px;
+}
+
+.absolute-one-alert {
+    max-width: 100%;
+}

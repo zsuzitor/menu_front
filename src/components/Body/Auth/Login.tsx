@@ -1,5 +1,7 @@
 import * as React from "react";
 import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
+import { AlertData } from "../../_ComponentsLink/Models/AlertData";
+/// <reference path="../../../typings/globals.d.ts" />
 
 export interface ILoginState {
     Login: string;
@@ -61,6 +63,15 @@ export class Login extends React.Component<{}, ILoginState> {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
                     //TODO ошибка
+                    if (G_AddAbsoluteAlertToState) {
+                        let alertLogic = new AlertData();
+                        resp.errors.forEach(error => {
+                            let errArr = alertLogic.GetByErrorBack(error);
+                            errArr.forEach(alertForShow => {
+                                G_AddAbsoluteAlertToState(alertForShow);
+                            });
+                        });
+                    }
                 }
                 else {
                     //TODO записываем полученные токены
@@ -73,7 +84,7 @@ export class Login extends React.Component<{}, ILoginState> {
         });
 
     }
-    
+
     render() {
         return <div className='persent-100-width'>
             <div className='persent-100-width'>

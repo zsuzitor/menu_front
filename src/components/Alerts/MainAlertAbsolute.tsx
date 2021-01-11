@@ -4,6 +4,7 @@ import { OneAlert } from "./OneAlert";
 
 export interface IMainAlertProps {
     Data?: AlertDataStored[];
+    RemoveALert: (id: number) => void;
 }
 
 export class MainAlertAbsolute extends React.Component<IMainAlertProps, {}> {
@@ -21,7 +22,7 @@ export class MainAlertAbsolute extends React.Component<IMainAlertProps, {}> {
         // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
         return <div className='main-alert-section'>
             {this.props.Data.map((el) => {
-                return <OneAlert Data={el}></OneAlert>
+                return <OneAlert Data={el} RemoveALert={this.props.RemoveALert} key={'absolute_alert_' + el.Key}></OneAlert>
             })}
         </div>
     }

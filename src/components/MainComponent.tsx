@@ -42,18 +42,43 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
         this.state = localState;
 
         this.AddMainALert = this.AddMainALert.bind(this);
+        this.RemoveMainALert = this.RemoveMainALert.bind(this);
+
+        window.G_AddAbsoluteAlertToState = this.AddMainALert;
+
     }
 
     AddMainALert(alert: AlertData) {
+        // console.log('1-AddMainALert');
         let storedAlert = new AlertDataStored();
         storedAlert.FillByAlertData(alert);
 
         let newState = { ...this.state };
         let maxKey = Math.max.apply(Math, newState.AbsoluteAlerts.map(function (el) { return el.Key; }));
-        storedAlert.Key = maxKey + 1;
+        if ((!maxKey && maxKey !== 0) || maxKey < 0) {
+            maxKey = 0;
+        }
+        else {
+            maxKey++;
+        }
+        storedAlert.Key = maxKey;
+        newState.AbsoluteAlerts.push(storedAlert);
         this.setState(newState);
     }
 
+
+    RemoveMainALert(alertId: number) {
+
+        let newState = { ...this.state };
+        for (let i = 0; i < newState.AbsoluteAlerts.length; ++i) {
+            if (newState.AbsoluteAlerts[i].Key == alertId) {
+                newState.AbsoluteAlerts.splice(i, 1);
+                this.setState(newState);
+                return;
+            }
+
+        }
+    }
 
     componentDidMount() {
         //TODO запрос для определения?
@@ -67,19 +92,19 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
 
         this.setState({
             Auth: auth,
-            AbsoluteAlerts:[],
+            AbsoluteAlerts: [],
         });
 
     }
 
-    
+
     render() {
         return <div>
             <BrowserRouter>
                 <HeaderMain AuthInfo={this.state.Auth} />
                 <BodyMain />
                 <FooterMain />
-                <MainAlertAbsolute Data={this.state.AbsoluteAlerts} />
+                <MainAlertAbsolute Data={this.state.AbsoluteAlerts} RemoveALert={this.RemoveMainALert} />
             </BrowserRouter>
         </div>
     }

@@ -6,7 +6,7 @@ import { IOneCardInListData } from '../../_ComponentsLink/Models/OneCardInListDa
 export interface IMenuCardListProps {
     CardFilters: ICardListFilters;
     NewCardTemplate: boolean;
-    UpdateElement: (newElement: IOneCardInListData) => void;
+    UpdateElement: (newElement: IOneCardInListData, isNew: boolean) => void;
     FollowRequstSuccess: (id: number, result: boolean) => void;
     CardsList: IOneCardInListData[];
     RemoveNewTemplate?: () => void;

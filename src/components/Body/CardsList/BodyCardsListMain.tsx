@@ -84,51 +84,74 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             Url: G_PathToServer + 'api/article/get-all-short-for-user',
 
         });
-      
+
     }
 
 
 
 
     ///add or update
-    UpdateElement(newElement: IOneCardInListData) {
-        // console.log(newElement);
-        // let newState = Object.assign({}, this.state);
-        let newState = { ...this.state };
-        // let thisRef = this;
-        let updEl = (arr: IOneCardInListData[]) => {
-            for (let i = 0; i < arr.length; ++i) {
-                if (arr[i].Id == newElement.Id) {
-                    this.EditCardInListRequest(newElement,
-                        () => {
-                            // console.log(i);
-                            // console.log(JSON.stringify(newElement));
-                            arr[i] = newElement;
-                            this.setState(newState);
-                        }
-                    );
+    UpdateElement(newElement: IOneCardInListData, isNew: boolean) {
+        
+        if (isNew) {
+            let newState = { ...this.state };
+            // let elForAdd = new OneCardInListData();
+            // elForAdd.FillByBackModel(newEl);
+            newState.AllCardsData.push(newElement);
+            newState.NewCardTemplate = false;
 
-                    return true;
+            this.setState(newState);
+        }
+        else{
+            let newState = { ...this.state };
+            for (let i = 0; i < newState.AllCardsData.length; ++i) {
+                if (newState.AllCardsData[i].Id == newElement.Id) {
+                    newState.AllCardsData[i] = newElement;
+                            this.setState(newState);
+
+                    return;
                 }
             }
+
         }
+
+        // // console.log(newElement);
+        // // let newState = Object.assign({}, this.state);
+        // let newState = { ...this.state };
+        // // let thisRef = this;
+        // let updEl = (arr: IOneCardInListData[]) => {
+        //     for (let i = 0; i < arr.length; ++i) {
+        //         if (arr[i].Id == newElement.Id) {
+        //             this.EditCardInListRequest(newElement,
+        //                 () => {
+        //                     // console.log(i);
+        //                     // console.log(JSON.stringify(newElement));
+        //                     arr[i] = newElement;
+        //                     this.setState(newState);
+        //                 }
+        //             );
+
+        //             return true;
+        //         }
+        //     }
+        // }
 
         // console.log(newElement);
 
 
-        if (newElement.Id > 0 && updEl(newState.AllCardsData)) {
-            return;
-        }
+        // if (newElement.Id > 0 && updEl(newState.AllCardsData)) {
+        //     return;
+        // }
 
-        this.CreateCardInListRequest(newElement, (newEl: IOneCardInListDataBack) => {
-            // this.state.NewCardTemplate
-            let elForAdd = new OneCardInListData();
-            elForAdd.FillByBackModel(newEl);
-            newState.AllCardsData.push(elForAdd);
-            newState.NewCardTemplate = false;
-         
-            this.setState(newState);
-        });
+        // this.CreateCardInListRequest(newElement, (newEl: IOneCardInListDataBack) => {
+        //     // this.state.NewCardTemplate
+        //     let elForAdd = new OneCardInListData();
+        //     elForAdd.FillByBackModel(newEl);
+        //     newState.AllCardsData.push(elForAdd);
+        //     newState.NewCardTemplate = false;
+
+        //     this.setState(newState);
+        // });
 
     }
 
@@ -213,77 +236,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
 
 
-    //----------------------------------------------------------------------------PRIVATE
-   
-    ///редактирование именно из списка карт
-    private EditCardInListRequest(newElement: IOneCardInListData, callBack: any) {//TODO callback на апдейт 
-        let data = {
-            "id": newElement.Id,
-            "title": newElement.Title,
-            "body": newElement.Body,
-            // "main_image_new":newElement.Image,
-        };
 
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "PATCH",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                }
-                else {
-                    let boolRes = xhr as BoolResultBack;
-                    if (boolRes.result === true) {
-
-                        callBack();
-                    }
-                    else if (boolRes.result === false) {
-                        //какая то ошибка
-                    }
-                    else {
-                        //что то не то вернулось
-                    }
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/article/edit',
-
-        });
-    }
-
-    ///создание именно из списка карт
-    private CreateCardInListRequest(newElement: IOneCardInListData, callBack: any) {//TODO callback на добавление 
-        let data = {
-            "title": newElement.Title,
-            "body": newElement.Body,
-            // "main_image_new":newElement.Image,
-        };
-
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "PUT",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                }
-                else {
-                    let resBack = xhr as IOneCardInListDataBack;
-                    if (Number.isInteger(resBack.id) && resBack.id > 0) {
-
-                        callBack(resBack);
-                    }
-                    else {
-                        //что то не то вернулось
-                    }
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/article/create',
-
-        });
-    }
 
 
 

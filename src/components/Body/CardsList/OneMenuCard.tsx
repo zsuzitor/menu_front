@@ -12,11 +12,12 @@ import {
 } from "react-router-dom";
 import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
+import { IOneCardInListDataBack } from "../../_ComponentsLink/BackModel/OneCardInListDataBack";
 
 export interface IOneMenuCardProps {
     CardData?: IOneCardInListData;
     FollowRequstSuccess?: (id: number, result: boolean) => void;
-    UpdateElement: (newElement: IOneCardInListData) => void;
+    UpdateElement: (newElementData: IOneCardInListData, isNew: boolean) => void;
     IsNewTemplate?: boolean;
     RemoveNewTemplate?: () => void;
 }
@@ -90,7 +91,7 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
         return <div></div>
     }
 
-    
+
 
     RenderFollowIcon() {
         // return <div></div>
@@ -190,15 +191,42 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
     }
 
     SaveOnClick() {
+        //
+        let cardForUpdate = this.state.NewState;
+        if (this.props.IsNewTemplate) {
+            cardForUpdate.Id = -1;
+            this.CreateCardInListRequest(cardForUpdate,
+                (newEl: IOneCardInListDataBack) => {
+                    let newCardData = new OneCardInListData(newEl);
+                    let newState = { ...this.state };
+
+                    // let stateForUpdate = newState.NewState;
+                    newState.NewState = null;
+                    newState.EditNow = false;
+                    this.setState(newState);
+                    this.props.UpdateElement(newCardData, true);
+
+                });
+        }
+        else {
+            cardForUpdate.Id = this.props.CardData.Id;
+            this.EditCardInListRequest(cardForUpdate,
+                () => {
+                    // let newCardData = new OneCardInListData(cardForUpdate);
+                    let newState = { ...this.state };
+
+                    // let stateForUpdate = newState.NewState;
+                    newState.NewState = null;
+                    newState.EditNow = false;
+                    this.setState(newState);
+                    this.props.UpdateElement(cardForUpdate, false);
+
+                });
+        }
+
 
         //дальше работаем и в компоненты выше передаем то что вернулось в бэка
-        let newState = { ...this.state };
 
-        let stateForUpdate = newState.NewState;
-        newState.NewState = null;
-        newState.EditNow = false;
-        this.setState(newState);
-        this.props.UpdateElement(stateForUpdate);
 
     }
 
@@ -212,11 +240,11 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
 
         if (this.state.EditNow) {
 
-           
+
             return <input type="text" className='persent-100-width form-control' value={title} onChange={this.TitleOnChange} />
         }
         else {
-           
+
             return <Link to={"/menu/detail/" + id}><h5 className="card-title" >{title}</h5></Link>
         }
     }
@@ -237,7 +265,7 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
             if (!this.state.NewState) {
                 bodyText = this.state.NewState.Body;
             }
-           
+
             return <input type="text" className='persent-100-width form-control' value={bodyText} onChange={this.BodyOnChange} />
         }
         else {
@@ -285,4 +313,83 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
             return null;
         }
     }
+
+
+
+    //----------------------------------------------------------------------------PRIVATE
+
+    ///редактирование именно из списка карт
+    private EditCardInListRequest(newElement: IOneCardInListData, callBack: any) {//TODO callback на апдейт 
+        let data = {
+            "id": newElement.Id,
+            "title": newElement.Title,
+            "body": newElement.Body,
+            // "main_image_new":newElement.Image,
+        };
+
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PATCH",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    let boolRes = xhr as BoolResultBack;
+                    if (boolRes.result === true) {
+
+                        callBack();
+                    }
+                    else if (boolRes.result === false) {
+                        //какая то ошибка
+                    }
+                    else {
+                        //что то не то вернулось
+                    }
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/article/edit',
+
+        });
+    }
+
+    ///создание именно из списка карт
+    private CreateCardInListRequest(newElement: IOneCardInListData, callBack: any) {//TODO callback на добавление 
+        let data = {
+            "title": newElement.Title,
+            "body": newElement.Body,
+            // "main_image_new":newElement.Image,
+        };
+
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PUT",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+
+                }
+                else {
+                    let resBack = xhr as IOneCardInListDataBack;
+                    if (Number.isInteger(resBack.id) && resBack.id > 0) {
+
+                        callBack(resBack);
+                    }
+                    else {
+                        //что то не то вернулось
+                    }
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/article/create',
+
+        });
+    }
+
+
+
+
 }

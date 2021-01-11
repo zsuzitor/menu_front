@@ -191,7 +191,6 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
 
     SaveOnClick() {
 
-
         //дальше работаем и в компоненты выше передаем то что вернулось в бэка
         let newState = { ...this.state };
 

@@ -91,7 +91,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
 
     ///add or update
-    UpdateElement(newElement: IOneCardInListData) {//TODO async почитать
+    UpdateElement(newElement: IOneCardInListData) {
         // console.log(newElement);
         // let newState = Object.assign({}, this.state);
         let newState = { ...this.state };

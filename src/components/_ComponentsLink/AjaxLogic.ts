@@ -1,5 +1,6 @@
 
 import { MainErrorObjectBack } from "./BackModel/ErrorBack";
+import { AlertData } from "./Models/AlertData";
 
 
 export declare interface IAjaxInputObject {
@@ -8,6 +9,7 @@ export declare interface IAjaxInputObject {
     Url: string;
     DataType?: string;
     NeedTryRefreshToken?: boolean;
+    NotGlobalError?: boolean;
     FuncSuccess?: (xhr: any, status: JQuery.Ajax.SuccessTextStatus, jqXHR: JQuery.jqXHR) => void;
     FuncError?: (xhr: any, status: JQuery.Ajax.ErrorTextStatus, error: string) => void;
     FuncBeforeSend?: () => void;
@@ -103,6 +105,21 @@ export class AjaxHelper implements IAjaxHelper {
                         );//TODO await или что то такое
                     }
 
+                }
+                else {
+                    let resp: MainErrorObjectBack = jqXHR.responseJSON as MainErrorObjectBack;
+                    if (resp.errors) {
+                        //TODO ошибка
+                        if (!obj.NotGlobalError && G_AddAbsoluteAlertToState) {
+                            let alertLogic = new AlertData();
+                            resp.errors.forEach(error => {
+                                let errArr = alertLogic.GetByErrorBack(error);
+                                errArr.forEach(alertForShow => {
+                                    G_AddAbsoluteAlertToState(alertForShow);
+                                });
+                            });
+                        }
+                    }
                 }
                 if (obj.FuncComplete) {
                     try {

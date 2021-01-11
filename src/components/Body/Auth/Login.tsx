@@ -62,16 +62,16 @@ export class Login extends React.Component<{}, ILoginState> {
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
-                    //TODO ошибка
-                    if (G_AddAbsoluteAlertToState) {
-                        let alertLogic = new AlertData();
-                        resp.errors.forEach(error => {
-                            let errArr = alertLogic.GetByErrorBack(error);
-                            errArr.forEach(alertForShow => {
-                                G_AddAbsoluteAlertToState(alertForShow);
-                            });
-                        });
-                    }
+                    // //TODO ошибка
+                    // if (G_AddAbsoluteAlertToState) {
+                    //     let alertLogic = new AlertData();
+                    //     resp.errors.forEach(error => {
+                    //         let errArr = alertLogic.GetByErrorBack(error);
+                    //         errArr.forEach(alertForShow => {
+                    //             G_AddAbsoluteAlertToState(alertForShow);
+                    //         });
+                    //     });
+                    // }
                 }
                 else {
                     //TODO записываем полученные токены

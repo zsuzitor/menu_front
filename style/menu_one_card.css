@@ -15,6 +15,7 @@
     /* border:2px solid black; */
     text-align: center;
     box-shadow: 0 0 5px;
+    border-radius: 3px;
 }
 
 .one-card-body-info{

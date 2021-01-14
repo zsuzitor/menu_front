@@ -131,7 +131,7 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
     EditOnClick() {
         let newState = { ...this.state };//Object.assign({}, );
         newState.EditNow = true;
-        newState.NewState = Object.assign({}, this.props.CardData);
+        newState.NewState = Object.assign(new OneCardInListData(), this.props.CardData);
         this.setState(newState);
     }
 
@@ -193,6 +193,7 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
     SaveOnClick() {
         //
         let cardForUpdate = this.state.NewState;
+        // console.log(JSON.stringify(cardForUpdate));
         if (this.props.IsNewTemplate) {
             cardForUpdate.Id = -1;
             this.CreateCardInListRequest(cardForUpdate,
@@ -211,7 +212,7 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
         else {
             cardForUpdate.Id = this.props.CardData.Id;
             this.EditCardInListRequest(cardForUpdate,
-                () => {
+                (fromBack: IOneCardInListDataBack) => {
                     // let newCardData = new OneCardInListData(cardForUpdate);
                     let newState = { ...this.state };
 
@@ -219,6 +220,7 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
                     newState.NewState = null;
                     newState.EditNow = false;
                     this.setState(newState);
+                    cardForUpdate.FillByBackModel(fromBack);
                     this.props.UpdateElement(cardForUpdate, false);
 
                 });
@@ -336,16 +338,13 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
                     //TODO ошибка
                 }
                 else {
-                    let boolRes = xhr as BoolResultBack;
-                    if (boolRes.result === true) {
+                    let res = xhr as IOneCardInListDataBack;
+                    if (res.id && res.id > 0) {
 
-                        callBack();
-                    }
-                    else if (boolRes.result === false) {
-                        //какая то ошибка
+                        callBack(res);
                     }
                     else {
-                        //что то не то вернулось
+                        //какая то ошибка
                     }
                 }
             },

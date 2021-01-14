@@ -102,12 +102,12 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
             this.setState(newState);
         }
-        else{
+        else {
             let newState = { ...this.state };
             for (let i = 0; i < newState.AllCardsData.length; ++i) {
                 if (newState.AllCardsData[i].Id == newElement.Id) {
                     newState.AllCardsData[i] = newElement;
-                            this.setState(newState);
+                    this.setState(newState);
 
                     return;
                 }

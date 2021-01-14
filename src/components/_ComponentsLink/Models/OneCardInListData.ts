@@ -1,4 +1,5 @@
 import { IOneCardInListDataBack } from "../BackModel/OneCardInListDataBack";
+import { IOneCardFullData } from "./OneCardFullData";
 
 export interface IOneCardInListData {
     Id: number;
@@ -8,6 +9,7 @@ export interface IOneCardInListData {
     Followed: boolean;
 
     FillByBackModel(newData: IOneCardInListDataBack): void;
+    FillByFullModel(newData: IOneCardFullData): void;
 }
 
 export class OneCardInListData implements IOneCardInListData {
@@ -22,6 +24,13 @@ export class OneCardInListData implements IOneCardInListData {
             this.FillByBackModel(backModel);
         }
 
+    }
+    FillByFullModel(newData: IOneCardFullData): void {
+        this.Id = newData.Id;
+        this.Title = newData.Title;
+        this.Body = newData.Body;
+        this.Image = newData.Image;
+        this.Followed = newData.Followed;
     }
 
 

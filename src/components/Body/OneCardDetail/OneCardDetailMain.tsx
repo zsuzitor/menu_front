@@ -6,13 +6,17 @@ import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
 import { IOneCardFullDataBack } from "../../_ComponentsLink/BackModel/OneCardFullDataBack";
 import { IOneCardInListDataBack } from "../../_ComponentsLink/BackModel/OneCardInListDataBack";
 import { IOneCardFullData, OneCardFullData } from '../../_ComponentsLink/Models/OneCardFullData';
-import { IOneCardInListData } from '../../_ComponentsLink/Models/OneCardInListData';
+import { IOneCardInListData, OneCardInListData } from '../../_ComponentsLink/Models/OneCardInListData';
 // export interface IHeaderLogoProps {
 // }
 
+
+//TODO сейчас не используется, что бы добавить такое надо вроде норм переписать логику, нужно ли это? походу нет
+//или вообще выпилить?
 export interface IBodyOneCardDetailMainProps {
     Id?: number;
     CardDataFromList?: IOneCardInListData;
+    UpdateElement: (newElementData: IOneCardInListData, isNew: boolean) => void;
 }
 
 export interface IOneCardDetailMainState {
@@ -57,6 +61,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         this.RenderCancelBlock = this.RenderCancelBlock.bind(this);
         this.TitleOnChange = this.TitleOnChange.bind(this);
         this.BodyOnChange = this.BodyOnChange.bind(this);
+        this.SaveButtonClick = this.SaveButtonClick.bind(this);
 
 
     }
@@ -212,7 +217,27 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
     }
 
     SaveButtonClick() {
-        //TODO
+        let cardForUpdate = this.state.NewCardData;
+
+        cardForUpdate.Id = this.state.Card.Id;
+
+        this.EditCardInListRequest(cardForUpdate,
+            (fromBack: IOneCardFullDataBack) => {
+                // let newCardData = new OneCardInListData(cardForUpdate);
+                let newState = { ...this.state };
+                newState.Card.FillByBackModel(fromBack);
+                // newState.Card.Title=newState.NewCardData.Title;
+                // newState.Card.Title=newState.NewCardData.body;
+                newState.NewCardData = null;
+
+                newState.EditNow = false;
+                this.setState(newState);
+                if (this.props.UpdateElement) {
+                    let upd = new OneCardInListData();
+                    upd.FillByFullModel(newState.Card);
+                    this.props.UpdateElement(upd, false);
+                }
+            });
     }
 
     CancelButtonClick() {
@@ -378,5 +403,54 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         return this.RenderCardOrPreloader();
 
     }
+
+
+
+
+
+
+
+
+
+
+    private EditCardInListRequest(newElement: IOneCardFullData, callBack: any) {//TODO схожий метод уже есть, вынести куда нибудь?? #any
+        let data = {
+            "id": newElement.Id,
+            "title": newElement.Title,
+            "body": newElement.Body,
+            // "main_image_new":newElement.Image,
+        };
+
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PATCH",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    let res = xhr as IOneCardFullDataBack;
+                    if (res.id && res.id > 0) {
+
+                        callBack(res);
+                    }
+                    else {
+                        //что то не то вернулось
+                    }
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/article/edit',
+
+        });
+    }
+
+
+
+
+
+
+
 }
 // </helloprops>

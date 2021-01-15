@@ -4,9 +4,9 @@ import * as React from "react";
 import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
 import { IOneCardFullDataBack } from "../../_ComponentsLink/BackModel/OneCardFullDataBack";
-import { IOneCardInListDataBack } from "../../_ComponentsLink/BackModel/OneCardInListDataBack";
 import { IOneCardFullData, OneCardFullData } from '../../_ComponentsLink/Models/OneCardFullData';
 import { IOneCardInListData, OneCardInListData } from '../../_ComponentsLink/Models/OneCardInListData';
+import { IOneCardFullDataEdit } from "../../_ComponentsLink/Models/Poco/IOneCardFullDataEdit";
 // export interface IHeaderLogoProps {
 // }
 
@@ -217,9 +217,9 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
     }
 
     SaveButtonClick() {
-        let cardForUpdate = this.state.NewCardData;
-
+        let cardForUpdate: IOneCardFullDataEdit = { ...this.state.NewCardData };
         cardForUpdate.Id = this.state.Card.Id;
+        cardForUpdate.MainImage = ($('#main_image_input')[0] as HTMLInputElement).files[0];
 
         this.EditCardInListRequest(cardForUpdate,
             (fromBack: IOneCardFullDataBack) => {
@@ -350,7 +350,12 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
             imgPath = G_PathToBaseImages + this.state.Card.Image;
         }
 
-        return <img src={imgPath} />
+        let inputFile: JSX.Element = <div></div>;
+        if (this.state.EditNow) {
+            inputFile = <input id="main_image_input" type="file"></input>
+        }
+
+        return <div><img src={imgPath} />{inputFile}</div>
     }
 
     RenderActionButton() {
@@ -409,17 +414,20 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
 
 
 
+    private EditCardInListRequest(newElement: IOneCardFullDataEdit, callBack: any) {//TODO схожий метод уже есть, вынести куда нибудь?? #any
+        // let data = {
+        //     "id": newElement.Id,
+        //     "title": newElement.Title,
+        //     "body": newElement.Body,
+        //     // "main_image_new": $('#main_image_input').val(),
+        //     // "main_image_new":newElement.Image,
+        // };
 
-
-
-
-    private EditCardInListRequest(newElement: IOneCardFullData, callBack: any) {//TODO схожий метод уже есть, вынести куда нибудь?? #any
-        let data = {
-            "id": newElement.Id,
-            "title": newElement.Title,
-            "body": newElement.Body,
-            // "main_image_new":newElement.Image,
-        };
+        let data = new FormData();
+        data.append('id', newElement.Id + '');
+        data.append('title', newElement.Title);
+        data.append('body', newElement.Body);
+        data.append('main_image_new', newElement.MainImage);
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
@@ -443,7 +451,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/article/edit',
 
-        });
+        }, true);
     }
 
 

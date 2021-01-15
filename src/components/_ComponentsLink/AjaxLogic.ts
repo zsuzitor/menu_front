@@ -108,7 +108,7 @@ export class AjaxHelper implements IAjaxHelper {
                 }
                 else {
                     let resp: MainErrorObjectBack = jqXHR.responseJSON as MainErrorObjectBack;
-                    if (resp.errors) {
+                    if (resp.errors && Array.isArray(resp.errors)) {
                         //TODO ошибка
                         if (!obj.NotGlobalError && G_AddAbsoluteAlertToState) {
                             let alertLogic = new AlertData();

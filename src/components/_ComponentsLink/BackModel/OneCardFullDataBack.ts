@@ -2,6 +2,6 @@ export interface IOneCardFullDataBack {
     id: number;
     title: string;
     body: string;
-    image: string;
+    main_image_path: string;
     followed: boolean;
 }

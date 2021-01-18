@@ -22,7 +22,7 @@ export class OneCardFullData implements IOneCardFullData{
        this.Id = newData.id;
        this.Title = newData.title;
        this.Body = newData.body;
-       this.Image = newData.image;
+       this.Image = newData.main_image_path;
        this.Followed = newData.followed;
     }
 

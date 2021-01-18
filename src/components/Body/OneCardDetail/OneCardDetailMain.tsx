@@ -346,7 +346,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
 
     RenderImage() {
         let imgPath = G_EmptyImagePath;
-        if (this.state && this.state.Card.Image) {
+        if (this.state.Card && this.state.Card.Image) {
             imgPath = G_PathToBaseImages + this.state.Card.Image;
         }
 
@@ -355,7 +355,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
             inputFile = <input id="main_image_input" type="file"></input>
         }
 
-        return <div><img src={imgPath} />{inputFile}</div>
+        return <div><img className="persent-100-width-height" src={imgPath} />{inputFile}</div>
     }
 
     RenderActionButton() {

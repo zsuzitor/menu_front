@@ -252,7 +252,7 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
     }
 
     ImageRender() {
-        let localImagePath: string = this.props.CardData?.Image;
+        let localImagePath: string = G_PathToBaseImages + this.props.CardData?.Image;
         if (!localImagePath) {
             localImagePath = G_EmptyImagePath;
         }

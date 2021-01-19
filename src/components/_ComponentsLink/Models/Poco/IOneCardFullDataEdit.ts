@@ -5,6 +5,6 @@ export interface IOneCardFullDataEdit {  //:IOneCardInListData??
     Title: string;
     Body: string;
     MainImage?: File;
-
+    NeedDeleteMainImage: boolean;
 }
 

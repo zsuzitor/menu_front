@@ -21,7 +21,7 @@ export interface IBodyOneCardDetailMainProps {
 
 export interface IOneCardDetailMainState {
     Card?: IOneCardFullData;
-    NewCardData?: IOneCardFullData;
+    NewCardData?: IOneCardFullDataEdit;//IOneCardFullData;
     EditNow: boolean;
 }
 
@@ -62,6 +62,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         this.TitleOnChange = this.TitleOnChange.bind(this);
         this.BodyOnChange = this.BodyOnChange.bind(this);
         this.SaveButtonClick = this.SaveButtonClick.bind(this);
+        this.DeleteMainImageClick = this.DeleteMainImageClick.bind(this);
 
 
     }
@@ -212,7 +213,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
     EditButtonClick() {
         let newState = { ...this.state };
         newState.EditNow = true;
-        newState.NewCardData = { ...newState.Card };
+        newState.NewCardData = { ...newState.Card, NeedDeleteMainImage: false };
         this.setState(newState);
     }
 
@@ -287,6 +288,15 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
 
     }
 
+    DeleteMainImageClick() {
+        if (!this.state.EditNow) {
+            return;
+        }
+
+        let newState = { ...this.state };
+        newState.NewCardData.NeedDeleteMainImage = !newState.NewCardData.NeedDeleteMainImage;
+        this.setState(newState);
+    }
 
     TitleOnChange(e: any) {
         // console.log(this.state);
@@ -350,12 +360,18 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
             imgPath = G_PathToBaseImages + this.state.Card.Image;
         }
 
-        let inputFile: JSX.Element = <div></div>;
+        let editFunc: JSX.Element = <div></div>;
         if (this.state.EditNow) {
-            inputFile = <input id="main_image_input" type="file"></input>
+            editFunc = <div>
+                <input id="main_image_input" type="file"></input>
+                <p>удалить картинку</p>
+                <input onClick={this.DeleteMainImageClick} type='checkbox'></input>
+            </div>
         }
 
-        return <div><img className="persent-100-width-height" src={imgPath} />{inputFile}</div>
+
+
+        return <div><img className="persent-100-width-height" src={imgPath} />{editFunc}</div>
     }
 
     RenderActionButton() {
@@ -428,6 +444,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         data.append('title', newElement.Title);
         data.append('body', newElement.Body);
         data.append('main_image_new', newElement.MainImage);
+        data.append('delete_main_image', JSON.stringify(newElement.NeedDeleteMainImage));
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,

@@ -252,9 +252,9 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
     }
 
     ImageRender() {
-        let localImagePath: string = G_PathToBaseImages + this.props.CardData?.Image;
-        if (!localImagePath) {
-            localImagePath = G_EmptyImagePath;
+        let localImagePath: string = G_EmptyImagePath;
+        if (this.props.CardData?.Image) {
+            localImagePath = G_PathToBaseImages + this.props.CardData?.Image;
         }
 
         return <img src={localImagePath} className="card-img-top" alt="..." />

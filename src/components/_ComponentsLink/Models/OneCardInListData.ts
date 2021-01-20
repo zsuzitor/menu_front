@@ -1,7 +1,8 @@
 import { IOneCardInListDataBack } from "../BackModel/OneCardInListDataBack";
+import { MappedWithBack } from "../BL/Interfaces/MappedWithBack";
 import { IOneCardFullData } from "./OneCardFullData";
 
-export interface IOneCardInListData {
+export interface IOneCardInListData extends MappedWithBack<IOneCardInListDataBack> {
     Id: number;
     Title: string;
     Body: string;

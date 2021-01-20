@@ -417,7 +417,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
                     <div className='padding-10-top'></div>
                     <div className="one-card-body-info row padding-10-top">
                         {/* <div className='col-sm-12'>{this.AdditionalImageRender()}</div> */}
-                        <AdditionalImages></AdditionalImages>
+                        <AdditionalImages Images={this.state.Card.AdditionalImages}></AdditionalImages>
                         <div className='col-sm-12'>{this.BodyTextRender()}</div>
                         <div className='col-sm-12'>MORE INFO</div>
                     </div>

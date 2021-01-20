@@ -1,6 +1,7 @@
 /// <reference path="../../../../typings/globals.d.ts" />
 
 import * as React from "react";
+import { CustomImage } from "../../_ComponentsLink/Models/CustomImage";
 // export interface IHeaderLogoProps {
 // }
 
@@ -8,6 +9,7 @@ import * as React from "react";
 //TODO сейчас не используется, что бы добавить такое надо вроде норм переписать логику, нужно ли это? походу нет
 //или вообще выпилить?
 export interface IAdditionalImagesProps {
+  Images: CustomImage[];
 }
 
 export interface IAdditionalImagesState {
@@ -16,31 +18,38 @@ export interface IAdditionalImagesState {
 
 export class AdditionalImages extends React.Component<IAdditionalImagesProps, IAdditionalImagesState> {
 
-    constructor(props: any) {
-        super(props);
-        //this.props.location.search
+  constructor(props: any) {
+    super(props);
+    //this.props.location.search
 
 
-    }
+  }
 
-    render() {
-        return <div id="carouselExampleFade" className="carousel slide carousel-fade" data-bs-ride="carousel">
+  render() {
+    if (this.props.Images) {
+      return <div id="carouselExampleFade" className="carousel slide carousel-fade" data-ride="carousel" data-pause={false}>
         <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img src="..." className="d-block w-100" alt="..."/>
-          </div>
-         
+          {this.props.Images.map(x => {
+            return <div className="carousel-item">
+              <img src={x.Path} className="d-block w-100" alt="..." />
+            </div>
+
+          })}
+
         </div>
-        <a className="carousel-control-prev" href="#carouselExampleFade" role="button" data-bs-slide="prev">
+        <a className="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
           <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Previous</span>
+          <span className="sr-only">Previous</span>
         </a>
-        <a className="carousel-control-next" href="#carouselExampleFade" role="button" data-bs-slide="next">
+        <a className="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
           <span className="carousel-control-next-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Next</span>
+          <span className="sr-only">Next</span>
         </a>
       </div>
-
     }
+
+    return <div></div>
+
+  }
 
 }

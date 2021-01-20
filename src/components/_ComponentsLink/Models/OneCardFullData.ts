@@ -1,8 +1,9 @@
-import { CustomImageBack } from "../BackModel/CustomImageBack";
+
 import { IOneCardFullDataBack } from "../BackModel/OneCardFullDataBack";
+import { MappedWithBack } from "../BL/Interfaces/MappedWithBack";
 import { CustomImage } from "./CustomImage";
 
-export interface IOneCardFullData {  //:IOneCardInListData??
+export interface IOneCardFullData extends MappedWithBack<IOneCardFullDataBack> {
     Id: number;
     Title: string;
     Body: string;
@@ -28,7 +29,11 @@ export class OneCardFullData implements IOneCardFullData {
         this.Body = newData.body;
         this.Image = newData.main_image_path;
         this.Followed = newData.followed;
-        this.AdditionalImages = //перенести даннные с бэк модели в фронт
+        this.AdditionalImages = newData.additional_images.map(x => {//какая то проверка мб? что бы массив был в любом случае не null
+            let res = new CustomImage();
+            res.FillByBackModel(x);
+            return res;
+        });
     }
 
 

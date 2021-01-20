@@ -92,7 +92,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
     ///add or update
     UpdateElement(newElement: IOneCardInListData, isNew: boolean) {
-        
+
         if (isNew) {
             let newState = { ...this.state };
             // let elForAdd = new OneCardInListData();
@@ -115,43 +115,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
         }
 
-        // // console.log(newElement);
-        // // let newState = Object.assign({}, this.state);
-        // let newState = { ...this.state };
-        // // let thisRef = this;
-        // let updEl = (arr: IOneCardInListData[]) => {
-        //     for (let i = 0; i < arr.length; ++i) {
-        //         if (arr[i].Id == newElement.Id) {
-        //             this.EditCardInListRequest(newElement,
-        //                 () => {
-        //                     // console.log(i);
-        //                     // console.log(JSON.stringify(newElement));
-        //                     arr[i] = newElement;
-        //                     this.setState(newState);
-        //                 }
-        //             );
 
-        //             return true;
-        //         }
-        //     }
-        // }
-
-        // console.log(newElement);
-
-
-        // if (newElement.Id > 0 && updEl(newState.AllCardsData)) {
-        //     return;
-        // }
-
-        // this.CreateCardInListRequest(newElement, (newEl: IOneCardInListDataBack) => {
-        //     // this.state.NewCardTemplate
-        //     let elForAdd = new OneCardInListData();
-        //     elForAdd.FillByBackModel(newEl);
-        //     newState.AllCardsData.push(elForAdd);
-        //     newState.NewCardTemplate = false;
-
-        //     this.setState(newState);
-        // });
 
     }
 
@@ -218,7 +182,10 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         }
         else {
             return <div className='card-list-preloader'>
-                <img src={G_PreloaderPath} className='persent-100-width-height'></img>
+                {/* <img src={G_PreloaderPath} className='persent-100-width-height'></img> */}
+                <div className="spinner-border persent-100-width-height" role="status">
+                    <span className="sr-only">Loading...</span>
+                </div>
             </div>
         }
     }

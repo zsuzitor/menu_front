@@ -1,6 +1,10 @@
 /// <reference path="../../../../typings/globals.d.ts" />
 
 import * as React from "react";
+
+import { AdditionalImages } from "../../Body/OneCardDetail/AdditionalImages";
+
+
 import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
 import { IOneCardFullDataBack } from "../../_ComponentsLink/BackModel/OneCardFullDataBack";
@@ -341,7 +345,8 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
             }
 
             if (this.state.EditNow) {
-                return <input type="text" className='persent-100-width form-control' value={body} onChange={this.BodyOnChange} />
+                // return <input type="text" className='persent-100-width form-control' value={body} onChange={this.BodyOnChange} />
+                return <textarea className='persent-100-width form-control' onChange={this.BodyOnChange} >{body}</textarea>
             }
             else {
                 return <p>{body}</p>
@@ -369,10 +374,12 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
             </div>
         }
 
-
-
         return <div><img className="persent-100-width-height" src={imgPath} />{editFunc}</div>
     }
+
+    // AdditionalImageRender() {
+
+    // }
 
     RenderActionButton() {
         return <div>
@@ -409,6 +416,8 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
                     </div>
                     <div className='padding-10-top'></div>
                     <div className="one-card-body-info row padding-10-top">
+                        {/* <div className='col-sm-12'>{this.AdditionalImageRender()}</div> */}
+                        <AdditionalImages></AdditionalImages>
                         <div className='col-sm-12'>{this.BodyTextRender()}</div>
                         <div className='col-sm-12'>MORE INFO</div>
                     </div>

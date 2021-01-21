@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { AdditionalImages } from "../../Body/OneCardDetail/AdditionalImages";
+import { AdditionalImages, CustomImageEdit } from "../../Body/OneCardDetail/AdditionalImages";
 
 
 import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
@@ -27,6 +27,7 @@ export interface IOneCardDetailMainState {
     Card?: IOneCardFullData;
     NewCardData?: IOneCardFullDataEdit;//IOneCardFullData;
     EditNow: boolean;
+
 }
 
 
@@ -218,14 +219,19 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         let newState = { ...this.state };
         newState.EditNow = true;
         newState.NewCardData = Object.assign(new OneCardFullDataEdit(), { ...newState.Card, NeedDeleteMainImage: false });
+        newState.NewCardData.AdditionalImagesEdit = newState.Card.AdditionalImages.map(x => {
+            let res = new CustomImageEdit();
+            res.FillByCustomImage(x);
+            return res;
+        });
         this.setState(newState);
     }
 
     SaveButtonClick() {
         let cardForUpdate: IOneCardFullDataEdit = { ...this.state.NewCardData };
         cardForUpdate.Id = this.state.Card.Id;
-        cardForUpdate.MainImage = ($('#main_image_input')[0] as HTMLInputElement).files[0];
-        cardForUpdate.AdditionalImages = Array.from(($('#additional_images_input')[0] as HTMLInputElement).files);
+        cardForUpdate.MainImageSave = ($('#main_image_input')[0] as HTMLInputElement).files[0];
+        cardForUpdate.AdditionalImagesSave = Array.from(($('#additional_images_input')[0] as HTMLInputElement).files);
 
         //...Array.from(($('#additional_images_input')[0] as HTMLInputElement).files)
 
@@ -318,6 +324,12 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         newState.NewCardData.Body = e.target.value;
         this.setState(newState);
     }
+
+    AddToRemoveAdditionalImage(id: number) {
+
+    }
+
+
 
     RenderTitle() {
         if (this.state?.Card) {
@@ -423,7 +435,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
                     <div className='padding-10-top'></div>
                     <div className="one-card-body-info row padding-10-top">
                         {/* <div className='col-sm-12'>{this.AdditionalImageRender()}</div> */}
-                        <AdditionalImages Images={this.state.Card.AdditionalImages} EditNow={this.state.EditNow}></AdditionalImages>
+                        <AdditionalImages Images={this.state.Card.AdditionalImages} ImagesEdit={this.state.NewCardData?.AdditionalImagesEdit} EditNow={this.state.EditNow}></AdditionalImages>
                         <div className='col-sm-12'>{this.BodyTextRender()}</div>
                         <div className='col-sm-12'>MORE INFO</div>
                     </div>
@@ -460,8 +472,8 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         data.append('body', newElement.Body);
         data.append('delete_main_image', JSON.stringify(newElement.NeedDeleteMainImage));
 
-        data.append('main_image_new', newElement.MainImage);
-        newElement.AdditionalImages.forEach((addImage, index) => {
+        data.append('main_image_new', newElement.MainImageSave);
+        newElement.AdditionalImagesSave.forEach((addImage, index) => {
             data.append('additional_images', addImage);//' + index + '
         });
 

@@ -10,7 +10,7 @@ import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
 import { IOneCardFullDataBack } from "../../_ComponentsLink/BackModel/OneCardFullDataBack";
 import { IOneCardFullData, OneCardFullData } from '../../_ComponentsLink/Models/OneCardFullData';
 import { IOneCardInListData, OneCardInListData } from '../../_ComponentsLink/Models/OneCardInListData';
-import { IOneCardFullDataEdit } from "../../_ComponentsLink/Models/Poco/IOneCardFullDataEdit";
+import { IOneCardFullDataEdit, OneCardFullDataEdit } from "../../_ComponentsLink/Models/Poco/IOneCardFullDataEdit";
 // export interface IHeaderLogoProps {
 // }
 
@@ -217,7 +217,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
     EditButtonClick() {
         let newState = { ...this.state };
         newState.EditNow = true;
-        newState.NewCardData = { ...newState.Card, NeedDeleteMainImage: false };
+        newState.NewCardData = Object.assign(new OneCardFullDataEdit(), { ...newState.Card, NeedDeleteMainImage: false });
         this.setState(newState);
     }
 
@@ -225,6 +225,9 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         let cardForUpdate: IOneCardFullDataEdit = { ...this.state.NewCardData };
         cardForUpdate.Id = this.state.Card.Id;
         cardForUpdate.MainImage = ($('#main_image_input')[0] as HTMLInputElement).files[0];
+        cardForUpdate.AdditionalImages = Array.from(($('#additional_images_input')[0] as HTMLInputElement).files);
+
+        //...Array.from(($('#additional_images_input')[0] as HTMLInputElement).files)
 
         this.EditCardInListRequest(cardForUpdate,
             (fromBack: IOneCardFullDataBack) => {
@@ -346,7 +349,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
 
             if (this.state.EditNow) {
                 // return <input type="text" className='persent-100-width form-control' value={body} onChange={this.BodyOnChange} />
-                return <textarea className='persent-100-width form-control' onChange={this.BodyOnChange} >{body}</textarea>
+                return <textarea className='persent-100-width form-control' value={body} onChange={this.BodyOnChange} />
             }
             else {
                 return <p>{body}</p>
@@ -395,7 +398,10 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
     RenderCardOrPreloader() {
         if (!this.state.Card) {//TODO нужен кастомный
             return <div className='card-list-preloader'>
-                <img src={G_PreloaderPath} className='persent-100-width-height'></img>
+                {/* <img src={G_PreloaderPath} className='persent-100-width-height'></img> */}
+                <div className="spinner-border persent-100-width-height" role="status">
+                    <span className="sr-only">Loading...</span>
+                </div>
             </div>
         }
         else {
@@ -417,7 +423,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
                     <div className='padding-10-top'></div>
                     <div className="one-card-body-info row padding-10-top">
                         {/* <div className='col-sm-12'>{this.AdditionalImageRender()}</div> */}
-                        <AdditionalImages Images={this.state.Card.AdditionalImages}></AdditionalImages>
+                        <AdditionalImages Images={this.state.Card.AdditionalImages} EditNow={this.state.EditNow}></AdditionalImages>
                         <div className='col-sm-12'>{this.BodyTextRender()}</div>
                         <div className='col-sm-12'>MORE INFO</div>
                     </div>
@@ -452,8 +458,14 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         data.append('id', newElement.Id + '');
         data.append('title', newElement.Title);
         data.append('body', newElement.Body);
-        data.append('main_image_new', newElement.MainImage);
         data.append('delete_main_image', JSON.stringify(newElement.NeedDeleteMainImage));
+
+        data.append('main_image_new', newElement.MainImage);
+        newElement.AdditionalImages.forEach((addImage, index) => {
+            data.append('additional_images', addImage);//' + index + '
+        });
+
+
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
@@ -487,4 +499,3 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
 
 
 }
-// </helloprops>

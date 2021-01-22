@@ -6,10 +6,11 @@ export interface IOneCardFullDataEdit {
     Title: string;
     Body: string;
     NeedDeleteMainImage: boolean;
+    
+    // AdditionalImagesForRemove: number[];
+    // AdditionalImagesEdit: CustomImageEdit[];
     MainImageSave?: File;//не хранится тут, проставляется при редактировании
     AdditionalImagesSave?: File[];//не хранится тут, проставляется при редактировании
-    // AdditionalImagesForRemove: number[];
-    AdditionalImagesEdit: CustomImageEdit[];
 
 }
 
@@ -18,15 +19,16 @@ export class OneCardFullDataEdit implements IOneCardFullDataEdit {
     Title: string;
     Body: string;
     NeedDeleteMainImage: boolean;
+    // AdditionalImagesForRemove: number[];
+    // AdditionalImagesEdit: CustomImageEdit[];
+
     MainImageSave?: File;//не хранится тут, проставляется при редактировании
     AdditionalImagesSave?: File[];//не хранится тут, проставляется при редактировании
-    // AdditionalImagesForRemove: number[];
-    AdditionalImagesEdit: CustomImageEdit[];
 
     constructor() {
         this.AdditionalImagesSave = [];
         // this.AdditionalImagesForRemove = [];
-        this.AdditionalImagesEdit = [];
+        // this.AdditionalImagesEdit = [];
 
     }
 }

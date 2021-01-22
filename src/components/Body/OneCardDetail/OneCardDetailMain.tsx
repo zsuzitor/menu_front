@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import { AdditionalImages, CustomImageEdit } from "../../Body/OneCardDetail/AdditionalImages";
-
+import { MappedWithBack } from "../../_ComponentsLink/BL/Interfaces/MappedWithBack";
 
 import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
@@ -24,10 +24,34 @@ export interface IBodyOneCardDetailMainProps {
 }
 
 export interface IOneCardDetailMainState {
-    Card?: IOneCardFullData;
+    Card?: OneCardFullDataView;
     NewCardData?: IOneCardFullDataEdit;//IOneCardFullData;
     EditNow: boolean;
 
+}
+
+
+
+export class OneCardFullDataView implements MappedWithBack<IOneCardFullDataBack> {
+    Id: number;
+    Title: string;
+    Body: string;
+    Image?: string;
+    Followed: boolean;
+    AdditionalImages: CustomImageEdit[];
+
+    FillByBackModel(newData: IOneCardFullDataBack): void {
+        this.Id = newData.id;
+        this.Title = newData.title;
+        this.Body = newData.body;
+        this.Image = newData.main_image_path;
+        this.Followed = newData.followed;
+        this.AdditionalImages = newData.additional_images.map(x => {//какая то проверка мб? что бы массив был в любом случае не null
+            let res = new CustomImageEdit();
+            res.FillByBackModel(x);
+            return res;
+        });
+    }
 }
 
 
@@ -43,7 +67,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
 
         if (this.props.CardDataFromList) {
             //что то передали из списка, можно это отобразить пока грузятся норм данные
-            newState.Card = new OneCardFullData();
+            newState.Card = new OneCardFullDataView();
             newState.Card.Id = this.props.CardDataFromList.Id;
             newState.Card.Body = this.props.CardDataFromList.Body;
             newState.Card.Followed = this.props.CardDataFromList.Followed;
@@ -112,7 +136,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
 
                     if (dataBack.id && dataBack.id > 0) {
                         let newState = { ...thisRef.state };
-                        newState.Card = new OneCardFullData();
+                        newState.Card = new OneCardFullDataView();
                         newState.Card.FillByBackModel(dataBack);
                         thisRef.setState(newState);
                     }
@@ -219,11 +243,11 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         let newState = { ...this.state };
         newState.EditNow = true;
         newState.NewCardData = Object.assign(new OneCardFullDataEdit(), { ...newState.Card, NeedDeleteMainImage: false });
-        newState.NewCardData.AdditionalImagesEdit = newState.Card.AdditionalImages.map(x => {
-            let res = new CustomImageEdit();
-            res.FillByCustomImage(x);
-            return res;
-        });
+        // newState.NewCardData.AdditionalImages = newState.Card.AdditionalImages.map(x => {
+        //     let res = new CustomImageEdit();
+        //     res.FillByCustomImage(x);
+        //     return res;
+        // });
         this.setState(newState);
     }
 
@@ -435,7 +459,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
                     <div className='padding-10-top'></div>
                     <div className="one-card-body-info row padding-10-top">
                         {/* <div className='col-sm-12'>{this.AdditionalImageRender()}</div> */}
-                        <AdditionalImages Images={this.state.Card.AdditionalImages} ImagesEdit={this.state.NewCardData?.AdditionalImagesEdit} EditNow={this.state.EditNow}></AdditionalImages>
+                        <AdditionalImages Images={this.state.Card.AdditionalImages} EditNow={this.state.EditNow}></AdditionalImages>
                         <div className='col-sm-12'>{this.BodyTextRender()}</div>
                         <div className='col-sm-12'>MORE INFO</div>
                     </div>

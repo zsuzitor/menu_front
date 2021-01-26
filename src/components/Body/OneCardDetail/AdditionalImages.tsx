@@ -29,8 +29,8 @@ export interface IAdditionalImagesProps {
   // Images: CustomImage[];
   EditNow: boolean;
 
-  // AddToRemoveAdditionalImage: (id: number) => void;
-  // CancelRemoveAdditionalImage: (id: number) => void;
+  AddToRemoveAdditionalImage: (id: number) => void;
+  RestoreRemovedAdditionalImage: (id: number) => void;
 }
 
 export interface IAdditionalImagesState {
@@ -46,9 +46,21 @@ export class AdditionalImages extends React.Component<IAdditionalImagesProps, IA
     this.RenderOneAdditionalImageActions = this.RenderOneAdditionalImageActions.bind(this);
   }
 
-  RenderOneAdditionalImageActions() {
+  // RestoreRemovedAdditionalImage(id: number) {
+  //   this.props.RestoreRemovedAdditionalImage(id);
+  // }
+
+
+  RenderOneAdditionalImageActions(img: CustomImageEdit) {
     if (this.props.EditNow) {
-      return <div>УДАЛИТЬ КАРТИНКУ</div>
+      if (img.NeedRemove) {
+        // <p>в списке на удаление</p>
+        return <button className="btn" onClick={() => { this.props.RestoreRemovedAdditionalImage(img.Id) }}> восстановить КАРТИНКУ</button >
+      }
+      else {
+        return <button className="btn" onClick={() => { this.props.AddToRemoveAdditionalImage(img.Id) }}>УДАЛИТЬ КАРТИНКУ</button>
+      }
+
     }
   }
 
@@ -68,7 +80,7 @@ export class AdditionalImages extends React.Component<IAdditionalImagesProps, IA
 
     if (this.props.Images) {
       return <div>{LoadlFileInput}
-        <div id="carouselExampleControls" className="carousel slide carousel-fade" data-ride="carousel" data-pause={false}>
+        <div id="carouselExampleControls" className="carousel slide carousel-fade" data-ride="false" data-interval="false">
           <div className="carousel-inner">
             {this.props.Images.map((x, index) => {
               let actv = '';
@@ -77,7 +89,7 @@ export class AdditionalImages extends React.Component<IAdditionalImagesProps, IA
               }
 
               return <div className={"carousel-item" + actv} key={index}>
-                {this.RenderOneAdditionalImageActions()}
+                {this.RenderOneAdditionalImageActions(x)}
                 <img src={G_PathToBaseImages + x.Path} className="d-block w-100" alt="..." />
               </div>
 

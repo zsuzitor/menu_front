@@ -92,6 +92,8 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         this.BodyOnChange = this.BodyOnChange.bind(this);
         this.SaveButtonClick = this.SaveButtonClick.bind(this);
         this.DeleteMainImageClick = this.DeleteMainImageClick.bind(this);
+        this.AddToRemoveAdditionalImage = this.AddToRemoveAdditionalImage.bind(this);
+        this.RestoreRemovedAdditionalImage = this.RestoreRemovedAdditionalImage.bind(this);
 
 
     }
@@ -350,7 +352,11 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
     }
 
     AddToRemoveAdditionalImage(id: number) {
+        this.ChangeRemoveStatusAdditionalImage(id, true);
+    }
 
+    RestoreRemovedAdditionalImage(id: number) {
+        this.ChangeRemoveStatusAdditionalImage(id, false);
     }
 
 
@@ -459,7 +465,9 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
                     <div className='padding-10-top'></div>
                     <div className="one-card-body-info row padding-10-top">
                         {/* <div className='col-sm-12'>{this.AdditionalImageRender()}</div> */}
-                        <AdditionalImages Images={this.state.Card.AdditionalImages} EditNow={this.state.EditNow}></AdditionalImages>
+                        <AdditionalImages Images={this.state.Card.AdditionalImages}
+                            EditNow={this.state.EditNow} AddToRemoveAdditionalImage={this.AddToRemoveAdditionalImage}
+                            RestoreRemovedAdditionalImage={this.RestoreRemovedAdditionalImage}></AdditionalImages>
                         <div className='col-sm-12'>{this.BodyTextRender()}</div>
                         <div className='col-sm-12'>MORE INFO</div>
                     </div>
@@ -528,7 +536,16 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         }, true);
     }
 
-
+    private ChangeRemoveStatusAdditionalImage(id: number, newStatus: boolean) {
+        let newState = { ...this.state };
+        newState.Card.AdditionalImages.forEach(img => {
+            if (img.Id == id) {
+                img.NeedRemove = newStatus;
+                this.setState(newState);
+                return;
+            }
+        });
+    }
 
 
 

@@ -1,16 +1,16 @@
-/// <reference path="../../../../typings/globals.d.ts" />
+/// <reference path="../../../../../typings/globals.d.ts" />
 
 import * as React from "react";
 
-import { AdditionalImages, CustomImageEdit } from "../../Body/OneCardDetail/AdditionalImages";
-import { MappedWithBack } from "../../_ComponentsLink/BL/Interfaces/MappedWithBack";
+import { AdditionalImages, CustomImageEdit } from "./AdditionalImages";
+import { MappedWithBack } from "../../../_ComponentsLink/BL/Interfaces/MappedWithBack";
 
-import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
-import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
-import { IOneCardFullDataBack } from "../../_ComponentsLink/BackModel/OneCardFullDataBack";
-import { IOneCardFullData, OneCardFullData } from '../../_ComponentsLink/Models/OneCardFullData';
-import { IOneCardInListData, OneCardInListData } from '../../_ComponentsLink/Models/OneCardInListData';
-import { IOneCardFullDataEdit, OneCardFullDataEdit } from "../../_ComponentsLink/Models/Poco/IOneCardFullDataEdit";
+import { BoolResultBack } from "../../../_ComponentsLink/BackModel/BoolResultBack";
+import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
+import { IOneCardFullDataBack } from "../../../_ComponentsLink/BackModel/OneCardFullDataBack";
+import { IOneCardFullData, OneCardFullData } from '../../../_ComponentsLink/Models/OneCardFullData';
+import { IOneCardInListData, OneCardInListData } from '../../../_ComponentsLink/Models/OneCardInListData';
+import { IOneCardFullDataEdit, OneCardFullDataEdit } from "../../../_ComponentsLink/Models/Poco/IOneCardFullDataEdit";
 // export interface IHeaderLogoProps {
 // }
 

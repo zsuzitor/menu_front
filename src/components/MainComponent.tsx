@@ -5,12 +5,13 @@ import * as React from "react";
 import { IAuthState } from './_ComponentsLink/Models/AuthState';
 
 import { HeaderMain } from './Header/HeaderMain';
-import { BodyMain } from './Body/BodyMain';
+// import { BodyMain } from './Body/BodyMain';
 import { FooterMain } from './Footer/FooterMain';
 import { MainAlertAbsolute } from './Alerts/MainAlertAbsolute';
 
 import { BrowserRouter } from "react-router-dom";
 import { AlertData, AlertDataStored } from "./_ComponentsLink/Models/AlertData";
+import { AppRouter } from "./AppRouter";
 
 
 
@@ -111,7 +112,8 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
         return <div>
             <BrowserRouter>
                 <HeaderMain AuthInfo={this.state.Auth} />
-                <BodyMain />
+                {/* <BodyMain /> */}
+                <AppRouter/>
                 <FooterMain />
                 <MainAlertAbsolute Data={this.state.AbsoluteAlerts} RemoveALert={this.RemoveMainALert} />
             </BrowserRouter>

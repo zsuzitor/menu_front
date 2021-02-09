@@ -1,4 +1,5 @@
 import * as React from "react";
+import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
 
 export interface IRegisterState {
     Login: string;
@@ -64,9 +65,13 @@ export class Register extends React.Component<{}, IRegisterState> {
             Data: data,
             Type: "PUT",
             FuncSuccess: (xhr, status, jqXHR) => {
-                console.log(JSON.stringify(xhr));
-                console.log(JSON.stringify(jqXHR));
-                debugger;
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                }
+                else {
+                    //TODO записываем полученные токены
+                    document.location.href = "/menu";
+                }
             },
             Url: G_PathToServer + 'api/authenticate/register',
 

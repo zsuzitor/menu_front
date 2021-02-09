@@ -1,13 +1,13 @@
-/// <reference path="../../../../typings/globals.d.ts" />
+/// <reference path="../../../../../typings/globals.d.ts" />
 
 import * as React from "react";
 import { MenuCardList } from './MenuCardList';
 import { CardsFilters } from './CardsFilters';
-import { ICardListFilters } from '../../_ComponentsLink/Models/CardListFilters';
-import { IOneCardInListData, OneCardInListData } from '../../_ComponentsLink/Models/OneCardInListData';
-import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
-import { IOneCardInListDataBack } from "../../_ComponentsLink/BackModel/OneCardInListDataBack";
-import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
+import { ICardListFilters } from '../../../_ComponentsLink/Models/CardListFilters';
+import { IOneCardInListData, OneCardInListData } from '../../../_ComponentsLink/Models/OneCardInListData';
+import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
+import { IOneCardInListDataBack } from "../../../_ComponentsLink/BackModel/OneCardInListDataBack";
+import { BoolResultBack } from "../../../_ComponentsLink/BackModel/BoolResultBack";
 
 
 export interface IBodyCardsListMainProps {

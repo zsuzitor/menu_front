@@ -1,7 +1,7 @@
-/// <reference path="../../../../typings/globals.d.ts" />
+/// <reference path="../../../../../typings/globals.d.ts" />
 
 import * as React from "react";
-import { IOneCardInListData, OneCardInListData } from '../../_ComponentsLink/Models/OneCardInListData';
+import { IOneCardInListData, OneCardInListData } from '../../../_ComponentsLink/Models/OneCardInListData';
 
 // export interface IHeaderLogoProps {
 // }
@@ -10,9 +10,9 @@ import {
     Link,
     BrowserRouter
 } from "react-router-dom";
-import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
-import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
-import { IOneCardInListDataBack } from "../../_ComponentsLink/BackModel/OneCardInListDataBack";
+import { BoolResultBack } from "../../../_ComponentsLink/BackModel/BoolResultBack";
+import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
+import { IOneCardInListDataBack } from "../../../_ComponentsLink/BackModel/OneCardInListDataBack";
 
 export interface IOneMenuCardProps {
     CardData?: IOneCardInListData;
@@ -247,7 +247,7 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
         }
         else {
 
-            return <Link to={"/menu/detail/" + id}><h5 className="card-title" >{title}</h5></Link>
+            return <Link to={"/menu-app/detail/" + id}><h5 className="card-title" >{title}</h5></Link>
         }
     }
 

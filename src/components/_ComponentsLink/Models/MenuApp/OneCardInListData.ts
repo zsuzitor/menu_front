@@ -1,5 +1,5 @@
-import { IOneCardInListDataBack } from "../BackModel/OneCardInListDataBack";
-import { MappedWithBack } from "../BL/Interfaces/MappedWithBack";
+import { IOneCardInListDataBack } from "../../BackModel/MenuApp/OneCardInListDataBack";
+import { MappedWithBack } from "../../BL/Interfaces/MappedWithBack";
 import { IOneCardFullData } from "./OneCardFullData";
 
 export interface IOneCardInListData extends MappedWithBack<IOneCardInListDataBack> {

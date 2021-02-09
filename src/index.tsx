@@ -15,8 +15,12 @@ require('../style/auth.css');
 require('../style/body.css');
 require('../style/footer.css');
 require('../style/header.css');
-require('../style/menu_one_card.css');
 require('../style/alerts.css');
+
+require('../style/menu_app.css');
+require('../style/menu_app_one_card.css');
+
+require('../style/menu.css');
 
 
 //INIT CONST

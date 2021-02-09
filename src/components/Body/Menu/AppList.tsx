@@ -1,16 +1,37 @@
 import * as React from "react";
+import { AppItem } from "../../_ComponentsLink/Models/Poco/AppItem";
+import { AppListItem } from "./AppListItem";
+
+export interface AppListState {
+    Apps: AppItem[];
+}
+
+export class AppList extends React.Component<{}, AppListState> {
+    constructor(props: any) {
+        super(props);
+
+        let arr: AppItem[] = [
+            new AppItem({ Logo: G_EmptyImagePath, Name: "MenuApp", Path: "/menu-app" }),
+            new AppItem({ Logo: G_EmptyImagePath, Name: "Dict", Path: "/menu-app" }),
+            new AppItem({ Logo: G_EmptyImagePath, Name: "TimeBooking", Path: "/menu-app" }),
+            new AppItem({ Logo: G_EmptyImagePath, Name: "MenuApp", Path: "/menu-app" }),
+            new AppItem({ Logo: G_EmptyImagePath, Name: "MenuApp", Path: "/menu-app" }),
+        ];
+
+        this.state = {
+            Apps: arr,
+        };
+    }
 
 
 
-export class AppList extends React.Component<{}, {}> {
     render() {
-        return <div>
-            <p><a href="/menu">Меню</a></p>
-            <p><a href="/menu-app">Меню статей</a></p>
-            <p><a href="/menu/#">Словарь</a></p>
-            <p><a href="/menu/#">БУК</a></p>
+        return <div className="container"><div className="row">
+            {this.state.Apps.map((x, index) =>
+                <AppListItem key={index} Data={x} />
+            )}
 
 
-        </div>
+        </div></div>
     }
 }

@@ -1,0 +1,14 @@
+
+.app-one-item{
+    /* width:20px;
+    height:20px; */
+    
+    text-align: center;
+    padding: 20px;
+}
+
+.app-one-item-inner{
+    border: 1px solid rgb(0, 0, 0);
+    max-height: 300px;
+    max-width: 300px;
+}

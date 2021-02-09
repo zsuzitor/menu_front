@@ -1,7 +1,7 @@
 
-import { IOneCardFullDataBack } from "../BackModel/OneCardFullDataBack";
-import { MappedWithBack } from "../BL/Interfaces/MappedWithBack";
-import { CustomImage } from "./CustomImage";
+import { IOneCardFullDataBack } from "../../BackModel/MenuApp/OneCardFullDataBack";
+import { MappedWithBack } from "../../BL/Interfaces/MappedWithBack";
+import { CustomImage } from "../CustomImage";
 
 export interface IOneCardFullData extends MappedWithBack<IOneCardFullDataBack> {
     Id: number;

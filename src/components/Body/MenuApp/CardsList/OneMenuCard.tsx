@@ -1,7 +1,7 @@
 /// <reference path="../../../../../typings/globals.d.ts" />
 
 import * as React from "react";
-import { IOneCardInListData, OneCardInListData } from '../../../_ComponentsLink/Models/OneCardInListData';
+import { IOneCardInListData, OneCardInListData } from '../../../_ComponentsLink/Models/MenuApp/OneCardInListData';
 
 // export interface IHeaderLogoProps {
 // }
@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 import { BoolResultBack } from "../../../_ComponentsLink/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
-import { IOneCardInListDataBack } from "../../../_ComponentsLink/BackModel/OneCardInListDataBack";
+import { IOneCardInListDataBack } from "../../../_ComponentsLink/BackModel/MenuApp/OneCardInListDataBack";
 
 export interface IOneMenuCardProps {
     CardData?: IOneCardInListData;
@@ -254,7 +254,7 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
     ImageRender() {
         let localImagePath: string = G_EmptyImagePath;
         if (this.props.CardData?.Image) {
-            localImagePath = G_PathToBaseImages + this.props.CardData?.Image;
+            localImagePath = this.props.CardData?.Image;
         }
 
         return <img src={localImagePath} className="card-img-top" alt="..." />

@@ -90,7 +90,7 @@ export class AdditionalImages extends React.Component<IAdditionalImagesProps, IA
 
               return <div className={"carousel-item" + actv} key={index}>
                 {this.RenderOneAdditionalImageActions(x)}
-                <img src={G_PathToBaseImages + x.Path} className="d-block w-100" alt="..." />
+                <img src={ x.Path} className="d-block w-100" alt="..." />
               </div>
 
             })}

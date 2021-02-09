@@ -1,7 +1,7 @@
 import * as React from "react";
 import { OneMenuCard } from './OneMenuCard';
-import { ICardListFilters } from '../../../_ComponentsLink/Models/CardListFilters';
-import { IOneCardInListData } from '../../../_ComponentsLink/Models/OneCardInListData';
+import { ICardListFilters } from '../../../_ComponentsLink/Models/MenuApp/CardListFilters';
+import { IOneCardInListData } from '../../../_ComponentsLink/Models/MenuApp/OneCardInListData';
 
 export interface IMenuCardListProps {
     CardFilters: ICardListFilters;

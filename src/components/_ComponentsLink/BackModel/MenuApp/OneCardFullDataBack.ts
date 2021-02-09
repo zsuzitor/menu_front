@@ -1,4 +1,4 @@
-import { CustomImageBack } from "./CustomImageBack";
+import { CustomImageBack } from "../CustomImageBack";
 
 
 export interface IOneCardFullDataBack {

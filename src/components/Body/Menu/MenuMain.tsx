@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Switch, Route } from "react-router-dom";
+// import { Switch, Route } from "react-router-dom";
 import { AppList } from "./AppList";
 
 export interface IHelloProps {
@@ -17,10 +17,11 @@ export class MenuMain extends React.Component<IHelloProps, {}> {
         // return <BodyCardsListMain />
         //TODO попробовать достучаться незалогиненным по ссылкам и поправить то что вылезет
         // return <BodyCardsListMain/> 
-        return <Switch>
-            <Route exact path="/menu" component={AppList} />
+        return <AppList/> 
+        // <Switch>
+        //     <Route exact path="/menu" component={AppList} />
 
-        </Switch>
+        // </Switch>
 
     }
 }

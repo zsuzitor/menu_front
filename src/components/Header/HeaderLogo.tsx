@@ -12,7 +12,7 @@ export class HeaderLogo extends React.Component<IHeaderLogoProps, {}> {
     render() {
         return <div className='main-header-logo nopadding col-4  col-md-2'>
             <a href="/menu">
-                <img className='main-header-logo-img' src={G_PathToBaseImages + "Header_logo.jpg"} alt="menu" />
+                <img className='main-header-logo-img' src={G_PathToBaseImages + "Header_logo.png"} alt="menu" />
             </a>
         </div>
     }

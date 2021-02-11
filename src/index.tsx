@@ -17,10 +17,14 @@ require('../style/footer.css');
 require('../style/header.css');
 require('../style/alerts.css');
 
+require('../style/menu.css');
+
 require('../style/menu_app.css');
 require('../style/menu_app_one_card.css');
 
-require('../style/menu.css');
+require('../style/word_cards.css');
+
+
 
 
 //INIT CONST

@@ -1,0 +1,9 @@
+.word-card-card-main {
+    border: 1px solid black;
+}
+
+.word-card-cards-list-main {
+    border: 1px solid black;
+    height: 100px;
+    overflow-y: scroll;
+}

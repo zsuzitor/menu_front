@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { IAuthState } from './_ComponentsLink/Models/AuthState';
+import { IAuthState, IAuthUserState } from './_ComponentsLink/Models/AuthState';
 
 import { HeaderMain } from './Header/HeaderMain';
 // import { BodyMain } from './Body/BodyMain';
@@ -12,6 +12,8 @@ import { MainAlertAbsolute } from './Alerts/MainAlertAbsolute';
 import { BrowserRouter } from "react-router-dom";
 import { AlertData, AlertDataStored } from "./_ComponentsLink/Models/AlertData";
 import { AppRouter } from "./AppRouter";
+import { MainErrorObjectBack } from "./_ComponentsLink/BackModel/ErrorBack";
+import { UserShortBack } from "./_ComponentsLink/BackModel/UserShort";
 
 
 
@@ -46,9 +48,27 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
 
         this.AddMainALert = this.AddMainALert.bind(this);
         this.RemoveMainALert = this.RemoveMainALert.bind(this);
+        this.LogOutHandler = this.LogOutHandler.bind(this);
 
         window.G_AddAbsoluteAlertToState = this.AddMainALert;
+        let thisRef = this;
+        // window.addEventListener("logout", function (e) { thisRef.LogOutHandler() });
 
+    }
+
+    LogOutHandler() {
+        let auth: IAuthState = {
+            AuthSuccess: false,
+            User: null,
+        };
+
+        // localStorage.setItem('header_auth', JSON.stringify(auth));
+        localStorage.removeItem("header_auth");
+
+        this.setState({
+            Auth: auth,
+            AbsoluteAlerts: [],
+        });
     }
 
     AddMainALert(alert: AlertData) {
@@ -87,23 +107,73 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
             }
         }
 
-        
+
     }
 
-    componentDidMount() {
-        //TODO запрос для определения?
-        let auth: IAuthState = {
-            AuthSuccess: false,
-            User: {
-                Name: "Тестовое имя",
-                Image: G_EmptyImagePath
-            }
-        };
+    async componentDidMount() {
 
-        this.setState({
-            Auth: auth,
-            AbsoluteAlerts: [],
+        let authStoredJson = localStorage.getItem('header_auth');
+        let authStored = JSON.parse(authStoredJson) as IAuthUserState;
+        if (authStoredJson && authStored) {
+            let auth: IAuthState = {
+                AuthSuccess: true,
+                User: {
+                    Name: authStored.Name,
+                    Image: authStored.Image,
+                }
+            };
+
+            this.setState({
+                Auth: auth,
+                AbsoluteAlerts: [],
+            });
+
+            return;
+        }
+
+        await G_AjaxHelper.GoAjaxRequest({
+            Data: {},
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+
+                }
+                else {
+                    let dataBack = xhr as UserShortBack;
+                    if (!dataBack.id) {
+                        //TODO какая то ошибка
+                        alert('что то сломалось-1');
+                        return;
+                    }
+
+                    let auth: IAuthState = {
+                        AuthSuccess: true,
+                        User: {
+                            Name: dataBack.name,
+                            Image: dataBack.main_image_path
+                        }
+                    };
+
+                    localStorage.setItem('header_auth', JSON.stringify(auth.User));
+
+                    this.setState({
+                        Auth: auth,
+                        AbsoluteAlerts: [],
+                    });
+
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/users/get-shortest-user-info',
+
         });
+
+
+
+        //TODO запрос для определения?
+
 
     }
 
@@ -113,7 +183,7 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
             <BrowserRouter>
                 <HeaderMain AuthInfo={this.state.Auth} />
                 {/* <BodyMain /> */}
-                <AppRouter/>
+                <AppRouter />
                 <FooterMain />
                 <MainAlertAbsolute Data={this.state.AbsoluteAlerts} RemoveALert={this.RemoveMainALert} />
             </BrowserRouter>

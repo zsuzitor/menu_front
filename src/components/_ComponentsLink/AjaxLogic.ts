@@ -34,6 +34,9 @@ export class AjaxHelper implements IAjaxHelper {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
                     //TODO ошибка
+                    localStorage.removeItem("header_auth");
+                    var eventLogOut = new CustomEvent("logout", {});
+                    window.dispatchEvent(eventLogOut);
                     location.href = '/menu/auth/login/';
                 }
                 else {

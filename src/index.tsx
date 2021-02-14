@@ -46,6 +46,6 @@ window.G_ErrorHandleLogic = new MainErrorHandler();
 ReactDOM.render(
     <MainComponent />,
     // <div>test</div>,
-    document.getElementById("example")
+    document.getElementById("menu_all_main_content_start")
 );
 

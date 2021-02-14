@@ -13,9 +13,9 @@ export class OneWordCardInList extends React.Component<OneWordCardInListProps, {
     }
 
     render() {
-        let selectedClassName = "";
+        let selectedClassName = "word-in-list";
         if (this.props.Selected) {
-            selectedClassName = "word-in-list-selected";
+            selectedClassName += " word-in-list-selected";
         }
         return <div onClick={()=>{this.props.OnSelectedCard(this.props.Card.Id)}} className={selectedClassName}>{this.props.Card.Word}</div>
 

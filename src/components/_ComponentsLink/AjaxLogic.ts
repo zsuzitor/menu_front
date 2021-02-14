@@ -10,6 +10,7 @@ export declare interface IAjaxInputObject {
     DataType?: string;
     NeedTryRefreshToken?: boolean;
     NotGlobalError?: boolean;
+    NotRedirectWhenNotAuth?: boolean;
     FuncSuccess?: (xhr: any, status: JQuery.Ajax.SuccessTextStatus, jqXHR: JQuery.jqXHR) => void;
     FuncError?: (xhr: any, status: JQuery.Ajax.ErrorTextStatus, error: string) => void;
     FuncBeforeSend?: () => void;
@@ -17,7 +18,7 @@ export declare interface IAjaxInputObject {
 }
 
 export interface IAjaxHelper {
-    TryRefreshToken(callBack: any): void;
+    TryRefreshToken(required: boolean, callBack: any): void;
     GoAjaxRequest(obj: IAjaxInputObject, fileLoad?: boolean): Promise<any>;
     TrySend(ajaxObj: JQuery.AjaxSettings): void;
 }
@@ -26,10 +27,12 @@ export interface IAjaxHelper {
 
 export class AjaxHelper implements IAjaxHelper {
 
-    public TryRefreshToken(callBack?: any): void {
+    public TryRefreshToken(notRedirectWhenNotAuth: boolean, callBack?: any): void {
         this.GoAjaxRequest({
             Data: {},
             Type: "POST",
+            NeedTryRefreshToken: false,
+            NotRedirectWhenNotAuth: notRedirectWhenNotAuth,//по сути просто возвращаем обратно, это поле нужно только в TryRefreshToken, и она не вызовется внутри
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
@@ -37,7 +40,10 @@ export class AjaxHelper implements IAjaxHelper {
                     localStorage.removeItem("header_auth");
                     var eventLogOut = new CustomEvent("logout", {});
                     window.dispatchEvent(eventLogOut);
-                    location.href = '/menu/auth/login/';
+                    if (!notRedirectWhenNotAuth) {
+                        location.href = '/menu/auth/login/';
+                    }
+
                 }
                 else {
                     //TODO записываем полученные токены
@@ -100,7 +106,7 @@ export class AjaxHelper implements IAjaxHelper {
             complete: function (jqXHR, status) {
                 if (jqXHR.status == 401) {
                     if (obj.NeedTryRefreshToken) {
-                        thisRef.TryRefreshToken(
+                        thisRef.TryRefreshToken(obj.NotRedirectWhenNotAuth,
                             () => {
                                 obj.NeedTryRefreshToken = false;
                                 thisRef.GoAjaxRequest(obj, fileLoad);

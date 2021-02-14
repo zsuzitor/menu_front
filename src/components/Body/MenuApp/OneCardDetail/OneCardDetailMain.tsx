@@ -8,7 +8,7 @@ import { MappedWithBack } from "../../../_ComponentsLink/BL/Interfaces/MappedWit
 import { BoolResultBack } from "../../../_ComponentsLink/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
 import { IOneCardFullDataBack } from "../../../_ComponentsLink/BackModel/MenuApp/OneCardFullDataBack";
-import { IOneCardFullData, OneCardFullData } from '../../../_ComponentsLink/Models/MenuApp/OneCardFullData';
+// import { IOneCardFullData, OneCardFullData } from '../../../_ComponentsLink/Models/MenuApp/OneCardFullData';
 import { IOneCardInListData, OneCardInListData } from '../../../_ComponentsLink/Models/MenuApp/OneCardInListData';
 import { IOneCardFullDataEdit, OneCardFullDataEdit } from "../../../_ComponentsLink/Models/MenuApp/Poco/IOneCardFullDataEdit";
 // export interface IHeaderLogoProps {
@@ -407,7 +407,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
     RenderImage() {
         let imgPath = G_EmptyImagePath;
         if (this.state.Card && this.state.Card.Image) {
-            imgPath =  this.state.Card.Image;
+            imgPath = this.state.Card.Image;
         }
 
         let editFunc: JSX.Element = <div></div>;
@@ -503,8 +503,10 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         data.append('title', newElement.Title);
         data.append('body', newElement.Body);
         data.append('delete_main_image', JSON.stringify(newElement.NeedDeleteMainImage));
+        if (newElement.MainImageSave) {
+            data.append('main_image_new', newElement.MainImageSave);
+        }
 
-        data.append('main_image_new', newElement.MainImageSave);
         newElement.AdditionalImagesSave.forEach((addImage, index) => {
             data.append('additional_images', addImage);//' + index + '
         });

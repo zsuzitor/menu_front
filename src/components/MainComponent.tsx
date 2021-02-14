@@ -131,9 +131,14 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
             return;
         }
 
+        if (window.location.pathname.startsWith('/menu/auth/')) {
+            return;
+        }
+
         await G_AjaxHelper.GoAjaxRequest({
             Data: {},
             Type: "GET",
+            NotRedirectWhenNotAuth: true,
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {

@@ -85,7 +85,7 @@ export class Register extends React.Component<{}, IRegisterState> {
         return <div className='persent-100-width'>
             <div className='persent-100-width'>
                 <div className='persent-100-width padding-10-top'>
-                    <input className='form-control persent-100-width' type='text' placeholder='login' onChange={this.LoginOnChange}></input>
+                    <input className='form-control persent-100-width' type='text' placeholder='email' onChange={this.LoginOnChange}></input>
                 </div>
                 <div className='persent-100-width padding-10-top'>
                     <input className='form-control persent-100-width' type='password' placeholder='password' onChange={this.PasswordOnChange}></input>

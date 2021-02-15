@@ -245,9 +245,9 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         let editCurrantCard = this.state.EditCurrentCard;
         this.state.EditCurrentCard.MainImageSave
         editCurrantCard.MainImageSave = ($('#main_image_input')[0] as HTMLInputElement).files[0];
+        let currentCardId = editCurrantCard.Id;
 
-
-        if (editCurrantCard.Id < 1) {
+        if (currentCardId < 1) {
             // создаем
             this.AddNewCardInListRequest(editCurrantCard,
                 (fromBack: IOneWordCardBack) => {
@@ -267,12 +267,19 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
                 (fromBack: IOneWordCardBack) => {
                     // let newCardData = new OneCardInListData(cardForUpdate);
                     let newState = { ...refThis.state };
-                    newState.CurrentCard.FillByBackModel(fromBack);
+                    let actualCard = refThis.GetFromStateCardsById(newState,currentCardId);
+                    if(actualCard){
+                        actualCard.FillByBackModel(fromBack);
+                        newState.EditCurrentCard = null;
+
+                        refThis.setState(newState);
+                    }
+                    // newState.CurrentCard.FillByBackModel(fromBack);
                     // newState.Card.Title=newState.NewCardData.Title;
                     // newState.Card.Title=newState.NewCardData.body;
-                    newState.EditCurrentCard = null;
+                    // newState.EditCurrentCard = null;
 
-                    refThis.setState(newState);
+                    // refThis.setState(newState);
                 });
         }
     }
@@ -291,7 +298,8 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         }
 
         let data = new FormData();
-        data.append('id', this.state.CurrentCard.Id + '');
+        let cardId = this.state.CurrentCard.Id;
+        data.append('id', cardId + '');
         let refThis = this;
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
@@ -305,9 +313,15 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
                     //TODO тут может быть ошибка, что мы не дождались ответа серва а выбранная картинка уже изменилась
                     let res = xhr as BoolResultBack;
                     let newState = { ...refThis.state };
-                    newState.CurrentCard.Hided = res.result;
-                    this.ChangeCurrentCard(newState);
-                    refThis.setState(newState);
+                    let card = refThis.GetFromStateCardsById(newState, cardId);
+                    if (card) {
+                        card.Hided = res.result;
+                        this.ChangeCurrentCard(newState);
+                        refThis.setState(newState);
+                    }
+                    // newState.CurrentCard.Hided = res.result;
+                    // this.ChangeCurrentCard(newState);
+                    // refThis.setState(newState);
                     // for (let i = 0; i < refThis.state.Cards.length; ++i) {
                     //     if (refThis.state.Cards[i].Id == refThis.state.CurrentCard.Id) {
                     //         let newState = { ...refThis.state };

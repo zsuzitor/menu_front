@@ -36,7 +36,8 @@ export class WordActions extends React.Component<IWordActionsProps, IWordActions
         };
 
         this.ShowMoreAction = this.ShowMoreAction.bind(this);
-
+        this.DosnloadFile = this.DosnloadFile.bind(this);
+        
     }
 
     ShowMoreAction() {
@@ -45,6 +46,21 @@ export class WordActions extends React.Component<IWordActionsProps, IWordActions
         this.setState(newState);
 
     }
+
+    DosnloadFile(){
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: {},
+        //     Type: "GET",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+               
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/wordscards/download-all-words-file',
+
+        // }, true);
+        window.open("/api/wordscards/download-all-words-file");
+    }
+
 
     render() {
         let buttons: JSX.Element;
@@ -80,7 +96,7 @@ export class WordActions extends React.Component<IWordActionsProps, IWordActions
                 <button className="btn btn-secondary btn-sm" onClick={this.props.AddNewTemplate}>Показать новый шаблон</button>
                 <button className="btn btn-secondary btn-sm" onClick={this.props.ShowHiddenCardsOnClick}>Показать спрятанные</button>
                 <button className="btn btn-secondary btn-sm">Загрузить файл</button>
-                <button className="btn btn-secondary btn-sm">Скачать файл</button>
+                <button className="btn btn-secondary btn-sm" onClick={this.DosnloadFile}>Скачать файл</button>
                 <button className="btn btn-secondary btn-sm" onClick={this.props.ShuffleCardsOnClick}>перемешать</button>
                 {/* для карточки */}
                 {editsButtons}

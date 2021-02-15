@@ -19,7 +19,7 @@ export class AppListItem extends React.Component<AppListItemProps, {}> {
         }
 
 
-        return <div className="app-one-item col-sm-12 col-md-3 col-lg-21">
+        return <div className="app-one-item col-sm-12 col-md-3 col-lg-2">
             <div className="app-one-item-inner">
                 <img className="persent-100-width-height" src={imgLogo} />
                 <a href={this.props.Data.Path}>

@@ -39,6 +39,7 @@ export interface IOneWordCardProps {
     ShowHiddenCardsOnClick: () => void;
     ChangeVisibilityCurrentCard: () => void;
     ShuffleCardsOnClick: () => void;
+    EditTemplateViewNow: boolean;
 }
 
 
@@ -189,6 +190,7 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
                 ShowHiddenCardsOnClick={this.props.ShowHiddenCardsOnClick}
                 ChangeVisibilityCurrentCard={this.props.ChangeVisibilityCurrentCard}
                 ShuffleCardsOnClick={this.props.ShuffleCardsOnClick}
+                EditTemplateViewNow={this.props.EditTemplateViewNow}
             />
         </div>
 

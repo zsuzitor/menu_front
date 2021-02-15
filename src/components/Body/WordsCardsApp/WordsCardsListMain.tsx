@@ -144,6 +144,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
             WordAnswer: newState.CurrentCard.WordAnswer,
             Description: newState.CurrentCard.Description,
             ImagePath: newState.CurrentCard.ImagePath,
+            NeedDeleteMainImage: false,
         } as IEditCardState;
 
         this.setState(newState);
@@ -212,6 +213,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
             Word: "",
             WordAnswer: "",
             Description: "",
+            NeedDeleteMainImage: false,
         } as IEditCardState;
 
         this.setState(newState);
@@ -236,6 +238,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
             let alert = new AlertData();
             alert.Text = 'Активируйте режим редактирования';
             G_AddAbsoluteAlertToState(alert);
+            return;
         }
 
         let refThis = this;
@@ -365,6 +368,15 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
 
     render() {
+        if (!this.state.CardsLoaded) {//TODO нужен кастомный
+            return <div className='card-list-preloader'>
+                {/* <img src={G_PreloaderPath} className='persent-100-width-height'></img> */}
+                <div className="spinner-border persent-100-width-height" role="status">
+                    <span className="sr-only">Loading...</span>
+                </div>
+            </div>
+        }
+
         return <div className="main-body container">
             <div className="row">
                 <OneWordCardView CurrentCard={this.state.CurrentCard} EditCurrentCard={this.state.EditCurrentCard}
@@ -386,6 +398,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
                     ShowHiddenCardsOnClick={this.ShowHiddenCardsOnClick}
                     ChangeVisibilityCurrentCard={this.ChangeVisibilityCurrentCard}
                     ShuffleCardsOnClick={this.ShuffleCardsOnClick}
+                    EditTemplateViewNow={this.state.EditCurrentCard != null}
                 />
                 <WordsCardsList
                     CardList={this.state.Cards.filter(x => this.FilterWordNeedShowInList(x))
@@ -488,12 +501,23 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
     private ChangeCurrentCard(stateCopy: WordsCardsListMainState) {
         stateCopy.CurrentCard = null;
         stateCopy.EditCurrentCard = null;
+        stateCopy.ShowCurrentWord = false;
         stateCopy.ShowCurrentWordAnswer = false;
         stateCopy.ShowCurrentWordImage = false;
     }
 
     private FilterWordNeedShowInList(card: OneWordCardModel) {
         return card.Word.indexOf(this.state.SearchedString) >= 0 && (this.state.ShowHidenCard || !card.Hided);
+    }
+
+    private GetFromStateCardsById(state: WordsCardsListMainState, id: number): OneWordCardModel {
+        for (let i = 0; i < state.Cards.length; ++i) {
+            if (state.Cards[i].Id == id) {
+                return state.Cards[i];
+            }
+        }
+
+        return null;
     }
 
 }

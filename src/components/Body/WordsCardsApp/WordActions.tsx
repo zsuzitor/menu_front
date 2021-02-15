@@ -23,6 +23,7 @@ export interface IWordActionsProps {
     ShowHiddenCardsOnClick: () => void;
     ChangeVisibilityCurrentCard: () => void;
     ShuffleCardsOnClick: () => void;
+    EditTemplateViewNow: boolean;
 }
 
 
@@ -57,6 +58,19 @@ export class WordActions extends React.Component<IWordActionsProps, IWordActions
             <input onChange={this.props.SearchStrChanged} type="text" placeholder="поиск..." value={this.props.SearchedString} />
         </div>
 
+        let editsButtons = <div></div>
+        if (this.props.EditTemplateViewNow) {
+            editsButtons = <div>
+                <button className="btn btn-success btn-sm" onClick={this.props.SaveCard}>сохранить изменения</button>
+                <button className="btn btn-danger btn-sm" onClick={this.props.CancelEditCard}>отменить изменения</button>
+            </div>
+        }
+        else {
+            editsButtons = <div>
+                <button className="btn btn-secondary btn-sm" onClick={this.props.StartEditCard}>редактировать</button>
+            </div>
+        }
+
         if (this.state.ShowMoreActions) {
             buttons = <div>
                 {buttons}
@@ -68,10 +82,9 @@ export class WordActions extends React.Component<IWordActionsProps, IWordActions
                 <button className="btn btn-secondary btn-sm">Скачать файл</button>
                 <button className="btn btn-secondary btn-sm" onClick={this.props.ShuffleCardsOnClick}>перемешать</button>
                 {/* для карточки */}
-                <button className="btn btn-secondary btn-sm" onClick={this.props.StartEditCard}>редактировать</button>
+                {editsButtons}
                 {/* либо */}
-                <button className="btn btn-success btn-sm" onClick={this.props.SaveCard}>сохранить изменения</button>
-                <button className="btn btn-danger btn-sm" onClick={this.props.CancelEditCard}>отменить изменения</button>
+
 
                 <button className="btn btn-danger btn-sm">Удалить</button>
                 <label>Всегда отображать слово</label><input onClick={this.props.ChangeAlwaysShowWord} type="checkbox"></input>

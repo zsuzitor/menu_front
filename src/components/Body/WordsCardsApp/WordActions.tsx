@@ -23,6 +23,7 @@ export interface IWordActionsProps {
     ShowHiddenCardsOnClick: () => void;
     ChangeVisibilityCurrentCard: () => void;
     ShuffleCardsOnClick: () => void;
+    DeleteCurrentCard: () => void;
     EditTemplateViewNow: boolean;
 }
 
@@ -86,7 +87,7 @@ export class WordActions extends React.Component<IWordActionsProps, IWordActions
                 {/* либо */}
 
 
-                <button className="btn btn-danger btn-sm">Удалить</button>
+                <button className="btn btn-danger btn-sm" onClick={this.props.DeleteCurrentCard}>Удалить</button>
                 <label>Всегда отображать слово</label><input onClick={this.props.ChangeAlwaysShowWord} type="checkbox"></input>
                 <label>Всегда отображать ответ на слово</label><input onClick={this.props.ChangeAlwaysShowWordAnswer} type="checkbox"></input>
                 <label>Всегда отображать изображение</label><input onClick={this.props.ChangeAlwaysShowWordImage} type="checkbox"></input>

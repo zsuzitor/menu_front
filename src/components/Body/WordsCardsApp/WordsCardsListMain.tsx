@@ -67,6 +67,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         this.ShowHiddenCardsOnClick = this.ShowHiddenCardsOnClick.bind(this);
         this.ChangeVisibilityCurrentCard = this.ChangeVisibilityCurrentCard.bind(this);
         this.ShuffleCardsOnClick = this.ShuffleCardsOnClick.bind(this);
+        this.DeleteCurrentCard = this.DeleteCurrentCard.bind(this);
 
     }
 
@@ -267,8 +268,8 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
                 (fromBack: IOneWordCardBack) => {
                     // let newCardData = new OneCardInListData(cardForUpdate);
                     let newState = { ...refThis.state };
-                    let actualCard = refThis.GetFromStateCardsById(newState,currentCardId);
-                    if(actualCard){
+                    let actualCard = refThis.GetFromStateCardsById(newState, currentCardId);
+                    if (actualCard) {
                         actualCard.FillByBackModel(fromBack);
                         newState.EditCurrentCard = null;
 
@@ -338,6 +339,44 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
         }, true);
     }
+
+    DeleteCurrentCard(){
+        if (!this.state.CurrentCard) {
+            return;
+        }
+
+        let data = new FormData();
+        let cardId = this.state.CurrentCard.Id;
+        data.append('id', cardId + '');
+        let refThis = this;
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "DELETE",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    //TODO тут может быть ошибка, что мы не дождались ответа серва а выбранная картинка уже изменилась
+                    let res = xhr as IOneWordCardBack;
+                    if(res?.id&&res.id>0){
+                        let newState = { ...refThis.state };
+                        let card = refThis.TryRemoveFromStateCardsById(newState, cardId);
+                        if (card) {
+                            this.ChangeCurrentCard(newState);
+                            refThis.setState(newState);
+                        }
+                    }
+                   
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/wordscards/delete',
+
+        }, true);
+    }
+
 
     ShowHiddenCardsOnClick() {
         let newState = { ...this.state };
@@ -413,6 +452,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
                     ChangeVisibilityCurrentCard={this.ChangeVisibilityCurrentCard}
                     ShuffleCardsOnClick={this.ShuffleCardsOnClick}
                     EditTemplateViewNow={this.state.EditCurrentCard != null}
+                    DeleteCurrentCard={this.DeleteCurrentCard}
                 />
                 <WordsCardsList
                     CardList={this.state.Cards.filter(x => this.FilterWordNeedShowInList(x))
@@ -533,5 +573,16 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
         return null;
     }
+
+    private TryRemoveFromStateCardsById(state: WordsCardsListMainState, id: number): OneWordCardModel[] {
+        for (let i = 0; i < state.Cards.length; ++i) {
+            if (state.Cards[i].Id == id) {
+                return state.Cards.splice(i,1);
+            }
+        }
+
+        return null;
+    }
+    
 
 }

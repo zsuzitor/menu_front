@@ -10,3 +10,5 @@ export interface IEditCardState{
     // AdditionalImagesEdit: CustomImageEdit[];
     MainImageSave?: File;//не хранится тут, проставляется при редактировании
 }
+
+

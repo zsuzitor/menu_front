@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 
 
 export interface IWordActionsState {
@@ -23,6 +24,7 @@ export interface IWordActionsProps {
     ShowHiddenCardsOnClick: () => void;
     ChangeVisibilityCurrentCard: () => void;
     ShuffleCardsOnClick: () => void;
+    WriteModeOnClick: () => void;
     DeleteCurrentCard: () => void;
     EditTemplateViewNow: boolean;
 }
@@ -72,7 +74,7 @@ export class WordActions extends React.Component<IWordActionsProps, IWordActions
             <button className="btn btn-primary btn-sm" onClick={this.props.ChangeShowCurrentWordAnswer}>показать ответ</button>
 
             <button className="btn btn-dark btn-sm" onClick={this.props.ChangeVisibilityCurrentCard}>изменить видимость</button>
-            <input onChange={this.props.SearchStrChanged} type="text" placeholder="поиск..." value={this.props.SearchedString} />
+            <input className="form-control" onChange={this.props.SearchStrChanged} type="text" placeholder="поиск..." value={this.props.SearchedString} />
         </div>
 
         let editsButtons = <div></div>
@@ -94,7 +96,7 @@ export class WordActions extends React.Component<IWordActionsProps, IWordActions
                 <hr></hr>
                 {/* общее */}
                 <button className="btn btn-secondary btn-sm" onClick={this.props.AddNewTemplate}>Показать новый шаблон</button>
-                <button className="btn btn-secondary btn-sm" onClick={this.props.ShowHiddenCardsOnClick}>Показать спрятанные</button>
+                
                 <button className="btn btn-secondary btn-sm">Загрузить файл</button>
                 <button className="btn btn-secondary btn-sm" onClick={this.DosnloadFile}>Скачать файл</button>
                 <button className="btn btn-secondary btn-sm" onClick={this.props.ShuffleCardsOnClick}>перемешать</button>
@@ -107,6 +109,10 @@ export class WordActions extends React.Component<IWordActionsProps, IWordActions
                 <label>Всегда отображать слово</label><input onClick={this.props.ChangeAlwaysShowWord} type="checkbox"></input>
                 <label>Всегда отображать ответ на слово</label><input onClick={this.props.ChangeAlwaysShowWordAnswer} type="checkbox"></input>
                 <label>Всегда отображать изображение</label><input onClick={this.props.ChangeAlwaysShowWordImage} type="checkbox"></input>
+                <label>Показать спрятанные</label><input type="checkbox" onClick={this.props.ShowHiddenCardsOnClick}></input>
+                <label>Режим письма</label><input type="checkbox" onClick={this.props.WriteModeOnClick}></input>
+                <hr/>
+                <Link to="/words-cards-app/force-add">перейти в режим ускоренного добавления</Link>
             </div>
         }
         else {

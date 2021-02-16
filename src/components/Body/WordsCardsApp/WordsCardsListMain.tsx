@@ -11,13 +11,14 @@ import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
 export interface WordsCardsListMainState {
     Cards: OneWordCardModel[];
     CurrentCard: OneWordCardModel;
-    EditCurrentCard: IEditCardState;//надо будет поменять думаю
+    EditCurrentCard: IEditCardState;
     ShowCurrentWordAnswer: boolean;//хранится не в карточке потому что ее надо обнулять при выборе карточки
     ShowCurrentWord: boolean;
     ShowCurrentWordImage: boolean;//хранится не в карточке потому что ее надо обнулять при выборе карточки
-    SearchedString: string;
-    CardsLoaded: boolean;
-    ShowHidenCard: boolean;
+    SearchedString: string;//строка поиска
+    CardsLoaded: boolean;//карты бали загружены
+    ShowHidenCard: boolean;//показываем скрытые карты вместе с обычными
+    WriteTestString: string;
 }
 
 
@@ -34,7 +35,8 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
             ShowCurrentWord: false,
             SearchedString: "",
             CardsLoaded: false,
-            ShowHidenCard: true,
+            ShowHidenCard: false,
+            WriteTestString: "",
         };
 
         // for (let i = 0; i < 20; ++i) {
@@ -68,6 +70,8 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         this.ChangeVisibilityCurrentCard = this.ChangeVisibilityCurrentCard.bind(this);
         this.ShuffleCardsOnClick = this.ShuffleCardsOnClick.bind(this);
         this.DeleteCurrentCard = this.DeleteCurrentCard.bind(this);
+        this.WriteTestChanged = this.WriteTestChanged.bind(this);
+        
 
     }
 
@@ -220,6 +224,8 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         this.setState(newState);
     }
 
+
+
     CancelEditCard() {
         if (!this.state.EditCurrentCard) {
             // let alert = new AlertData();
@@ -317,7 +323,11 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
                     let card = refThis.GetFromStateCardsById(newState, cardId);
                     if (card) {
                         card.Hided = res.result;
-                        this.ChangeCurrentCard(newState);
+
+                        if ((!newState.ShowHidenCard) && card.Hided && newState.CurrentCard?.Id == cardId) {
+                            this.ChangeCurrentCard(newState);
+                        }
+
                         refThis.setState(newState);
                     }
                     // newState.CurrentCard.Hided = res.result;
@@ -340,7 +350,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         }, true);
     }
 
-    DeleteCurrentCard(){
+    DeleteCurrentCard() {
         if (!this.state.CurrentCard) {
             return;
         }
@@ -360,7 +370,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
                 else {
                     //TODO тут может быть ошибка, что мы не дождались ответа серва а выбранная картинка уже изменилась
                     let res = xhr as IOneWordCardBack;
-                    if(res?.id&&res.id>0){
+                    if (res?.id && res.id > 0) {
                         let newState = { ...refThis.state };
                         let card = refThis.TryRemoveFromStateCardsById(newState, cardId);
                         if (card) {
@@ -368,7 +378,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
                             refThis.setState(newState);
                         }
                     }
-                   
+
                 }
             },
             FuncError: (xhr, status, error) => { },
@@ -407,6 +417,10 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
 
     OnSelectedCard(id: number) {
+        if (this.state.CurrentCard?.Id == id) {
+            return;
+        }
+
         let newState = { ...this.state };
         this.ChangeCurrentCard(newState);
         newState.CurrentCard = newState.Cards.find(x => x.Id == id);
@@ -416,6 +430,12 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
     SearchStrChanged(event: any) {
         let newState = { ...this.state };
         newState.SearchedString = event.target.value;
+        this.setState(newState);
+    }
+
+    WriteTestChanged(event: any) {
+        let newState = { ...this.state };
+        newState.WriteTestString = event.target.value;
         this.setState(newState);
     }
 
@@ -453,6 +473,8 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
                     ShuffleCardsOnClick={this.ShuffleCardsOnClick}
                     EditTemplateViewNow={this.state.EditCurrentCard != null}
                     DeleteCurrentCard={this.DeleteCurrentCard}
+                    WriteTestChanged={this.WriteTestChanged}
+                    WriteTestString={this.state.WriteTestString}
                 />
                 <WordsCardsList
                     CardList={this.state.Cards.filter(x => this.FilterWordNeedShowInList(x))
@@ -558,6 +580,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         stateCopy.ShowCurrentWord = false;
         stateCopy.ShowCurrentWordAnswer = false;
         stateCopy.ShowCurrentWordImage = false;
+        stateCopy.WriteTestString = "";
     }
 
     private FilterWordNeedShowInList(card: OneWordCardModel) {
@@ -577,12 +600,12 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
     private TryRemoveFromStateCardsById(state: WordsCardsListMainState, id: number): OneWordCardModel[] {
         for (let i = 0; i < state.Cards.length; ++i) {
             if (state.Cards[i].Id == id) {
-                return state.Cards.splice(i,1);
+                return state.Cards.splice(i, 1);
             }
         }
 
         return null;
     }
-    
+
 
 }

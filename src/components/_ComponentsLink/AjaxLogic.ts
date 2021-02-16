@@ -3,6 +3,29 @@ import { MainErrorObjectBack } from "./BackModel/ErrorBack";
 import { AlertData } from "./Models/AlertData";
 
 
+
+////
+// let data = new FormData();
+
+//когда принимаем просто массив [FromForm] List<string> word
+// data.append('word[0]', "");
+// data.append('word', "");
+
+//когда принимаем объект который содержит массив [FromForm] test newData
+//то либо все поля указываем вот так  data.append('word', "");
+//либо все поля указываем вот так  data.append('newData.description',
+//если их перемешать( и тот и тот способ) то там не понятно как все запишется
+
+//когда принимаем [FromForm] List<WordCardInputModelApi> newData
+// то опять же все должно передаваться единообразно, пример
+// data.append('newData[0].word',
+// а вот так уже нельзя // data.append('newData.word',
+
+
+///
+
+
+
 export declare interface IAjaxInputObject {
     Type?: string;
     Data: any;//generic?

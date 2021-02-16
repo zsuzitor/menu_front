@@ -23,7 +23,7 @@ export class WordsCardsList extends React.Component<IWordsCardsListProps, IWords
     }
 
 
-    
+
 
     render() {
         //offset-md-1
@@ -31,7 +31,7 @@ export class WordsCardsList extends React.Component<IWordsCardsListProps, IWords
             {/* <WordActions/> */}
             <div className="word-card-cards-list-inner">
                 {this.props.CardList.map(x => <OneWordCardInList OnSelectedCard={this.props.OnSelectedCard}
-                        Card={x} key={x.Id} Selected={x.Id == this.props.CurrentCard?.Id} />)}
+                    Card={x} key={x.Id} Selected={x.Id == this.props.CurrentCard?.Id} />)}
             </div>
 
 

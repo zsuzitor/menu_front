@@ -9,7 +9,8 @@ export interface IOneWordCardStase {
     AlwaysShowWordAnswer: boolean;
     AlwaysShowWord: boolean;
     AlwaysShowWordImage: boolean;
-
+    WriteMode: boolean;//режим письма, отрисовать новый инпут, он будет сравнивать введенное с word
+    // WordGoodWrited: boolean;//в режиме write слово введено верно
 }
 
 
@@ -41,6 +42,8 @@ export interface IOneWordCardProps {
     ShuffleCardsOnClick: () => void;
     EditTemplateViewNow: boolean;
     DeleteCurrentCard: () => void;
+    WriteTestChanged: (e: any) => void;
+    WriteTestString: string;
 }
 
 
@@ -52,6 +55,8 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
             AlwaysShowWordAnswer: false,
             AlwaysShowWordImage: false,
             AlwaysShowWord: false,
+            WriteMode: false,
+            // WordGoodWrited: false,
             // ShowCurrentWordAnswer: false,
             // ShowCurrentWordImage: false,
         };
@@ -60,6 +65,9 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
         this.ChangeAlwaysShowWordImage = this.ChangeAlwaysShowWordImage.bind(this);
         this.ChangeAlwaysShowWord = this.ChangeAlwaysShowWord.bind(this);
         this.RenderCardBody = this.RenderCardBody.bind(this);
+        this.WriteModeOnClick = this.WriteModeOnClick.bind(this);
+        // this.WordInputCompare = this.WordInputCompare.bind(this);
+
 
     }
 
@@ -93,6 +101,37 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
         this.setState(newState);
     }
 
+    WriteModeOnClick() {
+        let newState = { ...this.state };
+        newState.WriteMode = !newState.WriteMode;
+
+        this.setState(newState);
+    }
+
+
+    // WordInputCompare(e: any) {
+    //     let newState = { ...this.state };
+    //     let wordForCompare = this.props.CurrentCard.Word;
+    //     if(this.state.AlwaysShowWord){
+    //         wordForCompare = this.props.CurrentCard.WordAnswer;
+    //     }
+
+    //     if (e.target.value.toUpperCase() == wordForCompare.toUpperCase()) {
+    //         newState.WordGoodWrited = true;
+    //     }
+    //     else {
+    //         newState.WordGoodWrited = false;
+    //     }
+
+    //     this.setState(newState);
+    // }
+
+
+
+
+
+
+
     RenderCardBody() {
         if (this.props.EditCurrentCard) {
             let editTitle = <p>Редактирование</p>
@@ -102,13 +141,13 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
 
             return <div>
                 {editTitle}
-                <label>Слово</label><input onChange={this.props.WordOnChange} type="text" value={this.props.EditCurrentCard.Word} />
+                <label>Слово</label><input className="form-control" onChange={this.props.WordOnChange} type="text" value={this.props.EditCurrentCard.Word} />
                 <br />
-                <label>Ответ</label><input onChange={this.props.WordAnswerOnChange} type="text" value={this.props.EditCurrentCard.WordAnswer} />
+                <label>Ответ</label><input className="form-control" onChange={this.props.WordAnswerOnChange} type="text" value={this.props.EditCurrentCard.WordAnswer} />
                 <br />
-                <label>Описание</label><input onChange={this.props.WordDescriptionOnChange} type="text" value={this.props.EditCurrentCard.Description} />
+                <label>Описание</label><input className="form-control" onChange={this.props.WordDescriptionOnChange} type="text" value={this.props.EditCurrentCard.Description} />
                 <br />
-                <input id="main_image_input" type="file"></input>
+                <input className="form-control" id="main_image_input" type="file"></input>
                 <br />
                 <label>удалить картинку</label>
                 <input onClick={this.props.DeleteMainImageOnClick} type='checkbox'></input>
@@ -154,6 +193,19 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
             hiddenWord = <p className="word-card-hidden-status">Слово скрыто</p>
         }
 
+        let writeWord = <div></div>
+        let writeWordClass = "alert-danger";
+        if (this.WordInputCompare(this.props.WriteTestString)) {
+            writeWordClass = "alert-success";
+        }
+
+        if (this.state.WriteMode) {
+            writeWord = <div className="">
+                <input className={"" + writeWordClass} onChange={this.props.WriteTestChanged}
+                    placeholder="введите слово" type="text" value={this.props.WriteTestString}></input>
+            </div>
+        }
+
         return <div>
             {/* <p>id - {this.props.CurrentCard.Id}</p> */}
             {/* <hr/> */}
@@ -163,7 +215,7 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
             <hr />
             {imageRender}
             {hiddenWord}
-
+            {writeWord}
         </div>
     }
 
@@ -193,8 +245,26 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
                 ShuffleCardsOnClick={this.props.ShuffleCardsOnClick}
                 DeleteCurrentCard={this.props.DeleteCurrentCard}
                 EditTemplateViewNow={this.props.EditTemplateViewNow}
+                WriteModeOnClick={this.WriteModeOnClick}
             />
         </div>
+
+    }
+
+
+
+    private WordInputCompare(str: string) {
+        let wordForCompare = this.props.CurrentCard.Word;
+        if (this.state.AlwaysShowWord) {
+            wordForCompare = this.props.CurrentCard.WordAnswer;
+        }
+
+        if (str.toUpperCase() == wordForCompare.toUpperCase()) {
+            return true;
+        }
+        else {
+            return false;
+        }
 
     }
 }

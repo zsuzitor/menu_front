@@ -10,9 +10,7 @@
     min-height: 150px;
 }
 
-.word-card-cards-list-main {
-
-}
+.word-card-cards-list-main {}
 
 .word-card-cards-list-inner {
     /* border: 1px solid black; */
@@ -20,41 +18,51 @@
     border-radius: 3px;
     height: 300px;
     overflow-y: scroll;
-  
     padding: 5px;
 }
 
-.word-in-list{
+.word-in-list {
     cursor: pointer;
     border-bottom: 1px solid black;
+    min-height: 24px;
+    overflow: hidden;
 }
 
-.words-cards-list-actions{
+.words-cards-list-actions {
     min-height: 150px;
     /* border: 1px solid black; */
     box-shadow: 0 0 5px;
     border-radius: 3px;
-   
 }
 
-.word-in-list-selected{
+.word-in-list-selected {
     /* border: 1px solid black; */
     background-color: #9bbfb2;
     border-radius: 3px;
-
 }
 
-.one-word-card-image{
+.one-word-card-image {
     width: 200px;
     height: 200px;
     margin-left: auto;
     margin-right: auto;
 }
 
-.one-word-card-image-line{
-text-align: center;
+.one-word-card-image-line {
+    text-align: center;
 }
 
-.word-card-hidden-status{
+.word-card-hidden-status {
     font-size: 10pt;
+}
+
+.force-add-one-card {}
+
+.force-add-one-card-inner{
+    box-shadow: 0 0 5px;
+}
+
+.force-add-cards-list {
+    margin-left: auto;
+    margin-right: auto;
 }

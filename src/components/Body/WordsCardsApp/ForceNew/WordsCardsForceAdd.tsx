@@ -2,6 +2,7 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
 import { IOneWordCardBack } from "../../../_ComponentsLink/BackModel/WordCardApp/OneWordCardBack";
+import { AlertData, AlertTypeEnum } from "../../../_ComponentsLink/Models/AlertData";
 import { CreateCardEdit, OneCard } from "./OneCard";
 
 export interface OneWordCardInListState {
@@ -90,9 +91,7 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
             // data.append('newData.description', this.state.Cards[i].Description);
         }
 
-
-
-        console.log('saveAll');
+        let refThis = this;
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
             Type: "PUT",
@@ -103,9 +102,14 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
                 }
                 else {
                     let res = xhr as IOneWordCardBack[];
-                    console.log(res);
                     if (res.length > 0) {
-                        alert('успешно');
+                        let newState = { ...refThis.state };
+                        newState.Cards = [];
+                        this.setState(newState);
+                        let alertL = new AlertData();
+                        alertL.Text = "Сохранено";
+                        alertL.Type = AlertTypeEnum.Success;
+                        G_AddAbsoluteAlertToState(alertL);
                     }
                 }
             },

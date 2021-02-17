@@ -65,9 +65,9 @@ export class WordActions extends React.Component<IWordActionsProps, IWordActions
 
 
     render() {
-        let buttons: JSX.Element;
+        // let buttons: JSX.Element;
 
-        buttons = <div>
+        let buttons = <div>
             <button className="btn btn-primary btn-sm" onClick={this.props.ShowNextCard}>следующее слово</button>
             <button className="btn btn-primary btn-sm" onClick={this.props.ChangeShowCurrentWordImage}>показать картинку</button>
             <button className="btn btn-primary btn-sm" onClick={this.props.ChangeShowCurrentWord}>показать слово</button>

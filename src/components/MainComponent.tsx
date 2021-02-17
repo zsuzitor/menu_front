@@ -84,7 +84,7 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
         // else {
         //     maxKey++;
         // }
-        storedAlert.Key = newState.MaxIdMainAlert++;
+        storedAlert.Key = ++newState.MaxIdMainAlert;
         newState.AbsoluteAlerts.push(storedAlert);
         this.setState(newState);
     }

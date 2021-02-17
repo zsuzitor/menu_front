@@ -3,7 +3,7 @@ import { OneWordCard as OneWordCardView } from "./OneWordCard";
 import { WordsCardsList } from "./WordsCardsList";
 import { OneWordCard as OneWordCardModel } from "../../_ComponentsLink/Models/WordsCardsApp/OneWordCard";
 import { IEditCardState } from "../../_ComponentsLink/Models/WordsCardsApp/IEditCardState";
-import { AlertData } from "../../_ComponentsLink/Models/AlertData";
+import { AlertData, AlertTypeEnum } from "../../_ComponentsLink/Models/AlertData";
 import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
 import { IOneWordCardBack } from "../../_ComponentsLink/BackModel/WordCardApp/OneWordCardBack";
 import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
@@ -71,7 +71,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         this.ShuffleCardsOnClick = this.ShuffleCardsOnClick.bind(this);
         this.DeleteCurrentCard = this.DeleteCurrentCard.bind(this);
         this.WriteTestChanged = this.WriteTestChanged.bind(this);
-        
+
 
     }
 
@@ -138,6 +138,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         if (!this.state.CurrentCard) {
             let alert = new AlertData();
             alert.Text = 'Не выбрано слово';
+            alert.Type = AlertTypeEnum.Error;
             G_AddAbsoluteAlertToState(alert);
             return;
         }
@@ -244,6 +245,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         if (!this.state.EditCurrentCard) {
             let alert = new AlertData();
             alert.Text = 'Активируйте режим редактирования';
+            alert.Type = AlertTypeEnum.Error;
             G_AddAbsoluteAlertToState(alert);
             return;
         }

@@ -40,6 +40,8 @@ window.G_PathToServerMenu = G_PathToServer + "menu/";
 window.G_AjaxHelper = new AjaxHelper();
 window.G_ErrorHandleLogic = new MainErrorHandler();
 //
+// G_AddAbsoluteAlertToState -->MainComponent
+//
 
 
 

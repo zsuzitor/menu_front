@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AlertDataStored } from "../_ComponentsLink/Models/AlertData";
+import { AlertDataStored, AlertTypeEnum } from "../_ComponentsLink/Models/AlertData";
 
 export interface IOneAlertProps {
     Data: AlertDataStored;
@@ -19,15 +19,23 @@ export class OneAlert extends React.Component<IOneAlertProps, {}> {
     }
 
     render() {
+        let alertClassDiv = "alert-danger";
+        let alertName = "Error";
+        if (this.props.Data.Type == AlertTypeEnum.Success) {
+            alertClassDiv = "alert-success";
+            alertName = "Success"
+        }
+
+
         // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
         return <div className='absolute-one-alert'>
-            <div className="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Error</strong> {this.props.Data.Text}
+            <div className={"alert " + alertClassDiv + " alert-dismissible fade show"} role="alert">
+                <strong>{alertName}</strong> {this.props.Data.Text}
                 {/* data-dismiss="alert" */}
                 <button onClick={this.Remove} type="button" className="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-        </div>
+        </div >
     }
 }

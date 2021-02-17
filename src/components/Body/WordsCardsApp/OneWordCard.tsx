@@ -229,6 +229,8 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
             <div className="padding-10-top"></div>
             <WordActions ChangeAlwaysShowWordImage={this.ChangeAlwaysShowWordImage}
                 ChangeAlwaysShowWordAnswer={this.ChangeAlwaysShowWordAnswer}
+                ChangeAlwaysShowWord={this.ChangeAlwaysShowWord}
+                WriteModeOnClick={this.WriteModeOnClick}
                 ChangeShowCurrentWordImage={this.props.ChangeShowCurrentWordImage}
                 ChangeShowCurrentWordAnswer={this.props.ChangeShowCurrentWordAnswer}
                 ChangeShowCurrentWord={this.props.ChangeShowCurrentWord}
@@ -238,14 +240,13 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
                 CancelEditCard={this.props.CancelEditCard}
                 SaveCard={this.props.SaveCard}
                 AddNewTemplate={this.props.AddNewTemplate}
-                ChangeAlwaysShowWord={this.ChangeAlwaysShowWord}
                 ShowNextCard={this.props.ShowNextCard}
                 ShowHiddenCardsOnClick={this.props.ShowHiddenCardsOnClick}
                 ChangeVisibilityCurrentCard={this.props.ChangeVisibilityCurrentCard}
                 ShuffleCardsOnClick={this.props.ShuffleCardsOnClick}
                 DeleteCurrentCard={this.props.DeleteCurrentCard}
                 EditTemplateViewNow={this.props.EditTemplateViewNow}
-                WriteModeOnClick={this.WriteModeOnClick}
+                
             />
         </div>
 

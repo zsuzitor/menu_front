@@ -2,12 +2,16 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
 import { IOneWordCardBack } from "../../../_ComponentsLink/BackModel/WordCardApp/OneWordCardBack";
+import { IWordListBack } from "../../../_ComponentsLink/BackModel/WordCardApp/WordListBack";
 import { AlertData, AlertTypeEnum } from "../../../_ComponentsLink/Models/AlertData";
+import { OneWordList } from "../../../_ComponentsLink/Models/WordsCardsApp/OneWordList";
 import { CreateCardEdit, OneCard } from "./OneCard";
 
 export interface OneWordCardInListState {
     Cards: CreateCardEdit[];
+    WordLists: OneWordList[];
     MaxId: number;
+    ListsLoaded: boolean,
 }
 
 
@@ -26,6 +30,8 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
         this.state = {
             Cards: [],
             MaxId: 0,
+            WordLists: [],
+            ListsLoaded: false,
         };
 
         this.AddNewTemplate = this.AddNewTemplate.bind(this);
@@ -34,6 +40,7 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
         this.WordDescriptionOnChange = this.WordDescriptionOnChange.bind(this);
         this.GetById = this.GetById.bind(this);
         this.SaveAll = this.SaveAll.bind(this);
+        this.LoadAllWOrdLists = this.LoadAllWOrdLists.bind(this);
 
 
     }
@@ -121,13 +128,61 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
 
 
 
+    LoadAllWOrdLists() {
+
+
+        let refThis = this;
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {},
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    let dataBack = xhr as IWordListBack[];
+                    if (dataBack.length > 0) {
+                        let newState = { ...refThis.state };
+                        let dataFront: OneWordList[] = [];
+                        dataBack.forEach(bk => {
+                            let nd = new OneWordList();
+                            nd.FillByBackModel(bk);
+                            dataFront.push(nd);
+                        });
+
+                        newState.ListsLoaded = true;
+                        newState.WordLists = dataFront;
+
+                        this.setState(newState);
+                    }
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/wordslist/get-all-for-user',
+
+        }, true);
+    }
+
+
+
+
 
 
 
 
     render() {
+        let listSelect = <div></div>
+        if (this.state.ListsLoaded) {
+            listSelect=<select>
+                {this.state.WordLists.map(x=><option>{x.Title}</option>)}
+            </select>
+        }
+
+
         return <div className="container">
             <div className="row">
+                {listSelect}
                 <div className="force-add-cards-list">
                     {this.state.Cards.map((x, index) => {
                         return <OneCard Card={x} key={x.Id}

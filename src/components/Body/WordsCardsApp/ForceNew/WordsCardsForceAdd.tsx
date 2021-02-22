@@ -40,9 +40,14 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
         this.WordDescriptionOnChange = this.WordDescriptionOnChange.bind(this);
         this.GetById = this.GetById.bind(this);
         this.SaveAll = this.SaveAll.bind(this);
-        this.LoadAllWOrdLists = this.LoadAllWOrdLists.bind(this);
+        this.LoadAllWordLists = this.LoadAllWordLists.bind(this);
 
 
+    }
+
+
+    componentDidMount() {
+        this.LoadAllWordLists();
     }
 
 
@@ -128,7 +133,7 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
 
 
 
-    LoadAllWOrdLists() {
+    LoadAllWordLists() {
 
 
         let refThis = this;
@@ -174,8 +179,8 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
     render() {
         let listSelect = <div></div>
         if (this.state.ListsLoaded) {
-            listSelect=<select>
-                {this.state.WordLists.map(x=><option>{x.Title}</option>)}
+            listSelect = <select>
+                {this.state.WordLists.map(x => <option>{x.Title}</option>)}
             </select>
         }
 

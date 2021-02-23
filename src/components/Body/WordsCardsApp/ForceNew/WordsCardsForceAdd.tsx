@@ -12,6 +12,7 @@ export interface OneWordCardInListState {
     WordLists: OneWordList[];
     MaxId: number;
     ListsLoaded: boolean,
+    SelectedList: number,
 }
 
 
@@ -32,6 +33,7 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
             MaxId: 0,
             WordLists: [],
             ListsLoaded: false,
+            SelectedList: -1,
         };
 
         this.AddNewTemplate = this.AddNewTemplate.bind(this);
@@ -41,6 +43,7 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
         this.GetById = this.GetById.bind(this);
         this.SaveAll = this.SaveAll.bind(this);
         this.LoadAllWordLists = this.LoadAllWordLists.bind(this);
+        this.ListOnChange = this.ListOnChange.bind(this);
 
 
     }
@@ -99,6 +102,7 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
             data.append('newData[' + i + '].word', this.state.Cards[i].Word);
             data.append('newData[' + i + '].word_answer', this.state.Cards[i].WordAnswer);
             data.append('newData[' + i + '].description', this.state.Cards[i].Description);
+            data.append('newData[' + i + '].list_id', this.state.SelectedList + '');
             // data.append('newData.word_answer', this.state.Cards[i].WordAnswer);
             // data.append('newData.description', this.state.Cards[i].Description);
         }
@@ -170,7 +174,12 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
     }
 
 
-
+    ListOnChange(e: any) {
+        // console.log(e);
+        let newState = { ...this.state };
+        newState.SelectedList = +e.target.value;
+        this.setState(newState);
+    }
 
 
 
@@ -179,9 +188,12 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
     render() {
         let listSelect = <div></div>
         if (this.state.ListsLoaded) {
-            listSelect = <select>
-                {this.state.WordLists.map(x => <option>{x.Title}</option>)}
-            </select>
+            listSelect = <div>
+                <select value={this.state.SelectedList} onChange={this.ListOnChange}>
+                    <option key={-1} value={-1}>Без списка</option>
+                    {this.state.WordLists.map(x => <option key={x.Id} value={x.Id}>{x.Title}</option>)}
+                </select>
+            </div>
         }
 
 

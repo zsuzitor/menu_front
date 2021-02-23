@@ -2,6 +2,7 @@ import * as React from "react";
 import { WordActions } from "./WordActions";
 import { OneWordCard as OneWordCardModel } from "../../_ComponentsLink/Models/WordsCardsApp/OneWordCard";
 import { IEditCardState } from "../../_ComponentsLink/Models/WordsCardsApp/IEditCardState";
+import { OneWordList } from "../../_ComponentsLink/Models/WordsCardsApp/OneWordList";
 
 export interface IOneWordCardStase {
     // EditNow: boolean;
@@ -11,6 +12,7 @@ export interface IOneWordCardStase {
     AlwaysShowWordImage: boolean;
     WriteMode: boolean;//режим письма, отрисовать новый инпут, он будет сравнивать введенное с word
     // WordGoodWrited: boolean;//в режиме write слово введено верно
+    CurrentCardNewSelectedList: number;
 }
 
 
@@ -44,6 +46,11 @@ export interface IOneWordCardProps {
     DeleteCurrentCard: () => void;
     WriteTestChanged: (e: any) => void;
     WriteTestString: string;
+    WordLists: OneWordList[];//список всех списков(сетов)
+    SelectedList: number;//выбранный список(сет)
+    ListOnChange: (e: any) => void;//изменение списка слов(выбор нового сета)
+    AddCardToList: (cardId: number, listId: number) => void;
+    RemoveFromList: (cardId: number, listId: number) => void;
 }
 
 
@@ -56,6 +63,7 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
             AlwaysShowWordImage: false,
             AlwaysShowWord: false,
             WriteMode: false,
+            CurrentCardNewSelectedList: -1,
             // WordGoodWrited: false,
             // ShowCurrentWordAnswer: false,
             // ShowCurrentWordImage: false,
@@ -66,22 +74,15 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
         this.ChangeAlwaysShowWord = this.ChangeAlwaysShowWord.bind(this);
         this.RenderCardBody = this.RenderCardBody.bind(this);
         this.WriteModeOnClick = this.WriteModeOnClick.bind(this);
+        this.NewAddListOnChange = this.NewAddListOnChange.bind(this);
         // this.WordInputCompare = this.WordInputCompare.bind(this);
+        this.AddCardToList = this.AddCardToList.bind(this);
+        this.RemoveFromList = this.RemoveFromList.bind(this);
 
 
     }
 
 
-    // componentDidUpdate() {
-    //     console.log('---------');
-    //     if(this.state.ShowCurrentWordAnswer||this.state.ShowCurrentWordImage){
-    //         let newState = { ...this.state };
-    //         newState.ShowCurrentWordAnswer = false;
-    //         newState.ShowCurrentWordImage = false;
-    //         this.setState(newState);
-    //     }
-
-    // }
 
     ChangeAlwaysShowWordImage() {
         let newState = { ...this.state };
@@ -109,27 +110,21 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
     }
 
 
-    // WordInputCompare(e: any) {
-    //     let newState = { ...this.state };
-    //     let wordForCompare = this.props.CurrentCard.Word;
-    //     if(this.state.AlwaysShowWord){
-    //         wordForCompare = this.props.CurrentCard.WordAnswer;
-    //     }
+    NewAddListOnChange(e: any) {
+        // console.log(e);
+        let newState = { ...this.state };
+        newState.CurrentCardNewSelectedList = +e.target.value;
+        this.setState(newState);
+    }
 
-    //     if (e.target.value.toUpperCase() == wordForCompare.toUpperCase()) {
-    //         newState.WordGoodWrited = true;
-    //     }
-    //     else {
-    //         newState.WordGoodWrited = false;
-    //     }
+    AddCardToList() {
+        this.props.AddCardToList(this.props.CurrentCard.Id, this.state.CurrentCardNewSelectedList);
 
-    //     this.setState(newState);
-    // }
+    }
 
-
-
-
-
+    RemoveFromList() {
+        this.props.RemoveFromList(this.props.CurrentCard.Id, this.state.CurrentCardNewSelectedList);
+    }
 
 
     RenderCardBody() {
@@ -206,6 +201,36 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
             </div>
         }
 
+        let wordListActions = <div></div>
+
+        if (this.props.CurrentCard.Lists) {//TODO тут бы еще какую то кнопку мб, что бы не рисовать всегда
+
+            let listSelect = <div>
+                <select value={this.state.CurrentCardNewSelectedList} onChange={this.NewAddListOnChange}>
+                    <option key={-1} value={-1}>Без списка</option>
+                    {this.props.WordLists.map(x => <option key={x.Id} value={x.Id}>{x.Title}</option>)}
+                </select>
+                <button onClick={this.AddCardToList}>Добавить новый</button>
+            </div>
+
+            wordListActions = <div>
+                <p>Списки:</p>
+                {this.props.CurrentCard.Lists.map(x => {
+                    let lst = this.props.WordLists.find(x1 => x1.Id == x.IdList)
+                    if (lst) {
+                        return <div key={lst.Id}>
+                            <p>{lst.Title}</p>
+                            <button onClick={this.RemoveFromList}>Удалить из списка</button>
+                        </div>
+                    }
+
+                })}
+                {listSelect}
+
+            </div>
+
+        }
+
         return <div>
             {/* <p>id - {this.props.CurrentCard.Id}</p> */}
             {/* <hr/> */}
@@ -216,6 +241,7 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
             {imageRender}
             {hiddenWord}
             {writeWord}
+            {wordListActions}
         </div>
     }
 
@@ -246,7 +272,9 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
                 ShuffleCardsOnClick={this.props.ShuffleCardsOnClick}
                 DeleteCurrentCard={this.props.DeleteCurrentCard}
                 EditTemplateViewNow={this.props.EditTemplateViewNow}
-                
+                WordLists={this.props.WordLists}
+                SelectedList={this.props.SelectedList}
+                ListOnChange={this.props.ListOnChange}
             />
         </div>
 

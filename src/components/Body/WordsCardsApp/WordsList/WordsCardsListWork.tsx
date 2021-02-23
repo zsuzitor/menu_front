@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
 import { IWordListBack } from "../../../_ComponentsLink/BackModel/WordCardApp/WordListBack";
 import { OneWordList } from "../../../_ComponentsLink/Models/WordsCardsApp/OneWordList";
@@ -274,6 +275,9 @@ export class WordsCardsListWork extends React.Component<{}, IWordsCardsListWorkS
 
         let actions = <div>
             <button onClick={this.AddNewTemplate} className="btn btn-primary">Добавить новый шаблон</button>
+            <div className="padding-10-top">
+                <Link to="/words-cards-app">перейти к словарю без сохранения</Link>
+            </div>
         </div>
 
         let editTemplate = <div>

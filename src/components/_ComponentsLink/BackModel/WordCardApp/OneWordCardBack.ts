@@ -1,6 +1,11 @@
 
 
 
+export interface IWordCardWordList {
+    id_list: number;
+    id_word: number;
+}
+
 
 export interface IOneWordCardBack {
     id: number;
@@ -10,4 +15,5 @@ export interface IOneWordCardBack {
     hided: boolean;
     description: string;
     user_id: string;
+    lists: IWordCardWordList[];
 }

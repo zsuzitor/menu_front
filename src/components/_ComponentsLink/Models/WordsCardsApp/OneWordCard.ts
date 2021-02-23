@@ -1,8 +1,9 @@
 import { IOneWordCardBack } from "../../BackModel/WordCardApp/OneWordCardBack";
 import { MappedWithBack } from "../../BL/Interfaces/MappedWithBack";
+import { WordCardWordList } from "./WordCardWordList";
 
 
-export class OneWordCard implements  MappedWithBack<IOneWordCardBack>  {
+export class OneWordCard implements MappedWithBack<IOneWordCardBack>  {
     Id: number;
     ImagePath: string;
     Word: string;
@@ -10,6 +11,7 @@ export class OneWordCard implements  MappedWithBack<IOneWordCardBack>  {
     Hided: boolean;
     Description: string;
     UserId: string;
+    Lists: WordCardWordList[];
 
     FillByBackModel(newData: IOneWordCardBack): void {
         this.Id = newData.id;
@@ -19,6 +21,10 @@ export class OneWordCard implements  MappedWithBack<IOneWordCardBack>  {
         this.Hided = newData.hided;
         this.Description = newData.description;
         this.UserId = newData.user_id;
-        
+        this.Lists = newData.lists.map(x => {
+            let lst = new WordCardWordList();
+            lst.FillByBackModel(x);
+            return lst;
+        });
     }
 }

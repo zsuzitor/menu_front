@@ -5,8 +5,12 @@ import { OneWordCard as OneWordCardModel } from "../../_ComponentsLink/Models/Wo
 import { IEditCardState } from "../../_ComponentsLink/Models/WordsCardsApp/IEditCardState";
 import { AlertData, AlertTypeEnum } from "../../_ComponentsLink/Models/AlertData";
 import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
-import { IOneWordCardBack } from "../../_ComponentsLink/BackModel/WordCardApp/OneWordCardBack";
+import { IOneWordCardBack, IWordCardWordList } from "../../_ComponentsLink/BackModel/WordCardApp/OneWordCardBack";
 import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
+import { IWordListBack } from "../../_ComponentsLink/BackModel/WordCardApp/WordListBack";
+import { OneWordList } from "../../_ComponentsLink/Models/WordsCardsApp/OneWordList";
+import { OneWordListState } from "./WordsList/WordsCardsListWork";
+import { WordCardWordList } from "../../_ComponentsLink/Models/WordsCardsApp/WordCardWordList";
 
 export interface WordsCardsListMainState {
     Cards: OneWordCardModel[];
@@ -18,7 +22,10 @@ export interface WordsCardsListMainState {
     SearchedString: string;//строка поиска
     CardsLoaded: boolean;//карты бали загружены
     ShowHidenCard: boolean;//показываем скрытые карты вместе с обычными
-    WriteTestString: string;
+    WriteTestString: string;//слово которое написал юзер для проверки правописания
+    WordLists: OneWordList[];
+    WordListSelected: number;//выбранный список
+    // WordListsLoaded: boolean,
 }
 
 
@@ -37,6 +44,9 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
             CardsLoaded: false,
             ShowHidenCard: false,
             WriteTestString: "",
+            WordLists: [],
+            WordListSelected: -1,
+            // WordListsLoaded:false,
         };
 
         // for (let i = 0; i < 20; ++i) {
@@ -71,12 +81,17 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         this.ShuffleCardsOnClick = this.ShuffleCardsOnClick.bind(this);
         this.DeleteCurrentCard = this.DeleteCurrentCard.bind(this);
         this.WriteTestChanged = this.WriteTestChanged.bind(this);
-
+        this.LoadAllWordLists = this.LoadAllWordLists.bind(this);
+        this.ListOnChange = this.ListOnChange.bind(this);
+        this.AddCardToList = this.AddCardToList.bind(this);
+        this.RemoveFromList = this.RemoveFromList.bind(this);
 
     }
 
 
     componentDidMount() {
+        this.LoadAllWordLists();
+
         G_AjaxHelper.GoAjaxRequest({
             Data: {},
             Type: "GET",
@@ -181,6 +196,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
             this.ChangeCurrentCard(newState);
             newState.CurrentCard = funcSearch(this.state.Cards, 0);
             this.setState(newState);
+            return;
             // if (this.state.Cards.length > 0) {
             //     let newState = { ...this.state };
             //     this.ChangeCurrentCard(newState);
@@ -352,6 +368,97 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         }, true);
     }
 
+
+    AddCardToList(cardId: number, listId: number) {
+        if (cardId < 1 || listId < 1) {
+            return;
+        }
+        let card = this.GetFromStateCardsById(this.state, cardId);
+        if (card.Lists.find(x => x.IdList == listId)) {
+            return;
+        }
+
+        let data = new FormData();
+        data.append('card_id', cardId + '');
+        data.append('list_id', listId + '');
+        let refThis = this;
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PUT",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    //TODO тут может быть ошибка, что мы не дождались ответа серва а выбранная картинка уже изменилась
+                    let res = xhr as IWordCardWordList;
+                    if (res.id_list) {
+                        let newState = { ...refThis.state };
+                        card = this.GetFromStateCardsById(newState, cardId);
+                        if (card) {
+                            let newRec = new WordCardWordList();
+                            newRec.FillByBackModel(res);
+                            card.Lists.push(newRec);
+                            refThis.setState(newState);
+                        }
+                    }
+
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/wordslist/add-to-list',
+
+        }, true);
+    }
+
+    RemoveFromList(cardId: number, listId: number) {
+        if (cardId < 1 || listId < 1) {
+            return;
+        }
+        let card = this.GetFromStateCardsById(this.state, cardId);
+        if (!card.Lists.find(x => x.IdList == listId)) {
+            return;
+        }
+
+        let data = new FormData();
+        data.append('card_id', cardId + '');
+        data.append('list_id', listId + '');
+        let refThis = this;
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "DELETE",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    //TODO тут может быть ошибка, что мы не дождались ответа серва а выбранная картинка уже изменилась
+                    let res = xhr as BoolResultBack;
+                    if (res.result) {
+                        let newState = { ...refThis.state };
+                        card = this.GetFromStateCardsById(newState, cardId);
+                        for (let i = 0; i < card.Lists.length; ++i) {
+                            if (card.Lists[i].IdList == listId) {
+                                card.Lists.splice(i, 1)
+                                refThis.setState(newState);
+                                return;
+                            }
+                        }
+
+
+                    }
+
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/wordslist/remove-from-list',
+
+        }, true);
+    }
+
+
     DeleteCurrentCard() {
         if (!this.state.CurrentCard) {
             return;
@@ -442,6 +549,14 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
     }
 
 
+    ListOnChange(e: any) {
+        // console.log(e);
+        let newState = { ...this.state };
+        newState.WordListSelected = +e.target.value;
+        this.setState(newState);
+    }
+
+
     render() {
         if (!this.state.CardsLoaded) {//TODO нужен кастомный
             return <div className='card-list-preloader'>
@@ -477,6 +592,11 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
                     DeleteCurrentCard={this.DeleteCurrentCard}
                     WriteTestChanged={this.WriteTestChanged}
                     WriteTestString={this.state.WriteTestString}
+                    WordLists={this.state.WordLists}
+                    SelectedList={this.state.WordListSelected}
+                    ListOnChange={this.ListOnChange}
+                    AddCardToList={this.AddCardToList}
+                    RemoveFromList={this.RemoveFromList}
                 />
                 <WordsCardsList
                     CardList={this.state.Cards.filter(x => this.FilterWordNeedShowInList(x))
@@ -586,7 +706,19 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
     }
 
     private FilterWordNeedShowInList(card: OneWordCardModel) {
-        return card.Word.indexOf(this.state.SearchedString) >= 0 && (this.state.ShowHidenCard || !card.Hided);
+        let res = card.Word.indexOf(this.state.SearchedString) >= 0
+            && (this.state.ShowHidenCard || !card.Hided);
+
+        if (!res) {
+            return false;
+        }
+
+        if (this.state.WordListSelected > 0) {
+            res = card.Lists.some(x => x.IdList == this.state.WordListSelected);
+        }
+
+
+        return res;
     }
 
     private GetFromStateCardsById(state: WordsCardsListMainState, id: number): OneWordCardModel {
@@ -609,5 +741,43 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         return null;
     }
 
+
+    private LoadAllWordLists() {
+        //копия src\components\Body\WordsCardsApp\ForceNew\WordsCardsForceAdd.tsx
+
+        let refThis = this;
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {},
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    let dataBack = xhr as IWordListBack[];
+                    if (dataBack.length == 0) {
+                        return;//todo
+                    }
+
+                    let newState = { ...refThis.state };
+                    let dataFront: OneWordList[] = [];
+                    dataBack.forEach(bk => {
+                        let nd = new OneWordList();
+                        nd.FillByBackModel(bk);
+                        dataFront.push(nd);
+                    });
+
+                    // newState.WordListsLoaded = true;
+                    newState.WordLists = dataFront;
+                    this.setState(newState);
+
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/wordslist/get-all-for-user',
+
+        }, true);
+    }
 
 }

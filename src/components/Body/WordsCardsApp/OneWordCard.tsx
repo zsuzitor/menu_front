@@ -13,6 +13,7 @@ export interface IOneWordCardStase {
     WriteMode: boolean;//режим письма, отрисовать новый инпут, он будет сравнивать введенное с word
     // WordGoodWrited: boolean;//в режиме write слово введено верно
     CurrentCardNewSelectedList: number;
+    ShowCrdsListInfo: boolean;
 }
 
 
@@ -64,6 +65,7 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
             AlwaysShowWord: false,
             WriteMode: false,
             CurrentCardNewSelectedList: -1,
+            ShowCrdsListInfo: false,
             // WordGoodWrited: false,
             // ShowCurrentWordAnswer: false,
             // ShowCurrentWordImage: false,
@@ -78,6 +80,7 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
         // this.WordInputCompare = this.WordInputCompare.bind(this);
         this.AddCardToList = this.AddCardToList.bind(this);
         this.RemoveFromList = this.RemoveFromList.bind(this);
+        this.ChangeShowCardLists = this.ChangeShowCardLists.bind(this);
 
 
     }
@@ -89,6 +92,13 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
         newState.AlwaysShowWordImage = !newState.AlwaysShowWordImage;
         this.setState(newState);
     }
+
+    ChangeShowCardLists() {
+        let newState = { ...this.state };
+        newState.ShowCrdsListInfo = !newState.ShowCrdsListInfo;
+        this.setState(newState);
+    }
+
 
     ChangeAlwaysShowWordAnswer() {
         let newState = { ...this.state };
@@ -122,8 +132,8 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
 
     }
 
-    RemoveFromList() {
-        this.props.RemoveFromList(this.props.CurrentCard.Id, this.state.CurrentCardNewSelectedList);
+    RemoveFromList(listId:number) {
+        this.props.RemoveFromList(this.props.CurrentCard.Id, listId);
     }
 
 
@@ -201,9 +211,11 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
             </div>
         }
 
-        let wordListActions = <div></div>
-
-        if (this.props.CurrentCard.Lists) {//TODO тут бы еще какую то кнопку мб, что бы не рисовать всегда
+        let wordListActions = <div>
+            <button className="btn btn-secondary btn-sm" onClick={this.ChangeShowCardLists}>Списки</button>
+        </div>
+        if (this.state.ShowCrdsListInfo) {
+            //if (this.props.CurrentCard.Lists) {//TODO тут бы еще какую то кнопку мб, что бы не рисовать всегда
 
             let listSelect = <div>
                 <select value={this.state.CurrentCardNewSelectedList} onChange={this.NewAddListOnChange}>
@@ -219,17 +231,19 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
                     let lst = this.props.WordLists.find(x1 => x1.Id == x.IdList)
                     if (lst) {
                         return <div key={lst.Id}>
-                            <p>{lst.Title}</p>
-                            <button onClick={this.RemoveFromList}>Удалить из списка</button>
+                            {lst.Title}
+                            <button className="btn btn-secondary btn-sm" onClick={()=>this.RemoveFromList(lst.Id)}>Удалить из списка</button>
                         </div>
                     }
 
                 })}
                 {listSelect}
-
+                <button className="btn btn-secondary btn-sm" onClick={this.ChangeShowCardLists}>Списки</button>
             </div>
 
+            // }
         }
+
 
         return <div>
             {/* <p>id - {this.props.CurrentCard.Id}</p> */}

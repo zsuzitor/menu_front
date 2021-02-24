@@ -53,6 +53,7 @@ export class WordsCardsListWork extends React.Component<{}, IWordsCardsListWorkS
         this.RenderOneCard = this.RenderOneCard.bind(this);
         this.StartEdit = this.StartEdit.bind(this);
         this.EditTemplateTitleOnChange = this.EditTemplateTitleOnChange.bind(this);
+        this.Delete = this.Delete.bind(this);
 
 
     }
@@ -157,6 +158,42 @@ export class WordsCardsListWork extends React.Component<{}, IWordsCardsListWorkS
         }, true);
     }
 
+
+    Delete(id: number) {
+        let data = new FormData();
+        data.append('id', id + '');
+        let refThis = this;
+
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "DELETE",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                }
+                else {
+                    let dataBack = xhr as IWordListBack;
+                    if (dataBack.id < 1) {
+                        return;
+                    }
+                    let newState = { ...refThis.state };
+                    for (let i = 0; i < newState.WordLists.length; ++i) {
+                        if (newState.WordLists[i].Record.Id == id) {
+                            newState.WordLists.splice(i,1);
+                            this.setState(newState);
+                            return;
+                        }
+                    }
+
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/wordslist/delete',
+
+        }, true);
+    }
+
     CancelChange(id: number) {
         if (id < 1) {
             let newState = { ...this.state };
@@ -249,6 +286,7 @@ export class WordsCardsListWork extends React.Component<{}, IWordsCardsListWorkS
                 <div className="work-words-one-list-inner">
                     <p>{data.Record.Id} - {data.Record.Title}</p>
                     <button onClick={() => { this.StartEdit(data.Record.Id) }} className="btn btn-primary">Редактировать</button>
+                    <button onClick={() => { this.Delete(data.Record.Id) }} className="btn btn-primary">Удалить</button>
                 </div>
             </div>
         }

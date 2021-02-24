@@ -210,7 +210,7 @@ export class OneWordCard extends React.Component<IOneWordCardProps, IOneWordCard
                     <option key={-1} value={-1}>Без списка</option>
                     {this.props.WordLists.map(x => <option key={x.Id} value={x.Id}>{x.Title}</option>)}
                 </select>
-                <button onClick={this.AddCardToList}>Добавить новый</button>
+                <button className="btn btn-secondary btn-sm" onClick={this.AddCardToList}>Добавить новый</button>
             </div>
 
             wordListActions = <div>

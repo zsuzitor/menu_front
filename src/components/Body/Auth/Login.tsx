@@ -49,39 +49,51 @@ export class Login extends React.Component<{}, ILoginState> {
 
 
     async TryLogin() {
-        //TODO отправляем запрос и чистим state
         let data = {
-            'email': this.state.Login,
-            'password': this.state.Password,
+            Email: this.state.Login,
+            Password: this.state.Password,
         };
+        
+        let onSuccess = (error: MainErrorObjectBack) => {
+            if (!error) {
+                document.location.href = "/menu";
+            }
+        }
+
+        window.G_AuthenticateController.Login(data, onSuccess);
+        //TODO отправляем запрос и чистим state
+        // let data = {
+        //     'email': this.state.Login,
+        //     'password': this.state.Password,
+        // };
 
         // let ajx: AjaxHelper.IAjaxHelper = new AjaxHelper.AjaxHelper();
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "POST",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    // //TODO ошибка
-                    // if (G_AddAbsoluteAlertToState) {
-                    //     let alertLogic = new AlertData();
-                    //     resp.errors.forEach(error => {
-                    //         let errArr = alertLogic.GetByErrorBack(error);
-                    //         errArr.forEach(alertForShow => {
-                    //             G_AddAbsoluteAlertToState(alertForShow);
-                    //         });
-                    //     });
-                    // }
-                }
-                else {
-                    //TODO записываем полученные токены
-                    document.location.href = "/menu";
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/authenticate/login',
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: data,
+        //     Type: "POST",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             // //TODO ошибка
+        //             // if (G_AddAbsoluteAlertToState) {
+        //             //     let alertLogic = new AlertData();
+        //             //     resp.errors.forEach(error => {
+        //             //         let errArr = alertLogic.GetByErrorBack(error);
+        //             //         errArr.forEach(alertForShow => {
+        //             //             G_AddAbsoluteAlertToState(alertForShow);
+        //             //         });
+        //             //     });
+        //             // }
+        //         }
+        //         else {
+        //             //TODO записываем полученные токены
+        //             document.location.href = "/menu";
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/authenticate/login',
 
-        });
+        // });
 
     }
 

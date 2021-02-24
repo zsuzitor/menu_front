@@ -53,29 +53,46 @@ export class Register extends React.Component<{}, IRegisterState> {
     }
 
 
+
+
     TryRegister() {
         //TODO отправляем запрос и чистим state?
         let data = {
-            'email': this.state.Login,
-            'password': this.state.Password,
-            "password_confirm": this.state.ConfirmPassword,
+            Email: this.state.Login,
+            Password: this.state.Password,
+            ConfirmPassword:this.state.ConfirmPassword,
         };
+        
+        let onSuccess = (error: MainErrorObjectBack) => {
+            if (!error) {
+                document.location.href = "/menu";
+            }
+        }
 
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "PUT",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                }
-                else {
-                    //TODO записываем полученные токены
-                    document.location.href = "/menu";
-                }
-            },
-            Url: G_PathToServer + 'api/authenticate/register',
+        window.G_AuthenticateController.Register(data, onSuccess);
+        
+        
+        // let data = {
+        //     'email': this.state.Login,
+        //     'password': this.state.Password,
+        //     "password_confirm": this.state.ConfirmPassword,
+        // };
 
-        });
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: data,
+        //     Type: "PUT",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //         }
+        //         else {
+        //             //TODO записываем полученные токены
+        //             document.location.href = "/menu";
+        //         }
+        //     },
+        //     Url: G_PathToServer + 'api/authenticate/register',
+
+        // });
 
 
 

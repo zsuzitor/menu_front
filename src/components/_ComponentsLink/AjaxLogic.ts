@@ -21,6 +21,8 @@ import { AlertData } from "./Models/AlertData";
 // data.append('newData[0].word',
 // а вот так уже нельзя // data.append('newData.word',
 
+//что бы работало без флага fileLoad == true
+//надо что бы data был обычный объект js -- {a:123}
 
 ///
 

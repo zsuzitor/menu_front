@@ -55,35 +55,52 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
         //грузим все
 
         // let ajx: AjaxHelper.IAjaxHelper = new AjaxHelper.AjaxHelper();
-        await G_AjaxHelper.GoAjaxRequest({
-            Data: {},
-            Type: "GET",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
+        let success = (error: MainErrorObjectBack, data: IOneCardInListDataBack[]) => {
+            if (error || !data) {
+                return;
+            }
+            let dataFront: OneCardInListData[] = [];
+            data.forEach(bk => {
+                dataFront.push(new OneCardInListData(bk));
+            });
 
-                }
-                else {
-                    let dataBack = xhr as IOneCardInListDataBack[];
-                    let dataFront: OneCardInListData[] = [];
-                    dataBack.forEach(bk => {
-                        dataFront.push(new OneCardInListData(bk));
-                    });
+            this.setState({//смержит?????
+                AllCardsData: dataFront,
+                CardsLoaded: true,
+                // FollowedCards: followed,
+                // NotFollowedCards: notFollowed,
+            });
+        }
+        window.G_ArticleController.GetAllShortForUser(success);
+        // await G_AjaxHelper.GoAjaxRequest({
+        //     Data: {},
+        //     Type: "GET",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             //TODO ошибка
 
-                    this.setState({//смержит?????
-                        AllCardsData: dataFront,
-                        CardsLoaded: true,
-                        // FollowedCards: followed,
-                        // NotFollowedCards: notFollowed,
-                    });
+        //         }
+        //         else {
+        //             let dataBack = xhr as IOneCardInListDataBack[];
+        //             let dataFront: OneCardInListData[] = [];
+        //             dataBack.forEach(bk => {
+        //                 dataFront.push(new OneCardInListData(bk));
+        //             });
 
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/article/get-all-short-for-user',
+        //             this.setState({//смержит?????
+        //                 AllCardsData: dataFront,
+        //                 CardsLoaded: true,
+        //                 // FollowedCards: followed,
+        //                 // NotFollowedCards: notFollowed,
+        //             });
 
-        });
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/article/get-all-short-for-user',
+
+        // });
 
     }
 

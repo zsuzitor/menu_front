@@ -5,6 +5,9 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { MainComponent } from './components/MainComponent';
 import { AjaxHelper } from './components/_ComponentsLink/AjaxLogic';
+import { AuthenticateController } from "./components/_ComponentsLink/Controllers/AuthenticateController";
+import { ArticleController } from "./components/_ComponentsLink/Controllers/MenuApp/ArticleController";
+import { UsersController } from "./components/_ComponentsLink/Controllers/UsersController";
 import { MainErrorHandler } from './components/_ComponentsLink/Models/ErrorHandleLogic';
 
 
@@ -34,11 +37,18 @@ require('../style/word_cards.css');
 // window.G_PathToBaseImages = "../../images/";
 window.G_PathToBaseImages = "/images/";
 window.G_EmptyImagePath = G_PathToBaseImages + "user_empty_image.png";
-window.G_PreloaderPath =  G_PathToBaseImages + "loading.gif";
+window.G_PreloaderPath = G_PathToBaseImages + "loading.gif";
 window.G_PathToServer = "/";//"http://localhost:8000/";
 window.G_PathToServerMenu = G_PathToServer + "menu/";
 window.G_AjaxHelper = new AjaxHelper();
 window.G_ErrorHandleLogic = new MainErrorHandler();
+
+//controllers
+window.G_AuthenticateController = new AuthenticateController();
+window.G_UsersController = new UsersController();
+window.G_ArticleController = new ArticleController();
+window.G_WordsCardsController = new ArticleController();
+window.G_WordsListController = new ArticleController();
 //
 // G_AddAbsoluteAlertToState -->MainComponent
 //

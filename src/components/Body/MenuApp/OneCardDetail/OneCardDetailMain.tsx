@@ -119,38 +119,51 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
             // console.log(JSON.stringify(cardId));
         }
 
-        let data = {
-            "id": cardId,
-        };
-
-
         let thisRef = this;
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "GET",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                }
-                else {
-                    let dataBack = xhr as IOneCardFullDataBack;
+        let success = (error: MainErrorObjectBack, data: IOneCardFullDataBack) => {
+            if (error || !data) {
+                return;
+            }
+            let newState = { ...thisRef.state };
+            newState.Card = new OneCardFullDataView();
+            newState.Card.FillByBackModel(data);
+            thisRef.setState(newState);
+        }
 
-                    if (dataBack.id && dataBack.id > 0) {
-                        let newState = { ...thisRef.state };
-                        newState.Card = new OneCardFullDataView();
-                        newState.Card.FillByBackModel(dataBack);
-                        thisRef.setState(newState);
-                    }
-                    else {
-                        //ошибка
-                    }
+        window.G_ArticleController.Detail(
+            { Id: cardId },
+            success);
 
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/article/detail',
-        });
+        // let data = {
+        //     "id": cardId,
+        // };
+        // let thisRef = this;
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: data,
+        //     Type: "GET",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             //TODO ошибка
+        //         }
+        //         else {
+        //             let dataBack = xhr as IOneCardFullDataBack;
+
+        //             if (dataBack.id && dataBack.id > 0) {
+        //                 let newState = { ...thisRef.state };
+        //                 newState.Card = new OneCardFullDataView();
+        //                 newState.Card.FillByBackModel(dataBack);
+        //                 thisRef.setState(newState);
+        //             }
+        //             else {
+        //                 //ошибка
+        //             }
+
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/article/detail',
+        // });
 
 
     }
@@ -289,41 +302,60 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
 
 
     FollowButtonClick() {
-        let data = {
-            "id": this.state.Card.Id,
-        };
 
-        let newState = { ...this.state };
+        let thisRef = this;
+        let success = (error: MainErrorObjectBack, data: BoolResultBack) => {
+            if (error || !data) {
+                return;
+            }
+            let newState = { ...thisRef.state };
+            if (data.result === true) {
 
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "PATCH",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                }
-                else {
-                    let boolRes = xhr as BoolResultBack;
+                newState.Card.Followed = true;
+                thisRef.setState(newState);
+            }
+            else if (data.result === false) {
+                newState.Card.Followed = false;
+                thisRef.setState(newState);
+            }
+        }
+        window.G_ArticleController.Follow({ Id: this.state.Card.Id }, success);
 
-                    if (boolRes.result === true) {
+        // let data = {
+        //     "id": this.state.Card.Id,
+        // };
 
-                        newState.Card.Followed = true;
-                        this.setState(newState);
-                    }
-                    else if (boolRes.result === false) {
-                        newState.Card.Followed = false;
-                        this.setState(newState);
-                    }
-                    else {
-                        //что то не то вернулось
-                    }
+        // let newState = { ...this.state };
 
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/article/follow',
-        });
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: data,
+        //     Type: "PATCH",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             //TODO ошибка
+        //         }
+        //         else {
+        //             let boolRes = xhr as BoolResultBack;
+
+        //             if (boolRes.result === true) {
+
+        //                 newState.Card.Followed = true;
+        //                 this.setState(newState);
+        //             }
+        //             else if (boolRes.result === false) {
+        //                 newState.Card.Followed = false;
+        //                 this.setState(newState);
+        //             }
+        //             else {
+        //                 //что то не то вернулось
+        //             }
+
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/article/follow',
+        // });
 
     }
 

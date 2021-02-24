@@ -155,37 +155,51 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
         }
         //TODO запрос
 
+        let thisRef = this;
+        let success = (error: MainErrorObjectBack, data: BoolResultBack) => {
+            if (error || !data) {
+                return;
+            }
+            if (data.result === true) {
 
-        let data = {
-            "id": this.props.CardData.Id,
-        };
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "PATCH",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                }
-                else {
-                    let boolRes = xhr as BoolResultBack;
+                thisRef.props.FollowRequstSuccess(thisRef.props.CardData.Id, true);
+            }
+            else if (data.result === false) {
+                thisRef.props.FollowRequstSuccess(thisRef.props.CardData.Id, false);
+            }
+        }
+        window.G_ArticleController.Follow({ Id: this.props.CardData.Id }, success);
 
-                    if (boolRes.result === true) {
+        // let data = {
+        //     "id": this.props.CardData.Id,
+        // };
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: data,
+        //     Type: "PATCH",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             //TODO ошибка
+        //         }
+        //         else {
+        //             let boolRes = xhr as BoolResultBack;
 
-                        this.props.FollowRequstSuccess(this.props.CardData.Id, true);
-                    }
-                    else if (boolRes.result === false) {
-                        this.props.FollowRequstSuccess(this.props.CardData.Id, false);
-                    }
-                    else {
-                        //что то не то вернулось
-                    }
+        //             if (boolRes.result === true) {
 
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/article/follow',
-        });
+        //                 this.props.FollowRequstSuccess(this.props.CardData.Id, true);
+        //             }
+        //             else if (boolRes.result === false) {
+        //                 this.props.FollowRequstSuccess(this.props.CardData.Id, false);
+        //             }
+        //             else {
+        //                 //что то не то вернулось
+        //             }
+
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/article/follow',
+        // });
 
 
     }
@@ -322,70 +336,91 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
 
     ///редактирование именно из списка карт
     private EditCardInListRequest(newElement: IOneCardInListData, callBack: any) {//TODO callback на апдейт 
-        let data = {
-            "id": newElement.Id,
-            "title": newElement.Title,
-            "body": newElement.Body,
-            // "main_image_new":newElement.Image,
-        };
 
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "PATCH",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                }
-                else {
-                    let res = xhr as IOneCardInListDataBack;
-                    if (res.id && res.id > 0) {
+        let success = (error: MainErrorObjectBack, data: IOneCardInListDataBack) => {
+            if (error || !data) {
+                return;
+            }
+            callBack(data);
+        }
+        window.G_ArticleController.Edit(newElement, success);
 
-                        callBack(res);
-                    }
-                    else {
-                        //какая то ошибка
-                    }
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/article/edit',
+        // let data = {
+        //     "id": newElement.Id,
+        //     "title": newElement.Title,
+        //     "body": newElement.Body,
+        //     // "main_image_new":newElement.Image,
+        // };
 
-        });
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: data,
+        //     Type: "PATCH",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             //TODO ошибка
+        //         }
+        //         else {
+        //             let res = xhr as IOneCardInListDataBack;
+        //             if (res.id && res.id > 0) {
+
+        //                 callBack(res);
+        //             }
+        //             else {
+        //                 //какая то ошибка
+        //             }
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/article/edit',
+
+        // });
     }
 
     ///создание именно из списка карт
     private CreateCardInListRequest(newElement: IOneCardInListData, callBack: any) {//TODO callback на добавление 
-        let data = {
-            "title": newElement.Title,
-            "body": newElement.Body,
-            // "main_image_new":newElement.Image,
-        };
 
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "PUT",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
+        // let thisRef = this;
+        let success = (error: MainErrorObjectBack, data: IOneCardInListDataBack) => {
+            if (error || !data) {
+                return;
+            }
+            callBack(data);
+        }
+        window.G_ArticleController.Create(newElement, success);
 
-                }
-                else {
-                    let resBack = xhr as IOneCardInListDataBack;
-                    if (Number.isInteger(resBack.id) && resBack.id > 0) {
 
-                        callBack(resBack);
-                    }
-                    else {
-                        //что то не то вернулось
-                    }
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/article/create',
 
-        });
+        // let data = {
+        //     "title": newElement.Title,
+        //     "body": newElement.Body,
+        //     // "main_image_new":newElement.Image,
+        // };
+
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: data,
+        //     Type: "PUT",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             //TODO ошибка
+
+        //         }
+        //         else {
+        //             let resBack = xhr as IOneCardInListDataBack;
+        //             if (Number.isInteger(resBack.id) && resBack.id > 0) {
+
+        //                 callBack(resBack);
+        //             }
+        //             else {
+        //                 //что то не то вернулось
+        //             }
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/article/create',
+
+        // });
     }
 
 

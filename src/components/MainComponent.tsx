@@ -135,47 +135,29 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
             return;
         }
 
-        await G_AjaxHelper.GoAjaxRequest({
-            Data: {},
-            Type: "GET",
-            NotRedirectWhenNotAuth: true,
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
+        let success = (error: MainErrorObjectBack, data: UserShortBack) => {
+            if (error) {
+                return;
+            }
 
+            let auth: IAuthState = {
+                AuthSuccess: true,
+                User: {
+                    Name: data.name,
+                    Image: data.main_image_path
                 }
-                else {
-                    let dataBack = xhr as UserShortBack;
-                    if (!dataBack.id) {
-                        //TODO какая то ошибка
-                        alert('что то сломалось-1');
-                        return;
-                    }
+            };
 
-                    let auth: IAuthState = {
-                        AuthSuccess: true,
-                        User: {
-                            Name: dataBack.name,
-                            Image: dataBack.main_image_path
-                        }
-                    };
+            localStorage.setItem('header_auth', JSON.stringify(auth.User));
+            this.setState({
+                Auth: auth,
+                AbsoluteAlerts: [],
+            });
 
-                    localStorage.setItem('header_auth', JSON.stringify(auth.User));
+        }
 
-                    this.setState({
-                        Auth: auth,
-                        AbsoluteAlerts: [],
-                    });
-
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/users/get-shortest-user-info',
-
-        });
-
-
+        window.G_UsersController.GetShortestUSerInfo(success);
+       
 
         //TODO запрос для определения?
 

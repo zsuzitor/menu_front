@@ -530,44 +530,51 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         //     // "main_image_new":newElement.Image,
         // };
 
-        let data = new FormData();
-        data.append('id', newElement.Id + '');
-        data.append('title', newElement.Title);
-        data.append('body', newElement.Body);
-        data.append('delete_main_image', JSON.stringify(newElement.NeedDeleteMainImage));
-        if (newElement.MainImageSave) {
-            data.append('main_image_new', newElement.MainImageSave);
+        let success = (error: MainErrorObjectBack, data: IOneCardFullDataBack) => {
+            if (error || !data) {
+                return;
+            }
+            callBack(data);
         }
+        window.G_ArticleController.Edit(newElement, success);
 
-        newElement.AdditionalImagesSave.forEach((addImage, index) => {
-            data.append('additional_images', addImage);//' + index + '
-        });
+        // let data = new FormData();
+        // data.append('id', newElement.Id + '');
+        // data.append('title', newElement.Title);
+        // data.append('body', newElement.Body);
+        // data.append('delete_main_image', JSON.stringify(newElement.NeedDeleteMainImage));
+        // if (newElement.MainImageSave) {
+        //     data.append('main_image_new', newElement.MainImageSave);
+        // }
+
+        // newElement.AdditionalImagesSave.forEach((addImage, index) => {
+        //     data.append('additional_images', addImage);//' + index + '
+        // });
 
 
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: data,
+        //     Type: "PATCH",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             //TODO ошибка
+        //         }
+        //         else {
+        //             let res = xhr as IOneCardFullDataBack;
+        //             if (res.id && res.id > 0) {
 
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "PATCH",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                }
-                else {
-                    let res = xhr as IOneCardFullDataBack;
-                    if (res.id && res.id > 0) {
+        //                 callBack(res);
+        //             }
+        //             else {
+        //                 //что то не то вернулось
+        //             }
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/article/edit',
 
-                        callBack(res);
-                    }
-                    else {
-                        //что то не то вернулось
-                    }
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/article/edit',
-
-        }, true);
+        // }, true);
     }
 
     private ChangeRemoveStatusAdditionalImage(id: number, newStatus: boolean) {

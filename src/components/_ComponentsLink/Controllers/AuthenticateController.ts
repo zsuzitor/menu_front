@@ -86,10 +86,10 @@ export class AuthenticateController implements IAuthenticateController {
 
 
     Logout() {
-        alert('not inplement');
+        alert('not inplemented');
     }
     RefreshAccessToken() {
-        alert('not inplement');
+        alert('not inplemented');
     }
 }
 

@@ -3,12 +3,13 @@ import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { IOneCardFullDataBack } from "../../BackModel/MenuApp/OneCardFullDataBack";
 import { IOneCardInListDataBack } from "../../BackModel/MenuApp/OneCardInListDataBack";
 import { IOneCardInListData } from "../../Models/MenuApp/OneCardInListData";
+import { IOneCardFullDataEdit } from "../../Models/MenuApp/Poco/IOneCardFullDataEdit";
 import { BoolWithError, OnlyError } from "../BO/ControllersOutput";
 
 
 export type ListOfCardOnReturn = (error: MainErrorObjectBack, data: IOneCardInListDataBack[]) => void;
 export type DetailOnReturn = (error: MainErrorObjectBack, data: IOneCardFullDataBack) => void;
-export type EditOnReturn = (error: MainErrorObjectBack, data: IOneCardInListDataBack) => void;
+export type EditOnReturn = (error: MainErrorObjectBack, data: IOneCardFullDataBack) => void;
 
 
 export interface IArticleController {
@@ -17,7 +18,7 @@ export interface IArticleController {
     Detail: (model: IdInput, onSuccess: DetailOnReturn) => void;
     Follow: (model: IdInput, onSuccess: BoolWithError) => void;
     Create: (model: IOneCardInListData, onSuccess: EditOnReturn) => void;
-    Edit: (model: IOneCardInListData, onSuccess: EditOnReturn) => void;
+    Edit: (model: IOneCardFullDataEdit, onSuccess: EditOnReturn) => void;
 
 }
 
@@ -135,7 +136,7 @@ export class ArticleController implements IArticleController {
 
                 }
                 else {
-                    let resBack = xhr as IOneCardInListDataBack;
+                    let resBack = xhr as IOneCardFullDataBack;
                     if (Number.isInteger(resBack.id) && resBack.id > 0) {
                         success(null, resBack);
                         // callBack(resBack);
@@ -152,13 +153,22 @@ export class ArticleController implements IArticleController {
     }
 
 
-    Edit(model: IOneCardInListData, success: EditOnReturn) {
-        let data = {
-            "id": model.Id,
-            "title": model.Title,
-            "body": model.Body,
-            // "main_image_new":newElement.Image,
-        };
+    Edit(model: IOneCardFullDataEdit, success: EditOnReturn) {
+        let data = new FormData();
+        data.append('id', model.Id + '');
+        data.append('title', model.Title);
+        data.append('body', model.Body);
+        data.append('delete_main_image', JSON.stringify(model.NeedDeleteMainImage));
+        if (model.MainImageSave) {
+            data.append('main_image_new', model.MainImageSave);
+        }
+
+        if (model.AdditionalImagesSave) {
+            model.AdditionalImagesSave.forEach((addImage, index) => {
+                data.append('additional_images', addImage);//' + index + '
+            });
+        }
+
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
@@ -170,7 +180,7 @@ export class ArticleController implements IArticleController {
                     success(resp, null);
                 }
                 else {
-                    let res = xhr as IOneCardInListDataBack;
+                    let res = xhr as IOneCardFullDataBack;
                     if (res.id && res.id > 0) {
                         success(null, res);
                         // callBack(res);
@@ -183,6 +193,6 @@ export class ArticleController implements IArticleController {
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/article/edit',
 
-        });
+        }, true);
     }
 }

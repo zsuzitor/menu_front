@@ -5,7 +5,7 @@ import { IWordListBack } from "../../../_ComponentsLink/BackModel/WordCardApp/Wo
 import { OneWordList } from "../../../_ComponentsLink/Models/WordsCardsApp/OneWordList";
 
 
-export class OneWordListEdit {
+export class OneWordListEdit {//TODO надо вынести в отдельный файл и повыше в иерархии тк используется в контроллерах
     Id?: number;
     Title: string;
 
@@ -72,37 +72,55 @@ export class WordsCardsListWork extends React.Component<{}, IWordsCardsListWorkS
             return;
         }
 
-        let data = new FormData();
-        data.append('title', rec.EditModel.Title);
-        data.append('id', rec.Record.Id + '');
+        rec.EditModel.Id=rec.Record.Id;
+
+
         let refThis = this;
+        let success = (error: MainErrorObjectBack, data: IWordListBack) => {
+            if (error || !data) {
+                return;
+            }
+            let newState = { ...refThis.state };
+            let recActual = refThis.GetByIdFromState(newState, id);
+            recActual.Record.FillByBackModel(data);
 
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "PATCH",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                }
-                else {
-                    let dataBack = xhr as IWordListBack;
-                    if (dataBack.id < 1) {
-                        return;
-                    }
-                    let newState = { ...refThis.state };
-                    let recActual = this.GetByIdFromState(newState, id);
-                    recActual.Record.FillByBackModel(dataBack);
+            recActual.EditModel = null;
+            refThis.setState(newState);
+        };
 
-                    recActual.EditModel = null;
-                    this.setState(newState);
+        G_WordsListController.Update(rec.EditModel, success);
 
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/wordslist/update',
+        // let data = new FormData();
+        // data.append('title', rec.EditModel.Title);
+        // data.append('id', rec.Record.Id + '');
+        // let refThis = this;
 
-        }, true);
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: data,
+        //     Type: "PATCH",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             //TODO ошибка
+        //         }
+        //         else {
+        //             let dataBack = xhr as IWordListBack;
+        //             if (dataBack.id < 1) {
+        //                 return;
+        //             }
+        //             let newState = { ...refThis.state };
+        //             let recActual = this.GetByIdFromState(newState, id);
+        //             recActual.Record.FillByBackModel(dataBack);
+
+        //             recActual.EditModel = null;
+        //             this.setState(newState);
+
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/wordslist/update',
+
+        // }, true);
     }
 
     StartEdit(id: number) {
@@ -120,78 +138,118 @@ export class WordsCardsListWork extends React.Component<{}, IWordsCardsListWorkS
 
 
     SaveNew() {
-        let data = new FormData();
-        data.append('title', this.state.EditModel.Title);
         let refThis = this;
-
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "PUT",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
+        let success = (error: MainErrorObjectBack, data: IWordListBack) => {
+            if (error || !data) {
+                return;
+            }
+            let newState = { ...refThis.state };
+            let nd = new OneWordList();
+            nd.FillByBackModel(data);
+            newState.WordLists.push(
+                {
+                    Record: nd,
+                    EditModel: null,
                 }
-                else {
-                    let dataBack = xhr as IWordListBack;
-                    if (dataBack.id < 1) {
-                        return;
-                    }
-                    let newState = { ...refThis.state };
-                    let nd = new OneWordList();
-                    nd.FillByBackModel(dataBack);
-                    newState.WordLists.push(
-                        {
-                            Record: nd,
-                            EditModel: null,
-                        }
-                    );
+            );
 
-                    newState.EditModel = null;
-                    this.setState(newState);
+            newState.EditModel = null;
+            refThis.setState(newState);
+        };
 
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/wordslist/create',
+        G_WordsListController.Create(this.state.EditModel.Title, success);
 
-        }, true);
+
+        // let data = new FormData();
+        // data.append('title', this.state.EditModel.Title);
+        // let refThis = this;
+
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: data,
+        //     Type: "PUT",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             //TODO ошибка
+        //         }
+        //         else {
+        //             let dataBack = xhr as IWordListBack;
+        //             if (dataBack.id < 1) {
+        //                 return;
+        //             }
+        //             let newState = { ...refThis.state };
+        //             let nd = new OneWordList();
+        //             nd.FillByBackModel(dataBack);
+        //             newState.WordLists.push(
+        //                 {
+        //                     Record: nd,
+        //                     EditModel: null,
+        //                 }
+        //             );
+
+        //             newState.EditModel = null;
+        //             this.setState(newState);
+
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/wordslist/create',
+
+        // }, true);
     }
 
 
     Delete(id: number) {
-        let data = new FormData();
-        data.append('id', id + '');
+
         let refThis = this;
-
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "DELETE",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
+        let success = (error: MainErrorObjectBack, data: IWordListBack) => {
+            if (error || !data) {
+                return;
+            }
+            let newState = { ...refThis.state };
+            for (let i = 0; i < newState.WordLists.length; ++i) {
+                if (newState.WordLists[i].Record.Id == id) {
+                    newState.WordLists.splice(i, 1);
+                    refThis.setState(newState);
+                    return;
                 }
-                else {
-                    let dataBack = xhr as IWordListBack;
-                    if (dataBack.id < 1) {
-                        return;
-                    }
-                    let newState = { ...refThis.state };
-                    for (let i = 0; i < newState.WordLists.length; ++i) {
-                        if (newState.WordLists[i].Record.Id == id) {
-                            newState.WordLists.splice(i,1);
-                            this.setState(newState);
-                            return;
-                        }
-                    }
+            }
+        };
 
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/wordslist/delete',
+        G_WordsListController.Delete(id, success);
 
-        }, true);
+        // let data = new FormData();
+        // data.append('id', id + '');
+        // let refThis = this;
+
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: data,
+        //     Type: "DELETE",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             //TODO ошибка
+        //         }
+        //         else {
+        //             let dataBack = xhr as IWordListBack;
+        //             if (dataBack.id < 1) {
+        //                 return;
+        //             }
+        //             let newState = { ...refThis.state };
+        //             for (let i = 0; i < newState.WordLists.length; ++i) {
+        //                 if (newState.WordLists[i].Record.Id == id) {
+        //                     newState.WordLists.splice(i, 1);
+        //                     this.setState(newState);
+        //                     return;
+        //                 }
+        //             }
+
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/wordslist/delete',
+
+        // }, true);
     }
 
     CancelChange(id: number) {
@@ -232,43 +290,68 @@ export class WordsCardsListWork extends React.Component<{}, IWordsCardsListWorkS
         //копия src\components\Body\WordsCardsApp\ForceNew\WordsCardsForceAdd.tsx
 
         let refThis = this;
-        G_AjaxHelper.GoAjaxRequest({
-            Data: {},
-            Type: "GET",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                }
-                else {
-                    let dataBack = xhr as IWordListBack[];
-                    if (dataBack.length == 0) {
-                        return;//todo
+        let success = (error: MainErrorObjectBack, data: IWordListBack[]) => {
+            if (error || !data) {
+                return;
+            }
+            let newState = { ...refThis.state };
+            let dataFront: OneWordListState[] = [];
+            data.forEach(bk => {
+                let nd = new OneWordList();
+                nd.FillByBackModel(bk);
+                dataFront.push(
+                    {
+                        Record: nd,
+                        EditModel: null,
                     }
+                );
+            });
 
-                    let newState = { ...refThis.state };
-                    let dataFront: OneWordListState[] = [];
-                    dataBack.forEach(bk => {
-                        let nd = new OneWordList();
-                        nd.FillByBackModel(bk);
-                        dataFront.push(
-                            {
-                                Record: nd,
-                                EditModel: null,
-                            }
-                        );
-                    });
+            newState.ListsLoaded = true;
+            newState.WordLists = dataFront;
+            refThis.setState(newState);
+        };
 
-                    newState.ListsLoaded = true;
-                    newState.WordLists = dataFront;
-                    this.setState(newState);
+        G_WordsListController.GetAllForUser(success);
 
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/wordslist/get-all-for-user',
+        // let refThis = this;
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: {},
+        //     Type: "GET",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             //TODO ошибка
+        //         }
+        //         else {
+        //             let dataBack = xhr as IWordListBack[];
+        //             if (dataBack.length == 0) {
+        //                 return;//todo
+        //             }
 
-        }, true);
+        //             let newState = { ...refThis.state };
+        //             let dataFront: OneWordListState[] = [];
+        //             dataBack.forEach(bk => {
+        //                 let nd = new OneWordList();
+        //                 nd.FillByBackModel(bk);
+        //                 dataFront.push(
+        //                     {
+        //                         Record: nd,
+        //                         EditModel: null,
+        //                     }
+        //                 );
+        //             });
+
+        //             newState.ListsLoaded = true;
+        //             newState.WordLists = dataFront;
+        //             this.setState(newState);
+
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/wordslist/get-all-for-user',
+
+        // }, true);
     }
 
 

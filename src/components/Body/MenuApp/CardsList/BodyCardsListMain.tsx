@@ -53,7 +53,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
 
     async componentDidMount() {
         //грузим все
-
+        let refThis = this;
         // let ajx: AjaxHelper.IAjaxHelper = new AjaxHelper.AjaxHelper();
         let success = (error: MainErrorObjectBack, data: IOneCardInListDataBack[]) => {
             if (error || !data) {
@@ -64,7 +64,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
                 dataFront.push(new OneCardInListData(bk));
             });
 
-            this.setState({//смержит?????
+            refThis.setState({//смержит?????
                 AllCardsData: dataFront,
                 CardsLoaded: true,
                 // FollowedCards: followed,

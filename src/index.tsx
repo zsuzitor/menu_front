@@ -8,6 +8,8 @@ import { AjaxHelper } from './components/_ComponentsLink/AjaxLogic';
 import { AuthenticateController } from "./components/_ComponentsLink/Controllers/AuthenticateController";
 import { ArticleController } from "./components/_ComponentsLink/Controllers/MenuApp/ArticleController";
 import { UsersController } from "./components/_ComponentsLink/Controllers/UsersController";
+import { WordsCardsController } from "./components/_ComponentsLink/Controllers/WordsCardsApp/WordsCardsController";
+import { WordsListController } from "./components/_ComponentsLink/Controllers/WordsCardsApp/WordsListController";
 import { MainErrorHandler } from './components/_ComponentsLink/Models/ErrorHandleLogic';
 
 
@@ -47,8 +49,8 @@ window.G_ErrorHandleLogic = new MainErrorHandler();
 window.G_AuthenticateController = new AuthenticateController();
 window.G_UsersController = new UsersController();
 window.G_ArticleController = new ArticleController();
-window.G_WordsCardsController = new ArticleController();
-window.G_WordsListController = new ArticleController();
+window.G_WordsCardsController = new WordsCardsController();
+window.G_WordsListController = new WordsListController();
 //
 // G_AddAbsoluteAlertToState -->MainComponent
 //

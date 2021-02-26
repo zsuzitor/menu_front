@@ -12,7 +12,10 @@ import {
 } from "react-router-dom";
 import { BoolResultBack } from "../../../_ComponentsLink/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
-import { IOneCardInListDataBack } from "../../../_ComponentsLink/BackModel/MenuApp/OneCardInListDataBack";
+import { IOneCardInListDataBack, OneCardInListDataBack } from "../../../_ComponentsLink/BackModel/MenuApp/OneCardInListDataBack";
+import { IOneCardFullDataEdit } from "../../../_ComponentsLink/Models/MenuApp/Poco/IOneCardFullDataEdit";
+import { IOneWordCardBack } from "../../../_ComponentsLink/BackModel/WordCardApp/OneWordCardBack";
+import { IOneCardFullDataBack } from "../../../_ComponentsLink/BackModel/MenuApp/OneCardFullDataBack";
 
 export interface IOneMenuCardProps {
     CardData?: IOneCardInListData;
@@ -337,13 +340,18 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
     ///редактирование именно из списка карт
     private EditCardInListRequest(newElement: IOneCardInListData, callBack: any) {//TODO callback на апдейт 
 
-        let success = (error: MainErrorObjectBack, data: IOneCardInListDataBack) => {
+        let success = (error: MainErrorObjectBack, data: IOneCardFullDataBack) => {
             if (error || !data) {
                 return;
             }
-            callBack(data);
+            let forApply = new OneCardInListDataBack();
+            forApply.FillByFullMode(data);
+            callBack(forApply);
         }
-        window.G_ArticleController.Edit(newElement, success);
+
+        let forSend: IOneCardFullDataEdit = { ...newElement, NeedDeleteMainImage: false };
+
+        window.G_ArticleController.Edit(forSend, success);
 
         // let data = {
         //     "id": newElement.Id,
@@ -381,11 +389,14 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
     private CreateCardInListRequest(newElement: IOneCardInListData, callBack: any) {//TODO callback на добавление 
 
         // let thisRef = this;
-        let success = (error: MainErrorObjectBack, data: IOneCardInListDataBack) => {
+        let success = (error: MainErrorObjectBack, data: IOneCardFullDataBack) => {
             if (error || !data) {
                 return;
             }
-            callBack(data);
+
+            let forApply = new OneCardInListDataBack();
+            forApply.FillByFullMode(data);
+            callBack(forApply);
         }
         window.G_ArticleController.Create(newElement, success);
 

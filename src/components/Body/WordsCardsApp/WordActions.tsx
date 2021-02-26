@@ -65,7 +65,10 @@ export class WordActions extends React.Component<IWordActionsProps, IWordActions
         //     Url: G_PathToServer + 'api/wordscards/download-all-words-file',
 
         // }, true);
-        window.open("/api/wordscards/download-all-words-file");
+        
+
+        G_WordsCardsController.DownloadAllWordsFile();
+        // window.open("/api/wordscards/download-all-words-file");
     }
 
 

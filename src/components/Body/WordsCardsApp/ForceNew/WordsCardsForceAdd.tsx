@@ -97,80 +97,116 @@ export class WordsCardsForceAdd extends React.Component<{}, OneWordCardInListSta
 
 
     SaveAll() {
-        let data = new FormData();
-        for (let i = 0; i < this.state.Cards.length; ++i) {
-            data.append('newData[' + i + '].word', this.state.Cards[i].Word);
-            data.append('newData[' + i + '].word_answer', this.state.Cards[i].WordAnswer);
-            data.append('newData[' + i + '].description', this.state.Cards[i].Description);
-            data.append('newData[' + i + '].list_id', this.state.SelectedList + '');
-            // data.append('newData.word_answer', this.state.Cards[i].WordAnswer);
-            // data.append('newData.description', this.state.Cards[i].Description);
-        }
-
         let refThis = this;
-        G_AjaxHelper.GoAjaxRequest({
-            Data: data,
-            Type: "PUT",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                }
-                else {
-                    let res = xhr as IOneWordCardBack[];
-                    if (res.length > 0) {
-                        let newState = { ...refThis.state };
-                        newState.Cards = [];
-                        this.setState(newState);
-                        let alertL = new AlertData();
-                        alertL.Text = "Сохранено";
-                        alertL.Type = AlertTypeEnum.Success;
-                        G_AddAbsoluteAlertToState(alertL);
-                    }
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/wordscards/create-list',
+        let success = (error: MainErrorObjectBack, data: IOneWordCardBack[]) => {
+            if (error || !data) {
+                return;
+            }
+            let newState = { ...refThis.state };
+            newState.Cards = [];
+            this.setState(newState);
+            let alertL = new AlertData();
+            alertL.Text = "Сохранено";
+            alertL.Type = AlertTypeEnum.Success;
+            G_AddAbsoluteAlertToState(alertL);
+        };
 
-        }, true);
+        G_WordsCardsController.CreateList(this.state.Cards, this.state.SelectedList + '', success);
+
+
+        // let data = new FormData();
+        // for (let i = 0; i < this.state.Cards.length; ++i) {
+        //     data.append('newData[' + i + '].word', this.state.Cards[i].Word);
+        //     data.append('newData[' + i + '].word_answer', this.state.Cards[i].WordAnswer);
+        //     data.append('newData[' + i + '].description', this.state.Cards[i].Description);
+        //     data.append('newData[' + i + '].list_id', this.state.SelectedList + '');
+        //     // data.append('newData.word_answer', this.state.Cards[i].WordAnswer);
+        //     // data.append('newData.description', this.state.Cards[i].Description);
+        // }
+
+        // let refThis = this;
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: data,
+        //     Type: "PUT",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             //TODO ошибка
+        //         }
+        //         else {
+        //             let res = xhr as IOneWordCardBack[];
+        //             if (res.length > 0) {
+        //                 let newState = { ...refThis.state };
+        //                 newState.Cards = [];
+        //                 this.setState(newState);
+        //                 let alertL = new AlertData();
+        //                 alertL.Text = "Сохранено";
+        //                 alertL.Type = AlertTypeEnum.Success;
+        //                 G_AddAbsoluteAlertToState(alertL);
+        //             }
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/wordscards/create-list',
+
+        // }, true);
     }
 
 
 
     LoadAllWordLists() {
-
-
         let refThis = this;
-        G_AjaxHelper.GoAjaxRequest({
-            Data: {},
-            Type: "GET",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                }
-                else {
-                    let dataBack = xhr as IWordListBack[];
-                    if (dataBack.length > 0) {
-                        let newState = { ...refThis.state };
-                        let dataFront: OneWordList[] = [];
-                        dataBack.forEach(bk => {
-                            let nd = new OneWordList();
-                            nd.FillByBackModel(bk);
-                            dataFront.push(nd);
-                        });
+        let success = (error: MainErrorObjectBack, data: IWordListBack[]) => {
+            if (error || !data) {
+                return;
+            }
+            let newState = { ...refThis.state };
+            let dataFront: OneWordList[] = [];
+            data.forEach(bk => {
+                let nd = new OneWordList();
+                nd.FillByBackModel(bk);
+                dataFront.push(nd);
+            });
 
-                        newState.ListsLoaded = true;
-                        newState.WordLists = dataFront;
+            newState.ListsLoaded = true;
+            newState.WordLists = dataFront;
 
-                        this.setState(newState);
-                    }
-                }
-            },
-            FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/wordslist/get-all-for-user',
+            refThis.setState(newState);
+        };
 
-        }, true);
+        G_WordsListController.GetAllForUser(success);
+
+        // let refThis = this;
+        // G_AjaxHelper.GoAjaxRequest({
+        //     Data: {},
+        //     Type: "GET",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+        //         if (resp.errors) {
+        //             //TODO ошибка
+        //         }
+        //         else {
+        //             let dataBack = xhr as IWordListBack[];
+        //             if (dataBack.length > 0) {
+        //                 let newState = { ...refThis.state };
+        //                 let dataFront: OneWordList[] = [];
+        //                 dataBack.forEach(bk => {
+        //                     let nd = new OneWordList();
+        //                     nd.FillByBackModel(bk);
+        //                     dataFront.push(nd);
+        //                 });
+
+        //                 newState.ListsLoaded = true;
+        //                 newState.WordLists = dataFront;
+
+        //                 this.setState(newState);
+        //             }
+        //         }
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/wordslist/get-all-for-user',
+
+        // }, true);
     }
 
 

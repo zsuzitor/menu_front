@@ -134,7 +134,7 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
         if (window.location.pathname.startsWith('/menu/auth/')) {
             return;
         }
-
+        let refThis = this;
         let success = (error: MainErrorObjectBack, data: UserShortBack) => {
             if (error) {
                 return;
@@ -149,7 +149,7 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
             };
 
             localStorage.setItem('header_auth', JSON.stringify(auth.User));
-            this.setState({
+            refThis.setState({
                 Auth: auth,
                 AbsoluteAlerts: [],
             });

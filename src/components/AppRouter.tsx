@@ -17,6 +17,7 @@ import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import { MenuMain } from "./Body/Menu/MenuMain";
 import { MenuAppMain } from "./Body/MenuApp/MenuAppMain";
 import { WordsCardsAppMain } from "./Body/WordsCardsApp/WordsCardsAppMain";
+import PlaningPokerMain from "./Body/PlaningPoker/PlaningPokerMain";
 
 
 
@@ -35,6 +36,7 @@ export class AppRouter extends React.Component<{}, {}> {
             <Route exact path="/menu" component={MenuMain} />
             <Route path="/menu-app/" component={MenuAppMain} />
             <Route path="/words-cards-app" component={WordsCardsAppMain} />
+            <Route path="/planing-poker" component={PlaningPokerMain} />
 
             <Route path="/menu/auth/login" render={(props) => (
                 <MainAuth {...props} LoginPage={true} />

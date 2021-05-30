@@ -4,6 +4,10 @@
  }
 
 
+.display_none{
+    display: none;
+}
+
  .persent-100-width{
      width:100%;
  }

@@ -7,6 +7,7 @@ import { MainComponent } from './components/MainComponent';
 import { AjaxHelper } from './components/_ComponentsLink/AjaxLogic';
 import { AuthenticateController } from "./components/_ComponentsLink/Controllers/AuthenticateController";
 import { ArticleController } from "./components/_ComponentsLink/Controllers/MenuApp/ArticleController";
+import { PlaningPokerController } from "./components/_ComponentsLink/Controllers/PlaningPoker/PlaningPokerController";
 import { UsersController } from "./components/_ComponentsLink/Controllers/UsersController";
 import { WordsCardsController } from "./components/_ComponentsLink/Controllers/WordsCardsApp/WordsCardsController";
 import { WordsListController } from "./components/_ComponentsLink/Controllers/WordsCardsApp/WordsListController";
@@ -51,6 +52,7 @@ window.G_UsersController = new UsersController();
 window.G_ArticleController = new ArticleController();
 window.G_WordsCardsController = new WordsCardsController();
 window.G_WordsListController = new WordsListController();
+window.G_PlaningPokerController = new PlaningPokerController();
 //
 // G_AddAbsoluteAlertToState -->MainComponent
 //

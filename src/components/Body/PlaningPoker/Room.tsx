@@ -29,6 +29,19 @@ class RoomState {
 
 }
 
+let CurrentUserIsAdmin: (st: RoomState, userId: string) => boolean = (st: RoomState, userId: string) => {
+    let user = st.UsersList.find(x => x.Id === userId);
+    if (user && user.IsAdmin) {
+        return true;
+    }
+
+    return false;
+}
+
+
+
+
+
 const Room = (props: RoomProps) => {
 
     if (!props.RoomInfo.InRoom) {//TODO тут по хорошему надо узнать название румы из урла и попросить ввести пароль, но пока что так
@@ -37,6 +50,11 @@ const Room = (props: RoomProps) => {
 
     let initState = new RoomState();
     const [localState, setLocalState] = useState(initState);
+
+
+
+
+
 
 
     useEffect(() => {
@@ -111,8 +129,8 @@ const Room = (props: RoomProps) => {
 
 
     let tryToRemoveUserFromRoom = (userId: string) => {
-        let user = localState.UsersList.find(x => x.Id == props.UserInfo.UserId);
-        if (!user || !user.IsAdmin) {
+        let isAdmin = CurrentUserIsAdmin(localState, props.UserInfo.UserId);
+        if (!isAdmin) {
             return;
         }
 
@@ -123,6 +141,33 @@ const Room = (props: RoomProps) => {
 
 
 
+    let renderVotePlaceIfNeed = () => {
+
+        //UNCOMMENT
+        // if (localState.RoomStatus !== RoomSatus.AllCanVote) {
+        //     return <div></div>
+        // }
+
+        return <div className="planing-cards-container">
+            <div className="one-planing-vote-card">1</div>
+            <div className="one-planing-vote-card">2</div>
+            <div className="one-planing-vote-card">3</div>
+        </div>
+
+    }
+
+    let renderVoteResultIfNeed = () => {
+
+        //UNCOMMENT
+        if (localState.RoomStatus !== RoomSatus.CloseVote) {
+            return <div></div>
+        }
+
+        return <div>vote result</div>
+
+    }
+
+
 
 
     return <div className="container">
@@ -131,13 +176,22 @@ const Room = (props: RoomProps) => {
         <div className="row">
             {/* <div className="persent-100-width"> */}
             <div className="planit-room-left-part col-12 col-md-9">
+                <div>
+                    <button>Начать голосование</button>
+                    <button>Закончить голосование</button>
+                    {renderVotePlaceIfNeed()}
+                    {renderVoteResultIfNeed()}
+                </div>
                 <div>оценки</div>
                 <div>описание задач?</div>
             </div>
             <div className="planit-room-right-part col-12 col-md-3">
                 <div>люди</div>
                 {localState.UsersList.map(x =>
-                    <UserInList key={x.Id} User={x} TryToRemoveUserFromRoom={tryToRemoveUserFromRoom} />
+                    <UserInList key={x.Id}
+                        User={x}
+                        TryToRemoveUserFromRoom={tryToRemoveUserFromRoom}
+                        RenderForAdmin={CurrentUserIsAdmin(localState, props.UserInfo.UserId)} />
                 )}
             </div>
             {/* </div> */}

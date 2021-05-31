@@ -1,11 +1,37 @@
-
-
-.planit-room-left-part{
-    border:2px solid black;
+.planit-room-left-part {
+    border: 2px solid black;
     height: 500px;
 }
 
-.planit-room-right-part{
-    border:2px solid black;
+.planit-room-right-part {
+    border: 2px solid black;
     height: 500px;
+}
+
+.one-planing-vote-card {
+    width: 100px;
+    height: 100px;
+    border: 2px solid black;
+    font-size: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.one-planing-vote-card:hover {
+    cursor: pointer;
+}
+
+.planing-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: space-between;
+    gap: 12px;
+    padding-top: 10px;
+    /* calc() */
+}
+
+.planing-cards-container>div {
+    margin: 6px;
 }

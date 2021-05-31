@@ -1,6 +1,6 @@
 // import * as React from "react";
 import React, { useState, useEffect } from 'react';
-import { RoomInfo, UserInRoom, RoomSatus } from './Models/RoomInfo';
+import { RoomInfo, UserInRoom, RoomSatus, PlaningPokerUserInfo } from './Models/RoomInfo';
 
 
 import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
@@ -10,7 +10,7 @@ import UserInList from './UserInList';
 
 class RoomProps {
     // InRoom: boolean;
-    Username: string;
+    UserInfo: PlaningPokerUserInfo;
     RoomInfo: RoomInfo;
 
     MyHubConnection: signalR.HubConnection;
@@ -31,7 +31,7 @@ class RoomState {
 
 const Room = (props: RoomProps) => {
 
-    if (!props.RoomInfo.InRoom) {//TODO тут по хорошему надо узнать название русы из урла и попросить ввести пароль, но пока что так
+    if (!props.RoomInfo.InRoom) {//TODO тут по хорошему надо узнать название румы из урла и попросить ввести пароль, но пока что так
         window.location.href = "/planing-poker";
     }
 
@@ -54,7 +54,10 @@ const Room = (props: RoomProps) => {
                     return us;
                 });
                 let newState = { ...localState };
-                newState.UsersList = newUsersData;
+                //реинициализировать нельзя, почему то отваливается
+                newState.UsersList.splice(0, newState.UsersList.length);
+                newState.UsersList.push(...newUsersData);
+                // newState.UsersList = newUsersData;
                 setLocalState(newState);
             }
 
@@ -63,7 +66,62 @@ const Room = (props: RoomProps) => {
         window.G_PlaningPokerController.GetUsersIsRoom(props.RoomInfo.Name, loadedUsers);
 
 
+
+        props.MyHubConnection.on("NewUserInRoom", function (data) {
+            if (!data) {
+                return;
+            }
+
+            let dataTyped = data as IUserInRoomReturn;
+            let us = new UserInRoom();
+            us.FillByBackModel(dataTyped);
+            let newState = { ...localState };
+            newState.UsersList.push(us);
+            setLocalState(newState);
+        });
+
+
+        props.MyHubConnection.on("UserLeaved", function (userId) {
+            if (!userId) {
+                return;
+            }
+
+            if (userId == props.UserInfo.UserId) {
+                alert("you kicked or leave");//TODO может как то получше сделать, и хорошо бы без перезагрузки\редиректа
+                window.location.href = "/planing-poker";
+                return;
+            }
+
+            let newState = { ...localState };
+            let userIndex = newState.UsersList.findIndex(x => x.Id === userId);
+            if (userIndex < 0) {
+                return;
+            }
+
+            newState.UsersList.splice(userIndex, 1);
+            setLocalState(newState);
+        });
+
+
+
+
+
     }, []);
+
+
+
+    let tryToRemoveUserFromRoom = (userId: string) => {
+        let user = localState.UsersList.find(x => x.Id == props.UserInfo.UserId);
+        if (!user || !user.IsAdmin) {
+            return;
+        }
+
+        props.MyHubConnection.send("KickUser", props.RoomInfo.Name, userId);
+
+
+    }
+
+
 
 
 
@@ -78,9 +136,9 @@ const Room = (props: RoomProps) => {
             </div>
             <div className="planit-room-right-part col-12 col-md-3">
                 <div>люди</div>
-                {localState.UsersList.map(x => {
-                    return <UserInList key={x.Id} User={x} />
-                })}
+                {localState.UsersList.map(x =>
+                    <UserInList key={x.Id} User={x} TryToRemoveUserFromRoom={tryToRemoveUserFromRoom} />
+                )}
             </div>
             {/* </div> */}
 

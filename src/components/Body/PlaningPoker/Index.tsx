@@ -42,19 +42,7 @@ let Index = (props: IndexProps) => {
 
 
 
-    props.MyHubConnection.on("RoomNotCreated", function () {
-        let alert = new AlertData();
-        alert.Text = "Комната не создана";
-        alert.Type = 1;
-        window.G_AddAbsoluteAlertToState(alert);
-    });
-
-    props.MyHubConnection.on("ConnectedToRoomError", function () {
-        let alert = new AlertData();
-        alert.Text = "подключение не удалось";
-        alert.Type = 1;
-        window.G_AddAbsoluteAlertToState(alert);
-    });
+ 
 
 
 
@@ -63,6 +51,24 @@ let Index = (props: IndexProps) => {
 
     useEffect(() => {
         // console.log("Index");
+        props.MyHubConnection.on("RoomNotCreated", function () {
+            let alert = new AlertData();
+            alert.Text = "Комната не создана";
+            alert.Type = 1;
+            window.G_AddAbsoluteAlertToState(alert);
+            return;
+        });
+    
+        props.MyHubConnection.on("ConnectedToRoomError", function () {
+            let alert = new AlertData();
+            alert.Text = "подключение не удалось";
+            alert.Type = 1;
+            window.G_AddAbsoluteAlertToState(alert);
+            return;
+        });
+
+
+
     }, []);
 
 

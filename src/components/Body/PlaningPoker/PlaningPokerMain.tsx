@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import Index from "./Index";
 import Room from "./Room";
 import { AlertData } from '../../_ComponentsLink/Models/AlertData';
-import { RoomInfo } from './Models/RoomInfo';
+import { PlaningPokerUserInfo, RoomInfo } from './Models/RoomInfo';
 
 // import { HubConnection } from '@microsoft/signalr';
 // import signalR, { HubConnection } from "@aspnet/signalr";
@@ -19,12 +19,7 @@ import * as signalR from "@aspnet/signalr";
 
 
 
-class PlaningPokerUserInfo {
-    UserName: string;
-    constructor() {
-        this.UserName = "";
-    }
-}
+
 
 class PlaningPokerMainState {
     MyHubConnection: signalR.HubConnection;
@@ -96,7 +91,16 @@ const PlaningPokerMain = () => {
 
         // возможно тут стоит выделить в child components методы которые вызвать до старта
         //Update, не стоит тк они актуальны только в самих компонентах
-        hubConnection.start();
+        hubConnection.start()
+            .then(function () {
+                hubConnection.invoke("GetConnectionId")
+                .then(function (connectionId) {
+                    let newState = { ...localState };
+                    newState.User.UserId = connectionId;
+                    setLocalState(newState);
+                })
+            });
+
 
         // let newState = { ...localState };
         // newState.MyHubConnection = hubConnection;
@@ -144,7 +148,7 @@ const PlaningPokerMain = () => {
             <Route path="/planing-poker/room" render={() =>
                 <Room
                     //  InRoom={localState.InRoom}
-                    Username={localState.User.UserName}
+                    UserInfo={localState.User}
                     RoomInfo={localState.RoomInfo}
                     MyHubConnection={localState.MyHubConnection}
                 />

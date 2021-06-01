@@ -44,3 +44,12 @@ export class PlaningPokerUserInfo {
         this.UserId = "";
     }
 }
+
+
+export class VoteInfo {
+    MaxVote: number;
+    MinVote: number;
+    AverageVote: number;
+
+
+}

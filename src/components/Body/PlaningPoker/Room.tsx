@@ -1,6 +1,6 @@
 // import * as React from "react";
 import React, { useState, useEffect } from 'react';
-import { RoomInfo, UserInRoom, RoomSatus, PlaningPokerUserInfo } from './Models/RoomInfo';
+import { RoomInfo, UserInRoom, RoomSatus, PlaningPokerUserInfo, VoteInfo } from './Models/RoomInfo';
 
 
 import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
@@ -8,6 +8,7 @@ import { MainErrorObjectBack } from '../../_ComponentsLink/BackModel/ErrorBack';
 import { IUserInRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/UserInRoomReturn';
 import UserInList from './UserInList';
 import OneVoteCard from './OneVoteCard';
+import { IEndVoteInfoReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/EndVoteInfoReturn';
 
 class RoomProps {
     // InRoom: boolean;
@@ -21,7 +22,7 @@ class RoomState {
     UsersList: UserInRoom[];
     CurrentVote?: number;
     RoomStatus: RoomSatus;
-
+    VoteInfo: VoteInfo;
     SelectedVoteCard: number;
 
     constructor() {
@@ -140,8 +141,37 @@ const Room = (props: RoomProps) => {
             setLocalState(newState);
         });
 
+        props.MyHubConnection.on("VoteStart", function () {
 
 
+            let newState = { ...localState };
+            newState.RoomStatus = RoomSatus.AllCanVote;
+            newState.SelectedVoteCard = -1;
+            newState.UsersList.forEach(x => {
+                x.Vote = null;
+            });
+
+            setLocalState(newState);
+        });
+
+
+        props.MyHubConnection.on("VoteEnd", function (data: IEndVoteInfoReturn) {
+
+            let newState = { ...localState };
+            newState.RoomStatus = RoomSatus.CloseVote;
+            newState.SelectedVoteCard = -1;
+            newState.UsersList.forEach(x => {
+                let userFromRes = data.users_info.find(x1 => x1.id === x.Id);
+                if (userFromRes) {
+                    x.Vote = userFromRes.vote;
+                }
+            });
+
+            newState.VoteInfo.MaxVote = data.max_vote;
+            newState.VoteInfo.MinVote = data.min_vote;
+            newState.VoteInfo.AverageVote = data.average_vote;
+            setLocalState(newState);
+        });
 
 
     }, []);
@@ -181,9 +211,9 @@ const Room = (props: RoomProps) => {
     let renderVotePlaceIfNeed = () => {
 
         //TODO UNCOMMENT
-        // if (localState.RoomStatus !== RoomSatus.AllCanVote) {
-        //     return <div></div>
-        // }
+        if (localState.RoomStatus !== RoomSatus.AllCanVote) {
+            return <div></div>
+        }
         let voteArr = [1, 2, 3, 5, 7, 10, 13, 15, 18, 20, 25, 30, 35, 40, 50];
 
         return <div onClick={(e) => doVote(e)} className="planing-cards-container">
@@ -203,9 +233,28 @@ const Room = (props: RoomProps) => {
             return <div></div>
         }
 
-        return <div>vote result</div>
+        return <div>
+            <p>vote result</p>
+            <p>Max: {localState.VoteInfo.MaxVote}</p>
+            <p>Min: {localState.VoteInfo.MinVote}</p>
+            <p>Average: {localState.VoteInfo.AverageVote}</p>
+
+        </div>
 
     }
+
+    let tryStartVote = () => {
+        props.MyHubConnection.send("StartVote", props.RoomInfo.Name);
+
+
+    }
+
+    let tryEndVote = () => {
+        props.MyHubConnection.send("EndVote", props.RoomInfo.Name);
+
+
+    }
+
 
 
 
@@ -217,8 +266,8 @@ const Room = (props: RoomProps) => {
             {/* <div className="persent-100-width"> */}
             <div className="planit-room-left-part col-12 col-md-9">
                 <div>
-                    <button>Начать голосование</button>
-                    <button>Закончить голосование</button>
+                    <button onClick={() => tryStartVote()}>Начать голосование</button>
+                    <button onClick={() => tryEndVote()}>Закончить голосование</button>
                     {renderVotePlaceIfNeed()}
                     {renderVoteResultIfNeed()}
                 </div>

@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import { MainErrorObjectBack } from '../../_ComponentsLink/BackModel/ErrorBack';
 import { IUserInRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/UserInRoomReturn';
 import UserInList from './UserInList';
+import OneVoteCard from './OneVoteCard';
 
 class RoomProps {
     // InRoom: boolean;
@@ -21,10 +22,12 @@ class RoomState {
     CurrentVote?: number;
     RoomStatus: RoomSatus;
 
+    SelectedVoteCard: number;
 
     constructor() {
         this.UsersList = [];
         this.CurrentVote = null;
+        this.SelectedVoteCard = -1;
     }
 
 }
@@ -49,6 +52,7 @@ const Room = (props: RoomProps) => {
     }
 
     let initState = new RoomState();
+    initState.RoomStatus = RoomSatus.AllCanVote;//TODO надо заменить запрос на получение пользователей на запрос получение roominfo и там будет статус
     const [localState, setLocalState] = useState(initState);
 
 
@@ -121,6 +125,22 @@ const Room = (props: RoomProps) => {
         });
 
 
+        props.MyHubConnection.on("VoteChanged", function (userId, vote) {
+            if (!userId) {
+                return;
+            }
+
+            let newState = { ...localState };
+            let userIndex = newState.UsersList.findIndex(x => x.Id === userId);
+            if (userIndex < 0) {
+                return;
+            }
+
+            newState.UsersList[userIndex].Vote = vote;
+            setLocalState(newState);
+        });
+
+
 
 
 
@@ -140,18 +160,38 @@ const Room = (props: RoomProps) => {
     }
 
 
+    let doVote = async (voteCardBlock: any) => {//number
+        // console.log(vote);
+        // console.dir(vote);
+        if (!voteCardBlock?.target?.dataset?.vote) {
+            return;
+        }
+
+        let voted = await props.MyHubConnection.invoke("Vote", props.RoomInfo.Name, +voteCardBlock.target.dataset.vote);
+        if (!voted) {
+            return;
+        }
+
+        let newState = { ...localState };
+        newState.SelectedVoteCard = +voteCardBlock.target.dataset.vote;
+        setLocalState(newState);
+    }
+
 
     let renderVotePlaceIfNeed = () => {
 
-        //UNCOMMENT
+        //TODO UNCOMMENT
         // if (localState.RoomStatus !== RoomSatus.AllCanVote) {
         //     return <div></div>
         // }
+        let voteArr = [1, 2, 3, 5, 7, 10, 13, 15, 18, 20, 25, 30, 35, 40, 50];
 
-        return <div className="planing-cards-container">
-            <div className="one-planing-vote-card">1</div>
-            <div className="one-planing-vote-card">2</div>
-            <div className="one-planing-vote-card">3</div>
+        return <div onClick={(e) => doVote(e)} className="planing-cards-container">
+            {voteArr.map(x => <OneVoteCard key={x} Num={x} NeedSelect={localState.SelectedVoteCard === x} />)}
+            {/*             
+            <div className="one-planing-vote-card" data-vote="1">1</div>
+            <div className="one-planing-vote-card" data-vote="2">2</div>
+            <div className="one-planing-vote-card" data-vote="3">3</div> */}
         </div>
 
     }

@@ -1,11 +1,12 @@
 .planit-room-left-part {
     border: 2px solid black;
-    height: 500px;
+    min-height: 500px;
 }
 
 .planit-room-right-part {
     border: 2px solid black;
     height: 500px;
+    min-height: 500px;
 }
 
 .one-planing-vote-card {
@@ -22,6 +23,10 @@
     cursor: pointer;
 }
 
+.one-planing-selected-vote-card{
+    background-color: pink;
+}
+
 .planing-cards-container {
     display: flex;
     flex-wrap: wrap;
@@ -35,3 +40,4 @@
 .planing-cards-container>div {
     margin: 6px;
 }
+

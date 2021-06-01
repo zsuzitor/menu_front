@@ -23,7 +23,7 @@ const UserInList = (props: UserInListProp) => {
 
     return <div>
         <p>{props.User.Name}</p>
-        <p>{props.User.Id}</p>
+        {/* <p>{props.User.Id}</p> */}
         <p>оценка: {props.User.Vote ? props.User.Vote : ""}</p>
         {delButton}
         <hr />

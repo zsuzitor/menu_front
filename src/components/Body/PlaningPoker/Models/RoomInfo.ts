@@ -14,7 +14,7 @@ export class RoomInfo {
 }
 
 
-export enum RoomSatus { AllCanVote, CloseVote };
+export enum RoomSatus { None = 0, AllCanVote, CloseVote };
 
 
 export class UserInRoom implements MappedWithBack<IUserInRoomReturn> {
@@ -50,6 +50,10 @@ export class VoteInfo {
     MaxVote: number;
     MinVote: number;
     AverageVote: number;
-
+    constructor() {
+        this.MaxVote = 0;
+        this.MinVote = 0;
+        this.AverageVote = 0;
+    }
 
 }

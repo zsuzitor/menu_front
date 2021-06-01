@@ -9,6 +9,8 @@ import { IUserInRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/
 import UserInList from './UserInList';
 import OneVoteCard from './OneVoteCard';
 import { IEndVoteInfoReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/EndVoteInfoReturn';
+import { IOneRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/OneRoomReturn';
+
 
 class RoomProps {
     // InRoom: boolean;
@@ -20,15 +22,17 @@ class RoomProps {
 
 class RoomState {
     UsersList: UserInRoom[];
-    CurrentVote?: number;
+    // CurrentVote?: number;
     RoomStatus: RoomSatus;
     VoteInfo: VoteInfo;
     SelectedVoteCard: number;
 
     constructor() {
         this.UsersList = [];
-        this.CurrentVote = null;
+        // this.CurrentVote = null;
         this.SelectedVoteCard = -1;
+        this.VoteInfo = new VoteInfo();
+        this.RoomStatus = RoomSatus.None;
     }
 
 }
@@ -47,15 +51,15 @@ let CurrentUserIsAdmin: (st: RoomState, userId: string) => boolean = (st: RoomSt
 
 
 const Room = (props: RoomProps) => {
-
+    //TODO тут выбило какую то ошибку, но после перезагрузки прошло - Cannot flush updates when React is already rendering
     if (!props.RoomInfo.InRoom) {//TODO тут по хорошему надо узнать название румы из урла и попросить ввести пароль, но пока что так
         window.location.href = "/planing-poker";
     }
 
     let initState = new RoomState();
-    initState.RoomStatus = RoomSatus.AllCanVote;//TODO надо заменить запрос на получение пользователей на запрос получение roominfo и там будет статус
     const [localState, setLocalState] = useState(initState);
-
+    console.log("room");
+    console.log(localState);
 
 
 
@@ -63,7 +67,36 @@ const Room = (props: RoomProps) => {
 
 
     useEffect(() => {
-        let loadedUsers = (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => {
+        // let loadedUsers = (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => {
+        //     if (error) {
+        //         //TODO выбить из комнаты?
+        //         alert("todo что то пошло не так лучше обновить страницу");
+        //         return;
+        //     }
+
+        //     if (data) {
+        //         let newUsersData = data.map(x => {
+        //             let us = new UserInRoom();
+        //             us.FillByBackModel(x);
+        //             return us;
+        //         });
+        //         let newState = { ...localState };
+        //         //реинициализировать нельзя, почему то отваливается
+        //         newState.UsersList.splice(0, newState.UsersList.length);
+        //         newState.UsersList.push(...newUsersData);
+        //         // newState.UsersList = newUsersData;
+        //         setLocalState(newState);
+        //     }
+
+        // };
+        // // console.log(JSON.stringify(props));
+        // window.G_PlaningPokerController.GetUsersIsRoom(props.RoomInfo.Name, props.UserInfo.UserId, loadedUsers);
+
+
+
+
+
+        let getRoomInfo = (error: MainErrorObjectBack, data: IOneRoomReturn) => {
             if (error) {
                 //TODO выбить из комнаты?
                 alert("todo что то пошло не так лучше обновить страницу");
@@ -71,7 +104,7 @@ const Room = (props: RoomProps) => {
             }
 
             if (data) {
-                let newUsersData = data.map(x => {
+                let newUsersData = data.users.map(x => {
                     let us = new UserInRoom();
                     us.FillByBackModel(x);
                     return us;
@@ -80,13 +113,15 @@ const Room = (props: RoomProps) => {
                 //реинициализировать нельзя, почему то отваливается
                 newState.UsersList.splice(0, newState.UsersList.length);
                 newState.UsersList.push(...newUsersData);
+                newState.RoomStatus = data.status;
                 // newState.UsersList = newUsersData;
                 setLocalState(newState);
             }
 
         };
-        // console.log(JSON.stringify(props));
-        window.G_PlaningPokerController.GetUsersIsRoom(props.RoomInfo.Name, loadedUsers);
+
+
+        window.G_PlaningPokerController.GetRoomInfo(props.RoomInfo.Name, props.UserInfo.UserId, getRoomInfo);
 
 
 
@@ -101,6 +136,8 @@ const Room = (props: RoomProps) => {
             let newState = { ...localState };
             newState.UsersList.push(us);
             setLocalState(newState);
+            console.log("newuser");
+    console.log(newState);
         });
 
 
@@ -150,6 +187,7 @@ const Room = (props: RoomProps) => {
             newState.UsersList.forEach(x => {
                 x.Vote = null;
             });
+            newState.VoteInfo = new VoteInfo();
 
             setLocalState(newState);
         });

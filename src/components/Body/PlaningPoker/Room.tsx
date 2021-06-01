@@ -23,7 +23,7 @@ class RoomProps {
 class RoomState {
     UsersList: UserInRoom[];
     // CurrentVote?: number;
-    RoomStatus: RoomSatus;
+    // RoomStatus: RoomSatus;
     VoteInfo: VoteInfo;
     SelectedVoteCard: number;
 
@@ -32,7 +32,7 @@ class RoomState {
         // this.CurrentVote = null;
         this.SelectedVoteCard = -1;
         this.VoteInfo = new VoteInfo();
-        this.RoomStatus = RoomSatus.None;
+        // this.RoomStatus = RoomSatus.None;
     }
 
 }
@@ -58,8 +58,10 @@ const Room = (props: RoomProps) => {
 
     let initState = new RoomState();
     const [localState, setLocalState] = useState(initState);
-    console.log("room");
-    console.log(localState);
+    //НЕ заносить в общий объект, перестает работать, начинает сбрасываться при ререндере
+    const [roomStatusState, setRoomStatusState] = useState(RoomSatus.None);
+    // console.log("room");
+    // console.log(localState);
 
 
 
@@ -113,9 +115,10 @@ const Room = (props: RoomProps) => {
                 //реинициализировать нельзя, почему то отваливается
                 newState.UsersList.splice(0, newState.UsersList.length);
                 newState.UsersList.push(...newUsersData);
-                newState.RoomStatus = data.status;
+                // newState.RoomStatus = data.status;
                 // newState.UsersList = newUsersData;
                 setLocalState(newState);
+                setRoomStatusState(data.status);
             }
 
         };
@@ -136,8 +139,8 @@ const Room = (props: RoomProps) => {
             let newState = { ...localState };
             newState.UsersList.push(us);
             setLocalState(newState);
-            console.log("newuser");
-    console.log(newState);
+            //         console.log("newuser");
+            // console.log(newState);
         });
 
 
@@ -182,7 +185,7 @@ const Room = (props: RoomProps) => {
 
 
             let newState = { ...localState };
-            newState.RoomStatus = RoomSatus.AllCanVote;
+            // newState.RoomStatus = RoomSatus.AllCanVote;
             newState.SelectedVoteCard = -1;
             newState.UsersList.forEach(x => {
                 x.Vote = null;
@@ -190,13 +193,14 @@ const Room = (props: RoomProps) => {
             newState.VoteInfo = new VoteInfo();
 
             setLocalState(newState);
+            setRoomStatusState(RoomSatus.AllCanVote);
         });
 
 
         props.MyHubConnection.on("VoteEnd", function (data: IEndVoteInfoReturn) {
 
             let newState = { ...localState };
-            newState.RoomStatus = RoomSatus.CloseVote;
+            // newState.RoomStatus = RoomSatus.CloseVote;
             newState.SelectedVoteCard = -1;
             newState.UsersList.forEach(x => {
                 let userFromRes = data.users_info.find(x1 => x1.id === x.Id);
@@ -209,6 +213,7 @@ const Room = (props: RoomProps) => {
             newState.VoteInfo.MinVote = data.min_vote;
             newState.VoteInfo.AverageVote = data.average_vote;
             setLocalState(newState);
+            setRoomStatusState(RoomSatus.CloseVote);
         });
 
 
@@ -249,7 +254,7 @@ const Room = (props: RoomProps) => {
     let renderVotePlaceIfNeed = () => {
 
         //TODO UNCOMMENT
-        if (localState.RoomStatus !== RoomSatus.AllCanVote) {
+        if (roomStatusState !== RoomSatus.AllCanVote) {
             return <div></div>
         }
         let voteArr = [1, 2, 3, 5, 7, 10, 13, 15, 18, 20, 25, 30, 35, 40, 50];
@@ -267,7 +272,7 @@ const Room = (props: RoomProps) => {
     let renderVoteResultIfNeed = () => {
 
         //UNCOMMENT
-        if (localState.RoomStatus !== RoomSatus.CloseVote) {
+        if (roomStatusState !== RoomSatus.CloseVote) {
             return <div></div>
         }
 
@@ -294,7 +299,17 @@ const Room = (props: RoomProps) => {
     }
 
 
+    let roomMainActionButton = () => {
+        let isAdmin = CurrentUserIsAdmin(localState, props.UserInfo.UserId);
+        if (isAdmin) {
+            return <div>
+                <button onClick={() => tryStartVote()}>Начать голосование</button>
+                <button onClick={() => tryEndVote()}>Закончить голосование</button>
+            </div>
+        }
 
+        return <div></div>
+    }
 
 
     return <div className="container">
@@ -304,8 +319,7 @@ const Room = (props: RoomProps) => {
             {/* <div className="persent-100-width"> */}
             <div className="planit-room-left-part col-12 col-md-9">
                 <div>
-                    <button onClick={() => tryStartVote()}>Начать голосование</button>
-                    <button onClick={() => tryEndVote()}>Закончить голосование</button>
+                    {roomMainActionButton()}
                     {renderVotePlaceIfNeed()}
                     {renderVoteResultIfNeed()}
                 </div>

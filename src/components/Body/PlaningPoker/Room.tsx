@@ -25,12 +25,12 @@ class RoomState {
     // CurrentVote?: number;
     // RoomStatus: RoomSatus;
     VoteInfo: VoteInfo;
-    SelectedVoteCard: number;
+    // SelectedVoteCard: number;
 
     constructor() {
         this.UsersList = [];
         // this.CurrentVote = null;
-        this.SelectedVoteCard = -1;
+        // this.SelectedVoteCard = -1;
         this.VoteInfo = new VoteInfo();
         // this.RoomStatus = RoomSatus.None;
     }
@@ -60,6 +60,8 @@ const Room = (props: RoomProps) => {
     const [localState, setLocalState] = useState(initState);
     //НЕ заносить в общий объект, перестает работать, начинает сбрасываться при ререндере
     const [roomStatusState, setRoomStatusState] = useState(RoomSatus.None);
+    const [selectedVoteCard, setSelectedVoteCard] = useState(-1);
+
     // console.log("room");
     // console.log(localState);
 
@@ -186,7 +188,8 @@ const Room = (props: RoomProps) => {
 
             let newState = { ...localState };
             // newState.RoomStatus = RoomSatus.AllCanVote;
-            newState.SelectedVoteCard = -1;
+            // newState.SelectedVoteCard = -1;
+            setSelectedVoteCard(-1);
             newState.UsersList.forEach(x => {
                 x.Vote = null;
             });
@@ -201,7 +204,8 @@ const Room = (props: RoomProps) => {
 
             let newState = { ...localState };
             // newState.RoomStatus = RoomSatus.CloseVote;
-            newState.SelectedVoteCard = -1;
+            // newState.SelectedVoteCard = -1;
+            setSelectedVoteCard(-1);
             newState.UsersList.forEach(x => {
                 let userFromRes = data.users_info.find(x1 => x1.id === x.Id);
                 if (userFromRes) {
@@ -246,7 +250,8 @@ const Room = (props: RoomProps) => {
         }
 
         let newState = { ...localState };
-        newState.SelectedVoteCard = +voteCardBlock.target.dataset.vote;
+        // newState.SelectedVoteCard = +voteCardBlock.target.dataset.vote;
+        setSelectedVoteCard(+voteCardBlock.target.dataset.vote);
         setLocalState(newState);
     }
 
@@ -260,7 +265,7 @@ const Room = (props: RoomProps) => {
         let voteArr = [1, 2, 3, 5, 7, 10, 13, 15, 18, 20, 25, 30, 35, 40, 50];
 
         return <div onClick={(e) => doVote(e)} className="planing-cards-container">
-            {voteArr.map(x => <OneVoteCard key={x} Num={x} NeedSelect={localState.SelectedVoteCard === x} />)}
+            {voteArr.map(x => <OneVoteCard key={x} Num={x} NeedSelect={selectedVoteCard === x} />)}
             {/*             
             <div className="one-planing-vote-card" data-vote="1">1</div>
             <div className="one-planing-vote-card" data-vote="2">2</div>
@@ -323,7 +328,7 @@ const Room = (props: RoomProps) => {
                     {renderVotePlaceIfNeed()}
                     {renderVoteResultIfNeed()}
                 </div>
-                <div>оценки</div>
+                {/* <div>оценки</div> */}
                 <div>описание задач?</div>
             </div>
             <div className="planit-room-right-part col-12 col-md-3">

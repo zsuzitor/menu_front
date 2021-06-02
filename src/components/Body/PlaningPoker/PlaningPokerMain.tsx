@@ -44,10 +44,12 @@ const PlaningPokerMain = () => {
 
     let initState = new PlaningPokerMainState();
     const hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl("/planing-poker-hub", {
-            skipNegotiation: true,
-            transport: signalR.HttpTransportType.WebSockets//TODO эти 2 строки вроде как костыль
-        })
+        .withUrl("/planing-poker-hub"
+        // , {
+        //     skipNegotiation: true,
+        //     transport: signalR.HttpTransportType.WebSockets//TODO эти 2 строки вроде как костыль
+        // }
+        )
         .build();
 
     // https://stackoverflow.com/questions/52086158/angular-signalr-error-failed-to-complete-negotiation-with-the-server
@@ -94,12 +96,12 @@ const PlaningPokerMain = () => {
         hubConnection.start()
             .then(function () {
                 hubConnection.invoke("GetConnectionId")
-                .then(function (connectionId) {
-                    let newState = { ...localState };
-                    newState.User.UserId = connectionId;
-                    setLocalState(newState);
-                })
-            });
+                    .then(function (connectionId) {
+                        let newState = { ...localState };
+                        newState.User.UserId = connectionId;
+                        setLocalState(newState);
+                    })
+            }).catch(function () { alert("что то не так с подключением обновите страницу"); });
 
 
         // let newState = { ...localState };

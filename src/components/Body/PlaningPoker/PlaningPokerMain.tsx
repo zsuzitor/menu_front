@@ -45,10 +45,10 @@ const PlaningPokerMain = () => {
     let initState = new PlaningPokerMainState();
     const hubConnection = new signalR.HubConnectionBuilder()
         .withUrl("/planing-poker-hub"
-        // , {
-        //     skipNegotiation: true,
-        //     transport: signalR.HttpTransportType.WebSockets//TODO эти 2 строки вроде как костыль
-        // }
+            // , {
+            //     skipNegotiation: true,
+            //     transport: signalR.HttpTransportType.WebSockets//TODO эти 2 строки вроде как костыль
+            // }
         )
         .build();
 
@@ -137,7 +137,17 @@ const PlaningPokerMain = () => {
 
     return <div>
         <Switch>
-            <Route exact path="/planing-poker" render={() =>
+            <Route path="/planing-poker/room" render={() =>
+                <Room
+                    //  InRoom={localState.InRoom}
+                    UserInfo={localState.User}
+                    RoomInfo={localState.RoomInfo}
+                    MyHubConnection={localState.MyHubConnection}
+                />
+            } />
+
+            {/* exact */}
+            <Route path="/planing-poker" render={() =>
                 <Index
                     Username={localState.User.UserName}
                     ChangeUserName={userNameChange}
@@ -147,14 +157,7 @@ const PlaningPokerMain = () => {
                     RoomInfo={localState.RoomInfo}
                 // InRoom={localState.InRoom}
                 />} />
-            <Route path="/planing-poker/room" render={() =>
-                <Room
-                    //  InRoom={localState.InRoom}
-                    UserInfo={localState.User}
-                    RoomInfo={localState.RoomInfo}
-                    MyHubConnection={localState.MyHubConnection}
-                />
-            } />
+
         </Switch>
     </div>
 }

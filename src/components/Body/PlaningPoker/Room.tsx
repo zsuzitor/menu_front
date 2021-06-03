@@ -61,6 +61,8 @@ const Room = (props: RoomProps) => {
     //НЕ заносить в общий объект, перестает работать, начинает сбрасываться при ререндере
     const [roomStatusState, setRoomStatusState] = useState(RoomSatus.None);
     const [selectedVoteCard, setSelectedVoteCard] = useState(-1);
+    const [hideVoteState, setHideVoteState] = useState(false);
+
 
     // console.log("room");
     // console.log(localState);
@@ -179,7 +181,14 @@ const Room = (props: RoomProps) => {
                 return;
             }
 
-            newState.UsersList[userIndex].Vote = vote;
+
+            newState.UsersList[userIndex].HasVote = true;
+
+            if (!isNaN(vote)) {
+                newState.UsersList[userIndex].Vote = vote;
+            }
+            // else{
+            // }
             setLocalState(newState);
         });
 
@@ -192,6 +201,7 @@ const Room = (props: RoomProps) => {
             setSelectedVoteCard(-1);
             newState.UsersList.forEach(x => {
                 x.Vote = null;
+                x.HasVote = false;
             });
             newState.VoteInfo = new VoteInfo();
 
@@ -308,8 +318,8 @@ const Room = (props: RoomProps) => {
         let isAdmin = CurrentUserIsAdmin(localState, props.UserInfo.UserId);
         if (isAdmin) {
             return <div>
-                <button onClick={() => tryStartVote()}>Начать голосование</button>
-                <button onClick={() => tryEndVote()}>Закончить голосование</button>
+                <button className="btn btn-primary" onClick={() => tryStartVote()}>Начать голосование</button>
+                <button className="btn btn-primary" onClick={() => tryEndVote()}>Закончить голосование</button>
             </div>
         }
 
@@ -317,9 +327,35 @@ const Room = (props: RoomProps) => {
     }
 
 
+    let settingsUpUserList = () => {
+
+        let hideVotesSetting = <div></div>
+        if (CurrentUserIsAdmin(localState, props.UserInfo.UserId)) {
+            hideVotesSetting = <div>
+                <div className="padding-10-top"></div>
+                <div className="planning-vote-settings">
+                    <label>Скрывать оценки</label>
+                    {/* className="form-control persent-100-width" */}
+                    <input onClick={() => setHideVoteState(!hideVoteState)} type="checkbox"></input>
+                </div>
+            </div>
+        }
+
+
+        return <div>
+            <p>доп настройки</p>
+            {hideVotesSetting}
+        </div>
+    };
+
     return <div className="container">
         <div className="padding-10-top"></div>
-        <div>Room {props.RoomInfo.Name}</div>
+        <h1>Room {props.RoomInfo.Name}</h1>
+        <p>
+            при обновлении страницы, вы подключаетесь как новый пользователь(исключение-вы авторизованы в основном приложении(TODO)).
+            это означает что все права(в том числе админские) остаются на старом пользователе,
+            и в случае наличия только 1 администратора комната становится неадминистрируемой
+        </p>
         <div className="row">
             {/* <div className="persent-100-width"> */}
             <div className="planit-room-left-part col-12 col-md-9">
@@ -332,12 +368,23 @@ const Room = (props: RoomProps) => {
                 <div>описание задач?</div>
             </div>
             <div className="planit-room-right-part col-12 col-md-3">
+                <div>
+                    {settingsUpUserList()}
+
+                </div>
+                <div className="padding-10-top"></div>
                 <div>люди</div>
                 {localState.UsersList.map(x =>
                     <UserInList key={x.Id}
                         User={x}
                         TryToRemoveUserFromRoom={tryToRemoveUserFromRoom}
-                        RenderForAdmin={CurrentUserIsAdmin(localState, props.UserInfo.UserId)} />
+                        RenderForAdmin={CurrentUserIsAdmin(localState, props.UserInfo.UserId)}
+                        HideVote={hideVoteState}
+                        HasVote={x.HasVote}
+                        RoomStatus={roomStatusState}
+                        MaxVote={localState.VoteInfo.MaxVote}
+                        MinVote={localState.VoteInfo.MinVote}
+                    />
                 )}
             </div>
             {/* </div> */}

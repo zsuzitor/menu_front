@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 // import * as signalR from "@microsoft/signalr";
 import Index from "./Index";
 import Room from "./Room";
-import { AlertData } from '../../_ComponentsLink/Models/AlertData';
+import { AlertData, AlertTypeEnum } from '../../_ComponentsLink/Models/AlertData';
 import { PlaningPokerUserInfo, RoomInfo } from './Models/RoomInfo';
 
 // import { HubConnection } from '@microsoft/signalr';
@@ -43,6 +43,7 @@ const PlaningPokerMain = () => {
 
 
     let initState = new PlaningPokerMainState();
+    initState.User.UserName = "enter_your_name";
     const hubConnection = new signalR.HubConnectionBuilder()
         .withUrl("/planing-poker-hub"
             // , {
@@ -58,6 +59,7 @@ const PlaningPokerMain = () => {
 
     initState.MyHubConnection = hubConnection;
     const [localState, setLocalState] = useState(initState);
+    const [hubConnected, sethubConnectedState] = useState(false);
 
 
 
@@ -82,12 +84,31 @@ const PlaningPokerMain = () => {
             newState.RoomInfo.InRoom = true;
             setLocalState(newState);
             let lk = document.getElementById('move_to_room_link_react');
-            lk.click();
+            //todo типо костыль
+            //если этой линки нет, значит мы уже на странице румы
+            if (lk) {
+                // history.pushState(null, '/planing-poker/room/' + localState.RoomInfo.Name);
+                lk.click();
+            }
+
             // history.pushState(null, '/');
             // history.pushState(null, '/messages');
             // window.document.title
 
         });
+
+
+        hubConnection.on("ConnectedToRoomError", function () {
+            let alert = new AlertData();
+            alert.Text = "подключение не удалось";
+            alert.Type = 1;
+            window.G_AddAbsoluteAlertToState(alert);
+            if (!location.href.endsWith("/planing-poker") && !location.href.endsWith("/planing-poker/")) {
+                window.location.href = "/planing-poker";
+            }
+            return;
+        });
+
 
 
 
@@ -100,8 +121,16 @@ const PlaningPokerMain = () => {
                         let newState = { ...localState };
                         newState.User.UserId = connectionId;
                         setLocalState(newState);
+                        sethubConnectedState(true);
                     })
-            }).catch(function () { alert("что то не так с подключением обновите страницу"); });
+            }).catch(function () {
+                alert("что то не так с подключением обновите страницу");
+                sethubConnectedState(false);
+            });
+
+
+
+
 
 
         // let newState = { ...localState };
@@ -114,6 +143,16 @@ const PlaningPokerMain = () => {
         let newState = { ...localState };
         newState.User.UserName = newName;
         setLocalState(newState);
+        // if (localState.RoomInfo.InRoom) {
+        //     hubConnection.invoke("UserNameChange", newState.RoomInfo.Name, newName).then(dt => {
+        //         if (!dt) {
+        //             let alert = new AlertData();
+        //             alert.Text = "изменить имя не удалось";
+        //             alert.Type = AlertTypeEnum.Error;
+        //             window.G_AddAbsoluteAlertToState(alert);
+        //         }
+        //     });
+        // }
     }
 
 
@@ -143,6 +182,9 @@ const PlaningPokerMain = () => {
                     UserInfo={localState.User}
                     RoomInfo={localState.RoomInfo}
                     MyHubConnection={localState.MyHubConnection}
+                    RoomNameChanged={roomNameChanged}
+                    ChangeUserName={userNameChange}
+                    HubConnected={hubConnected}
                 />
             } />
 

@@ -20,7 +20,8 @@ const UserInList = (props: UserInListProp) => {
     let delButton = <div></div>
     if (props.RenderForAdmin) {
         delButton = <div>
-            <button onClick={() => props.TryToRemoveUserFromRoom(props.User.Id)}>Выгнать</button>
+            <button className="btn btn-danger"
+                onClick={() => props.TryToRemoveUserFromRoom(props.User.Id)}>Выгнать</button>
 
         </div>
     }

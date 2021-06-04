@@ -10,6 +10,7 @@ import UserInList from './UserInList';
 import OneVoteCard from './OneVoteCard';
 import { IEndVoteInfoReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/EndVoteInfoReturn';
 import { IOneRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/OneRoomReturn';
+import { AlertData, AlertTypeEnum } from '../../_ComponentsLink/Models/AlertData';
 
 
 class RoomProps {
@@ -18,6 +19,10 @@ class RoomProps {
     RoomInfo: RoomInfo;
 
     MyHubConnection: signalR.HubConnection;
+    HubConnected: boolean;
+
+    RoomNameChanged: (name: string) => void;
+    ChangeUserName: ((newName: string) => void);
 }
 
 class RoomState {
@@ -51,10 +56,67 @@ let CurrentUserIsAdmin: (st: RoomState, userId: string) => boolean = (st: RoomSt
 
 
 const Room = (props: RoomProps) => {
-    //TODO тут выбило какую то ошибку, но после перезагрузки прошло - Cannot flush updates when React is already rendering
-    if (!props.RoomInfo.InRoom) {//TODO тут по хорошему надо узнать название румы из урла и попросить ввести пароль, но пока что так
-        window.location.href = "/planing-poker";
-    }
+
+    // useEffect(() => {
+    //     console.log("use_1");
+    // }, [1]);
+
+
+    //эффект для доступа по прямой ссылке
+    //
+    useEffect(() => {
+        if (!props.RoomInfo.Name) {
+            let pathNameUrlSplit = document.location.pathname.split('/');
+            if (pathNameUrlSplit && pathNameUrlSplit.length > 3 && pathNameUrlSplit[3]) {
+                props.RoomNameChanged(pathNameUrlSplit[3]);
+            }
+            else {
+                //todo тут можно ошибку какую нибудь бахнуть, типо вход не удался
+                window.location.href = "/planing-poker";
+            }
+        }
+        // else {
+        //     if (!props.RoomInfo.InRoom) {
+        //         props.MyHubConnection.send("EnterInRoom", props.RoomInfo.Name, props.RoomInfo.Password, props.UserInfo.UserName);
+
+        //     }
+        // }
+    }, [props.RoomInfo.Name]);
+
+    useEffect(() => {
+        if (props.HubConnected && props.RoomInfo.Name && !props.RoomInfo.InRoom) {
+            props.MyHubConnection.send("EnterInRoom", props.RoomInfo.Name, props.RoomInfo.Password, props.UserInfo.UserName);
+        }
+    }, [props.HubConnected]);
+
+    // console.log("render Room");
+
+    // console.log(props.RoomInfo.Name);
+
+
+    // if (!props.UserInfo.UserName) {
+    //     props.ChangeUserName("enter_your_name");//todo хотя бы math random сюда закинуть?
+    //     return <div></div>
+    // }
+
+    // if (!props.RoomInfo.InRoom) {
+    //     return <div></div>
+    //     //означает что мы пришли по прямой ссылке, не через форму входа с index page 
+    //     //и при этом комната еще не загружена\мы не вошли
+
+    //     // if (!props.RoomInfo.Name) {
+    //     //     //имя комнаты пустое. либо это первый рендер либо имя комнаты нет вообще
+    //     //     return <div></div>
+    //     // }
+
+    //     //это уже не первый рендер тк имя комнаты спаршено из урла и не пустое, означает что хаб подключен
+    //     //но мы еще не вошли у нее
+    //     // props.MyHubConnection.send("EnterInRoom", props.RoomInfo.Name, props.RoomInfo.Password, props.Username);
+    // }
+
+
+
+
 
     let initState = new RoomState();
     const [localState, setLocalState] = useState(initState);
@@ -62,12 +124,48 @@ const Room = (props: RoomProps) => {
     const [roomStatusState, setRoomStatusState] = useState(RoomSatus.None);
     const [selectedVoteCard, setSelectedVoteCard] = useState(-1);
     const [hideVoteState, setHideVoteState] = useState(false);
+    const [userNameLocalState, changeUserNameLocalState] = useState(props.UserInfo.UserName);
 
+    // const [roomIsGoodState, setRoomIsGoodState] = useState(false);
 
     // console.log("room");
     // console.log(localState);
 
+    useEffect(() => {
+        if (!props.RoomInfo.InRoom) {
+            return;
+        }
+        //мы проставили все необходимые данные, подключились к хабу и готовы работать
 
+        let getRoomInfo = (error: MainErrorObjectBack, data: IOneRoomReturn) => {
+            if (error) {
+                //TODO выбить из комнаты?
+                alert("todo что то пошло не так лучше обновить страницу");
+                return;
+            }
+
+            if (data) {
+                let newUsersData = data.users.map(x => {
+                    let us = new UserInRoom();
+                    us.FillByBackModel(x);
+                    return us;
+                });
+                let newState = { ...localState };
+                //реинициализировать нельзя, почему то отваливается
+                newState.UsersList.splice(0, newState.UsersList.length);
+                newState.UsersList.push(...newUsersData);
+                // newState.RoomStatus = data.status;
+                // newState.UsersList = newUsersData;
+                setLocalState(newState);
+                setRoomStatusState(data.status);
+            }
+
+        };
+
+
+        window.G_PlaningPokerController.GetRoomInfo(props.RoomInfo.Name, props.UserInfo.UserId, getRoomInfo);
+
+    }, [props.RoomInfo.InRoom]);
 
 
 
@@ -101,37 +199,6 @@ const Room = (props: RoomProps) => {
 
 
 
-
-        let getRoomInfo = (error: MainErrorObjectBack, data: IOneRoomReturn) => {
-            if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
-                return;
-            }
-
-            if (data) {
-                let newUsersData = data.users.map(x => {
-                    let us = new UserInRoom();
-                    us.FillByBackModel(x);
-                    return us;
-                });
-                let newState = { ...localState };
-                //реинициализировать нельзя, почему то отваливается
-                newState.UsersList.splice(0, newState.UsersList.length);
-                newState.UsersList.push(...newUsersData);
-                // newState.RoomStatus = data.status;
-                // newState.UsersList = newUsersData;
-                setLocalState(newState);
-                setRoomStatusState(data.status);
-            }
-
-        };
-
-
-        window.G_PlaningPokerController.GetRoomInfo(props.RoomInfo.Name, props.UserInfo.UserId, getRoomInfo);
-
-
-
         props.MyHubConnection.on("NewUserInRoom", function (data) {
             if (!data) {
                 return;
@@ -145,6 +212,23 @@ const Room = (props: RoomProps) => {
             setLocalState(newState);
             //         console.log("newuser");
             // console.log(newState);
+        });
+
+
+
+        props.MyHubConnection.on("UserNameChanged", function (userId, newUserName) {
+            if (!userId) {
+                return;
+            }
+
+            let newState = { ...localState };
+            let userIndex = newState.UsersList.findIndex(x => x.Id === userId);
+            if (userIndex < 0) {
+                return;
+            }
+
+            newState.UsersList[userIndex].Name = newUserName;
+            setLocalState(newState);
         });
 
 
@@ -342,11 +426,38 @@ const Room = (props: RoomProps) => {
         }
 
 
+        let changeUserName = () => {
+            props.MyHubConnection.invoke("UserNameChange", props.RoomInfo.Name, userNameLocalState).then(dt => {
+                if (!dt) {
+                    let alert = new AlertData();
+                    alert.Text = "изменить имя не удалось";
+                    alert.Type = AlertTypeEnum.Error;
+                    window.G_AddAbsoluteAlertToState(alert);
+                }
+                else {
+                    props.ChangeUserName(userNameLocalState)
+                }
+            });
+
+
+
+
+
+        }
+
+
         return <div>
             <p>доп настройки</p>
+            <input onChange={(e) => changeUserNameLocalState(e.target.value)} value={props.UserInfo.UserName}></input>
+            <button onClick={() => changeUserName()}>Изменить имя</button>
             {hideVotesSetting}
         </div>
     };
+
+
+    if (!props.RoomInfo.InRoom) {
+        return <h1>пытаемся войти</h1>
+    }
 
     return <div className="container">
         <div className="padding-10-top"></div>

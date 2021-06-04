@@ -11,11 +11,12 @@
 .one-planing-vote-card {
     width: 100px;
     height: 100px;
-    border: 2px solid rgb(20, 56, 65);
+    border: 2px solid rgb(65 152 174);
     font-size: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 5px;
 }
 
 .one-planing-vote-card:hover {
@@ -66,11 +67,11 @@
     border-bottom: 1px solid #db5353;
 }
 
-.planing-enter-main{
+.planing-enter-main {
     padding-top: 30px;
     padding-bottom: 30px;
 }
 
-.planing-enter-inner{
+.planing-enter-inner {
     box-shadow: 0 0 10px rgb(0 0 0 / 50%);
 }

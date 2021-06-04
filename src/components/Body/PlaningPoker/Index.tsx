@@ -39,9 +39,13 @@ let Index = (props: IndexProps) => {
 
     const initState = new IndexState();
     const [localState, setLocalState] = useState(initState);
+    // const [test, setTestLocalState] = useState(false);
     // const [withoutPasswordState, setWithoutPasswordState] = useState(false);
 
+    // if (!test) {
+    //     setTestLocalState(true);
 
+    // }
 
 
 
@@ -65,13 +69,7 @@ let Index = (props: IndexProps) => {
             return;
         });
 
-        props.MyHubConnection.on("ConnectedToRoomError", function () {
-            let alert = new AlertData();
-            alert.Text = "подключение не удалось";
-            alert.Type = 1;
-            window.G_AddAbsoluteAlertToState(alert);
-            return;
-        });
+
 
 
 
@@ -124,6 +122,7 @@ let Index = (props: IndexProps) => {
     }
 
     return <div className="planing-enter-main">
+        {/* <input type="hidden" value={test + ""}></input> */}
         {/* TODO из за того что сделано бутстрапом, сейчас криво, слева может быть отступ меньше чем справа, перписать*/}
         <div className="planing-enter-inner col-sm-6 col-md-5 col-lg-4 offset-sm-3 offset-lg-4">
             <div>
@@ -147,7 +146,7 @@ let Index = (props: IndexProps) => {
             </div>
             {actionsButton}
             <div className="display_none">
-                <Link id="move_to_room_link_react" to="/planing-poker/room">hidden</Link>
+                <Link id="move_to_room_link_react" to={"/planing-poker/room/" + props.RoomInfo.Name}>hidden</Link>
 
             </div>
         </div>

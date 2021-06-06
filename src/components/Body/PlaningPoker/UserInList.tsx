@@ -1,6 +1,7 @@
+import { stringify } from 'querystring';
 import React, { useState, useEffect } from 'react';
 // import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
-import { RoomSatus, UserInRoom } from './Models/RoomInfo';
+import { RoomSatus, UserInRoom, UserRoles } from './Models/RoomInfo';
 
 
 class UserInListProp {
@@ -12,19 +13,66 @@ class UserInListProp {
     RoomStatus: RoomSatus;
     MinVote: number;
     MaxVote: number;
+    RoomName: string;
+
+    MyHubConnection: signalR.HubConnection;
+    // HubConnected: boolean;
 }
 
 
 const UserInList = (props: UserInListProp) => {
 
+    const [selectedEditRole, changeSelectedEditRoleState] = useState("-");
+
+
+
+    // useEffect(() => {
+    //     if (props.HubConnected) {
+    //     }
+    // }, [props.HubConnected]);
+
+
+
+    const addNewStatusToUser = () => {
+        props.MyHubConnection.send("AddNewStatusToUser", props.RoomName, props.User.Id, selectedEditRole);
+
+    }
+
+    const removeStatusUser = () => {
+        props.MyHubConnection.send("RemoveStatusUser", props.RoomName, props.User.Id, selectedEditRole);
+
+    }
+
+
+
+
+
     let delButton = <div></div>
+    let statusChange = <div></div>
     if (props.RenderForAdmin) {
         delButton = <div>
             <button className="btn btn-danger"
                 onClick={() => props.TryToRemoveUserFromRoom(props.User.Id)}>Выгнать</button>
+        </div>
 
+        statusChange = <div>
+            <select value={selectedEditRole} onChange={(e) => changeSelectedEditRoleState(e.target.value)}>
+                <option value="-">Не выбрано</option>
+                <option value={UserRoles.User}>{UserRoles.User}</option>
+                <option value={UserRoles.Admin}>{UserRoles.Admin}</option>
+                <option value={UserRoles.Observer}>{UserRoles.Observer}</option>
+            </select>
+            <button className="btn btn-success"
+                onClick={() => addNewStatusToUser()}>Добавить статус</button>
+            <button className="btn btn-danger"
+                onClick={() => removeStatusUser()}>Удалить статус</button>
         </div>
     }
+
+
+
+
+
 
     let vote = "отсутствует";
     if (props.User.Vote && !props.HideVote) {
@@ -35,11 +83,15 @@ const UserInList = (props: UserInListProp) => {
         vote = "скрыта";
     }
 
+    if (!props.User.CanVote()) {
+        vote = "без права голоса";
+    }
+
 
     let classColorize = "";
     if (props.RoomStatus === RoomSatus.AllCanVote) {
         //подсвечиваем проголосовавших
-        if (props.HasVote) {
+        if (props.HasVote || !props.User.CanVote()) {
             classColorize = " planing-user-voted";
         }
         else {
@@ -68,6 +120,8 @@ const UserInList = (props: UserInListProp) => {
             <p>оценка: {vote}</p>
             {delButton}
             {/* <hr /> */}
+            <p>Роли: {props.User.Roles.join(',')}</p>
+            {statusChange}
         </div>
         <div className="padding-10-top"></div>
     </div>

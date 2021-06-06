@@ -1,6 +1,8 @@
 import { IUserInRoomReturn } from "../../../_ComponentsLink/BackModel/PlaningPoker/UserInRoomReturn";
 import { MappedWithBack } from "../../../_ComponentsLink/BL/Interfaces/MappedWithBack"
 
+//todo хорошо бы по файликам раскидать
+
 export class RoomInfo {
     Name: string;
     Password: string;
@@ -16,13 +18,21 @@ export class RoomInfo {
 
 export enum RoomSatus { None = 0, AllCanVote, CloseVote };
 
+export class UserRoles {
+    static User = "User";
+    static Admin = "Admin";
+    static Creator = "Creator";
+    static Observer = "Observer";
+
+}
+
 
 export class UserInRoom implements MappedWithBack<IUserInRoomReturn> {
 
     Id: string;
     Name: string;
     Vote?: number;
-    IsAdmin: boolean;
+    Roles: string[];
     HasVote: boolean;
 
 
@@ -30,10 +40,20 @@ export class UserInRoom implements MappedWithBack<IUserInRoomReturn> {
         this.Id = newData.id;
         this.Name = newData.name;
         this.Vote = newData.vote;
-        this.IsAdmin = newData.is_admin;
+        this.Roles = newData.roles;
         this.HasVote = newData.has_vote;
 
     }
+
+    IsAdmin = (): boolean => {
+        return this.Roles.includes(UserRoles.Creator) || this.Roles.includes(UserRoles.Admin);
+    };
+
+    CanVote = (): boolean => {
+        return !this.Roles.includes(UserRoles.Observer);
+    };
+
+
 }
 
 

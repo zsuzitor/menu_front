@@ -4,7 +4,7 @@
 
 export interface IUserInRoomReturn {
     id: string;
-    is_admin: boolean;
+    roles: string[];
     name: string;
     vote?: number;
     has_vote:boolean;

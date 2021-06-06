@@ -103,8 +103,9 @@ const PlaningPokerMain = () => {
             alert.Text = "подключение не удалось";
             alert.Type = 1;
             window.G_AddAbsoluteAlertToState(alert);
-            if (!location.href.endsWith("/planing-poker") && !location.href.endsWith("/planing-poker/")) {
-                window.location.href = "/planing-poker";
+            if (!location.href.includes("/planing-poker") || location.href.includes("/planing-poker/room")) {// && !location.href.endsWith("/planing-poker/")) {
+                let roomName = localState.RoomInfo.Name || "";
+                window.location.href = "/planing-poker/" + roomName;
             }
             return;
         });

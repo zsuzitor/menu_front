@@ -42,14 +42,37 @@ class RoomState {
 
 }
 
-let CurrentUserIsAdmin: (st: RoomState, userId: string) => boolean = (st: RoomState, userId: string) => {
-    let user = st.UsersList.find(x => x.Id === userId);
-    if (user && user.IsAdmin) {
+const CurrentUserIsAdmin = (users: UserInRoom[], userId: string): boolean => {
+    let user = GetUserById(users, userId);
+    if (user && user.IsAdmin()) {
         return true;
     }
 
     return false;
 }
+
+const CurrentUserCanVote = (users: UserInRoom[], userId: string): boolean => {
+    let user = GetUserById(users, userId);
+    if (user && user.CanVote()) {
+        return true;
+    }
+
+    return false;
+}
+
+const GetUserIndexById = (users: UserInRoom[], userId: string): number => {
+    return users.findIndex(x => x.Id === userId);
+}
+
+const GetUserById = (users: UserInRoom[], userId: string): UserInRoom => {
+    let index = GetUserIndexById(users, userId);
+    if (index < 0 || index >= users.length) {
+        return null;
+    }
+
+    return users[index];
+}
+
 
 
 
@@ -124,7 +147,7 @@ const Room = (props: RoomProps) => {
     const [roomStatusState, setRoomStatusState] = useState(RoomSatus.None);
     const [selectedVoteCard, setSelectedVoteCard] = useState(-1);
     const [hideVoteState, setHideVoteState] = useState(false);
-    const [userNameLocalState, changeUserNameLocalState] = useState(props.UserInfo.UserName);
+    const [userNameLocalState, changeUserNameLocalState] = useState(props.UserInfo.UserName);//для редактирования
 
     // const [roomIsGoodState, setRoomIsGoodState] = useState(false);
 
@@ -171,38 +194,13 @@ const Room = (props: RoomProps) => {
 
 
     useEffect(() => {
-        // let loadedUsers = (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => {
-        //     if (error) {
-        //         //TODO выбить из комнаты?
-        //         alert("todo что то пошло не так лучше обновить страницу");
-        //         return;
-        //     }
-
-        //     if (data) {
-        //         let newUsersData = data.map(x => {
-        //             let us = new UserInRoom();
-        //             us.FillByBackModel(x);
-        //             return us;
-        //         });
-        //         let newState = { ...localState };
-        //         //реинициализировать нельзя, почему то отваливается
-        //         newState.UsersList.splice(0, newState.UsersList.length);
-        //         newState.UsersList.push(...newUsersData);
-        //         // newState.UsersList = newUsersData;
-        //         setLocalState(newState);
-        //     }
-
-        // };
-        // // console.log(JSON.stringify(props));
-        // window.G_PlaningPokerController.GetUsersIsRoom(props.RoomInfo.Name, props.UserInfo.UserId, loadedUsers);
-
-
 
 
         props.MyHubConnection.on("NewUserInRoom", function (data) {
             if (!data) {
                 return;
             }
+
 
             let dataTyped = data as IUserInRoomReturn;
             let us = new UserInRoom();
@@ -222,12 +220,12 @@ const Room = (props: RoomProps) => {
             }
 
             let newState = { ...localState };
-            let userIndex = newState.UsersList.findIndex(x => x.Id === userId);
-            if (userIndex < 0) {
+            let user = GetUserById(newState.UsersList, userId);
+            if (!user) {
                 return;
             }
 
-            newState.UsersList[userIndex].Name = newUserName;
+            user.Name = newUserName;
             setLocalState(newState);
         });
 
@@ -244,7 +242,7 @@ const Room = (props: RoomProps) => {
             }
 
             let newState = { ...localState };
-            let userIndex = newState.UsersList.findIndex(x => x.Id === userId);
+            let userIndex = GetUserIndexById(newState.UsersList, userId);
             if (userIndex < 0) {
                 return;
             }
@@ -260,21 +258,50 @@ const Room = (props: RoomProps) => {
             }
 
             let newState = { ...localState };
-            let userIndex = newState.UsersList.findIndex(x => x.Id === userId);
-            if (userIndex < 0) {
+            let user = GetUserById(newState.UsersList, userId);
+            if (!user) {
                 return;
             }
 
-
-            newState.UsersList[userIndex].HasVote = true;
+            user.HasVote = true;
 
             if (!isNaN(vote)) {
-                newState.UsersList[userIndex].Vote = vote;
+                user.Vote = vote;
             }
             // else{
             // }
             setLocalState(newState);
         });
+
+
+        props.MyHubConnection.on("UserStatusChanged", function (userId, changeType, role) {
+            if (!userId) {
+                return;
+            }
+
+
+            let newState = { ...localState };
+            let user = GetUserById(newState.UsersList, userId);
+            if (!user) {
+                return;
+            }
+
+            if (changeType === 1) {
+                //добавлен
+                user.Roles.push(role);
+            }
+            else {
+                //удален
+                let index = user.Roles.findIndex(x => x === role);
+                if (index >= 0) {
+                    user.Roles.splice(index, 1);
+                }
+            }
+
+            setLocalState(newState);
+        });
+
+
 
         props.MyHubConnection.on("VoteStart", function () {
 
@@ -319,8 +346,8 @@ const Room = (props: RoomProps) => {
 
 
 
-    let tryToRemoveUserFromRoom = (userId: string) => {
-        let isAdmin = CurrentUserIsAdmin(localState, props.UserInfo.UserId);
+    const tryToRemoveUserFromRoom = (userId: string) => {
+        let isAdmin = CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId);
         if (!isAdmin) {
             return;
         }
@@ -331,10 +358,18 @@ const Room = (props: RoomProps) => {
     }
 
 
-    let doVote = async (voteCardBlock: any) => {//number
+    const doVote = async (voteCardBlock: any) => {//number
         // console.log(vote);
         // console.dir(vote);
         if (!voteCardBlock?.target?.dataset?.vote) {
+            return;
+        }
+
+        if (!CurrentUserCanVote(localState.UsersList, props.UserInfo.UserId)) {
+            let alert = new AlertData();
+            alert.Text = "У обсерверов нет прав голосовать";
+            alert.Type = AlertTypeEnum.Error;
+            window.G_AddAbsoluteAlertToState(alert);
             return;
         }
 
@@ -350,7 +385,7 @@ const Room = (props: RoomProps) => {
     }
 
 
-    let renderVotePlaceIfNeed = () => {
+    const renderVotePlaceIfNeed = () => {
 
         //TODO UNCOMMENT
         if (roomStatusState !== RoomSatus.AllCanVote) {
@@ -368,7 +403,7 @@ const Room = (props: RoomProps) => {
 
     }
 
-    let renderVoteResultIfNeed = () => {
+    const renderVoteResultIfNeed = () => {
 
         //UNCOMMENT
         if (roomStatusState !== RoomSatus.CloseVote) {
@@ -385,21 +420,21 @@ const Room = (props: RoomProps) => {
 
     }
 
-    let tryStartVote = () => {
+    const tryStartVote = () => {
         props.MyHubConnection.send("StartVote", props.RoomInfo.Name);
 
 
     }
 
-    let tryEndVote = () => {
+    const tryEndVote = () => {
         props.MyHubConnection.send("EndVote", props.RoomInfo.Name);
 
 
     }
 
 
-    let roomMainActionButton = () => {
-        let isAdmin = CurrentUserIsAdmin(localState, props.UserInfo.UserId);
+    const roomMainActionButton = () => {
+        let isAdmin = CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId);
         if (isAdmin) {
             return <div>
                 <button className="btn btn-primary" onClick={() => tryStartVote()}>Начать голосование</button>
@@ -411,10 +446,10 @@ const Room = (props: RoomProps) => {
     }
 
 
-    let settingsUpUserList = () => {
+    const settingsUpUserListRender = () => {
 
         let hideVotesSetting = <div></div>
-        if (CurrentUserIsAdmin(localState, props.UserInfo.UserId)) {
+        if (CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId)) {
             hideVotesSetting = <div>
                 <div className="padding-10-top"></div>
                 <div className="planning-vote-settings">
@@ -426,30 +461,59 @@ const Room = (props: RoomProps) => {
         }
 
 
-        let changeUserName = () => {
+        const changeUserName = () => {
             props.MyHubConnection.invoke("UserNameChange", props.RoomInfo.Name, userNameLocalState).then(dt => {
                 if (!dt) {
                     let alert = new AlertData();
                     alert.Text = "изменить имя не удалось";
                     alert.Type = AlertTypeEnum.Error;
                     window.G_AddAbsoluteAlertToState(alert);
+                    return;
                 }
-                else {
-                    props.ChangeUserName(userNameLocalState)
-                }
+
+                props.ChangeUserName(userNameLocalState)
             });
-
-
-
 
 
         }
 
+        const updateAllUsers = () => {
+            let loadedUsers = (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => {
+                if (error) {
+                    //TODO выбить из комнаты?
+                    alert("todo что то пошло не так лучше обновить страницу");
+                    return;
+                }
+
+                if (data) {
+                    let newUsersData = data.map(x => {
+                        let us = new UserInRoom();
+                        us.FillByBackModel(x);
+                        return us;
+                    });
+                    let newState = { ...localState };
+                    //реинициализировать нельзя, почему то отваливается
+                    newState.UsersList.splice(0, newState.UsersList.length);
+                    newState.UsersList.push(...newUsersData);
+                    // newState.UsersList = newUsersData;
+                    setLocalState(newState);
+                }
+
+            };
+            // console.log(JSON.stringify(props));
+            window.G_PlaningPokerController.GetUsersIsRoom(props.RoomInfo.Name, props.UserInfo.UserId, loadedUsers);
+        };
+
 
         return <div>
             <p>доп настройки</p>
-            <input onChange={(e) => changeUserNameLocalState(e.target.value)} value={props.UserInfo.UserName}></input>
-            <button onClick={() => changeUserName()}>Изменить имя</button>
+            <input className="persent-100-width form-control"
+                onChange={(e) => changeUserNameLocalState(e.target.value)}
+                value={userNameLocalState}></input>
+            <button className="btn btn-primary"
+                onClick={() => changeUserName()}>Изменить имя</button>
+            <button className="btn btn-primary"
+                onClick={() => updateAllUsers()}>Обновить список пользователей</button>
             {hideVotesSetting}
         </div>
     };
@@ -480,7 +544,7 @@ const Room = (props: RoomProps) => {
             </div>
             <div className="planit-room-right-part col-12 col-md-3">
                 <div>
-                    {settingsUpUserList()}
+                    {settingsUpUserListRender()}
 
                 </div>
                 <div className="padding-10-top"></div>
@@ -489,12 +553,14 @@ const Room = (props: RoomProps) => {
                     <UserInList key={x.Id}
                         User={x}
                         TryToRemoveUserFromRoom={tryToRemoveUserFromRoom}
-                        RenderForAdmin={CurrentUserIsAdmin(localState, props.UserInfo.UserId)}
+                        RenderForAdmin={CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId)}
                         HideVote={hideVoteState}
                         HasVote={x.HasVote}
                         RoomStatus={roomStatusState}
                         MaxVote={localState.VoteInfo.MaxVote}
                         MinVote={localState.VoteInfo.MinVote}
+                        MyHubConnection={props.MyHubConnection}
+                        RoomName={props.RoomInfo.Name}
                     />
                 )}
             </div>

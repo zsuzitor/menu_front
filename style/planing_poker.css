@@ -75,3 +75,11 @@
 .planing-enter-inner {
     box-shadow: 0 0 10px rgb(0 0 0 / 50%);
 }
+
+.planing-current-story-main {
+    border: 2px solid black;
+}
+
+.planing-stories-list-main {
+    border: 2px solid black;
+}

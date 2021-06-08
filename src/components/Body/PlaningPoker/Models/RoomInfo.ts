@@ -1,3 +1,4 @@
+import { IStoryReturn } from "../../../_ComponentsLink/BackModel/PlaningPoker/StoryReturn";
 import { IUserInRoomReturn } from "../../../_ComponentsLink/BackModel/PlaningPoker/UserInRoomReturn";
 import { MappedWithBack } from "../../../_ComponentsLink/BL/Interfaces/MappedWithBack"
 
@@ -77,4 +78,37 @@ export class VoteInfo {
         this.AverageVote = 0;
     }
 
+}
+
+
+
+export class Story implements MappedWithBack<IStoryReturn>{
+    Id: number;
+    // InitWithServer: boolean;
+    Name: string;
+    Description: string;
+
+    Vote?: number;
+    Date?: string;
+
+
+    constructor() {
+        this.Id = 0;
+        // this.InitWithServer = false;
+        this.Name = "";
+        this.Description = "";
+        this.Vote = null;
+        this.Date = null;
+
+    }
+
+
+    FillByBackModel(newData: IStoryReturn): void {
+        this.Id = newData.id;
+        this.Name = newData.name;
+        this.Description = newData.description;
+        this.Vote = newData.vote;
+        this.Date = newData.date;
+
+    }
 }

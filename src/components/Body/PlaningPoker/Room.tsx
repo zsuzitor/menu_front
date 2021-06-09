@@ -1,6 +1,6 @@
 // import * as React from "react";
 import React, { useState, useEffect } from 'react';
-import { RoomInfo, UserInRoom, RoomSatus, PlaningPokerUserInfo, VoteInfo, Story } from './Models/RoomInfo';
+import { RoomInfo, UserInRoom, RoomSatus, PlaningPokerUserInfo, VoteInfo, Story, StoriesHelper } from './Models/RoomInfo';
 
 
 import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
@@ -12,6 +12,7 @@ import { IEndVoteInfoReturn } from '../../_ComponentsLink/BackModel/PlaningPoker
 import { IOneRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/OneRoomReturn';
 import { AlertData, AlertTypeEnum } from '../../_ComponentsLink/Models/AlertData';
 import { IStoryReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/StoryReturn';
+import StoriesSection from './StoriesSection';
 
 
 class RoomProps {
@@ -50,23 +51,23 @@ class StoriesInfo {
 
 
     CurrentStoryId: number;
-    CurrentStoryName: string;
-    CurrentStoryNameChange: string;
-    CurrentStoryDescription: string;
-    CurrentStoryDescriptionChange: string;
+    // CurrentStoryName: string;
+    // CurrentStoryNameChange: string;
+    // CurrentStoryDescription: string;
+    // CurrentStoryDescriptionChange: string;
 
-    NameForAdd: string;
-    DescriptionForAdd: string;
+    // NameForAdd: string;
+    // DescriptionForAdd: string;
 
     constructor() {
         this.Stories = [];
         this.CurrentStoryId = -1;
-        this.NameForAdd = "";
-        this.DescriptionForAdd = "";
-        this.CurrentStoryName = "";
-        this.CurrentStoryDescription = "";
-        this.CurrentStoryNameChange = "";
-        this.CurrentStoryDescriptionChange = "";
+        // this.NameForAdd = "";
+        // this.DescriptionForAdd = "";
+        // this.CurrentStoryName = "";
+        // this.CurrentStoryDescription = "";
+        // this.CurrentStoryNameChange = "";
+        // this.CurrentStoryDescriptionChange = "";
     }
 }
 
@@ -92,6 +93,10 @@ const CurrentUserCanVote = (users: UserInRoom[], userId: string): boolean => {
 }
 
 const GetUserIndexById = (users: UserInRoom[], userId: string): number => {
+    if (!users || !userId) {
+        return -1;
+    }
+
     return users.findIndex(x => x.Id === userId);
 }
 
@@ -105,27 +110,7 @@ const GetUserById = (users: UserInRoom[], userId: string): UserInRoom => {
 }
 
 
-const GetStoryIndexById = (stories: Story[], storyId: number): number => {
-    if (storyId < 0) {
-        return -1;
-    }
 
-    let index = stories.findIndex(x => x.Id === storyId);
-    if (index < 0 || index >= stories.length) {
-        return -1;
-    }
-
-    return index;
-}
-
-const GetStoryById = (stories: Story[], storyId: number): Story => {
-    let index = GetStoryIndexById(stories, storyId);
-    if (index < 0) {
-        return;
-    }
-
-    return stories[index];
-}
 
 
 
@@ -205,6 +190,11 @@ const Room = (props: RoomProps) => {
     const initStories = new StoriesInfo();
     const [storiesState, setStoriesState] = useState(initStories);
 
+
+    const storiesHelper = new StoriesHelper();
+
+
+    const currentUserIsAdmin = CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId);
 
     // const [roomIsGoodState, setRoomIsGoodState] = useState(false);
 
@@ -411,15 +401,9 @@ const Room = (props: RoomProps) => {
         props.MyHubConnection.on("NewCurrentStory", function (id: number) {
             //изменении в целом объекта текущей истории
             let newState = { ...storiesState };
-            let story = GetStoryById(newState.Stories, id);
-            if (!story) {
-                return;
-            }
+
             newState.CurrentStoryId = id;
-            newState.CurrentStoryDescription = story.Description;
-            newState.CurrentStoryDescriptionChange = story.Description;
-            newState.CurrentStoryName = story.Name;
-            newState.CurrentStoryNameChange = story.Name;
+
 
             setStoriesState(newState);
         });
@@ -427,26 +411,21 @@ const Room = (props: RoomProps) => {
         props.MyHubConnection.on("CurrentStoryChanged", function (id: number, newName: string, newDescription: string) {
             //изменение данных текущей истории
             let newState = { ...storiesState };
-            let story = GetStoryById(newState.Stories, id);
-
-            newState.CurrentStoryId = id;
-            newState.CurrentStoryDescription = newDescription;
-            newState.CurrentStoryDescriptionChange = newDescription;
-            newState.CurrentStoryName = newName;
-            newState.CurrentStoryNameChange = newName;
+            let story = storiesHelper.GetStoryById(newState.Stories, id);
 
             if (story) {
+                newState.CurrentStoryId = id;
                 story.Name = newName;
                 story.Description = newDescription;
+                setStoriesState(newState);
             }
 
-            setStoriesState(newState);
         });
 
         props.MyHubConnection.on("DeletedStory", function (id: number) {
             //изменение данных текущей истории
             let newState = { ...storiesState };
-            let storyIndex = GetStoryIndexById(newState.Stories, id);
+            let storyIndex = storiesHelper.GetStoryIndexById(newState.Stories, id);
             if (storyIndex < 0) {
                 return;
             }
@@ -454,10 +433,6 @@ const Room = (props: RoomProps) => {
             newState.Stories.splice(storyIndex, 1);
             if (newState.CurrentStoryId == id) {
                 newState.CurrentStoryId = -1;
-                newState.CurrentStoryDescription = "";
-                newState.CurrentStoryDescriptionChange = "";
-                newState.CurrentStoryName = "";
-                newState.CurrentStoryNameChange = "";
             }
 
             setStoriesState(newState);
@@ -483,8 +458,8 @@ const Room = (props: RoomProps) => {
 
 
     const tryToRemoveUserFromRoom = (userId: string) => {
-        let isAdmin = CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId);
-        if (!isAdmin) {
+        // let isAdmin = CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId);
+        if (!currentUserIsAdmin) {
             return;
         }
 
@@ -569,19 +544,9 @@ const Room = (props: RoomProps) => {
     }
 
 
-    const changeCurrentStory = () => {
-        props.MyHubConnection.send("ChangeCurrentStory",
-            props.RoomInfo.Name, storiesState.CurrentStoryId,
-            storiesState.CurrentStoryNameChange,
-            storiesState.CurrentStoryDescriptionChange);
-    }
 
-    const cancelChangeCurrentStory = () => {
-        let newState = { ...storiesState };
-        newState.CurrentStoryDescriptionChange = newState.CurrentStoryDescription;
-        newState.CurrentStoryNameChange = newState.CurrentStoryName;
-        setStoriesState(newState);
-    }
+
+
 
     const makeCurrentStory = (id: number) => {
         props.MyHubConnection.send("MakeCurrentStory",
@@ -595,8 +560,8 @@ const Room = (props: RoomProps) => {
 
 
     const roomMainActionButton = () => {
-        let isAdmin = CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId);
-        if (isAdmin) {
+        // let isAdmin = CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId);
+        if (currentUserIsAdmin) {
             return <div>
                 <button className="btn btn-primary" onClick={() => tryStartVote()}>Начать голосование</button>
                 <button className="btn btn-primary" onClick={() => tryEndVote()}>Закончить голосование</button>
@@ -610,7 +575,8 @@ const Room = (props: RoomProps) => {
     const settingsUpUserListRender = () => {
 
         let hideVotesSetting = <div></div>
-        if (CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId)) {
+        // if (CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId)) {
+        if (currentUserIsAdmin) {
             hideVotesSetting = <div>
                 <div className="padding-10-top"></div>
                 <div className="planning-vote-settings">
@@ -680,86 +646,10 @@ const Room = (props: RoomProps) => {
     };
 
 
-    const currentStoryDescriptionRender = () => {
-        if (storiesState.CurrentStoryId < 0) {
-            return <div></div>
-        }
-
-        const story = GetStoryById(storiesState.Stories, storiesState.CurrentStoryId);
-
-        if (!story) {
-            return <div></div>
-        }
-
-        return <div className="planing-current-story-main">
-            <p>описание текущей задачи</p>
-            <div>
-                <p>{story.Id}</p>
-                <input className="persent-100-width form-control"
-                    placeholder="Название"
-                    value={storiesState.CurrentStoryNameChange}
-                    type="text" onChange={(e) => {
-                        let newState = { ...storiesState };
-                        newState.CurrentStoryNameChange = e.target.value;
-                        setStoriesState(newState);
-                    }}></input>
-                <input className="persent-100-width form-control"
-                    placeholder="Описание"
-                    value={storiesState.CurrentStoryDescriptionChange}
-                    type="text" onChange={(e) => {
-                        let newState = { ...storiesState };
-                        newState.CurrentStoryDescriptionChange = e.target.value;
-                        setStoriesState(newState);
-                    }}></input>
-            </div>
-            <button className="btn btn-success" onClick={() => changeCurrentStory()}>Изменить</button>
-            <button className="btn btn-success" onClick={() => cancelChangeCurrentStory()}>Отменить</button>
-        </div>
-
-    }
 
 
-    const AddNewStory = () => {
-        props.MyHubConnection.send("AddNewStory", props.RoomInfo.Name,
-            storiesState.NameForAdd, storiesState.DescriptionForAdd);
-    }
 
-    const storiesListRender = () => {
-        return <div className="planing-stories-list-main">
-            <p>истории</p>
-            <div>
-                {storiesState.Stories.map(x => <div key={x.Id}>
-                    <p>{x.Id}</p>
-                    <p>{x.Name}</p>
-                    <p>{x.Description}</p>
-                    <button className="btn btn-success" onClick={() => makeCurrentStory(x.Id)}>Сделать текущей</button>
-                    <button className="btn btn-danger" onClick={() => deleteStory(x.Id)}>Удалить</button>
-                </div>)}
-            </div>
-            <div>
-                <input className="persent-100-width form-control"
-                    placeholder="Название"
-                    value={storiesState.NameForAdd}
-                    type="text" onChange={(e) => {
-                        let newState = { ...storiesState };
-                        newState.NameForAdd = e.target.value;
-                        setStoriesState(newState);
-                    }}></input>
-                <textarea className="persent-100-width form-control"
-                    placeholder="Описание"
-                    value={storiesState.DescriptionForAdd}
-                    onChange={(e) => {
-                        let newState = { ...storiesState };
-                        newState.DescriptionForAdd = e.target.value;
-                        setStoriesState(newState);
-                    }}
-                >
-                </textarea>
-                <button className="btn btn-success" onClick={() => AddNewStory()}>Добавить</button>
 
-            </div>
-        </div>
-    }
 
 
     return <div className="container">
@@ -779,14 +669,15 @@ const Room = (props: RoomProps) => {
                     {renderVoteResultIfNeed()}
                 </div>
                 {/* <div>оценки</div> */}
-                <div>
-
-                    {currentStoryDescriptionRender()}
-
-                </div>
-                <div>
-                    {storiesListRender()}
-                </div>
+                <StoriesSection
+                    CurrentStoryId={storiesState.CurrentStoryId}
+                    MyHubConnection={props.MyHubConnection}
+                    RoomName={props.RoomInfo.Name}
+                    Stories={storiesState.Stories}
+                    DeleteStory={deleteStory}
+                    MakeCurrentStory={makeCurrentStory}
+                    IsAdmin={currentUserIsAdmin}
+                />
             </div>
             <div className="planit-room-right-part col-12 col-md-3">
                 <div>
@@ -799,7 +690,7 @@ const Room = (props: RoomProps) => {
                     <UserInList key={x.Id}
                         User={x}
                         TryToRemoveUserFromRoom={tryToRemoveUserFromRoom}
-                        RenderForAdmin={CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId)}
+                        RenderForAdmin={currentUserIsAdmin}
                         HideVote={hideVoteState}
                         HasVote={x.HasVote}
                         RoomStatus={roomStatusState}

@@ -112,3 +112,30 @@ export class Story implements MappedWithBack<IStoryReturn>{
 
     }
 }
+
+
+
+
+export class StoriesHelper{
+     GetStoryIndexById = (stories: Story[], storyId: number): number => {
+        if (storyId < 0) {
+            return -1;
+        }
+    
+        let index = stories.findIndex(x => x.Id === storyId);
+        if (index < 0 || index >= stories.length) {
+            return -1;
+        }
+    
+        return index;
+    }
+    
+     GetStoryById = (stories: Story[], storyId: number): Story => {
+        let index = this.GetStoryIndexById(stories, storyId);
+        if (index < 0) {
+            return;
+        }
+    
+        return stories[index];
+    }
+}

@@ -68,15 +68,27 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
     const cancelChangeCurrentStory = () => {
-        let newState = { ...storiesState };
-        let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
-        if (!story) {
-            return;
-        }
+        // let newState = { ...storiesState };
+        // let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
+        // if (!story) {
+        //     return;
+        // }
 
-        newState.CurrentStoryDescriptionChange = story.Description;
-        newState.CurrentStoryNameChange = story.Name;
-        setStoriesState(newState);
+        // newState.CurrentStoryDescriptionChange = story.Description;
+        // newState.CurrentStoryNameChange = story.Name;
+        // setStoriesState(newState);
+
+        setStoriesState(prevState => {
+            let newState = { ...prevState };
+            let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
+            if (!story) {
+                return newState;
+            }
+
+            newState.CurrentStoryDescriptionChange = story.Description;
+            newState.CurrentStoryNameChange = story.Name;
+            return newState;
+        });
     }
 
 
@@ -92,23 +104,43 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
     const ResetCurrentStoryById = () => {
         if (props.CurrentStoryId < 0) {
-            let newState = { ...storiesState };
-            newState.CurrentStoryDescriptionChange = "";
-            newState.CurrentStoryNameChange = "";
-            setStoriesState(newState);
+            // let newState = { ...storiesState };
+            // newState.CurrentStoryDescriptionChange = "";
+            // newState.CurrentStoryNameChange = "";
+            // setStoriesState(newState);
+
+            setStoriesState(prevState => {
+                let newState = { ...prevState };
+                newState.CurrentStoryDescriptionChange = "";
+                newState.CurrentStoryNameChange = "";
+                return newState;
+            });
 
             return;
         }
 
-        let newState = { ...storiesState };
-        let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
-        if (!story) {
-            return;
-        }
 
-        newState.CurrentStoryDescriptionChange = story.Description;
-        newState.CurrentStoryNameChange = story.Name;
-        setStoriesState(newState);
+        // let newState = { ...storiesState };
+        // let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
+        // if (!story) {
+        //     return;
+        // }
+
+        // newState.CurrentStoryDescriptionChange = story.Description;
+        // newState.CurrentStoryNameChange = story.Name;
+        // setStoriesState(newState);
+
+        setStoriesState(prevState => {
+            let newState = { ...prevState };
+            let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
+            if (!story) {
+                return newState;
+            }
+
+            newState.CurrentStoryDescriptionChange = story.Description;
+            newState.CurrentStoryNameChange = story.Name;
+            return newState;
+        });
     }
 
 
@@ -141,17 +173,30 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     placeholder="Название"
                     value={storiesState.CurrentStoryNameChange}
                     type="text" onChange={(e) => {
-                        let newState = { ...storiesState };
-                        newState.CurrentStoryNameChange = e.target.value;
-                        setStoriesState(newState);
+                        // let newState = { ...storiesState };
+                        // newState.CurrentStoryNameChange = e.target.value;
+                        // setStoriesState(newState);
+
+                        setStoriesState(prevState => {
+                            let newState = { ...prevState };
+                            newState.CurrentStoryNameChange = e.target.value;
+                            return newState;
+                        });
+
                     }}></input>
                 <input className="persent-100-width form-control"
                     placeholder="Описание"
                     value={storiesState.CurrentStoryDescriptionChange}
                     type="text" onChange={(e) => {
-                        let newState = { ...storiesState };
-                        newState.CurrentStoryDescriptionChange = e.target.value;
-                        setStoriesState(newState);
+                        // let newState = { ...storiesState };
+                        // newState.CurrentStoryDescriptionChange = e.target.value;
+                        // setStoriesState(newState);
+
+                        setStoriesState(prevState => {
+                            let newState = { ...prevState };
+                            newState.CurrentStoryDescriptionChange = e.target.value;
+                            return newState;
+                        });
                     }}></input>
             </div>
             {adminButton}
@@ -192,6 +237,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     <p>{x.Name}</p>
                     <p>{x.Description}</p>
                     {adminButtonInList(x.Id)}
+                    <hr/>
                 </div>)}
             </div>
             <div>
@@ -199,17 +245,29 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     placeholder="Название"
                     value={storiesState.NameForAdd}
                     type="text" onChange={(e) => {
-                        let newState = { ...storiesState };
-                        newState.NameForAdd = e.target.value;
-                        setStoriesState(newState);
+                        // let newState = { ...storiesState };
+                        // newState.NameForAdd = e.target.value;
+                        // setStoriesState(newState);
+
+                        setStoriesState(prevState => {
+                            let newState = { ...prevState };
+                            newState.NameForAdd = e.target.value;
+                            return newState;
+                        });
                     }}></input>
                 <textarea className="persent-100-width form-control"
                     placeholder="Описание"
                     value={storiesState.DescriptionForAdd}
                     onChange={(e) => {
-                        let newState = { ...storiesState };
-                        newState.DescriptionForAdd = e.target.value;
-                        setStoriesState(newState);
+                        // let newState = { ...storiesState };
+                        // newState.DescriptionForAdd = e.target.value;
+                        // setStoriesState(newState);
+
+                        setStoriesState(prevState => {
+                            let newState = { ...prevState };
+                            newState.DescriptionForAdd = e.target.value;
+                            return newState;
+                        });
                     }}
                 >
                 </textarea>

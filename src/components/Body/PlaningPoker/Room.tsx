@@ -222,35 +222,54 @@ const Room = (props: RoomProps) => {
                     us.FillByBackModel(x);
                     return us;
                 });
-                let newState = { ...localState };
-                //реинициализировать нельзя, почему то отваливается
-                newState.UsersList.splice(0, newState.UsersList.length);
-                newState.UsersList.push(...newUsersData);
-                // newState.RoomStatus = data.status;
-                // newState.UsersList = newUsersData;
-                setRoomStatusState(data.room.status);
+                // let newState = { ...localState };
+                // //реинициализировать нельзя, почему то отваливается
+                // newState.UsersList.splice(0, newState.UsersList.length);
+                // newState.UsersList.push(...newUsersData);
+                // // newState.RoomStatus = data.status;
+                // // newState.UsersList = newUsersData;
+                // setRoomStatusState(data.room.status);
 
-                fillVoteInfo(newState, data.end_vote_info);
-                setLocalState(newState);
+                // fillVoteInfo(newState, data.end_vote_info);
+                // setLocalState(newState);
 
-                let newStoriesState = { ...storiesState };
-                newStoriesState.CurrentStoryId = data.room.current_story_id;
-                newStoriesState.Stories = data.room.actual_stories.map(x => {
-                    let st = new Story();
-                    st.FillByBackModel(x);
-                    return st;
+                setRoomStatusState(prevState => {
+                    // let newState = { ...prevState };
+                    return data.room.status;
+                    // return newState;
                 });
-                setStoriesState(newStoriesState);
-                // setStoriesState(prevState => {
-                //     let newStoriesState = { ...prevState };
-                //     newStoriesState.CurrentStoryId = data.room.current_story_id;
-                //     newStoriesState.Stories = data.room.actual_stories.map(x => {
-                //         let st = new Story();
-                //         st.FillByBackModel(x);
-                //         return st;
-                //     });
-                //     return newStoriesState;
+
+                setLocalState(prevState => {
+                    let newState = { ...prevState };
+                    newState.UsersList.splice(0, newState.UsersList.length);
+                    newState.UsersList.push(...newUsersData);
+                    // newState.RoomStatus = data.status;
+                    // newState.UsersList = newUsersData;
+
+
+                    fillVoteInfo(newState, data.end_vote_info);
+
+                    return newState;
+                });
+
+                // let newStoriesState = { ...storiesState };
+                // newStoriesState.CurrentStoryId = data.room.current_story_id;
+                // newStoriesState.Stories = data.room.actual_stories.map(x => {
+                //     let st = new Story();
+                //     st.FillByBackModel(x);
+                //     return st;
                 // });
+                // setStoriesState(newStoriesState);
+                setStoriesState(prevState => {
+                    let newStoriesState = { ...prevState };
+                    newStoriesState.CurrentStoryId = data.room.current_story_id;
+                    newStoriesState.Stories = data.room.actual_stories.map(x => {
+                        let st = new Story();
+                        st.FillByBackModel(x);
+                        return st;
+                    });
+                    return newStoriesState;
+                });
 
             }
         };
@@ -275,9 +294,16 @@ const Room = (props: RoomProps) => {
             let dataTyped = data as IUserInRoomReturn;
             let us = new UserInRoom();
             us.FillByBackModel(dataTyped);
-            let newState = { ...localState };
-            newState.UsersList.push(us);
-            setLocalState(newState);
+            // let newState = { ...localState };
+            // newState.UsersList.push(us);
+            // setLocalState(newState);
+
+            setLocalState(prevState => {
+                let newState = { ...prevState };
+                newState.UsersList.push(us);
+
+                return newState;
+            });
             //         console.log("newuser");
             // console.log(newState);
         });
@@ -289,14 +315,26 @@ const Room = (props: RoomProps) => {
                 return;
             }
 
-            let newState = { ...localState };
-            let user = GetUserById(newState.UsersList, userId);
-            if (!user) {
-                return;
-            }
+            // let newState = { ...localState };
+            // let user = GetUserById(newState.UsersList, userId);
+            // if (!user) {
+            //     return;
+            // }
 
-            user.Name = newUserName;
-            setLocalState(newState);
+            // user.Name = newUserName;
+            // setLocalState(newState);
+
+            setLocalState(prevState => {
+                let newState = { ...prevState };
+                let user = GetUserById(newState.UsersList, userId);
+                if (!user) {
+                    return newState;
+                }
+
+                user.Name = newUserName;
+
+                return newState;
+            });
         });
 
 
@@ -311,14 +349,25 @@ const Room = (props: RoomProps) => {
                 return;
             }
 
-            let newState = { ...localState };
-            let userIndex = GetUserIndexById(newState.UsersList, userId);
-            if (userIndex < 0) {
-                return;
-            }
+            // let newState = { ...localState };
+            // let userIndex = GetUserIndexById(newState.UsersList, userId);
+            // if (userIndex < 0) {
+            //     return;
+            // }
 
-            newState.UsersList.splice(userIndex, 1);
-            setLocalState(newState);
+            // newState.UsersList.splice(userIndex, 1);
+            // setLocalState(newState);
+            setLocalState(prevState => {
+                let newState = { ...prevState };
+                let userIndex = GetUserIndexById(newState.UsersList, userId);
+                if (userIndex < 0) {
+                    return newState;
+                }
+
+                newState.UsersList.splice(userIndex, 1);
+
+                return newState;
+            });
         });
 
 
@@ -327,20 +376,36 @@ const Room = (props: RoomProps) => {
                 return;
             }
 
-            let newState = { ...localState };
-            let user = GetUserById(newState.UsersList, userId);
-            if (!user) {
-                return;
-            }
-
-            user.HasVote = true;
-
-            if (!isNaN(vote)) {
-                user.Vote = vote;
-            }
-            // else{
+            // let newState = { ...localState };
+            // let user = GetUserById(newState.UsersList, userId);
+            // if (!user) {
+            //     return;
             // }
-            setLocalState(newState);
+
+            // user.HasVote = true;
+
+            // if (!isNaN(vote)) {
+            //     user.Vote = vote;
+            // }
+            // // else{
+            // // }
+            // setLocalState(newState);
+
+            setLocalState(prevState => {
+                let newState = { ...prevState };
+                let user = GetUserById(newState.UsersList, userId);
+                if (!user) {
+                    return newState;
+                }
+
+                user.HasVote = true;
+
+                if (!isNaN(vote)) {
+                    user.Vote = vote;
+                }
+
+                return newState;
+            });
         });
 
 
@@ -350,25 +415,47 @@ const Room = (props: RoomProps) => {
             }
 
 
-            let newState = { ...localState };
-            let user = GetUserById(newState.UsersList, userId);
-            if (!user) {
-                return;
-            }
+            // let newState = { ...localState };
+            // let user = GetUserById(newState.UsersList, userId);
+            // if (!user) {
+            //     return;
+            // }
 
-            if (changeType === 1) {
-                //добавлен
-                user.Roles.push(role);
-            }
-            else {
-                //удален
-                let index = user.Roles.findIndex(x => x === role);
-                if (index >= 0) {
-                    user.Roles.splice(index, 1);
+            // if (changeType === 1) {
+            //     //добавлен
+            //     user.Roles.push(role);
+            // }
+            // else {
+            //     //удален
+            //     let index = user.Roles.findIndex(x => x === role);
+            //     if (index >= 0) {
+            //         user.Roles.splice(index, 1);
+            //     }
+            // }
+
+            // setLocalState(newState);
+
+            setLocalState(prevState => {
+                let newState = { ...prevState };
+                let user = GetUserById(newState.UsersList, userId);
+                if (!user) {
+                    return newState;
                 }
-            }
 
-            setLocalState(newState);
+                if (changeType === 1) {
+                    //добавлен
+                    user.Roles.push(role);
+                }
+                else {
+                    //удален
+                    let index = user.Roles.findIndex(x => x === role);
+                    if (index >= 0) {
+                        user.Roles.splice(index, 1);
+                    }
+                }
+
+                return newState;
+            });
         });
 
 
@@ -376,79 +463,154 @@ const Room = (props: RoomProps) => {
         props.MyHubConnection.on("VoteStart", function () {
 
 
-            let newState = { ...localState };
+            // let newState = { ...localState };
             // newState.RoomStatus = RoomSatus.AllCanVote;
             // newState.SelectedVoteCard = -1;
-            setSelectedVoteCard(-1);
-            newState.UsersList.forEach(x => {
-                x.Vote = null;
-                x.HasVote = false;
+            // setSelectedVoteCard(-1);
+            setSelectedVoteCard(prevState => {
+                return -1;
             });
-            newState.VoteInfo = new VoteInfo();
+            // newState.UsersList.forEach(x => {
+            //     x.Vote = null;
+            //     x.HasVote = false;
+            // });
+            // newState.VoteInfo = new VoteInfo();
 
-            setLocalState(newState);
-            setRoomStatusState(RoomSatus.AllCanVote);
+            // setLocalState(newState);
+
+            setLocalState(prevState => {
+                let newState = { ...prevState };
+                newState.UsersList.forEach(x => {
+                    x.Vote = null;
+                    x.HasVote = false;
+                });
+                newState.VoteInfo = new VoteInfo();
+
+                return newState;
+            });
+
+            // setRoomStatusState(RoomSatus.AllCanVote);
+            setRoomStatusState(prevState => {
+                // let newState = { ...prevState };
+                return RoomSatus.AllCanVote;
+                // return newState;
+            });
         });
 
 
         props.MyHubConnection.on("VoteEnd", function (data: IEndVoteInfoReturn) {
 
-            fillVoteInfo(null, data);
+            // fillVoteInfo(null, data);
+            setLocalState(prevState => {
+                let newState = { ...prevState };
 
-            setRoomStatusState(RoomSatus.CloseVote);
+                fillVoteInfo(newState, data);
+
+                return newState;
+            });
+
+
+
+            // setRoomStatusState(RoomSatus.CloseVote);
+            setRoomStatusState(prevState => {
+                // let newState = { ...prevState };
+                return RoomSatus.CloseVote;
+                // return newState;
+            });
         });
 
 
 
         props.MyHubConnection.on("AddedNewStory", function (data: IStoryReturn) {
-            let newState = { ...storiesState };
-            let newStory = new Story();
-            newStory.FillByBackModel(data);
-            newState.Stories.push(newStory);
-            setStoriesState(newState);
+            // let newState = { ...storiesState };
+            // let newStory = new Story();
+            // newStory.FillByBackModel(data);
+            // newState.Stories.push(newStory);
+            // setStoriesState(newState);
+
+            setStoriesState(prevState => {
+                let newState = { ...prevState };
+                let newStory = new Story();
+                newStory.FillByBackModel(data);
+                newState.Stories.push(newStory);
+                return newState;
+            });
         });
 
         props.MyHubConnection.on("NewCurrentStory", function (id: number) {
             //изменении в целом объекта текущей истории
-            let newState = { ...storiesState };
+            // let newState = { ...storiesState };
+            // newState.CurrentStoryId = id;
+            // setStoriesState(newState);
 
-            newState.CurrentStoryId = id;
-
-
-            setStoriesState(newState);
+            setStoriesState(prevState => {
+                let newState = { ...prevState };
+                newState.CurrentStoryId = id;
+                return newState;
+            });
         });
 
         props.MyHubConnection.on("CurrentStoryChanged", function (id: number, newName: string, newDescription: string) {
             //изменение данных текущей истории
-            let newState = { ...storiesState };
-            let story = storiesHelper.GetStoryById(newState.Stories, id);
+            // let newState = { ...storiesState };
+            // let story = storiesHelper.GetStoryById(newState.Stories, id);
 
-            if (story) {
-                newState.CurrentStoryId = id;
-                story.Name = newName;
-                story.Description = newDescription;
-                setStoriesState(newState);
-                if (storiesState.ClearTmpFuncForStories) {
-                    storiesState.ClearTmpFuncForStories();
+            // if (story) {
+            //     newState.CurrentStoryId = id;
+            //     story.Name = newName;
+            //     story.Description = newDescription;
+            //     setStoriesState(newState);
+            //     if (storiesState.ClearTmpFuncForStories) {
+            //         storiesState.ClearTmpFuncForStories();
+            //     }
+            // }
+
+            setStoriesState(prevState => {
+                let newState = { ...prevState };
+                let story = storiesHelper.GetStoryById(newState.Stories, id);
+
+                if (story) {
+                    newState.CurrentStoryId = id;
+                    story.Name = newName;
+                    story.Description = newDescription;
+                    if (storiesState.ClearTmpFuncForStories) {
+                        storiesState.ClearTmpFuncForStories();
+                    }
                 }
-            }
+                return newState;
+            });
 
         });
 
         props.MyHubConnection.on("DeletedStory", function (id: number) {
             //изменение данных текущей истории
-            let newState = { ...storiesState };
-            let storyIndex = storiesHelper.GetStoryIndexById(newState.Stories, id);
-            if (storyIndex < 0) {
-                return;
-            }
+            // let newState = { ...storiesState };
+            // let storyIndex = storiesHelper.GetStoryIndexById(newState.Stories, id);
+            // if (storyIndex < 0) {
+            //     return;
+            // }
 
-            newState.Stories.splice(storyIndex, 1);
-            if (newState.CurrentStoryId == id) {
-                newState.CurrentStoryId = -1;
-            }
+            // newState.Stories.splice(storyIndex, 1);
+            // if (newState.CurrentStoryId == id) {
+            //     newState.CurrentStoryId = -1;
+            // }
 
-            setStoriesState(newState);
+            // setStoriesState(newState);
+
+
+            setStoriesState(prevState => {
+                let newState = { ...prevState };
+                let storyIndex = storiesHelper.GetStoryIndexById(newState.Stories, id);
+                if (storyIndex < 0) {
+                    return newState;
+                }
+
+                newState.Stories.splice(storyIndex, 1);
+                if (newState.CurrentStoryId == id) {
+                    newState.CurrentStoryId = -1;
+                }
+                return newState;
+            });
         });
 
 
@@ -460,21 +622,24 @@ const Room = (props: RoomProps) => {
 
 
     const fillVoteInfo = (state: RoomState, data: IEndVoteInfoReturn) => {
-        let newState = state || { ...localState };
-        setSelectedVoteCard(-1);
-        newState.UsersList.forEach(x => {
+        // let newState = state || { ...localState };
+        // setSelectedVoteCard(-1);
+        setSelectedVoteCard(prevState => {
+            return -1;
+        });
+        state.UsersList.forEach(x => {
             let userFromRes = data.users_info.find(x1 => x1.id === x.Id);
             if (userFromRes) {
                 x.Vote = userFromRes.vote;
             }
         });
 
-        newState.VoteInfo.MaxVote = data.max_vote;
-        newState.VoteInfo.MinVote = data.min_vote;
-        newState.VoteInfo.AverageVote = data.average_vote;
-        if (!state) {
-            setLocalState(newState);
-        }
+        state.VoteInfo.MaxVote = data.max_vote;
+        state.VoteInfo.MinVote = data.min_vote;
+        state.VoteInfo.AverageVote = data.average_vote;
+        // if (!state) {
+        //     setLocalState(newState);
+        // }
     }
 
 
@@ -520,10 +685,13 @@ const Room = (props: RoomProps) => {
             return;
         }
 
-        let newState = { ...localState };
+        // let newState = { ...localState };
         // newState.SelectedVoteCard = +voteCardBlock.target.dataset.vote;
-        setSelectedVoteCard(+voteCardBlock.target.dataset.vote);
-        setLocalState(newState);
+        // setSelectedVoteCard(+voteCardBlock.target.dataset.vote);
+        setSelectedVoteCard(prevState => {
+            return +voteCardBlock.target.dataset.vote;
+        });
+        // setLocalState(newState);
     }
 
 
@@ -592,15 +760,15 @@ const Room = (props: RoomProps) => {
 
 
     const setClearTmpFuncForStories = (func: () => void) => {
-        let newState = { ...storiesState };
-        newState.ClearTmpFuncForStories = func;
-        setStoriesState(newState);
+        // let newState = { ...storiesState };
+        // newState.ClearTmpFuncForStories = func;
+        // setStoriesState(newState);
 
-        // setStoriesState(prevState => {
-        //     let newState1 = { ...prevState };
-        //     newState1.ClearTmpFuncForStories = func;
-        //     return newState1;
-        // });
+        setStoriesState(prevState => {
+            let newState = { ...prevState };
+            newState.ClearTmpFuncForStories = func;
+            return newState;
+        });
 
     }
 
@@ -629,7 +797,12 @@ const Room = (props: RoomProps) => {
                 <div className="planning-vote-settings">
                     <label>Скрывать оценки</label>
                     {/* className="form-control persent-100-width" */}
-                    <input onClick={() => setHideVoteState(!hideVoteState)} type="checkbox"></input>
+                    <input onClick={() => {
+                        // setHideVoteState(!hideVoteState)
+                        setHideVoteState(prevState => {
+                            return !hideVoteState;
+                        });
+                    }} type="checkbox"></input>
                 </div>
             </div>
         }
@@ -665,12 +838,20 @@ const Room = (props: RoomProps) => {
                         us.FillByBackModel(x);
                         return us;
                     });
-                    let newState = { ...localState };
-                    //реинициализировать нельзя, почему то отваливается
-                    newState.UsersList.splice(0, newState.UsersList.length);
-                    newState.UsersList.push(...newUsersData);
-                    // newState.UsersList = newUsersData;
-                    setLocalState(newState);
+                    // let newState = { ...localState };
+                    // //реинициализировать нельзя, почему то отваливается
+                    // newState.UsersList.splice(0, newState.UsersList.length);
+                    // newState.UsersList.push(...newUsersData);
+                    // // newState.UsersList = newUsersData;
+                    // setLocalState(newState);
+
+                    setLocalState(prevState => {
+                        let newState = { ...prevState };
+                        newState.UsersList.splice(0, newState.UsersList.length);
+                        newState.UsersList.push(...newUsersData);
+
+                        return newState;
+                    });
                 }
 
             };
@@ -682,7 +863,12 @@ const Room = (props: RoomProps) => {
         return <div>
             <p>доп настройки</p>
             <input type="text" className="persent-100-width form-control"
-                onChange={(e) => setUserNameLocalState(e.target.value)}
+                onChange={(e) => {
+                    // setUserNameLocalState(e.target.value)
+                    setUserNameLocalState(prevState => {
+                        return e.target.value;
+                    });
+                }}
                 value={userNameLocalState}></input>
             <button className="btn btn-primary"
                 onClick={() => changeUserName()}>Изменить имя</button>

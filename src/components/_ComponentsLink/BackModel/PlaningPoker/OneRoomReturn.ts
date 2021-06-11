@@ -11,7 +11,8 @@ export interface IOneRoomReturn {
     die_date: any;//todo datetime
     users: IUserInRoomReturn[];
     status: RoomSatus;
-    end_vote_info: IEndVoteInfoReturn;
+    // end_vote_info: IEndVoteInfoReturn;
     actual_stories: IStoryReturn[];
+    current_story_id: number;
 
 }

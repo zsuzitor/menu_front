@@ -2,11 +2,12 @@
 
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { IOneRoomReturn } from "../../BackModel/PlaningPoker/OneRoomReturn";
+import { IRoomInfoReturn } from "../../BackModel/PlaningPoker/RoomInfoReturn";
 import { IUserInRoomReturn } from "../../BackModel/PlaningPoker/UserInRoomReturn";
 
 
 export type ListUserInRoomReturn = (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => void;
-export type GetRoomInfoReturn = (error: MainErrorObjectBack, data: IOneRoomReturn) => void;
+export type GetRoomInfoReturn = (error: MainErrorObjectBack, data: IRoomInfoReturn) => void;
 
 
 
@@ -62,7 +63,7 @@ export class PlaningPokerController implements IPlaningPokerController {
 
                 }
                 else {
-                    let dataBack = xhr as IOneRoomReturn;
+                    let dataBack = xhr as IRoomInfoReturn;
                     onSuccess(null, dataBack);
 
                 }

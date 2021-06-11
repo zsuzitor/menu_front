@@ -13,6 +13,7 @@ import { IOneRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/One
 import { AlertData, AlertTypeEnum } from '../../_ComponentsLink/Models/AlertData';
 import { IStoryReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/StoryReturn';
 import StoriesSection from './StoriesSection';
+import { IRoomInfoReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/RoomInfoReturn';
 
 
 class RoomProps {
@@ -48,7 +49,7 @@ class RoomState {
 
 class StoriesInfo {
     Stories: Story[];
-
+    ClearTmpFuncForStories: () => void;//todo не очень конечно решение
 
     CurrentStoryId: number;
     // CurrentStoryName: string;
@@ -62,6 +63,7 @@ class StoriesInfo {
     constructor() {
         this.Stories = [];
         this.CurrentStoryId = -1;
+        this.ClearTmpFuncForStories = null;
         // this.NameForAdd = "";
         // this.DescriptionForAdd = "";
         // this.CurrentStoryName = "";
@@ -207,7 +209,7 @@ const Room = (props: RoomProps) => {
         }
         //мы проставили все необходимые данные, подключились к хабу и готовы работать
 
-        let getRoomInfo = (error: MainErrorObjectBack, data: IOneRoomReturn) => {
+        let getRoomInfo = (error: MainErrorObjectBack, data: IRoomInfoReturn) => {
             if (error) {
                 //TODO выбить из комнаты?
                 alert("todo что то пошло не так лучше обновить страницу");
@@ -215,7 +217,7 @@ const Room = (props: RoomProps) => {
             }
 
             if (data) {
-                let newUsersData = data.users.map(x => {
+                let newUsersData = data.room.users.map(x => {
                     let us = new UserInRoom();
                     us.FillByBackModel(x);
                     return us;
@@ -226,10 +228,31 @@ const Room = (props: RoomProps) => {
                 newState.UsersList.push(...newUsersData);
                 // newState.RoomStatus = data.status;
                 // newState.UsersList = newUsersData;
-                setLocalState(newState);
-                setRoomStatusState(data.status);
-            }
+                setRoomStatusState(data.room.status);
 
+                fillVoteInfo(newState, data.end_vote_info);
+                setLocalState(newState);
+
+                let newStoriesState = { ...storiesState };
+                newStoriesState.CurrentStoryId = data.room.current_story_id;
+                newStoriesState.Stories = data.room.actual_stories.map(x => {
+                    let st = new Story();
+                    st.FillByBackModel(x);
+                    return st;
+                });
+                setStoriesState(newStoriesState);
+                // setStoriesState(prevState => {
+                //     let newStoriesState = { ...prevState };
+                //     newStoriesState.CurrentStoryId = data.room.current_story_id;
+                //     newStoriesState.Stories = data.room.actual_stories.map(x => {
+                //         let st = new Story();
+                //         st.FillByBackModel(x);
+                //         return st;
+                //     });
+                //     return newStoriesState;
+                // });
+
+            }
         };
 
 
@@ -370,21 +393,8 @@ const Room = (props: RoomProps) => {
 
         props.MyHubConnection.on("VoteEnd", function (data: IEndVoteInfoReturn) {
 
-            let newState = { ...localState };
-            // newState.RoomStatus = RoomSatus.CloseVote;
-            // newState.SelectedVoteCard = -1;
-            setSelectedVoteCard(-1);
-            newState.UsersList.forEach(x => {
-                let userFromRes = data.users_info.find(x1 => x1.id === x.Id);
-                if (userFromRes) {
-                    x.Vote = userFromRes.vote;
-                }
-            });
+            fillVoteInfo(null, data);
 
-            newState.VoteInfo.MaxVote = data.max_vote;
-            newState.VoteInfo.MinVote = data.min_vote;
-            newState.VoteInfo.AverageVote = data.average_vote;
-            setLocalState(newState);
             setRoomStatusState(RoomSatus.CloseVote);
         });
 
@@ -418,6 +428,9 @@ const Room = (props: RoomProps) => {
                 story.Name = newName;
                 story.Description = newDescription;
                 setStoriesState(newState);
+                if (storiesState.ClearTmpFuncForStories) {
+                    storiesState.ClearTmpFuncForStories();
+                }
             }
 
         });
@@ -445,6 +458,24 @@ const Room = (props: RoomProps) => {
     }, []);
 
 
+
+    const fillVoteInfo = (state: RoomState, data: IEndVoteInfoReturn) => {
+        let newState = state || { ...localState };
+        setSelectedVoteCard(-1);
+        newState.UsersList.forEach(x => {
+            let userFromRes = data.users_info.find(x1 => x1.id === x.Id);
+            if (userFromRes) {
+                x.Vote = userFromRes.vote;
+            }
+        });
+
+        newState.VoteInfo.MaxVote = data.max_vote;
+        newState.VoteInfo.MinVote = data.min_vote;
+        newState.VoteInfo.AverageVote = data.average_vote;
+        if (!state) {
+            setLocalState(newState);
+        }
+    }
 
 
 
@@ -557,6 +588,22 @@ const Room = (props: RoomProps) => {
         props.MyHubConnection.send("DeleteStory",
             props.RoomInfo.Name, id);
     }
+
+
+
+    const setClearTmpFuncForStories = (func: () => void) => {
+        let newState = { ...storiesState };
+        newState.ClearTmpFuncForStories = func;
+        setStoriesState(newState);
+
+        // setStoriesState(prevState => {
+        //     let newState1 = { ...prevState };
+        //     newState1.ClearTmpFuncForStories = func;
+        //     return newState1;
+        // });
+
+    }
+
 
 
     const roomMainActionButton = () => {
@@ -677,6 +724,7 @@ const Room = (props: RoomProps) => {
                     DeleteStory={deleteStory}
                     MakeCurrentStory={makeCurrentStory}
                     IsAdmin={currentUserIsAdmin}
+                    SetClearTmpFuncForStories={setClearTmpFuncForStories}
                 />
             </div>
             <div className="planit-room-right-part col-12 col-md-3">

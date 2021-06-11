@@ -19,6 +19,7 @@ class StoriesSectionProp {
     DeleteStory: (id: number) => void;
     RoomName: string;
     IsAdmin: boolean;
+    SetClearTmpFuncForStories: (func: () => void) => void;
 }
 
 class StoriesSectionState {
@@ -48,33 +49,21 @@ const StoriesSection = (props: StoriesSectionProp) => {
     const storiesHelper = new StoriesHelper();
 
     useEffect(() => {
-        if (props.CurrentStoryId < 0) {
-            let newState = { ...storiesState };
-            newState.CurrentStoryDescriptionChange = "";
-            newState.CurrentStoryNameChange = "";
-            setStoriesState(newState);
+        ResetCurrentStoryById();
 
-            return;
-        }
-
-        let newState = { ...storiesState };
-        let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
-        if (!story) {
-            return;
-        }
-
-        newState.CurrentStoryDescriptionChange = story.Description;
-        newState.CurrentStoryNameChange = story.Name;
-        setStoriesState(newState);
 
     }, [props.CurrentStoryId])
 
 
 
     useEffect(() => {
-
+        props.SetClearTmpFuncForStories(() => {
+            ResetCurrentStoryById();
+        });
 
     }, []);
+
+
 
 
 
@@ -97,6 +86,32 @@ const StoriesSection = (props: StoriesSectionProp) => {
             storiesState.CurrentStoryNameChange,
             storiesState.CurrentStoryDescriptionChange);
     }
+
+
+
+
+    const ResetCurrentStoryById = () => {
+        if (props.CurrentStoryId < 0) {
+            let newState = { ...storiesState };
+            newState.CurrentStoryDescriptionChange = "";
+            newState.CurrentStoryNameChange = "";
+            setStoriesState(newState);
+
+            return;
+        }
+
+        let newState = { ...storiesState };
+        let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
+        if (!story) {
+            return;
+        }
+
+        newState.CurrentStoryDescriptionChange = story.Description;
+        newState.CurrentStoryNameChange = story.Name;
+        setStoriesState(newState);
+    }
+
+
 
 
     const currentStoryDescriptionRender = () => {
@@ -176,7 +191,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     <p>{x.Id}</p>
                     <p>{x.Name}</p>
                     <p>{x.Description}</p>
-                    {adminButtonInList}
+                    {adminButtonInList(x.Id)}
                 </div>)}
             </div>
             <div>

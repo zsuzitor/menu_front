@@ -37,8 +37,8 @@ class IndexProps {
 
 let Index = (props: IndexProps) => {
 
-    const initState = new IndexState();
-    const [localState, setLocalState] = useState(initState);
+    // const initState = new IndexState();
+    // const [localState, setLocalState] = useState(initState);
     // const [test, setTestLocalState] = useState(false);
     // const [withoutPasswordState, setWithoutPasswordState] = useState(false);
 

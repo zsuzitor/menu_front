@@ -80,9 +80,15 @@ const PlaningPokerMain = () => {
         hubConnection.on("EnteredInRoom", function () {
             // window.history.pushState(null, "Room", "/");
             // window.history.pushState(null, "Room", "/planing-poker/room");
-            let newState = { ...localState };
-            newState.RoomInfo.InRoom = true;
-            setLocalState(newState);
+            // let newState = { ...localState };
+            // newState.RoomInfo.InRoom = true;
+            // setLocalState(newState);
+            setLocalState(prevState => {
+                let newState = { ...prevState };
+                newState.RoomInfo.InRoom = true;
+
+                return newState;
+            });
             let lk = document.getElementById('move_to_room_link_react');
             //todo типо костыль
             //если этой линки нет, значит мы уже на странице румы
@@ -119,14 +125,26 @@ const PlaningPokerMain = () => {
             .then(function () {
                 hubConnection.invoke("GetConnectionId")
                     .then(function (connectionId) {
-                        let newState = { ...localState };
-                        newState.User.UserId = connectionId;
-                        setLocalState(newState);
-                        sethubConnectedState(true);
+                        // let newState = { ...localState };
+                        // newState.User.UserId = connectionId;
+                        // setLocalState(newState);
+                        setLocalState(prevState => {
+                            let newState = { ...prevState };
+                            newState.User.UserId = connectionId;
+
+                            return newState;
+                        });
+                        //sethubConnectedState(true);
+                        sethubConnectedState(prevState => {
+                            return true;
+                        });
                     })
             }).catch(function () {
                 alert("что то не так с подключением обновите страницу");
-                sethubConnectedState(false);
+                // sethubConnectedState(false);
+                sethubConnectedState(prevState => {
+                    return false;
+                });
             });
 
 
@@ -141,9 +159,15 @@ const PlaningPokerMain = () => {
 
 
     let userNameChange = (newName: string) => {
-        let newState = { ...localState };
-        newState.User.UserName = newName;
-        setLocalState(newState);
+        // let newState = { ...localState };
+        // newState.User.UserName = newName;
+        // setLocalState(newState);
+        setLocalState(prevState => {
+            let newState = { ...prevState };
+            newState.User.UserName = newName;
+
+            return newState;
+        });
         // if (localState.RoomInfo.InRoom) {
         //     hubConnection.invoke("UserNameChange", newState.RoomInfo.Name, newName).then(dt => {
         //         if (!dt) {
@@ -158,15 +182,27 @@ const PlaningPokerMain = () => {
 
 
     let roomNameChanged = (name: string) => {
-        let newState = { ...localState };
-        newState.RoomInfo.Name = name;
-        setLocalState(newState);
+        // let newState = { ...localState };
+        // newState.RoomInfo.Name = name;
+        // setLocalState(newState);
+        setLocalState(prevState => {
+            let newState = { ...prevState };
+            newState.RoomInfo.Name = name;
+
+            return newState;
+        });
     }
 
     let roomPasswordChanged = (password: string) => {
-        let newState = { ...localState };
-        newState.RoomInfo.Password = password;
-        setLocalState(newState);
+        // let newState = { ...localState };
+        // newState.RoomInfo.Password = password;
+        // setLocalState(newState);
+        setLocalState(prevState => {
+            let newState = { ...prevState };
+            newState.RoomInfo.Password = password;
+
+            return newState;
+        });
     }
 
 

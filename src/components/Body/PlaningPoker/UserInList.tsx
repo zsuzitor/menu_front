@@ -56,7 +56,13 @@ const UserInList = (props: UserInListProp) => {
         </div>
 
         statusChange = <div>
-            <select value={selectedEditRole} onChange={(e) => changeSelectedEditRoleState(e.target.value)}>
+            <select value={selectedEditRole} onChange={(e) => {
+
+                // changeSelectedEditRoleState(e.target.value)
+                changeSelectedEditRoleState(prevState => {
+                    return e.target.value;
+                });
+            }}>
                 <option value="-">Не выбрано</option>
                 <option value={UserRoles.User}>{UserRoles.User}</option>
                 <option value={UserRoles.Admin}>{UserRoles.Admin}</option>

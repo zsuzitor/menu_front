@@ -637,9 +637,7 @@ const Room = (props: RoomProps) => {
         state.VoteInfo.MaxVote = data.max_vote;
         state.VoteInfo.MinVote = data.min_vote;
         state.VoteInfo.AverageVote = data.average_vote;
-        // if (!state) {
-        //     setLocalState(newState);
-        // }
+      
     }
 
 
@@ -685,13 +683,13 @@ const Room = (props: RoomProps) => {
             return;
         }
 
-        // let newState = { ...localState };
+        
         // newState.SelectedVoteCard = +voteCardBlock.target.dataset.vote;
         // setSelectedVoteCard(+voteCardBlock.target.dataset.vote);
         setSelectedVoteCard(prevState => {
             return +voteCardBlock.target.dataset.vote;
         });
-        // setLocalState(newState);
+        
     }
 
 

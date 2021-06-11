@@ -1,7 +1,7 @@
 import { stringify } from 'querystring';
 import React, { useState, useEffect } from 'react';
 // import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
-import { RoomSatus, UserInRoom, UserRoles } from './Models/RoomInfo';
+import { RoomStatus, UserInRoom, UserRoles } from './Models/RoomInfo';
 
 
 class UserInListProp {
@@ -10,7 +10,7 @@ class UserInListProp {
     RenderForAdmin: boolean;
     HideVote: boolean;
     HasVote: boolean;
-    RoomStatus: RoomSatus;
+    RoomStatus: RoomStatus;
     MinVote: number;
     MaxVote: number;
     RoomName: string;
@@ -95,7 +95,7 @@ const UserInList = (props: UserInListProp) => {
 
 
     let classColorize = "";
-    if (props.RoomStatus === RoomSatus.AllCanVote) {
+    if (props.RoomStatus === RoomStatus.AllCanVote) {
         //подсвечиваем проголосовавших
         if (props.HasVote || !props.User.CanVote()) {
             classColorize = " planing-user-voted";
@@ -104,7 +104,7 @@ const UserInList = (props: UserInListProp) => {
             classColorize = " planing-user-not-voted";
         }
     }
-    else if (props.RoomStatus === RoomSatus.CloseVote) {
+    else if (props.RoomStatus === RoomStatus.CloseVote) {
         //подсвечиваем min max
         if (props.User.Vote) {
             if (props.MinVote === props.User.Vote) {

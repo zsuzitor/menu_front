@@ -1,6 +1,6 @@
 // import * as React from "react";
 import React, { useState, useEffect } from 'react';
-import { RoomInfo, UserInRoom, RoomSatus, PlaningPokerUserInfo, VoteInfo, Story, StoriesHelper } from './Models/RoomInfo';
+import { RoomInfo, UserInRoom, RoomStatus, PlaningPokerUserInfo, VoteInfo, Story, StoriesHelper } from './Models/RoomInfo';
 
 
 import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
@@ -49,13 +49,13 @@ class RoomState {
 
 class StoriesInfo {
     Stories: Story[];
-    ClearTmpFuncForStories: () => void;//todo не очень конечно решение
+    // ClearTmpFuncForStories: () => void;//todo не очень конечно решение
 
     CurrentStoryId: number;
     // CurrentStoryName: string;
-    // CurrentStoryNameChange: string;
+    CurrentStoryNameChange: string;
     // CurrentStoryDescription: string;
-    // CurrentStoryDescriptionChange: string;
+    CurrentStoryDescriptionChange: string;
 
     // NameForAdd: string;
     // DescriptionForAdd: string;
@@ -63,13 +63,13 @@ class StoriesInfo {
     constructor() {
         this.Stories = [];
         this.CurrentStoryId = -1;
-        this.ClearTmpFuncForStories = null;
+        // this.ClearTmpFuncForStories = null;
         // this.NameForAdd = "";
         // this.DescriptionForAdd = "";
         // this.CurrentStoryName = "";
         // this.CurrentStoryDescription = "";
-        // this.CurrentStoryNameChange = "";
-        // this.CurrentStoryDescriptionChange = "";
+        this.CurrentStoryNameChange = "";
+        this.CurrentStoryDescriptionChange = "";
     }
 }
 
@@ -185,7 +185,7 @@ const Room = (props: RoomProps) => {
     let initState = new RoomState();
     const [localState, setLocalState] = useState(initState);
     //НЕ заносить в общий объект, перестает работать, начинает сбрасываться при ререндере
-    const [roomStatusState, setRoomStatusState] = useState(RoomSatus.None);
+    const [roomStatusState, setRoomStatusState] = useState(RoomStatus.None);
     const [selectedVoteCard, setSelectedVoteCard] = useState(-1);
     const [hideVoteState, setHideVoteState] = useState(false);
     const [userNameLocalState, setUserNameLocalState] = useState(props.UserInfo.UserName);//для редактирования
@@ -492,7 +492,7 @@ const Room = (props: RoomProps) => {
             // setRoomStatusState(RoomSatus.AllCanVote);
             setRoomStatusState(prevState => {
                 // let newState = { ...prevState };
-                return RoomSatus.AllCanVote;
+                return RoomStatus.AllCanVote;
                 // return newState;
             });
         });
@@ -514,7 +514,7 @@ const Room = (props: RoomProps) => {
             // setRoomStatusState(RoomSatus.CloseVote);
             setRoomStatusState(prevState => {
                 // let newState = { ...prevState };
-                return RoomSatus.CloseVote;
+                return RoomStatus.CloseVote;
                 // return newState;
             });
         });
@@ -569,13 +569,15 @@ const Room = (props: RoomProps) => {
                 let newState = { ...prevState };
                 let story = storiesHelper.GetStoryById(newState.Stories, id);
 
+                newState.CurrentStoryNameChange = newName;
+                newState.CurrentStoryDescriptionChange = newDescription;
                 if (story) {
                     newState.CurrentStoryId = id;
                     story.Name = newName;
                     story.Description = newDescription;
-                    if (storiesState.ClearTmpFuncForStories) {
-                        storiesState.ClearTmpFuncForStories();
-                    }
+                    // if (storiesState.ClearTmpFuncForStories) {
+                    //     storiesState.ClearTmpFuncForStories();
+                    // }
                 }
                 return newState;
             });
@@ -616,6 +618,29 @@ const Room = (props: RoomProps) => {
 
 
 
+        props.MyHubConnection.on("MovedStoryToComplete", function (id: number) {
+
+            setStoriesState(prevState => {
+                let newState = { ...prevState };
+                let story = storiesHelper.GetStoryById(newState.Stories, id);
+
+
+                if (story) {
+                    story.Completed = true;
+                    if (newState.CurrentStoryId === id) {
+                        newState.CurrentStoryId = -1;
+                    }
+
+                    newState.CurrentStoryDescriptionChange = "";
+                    newState.CurrentStoryNameChange = "";
+                }
+                return newState;
+            });
+
+        });
+
+
+
 
     }, []);
 
@@ -637,7 +662,7 @@ const Room = (props: RoomProps) => {
         state.VoteInfo.MaxVote = data.max_vote;
         state.VoteInfo.MinVote = data.min_vote;
         state.VoteInfo.AverageVote = data.average_vote;
-      
+
     }
 
 
@@ -683,20 +708,20 @@ const Room = (props: RoomProps) => {
             return;
         }
 
-        
+
         // newState.SelectedVoteCard = +voteCardBlock.target.dataset.vote;
         // setSelectedVoteCard(+voteCardBlock.target.dataset.vote);
         setSelectedVoteCard(prevState => {
             return +voteCardBlock.target.dataset.vote;
         });
-        
+
     }
 
 
     const renderVotePlaceIfNeed = () => {
 
         //TODO UNCOMMENT
-        if (roomStatusState !== RoomSatus.AllCanVote) {
+        if (roomStatusState !== RoomStatus.AllCanVote) {
             return <div></div>
         }
         let voteArr = [1, 2, 3, 5, 7, 10, 13, 15, 18, 20, 25, 30, 35, 40, 50];
@@ -714,7 +739,7 @@ const Room = (props: RoomProps) => {
     const renderVoteResultIfNeed = () => {
 
         //UNCOMMENT
-        if (roomStatusState !== RoomSatus.CloseVote) {
+        if (roomStatusState !== RoomStatus.CloseVote) {
             return <div></div>
         }
 
@@ -757,18 +782,36 @@ const Room = (props: RoomProps) => {
 
 
 
-    const setClearTmpFuncForStories = (func: () => void) => {
-        // let newState = { ...storiesState };
-        // newState.ClearTmpFuncForStories = func;
-        // setStoriesState(newState);
+    // const setClearTmpFuncForStories = (func: () => void) => {
+    //     // let newState = { ...storiesState };
+    //     // newState.ClearTmpFuncForStories = func;
+    //     // setStoriesState(newState);
 
+    //     setStoriesState(prevState => {
+    //         let newState = { ...prevState };
+    //         newState.ClearTmpFuncForStories = func;
+    //         return newState;
+    //     });
+
+    // }
+
+    const currentStoryDescriptionOnChange = (str: string) => {
         setStoriesState(prevState => {
             let newState = { ...prevState };
-            newState.ClearTmpFuncForStories = func;
+            newState.CurrentStoryDescriptionChange = str;
             return newState;
         });
-
     }
+
+    const currentStoryNameOnChange = (str: string) => {
+        setStoriesState(prevState => {
+            let newState = { ...prevState };
+            newState.CurrentStoryNameChange = str;
+            return newState;
+        });
+    }
+
+
 
 
 
@@ -908,7 +951,11 @@ const Room = (props: RoomProps) => {
                     DeleteStory={deleteStory}
                     MakeCurrentStory={makeCurrentStory}
                     IsAdmin={currentUserIsAdmin}
-                    SetClearTmpFuncForStories={setClearTmpFuncForStories}
+                    CurrentStoryDescriptionChange={storiesState.CurrentStoryDescriptionChange}
+                    CurrentStoryNameChange={storiesState.CurrentStoryNameChange}
+                    CurrentStoryDescriptionOnChange={currentStoryDescriptionOnChange}
+                    CurrentStoryNameOnChange={currentStoryNameOnChange}
+                    RoomStatus={roomStatusState}
                 />
             </div>
             <div className="planit-room-right-part col-12 col-md-3">

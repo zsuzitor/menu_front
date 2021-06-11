@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 // import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
-import { StoriesHelper, Story } from './Models/RoomInfo';
+import { RoomStatus, StoriesHelper, Story } from './Models/RoomInfo';
 
 
 
@@ -18,22 +18,29 @@ class StoriesSectionProp {
     MakeCurrentStory: (id: number) => void;
     DeleteStory: (id: number) => void;
     RoomName: string;
+    RoomStatus: RoomStatus;
     IsAdmin: boolean;
-    SetClearTmpFuncForStories: (func: () => void) => void;
+    // SetClearTmpFuncForStories: (func: () => void) => void;
+    CurrentStoryNameChange: string;
+    CurrentStoryNameOnChange: (str: string) => void;
+    CurrentStoryDescriptionChange: string;
+    CurrentStoryDescriptionOnChange: (str: string) => void;
 }
 
 class StoriesSectionState {
-    CurrentStoryNameChange: string;
-    CurrentStoryDescriptionChange: string;
+    // CurrentStoryNameChange: string;
+    // CurrentStoryDescriptionChange: string;
 
     NameForAdd: string;
     DescriptionForAdd: string;
+    ShowOnlyCompleted: boolean;
 
     constructor() {
         this.NameForAdd = "";
         this.DescriptionForAdd = "";
-        this.CurrentStoryNameChange = "";
-        this.CurrentStoryDescriptionChange = "";
+        this.ShowOnlyCompleted = false;
+        // this.CurrentStoryNameChange = "";
+        // this.CurrentStoryDescriptionChange = "";
     }
 }
 
@@ -57,9 +64,9 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
     useEffect(() => {
-        props.SetClearTmpFuncForStories(() => {
-            ResetCurrentStoryById();
-        });
+        // props.SetClearTmpFuncForStories(() => {
+        //     ResetCurrentStoryById();
+        // });
 
     }, []);
 
@@ -78,25 +85,29 @@ const StoriesSection = (props: StoriesSectionProp) => {
         // newState.CurrentStoryNameChange = story.Name;
         // setStoriesState(newState);
 
-        setStoriesState(prevState => {
-            let newState = { ...prevState };
-            let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
-            if (!story) {
-                return newState;
-            }
+        let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
+        props.CurrentStoryDescriptionOnChange(story.Description);
+        props.CurrentStoryNameOnChange(story.Name);
 
-            newState.CurrentStoryDescriptionChange = story.Description;
-            newState.CurrentStoryNameChange = story.Name;
-            return newState;
-        });
+        // setStoriesState(prevState => {
+        //     let newState = { ...prevState };
+        //     let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
+        //     if (!story) {
+        //         return newState;
+        //     }
+
+        //     // newState.CurrentStoryDescriptionChange = story.Description;
+        //     // newState.CurrentStoryNameChange = story.Name;
+        //     return newState;
+        // });
     }
 
 
     const changeCurrentStory = () => {
         props.MyHubConnection.send("ChangeCurrentStory",
             props.RoomName, props.CurrentStoryId,
-            storiesState.CurrentStoryNameChange,
-            storiesState.CurrentStoryDescriptionChange);
+            props.CurrentStoryNameChange,
+            props.CurrentStoryDescriptionChange);
     }
 
 
@@ -109,12 +120,14 @@ const StoriesSection = (props: StoriesSectionProp) => {
             // newState.CurrentStoryNameChange = "";
             // setStoriesState(newState);
 
-            setStoriesState(prevState => {
-                let newState = { ...prevState };
-                newState.CurrentStoryDescriptionChange = "";
-                newState.CurrentStoryNameChange = "";
-                return newState;
-            });
+            props.CurrentStoryDescriptionOnChange("");
+            props.CurrentStoryNameOnChange("");
+            // setStoriesState(prevState => {
+            //     let newState = { ...prevState };
+            //     newState.CurrentStoryDescriptionChange = "";
+            //     newState.CurrentStoryNameChange = "";
+            //     return newState;
+            // });
 
             return;
         }
@@ -130,17 +143,34 @@ const StoriesSection = (props: StoriesSectionProp) => {
         // newState.CurrentStoryNameChange = story.Name;
         // setStoriesState(newState);
 
-        setStoriesState(prevState => {
-            let newState = { ...prevState };
-            let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
-            if (!story) {
-                return newState;
-            }
+        let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
+        props.CurrentStoryDescriptionOnChange(story.Description);
+        props.CurrentStoryNameOnChange(story.Name);
+        // setStoriesState(prevState => {
+        //     let newState = { ...prevState };
+        //     let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
+        //     if (!story) {
+        //         return newState;
+        //     }
 
-            newState.CurrentStoryDescriptionChange = story.Description;
-            newState.CurrentStoryNameChange = story.Name;
-            return newState;
-        });
+        //     newState.CurrentStoryDescriptionChange = story.Description;
+        //     newState.CurrentStoryNameChange = story.Name;
+        //     return newState;
+        // });
+    }
+
+
+    const tryMakeStoryComplete = () => {
+        //если не задан voteInfo как то уведомить что оценки не запишутся
+        let save = true;
+        if (props.RoomStatus !== RoomStatus.CloseVote) {//todo возможно тут стоит не на статус завязаться а на voteinfo
+            save = confirm('Комната не в статусе <закрытого голосования>, История будет сохранена без оценок. Сохранить?')
+        }
+
+        if (save) {
+            props.MyHubConnection.send("MakeStoryComplete", props.RoomName,
+                props.CurrentStoryId);
+        }
     }
 
 
@@ -162,6 +192,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
             adminButton = <div>
                 <button className="btn btn-success" onClick={() => changeCurrentStory()}>Изменить</button>
                 <button className="btn btn-success" onClick={() => cancelChangeCurrentStory()}>Отменить</button>
+                <button className="btn btn-success" onClick={() => tryMakeStoryComplete()}>Отметить как выполненную</button>
             </div>
         }
 
@@ -171,32 +202,35 @@ const StoriesSection = (props: StoriesSectionProp) => {
                 <p>{story.Id}</p>
                 <input className="persent-100-width form-control"
                     placeholder="Название"
-                    value={storiesState.CurrentStoryNameChange}
+                    value={props.CurrentStoryNameChange}
                     type="text" onChange={(e) => {
                         // let newState = { ...storiesState };
                         // newState.CurrentStoryNameChange = e.target.value;
                         // setStoriesState(newState);
 
-                        setStoriesState(prevState => {
-                            let newState = { ...prevState };
-                            newState.CurrentStoryNameChange = e.target.value;
-                            return newState;
-                        });
+                        props.CurrentStoryNameOnChange(e.target.value);
+                        // setStoriesState(prevState => {
+                        //     let newState = { ...prevState };
+                        //     newState.CurrentStoryNameChange = e.target.value;
+                        //     return newState;
+                        // });
 
                     }}></input>
                 <input className="persent-100-width form-control"
                     placeholder="Описание"
-                    value={storiesState.CurrentStoryDescriptionChange}
+                    value={props.CurrentStoryDescriptionChange}
                     type="text" onChange={(e) => {
                         // let newState = { ...storiesState };
                         // newState.CurrentStoryDescriptionChange = e.target.value;
                         // setStoriesState(newState);
 
-                        setStoriesState(prevState => {
-                            let newState = { ...prevState };
-                            newState.CurrentStoryDescriptionChange = e.target.value;
-                            return newState;
-                        });
+                        props.CurrentStoryDescriptionOnChange(e.target.value);
+
+                        // setStoriesState(prevState => {
+                        //     let newState = { ...prevState };
+                        //     newState.CurrentStoryDescriptionChange = e.target.value;
+                        //     return newState;
+                        // });
                     }}></input>
             </div>
             {adminButton}
@@ -215,6 +249,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
             return <Fragment></Fragment>
         };
         //todo как то норм назвать
+        let addNewForm = <div></div>
         let adminButtonNotInList = <div></div>
         if (props.IsAdmin) {
             adminButtonInList = (id: number) => {
@@ -227,20 +262,9 @@ const StoriesSection = (props: StoriesSectionProp) => {
             adminButtonNotInList = <div>
                 <button className="btn btn-success" onClick={() => AddNewStory()}>Добавить</button>
             </div>
-        }
 
-        return <div className="planing-stories-list-main">
-            <p>истории</p>
-            <div>
-                {props.Stories.map(x => <div key={x.Id}>
-                    <p>{x.Id}</p>
-                    <p>{x.Name}</p>
-                    <p>{x.Description}</p>
-                    {adminButtonInList(x.Id)}
-                    <hr/>
-                </div>)}
-            </div>
-            <div>
+            addNewForm = <div>
+                <p>Добавить новую:</p>
                 <input className="persent-100-width form-control"
                     placeholder="Название"
                     value={storiesState.NameForAdd}
@@ -272,6 +296,34 @@ const StoriesSection = (props: StoriesSectionProp) => {
                 >
                 </textarea>
                 {adminButtonNotInList}
+            </div>
+        }
+
+
+
+
+
+        return <div className="planing-stories-list-main">
+            <p>истории</p>
+            <p>Показать выполненные</p>
+            <input onClick={() => {
+                setStoriesState(prevState => {
+                    let newState = { ...prevState };
+                    newState.ShowOnlyCompleted = !newState.ShowOnlyCompleted;
+                    return newState;
+                });
+            }} type="checkbox"></input>
+            <div>
+                {props.Stories.filter(x => x.Completed === storiesState.ShowOnlyCompleted).map(x => <div key={x.Id}>
+                    <p>{x.Id}</p>
+                    <p>{x.Name}</p>
+                    <p>{x.Description}</p>
+                    {adminButtonInList(x.Id)}
+                    <hr />
+                </div>)}
+            </div>
+            <div>
+                {addNewForm}
 
             </div>
         </div>

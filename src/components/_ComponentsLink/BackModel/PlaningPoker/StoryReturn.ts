@@ -8,4 +8,5 @@ export interface IStoryReturn {
     description: string;
     vote?: number;
     date?: string;
+    completed: boolean;
 }

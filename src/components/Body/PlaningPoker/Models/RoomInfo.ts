@@ -17,7 +17,7 @@ export class RoomInfo {
 }
 
 
-export enum RoomSatus { None = 0, AllCanVote, CloseVote };
+export enum RoomStatus { None = 0, AllCanVote, CloseVote };
 
 export class UserRoles {
     static User = "User";
@@ -87,6 +87,7 @@ export class Story implements MappedWithBack<IStoryReturn>{
     // InitWithServer: boolean;
     Name: string;
     Description: string;
+    Completed: boolean;
 
     Vote?: number;
     Date?: string;
@@ -99,7 +100,7 @@ export class Story implements MappedWithBack<IStoryReturn>{
         this.Description = "";
         this.Vote = null;
         this.Date = null;
-
+        this.Completed = false;
     }
 
 
@@ -109,33 +110,33 @@ export class Story implements MappedWithBack<IStoryReturn>{
         this.Description = newData.description;
         this.Vote = newData.vote;
         this.Date = newData.date;
-
+        this.Completed = newData.completed;
     }
 }
 
 
 
 
-export class StoriesHelper{
-     GetStoryIndexById = (stories: Story[], storyId: number): number => {
+export class StoriesHelper {
+    GetStoryIndexById = (stories: Story[], storyId: number): number => {
         if (storyId < 0) {
             return -1;
         }
-    
+
         let index = stories.findIndex(x => x.Id === storyId);
         if (index < 0 || index >= stories.length) {
             return -1;
         }
-    
+
         return index;
     }
-    
-     GetStoryById = (stories: Story[], storyId: number): Story => {
+
+    GetStoryById = (stories: Story[], storyId: number): Story => {
         let index = this.GetStoryIndexById(stories, storyId);
         if (index < 0) {
             return;
         }
-    
+
         return stories[index];
     }
 }

@@ -89,6 +89,8 @@ const PlaningPokerMain = () => {
 
                 return newState;
             });
+
+            document.cookie = "planing_poker_roomname=" + localState.RoomInfo.Name + "; path=/;";
             let lk = document.getElementById('move_to_room_link_react');
             //todo типо костыль
             //если этой линки нет, значит мы уже на странице румы

@@ -74,6 +74,7 @@ class StoriesInfo {
 }
 
 
+//TODO а так можно? не будут ли они затирать в теории методы с других компонентов с такими же названиями, может их переименовать более сложно?
 const CurrentUserIsAdmin = (users: UserInRoom[], userId: string): boolean => {
     let user = GetUserById(users, userId);
     if (user && user.IsAdmin()) {
@@ -744,11 +745,14 @@ const Room = (props: RoomProps) => {
         }
 
         return <div>
-            <p>vote result</p>
-            <p>Max: {localState.VoteInfo.MaxVote}</p>
-            <p>Min: {localState.VoteInfo.MinVote}</p>
-            <p>Average: {localState.VoteInfo.AverageVote}</p>
+            <div className="padding-10-top"></div>
+            <div className="planing-poker-left-one-section">
+                <p>vote result</p>
+                <p>Max: {localState.VoteInfo.MaxVote}</p>
+                <p>Min: {localState.VoteInfo.MinVote}</p>
+                <p>Average: {localState.VoteInfo.AverageVote}</p>
 
+            </div>
         </div>
 
     }
@@ -931,8 +935,6 @@ const Room = (props: RoomProps) => {
         <h1>Room {props.RoomInfo.Name}</h1>
         <p>
             при обновлении страницы, вы подключаетесь как новый пользователь(исключение-вы авторизованы в основном приложении(TODO)).
-            это означает что все права(в том числе админские) остаются на старом пользователе,
-            и в случае наличия только 1 администратора комната становится неадминистрируемой
         </p>
         <div className="row">
             {/* <div className="persent-100-width"> */}

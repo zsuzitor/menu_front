@@ -196,11 +196,10 @@ const StoriesSection = (props: StoriesSectionProp) => {
             </div>
         }
 
-        return <div className="planing-current-story-main">
-            <p>описание текущей задачи</p>
-            <div>
-                <p>{story.Id}</p>
-                <input className="persent-100-width form-control"
+
+        const storyBodyRender = () => {
+            if (props.IsAdmin) {
+                return <div><input className="persent-100-width form-control"
                     placeholder="Название"
                     value={props.CurrentStoryNameChange}
                     type="text" onChange={(e) => {
@@ -216,22 +215,37 @@ const StoriesSection = (props: StoriesSectionProp) => {
                         // });
 
                     }}></input>
-                <input className="persent-100-width form-control"
-                    placeholder="Описание"
-                    value={props.CurrentStoryDescriptionChange}
-                    type="text" onChange={(e) => {
-                        // let newState = { ...storiesState };
-                        // newState.CurrentStoryDescriptionChange = e.target.value;
-                        // setStoriesState(newState);
+                    <input className="persent-100-width form-control"
+                        placeholder="Описание"
+                        value={props.CurrentStoryDescriptionChange}
+                        type="text" onChange={(e) => {
+                            // let newState = { ...storiesState };
+                            // newState.CurrentStoryDescriptionChange = e.target.value;
+                            // setStoriesState(newState);
 
-                        props.CurrentStoryDescriptionOnChange(e.target.value);
+                            props.CurrentStoryDescriptionOnChange(e.target.value);
 
-                        // setStoriesState(prevState => {
-                        //     let newState = { ...prevState };
-                        //     newState.CurrentStoryDescriptionChange = e.target.value;
-                        //     return newState;
-                        // });
-                    }}></input>
+                            // setStoriesState(prevState => {
+                            //     let newState = { ...prevState };
+                            //     newState.CurrentStoryDescriptionChange = e.target.value;
+                            //     return newState;
+                            // });
+                        }}></input></div>
+            }
+            else {
+                return <div>
+                    <p>Название: {story.Name}</p>
+                    <p>Описание: {story.Description}</p>
+                </div>
+            }
+        }
+
+
+        return <div className="planing-current-story-main planing-poker-left-one-section">
+            <p>Описание текущей задачи</p>
+            <div>
+                <p>Id: {story.Id}</p>
+                {storyBodyRender()}
             </div>
             {adminButton}
         </div>
@@ -265,6 +279,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
             addNewForm = <div>
                 <p>Добавить новую:</p>
+                <span>Название:</span>
                 <input className="persent-100-width form-control"
                     placeholder="Название"
                     value={storiesState.NameForAdd}
@@ -279,6 +294,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                             return newState;
                         });
                     }}></input>
+                <span>Описание:</span>
                 <textarea className="persent-100-width form-control"
                     placeholder="Описание"
                     value={storiesState.DescriptionForAdd}
@@ -303,9 +319,9 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
 
-        return <div className="planing-stories-list-main">
-            <p>истории</p>
-            <p>Показать выполненные</p>
+        return <div className="planing-stories-list-main planing-poker-left-one-section">
+            <p>Истории:</p>
+            <span>Показать выполненные: </span>
             <input onClick={() => {
                 setStoriesState(prevState => {
                     let newState = { ...prevState };
@@ -315,12 +331,15 @@ const StoriesSection = (props: StoriesSectionProp) => {
             }} type="checkbox"></input>
             <div>
                 {props.Stories.filter(x => x.Completed === storiesState.ShowOnlyCompleted).map(x => <div key={x.Id}>
-                    <p>{x.Id}</p>
-                    <p>{x.Name}</p>
-                    <p>{x.Description}</p>
+                    <p>Id: {x.Id}</p>
+                    <p>Название: {x.Name}</p>
+                    <p>Описание: {x.Description}</p>
                     {adminButtonInList(x.Id)}
                     <hr />
                 </div>)}
+                <div>
+                    <button onClick={() => alert("todo")}>Загрузить прошлые</button>
+                </div>
             </div>
             <div>
                 {addNewForm}

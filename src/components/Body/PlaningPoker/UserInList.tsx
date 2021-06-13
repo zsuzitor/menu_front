@@ -94,7 +94,7 @@ const UserInList = (props: UserInListProp) => {
     }
 
 
-    let classColorize = "";
+    let classColorize = " planing-user-not-voted";//что бы белый не перебивать
     if (props.RoomStatus === RoomStatus.AllCanVote) {
         //подсвечиваем проголосовавших
         if (props.HasVote || !props.User.CanVote()) {

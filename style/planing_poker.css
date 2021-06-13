@@ -1,10 +1,13 @@
 .planit-room-left-part {
-    border: 2px solid black;
+    /* border: 2px solid black; */
+    background: linear-gradient(to right, transparent, #745959);
+    /* #2a4061); */
     min-height: 500px;
 }
 
 .planit-room-right-part {
     /* border: 2px solid black; */
+    background: linear-gradient(to left, transparent, gray);
     min-height: 500px;
 }
 
@@ -61,6 +64,7 @@
     box-shadow: 0 0 10px rgb(0 0 0 / 50%);
     border-radius: 5px;
     padding: 10px;
+    /* background-color: white; */
 }
 
 .planning-vote-settings {
@@ -77,9 +81,14 @@
 }
 
 .planing-current-story-main {
-    border: 2px solid black;
+    /* border: 2px solid black; */
 }
 
 .planing-stories-list-main {
-    border: 2px solid black;
+    /* border: 2px solid black; */
+}
+
+.planing-poker-left-one-section {
+    background-color: white;
+    border-radius: 20px;
 }

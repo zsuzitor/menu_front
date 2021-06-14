@@ -61,9 +61,11 @@ export class UserInRoom implements MappedWithBack<IUserInRoomReturn> {
 export class PlaningPokerUserInfo {
     UserName: string;
     UserId: string;
+    UserConnectionId: string;
     constructor() {
         this.UserName = "";
         this.UserId = "";
+        this.UserConnectionId = "";
     }
 }
 

@@ -26,7 +26,7 @@ export class PlaningPokerController implements IPlaningPokerController {
         G_AjaxHelper.GoAjaxRequest({
             Data: {
                 'roomname': roomname,
-                'userid': userId
+                'userConnectionId': userId
             },
             Type: "GET",
             FuncSuccess: (xhr, status, jqXHR) => {
@@ -52,7 +52,7 @@ export class PlaningPokerController implements IPlaningPokerController {
         G_AjaxHelper.GoAjaxRequest({
             Data: {
                 'roomname': roomname,
-                'userid': userId
+                'userConnectionId': userId
             },
             Type: "GET",
             FuncSuccess: (xhr, status, jqXHR) => {

@@ -77,7 +77,7 @@ const PlaningPokerMain = () => {
             window.G_AddAbsoluteAlertToState(alert);
         });
 
-        hubConnection.on("EnteredInRoom", function () {
+        hubConnection.on("EnteredInRoom", function (roomUserId) {
             // window.history.pushState(null, "Room", "/");
             // window.history.pushState(null, "Room", "/planing-poker/room");
             // let newState = { ...localState };
@@ -86,7 +86,8 @@ const PlaningPokerMain = () => {
             setLocalState(prevState => {
                 let newState = { ...prevState };
                 newState.RoomInfo.InRoom = true;
-
+                newState.User.UserId = roomUserId;
+                newState.RoomInfo.Password = "";
                 return newState;
             });
 
@@ -132,7 +133,7 @@ const PlaningPokerMain = () => {
                         // setLocalState(newState);
                         setLocalState(prevState => {
                             let newState = { ...prevState };
-                            newState.User.UserId = connectionId;
+                            newState.User.UserConnectionId = connectionId;
 
                             return newState;
                         });
@@ -160,7 +161,7 @@ const PlaningPokerMain = () => {
     }, []);
 
 
-    let userNameChange = (newName: string) => {
+    const userNameChange = (newName: string) => {
         // let newState = { ...localState };
         // newState.User.UserName = newName;
         // setLocalState(newState);
@@ -183,7 +184,7 @@ const PlaningPokerMain = () => {
     }
 
 
-    let roomNameChanged = (name: string) => {
+    const roomNameChanged = (name: string) => {
         // let newState = { ...localState };
         // newState.RoomInfo.Name = name;
         // setLocalState(newState);
@@ -195,7 +196,7 @@ const PlaningPokerMain = () => {
         });
     }
 
-    let roomPasswordChanged = (password: string) => {
+    const roomPasswordChanged = (password: string) => {
         // let newState = { ...localState };
         // newState.RoomInfo.Password = password;
         // setLocalState(newState);
@@ -207,7 +208,13 @@ const PlaningPokerMain = () => {
         });
     }
 
-
+    const clearUserId = () => {
+        setLocalState(prevState => {
+            let newState = { ...prevState };
+            newState.User.UserId = "";
+            return newState;
+        });
+    }
 
 
 
@@ -224,6 +231,7 @@ const PlaningPokerMain = () => {
                     RoomNameChanged={roomNameChanged}
                     ChangeUserName={userNameChange}
                     HubConnected={hubConnected}
+                    ClearUserId={clearUserId}
                 />
             } />
 

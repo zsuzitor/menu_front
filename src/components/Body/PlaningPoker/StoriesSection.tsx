@@ -338,7 +338,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     <hr />
                 </div>)}
                 <div>
-                    <button onClick={() => alert("todo")}>Загрузить прошлые</button>
+                    <button className="btn btn-primary" onClick={() => alert("todo")}>Загрузить прошлые</button>
                 </div>
             </div>
             <div>

@@ -56,7 +56,7 @@ const UserInList = (props: UserInListProp) => {
         </div>
 
         statusChange = <div>
-            <select value={selectedEditRole} onChange={(e) => {
+            <select className="form-control" value={selectedEditRole} onChange={(e) => {
 
                 // changeSelectedEditRoleState(e.target.value)
                 changeSelectedEditRoleState(prevState => {

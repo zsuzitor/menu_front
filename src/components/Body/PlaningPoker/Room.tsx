@@ -26,6 +26,7 @@ class RoomProps {
 
     RoomNameChanged: (name: string) => void;
     ChangeUserName: ((newName: string) => void);
+    ClearUserId: () => void;
 }
 
 class RoomState {
@@ -276,7 +277,7 @@ const Room = (props: RoomProps) => {
         };
 
 
-        window.G_PlaningPokerController.GetRoomInfo(props.RoomInfo.Name, props.UserInfo.UserId, getRoomInfo);
+        window.G_PlaningPokerController.GetRoomInfo(props.RoomInfo.Name, props.UserInfo.UserConnectionId, getRoomInfo);
 
     }, [props.RoomInfo.InRoom]);
 
@@ -301,7 +302,10 @@ const Room = (props: RoomProps) => {
 
             setLocalState(prevState => {
                 let newState = { ...prevState };
-                newState.UsersList.push(us);
+                var existUser = GetUserById(newState.UsersList,dataTyped.id);
+                if(!existUser){
+                    newState.UsersList.push(us);
+                }
 
                 return newState;
             });
@@ -347,6 +351,8 @@ const Room = (props: RoomProps) => {
             if (userId == props.UserInfo.UserId) {
                 alert("you kicked or leave");//TODO может как то получше сделать, и хорошо бы без перезагрузки\редиректа
                 window.location.href = "/planing-poker";
+                props.ClearUserId();
+                
                 return;
             }
 
@@ -901,7 +907,7 @@ const Room = (props: RoomProps) => {
 
             };
             // console.log(JSON.stringify(props));
-            window.G_PlaningPokerController.GetUsersIsRoom(props.RoomInfo.Name, props.UserInfo.UserId, loadedUsers);
+            window.G_PlaningPokerController.GetUsersIsRoom(props.RoomInfo.Name, props.UserInfo.UserConnectionId, loadedUsers);
         };
 
 

@@ -91,4 +91,11 @@
 .planing-poker-left-one-section {
     background-color: white;
     border-radius: 20px;
+    padding-left: 10px;
+}
+
+
+.stories-data-list{
+    max-height: 500px;
+    overflow: auto;
 }

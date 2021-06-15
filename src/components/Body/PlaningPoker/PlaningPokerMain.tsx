@@ -70,7 +70,7 @@ const PlaningPokerMain = () => {
         // alert("PlaningPokerMain");
         // hubConnection.start();
 
-        hubConnection.on("NotifyFromServer", function (data) {
+        hubConnection.on("PlaningNotifyFromServer", function (data) {
             let alert = new AlertData();
             alert.Text = data.text;
             alert.Type = data.status;
@@ -158,6 +158,15 @@ const PlaningPokerMain = () => {
         // let newState = { ...localState };
         // newState.MyHubConnection = hubConnection;
         // setLocalState(newState);
+        return function cleanUp() {
+            hubConnection.off("ConnectedToRoomError");
+            hubConnection.off("EnteredInRoom");
+            hubConnection.off("PlaningNotifyFromServer");
+            hubConnection.off("");
+            
+        };
+
+
     }, []);
 
 

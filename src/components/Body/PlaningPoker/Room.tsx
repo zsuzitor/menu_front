@@ -302,8 +302,8 @@ const Room = (props: RoomProps) => {
 
             setLocalState(prevState => {
                 let newState = { ...prevState };
-                var existUser = GetUserById(newState.UsersList,dataTyped.id);
-                if(!existUser){
+                var existUser = GetUserById(newState.UsersList, dataTyped.id);
+                if (!existUser) {
                     newState.UsersList.push(us);
                 }
 
@@ -352,7 +352,7 @@ const Room = (props: RoomProps) => {
                 alert("you kicked or leave");//TODO может как то получше сделать, и хорошо бы без перезагрузки\редиректа
                 window.location.href = "/planing-poker";
                 props.ClearUserId();
-                
+
                 return;
             }
 
@@ -416,7 +416,7 @@ const Room = (props: RoomProps) => {
         });
 
 
-        props.MyHubConnection.on("UserStatusChanged", function (userId, changeType, role) {
+        props.MyHubConnection.on("UserRoleChanged", function (userId, changeType, role) {
             if (!userId) {
                 return;
             }
@@ -648,7 +648,21 @@ const Room = (props: RoomProps) => {
 
 
 
+        return function cleanUp() {
+            props.MyHubConnection.off("MovedStoryToComplete");
+            props.MyHubConnection.off("DeletedStory");
+            props.MyHubConnection.off("CurrentStoryChanged");
+            props.MyHubConnection.off("NewCurrentStory");
+            props.MyHubConnection.off("AddedNewStory");
+            props.MyHubConnection.off("VoteEnd");
+            props.MyHubConnection.off("VoteStart");
+            props.MyHubConnection.off("UserRoleChanged");
+            props.MyHubConnection.off("VoteChanged");
+            props.MyHubConnection.off("UserLeaved");
+            props.MyHubConnection.off("UserNameChanged");
+            props.MyHubConnection.off("NewUserInRoom");
 
+        };
     }, []);
 
 

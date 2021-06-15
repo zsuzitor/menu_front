@@ -330,13 +330,15 @@ const StoriesSection = (props: StoriesSectionProp) => {
                 });
             }} type="checkbox"></input>
             <div>
-                {props.Stories.filter(x => x.Completed === storiesState.ShowOnlyCompleted).map(x => <div key={x.Id}>
-                    <p>Id: {x.Id}</p>
-                    <p>Название: {x.Name}</p>
-                    <p>Описание: {x.Description}</p>
-                    {adminButtonInList(x.Id)}
-                    <hr />
-                </div>)}
+                <div className="stories-data-list">
+                    {props.Stories.filter(x => x.Completed === storiesState.ShowOnlyCompleted).map(x => <div key={x.Id}>
+                        <p>Id: {x.Id}</p>
+                        <p>Название: {x.Name}</p>
+                        <p>Описание: {x.Description}</p>
+                        {adminButtonInList(x.Id)}
+                        <hr />
+                    </div>)}
+                </div>
                 <div>
                     <button className="btn btn-primary" onClick={() => alert("todo")}>Загрузить прошлые</button>
                 </div>
@@ -359,6 +361,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
             {currentStoryDescriptionRender()}
 
         </div>
+        <div className="padding-10-top"></div>
         <div>
             {storiesListRender()}
         </div>

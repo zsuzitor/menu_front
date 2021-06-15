@@ -72,7 +72,10 @@ let Index = (props: IndexProps) => {
 
 
 
+        return function cleanUp() {
+            props.MyHubConnection.off("RoomNotCreated");
 
+        };
     }, []);
 
 

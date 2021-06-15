@@ -33,13 +33,13 @@ const UserInList = (props: UserInListProp) => {
 
 
 
-    const addNewStatusToUser = () => {
-        props.MyHubConnection.send("AddNewStatusToUser", props.RoomName, props.User.Id, selectedEditRole);
+    const addNewRoleToUser = () => {
+        props.MyHubConnection.send("AddNewRoleToUser", props.RoomName, props.User.Id, selectedEditRole);
 
     }
 
-    const removeStatusUser = () => {
-        props.MyHubConnection.send("RemoveStatusUser", props.RoomName, props.User.Id, selectedEditRole);
+    const removeRoleUser = () => {
+        props.MyHubConnection.send("RemoveRoleUser", props.RoomName, props.User.Id, selectedEditRole);
 
     }
 
@@ -69,9 +69,9 @@ const UserInList = (props: UserInListProp) => {
                 <option value={UserRoles.Observer}>{UserRoles.Observer}</option>
             </select>
             <button className="btn btn-success"
-                onClick={() => addNewStatusToUser()}>Добавить статус</button>
+                onClick={() => addNewRoleToUser()}>Добавить роль</button>
             <button className="btn btn-danger"
-                onClick={() => removeStatusUser()}>Удалить статус</button>
+                onClick={() => removeRoleUser()}>Удалить роль</button>
         </div>
     }
 

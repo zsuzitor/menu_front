@@ -175,6 +175,18 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
 
+    const completedStoryInfo = (story: Story) => {
+        if (!storiesState.ShowOnlyCompleted) {
+            return <div></div>
+        }
+
+        return <div>
+            <p>Дата оценки: {story.Date}</p>
+            <p>Оценка: {story.Vote + ""}</p>
+        </div>
+    }
+
+
 
     const currentStoryDescriptionRender = () => {
         if (props.CurrentStoryId < 0) {
@@ -265,7 +277,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
         //todo как то норм назвать
         let addNewForm = <div></div>
         let adminButtonNotInList = <div></div>
-        if (props.IsAdmin) {
+        if (props.IsAdmin && !storiesState.ShowOnlyCompleted) {
             adminButtonInList = (id: number) => {
                 return <div>
                     <button className="btn btn-success" onClick={() => props.MakeCurrentStory(id)}>Сделать текущей</button>
@@ -331,10 +343,14 @@ const StoriesSection = (props: StoriesSectionProp) => {
             }} type="checkbox"></input>
             <div>
                 <div className="stories-data-list">
-                    {props.Stories.filter(x => x.Completed === storiesState.ShowOnlyCompleted).map(x => <div key={x.Id}>
+                    {props.Stories.filter(x => x.Completed === storiesState.ShowOnlyCompleted).map(x => <div
+                        className={"planing-story-in-list " + (x.Completed ? "completed-story" : "not-completed-story")}
+                        key={x.Id}>
                         <p>Id: {x.Id}</p>
                         <p>Название: {x.Name}</p>
                         <p>Описание: {x.Description}</p>
+                        {completedStoryInfo(x)}
+
                         {adminButtonInList(x.Id)}
                         <hr />
                     </div>)}

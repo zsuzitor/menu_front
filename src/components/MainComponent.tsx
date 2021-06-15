@@ -76,36 +76,40 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
         let storedAlert = new AlertDataStored();
         storedAlert.FillByAlertData(alert);
 
-        let newState = { ...this.state };
-        // let maxKey = Math.max.apply(Math, newState.AbsoluteAlerts.map(function (el) { return el.Key; }));
-        // if ((!maxKey && maxKey !== 0) || maxKey < 0) {
-        //     maxKey = 0;
-        // }
-        // else {
-        //     maxKey++;
-        // }
-        storedAlert.Key = ++newState.MaxIdMainAlert;
-        newState.AbsoluteAlerts.push(storedAlert);
-        this.setState(newState);
+
+        this.setState(prevState => {
+            let newState = { ...prevState };
+
+            storedAlert.Key = ++newState.MaxIdMainAlert;
+            newState.AbsoluteAlerts.push(storedAlert);
+            if (alert.Timeout) {
+                setTimeout(() => {
+                    this.RemoveMainALert(storedAlert.Key);
+                }, alert.Timeout);
+            }
+            return newState;
+        });
     }
 
 
     RemoveMainALert(alertId: number) {
-        let newState = { ...this.state };
-        // if (newState.AbsoluteAlerts.length == 0) {
-        //     newState.MaxIdMainAlert = 0;
-        // }
 
-        for (let i = 0; i < newState.AbsoluteAlerts.length; ++i) {
-            if (newState.AbsoluteAlerts[i].Key == alertId) {
-                newState.AbsoluteAlerts.splice(i, 1);
-                if (newState.AbsoluteAlerts.length == 0) {
-                    newState.MaxIdMainAlert = 0;
+
+        this.setState(prevState => {
+            let newState = { ...prevState };
+            for (let i = 0; i < newState.AbsoluteAlerts.length; ++i) {
+                if (newState.AbsoluteAlerts[i].Key == alertId) {
+                    newState.AbsoluteAlerts.splice(i, 1);
+                    if (newState.AbsoluteAlerts.length == 0) {
+                        newState.MaxIdMainAlert = 0;
+                    }
+                    // this.setState(newState);
+                    break;
                 }
-                this.setState(newState);
-                return;
             }
-        }
+
+            return newState;
+        });
 
 
     }
@@ -157,7 +161,7 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
         }
 
         window.G_UsersController.GetShortestUSerInfo(success);
-       
+
 
         //TODO запрос для определения?
 

@@ -720,6 +720,7 @@ const Room = (props: RoomProps) => {
             let alert = new AlertData();
             alert.Text = "У обсерверов нет прав голосовать";
             alert.Type = AlertTypeEnum.Error;
+            alert.Timeout = 5000;
             window.G_AddAbsoluteAlertToState(alert);
             return;
         }

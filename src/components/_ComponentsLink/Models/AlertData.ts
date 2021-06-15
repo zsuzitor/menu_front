@@ -20,6 +20,12 @@ export class AlertData {
     Key?: number;
     Text: string;
     Type: AlertTypeEnum;
+    Timeout?: number;
+
+    constructor() {
+
+        this.Timeout = null;
+    }
 
     GetByErrorBack(data: OneErrorBack): AlertData[] {
         let res: AlertData[] = [];

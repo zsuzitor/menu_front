@@ -77,7 +77,7 @@ const PlaningPokerMain = () => {
             window.G_AddAbsoluteAlertToState(alert);
         });
 
-        hubConnection.on("EnteredInRoom", function (roomUserId) {
+        hubConnection.on("EnteredInRoom", function (roomUserId, loginnedInMainApp: boolean) {
             // window.history.pushState(null, "Room", "/");
             // window.history.pushState(null, "Room", "/planing-poker/room");
             // let newState = { ...localState };
@@ -87,6 +87,8 @@ const PlaningPokerMain = () => {
                 let newState = { ...prevState };
                 newState.RoomInfo.InRoom = true;
                 newState.User.UserId = roomUserId;
+                newState.User.LoginnedInMainApp = loginnedInMainApp;
+
                 newState.RoomInfo.Password = "";
                 return newState;
             });
@@ -117,6 +119,11 @@ const PlaningPokerMain = () => {
                 window.location.href = "/planing-poker/" + roomName;
             }
             return;
+        });
+
+
+        hubConnection.on("NeedRefreshTokens", function () {
+            window.G_AuthenticateController.RefreshAccessToken(true, null);
         });
 
 
@@ -162,8 +169,8 @@ const PlaningPokerMain = () => {
             hubConnection.off("ConnectedToRoomError");
             hubConnection.off("EnteredInRoom");
             hubConnection.off("PlaningNotifyFromServer");
-            hubConnection.off("");
-            
+            hubConnection.off("NeedRefreshTokens");
+
         };
 
 

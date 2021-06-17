@@ -8,7 +8,7 @@ export interface IAuthenticateController {
     Login: (model: LoginModel, onSuccess: OnlyError) => void;//(success: OnlyError) => void;
     Register: (model: RegisterModel, onSuccess: OnlyError) => void;
     Logout: () => void;
-    RefreshAccessToken: () => void;
+    RefreshAccessToken: (notRedirectWhenNotAuth: boolean, callBack?: () => void) => void;
 
 }
 
@@ -88,8 +88,8 @@ export class AuthenticateController implements IAuthenticateController {
     Logout() {
         alert('not inplemented');
     }
-    RefreshAccessToken() {
-        alert('not inplemented');
+    RefreshAccessToken(notRedirectWhenNotAuth: boolean, callBack?: () => void) {
+        G_AjaxHelper.TryRefreshToken(notRedirectWhenNotAuth, callBack);
     }
 }
 

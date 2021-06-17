@@ -43,7 +43,7 @@ export declare interface IAjaxInputObject {
 }
 
 export interface IAjaxHelper {
-    TryRefreshToken(required: boolean, callBack: any): void;
+    TryRefreshToken(required: boolean, callBack?: () => void): void;
     GoAjaxRequest(obj: IAjaxInputObject, fileLoad?: boolean): Promise<any>;
     TrySend(ajaxObj: JQuery.AjaxSettings): void;
 }
@@ -52,7 +52,7 @@ export interface IAjaxHelper {
 
 export class AjaxHelper implements IAjaxHelper {
 
-    public TryRefreshToken(notRedirectWhenNotAuth: boolean, callBack?: any): void {
+    public TryRefreshToken(notRedirectWhenNotAuth: boolean, callBack?: () => void): void {
         this.GoAjaxRequest({
             Data: {},
             Type: "POST",

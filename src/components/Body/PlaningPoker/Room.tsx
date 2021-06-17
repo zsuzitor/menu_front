@@ -625,16 +625,20 @@ const Room = (props: RoomProps) => {
 
 
 
-        props.MyHubConnection.on("MovedStoryToComplete", function (id: number) {
+        props.MyHubConnection.on("MovedStoryToComplete", function (newData: IStoryReturn) {
+            if (!newData) {
+                return;
+            }
 
             setStoriesState(prevState => {
                 let newState = { ...prevState };
-                let story = storiesHelper.GetStoryById(newState.Stories, id);
+                let story = storiesHelper.GetStoryById(newState.Stories, newData.id);
 
 
                 if (story) {
-                    story.Completed = true;
-                    if (newState.CurrentStoryId === id) {
+                    story.Completed = newData.completed;
+                    story.Date = newData.date;
+                    if (newState.CurrentStoryId === newData.id) {
                         newState.CurrentStoryId = -1;
                     }
 
@@ -846,6 +850,8 @@ const Room = (props: RoomProps) => {
             return <div>
                 <button className="btn btn-primary" onClick={() => tryStartVote()}>Начать голосование</button>
                 <button className="btn btn-primary" onClick={() => tryEndVote()}>Закончить голосование</button>
+                <button className="btn btn-danger" onClick={() => alert("TODO + переместить куда нибудь")}>Сохранить комнату</button>
+                <button className="btn btn-danger" onClick={() => alert("TODO + переместить куда нибудь")}>Удалить комнату</button>
             </div>
         }
 
@@ -947,16 +953,24 @@ const Room = (props: RoomProps) => {
 
 
 
+    const renderNotAuthMessage = () => {
+        if (props.UserInfo.LoginnedInMainApp) {
+            return <div></div>
+        }
 
+        return <div className="planing-room-not-auth"
+            title={"при обновлении страницы, вы подключаетесь как новый пользователь(исключение-вы авторизованы в основном приложении)." +
+                "при создании комнаты неавторизованным пользователем, комната не будет сохраняться"}>
+        </div>
+    }
 
 
 
     return <div className="container">
         <div className="padding-10-top"></div>
-        <h1>Room {props.RoomInfo.Name}</h1>
-        <p>
-            при обновлении страницы, вы подключаетесь как новый пользователь(исключение-вы авторизованы в основном приложении(TODO)).
-        </p>
+        <h1>Room: {props.RoomInfo.Name}</h1>
+        {renderNotAuthMessage()}
+
         <div className="row">
             {/* <div className="persent-100-width"> */}
             <div className="planit-room-left-part col-12 col-md-9">

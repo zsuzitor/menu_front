@@ -200,11 +200,7 @@ const Room = (props: RoomProps) => {
 
     const currentUserIsAdmin = CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId);
 
-    // const [roomIsGoodState, setRoomIsGoodState] = useState(false);
-
-    // console.log("room");
-    // console.log(localState);
-
+  
     useEffect(() => {
         if (!props.RoomInfo.InRoom) {
             return;
@@ -224,16 +220,7 @@ const Room = (props: RoomProps) => {
                     us.FillByBackModel(x);
                     return us;
                 });
-                // let newState = { ...localState };
-                // //реинициализировать нельзя, почему то отваливается
-                // newState.UsersList.splice(0, newState.UsersList.length);
-                // newState.UsersList.push(...newUsersData);
-                // // newState.RoomStatus = data.status;
-                // // newState.UsersList = newUsersData;
-                // setRoomStatusState(data.room.status);
-
-                // fillVoteInfo(newState, data.end_vote_info);
-                // setLocalState(newState);
+               
 
                 setRoomStatusState(prevState => {
                     // let newState = { ...prevState };
@@ -245,23 +232,14 @@ const Room = (props: RoomProps) => {
                     let newState = { ...prevState };
                     newState.UsersList.splice(0, newState.UsersList.length);
                     newState.UsersList.push(...newUsersData);
-                    // newState.RoomStatus = data.status;
-                    // newState.UsersList = newUsersData;
-
+                   
 
                     fillVoteInfo(newState, data.end_vote_info);
 
                     return newState;
                 });
 
-                // let newStoriesState = { ...storiesState };
-                // newStoriesState.CurrentStoryId = data.room.current_story_id;
-                // newStoriesState.Stories = data.room.actual_stories.map(x => {
-                //     let st = new Story();
-                //     st.FillByBackModel(x);
-                //     return st;
-                // });
-                // setStoriesState(newStoriesState);
+              
                 setStoriesState(prevState => {
                     let newStoriesState = { ...prevState };
                     newStoriesState.CurrentStoryId = data.room.current_story_id;
@@ -296,9 +274,7 @@ const Room = (props: RoomProps) => {
             let dataTyped = data as IUserInRoomReturn;
             let us = new UserInRoom();
             us.FillByBackModel(dataTyped);
-            // let newState = { ...localState };
-            // newState.UsersList.push(us);
-            // setLocalState(newState);
+          
 
             setLocalState(prevState => {
                 let newState = { ...prevState };
@@ -309,8 +285,7 @@ const Room = (props: RoomProps) => {
 
                 return newState;
             });
-            //         console.log("newuser");
-            // console.log(newState);
+           
         });
 
 
@@ -320,14 +295,6 @@ const Room = (props: RoomProps) => {
                 return;
             }
 
-            // let newState = { ...localState };
-            // let user = GetUserById(newState.UsersList, userId);
-            // if (!user) {
-            //     return;
-            // }
-
-            // user.Name = newUserName;
-            // setLocalState(newState);
 
             setLocalState(prevState => {
                 let newState = { ...prevState };
@@ -343,35 +310,34 @@ const Room = (props: RoomProps) => {
         });
 
 
-        props.MyHubConnection.on("UserLeaved", function (userId) {
-            if (!userId) {
+        props.MyHubConnection.on("UserLeaved", function (usersId: string[]) {
+            if (!usersId) {
                 return;
             }
 
-            if (userId == props.UserInfo.UserId) {
-                alert("you kicked or leave");//TODO может как то получше сделать, и хорошо бы без перезагрузки\редиректа
-                window.location.href = "/planing-poker";
-                props.ClearUserId();
+            usersId.forEach(x => {
+                if (x == props.UserInfo.UserId) {
+                    alert("you kicked or leave");//TODO может как то получше сделать, и хорошо бы без перезагрузки\редиректа
+                    window.location.href = "/planing-poker";
+                    props.ClearUserId();//todo тут наверное стоит еще что то чистить
 
-                return;
-            }
+                    return;
+                }
+            });
 
-            // let newState = { ...localState };
-            // let userIndex = GetUserIndexById(newState.UsersList, userId);
-            // if (userIndex < 0) {
-            //     return;
-            // }
 
-            // newState.UsersList.splice(userIndex, 1);
-            // setLocalState(newState);
+
+         
             setLocalState(prevState => {
                 let newState = { ...prevState };
-                let userIndex = GetUserIndexById(newState.UsersList, userId);
-                if (userIndex < 0) {
-                    return newState;
-                }
+                usersId.forEach(x => {
+                    let userIndex = GetUserIndexById(newState.UsersList, x);
+                    if (userIndex < 0) {
+                        return newState;
+                    }
 
-                newState.UsersList.splice(userIndex, 1);
+                    newState.UsersList.splice(userIndex, 1);
+                });
 
                 return newState;
             });
@@ -383,20 +349,7 @@ const Room = (props: RoomProps) => {
                 return;
             }
 
-            // let newState = { ...localState };
-            // let user = GetUserById(newState.UsersList, userId);
-            // if (!user) {
-            //     return;
-            // }
-
-            // user.HasVote = true;
-
-            // if (!isNaN(vote)) {
-            //     user.Vote = vote;
-            // }
-            // // else{
-            // // }
-            // setLocalState(newState);
+          
 
             setLocalState(prevState => {
                 let newState = { ...prevState };
@@ -422,25 +375,6 @@ const Room = (props: RoomProps) => {
             }
 
 
-            // let newState = { ...localState };
-            // let user = GetUserById(newState.UsersList, userId);
-            // if (!user) {
-            //     return;
-            // }
-
-            // if (changeType === 1) {
-            //     //добавлен
-            //     user.Roles.push(role);
-            // }
-            // else {
-            //     //удален
-            //     let index = user.Roles.findIndex(x => x === role);
-            //     if (index >= 0) {
-            //         user.Roles.splice(index, 1);
-            //     }
-            // }
-
-            // setLocalState(newState);
 
             setLocalState(prevState => {
                 let newState = { ...prevState };
@@ -470,21 +404,10 @@ const Room = (props: RoomProps) => {
         props.MyHubConnection.on("VoteStart", function () {
 
 
-            // let newState = { ...localState };
-            // newState.RoomStatus = RoomSatus.AllCanVote;
-            // newState.SelectedVoteCard = -1;
-            // setSelectedVoteCard(-1);
             setSelectedVoteCard(prevState => {
                 return -1;
             });
-            // newState.UsersList.forEach(x => {
-            //     x.Vote = null;
-            //     x.HasVote = false;
-            // });
-            // newState.VoteInfo = new VoteInfo();
-
-            // setLocalState(newState);
-
+         
             setLocalState(prevState => {
                 let newState = { ...prevState };
                 newState.UsersList.forEach(x => {
@@ -529,12 +452,7 @@ const Room = (props: RoomProps) => {
 
 
         props.MyHubConnection.on("AddedNewStory", function (data: IStoryReturn) {
-            // let newState = { ...storiesState };
-            // let newStory = new Story();
-            // newStory.FillByBackModel(data);
-            // newState.Stories.push(newStory);
-            // setStoriesState(newState);
-
+           
             setStoriesState(prevState => {
                 let newState = { ...prevState };
                 let newStory = new Story();
@@ -546,9 +464,7 @@ const Room = (props: RoomProps) => {
 
         props.MyHubConnection.on("NewCurrentStory", function (id: number) {
             //изменении в целом объекта текущей истории
-            // let newState = { ...storiesState };
-            // newState.CurrentStoryId = id;
-            // setStoriesState(newState);
+           
 
             setStoriesState(prevState => {
                 let newState = { ...prevState };
@@ -559,18 +475,7 @@ const Room = (props: RoomProps) => {
 
         props.MyHubConnection.on("CurrentStoryChanged", function (id: number, newName: string, newDescription: string) {
             //изменение данных текущей истории
-            // let newState = { ...storiesState };
-            // let story = storiesHelper.GetStoryById(newState.Stories, id);
-
-            // if (story) {
-            //     newState.CurrentStoryId = id;
-            //     story.Name = newName;
-            //     story.Description = newDescription;
-            //     setStoriesState(newState);
-            //     if (storiesState.ClearTmpFuncForStories) {
-            //         storiesState.ClearTmpFuncForStories();
-            //     }
-            // }
+           
 
             setStoriesState(prevState => {
                 let newState = { ...prevState };
@@ -582,9 +487,7 @@ const Room = (props: RoomProps) => {
                     newState.CurrentStoryId = id;
                     story.Name = newName;
                     story.Description = newDescription;
-                    // if (storiesState.ClearTmpFuncForStories) {
-                    //     storiesState.ClearTmpFuncForStories();
-                    // }
+                   
                 }
                 return newState;
             });
@@ -593,19 +496,6 @@ const Room = (props: RoomProps) => {
 
         props.MyHubConnection.on("DeletedStory", function (id: number) {
             //изменение данных текущей истории
-            // let newState = { ...storiesState };
-            // let storyIndex = storiesHelper.GetStoryIndexById(newState.Stories, id);
-            // if (storyIndex < 0) {
-            //     return;
-            // }
-
-            // newState.Stories.splice(storyIndex, 1);
-            // if (newState.CurrentStoryId == id) {
-            //     newState.CurrentStoryId = -1;
-            // }
-
-            // setStoriesState(newState);
-
 
             setStoriesState(prevState => {
                 let newState = { ...prevState };
@@ -734,9 +624,6 @@ const Room = (props: RoomProps) => {
             return;
         }
 
-
-        // newState.SelectedVoteCard = +voteCardBlock.target.dataset.vote;
-        // setSelectedVoteCard(+voteCardBlock.target.dataset.vote);
         setSelectedVoteCard(prevState => {
             return +voteCardBlock.target.dataset.vote;
         });
@@ -790,39 +677,26 @@ const Room = (props: RoomProps) => {
 
     const tryEndVote = () => {
         props.MyHubConnection.send("EndVote", props.RoomInfo.Name);
-
-
     }
-
-
-
-
 
 
     const makeCurrentStory = (id: number) => {
-        props.MyHubConnection.send("MakeCurrentStory",
-            props.RoomInfo.Name, id);
+        props.MyHubConnection.send("MakeCurrentStory", props.RoomInfo.Name, id);
     }
 
     const deleteStory = (id: number) => {
-        props.MyHubConnection.send("DeleteStory",
-            props.RoomInfo.Name, id);
+        props.MyHubConnection.send("DeleteStory", props.RoomInfo.Name, id);
+    }
+
+    const saveRoom = () => {
+        props.MyHubConnection.send("SaveRoom", props.RoomInfo.Name).then(() => alert("Сохранено"));
+    }
+
+    const deleteRoom = () => {
+        props.MyHubConnection.send("DeleteRoom", props.RoomInfo.Name);
     }
 
 
-
-    // const setClearTmpFuncForStories = (func: () => void) => {
-    //     // let newState = { ...storiesState };
-    //     // newState.ClearTmpFuncForStories = func;
-    //     // setStoriesState(newState);
-
-    //     setStoriesState(prevState => {
-    //         let newState = { ...prevState };
-    //         newState.ClearTmpFuncForStories = func;
-    //         return newState;
-    //     });
-
-    // }
 
     const currentStoryDescriptionOnChange = (str: string) => {
         setStoriesState(prevState => {
@@ -842,16 +716,14 @@ const Room = (props: RoomProps) => {
 
 
 
-
-
     const roomMainActionButton = () => {
         // let isAdmin = CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId);
         if (currentUserIsAdmin) {
             return <div>
                 <button className="btn btn-primary" onClick={() => tryStartVote()}>Начать голосование</button>
                 <button className="btn btn-primary" onClick={() => tryEndVote()}>Закончить голосование</button>
-                <button className="btn btn-danger" onClick={() => alert("TODO + переместить куда нибудь")}>Сохранить комнату</button>
-                <button className="btn btn-danger" onClick={() => alert("TODO + переместить куда нибудь")}>Удалить комнату</button>
+                <button className="btn btn-danger" onClick={() => saveRoom()}>Сохранить комнату</button>
+                <button className="btn btn-danger" onClick={() => deleteRoom()}>Удалить комнату</button>
             </div>
         }
 
@@ -910,12 +782,7 @@ const Room = (props: RoomProps) => {
                         us.FillByBackModel(x);
                         return us;
                     });
-                    // let newState = { ...localState };
-                    // //реинициализировать нельзя, почему то отваливается
-                    // newState.UsersList.splice(0, newState.UsersList.length);
-                    // newState.UsersList.push(...newUsersData);
-                    // // newState.UsersList = newUsersData;
-                    // setLocalState(newState);
+                  
 
                     setLocalState(prevState => {
                         let newState = { ...prevState };

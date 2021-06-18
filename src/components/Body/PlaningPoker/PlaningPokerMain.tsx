@@ -66,9 +66,7 @@ const PlaningPokerMain = () => {
 
     //componentdidmount, должен вызваться уже когда childs отрендерятся
     useEffect(() => {
-        //  console.log("PlaningPokerMain");
-        // alert("PlaningPokerMain");
-        // hubConnection.start();
+        
 
         hubConnection.on("PlaningNotifyFromServer", function (data) {
             let alert = new AlertData();
@@ -78,11 +76,7 @@ const PlaningPokerMain = () => {
         });
 
         hubConnection.on("EnteredInRoom", function (roomUserId, loginnedInMainApp: boolean) {
-            // window.history.pushState(null, "Room", "/");
-            // window.history.pushState(null, "Room", "/planing-poker/room");
-            // let newState = { ...localState };
-            // newState.RoomInfo.InRoom = true;
-            // setLocalState(newState);
+            
             setLocalState(prevState => {
                 let newState = { ...prevState };
                 newState.RoomInfo.InRoom = true;
@@ -162,9 +156,7 @@ const PlaningPokerMain = () => {
 
 
 
-        // let newState = { ...localState };
-        // newState.MyHubConnection = hubConnection;
-        // setLocalState(newState);
+        
         return function cleanUp() {
             hubConnection.off("ConnectedToRoomError");
             hubConnection.off("EnteredInRoom");
@@ -178,25 +170,14 @@ const PlaningPokerMain = () => {
 
 
     const userNameChange = (newName: string) => {
-        // let newState = { ...localState };
-        // newState.User.UserName = newName;
-        // setLocalState(newState);
+       
         setLocalState(prevState => {
             let newState = { ...prevState };
             newState.User.UserName = newName;
 
             return newState;
         });
-        // if (localState.RoomInfo.InRoom) {
-        //     hubConnection.invoke("UserNameChange", newState.RoomInfo.Name, newName).then(dt => {
-        //         if (!dt) {
-        //             let alert = new AlertData();
-        //             alert.Text = "изменить имя не удалось";
-        //             alert.Type = AlertTypeEnum.Error;
-        //             window.G_AddAbsoluteAlertToState(alert);
-        //         }
-        //     });
-        // }
+       
     }
 
 

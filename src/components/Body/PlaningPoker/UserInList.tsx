@@ -34,12 +34,12 @@ const UserInList = (props: UserInListProp) => {
 
 
     const addNewRoleToUser = () => {
-        props.MyHubConnection.send("AddNewRoleToUser", props.RoomName, props.User.Id, selectedEditRole);
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.AddNewRoleToUser, props.RoomName, props.User.Id, selectedEditRole);
 
     }
 
     const removeRoleUser = () => {
-        props.MyHubConnection.send("RemoveRoleUser", props.RoomName, props.User.Id, selectedEditRole);
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.RemoveRoleUser, props.RoomName, props.User.Id, selectedEditRole);
 
     }
 

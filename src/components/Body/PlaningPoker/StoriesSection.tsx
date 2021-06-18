@@ -84,7 +84,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
     const changeCurrentStory = () => {
-        props.MyHubConnection.send("ChangeCurrentStory",
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.ChangeCurrentStory,
             props.RoomName, props.CurrentStoryId,
             props.CurrentStoryNameChange,
             props.CurrentStoryDescriptionChange);
@@ -122,7 +122,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
         }
 
         if (save) {
-            props.MyHubConnection.send("MakeStoryComplete", props.RoomName,
+            props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.MakeStoryComplete, props.RoomName,
                 props.CurrentStoryId);
         }
     }
@@ -206,7 +206,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
     const AddNewStory = () => {
-        props.MyHubConnection.send("AddNewStory", props.RoomName,
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.AddNewStory, props.RoomName,
             storiesState.NameForAdd, storiesState.DescriptionForAdd);
     }
 

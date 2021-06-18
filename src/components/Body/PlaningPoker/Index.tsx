@@ -61,7 +61,7 @@ let Index = (props: IndexProps) => {
         }
 
         // console.log("Index");
-        props.MyHubConnection.on("RoomNotCreated", function () {
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.RoomNotCreated, function () {
             let alert = new AlertData();
             alert.Text = "Комната не создана";
             alert.Type = 1;
@@ -73,7 +73,7 @@ let Index = (props: IndexProps) => {
 
 
         return function cleanUp() {
-            props.MyHubConnection.off("RoomNotCreated");
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.RoomNotCreated);
 
         };
     }, []);
@@ -84,11 +84,11 @@ let Index = (props: IndexProps) => {
         //этот метод вроде как  может подождать результат выполнения и как то получить ответ
         // props.MyHubConnection.invoke("CreateRoom", localState.RoomName, localState.RoomPassword, props.Username);
         //а вот этот не ждет
-        props.MyHubConnection.send("CreateRoom", props.RoomInfo.Name, props.RoomInfo.Password, props.Username);
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.CreateRoom, props.RoomInfo.Name, props.RoomInfo.Password, props.Username);
     };
 
     let enterInRoom = () => {
-        props.MyHubConnection.send("EnterInRoom", props.RoomInfo.Name, props.RoomInfo.Password, props.Username);
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.EnterInRoom, props.RoomInfo.Name, props.RoomInfo.Password, props.Username);
     }
 
 

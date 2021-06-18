@@ -66,17 +66,17 @@ const PlaningPokerMain = () => {
 
     //componentdidmount, должен вызваться уже когда childs отрендерятся
     useEffect(() => {
-        
 
-        hubConnection.on("PlaningNotifyFromServer", function (data) {
+
+        hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.PlaningNotifyFromServer, function (data) {
             let alert = new AlertData();
             alert.Text = data.text;
             alert.Type = data.status;
             window.G_AddAbsoluteAlertToState(alert);
         });
 
-        hubConnection.on("EnteredInRoom", function (roomUserId, loginnedInMainApp: boolean) {
-            
+        hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.EnteredInRoom, function (roomUserId, loginnedInMainApp: boolean) {
+
             setLocalState(prevState => {
                 let newState = { ...prevState };
                 newState.RoomInfo.InRoom = true;
@@ -103,7 +103,7 @@ const PlaningPokerMain = () => {
         });
 
 
-        hubConnection.on("ConnectedToRoomError", function () {
+        hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.ConnectedToRoomError, function () {
             let alert = new AlertData();
             alert.Text = "подключение не удалось";
             alert.Type = 1;
@@ -116,7 +116,7 @@ const PlaningPokerMain = () => {
         });
 
 
-        hubConnection.on("NeedRefreshTokens", function () {
+        hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.NeedRefreshTokens, function () {
             window.G_AuthenticateController.RefreshAccessToken(true, null);
         });
 
@@ -127,7 +127,7 @@ const PlaningPokerMain = () => {
         //Update, не стоит тк они актуальны только в самих компонентах
         hubConnection.start()
             .then(function () {
-                hubConnection.invoke("GetConnectionId")
+                hubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.GetConnectionId)
                     .then(function (connectionId) {
                         // let newState = { ...localState };
                         // newState.User.UserId = connectionId;
@@ -156,12 +156,12 @@ const PlaningPokerMain = () => {
 
 
 
-        
+
         return function cleanUp() {
-            hubConnection.off("ConnectedToRoomError");
-            hubConnection.off("EnteredInRoom");
-            hubConnection.off("PlaningNotifyFromServer");
-            hubConnection.off("NeedRefreshTokens");
+            hubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.ConnectedToRoomError);
+            hubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.EnteredInRoom);
+            hubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.PlaningNotifyFromServer);
+            hubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NeedRefreshTokens);
 
         };
 
@@ -170,14 +170,14 @@ const PlaningPokerMain = () => {
 
 
     const userNameChange = (newName: string) => {
-       
+
         setLocalState(prevState => {
             let newState = { ...prevState };
             newState.User.UserName = newName;
 
             return newState;
         });
-       
+
     }
 
 

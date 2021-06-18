@@ -151,7 +151,7 @@ const Room = (props: RoomProps) => {
 
     useEffect(() => {
         if (props.HubConnected && props.RoomInfo.Name && !props.RoomInfo.InRoom) {
-            props.MyHubConnection.send("EnterInRoom", props.RoomInfo.Name, props.RoomInfo.Password, props.UserInfo.UserName);
+            props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.EnterInRoom, props.RoomInfo.Name, props.RoomInfo.Password, props.UserInfo.UserName);
         }
     }, [props.HubConnected]);
 
@@ -200,7 +200,7 @@ const Room = (props: RoomProps) => {
 
     const currentUserIsAdmin = CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId);
 
-  
+
     useEffect(() => {
         if (!props.RoomInfo.InRoom) {
             return;
@@ -220,7 +220,7 @@ const Room = (props: RoomProps) => {
                     us.FillByBackModel(x);
                     return us;
                 });
-               
+
 
                 setRoomStatusState(prevState => {
                     // let newState = { ...prevState };
@@ -232,14 +232,14 @@ const Room = (props: RoomProps) => {
                     let newState = { ...prevState };
                     newState.UsersList.splice(0, newState.UsersList.length);
                     newState.UsersList.push(...newUsersData);
-                   
+
 
                     fillVoteInfo(newState, data.end_vote_info);
 
                     return newState;
                 });
 
-              
+
                 setStoriesState(prevState => {
                     let newStoriesState = { ...prevState };
                     newStoriesState.CurrentStoryId = data.room.current_story_id;
@@ -265,7 +265,7 @@ const Room = (props: RoomProps) => {
     useEffect(() => {
 
 
-        props.MyHubConnection.on("NewUserInRoom", function (data) {
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.NewUserInRoom, function (data) {
             if (!data) {
                 return;
             }
@@ -274,7 +274,7 @@ const Room = (props: RoomProps) => {
             let dataTyped = data as IUserInRoomReturn;
             let us = new UserInRoom();
             us.FillByBackModel(dataTyped);
-          
+
 
             setLocalState(prevState => {
                 let newState = { ...prevState };
@@ -285,12 +285,12 @@ const Room = (props: RoomProps) => {
 
                 return newState;
             });
-           
+
         });
 
 
 
-        props.MyHubConnection.on("UserNameChanged", function (userId, newUserName) {
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.UserNameChanged, function (userId, newUserName) {
             if (!userId) {
                 return;
             }
@@ -310,7 +310,7 @@ const Room = (props: RoomProps) => {
         });
 
 
-        props.MyHubConnection.on("UserLeaved", function (usersId: string[]) {
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.UserLeaved, function (usersId: string[]) {
             if (!usersId) {
                 return;
             }
@@ -327,7 +327,7 @@ const Room = (props: RoomProps) => {
 
 
 
-         
+
             setLocalState(prevState => {
                 let newState = { ...prevState };
                 usersId.forEach(x => {
@@ -344,12 +344,12 @@ const Room = (props: RoomProps) => {
         });
 
 
-        props.MyHubConnection.on("VoteChanged", function (userId, vote) {
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.VoteChanged, function (userId, vote) {
             if (!userId) {
                 return;
             }
 
-          
+
 
             setLocalState(prevState => {
                 let newState = { ...prevState };
@@ -369,7 +369,7 @@ const Room = (props: RoomProps) => {
         });
 
 
-        props.MyHubConnection.on("UserRoleChanged", function (userId, changeType, role) {
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.UserRoleChanged, function (userId, changeType, role) {
             if (!userId) {
                 return;
             }
@@ -401,13 +401,13 @@ const Room = (props: RoomProps) => {
 
 
 
-        props.MyHubConnection.on("VoteStart", function () {
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.VoteStart, function () {
 
 
             setSelectedVoteCard(prevState => {
                 return -1;
             });
-         
+
             setLocalState(prevState => {
                 let newState = { ...prevState };
                 newState.UsersList.forEach(x => {
@@ -428,7 +428,7 @@ const Room = (props: RoomProps) => {
         });
 
 
-        props.MyHubConnection.on("VoteEnd", function (data: IEndVoteInfoReturn) {
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.VoteEnd, function (data: IEndVoteInfoReturn) {
 
             // fillVoteInfo(null, data);
             setLocalState(prevState => {
@@ -451,8 +451,8 @@ const Room = (props: RoomProps) => {
 
 
 
-        props.MyHubConnection.on("AddedNewStory", function (data: IStoryReturn) {
-           
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.AddedNewStory, function (data: IStoryReturn) {
+
             setStoriesState(prevState => {
                 let newState = { ...prevState };
                 let newStory = new Story();
@@ -462,9 +462,9 @@ const Room = (props: RoomProps) => {
             });
         });
 
-        props.MyHubConnection.on("NewCurrentStory", function (id: number) {
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.NewCurrentStory, function (id: number) {
             //изменении в целом объекта текущей истории
-           
+
 
             setStoriesState(prevState => {
                 let newState = { ...prevState };
@@ -473,9 +473,9 @@ const Room = (props: RoomProps) => {
             });
         });
 
-        props.MyHubConnection.on("CurrentStoryChanged", function (id: number, newName: string, newDescription: string) {
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.CurrentStoryChanged, function (id: number, newName: string, newDescription: string) {
             //изменение данных текущей истории
-           
+
 
             setStoriesState(prevState => {
                 let newState = { ...prevState };
@@ -487,14 +487,14 @@ const Room = (props: RoomProps) => {
                     newState.CurrentStoryId = id;
                     story.Name = newName;
                     story.Description = newDescription;
-                   
+
                 }
                 return newState;
             });
 
         });
 
-        props.MyHubConnection.on("DeletedStory", function (id: number) {
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.DeletedStory, function (id: number) {
             //изменение данных текущей истории
 
             setStoriesState(prevState => {
@@ -515,7 +515,7 @@ const Room = (props: RoomProps) => {
 
 
 
-        props.MyHubConnection.on("MovedStoryToComplete", function (newData: IStoryReturn) {
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.MovedStoryToComplete, function (newData: IStoryReturn) {
             if (!newData) {
                 return;
             }
@@ -528,6 +528,7 @@ const Room = (props: RoomProps) => {
                 if (story) {
                     story.Completed = newData.completed;
                     story.Date = newData.date;
+                    story.Vote = newData.vote;
                     if (newState.CurrentStoryId === newData.id) {
                         newState.CurrentStoryId = -1;
                     }
@@ -543,18 +544,18 @@ const Room = (props: RoomProps) => {
 
 
         return function cleanUp() {
-            props.MyHubConnection.off("MovedStoryToComplete");
-            props.MyHubConnection.off("DeletedStory");
-            props.MyHubConnection.off("CurrentStoryChanged");
-            props.MyHubConnection.off("NewCurrentStory");
-            props.MyHubConnection.off("AddedNewStory");
-            props.MyHubConnection.off("VoteEnd");
-            props.MyHubConnection.off("VoteStart");
-            props.MyHubConnection.off("UserRoleChanged");
-            props.MyHubConnection.off("VoteChanged");
-            props.MyHubConnection.off("UserLeaved");
-            props.MyHubConnection.off("UserNameChanged");
-            props.MyHubConnection.off("NewUserInRoom");
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.MovedStoryToComplete);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.DeletedStory);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.CurrentStoryChanged);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewCurrentStory);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.AddedNewStory);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.VoteEnd);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.VoteStart);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.UserRoleChanged);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.VoteChanged);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.UserLeaved);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.UserNameChanged);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewUserInRoom);
 
         };
     }, []);
@@ -567,6 +568,7 @@ const Room = (props: RoomProps) => {
         setSelectedVoteCard(prevState => {
             return -1;
         });
+
         state.UsersList.forEach(x => {
             let userFromRes = data.users_info.find(x1 => x1.id === x.Id);
             if (userFromRes) {
@@ -597,7 +599,7 @@ const Room = (props: RoomProps) => {
             return;
         }
 
-        props.MyHubConnection.send("KickUser", props.RoomInfo.Name, userId);
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.KickUser, props.RoomInfo.Name, userId);
 
 
     }
@@ -670,30 +672,30 @@ const Room = (props: RoomProps) => {
     }
 
     const tryStartVote = () => {
-        props.MyHubConnection.send("StartVote", props.RoomInfo.Name);
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.StartVote, props.RoomInfo.Name);
 
 
     }
 
     const tryEndVote = () => {
-        props.MyHubConnection.send("EndVote", props.RoomInfo.Name);
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.EndVote, props.RoomInfo.Name);
     }
 
 
     const makeCurrentStory = (id: number) => {
-        props.MyHubConnection.send("MakeCurrentStory", props.RoomInfo.Name, id);
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.MakeCurrentStory, props.RoomInfo.Name, id);
     }
 
     const deleteStory = (id: number) => {
-        props.MyHubConnection.send("DeleteStory", props.RoomInfo.Name, id);
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.DeleteStory, props.RoomInfo.Name, id);
     }
 
     const saveRoom = () => {
-        props.MyHubConnection.send("SaveRoom", props.RoomInfo.Name).then(() => alert("Сохранено"));
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.SaveRoom, props.RoomInfo.Name).then(() => alert("Сохранено"));
     }
 
     const deleteRoom = () => {
-        props.MyHubConnection.send("DeleteRoom", props.RoomInfo.Name);
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.DeleteRoom, props.RoomInfo.Name);
     }
 
 
@@ -753,7 +755,7 @@ const Room = (props: RoomProps) => {
 
 
         const changeUserName = () => {
-            props.MyHubConnection.invoke("UserNameChange", props.RoomInfo.Name, userNameLocalState).then(dt => {
+            props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.UserNameChange, props.RoomInfo.Name, userNameLocalState).then(dt => {
                 if (!dt) {
                     let alert = new AlertData();
                     alert.Text = "изменить имя не удалось";
@@ -782,7 +784,7 @@ const Room = (props: RoomProps) => {
                         us.FillByBackModel(x);
                         return us;
                     });
-                  
+
 
                     setLocalState(prevState => {
                         let newState = { ...prevState };
@@ -827,7 +829,7 @@ const Room = (props: RoomProps) => {
 
         return <div className="planing-room-not-auth"
             title={"при обновлении страницы, вы подключаетесь как новый пользователь(исключение-вы авторизованы в основном приложении)." +
-                "при создании комнаты неавторизованным пользователем, комната не будет сохраняться"}>
+                "при создании комнаты неавторизованным пользователем, комната не будет сохраняться"}>!
         </div>
     }
 

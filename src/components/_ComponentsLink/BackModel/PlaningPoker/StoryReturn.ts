@@ -3,7 +3,7 @@
 
 
 export interface IStoryReturn {
-    id: number;
+    id: string;
     name: string;
     description: string;
     vote?: number;

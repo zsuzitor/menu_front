@@ -12,6 +12,6 @@ export interface IOneRoomReturn {
     status: RoomStatus;
     // end_vote_info: IEndVoteInfoReturn;
     actual_stories: IStoryReturn[];
-    current_story_id: number;
+    current_story_id: string;
 
 }

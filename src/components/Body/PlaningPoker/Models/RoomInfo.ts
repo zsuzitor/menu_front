@@ -87,7 +87,7 @@ export class VoteInfo {
 
 
 export class Story implements MappedWithBack<IStoryReturn>{
-    Id: number;
+    Id: string;
     // InitWithServer: boolean;
     Name: string;
     Description: string;
@@ -98,7 +98,7 @@ export class Story implements MappedWithBack<IStoryReturn>{
 
 
     constructor() {
-        this.Id = 0;
+        this.Id = "";
         // this.InitWithServer = false;
         this.Name = "";
         this.Description = "";
@@ -122,8 +122,8 @@ export class Story implements MappedWithBack<IStoryReturn>{
 
 
 export class StoriesHelper {
-    GetStoryIndexById = (stories: Story[], storyId: number): number => {
-        if (storyId < 0) {
+    GetStoryIndexById = (stories: Story[], storyId: string): number => {
+        if (!storyId) {
             return -1;
         }
 
@@ -135,7 +135,7 @@ export class StoriesHelper {
         return index;
     }
 
-    GetStoryById = (stories: Story[], storyId: number): Story => {
+    GetStoryById = (stories: Story[], storyId: string): Story => {
         let index = this.GetStoryIndexById(stories, storyId);
         if (index < 0) {
             return;

@@ -9,14 +9,14 @@ import { RoomStatus, StoriesHelper, Story } from './Models/RoomInfo';
 
 class StoriesSectionProp {
     Stories: Story[];
-    CurrentStoryId: number;
+    CurrentStoryId: string;
 
     // storiesInfo:StoriesInfo;
     MyHubConnection: signalR.HubConnection;
     // HubConnected: boolean;
     // ChangeCurrentStory:;
-    MakeCurrentStory: (id: number) => void;
-    DeleteStory: (id: number) => void;
+    MakeCurrentStory: (id: string) => void;
+    DeleteStory: (id: string) => void;
     RoomName: string;
     RoomStatus: RoomStatus;
     IsAdmin: boolean;
@@ -94,7 +94,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
     const ResetCurrentStoryById = () => {
-        if (props.CurrentStoryId < 0) {
+        if (!props.CurrentStoryId) {
           
 
             props.CurrentStoryDescriptionOnChange("");
@@ -143,7 +143,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
     const currentStoryDescriptionRender = () => {
-        if (props.CurrentStoryId < 0) {
+        if (!props.CurrentStoryId) {
             return <div></div>
         }
 
@@ -211,14 +211,14 @@ const StoriesSection = (props: StoriesSectionProp) => {
     }
 
     const storiesListRender = () => {
-        let adminButtonInList = (id: number) => {
+        let adminButtonInList = (id: string) => {
             return <Fragment></Fragment>
         };
         //todo как то норм назвать
         let addNewForm = <div></div>
         let adminButtonNotInList = <div></div>
         if (props.IsAdmin && !storiesState.ShowOnlyCompleted) {
-            adminButtonInList = (id: number) => {
+            adminButtonInList = (id: string) => {
                 return <div>
                     <button className="btn btn-success" onClick={() => props.MakeCurrentStory(id)}>Сделать текущей</button>
                     <button className="btn btn-danger" onClick={() => props.DeleteStory(id)}>Удалить</button>

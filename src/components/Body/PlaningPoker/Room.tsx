@@ -701,6 +701,22 @@ const Room = (props: RoomProps) => {
 
 
 
+    const storiesLoaded = (stories: IStoryReturn[]) => {
+        setStoriesState(prevState => {
+            let newState = { ...prevState };
+            stories.forEach(newStory => {
+                let story = storiesHelper.GetStoryById(newState.Stories, newStory.id);
+                if (!story) {
+                    let storyForAdd = new Story();
+                    storyForAdd.FillByBackModel(newStory);
+                    newState.Stories.push(storyForAdd);
+                }
+            });
+
+            return newState;
+        });
+    }
+
     const currentStoryDescriptionOnChange = (str: string) => {
         setStoriesState(prevState => {
             let newState = { ...prevState };
@@ -837,7 +853,7 @@ const Room = (props: RoomProps) => {
 
         return <div className="planing-room-not-auth"
             title={"при обновлении страницы, вы подключаетесь как новый пользователь(исключение-вы авторизованы в основном приложении)." +
-                "при создании комнаты неавторизованным пользователем, комната не будет сохраняться"}>!
+                "если в комнате все пользвоатели - неавторизованы, комната не будет сохраняться"}>!
         </div>
     }
 
@@ -870,6 +886,7 @@ const Room = (props: RoomProps) => {
                     CurrentStoryDescriptionOnChange={currentStoryDescriptionOnChange}
                     CurrentStoryNameOnChange={currentStoryNameOnChange}
                     RoomStatus={roomStatusState}
+                    StoriesLoaded={storiesLoaded}
                 />
             </div>
             <div className="planit-room-right-part col-12 col-md-3">

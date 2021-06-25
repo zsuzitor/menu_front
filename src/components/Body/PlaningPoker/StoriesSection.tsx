@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-// import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
+import { IStoryReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/StoryReturn';
 import { RoomStatus, StoriesHelper, Story } from './Models/RoomInfo';
 
 
@@ -25,6 +25,7 @@ class StoriesSectionProp {
     CurrentStoryNameOnChange: (str: string) => void;
     CurrentStoryDescriptionChange: string;
     CurrentStoryDescriptionOnChange: (str: string) => void;
+    StoriesLoaded: (stories: IStoryReturn[]) => void;
 }
 
 class StoriesSectionState {
@@ -64,7 +65,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
     useEffect(() => {
-       
+
 
     }, []);
 
@@ -73,13 +74,13 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
     const cancelChangeCurrentStory = () => {
-        
+
 
         let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
         props.CurrentStoryDescriptionOnChange(story.Description);
         props.CurrentStoryNameOnChange(story.Name);
 
-       
+
     }
 
 
@@ -90,27 +91,33 @@ const StoriesSection = (props: StoriesSectionProp) => {
             props.CurrentStoryDescriptionChange);
     }
 
-
+    const loadOldStories = () => {
+        props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.LoadNotActualStories,
+            props.RoomName).then(data => {
+                var dataTyped = data as IStoryReturn[];
+                props.StoriesLoaded(dataTyped);
+            });
+    }
 
 
     const ResetCurrentStoryById = () => {
         if (!props.CurrentStoryId) {
-          
+
 
             props.CurrentStoryDescriptionOnChange("");
             props.CurrentStoryNameOnChange("");
-           
+
 
             return;
         }
 
 
-        
+
 
         let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
         props.CurrentStoryDescriptionOnChange(story.Description);
         props.CurrentStoryNameOnChange(story.Name);
-        
+
     }
 
 
@@ -169,19 +176,19 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     placeholder="Название"
                     value={props.CurrentStoryNameChange}
                     type="text" onChange={(e) => {
-                       
+
                         props.CurrentStoryNameOnChange(e.target.value);
-                       
+
 
                     }}></input>
                     <input className="persent-100-width form-control"
                         placeholder="Описание"
                         value={props.CurrentStoryDescriptionChange}
                         type="text" onChange={(e) => {
-                          
+
                             props.CurrentStoryDescriptionOnChange(e.target.value);
 
-                           
+
                         }}></input></div>
             }
             else {
@@ -236,7 +243,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     placeholder="Название"
                     value={storiesState.NameForAdd}
                     type="text" onChange={(e) => {
-                       
+
                         setStoriesState(prevState => {
                             let newState = { ...prevState };
                             newState.NameForAdd = e.target.value;
@@ -248,7 +255,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     placeholder="Описание"
                     value={storiesState.DescriptionForAdd}
                     onChange={(e) => {
-                        
+
                         setStoriesState(prevState => {
                             let newState = { ...prevState };
                             newState.DescriptionForAdd = e.target.value;
@@ -274,7 +281,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     newState.ShowOnlyCompleted = !newState.ShowOnlyCompleted;
                     return newState;
                 });
-            }} type="checkbox"></input>
+            }} type="checkbox" defaultChecked={storiesState.ShowOnlyCompleted}></input>
             <div>
                 <div className="stories-data-list">
                     {props.Stories.filter(x => x.Completed === storiesState.ShowOnlyCompleted).map(x => <div
@@ -290,7 +297,11 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     </div>)}
                 </div>
                 <div>
-                    <button className="btn btn-primary" onClick={() => alert("todo")}>Загрузить прошлые</button>
+                    {storiesState.ShowOnlyCompleted ?
+                        <button className="btn btn-primary" onClick={() => loadOldStories()}>Загрузить прошлые</button>
+                        :
+                        <div></div>
+                    }
                 </div>
             </div>
             <div>

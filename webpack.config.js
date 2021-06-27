@@ -1,6 +1,8 @@
 
 
 //
+// entry: "./src/index.tsx",   // time.js
+
 module.exports = {
     entry: "./src/index.tsx",
     output: {
@@ -22,13 +24,13 @@ module.exports = {
                 loader: "source-map-loader",
                 enforce: "pre"//новый синтаксис заменяющий preLoaders блок 'pre' | 'post'
                 ,
-                 exclude: /node_modules/,//возможно не нужно
+                exclude: /node_modules/,//возможно не нужно
             },
             // Все файлы с разрешениями '.ts' или '.tsx' будет обрабатывать 'ts-loader'
-            { 
+            {
                 test: /\.tsx?$/,
-                 loader: "ts-loader",
-                 exclude: /node_modules/,//возможно не нужно
+                loader: "ts-loader",
+                exclude: /node_modules/,//возможно не нужно
             },
             {
                 test: /\.css$/i,

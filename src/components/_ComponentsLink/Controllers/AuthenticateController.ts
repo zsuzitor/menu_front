@@ -88,6 +88,7 @@ export class AuthenticateController implements IAuthenticateController {
     Logout() {
         alert('not inplemented');
     }
+    
     RefreshAccessToken(notRedirectWhenNotAuth: boolean, callBack?: () => void) {
         G_AjaxHelper.TryRefreshToken(notRedirectWhenNotAuth, callBack);
     }

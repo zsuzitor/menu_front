@@ -43,7 +43,7 @@ export declare interface IAjaxInputObject {
 }
 
 export interface IAjaxHelper {
-    TryRefreshToken(required: boolean, callBack?: () => void): void;
+    TryRefreshToken(required: boolean, callBack?: () => void): void;//тут вообще токены возвращаются как минимум
     GoAjaxRequest(obj: IAjaxInputObject, fileLoad?: boolean): Promise<any>;
     TrySend(ajaxObj: JQuery.AjaxSettings): void;
 }
@@ -71,6 +71,8 @@ export class AjaxHelper implements IAjaxHelper {
 
                 }
                 else {
+                    var eventTokensRefresh = new CustomEvent("tokens_was_refreshed", {});
+                    window.dispatchEvent(eventTokensRefresh);
                     //TODO записываем полученные токены
                     if (callBack) {
                         callBack();

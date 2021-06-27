@@ -10,6 +10,7 @@ import { PlaningPokerUserInfo, RoomInfo } from './Models/RoomInfo';
 // import { HubConnection } from '@microsoft/signalr';
 // import signalR, { HubConnection } from "@aspnet/signalr";
 import * as signalR from "@aspnet/signalr";
+import { IAuthState } from '../../_ComponentsLink/Models/AuthState';
 // import * as signalR from '@aspnet/signalr'
 
 
@@ -34,16 +35,20 @@ class PlaningPokerMainState {
     }
 }
 
+class PlaningPokerMainProps {
+    AuthInfo: IAuthState;
+}
 
 require('../../../../style/planing_poker.css');
 
 
-const PlaningPokerMain = () => {
+const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
 
 
     let initState = new PlaningPokerMainState();
     initState.User.UserName = "enter_your_name";
+    // console.log(initState.User.UserName);
     const hubConnection = new signalR.HubConnectionBuilder()
         .withUrl("/planing-poker-hub"
             // , {
@@ -167,6 +172,20 @@ const PlaningPokerMain = () => {
 
 
     }, []);
+
+
+
+    useEffect(() => {
+        if (props.AuthInfo.AuthSuccess) {
+            setLocalState(prevState => {
+                let newState = { ...prevState };
+                newState.User.UserName = props.AuthInfo.User.Email;
+                return newState;
+            });
+        }
+
+    }, [props.AuthInfo.AuthSuccess])
+
 
 
     const userNameChange = (newName: string) => {

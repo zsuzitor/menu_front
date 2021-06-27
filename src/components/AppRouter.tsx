@@ -18,12 +18,17 @@ import { MenuMain } from "./Body/Menu/MenuMain";
 import { MenuAppMain } from "./Body/MenuApp/MenuAppMain";
 import { WordsCardsAppMain } from "./Body/WordsCardsApp/WordsCardsAppMain";
 import PlaningPokerMain from "./Body/PlaningPoker/PlaningPokerMain";
+import { IAuthState } from "./_ComponentsLink/Models/AuthState";
 
+// 
 
+class AppRouterProps {
+    AuthInfo: IAuthState;
+}
 
-export class AppRouter extends React.Component<{}, {}> {
+export class AppRouter extends React.Component<AppRouterProps, {}> {
 
-    constructor(props: any) {
+    constructor(props: AppRouterProps) {
         super(props);
     }
 
@@ -32,11 +37,14 @@ export class AppRouter extends React.Component<{}, {}> {
         // return <BodyCardsListMain />
         //TODO попробовать достучаться незалогиненным по ссылкам и поправить то что вылезет
         // return <BodyCardsListMain/> 
+        // let props1 = this.props;
         return <Switch>
             <Route exact path="/menu" component={MenuMain} />
             <Route path="/menu-app/" component={MenuAppMain} />
             <Route path="/words-cards-app" component={WordsCardsAppMain} />
-            <Route path="/planing-poker" component={PlaningPokerMain} />
+            <Route path="/planing-poker" render={(props) => (
+                <PlaningPokerMain {...props} AuthInfo={this.props.AuthInfo} />
+            )} />
 
             <Route path="/menu/auth/login" render={(props) => (
                 <MainAuth {...props} LoginPage={true} />

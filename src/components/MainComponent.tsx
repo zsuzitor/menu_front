@@ -49,11 +49,12 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
         this.AddMainALert = this.AddMainALert.bind(this);
         this.RemoveMainALert = this.RemoveMainALert.bind(this);
         this.LogOutHandler = this.LogOutHandler.bind(this);
+        this.ReloadUserState = this.ReloadUserState.bind(this);
 
         window.G_AddAbsoluteAlertToState = this.AddMainALert;
         let thisRef = this;
         // window.addEventListener("logout", function (e) { thisRef.LogOutHandler() });
-
+        window.addEventListener("tokens_was_refreshed", function (e) { thisRef.ReloadUserState() });
     }
 
     LogOutHandler() {
@@ -69,6 +70,34 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
             Auth: auth,
             AbsoluteAlerts: [],
         });
+    }
+
+    ReloadUserState() {
+        let refThis = this;
+        let success = (error: MainErrorObjectBack, data: UserShortBack) => {
+            if (error) {
+                return;
+            }
+
+            let auth: IAuthState = {
+                AuthSuccess: true,
+                User: {
+                    Name: data.name,
+                    Image: data.main_image_path,
+                    Email: data.email,
+                    Id: data.id,
+                }
+            };
+
+            localStorage.setItem('header_auth', JSON.stringify(auth.User));
+            refThis.setState({
+                Auth: auth,
+                AbsoluteAlerts: [],
+            });
+
+        }
+
+        window.G_UsersController.GetShortestUserInfo(success);
     }
 
     AddMainALert(alert: AlertData) {
@@ -124,6 +153,8 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
                 User: {
                     Name: authStored.Name,
                     Image: authStored.Image,
+                    Id: authStored.Id,
+                    Email: authStored.Email,
                 }
             };
 
@@ -138,29 +169,9 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
         if (window.location.pathname.startsWith('/menu/auth/')) {
             return;
         }
-        let refThis = this;
-        let success = (error: MainErrorObjectBack, data: UserShortBack) => {
-            if (error) {
-                return;
-            }
 
-            let auth: IAuthState = {
-                AuthSuccess: true,
-                User: {
-                    Name: data.name,
-                    Image: data.main_image_path
-                }
-            };
+        this.ReloadUserState();
 
-            localStorage.setItem('header_auth', JSON.stringify(auth.User));
-            refThis.setState({
-                Auth: auth,
-                AbsoluteAlerts: [],
-            });
-
-        }
-
-        window.G_UsersController.GetShortestUSerInfo(success);
 
 
         //TODO запрос для определения?
@@ -174,7 +185,7 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
             <BrowserRouter>
                 <HeaderMain AuthInfo={this.state.Auth} />
                 {/* <BodyMain /> */}
-                <AppRouter />
+                <AppRouter AuthInfo={this.state.Auth}/>
                 <FooterMain />
                 <MainAlertAbsolute Data={this.state.AbsoluteAlerts} RemoveALert={this.RemoveMainALert} />
             </BrowserRouter>

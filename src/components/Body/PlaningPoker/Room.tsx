@@ -9,7 +9,7 @@ import { IUserInRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/
 import UserInList from './UserInList';
 import OneVoteCard from './OneVoteCard';
 import { IEndVoteInfoReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/EndVoteInfoReturn';
-import { IOneRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/OneRoomReturn';
+// import { IOneRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/OneRoomReturn';
 import { AlertData, AlertTypeEnum } from '../../_ComponentsLink/Models/AlertData';
 import { IStoryReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/StoryReturn';
 import StoriesSection from './StoriesSection';
@@ -31,17 +31,11 @@ class RoomProps {
 
 class RoomState {
     UsersList: UserInRoom[];
-    // CurrentVote?: number;
-    // RoomStatus: RoomSatus;
     VoteInfo: VoteInfo;
-    // SelectedVoteCard: number;
 
     constructor() {
         this.UsersList = [];
-        // this.CurrentVote = null;
-        // this.SelectedVoteCard = -1;
         this.VoteInfo = new VoteInfo();
-        // this.RoomStatus = RoomSatus.None;
     }
 
 }
@@ -50,25 +44,15 @@ class RoomState {
 
 class StoriesInfo {
     Stories: Story[];
-    // ClearTmpFuncForStories: () => void;//todo не очень конечно решение
 
     CurrentStoryId: string;
-    // CurrentStoryName: string;
     CurrentStoryNameChange: string;
-    // CurrentStoryDescription: string;
     CurrentStoryDescriptionChange: string;
 
-    // NameForAdd: string;
-    // DescriptionForAdd: string;
 
     constructor() {
         this.Stories = [];
         this.CurrentStoryId = "";
-        // this.ClearTmpFuncForStories = null;
-        // this.NameForAdd = "";
-        // this.DescriptionForAdd = "";
-        // this.CurrentStoryName = "";
-        // this.CurrentStoryDescription = "";
         this.CurrentStoryNameChange = "";
         this.CurrentStoryDescriptionChange = "";
     }
@@ -123,11 +107,6 @@ const GetUserById = (users: UserInRoom[], userId: string): UserInRoom => {
 
 const Room = (props: RoomProps) => {
 
-    // useEffect(() => {
-    //     console.log("use_1");
-    // }, [1]);
-
-
     //эффект для доступа по прямой ссылке
     //
     useEffect(() => {
@@ -141,12 +120,7 @@ const Room = (props: RoomProps) => {
                 window.location.href = "/planing-poker";
             }
         }
-        // else {
-        //     if (!props.RoomInfo.InRoom) {
-        //         props.MyHubConnection.send("EnterInRoom", props.RoomInfo.Name, props.RoomInfo.Password, props.UserInfo.UserName);
 
-        //     }
-        // }
     }, [props.RoomInfo.Name]);
 
     useEffect(() => {
@@ -155,30 +129,8 @@ const Room = (props: RoomProps) => {
         }
     }, [props.HubConnected]);
 
-    // console.log("render Room");
-
-    // console.log(props.RoomInfo.Name);
 
 
-    // if (!props.UserInfo.UserName) {
-    //     props.ChangeUserName("enter_your_name");//todo хотя бы math random сюда закинуть?
-    //     return <div></div>
-    // }
-
-    // if (!props.RoomInfo.InRoom) {
-    //     return <div></div>
-    //     //означает что мы пришли по прямой ссылке, не через форму входа с index page 
-    //     //и при этом комната еще не загружена\мы не вошли
-
-    //     // if (!props.RoomInfo.Name) {
-    //     //     //имя комнаты пустое. либо это первый рендер либо имя комнаты нет вообще
-    //     //     return <div></div>
-    //     // }
-
-    //     //это уже не первый рендер тк имя комнаты спаршено из урла и не пустое, означает что хаб подключен
-    //     //но мы еще не вошли у нее
-    //     // props.MyHubConnection.send("EnterInRoom", props.RoomInfo.Name, props.RoomInfo.Password, props.Username);
-    // }
 
 
 
@@ -186,7 +138,6 @@ const Room = (props: RoomProps) => {
 
     let initState = new RoomState();
     const [localState, setLocalState] = useState(initState);
-    //НЕ заносить в общий объект, перестает работать, начинает сбрасываться при ререндере
     const [roomStatusState, setRoomStatusState] = useState(RoomStatus.None);
     const [selectedVoteCard, setSelectedVoteCard] = useState(-1);
     const [hideVoteState, setHideVoteState] = useState(false);

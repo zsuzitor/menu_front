@@ -35,13 +35,14 @@ class StoriesSectionState {
     NameForAdd: string;
     DescriptionForAdd: string;
     ShowOnlyCompleted: boolean;
+    NotActualStoriesLoaded: boolean;
+
 
     constructor() {
         this.NameForAdd = "";
         this.DescriptionForAdd = "";
         this.ShowOnlyCompleted = false;
-        // this.CurrentStoryNameChange = "";
-        // this.CurrentStoryDescriptionChange = "";
+        this.NotActualStoriesLoaded = false;
     }
 }
 
@@ -95,6 +96,11 @@ const StoriesSection = (props: StoriesSectionProp) => {
         props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.LoadNotActualStories,
             props.RoomName).then(data => {
                 var dataTyped = data as IStoryReturn[];
+                setStoriesState(prevState => {
+                    let newState = { ...prevState };
+                    newState.NotActualStoriesLoaded = true;
+                    return newState;
+                });
                 props.StoriesLoaded(dataTyped);
             });
     }
@@ -297,7 +303,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     </div>)}
                 </div>
                 <div>
-                    {storiesState.ShowOnlyCompleted ?
+                    {storiesState.ShowOnlyCompleted && !storiesState.NotActualStoriesLoaded ?
                         <button className="btn btn-primary" onClick={() => loadOldStories()}>Загрузить прошлые</button>
                         :
                         <div></div>

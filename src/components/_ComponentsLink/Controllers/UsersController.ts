@@ -5,13 +5,13 @@ import { UserShortBack } from "../BackModel/UserShort";
 export type GetUserShort = (error: MainErrorObjectBack,data:UserShortBack) => void;
 
 export interface IUsersController {
-    GetShortestUSerInfo: ( onSuccess: GetUserShort) => void;
+    GetShortestUserInfo: ( onSuccess: GetUserShort) => void;
 
 }
 
 
 export class UsersController implements IUsersController{
-    GetShortestUSerInfo( onSuccess: GetUserShort){
+    GetShortestUserInfo( onSuccess: GetUserShort){
          G_AjaxHelper.GoAjaxRequest({
             Data: {},
             Type: "GET",

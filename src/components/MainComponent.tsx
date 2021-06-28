@@ -1,6 +1,6 @@
 /// <reference path="../../typings/globals.d.ts" />
 
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 
 import { IAuthState, IAuthUserState } from './_ComponentsLink/Models/AuthState';
 
@@ -30,34 +30,64 @@ export interface IMainComponentState {
 
 
 
-export class MainComponent extends React.Component<MainComponentProps, IMainComponentState> {
+let MainComponent = (props: MainComponentProps) => {// extends React.Component<MainComponentProps, IMainComponentState> {
 
-    constructor(props: MainComponentProps) {
-        super(props);
+    let initState: IMainComponentState = {
+        Auth: {
+            AuthSuccess: false,
+            User: null,
+        },
+        AbsoluteAlerts: [],
+        MaxIdMainAlert: 0,
+    };
 
-        let localState: IMainComponentState = {
-            Auth: {
-                AuthSuccess: false,
-                User: null,
-            },
-            AbsoluteAlerts: [],
-            MaxIdMainAlert: 0,
-        };
 
-        this.state = localState;
+    const [localState, setLocalState] = useState(initState);
 
-        this.AddMainALert = this.AddMainALert.bind(this);
-        this.RemoveMainALert = this.RemoveMainALert.bind(this);
-        this.LogOutHandler = this.LogOutHandler.bind(this);
-        this.ReloadUserState = this.ReloadUserState.bind(this);
 
-        window.G_AddAbsoluteAlertToState = this.AddMainALert;
-        let thisRef = this;
+
+    useEffect(() => {
+        window.G_AddAbsoluteAlertToState = AddMainALert;
+        // let thisRef = this;
         // window.addEventListener("logout", function (e) { thisRef.LogOutHandler() });
-        window.addEventListener("tokens_was_refreshed", function (e) { thisRef.ReloadUserState() });
-    }
+        window.addEventListener("tokens_was_refreshed", function (e) { ReloadUserState() });
 
-    LogOutHandler() {
+
+        let authStoredJson = localStorage.getItem('header_auth');
+        let authStored = JSON.parse(authStoredJson) as IAuthUserState;
+        if (authStoredJson && authStored) {
+            let auth: IAuthState = {
+                AuthSuccess: true,
+                User: {
+                    Name: authStored.Name,
+                    Image: authStored.Image,
+                    Id: authStored.Id,
+                    Email: authStored.Email,
+                }
+            };
+
+            setLocalState(prevState => {
+                let newState = { ...prevState };
+                newState.Auth = auth;
+                newState.AbsoluteAlerts = [];
+                return newState;
+            });
+
+            return;
+        }
+
+        if (window.location.pathname.startsWith('/menu/auth/')) {
+            return;
+        }
+
+        ReloadUserState();
+
+
+
+    }, [])
+
+
+    const LogOutHandler = () => {
         let auth: IAuthState = {
             AuthSuccess: false,
             User: null,
@@ -66,14 +96,15 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
         // localStorage.setItem('header_auth', JSON.stringify(auth));
         localStorage.removeItem("header_auth");
 
-        this.setState({
-            Auth: auth,
-            AbsoluteAlerts: [],
+        setLocalState(prevState => {
+            let newState = { ...prevState };
+            newState.Auth = auth;
+            newState.AbsoluteAlerts = [];
+            return newState;
         });
     }
 
-    ReloadUserState() {
-        let refThis = this;
+    const ReloadUserState = () => {
         let success = (error: MainErrorObjectBack, data: UserShortBack) => {
             if (error) {
                 return;
@@ -90,9 +121,12 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
             };
 
             localStorage.setItem('header_auth', JSON.stringify(auth.User));
-            refThis.setState({
-                Auth: auth,
-                AbsoluteAlerts: [],
+            setLocalState(prevState => {
+                let newState = { ...prevState };
+                newState.Auth = auth;
+                newState.AbsoluteAlerts = [];
+
+                return newState;
             });
 
         }
@@ -100,20 +134,20 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
         window.G_UsersController.GetShortestUserInfo(success);
     }
 
-    AddMainALert(alert: AlertData) {
+    const AddMainALert = (alert: AlertData) => {
         // console.log('1-AddMainALert');
         let storedAlert = new AlertDataStored();
         storedAlert.FillByAlertData(alert);
 
 
-        this.setState(prevState => {
+        setLocalState(prevState => {
             let newState = { ...prevState };
 
             storedAlert.Key = ++newState.MaxIdMainAlert;
             newState.AbsoluteAlerts.push(storedAlert);
             if (alert.Timeout) {
                 setTimeout(() => {
-                    this.RemoveMainALert(storedAlert.Key);
+                    RemoveMainALert(storedAlert.Key);
                 }, alert.Timeout);
             }
             return newState;
@@ -121,10 +155,9 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
     }
 
 
-    RemoveMainALert(alertId: number) {
+    const RemoveMainALert = (alertId: number) => {
 
-
-        this.setState(prevState => {
+        setLocalState(prevState => {
             let newState = { ...prevState };
             for (let i = 0; i < newState.AbsoluteAlerts.length; ++i) {
                 if (newState.AbsoluteAlerts[i].Key == alertId) {
@@ -143,52 +176,18 @@ export class MainComponent extends React.Component<MainComponentProps, IMainComp
 
     }
 
-    async componentDidMount() {
 
-        let authStoredJson = localStorage.getItem('header_auth');
-        let authStored = JSON.parse(authStoredJson) as IAuthUserState;
-        if (authStoredJson && authStored) {
-            let auth: IAuthState = {
-                AuthSuccess: true,
-                User: {
-                    Name: authStored.Name,
-                    Image: authStored.Image,
-                    Id: authStored.Id,
-                    Email: authStored.Email,
-                }
-            };
+    return <div>
+        <BrowserRouter>
+            <HeaderMain AuthInfo={localState.Auth} />
+            {/* <BodyMain /> */}
+            <AppRouter AuthInfo={localState.Auth} />
+            <FooterMain />
+            <MainAlertAbsolute Data={localState.AbsoluteAlerts} RemoveALert={RemoveMainALert} />
+        </BrowserRouter>
+    </div>
 
-            this.setState({
-                Auth: auth,
-                AbsoluteAlerts: [],
-            });
-
-            return;
-        }
-
-        if (window.location.pathname.startsWith('/menu/auth/')) {
-            return;
-        }
-
-        this.ReloadUserState();
-
-
-
-        //TODO запрос для определения?
-
-
-    }
-
-
-    render() {
-        return <div>
-            <BrowserRouter>
-                <HeaderMain AuthInfo={this.state.Auth} />
-                {/* <BodyMain /> */}
-                <AppRouter AuthInfo={this.state.Auth}/>
-                <FooterMain />
-                <MainAlertAbsolute Data={this.state.AbsoluteAlerts} RemoveALert={this.RemoveMainALert} />
-            </BrowserRouter>
-        </div>
-    }
 }
+
+
+export default MainComponent;

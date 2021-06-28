@@ -730,19 +730,18 @@ const Room = (props: RoomProps) => {
 
 
         const changeUserName = () => {
-            props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.UserNameChange, props.RoomInfo.Name, userNameLocalState).then(dt => {
-                if (!dt) {
-                    let alert = new AlertData();
-                    alert.Text = "изменить имя не удалось";
-                    alert.Type = AlertTypeEnum.Error;
-                    window.G_AddAbsoluteAlertToState(alert);
-                    return;
-                }
+            props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.UserNameChange
+                , props.RoomInfo.Name, userNameLocalState).then(dt => {
+                    if (!dt) {
+                        let alert = new AlertData();
+                        alert.Text = "изменить имя не удалось";
+                        alert.Type = AlertTypeEnum.Error;
+                        window.G_AddAbsoluteAlertToState(alert);
+                        return;
+                    }
 
-                props.ChangeUserName(userNameLocalState)
-            });
-
-
+                    props.ChangeUserName(userNameLocalState)
+                });
         }
 
         const updateAllUsers = () => {

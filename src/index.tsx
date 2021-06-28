@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { MainComponent } from './components/MainComponent';
+import MainComponent from './components/MainComponent';
 import { AjaxHelper } from './components/_ComponentsLink/AjaxLogic';
 import { AuthenticateController } from "./components/_ComponentsLink/Controllers/AuthenticateController";
 import { ArticleController } from "./components/_ComponentsLink/Controllers/MenuApp/ArticleController";

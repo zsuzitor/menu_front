@@ -124,9 +124,15 @@ const Room = (props: RoomProps) => {
     }, [props.RoomInfo.Name]);
 
     useEffect(() => {
-        if (props.HubConnected && props.RoomInfo.Name && !props.RoomInfo.InRoom) {
-            props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.EnterInRoom, props.RoomInfo.Name, props.RoomInfo.Password, props.UserInfo.UserName);
+        if (props.HubConnected) {
+            if (props.RoomInfo.Name && !props.RoomInfo.InRoom) {
+                props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.EnterInRoom, props.RoomInfo.Name, props.RoomInfo.Password, props.UserInfo.UserName);
+            }
+
+            setUserNameLocalState(props.UserInfo.UserName);
         }
+
+
     }, [props.HubConnected]);
 
 
@@ -166,11 +172,15 @@ const Room = (props: RoomProps) => {
             }
 
             if (data) {
+                // console.log(data);
                 let newUsersData = data.room.users.map(x => {
+
                     let us = new UserInRoom();
                     us.FillByBackModel(x);
                     return us;
                 });
+
+
 
 
                 setRoomStatusState(prevState => {
@@ -186,6 +196,14 @@ const Room = (props: RoomProps) => {
 
 
                     fillVoteInfo(newState, data.end_vote_info);
+                    newState.UsersList.forEach(us => {
+                        if (us.Id === props.UserInfo.UserId) {
+                            if (us.Vote) {
+                                setSelectedVoteCard(us.Vote);
+                            }
+                        }
+                    });
+
 
                     return newState;
                 });
@@ -210,6 +228,29 @@ const Room = (props: RoomProps) => {
 
     }, [props.RoomInfo.InRoom]);
 
+
+    useEffect(() => {
+        if (props.UserInfo.UserName === "enter_your_name") {
+            return;
+        }
+
+        if (!props.HubConnected) {
+            return;
+        }
+
+        props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.UserNameChange
+            , props.RoomInfo.Name, userNameLocalState).then(dt => {
+                if (!dt) {
+                    let alert = new AlertData();
+                    alert.Text = "изменить имя не удалось";
+                    alert.Type = AlertTypeEnum.Error;
+                    window.G_AddAbsoluteAlertToState(alert);
+                    return;
+                }
+
+            });
+
+    }, [props.UserInfo.UserName]);
 
 
 
@@ -521,12 +562,30 @@ const Room = (props: RoomProps) => {
             return -1;
         });
 
+        if (!data) {
+            state.VoteInfo = new VoteInfo();
+            return;
+        }
+
+        // let newVoteCurrentUserSetted = false;
+
         state.UsersList.forEach(x => {
             let userFromRes = data.users_info.find(x1 => x1.id === x.Id);
             if (userFromRes) {
                 x.Vote = userFromRes.vote;
             }
+
+            // if (x.Id === props.UserInfo.UserId) {
+            //     if (x.Vote) {
+            //         setSelectedVoteCard(x.Vote);
+            //         newVoteCurrentUserSetted = true;
+            //     }
+            // }
         });
+
+        // if (!newVoteCurrentUserSetted) {
+
+        // }
 
         state.VoteInfo.MaxVote = data.max_vote;
         state.VoteInfo.MinVote = data.min_vote;
@@ -730,18 +789,10 @@ const Room = (props: RoomProps) => {
 
 
         const changeUserName = () => {
-            props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.UserNameChange
-                , props.RoomInfo.Name, userNameLocalState).then(dt => {
-                    if (!dt) {
-                        let alert = new AlertData();
-                        alert.Text = "изменить имя не удалось";
-                        alert.Type = AlertTypeEnum.Error;
-                        window.G_AddAbsoluteAlertToState(alert);
-                        return;
-                    }
 
-                    props.ChangeUserName(userNameLocalState)
-                });
+
+            props.ChangeUserName(userNameLocalState)
+
         }
 
         const updateAllUsers = () => {

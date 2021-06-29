@@ -14,6 +14,7 @@ import { AlertData, AlertTypeEnum } from '../../_ComponentsLink/Models/AlertData
 import { IStoryReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/StoryReturn';
 import StoriesSection from './StoriesSection';
 import { IRoomInfoReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/RoomInfoReturn';
+import cloneDeep from 'lodash/cloneDeep';
 
 
 class RoomProps {
@@ -377,7 +378,10 @@ const Room = (props: RoomProps) => {
 
                 if (changeType === 1) {
                     //добавлен
-                    user.Roles.push(role);
+                    let index = user.Roles.findIndex(x => x === role);
+                    if (index == -1) {
+                        user.Roles.push(role);
+                    }
                 }
                 else {
                     //удален
@@ -385,6 +389,18 @@ const Room = (props: RoomProps) => {
                     if (index >= 0) {
                         user.Roles.splice(index, 1);
                     }
+                }
+
+                if (!user.CanVote()) {
+                    //todo убрать все оценки
+
+                    // GetUserById(localState.UsersList,);
+                    // users
+                    user.Vote = null;
+                    if (userId === props.UserInfo.UserId) {
+                        setSelectedVoteCard(-1);
+                    }
+
                 }
 
                 return newState;
@@ -625,10 +641,14 @@ const Room = (props: RoomProps) => {
 
         if (!CurrentUserCanVote(localState.UsersList, props.UserInfo.UserId)) {
             let alert = new AlertData();
-            alert.Text = "У обсерверов нет прав голосовать";
+            alert.Text = "Вы не можете голосовать";
             alert.Type = AlertTypeEnum.Error;
             alert.Timeout = 5000;
             window.G_AddAbsoluteAlertToState(alert);
+            return;
+        }
+
+        if (selectedVoteCard === +voteCardBlock.target.dataset.vote) {
             return;
         }
 

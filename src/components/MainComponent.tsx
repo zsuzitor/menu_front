@@ -178,13 +178,15 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
 
 
     return <div>
-        <BrowserRouter>
-            <HeaderMain AuthInfo={localState.Auth} />
-            {/* <BodyMain /> */}
-            <AppRouter AuthInfo={localState.Auth} />
-            <FooterMain />
-            <MainAlertAbsolute Data={localState.AbsoluteAlerts} RemoveALert={RemoveMainALert} />
-        </BrowserRouter>
+        <React.StrictMode>
+            <BrowserRouter>
+                <HeaderMain AuthInfo={localState.Auth} />
+                {/* <BodyMain /> */}
+                <AppRouter AuthInfo={localState.Auth} />
+                <FooterMain />
+                <MainAlertAbsolute Data={localState.AbsoluteAlerts} RemoveALert={RemoveMainALert} />
+            </BrowserRouter>
+        </React.StrictMode>
     </div>
 
 }

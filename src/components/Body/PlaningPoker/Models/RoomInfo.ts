@@ -46,11 +46,11 @@ export class UserInRoom implements MappedWithBack<IUserInRoomReturn> {
 
     }
 
-    IsAdmin = (): boolean => {
+    IsAdmin(): boolean {
         return this.Roles.includes(UserRoles.Creator) || this.Roles.includes(UserRoles.Admin);
     };
 
-    CanVote = (): boolean => {
+    CanVote(): boolean {
         return !this.Roles.includes(UserRoles.Observer);
     };
 

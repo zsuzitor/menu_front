@@ -103,11 +103,12 @@ const GetUserById = (users: UserInRoom[], userId: string): UserInRoom => {
 
 
 
-
-
+//подписки сигналр захватывают пропсы непонятно как, раньше это работало, но предположительно после введения deepClone
+//все вообще отвалилось. 6.30.2021, вот так получилось пофиксить, замена обработчика подписки на => не помогала
+let __planing_room_props_ref__: RoomProps = null;
 
 const Room = (props: RoomProps) => {
-
+    __planing_room_props_ref__ = props;
     //эффект для доступа по прямой ссылке
     //
     useEffect(() => {
@@ -191,7 +192,8 @@ const Room = (props: RoomProps) => {
                 });
 
                 setLocalState(prevState => {
-                    let newState = { ...prevState };
+                    // let newState = { ...prevState };
+                    let newState = cloneDeep(prevState);
                     newState.UsersList.splice(0, newState.UsersList.length);
                     newState.UsersList.push(...newUsersData);
 
@@ -211,7 +213,8 @@ const Room = (props: RoomProps) => {
 
 
                 setStoriesState(prevState => {
-                    let newStoriesState = { ...prevState };
+                    // let newState = { ...prevState };
+                    let newStoriesState = cloneDeep(prevState);
                     newStoriesState.CurrentStoryId = data.room.current_story_id;
                     newStoriesState.Stories = data.room.actual_stories.map(x => {
                         let st = new Story();
@@ -270,7 +273,8 @@ const Room = (props: RoomProps) => {
 
 
             setLocalState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
                 var existUser = GetUserById(newState.UsersList, dataTyped.id);
                 if (!existUser) {
                     newState.UsersList.push(us);
@@ -290,7 +294,8 @@ const Room = (props: RoomProps) => {
 
 
             setLocalState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
                 let user = GetUserById(newState.UsersList, userId);
                 if (!user) {
                     return newState;
@@ -309,10 +314,10 @@ const Room = (props: RoomProps) => {
             }
 
             usersId.forEach(x => {
-                if (x == props.UserInfo.UserId) {
+                if (x == __planing_room_props_ref__.UserInfo.UserId) {
                     alert("you kicked or leave");//TODO может как то получше сделать, и хорошо бы без перезагрузки\редиректа
                     window.location.href = "/planing-poker";
-                    props.ClearUserId();//todo тут наверное стоит еще что то чистить
+                    __planing_room_props_ref__.ClearUserId();//todo тут наверное стоит еще что то чистить
 
                     return;
                 }
@@ -322,7 +327,8 @@ const Room = (props: RoomProps) => {
 
 
             setLocalState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
                 usersId.forEach(x => {
                     let userIndex = GetUserIndexById(newState.UsersList, x);
                     if (userIndex < 0) {
@@ -345,7 +351,8 @@ const Room = (props: RoomProps) => {
 
 
             setLocalState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
                 let user = GetUserById(newState.UsersList, userId);
                 if (!user) {
                     return newState;
@@ -370,7 +377,8 @@ const Room = (props: RoomProps) => {
 
 
             setLocalState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
                 let user = GetUserById(newState.UsersList, userId);
                 if (!user) {
                     return newState;
@@ -397,7 +405,8 @@ const Room = (props: RoomProps) => {
                     // GetUserById(localState.UsersList,);
                     // users
                     user.Vote = null;
-                    if (userId === props.UserInfo.UserId) {
+                    user.HasVote = false;
+                    if (userId === __planing_room_props_ref__.UserInfo.UserId) {
                         setSelectedVoteCard(-1);
                     }
 
@@ -417,7 +426,8 @@ const Room = (props: RoomProps) => {
             });
 
             setLocalState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
                 newState.UsersList.forEach(x => {
                     x.Vote = null;
                     x.HasVote = false;
@@ -440,7 +450,8 @@ const Room = (props: RoomProps) => {
 
             // fillVoteInfo(null, data);
             setLocalState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
 
                 fillVoteInfo(newState, data);
 
@@ -462,7 +473,8 @@ const Room = (props: RoomProps) => {
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.AddedNewStory, function (data: IStoryReturn) {
 
             setStoriesState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
                 let newStory = new Story();
                 newStory.FillByBackModel(data);
                 newState.Stories.push(newStory);
@@ -475,7 +487,8 @@ const Room = (props: RoomProps) => {
 
 
             setStoriesState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
                 newState.CurrentStoryId = id;
                 return newState;
             });
@@ -486,7 +499,8 @@ const Room = (props: RoomProps) => {
 
 
             setStoriesState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
                 let story = storiesHelper.GetStoryById(newState.Stories, id);
 
                 newState.CurrentStoryNameChange = newName;
@@ -506,7 +520,8 @@ const Room = (props: RoomProps) => {
             //изменение данных текущей истории
 
             setStoriesState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
                 let storyIndex = storiesHelper.GetStoryIndexById(newState.Stories, id);
                 if (storyIndex < 0) {
                     return newState;
@@ -529,7 +544,8 @@ const Room = (props: RoomProps) => {
             }
 
             setStoriesState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
                 let story = storiesHelper.GetStoryById(newState.Stories, oldId);
 
 
@@ -733,7 +749,8 @@ const Room = (props: RoomProps) => {
 
     const storiesLoaded = (stories: IStoryReturn[]) => {
         setStoriesState(prevState => {
-            let newState = { ...prevState };
+            // let newState = { ...prevState };
+            let newState = cloneDeep(prevState);
             stories.forEach(newStory => {
                 let story = storiesHelper.GetStoryById(newState.Stories, newStory.id);
                 if (!story) {
@@ -749,7 +766,8 @@ const Room = (props: RoomProps) => {
 
     const currentStoryDescriptionOnChange = (str: string) => {
         setStoriesState(prevState => {
-            let newState = { ...prevState };
+            // let newState = { ...prevState };
+            let newState = cloneDeep(prevState);
             newState.CurrentStoryDescriptionChange = str;
             return newState;
         });
@@ -757,7 +775,8 @@ const Room = (props: RoomProps) => {
 
     const currentStoryNameOnChange = (str: string) => {
         setStoriesState(prevState => {
-            let newState = { ...prevState };
+            // let newState = { ...prevState };
+            let newState = cloneDeep(prevState);
             newState.CurrentStoryNameChange = str;
             return newState;
         });
@@ -832,7 +851,8 @@ const Room = (props: RoomProps) => {
 
 
                     setLocalState(prevState => {
-                        let newState = { ...prevState };
+                        // let newState = { ...prevState };
+                        let newState = cloneDeep(prevState);
                         newState.UsersList.splice(0, newState.UsersList.length);
                         newState.UsersList.push(...newUsersData);
 

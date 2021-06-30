@@ -11,6 +11,8 @@ import { PlaningPokerUserInfo, RoomInfo } from './Models/RoomInfo';
 // import signalR, { HubConnection } from "@aspnet/signalr";
 import * as signalR from "@aspnet/signalr";
 import { IAuthState } from '../../_ComponentsLink/Models/AuthState';
+import cloneDeep from 'lodash/cloneDeep';
+
 // import * as signalR from '@aspnet/signalr'
 
 
@@ -23,12 +25,12 @@ import { IAuthState } from '../../_ComponentsLink/Models/AuthState';
 
 
 class PlaningPokerMainState {
-    MyHubConnection: signalR.HubConnection;
+    // MyHubConnection: signalR.HubConnection;
     User: PlaningPokerUserInfo;
     RoomInfo: RoomInfo;
     // InRoom: boolean;//по сути надо дернуть обновление стейта для перерендера
     constructor() {
-        this.MyHubConnection = null;
+        // this.MyHubConnection = null;
         this.User = new PlaningPokerUserInfo();
         this.RoomInfo = new RoomInfo();
 
@@ -40,6 +42,10 @@ class PlaningPokerMainProps {
 }
 
 require('../../../../style/planing_poker.css');
+
+
+//см коммент для __planing_room_props_ref__
+let __planing_poker_main_state_ref__: PlaningPokerMainState = null;
 
 
 const PlaningPokerMain = (props: PlaningPokerMainProps) => {
@@ -62,8 +68,10 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
     //https://github.com/aspnet/SignalR/issues/2608
     //https://docs.microsoft.com/en-us/aspnet/core/tutorials/signalr-typescript-webpack?view=aspnetcore-2.1&tabs=visual-studio
 
-    initState.MyHubConnection = hubConnection;
+    // initState.MyHubConnection = hubConnection;
+    const [myHubConnection, setHubConnection] = useState(hubConnection);
     const [localState, setLocalState] = useState(initState);
+    __planing_poker_main_state_ref__ = localState;
     const [hubConnected, sethubConnectedState] = useState(false);
 
 
@@ -83,7 +91,8 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
         hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.EnteredInRoom, function (roomUserId, loginnedInMainApp: boolean) {
 
             setLocalState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
                 newState.RoomInfo.InRoom = true;
                 newState.User.UserId = roomUserId;
                 newState.User.LoginnedInMainApp = loginnedInMainApp;
@@ -92,7 +101,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
                 return newState;
             });
 
-            document.cookie = "planing_poker_roomname=" + localState.RoomInfo.Name + "; path=/;";
+            document.cookie = "planing_poker_roomname=" + __planing_poker_main_state_ref__.RoomInfo.Name + "; path=/;";
             let lk = document.getElementById('move_to_room_link_react');
             //todo типо костыль
             //если этой линки нет, значит мы уже на странице румы
@@ -114,7 +123,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
             alert.Type = 1;
             window.G_AddAbsoluteAlertToState(alert);
             if (!location.href.includes("/planing-poker") || location.href.includes("/planing-poker/room")) {// && !location.href.endsWith("/planing-poker/")) {
-                let roomName = localState.RoomInfo.Name || "";
+                let roomName = __planing_poker_main_state_ref__.RoomInfo.Name || "";
                 window.location.href = "/planing-poker/" + roomName;
             }
             return;
@@ -137,8 +146,9 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
                         // let newState = { ...localState };
                         // newState.User.UserId = connectionId;
                         // setLocalState(newState);
-                        setLocalState(prevState => {
-                            let newState = { ...prevState };
+                        setLocalState(prevState => { 
+                            // let newState = { ...prevState };
+                            let newState = cloneDeep(prevState);
                             newState.User.UserConnectionId = connectionId;
 
                             return newState;
@@ -178,7 +188,8 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
     useEffect(() => {
         if (props.AuthInfo.AuthSuccess) {
             setLocalState(prevState => {
-                let newState = { ...prevState };
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
                 newState.User.UserName = props.AuthInfo.User.Email;
                 return newState;
             });
@@ -191,7 +202,8 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
     const userNameChange = (newName: string) => {
 
         setLocalState(prevState => {
-            let newState = { ...prevState };
+            // let newState = { ...prevState };
+            let newState = cloneDeep(prevState);
             newState.User.UserName = newName;
 
             return newState;
@@ -205,7 +217,8 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
         // newState.RoomInfo.Name = name;
         // setLocalState(newState);
         setLocalState(prevState => {
-            let newState = { ...prevState };
+            // let newState = { ...prevState };
+            let newState = cloneDeep(prevState);
             newState.RoomInfo.Name = name;
 
             return newState;
@@ -217,7 +230,8 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
         // newState.RoomInfo.Password = password;
         // setLocalState(newState);
         setLocalState(prevState => {
-            let newState = { ...prevState };
+            // let newState = { ...prevState };
+            let newState = cloneDeep(prevState);
             newState.RoomInfo.Password = password;
 
             return newState;
@@ -226,7 +240,8 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
     const clearUserId = () => {
         setLocalState(prevState => {
-            let newState = { ...prevState };
+            // let newState = { ...prevState };
+            let newState = cloneDeep(prevState);
             newState.User.UserId = "";
             return newState;
         });
@@ -243,7 +258,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
                     //  InRoom={localState.InRoom}
                     UserInfo={localState.User}
                     RoomInfo={localState.RoomInfo}
-                    MyHubConnection={localState.MyHubConnection}
+                    MyHubConnection={myHubConnection}
                     RoomNameChanged={roomNameChanged}
                     ChangeUserName={userNameChange}
                     HubConnected={hubConnected}
@@ -256,7 +271,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
                 <Index
                     Username={localState.User.UserName}
                     ChangeUserName={userNameChange}
-                    MyHubConnection={localState.MyHubConnection}
+                    MyHubConnection={myHubConnection}
                     RoomNameChanged={roomNameChanged}
                     RoomPasswordChanged={roomPasswordChanged}
                     RoomInfo={localState.RoomInfo}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { IStoryReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/StoryReturn';
 import { RoomStatus, StoriesHelper, Story } from './Models/RoomInfo';
+import cloneDeep from 'lodash/cloneDeep';
 
 
 
@@ -97,7 +98,8 @@ const StoriesSection = (props: StoriesSectionProp) => {
             props.RoomName).then(data => {
                 var dataTyped = data as IStoryReturn[];
                 setStoriesState(prevState => {
-                    let newState = { ...prevState };
+                    // let newState = { ...prevState };
+                    let newState = cloneDeep(prevState);
                     newState.NotActualStoriesLoaded = true;
                     return newState;
                 });
@@ -251,7 +253,8 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     type="text" onChange={(e) => {
 
                         setStoriesState(prevState => {
-                            let newState = { ...prevState };
+                            // let newState = { ...prevState };
+                            let newState = cloneDeep(prevState);
                             newState.NameForAdd = e.target.value;
                             return newState;
                         });
@@ -263,7 +266,8 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     onChange={(e) => {
 
                         setStoriesState(prevState => {
-                            let newState = { ...prevState };
+                            // let newState = { ...prevState };
+                            let newState = cloneDeep(prevState);
                             newState.DescriptionForAdd = e.target.value;
                             return newState;
                         });
@@ -283,7 +287,8 @@ const StoriesSection = (props: StoriesSectionProp) => {
             <span>Показать выполненные: </span>
             <input onClick={() => {
                 setStoriesState(prevState => {
-                    let newState = { ...prevState };
+                    // let newState = { ...prevState };
+                    let newState = cloneDeep(prevState);
                     newState.ShowOnlyCompleted = !newState.ShowOnlyCompleted;
                     return newState;
                 });

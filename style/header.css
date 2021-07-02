@@ -3,9 +3,11 @@ div.main-header {
     /* border: 2px solid black; */
     background-color: #343943;
 }
-div.main-header-inner{
+
+div.main-header-inner {
     height: 100%;
 }
+
 div.main-header-row {
     height: 100%;
 }

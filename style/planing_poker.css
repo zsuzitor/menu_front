@@ -1,5 +1,7 @@
 .planit-room-left-part {
     /* border: 2px solid black; */
+    background: -webkit-gradient(linear, left top, right top, from(transparent), to(#745959));
+    background: -o-linear-gradient(left, transparent, #745959);
     background: linear-gradient(to right, transparent, #745959);
     /* #2a4061); */
     min-height: 500px;
@@ -7,6 +9,8 @@
 
 .planit-room-right-part {
     /* border: 2px solid black; */
+    background: -webkit-gradient(linear, right top, left top, from(transparent), to(gray));
+    background: -o-linear-gradient(right, transparent, gray);
     background: linear-gradient(to left, transparent, gray);
     min-height: 500px;
 }
@@ -16,8 +20,14 @@
     height: 100px;
     border: 2px solid rgb(65 152 174);
     font-size: 60px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     border-radius: 5px;
 }
@@ -31,9 +41,14 @@
 }
 
 .planing-cards-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
+    -ms-flex-pack: distribute;
     justify-content: space-around;
+    -ms-flex-line-pack: justify;
     align-content: space-between;
     gap: 12px;
     padding-top: 10px;
@@ -61,6 +76,7 @@
 }
 
 .planing-user {
+    -webkit-box-shadow: 0 0 10px rgb(0 0 0 / 50%);
     box-shadow: 0 0 10px rgb(0 0 0 / 50%);
     border-radius: 5px;
     padding: 10px;
@@ -77,6 +93,7 @@
 }
 
 .planing-enter-inner {
+    -webkit-box-shadow: 0 0 10px rgb(0 0 0 / 50%);
     box-shadow: 0 0 10px rgb(0 0 0 / 50%);
 }
 

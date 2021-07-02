@@ -1,49 +1,50 @@
-
-.one-card-header{
+.one-card-header {
     /* border:2px solid black; */
     /* box-shadow: 0 0 5px; */
 }
 
-.one-card-header-info{
+.one-card-header-info {
     /* border:2px solid black; */
     padding-bottom: 5px;
+    -webkit-box-shadow: 0 0 5px;
     box-shadow: 0 0 5px;
     border-radius: 3px;
 }
 
-.one-card-header-image{
+.one-card-header-image {
     /* border:2px solid black; */
     text-align: center;
+    -webkit-box-shadow: 0 0 5px;
     box-shadow: 0 0 5px;
     border-radius: 3px;
 }
 
-.one-card-body-info{
+.one-card-body-info {
     /* border:2px solid black; */
+    -webkit-box-shadow: 0 0 5px;
     box-shadow: 0 0 5px;
     border-radius: 3px;
 }
 
-.one-card-page-follow-button{
+.one-card-page-follow-button {
     /* width: 20px;
     height: 20px; */
 }
 
-.one-card-page-edit-button{
+.one-card-page-edit-button {
     /* width: 20px;
     height: 20px; */
 }
 
-.one-card-page-save-button{
+.one-card-page-save-button {
     /* width: 20px;
     height: 20px; */
 }
 
-.one-card-page-cancel-button{
+.one-card-page-cancel-button {
     /* width: 20px;
     height: 20px; */
 }
-
 
 div.datail-one-card-button {
     width: 30px;

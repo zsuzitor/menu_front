@@ -38,12 +38,15 @@ class StoriesSectionState {
     ShowOnlyCompleted: boolean;
     NotActualStoriesLoaded: boolean;
 
+    SortByDateAsc: boolean;
+
 
     constructor() {
         this.NameForAdd = "";
         this.DescriptionForAdd = "";
         this.ShowOnlyCompleted = false;
         this.NotActualStoriesLoaded = false;
+        this.SortByDateAsc = false;
     }
 }
 
@@ -278,8 +281,16 @@ const StoriesSection = (props: StoriesSectionProp) => {
             </div>
         }
 
-
-
+        let sortByDateButton = <></>
+        if (storiesState.ShowOnlyCompleted) {
+            sortByDateButton = <button className="btn btn-primary" onClick={(e) => {
+                setStoriesState(prevState => {
+                    let newState = cloneDeep(prevState);
+                    newState.SortByDateAsc = !newState.SortByDateAsc;
+                    return newState;
+                });
+            }}>Сортировка по дате</button>
+        }
 
 
         return <div className="planing-stories-list-main planing-poker-left-one-section">
@@ -293,19 +304,33 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     return newState;
                 });
             }} type="checkbox" defaultChecked={storiesState.ShowOnlyCompleted}></input>
+            {sortByDateButton}
             <div>
                 <div className="stories-data-list">
-                    {props.Stories.filter(x => x.Completed === storiesState.ShowOnlyCompleted).map(x => <div
-                        className={"planing-story-in-list " + (x.Completed ? "completed-story" : "not-completed-story")}
-                        key={x.Id}>
-                        <p>Id: {x.Id}</p>
-                        <p>Название: {x.Name}</p>
-                        <p>Описание: {x.Description}</p>
-                        {completedStoryInfo(x)}
+                    {props.Stories
+                        .filter(x => x.Completed === storiesState.ShowOnlyCompleted)
+                        .sort((x1, x2) => {
+                            let x1Date = new Date(x1.Date || 0);
+                            let x2Date = new Date(x2.Date || 0);
+                            if (storiesState.SortByDateAsc) {
+                                return (x1Date.valueOf() - x2Date.valueOf());
+                            }
+                            else {
+                                return (x2Date.valueOf() - x1Date.valueOf());
+                            }
+                        })
+                        .map(x =>
+                            <div
+                                className={"planing-story-in-list " + (x.Completed ? "completed-story" : "not-completed-story")}
+                                key={x.Id}>
+                                <p>Id: {x.Id}</p>
+                                <p>Название: {x.Name}</p>
+                                <p>Описание: {x.Description}</p>
+                                {completedStoryInfo(x)}
 
-                        {adminButtonInList(x.Id)}
-                        <hr />
-                    </div>)}
+                                {adminButtonInList(x.Id)}
+                                <hr />
+                            </div>)}
                 </div>
                 <div>
                     {storiesState.ShowOnlyCompleted && !storiesState.NotActualStoriesLoaded ?

@@ -5,6 +5,7 @@
 
 .word-card-card-inner {
     /* border: 1px solid black; */
+    -webkit-box-shadow: 0 0 5px;
     box-shadow: 0 0 5px;
     border-radius: 3px;
     min-height: 150px;
@@ -14,6 +15,7 @@
 
 .word-card-cards-list-inner {
     /* border: 1px solid black; */
+    -webkit-box-shadow: 0 0 5px;
     box-shadow: 0 0 5px;
     border-radius: 3px;
     height: 300px;
@@ -31,6 +33,7 @@
 .words-cards-list-actions {
     min-height: 150px;
     /* border: 1px solid black; */
+    -webkit-box-shadow: 0 0 5px;
     box-shadow: 0 0 5px;
     border-radius: 3px;
 }
@@ -58,7 +61,8 @@
 
 .force-add-one-card {}
 
-.force-add-one-card-inner{
+.force-add-one-card-inner {
+    -webkit-box-shadow: 0 0 5px;
     box-shadow: 0 0 5px;
 }
 
@@ -67,15 +71,14 @@
     margin-right: auto;
 }
 
-.work-words-lists-main{
+.work-words-lists-main {
     margin-left: auto;
     margin-right: auto;
 }
 
-.work-words-one-list{
+.work-words-one-list {}
 
-}
-
-.work-words-one-list-inner{
+.work-words-one-list-inner {
+    -webkit-box-shadow: 0 0 5px;
     box-shadow: 0 0 5px;
 }

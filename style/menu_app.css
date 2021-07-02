@@ -1,17 +1,20 @@
-.card-list-body{
+.card-list-body {
     background-color: white;
 }
-
-
 
 div.one-menu-card-inner {
     width: 100%;
     height: 100%;
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
     transition: 0.3s;
 }
 
 div.one-menu-card-inner:hover {
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
     transition: 0.3s;
 }
 
@@ -27,7 +30,6 @@ div.one-card-button {
 div.edit-one-card-button {
     left: 100%;
     margin-left: -30px;
-   
 }
 
 div.follow-one-card-button {
@@ -35,27 +37,18 @@ div.follow-one-card-button {
     margin-left: -60px;
 }
 
-div.cancel-edit-one-card-button{
+div.cancel-edit-one-card-button {
     left: 100%;
     margin-left: -30px;
 }
-div.save-one-card-button{
+
+div.save-one-card-button {
     left: 100%;
     margin-left: -60px;
 }
 
-div.card-list-preloader{
+div.card-list-preloader {
     height: 400px;
     width: 400px;
     /* TODO  при маленьком экране фул криво */
 }
-
-
-
-
-
-
-
-
-
-

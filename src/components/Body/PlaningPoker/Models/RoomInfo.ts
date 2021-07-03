@@ -32,7 +32,7 @@ export class UserInRoom implements MappedWithBack<IUserInRoomReturn> {
 
     Id: string;
     Name: string;
-    Vote?: number;
+    Vote?: string;//number|string
     Roles: string[];
     HasVote: boolean;
 

@@ -1,6 +1,4 @@
-import { stringify } from 'querystring';
 import React, { useState, useEffect } from 'react';
-// import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import { RoomStatus, UserInRoom, UserRoles } from './Models/RoomInfo';
 
 
@@ -106,11 +104,11 @@ const UserInList = (props: UserInListProp) => {
     }
     else if (props.RoomStatus === RoomStatus.CloseVote) {
         //подсвечиваем min max
-        if (props.User.Vote) {
-            if (props.MinVote === props.User.Vote) {
+        if (props.User.Vote && !isNaN(+props.User.Vote)) {
+            if (props.MinVote == +props.User.Vote) {
                 classColorize = " planing-user-voted-min";
             }
-            else if (props.MaxVote === props.User.Vote) {
+            else if (props.MaxVote == +props.User.Vote) {
                 classColorize = " planing-user-voted-max";
             }
         }

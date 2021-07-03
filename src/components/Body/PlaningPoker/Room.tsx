@@ -147,7 +147,7 @@ const Room = (props: RoomProps) => {
     let initState = new RoomState();
     const [localState, setLocalState] = useState(initState);
     const [roomStatusState, setRoomStatusState] = useState(RoomStatus.None);
-    const [selectedVoteCard, setSelectedVoteCard] = useState(-1);
+    const [selectedVoteCard, setSelectedVoteCard] = useState("-1");
     const [hideVoteState, setHideVoteState] = useState(false);
     const [userNameLocalState, setUserNameLocalState] = useState(props.UserInfo.UserName);//для редактирования
     const initStories = new StoriesInfo();
@@ -360,7 +360,9 @@ const Room = (props: RoomProps) => {
 
                 user.HasVote = true;
 
-                if (!isNaN(vote)) {
+
+                // if (!isNaN(vote)) {
+                if (vote !== "?") {
                     user.Vote = vote;
                 }
 
@@ -407,7 +409,7 @@ const Room = (props: RoomProps) => {
                     user.Vote = null;
                     user.HasVote = false;
                     if (userId === __planing_room_props_ref__.UserInfo.UserId) {
-                        setSelectedVoteCard(-1);
+                        setSelectedVoteCard("-1");
                     }
 
                 }
@@ -422,7 +424,7 @@ const Room = (props: RoomProps) => {
 
 
             setSelectedVoteCard(prevState => {
-                return -1;
+                return "-1";
             });
 
             setLocalState(prevState => {
@@ -591,7 +593,7 @@ const Room = (props: RoomProps) => {
         // let newState = state || { ...localState };
         // setSelectedVoteCard(-1);
         setSelectedVoteCard(prevState => {
-            return -1;
+            return "-1";
         });
 
         if (!data) {
@@ -664,17 +666,17 @@ const Room = (props: RoomProps) => {
             return;
         }
 
-        if (selectedVoteCard === +voteCardBlock.target.dataset.vote) {
+        if (selectedVoteCard === voteCardBlock.target.dataset.vote) {
             return;
         }
 
-        let voted = await props.MyHubConnection.invoke("Vote", props.RoomInfo.Name, +voteCardBlock.target.dataset.vote);
+        let voted = await props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.Vote, props.RoomInfo.Name, voteCardBlock.target.dataset.vote);
         if (!voted) {
             return;
         }
 
         setSelectedVoteCard(prevState => {
-            return +voteCardBlock.target.dataset.vote;
+            return voteCardBlock.target.dataset.vote;
         });
 
     }
@@ -682,18 +684,14 @@ const Room = (props: RoomProps) => {
 
     const renderVotePlaceIfNeed = () => {
 
-        //TODO UNCOMMENT
         if (roomStatusState !== RoomStatus.AllCanVote) {
             return <div></div>
         }
-        let voteArr = [1, 2, 3, 5, 7, 10, 13, 15, 18, 20, 25, 30, 35, 40, 50];
+        let voteArr = [1, 2, 3, 5, 7, 10, 13, 15, 18, 20, 25, 30, 35, 40, 50, "tea"];
 
         return <div onClick={(e) => doVote(e)} className="planing-cards-container">
-            {voteArr.map(x => <OneVoteCard key={x} Num={x} NeedSelect={selectedVoteCard === x} />)}
-            {/*             
-            <div className="one-planing-vote-card" data-vote="1">1</div>
-            <div className="one-planing-vote-card" data-vote="2">2</div>
-            <div className="one-planing-vote-card" data-vote="3">3</div> */}
+            {voteArr.map(x => <OneVoteCard key={x} Val={x + ''} NeedSelect={selectedVoteCard == x} />)}
+            {/* <OneVoteCard key="vote_card_tea" Val="tea" NeedSelect={selectedVoteCard === x} /> */}
         </div>
 
     }
@@ -827,12 +825,6 @@ const Room = (props: RoomProps) => {
         }
 
 
-        const changeUserName = () => {
-
-
-            props.ChangeUserName(userNameLocalState)
-
-        }
 
         const updateAllUsers = () => {
             let loadedUsers = (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => {
@@ -877,7 +869,7 @@ const Room = (props: RoomProps) => {
                 }}
                 value={userNameLocalState}></input>
             <button className="btn btn-primary"
-                onClick={() => changeUserName()}>Изменить имя</button>
+                onClick={() => props.ChangeUserName(userNameLocalState)}>Изменить имя</button>
             <button className="btn btn-primary"
                 onClick={() => updateAllUsers()}>Обновить список пользователей</button>
             {hideVotesSetting}

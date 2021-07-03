@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 
 class OneVoteCardProp {
-    Num: number;
+    Val: string;
     NeedSelect: boolean;
 }
 
@@ -15,7 +15,7 @@ const OneVoteCard = (props: OneVoteCardProp) => {
     }
 
 
-    return <div className={"one-planing-vote-card" + selectedClass} data-vote={"" + props.Num}>{props.Num}</div>
+    return <div className={"one-planing-vote-card" + selectedClass} data-vote={"" + props.Val}>{props.Val}</div>
 
 
 }

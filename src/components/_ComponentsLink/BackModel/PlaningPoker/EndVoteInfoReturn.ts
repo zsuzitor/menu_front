@@ -3,7 +3,7 @@
 
 export interface IEndVoteUserInfoReturn {
     id: string;
-    vote: number;
+    vote: string;//number|string
 }
 
 

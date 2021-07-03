@@ -68,6 +68,7 @@ export class HubEndpointsBack {
     AddNewRoleToUser: string;
     RemoveRoleUser: string;
     LoadNotActualStories: string;
+    Vote: string;
 
     constructor() {
         this.GetConnectionId = "GetConnectionId";
@@ -87,6 +88,7 @@ export class HubEndpointsBack {
         this.AddNewRoleToUser = "AddNewRoleToUser";
         this.RemoveRoleUser = "RemoveRoleUser";
         this.LoadNotActualStories = "LoadNotActualStories";
+        this.Vote = "Vote";
     }
 }
 

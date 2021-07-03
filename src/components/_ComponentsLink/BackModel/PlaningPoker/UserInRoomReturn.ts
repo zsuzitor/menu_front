@@ -6,6 +6,6 @@ export interface IUserInRoomReturn {
     id: string;
     roles: string[];
     name: string;
-    vote?: number;
+    vote?: string;//number|string
     has_vote:boolean;
 }

@@ -283,13 +283,14 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
         let sortByDateButton = <></>
         if (storiesState.ShowOnlyCompleted) {
-            sortByDateButton = <button className="btn btn-primary" onClick={(e) => {
-                setStoriesState(prevState => {
-                    let newState = cloneDeep(prevState);
-                    newState.SortByDateAsc = !newState.SortByDateAsc;
-                    return newState;
-                });
-            }}>Сортировка по дате</button>
+            sortByDateButton = <button className="btn btn-primary"
+                onClick={(e) => {
+                    setStoriesState(prevState => {
+                        let newState = cloneDeep(prevState);
+                        newState.SortByDateAsc = !newState.SortByDateAsc;
+                        return newState;
+                    });
+                }}>Сортировка по дате</button>
         }
 
 

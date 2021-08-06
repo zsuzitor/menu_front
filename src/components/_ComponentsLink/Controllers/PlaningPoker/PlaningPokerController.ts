@@ -1,7 +1,6 @@
 
 
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
-import { IOneRoomReturn } from "../../BackModel/PlaningPoker/OneRoomReturn";
 import { IRoomInfoReturn } from "../../BackModel/PlaningPoker/RoomInfoReturn";
 import { IUserInRoomReturn } from "../../BackModel/PlaningPoker/UserInRoomReturn";
 
@@ -173,3 +172,6 @@ export class PlaningPokerController implements IPlaningPokerController {
     }
 
 }
+
+
+

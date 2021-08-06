@@ -139,5 +139,3 @@ const UserInList = (props: UserInListProp) => {
 export default UserInList;
 
 
-
-

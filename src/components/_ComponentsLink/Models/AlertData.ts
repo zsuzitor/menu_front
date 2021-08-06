@@ -20,7 +20,7 @@ export class AlertData {
     Key?: number;
     Text: string;
     Type: AlertTypeEnum;
-    Timeout?: number;
+    Timeout?: number;//милисек
 
     constructor() {
 

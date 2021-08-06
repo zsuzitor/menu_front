@@ -12,6 +12,7 @@ import { PlaningPokerUserInfo, RoomInfo } from './Models/RoomInfo';
 import * as signalR from "@aspnet/signalr";
 import { IAuthState } from '../../_ComponentsLink/Models/AuthState';
 import cloneDeep from 'lodash/cloneDeep';
+import { MainErrorObjectBack } from '../../_ComponentsLink/BackModel/ErrorBack';
 
 // import * as signalR from '@aspnet/signalr'
 
@@ -82,9 +83,25 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
 
         hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.PlaningNotifyFromServer, function (data) {
+            let dataT = data as MainErrorObjectBack;
             let alert = new AlertData();
-            alert.Text = data.text;
-            alert.Type = data.status;
+            if (!dataT) {
+                return;
+            }
+
+            dataT.errors.forEach(errLvl1 => {
+                errLvl1.errors.forEach(errTxt => {
+
+                    alert.Text = errTxt;
+                    alert.Type = AlertTypeEnum.Error;
+                    alert.Timeout = 5000;
+                });
+            });
+
+            // alert.Text = data.text;
+            // alert.Type = data.status;
+
+
             window.G_AddAbsoluteAlertToState(alert);
         });
 
@@ -146,7 +163,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
                         // let newState = { ...localState };
                         // newState.User.UserId = connectionId;
                         // setLocalState(newState);
-                        setLocalState(prevState => { 
+                        setLocalState(prevState => {
                             // let newState = { ...prevState };
                             let newState = cloneDeep(prevState);
                             newState.User.UserConnectionId = connectionId;

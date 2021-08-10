@@ -1,3 +1,4 @@
+import { IEndVoteInfoReturn } from "../../../_ComponentsLink/BackModel/PlaningPoker/EndVoteInfoReturn";
 import { IStoryReturn } from "../../../_ComponentsLink/BackModel/PlaningPoker/StoryReturn";
 import { IUserInRoomReturn } from "../../../_ComponentsLink/BackModel/PlaningPoker/UserInRoomReturn";
 import { MappedWithBack } from "../../../_ComponentsLink/BL/Interfaces/MappedWithBack"
@@ -51,6 +52,7 @@ export class UserInRoom implements MappedWithBack<IUserInRoomReturn> {
     };
 
     CanVote(): boolean {
+        //должно быть синхронно с бэком
         return !this.Roles.includes(UserRoles.Observer);
     };
 
@@ -72,14 +74,23 @@ export class PlaningPokerUserInfo {
 }
 
 
-export class VoteInfo {
+export class VoteInfo implements MappedWithBack<IEndVoteInfoReturn>{
     MaxVote: number;
     MinVote: number;
     AverageVote: number;
+    AllAreVoted: boolean;
     constructor() {
         this.MaxVote = 0;
         this.MinVote = 0;
         this.AverageVote = 0;
+        this.AllAreVoted = false;
+    }
+
+    FillByBackModel(newData: IEndVoteInfoReturn): void {
+        this.MaxVote = newData.max_vote;
+        this.MinVote = newData.min_vote;
+        this.AverageVote = newData.average_vote;
+        this.AllAreVoted = false;
     }
 
 }

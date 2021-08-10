@@ -182,9 +182,6 @@ const Room = (props: RoomProps) => {
                     return us;
                 });
 
-
-
-
                 setRoomStatusState(prevState => {
                     // let newState = { ...prevState };
                     return data.room.status;
@@ -315,6 +312,7 @@ const Room = (props: RoomProps) => {
 
             usersId.forEach(x => {
                 if (x == __planing_room_props_ref__.UserInfo.UserId) {
+                    document.cookie = "planing_poker_roomname=; path=/;";
                     alert("you kicked or leave");//TODO может как то получше сделать, и хорошо бы без перезагрузки\редиректа
                     window.location.href = "/planing-poker";
                     __planing_room_props_ref__.ClearUserId();//todo тут наверное стоит еще что то чистить
@@ -349,7 +347,7 @@ const Room = (props: RoomProps) => {
             }
 
 
-
+            let allAreVotedChanged = false;
             setLocalState(prevState => {
                 // let newState = { ...prevState };
                 let newState = cloneDeep(prevState);
@@ -366,8 +364,23 @@ const Room = (props: RoomProps) => {
                     user.Vote = vote;
                 }
 
+                if (newState.UsersList.every(x => x.HasVote || !x.CanVote()) && !newState.VoteInfo.AllAreVoted) {
+                    newState.VoteInfo.AllAreVoted = true;
+                    allAreVotedChanged = true;
+                    
+                    // return;
+                }
+
                 return newState;
             });
+
+            if(allAreVotedChanged){
+                let alert = new AlertData();
+                alert.Text = "Все участники проголосовали";
+                alert.Type = AlertTypeEnum.Success;
+                alert.Timeout = 5000;
+                window.G_AddAbsoluteAlertToState(alert);
+            }
         });
 
 
@@ -621,9 +634,7 @@ const Room = (props: RoomProps) => {
 
         // }
 
-        state.VoteInfo.MaxVote = data.max_vote;
-        state.VoteInfo.MinVote = data.min_vote;
-        state.VoteInfo.AverageVote = data.average_vote;
+        state.VoteInfo.FillByBackModel(data);
 
     }
 

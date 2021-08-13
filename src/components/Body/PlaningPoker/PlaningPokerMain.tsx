@@ -47,7 +47,7 @@ require('../../../../style/planing_poker.css');
 
 //см коммент для __planing_room_props_ref__
 let __planing_poker_main_state_ref__: PlaningPokerMainState = null;
-
+let __planing_poker_hubConnected_ref__:boolean = false;
 
 const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
@@ -65,6 +65,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
         )
         .build();
 
+
     // https://stackoverflow.com/questions/52086158/angular-signalr-error-failed-to-complete-negotiation-with-the-server
     //https://github.com/aspnet/SignalR/issues/2608
     //https://docs.microsoft.com/en-us/aspnet/core/tutorials/signalr-typescript-webpack?view=aspnetcore-2.1&tabs=visual-studio
@@ -74,12 +75,40 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
     const [localState, setLocalState] = useState(initState);
     __planing_poker_main_state_ref__ = localState;
     const [hubConnected, sethubConnectedState] = useState(false);
-
+    __planing_poker_hubConnected_ref__ = hubConnected;
 
 
 
     //componentdidmount, должен вызваться уже когда childs отрендерятся
     useEffect(() => {
+        hubConnection.onclose(() => {
+            // console.log(JSON.stringify(__planing_poker_main_state_ref__));
+            // alert("asd");
+            //todo тут сообщение об ошибке или что то еще мб перезагрузить страницу\редирект?
+        });
+
+        // window.onbeforeunload = function(e) {
+        //     var dialogText = 'Dialog text here';
+        //     e.returnValue = dialogText;
+        //     return dialogText;
+        //   };
+
+        window.addEventListener('beforeunload', (event) => {
+            if (__planing_poker_hubConnected_ref__) {
+                hubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.OnWindowClosedAsync, __planing_poker_main_state_ref__?.RoomInfo?.Name);
+            }
+
+            // console.log(JSON.stringify(__planing_poker_main_state_ref__));
+            // var dialogText = 'Dialog text here';
+            // event.returnValue = dialogText;
+            // return dialogText;
+
+            // Отмените событие, как указано в стандарте.
+            //event.preventDefault();
+            // Chrome требует установки возвратного значения.
+            //event.returnValue = '';
+        });
+
 
 
         hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.PlaningNotifyFromServer, function (data) {

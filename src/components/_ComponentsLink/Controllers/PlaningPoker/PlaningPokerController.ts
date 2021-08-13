@@ -68,6 +68,7 @@ export class HubEndpointsBack {
     RemoveRoleUser: string;
     LoadNotActualStories: string;
     Vote: string;
+    OnWindowClosedAsync:string;
 
     constructor() {
         this.GetConnectionId = "GetConnectionId";
@@ -88,6 +89,7 @@ export class HubEndpointsBack {
         this.RemoveRoleUser = "RemoveRoleUser";
         this.LoadNotActualStories = "LoadNotActualStories";
         this.Vote = "Vote";
+        this.OnWindowClosedAsync = "OnWindowClosedAsync";
     }
 }
 

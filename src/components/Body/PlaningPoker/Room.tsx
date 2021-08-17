@@ -312,7 +312,7 @@ const Room = (props: RoomProps) => {
 
             usersId.forEach(x => {
                 if (x == __planing_room_props_ref__.UserInfo.UserId) {
-                    document.cookie = "planing_poker_roomname=; path=/;";
+                    // document.cookie = "planing_poker_roomname=; path=/;";
                     alert("you kicked or leave");//TODO может как то получше сделать, и хорошо бы без перезагрузки\редиректа
                     window.location.href = "/planing-poker";
                     __planing_room_props_ref__.ClearUserId();//todo тут наверное стоит еще что то чистить

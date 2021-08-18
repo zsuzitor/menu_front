@@ -27,6 +27,7 @@ export class HubEndpointsFront {
     EnteredInRoom: string;
     PlaningNotifyFromServer: string;
     NeedRefreshTokens: string;
+    NewRoomAlive:string;
 
     constructor() {
         this.MovedStoryToComplete = "MovedStoryToComplete";
@@ -46,6 +47,7 @@ export class HubEndpointsFront {
         this.EnteredInRoom = "EnteredInRoom";
         this.PlaningNotifyFromServer = "PlaningNotifyFromServer";
         this.NeedRefreshTokens = "NeedRefreshTokens";
+        this.NewRoomAlive = "NewRoomAlive";
     }
 }
 

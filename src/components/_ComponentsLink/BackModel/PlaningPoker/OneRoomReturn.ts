@@ -7,7 +7,7 @@ import { IUserInRoomReturn } from "./UserInRoomReturn";
 
 export interface IOneRoomReturn {
     name: string;
-    die_date: any;//todo datetime
+    die_date: string;
     users: IUserInRoomReturn[];
     status: RoomStatus;
     // end_vote_info: IEndVoteInfoReturn;

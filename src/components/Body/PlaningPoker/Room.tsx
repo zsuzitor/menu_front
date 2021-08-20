@@ -15,6 +15,7 @@ import { IStoryReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/Story
 import StoriesSection from './StoriesSection';
 import { IRoomInfoReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/RoomInfoReturn';
 import cloneDeep from 'lodash/cloneDeep';
+import RoomTimer from './RoomTimer';
 
 
 class RoomProps {
@@ -33,10 +34,11 @@ class RoomProps {
 class RoomState {
     UsersList: UserInRoom[];
     VoteInfo: VoteInfo;
-
+    DieRoomTime: Date;
     constructor() {
         this.UsersList = [];
         this.VoteInfo = new VoteInfo();
+        this.DieRoomTime = null;
     }
 
 }
@@ -143,7 +145,7 @@ const Room = (props: RoomProps) => {
 
 
 
-
+    //#state
     let initState = new RoomState();
     const [localState, setLocalState] = useState(initState);
     const [roomStatusState, setRoomStatusState] = useState(RoomStatus.None);
@@ -193,7 +195,7 @@ const Room = (props: RoomProps) => {
                     let newState = cloneDeep(prevState);
                     newState.UsersList.splice(0, newState.UsersList.length);
                     newState.UsersList.push(...newUsersData);
-
+                    newState.DieRoomTime = new Date(data.room.die_date);
 
                     fillVoteInfo(newState, data.end_vote_info);
                     newState.UsersList.forEach(us => {
@@ -367,14 +369,14 @@ const Room = (props: RoomProps) => {
                 if (newState.UsersList.every(x => x.HasVote || !x.CanVote()) && !newState.VoteInfo.AllAreVoted) {
                     newState.VoteInfo.AllAreVoted = true;
                     allAreVotedChanged = true;
-                    
+
                     // return;
                 }
 
                 return newState;
             });
 
-            if(allAreVotedChanged){
+            if (allAreVotedChanged) {
                 let alert = new AlertData();
                 alert.Text = "Все участники проголосовали";
                 alert.Type = AlertTypeEnum.Success;
@@ -581,6 +583,21 @@ const Room = (props: RoomProps) => {
 
         });
 
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.NewRoomAlive, function (newDieTime: string) {
+            if (!newDieTime) {
+                return;
+            }
+
+            setLocalState(prevState => {
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
+                newState.DieRoomTime = new Date(newDieTime);
+                return newState;
+            });
+
+        });
+
+
 
 
         return function cleanUp() {
@@ -596,6 +613,7 @@ const Room = (props: RoomProps) => {
             props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.UserLeaved);
             props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.UserNameChanged);
             props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewUserInRoom);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewRoomAlive);
 
         };
     }, []);
@@ -755,6 +773,10 @@ const Room = (props: RoomProps) => {
     }
 
 
+    const aliveRoom = () => {
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.AliveRoom, props.RoomInfo.Name);
+    }
+
 
     const storiesLoaded = (stories: IStoryReturn[]) => {
         setStoriesState(prevState => {
@@ -901,11 +923,15 @@ const Room = (props: RoomProps) => {
         </div>
     }
 
-
-
     return <div className="container">
         <div className="padding-10-top"></div>
         <h1>Room: {props.RoomInfo.Name}</h1>
+        <div>
+            {/* {renderRoomAliveTimer()} */}
+            <RoomTimer
+                DieDate={localState.DieRoomTime}
+                AliveRoom={aliveRoom} />
+        </div>
         {renderNotAuthMessage()}
 
         <div className="row">

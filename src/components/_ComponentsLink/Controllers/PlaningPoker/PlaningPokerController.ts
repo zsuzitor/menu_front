@@ -27,7 +27,7 @@ export class HubEndpointsFront {
     EnteredInRoom: string;
     PlaningNotifyFromServer: string;
     NeedRefreshTokens: string;
-    NewRoomAlive:string;
+    NewRoomAlive: string;
 
     constructor() {
         this.MovedStoryToComplete = "MovedStoryToComplete";
@@ -70,7 +70,8 @@ export class HubEndpointsBack {
     RemoveRoleUser: string;
     LoadNotActualStories: string;
     Vote: string;
-    OnWindowClosedAsync:string;
+    OnWindowClosedAsync: string;
+    AliveRoom: string;
 
     constructor() {
         this.GetConnectionId = "GetConnectionId";
@@ -92,6 +93,7 @@ export class HubEndpointsBack {
         this.LoadNotActualStories = "LoadNotActualStories";
         this.Vote = "Vote";
         this.OnWindowClosedAsync = "OnWindowClosedAsync";
+        this.AliveRoom = "AliveRoom";
     }
 }
 

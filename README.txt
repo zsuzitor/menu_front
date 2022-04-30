@@ -1,14 +1,14 @@
-===в основном взято отсюда, внесены исправления согласно обновленным версиям либ, поправлены опечатки
+===РІ РѕСЃРЅРѕРІРЅРѕРј РІР·СЏС‚Рѕ РѕС‚СЃСЋРґР°, РІРЅРµСЃРµРЅС‹ РёСЃРїСЂР°РІР»РµРЅРёСЏ СЃРѕРіР»Р°СЃРЅРѕ РѕР±РЅРѕРІР»РµРЅРЅС‹Рј РІРµСЂСЃРёСЏРј Р»РёР±, РїРѕРїСЂР°РІР»РµРЅС‹ РѕРїРµС‡Р°С‚РєРё
 http://typescript-lang.ru/docs/tutorials/React%20&%20Webpack.html
 
 ===setup project
 npm run setup
 npm install -g typescript webpack webpack-cli
-npm link typescript -- используем глобальную версию typescript, тут надо именно проследить, без этого будут проблемы(не сможет найти typescript).
+npm link typescript -- РёСЃРїРѕР»СЊР·СѓРµРј РіР»РѕР±Р°Р»СЊРЅСѓСЋ РІРµСЂСЃРёСЋ typescript, С‚СѓС‚ РЅР°РґРѕ РёРјРµРЅРЅРѕ РїСЂРѕСЃР»РµРґРёС‚СЊ, Р±РµР· СЌС‚РѕРіРѕ Р±СѓРґСѓС‚ РїСЂРѕР±Р»РµРјС‹(РЅРµ СЃРјРѕР¶РµС‚ РЅР°Р№С‚Рё typescript).
 npm link webpack
 npm link webpack-cli
 ===build===
-npm run build -- билдим
+npm run build -- Р±РёР»РґРёРј
 ===run test server=======
 ---
 
@@ -29,13 +29,13 @@ typings install --save dt~react
 typings install --save dt~react-dom
 typings install --global --save dt~react-router-dom
 }
-добавить tsconfig.json
-Создайте файл webpack.config.js
+РґРѕР±Р°РІРёС‚СЊ tsconfig.json
+РЎРѕР·РґР°Р№С‚Рµ С„Р°Р№Р» webpack.config.js
 ---
 
 
 
-bs-config.json -- конфиг lite-server. можно удалить конфиг и убрать его из команды запуска
+bs-config.json -- РєРѕРЅС„РёРі lite-server. РјРѕР¶РЅРѕ СѓРґР°Р»РёС‚СЊ РєРѕРЅС„РёРі Рё СѓР±СЂР°С‚СЊ РµРіРѕ РёР· РєРѕРјР°РЅРґС‹ Р·Р°РїСѓСЃРєР°
 
 
 
@@ -43,8 +43,8 @@ bs-config.json -- конфиг lite-server. можно удалить конфиг и убрать его из коман
 
 
 !!!
-при подключении не к asp core
-возможно придется поменять зависимость с "@aspnet/signalr" на '@microsoft/signalr' 
+РїСЂРё РїРѕРґРєР»СЋС‡РµРЅРёРё РЅРµ Рє asp core
+РІРѕР·РјРѕР¶РЅРѕ РїСЂРёРґРµС‚СЃСЏ РїРѕРјРµРЅСЏС‚СЊ Р·Р°РІРёСЃРёРјРѕСЃС‚СЊ СЃ "@aspnet/signalr" РЅР° '@microsoft/signalr' 
 
 
 

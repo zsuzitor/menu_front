@@ -5,7 +5,7 @@ import * as signalR from "@aspnet/signalr";
 import { type } from "os";
 import React, { useState, useEffect } from 'react';
 
-import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 import { AlertData } from "../../_ComponentsLink/Models/AlertData";
 import { RoomInfo } from "./Models/RoomInfo";
 

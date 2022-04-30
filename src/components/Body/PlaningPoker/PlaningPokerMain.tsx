@@ -1,6 +1,6 @@
 // import *, {useEffect} as React from "react";
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 // import * as signalR from "@microsoft/signalr";
 import Index from "./Index";
 import Room from "./Room";
@@ -47,7 +47,7 @@ require('../../../../style/planing_poker.css');
 
 //см коммент для __planing_room_props_ref__
 let __planing_poker_main_state_ref__: PlaningPokerMainState = null;
-let __planing_poker_hubConnected_ref__:boolean = false;
+let __planing_poker_hubConnected_ref__: boolean = false;
 
 const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
@@ -298,33 +298,32 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
 
     return <div>
-        <Switch>
-            <Route path="/planing-poker/room" render={() =>
-                <Room
-                    //  InRoom={localState.InRoom}
-                    UserInfo={localState.User}
-                    RoomInfo={localState.RoomInfo}
-                    MyHubConnection={myHubConnection}
-                    RoomNameChanged={roomNameChanged}
-                    ChangeUserName={userNameChange}
-                    HubConnected={hubConnected}
-                    ClearUserId={clearUserId}
-                />
+        <Routes>
+            <Route path="/planing-poker/room/*" element={<Room
+                //  InRoom={localState.InRoom}
+                UserInfo={localState.User}
+                RoomInfo={localState.RoomInfo}
+                MyHubConnection={myHubConnection}
+                RoomNameChanged={roomNameChanged}
+                ChangeUserName={userNameChange}
+                HubConnected={hubConnected}
+                ClearUserId={clearUserId}
+            />
             } />
 
             {/* exact */}
-            <Route path="/planing-poker" render={() =>
-                <Index
-                    Username={localState.User.UserName}
-                    ChangeUserName={userNameChange}
-                    MyHubConnection={myHubConnection}
-                    RoomNameChanged={roomNameChanged}
-                    RoomPasswordChanged={roomPasswordChanged}
-                    RoomInfo={localState.RoomInfo}
-                // InRoom={localState.InRoom}
-                />} />
+            <Route path="/planing-poker/*" element={<Index
+                Username={localState.User.UserName}
+                ChangeUserName={userNameChange}
+                MyHubConnection={myHubConnection}
+                RoomNameChanged={roomNameChanged}
+                RoomPasswordChanged={roomPasswordChanged}
+                RoomInfo={localState.RoomInfo}
+            // InRoom={localState.InRoom}
+            />
+            } />
 
-        </Switch>
+        </Routes>
     </div>
 }
 

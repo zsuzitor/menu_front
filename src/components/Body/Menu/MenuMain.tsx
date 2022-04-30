@@ -2,12 +2,12 @@ import * as React from "react";
 // import { Switch, Route } from "react-router-dom";
 import { AppList } from "./AppList";
 
-export interface IHelloProps {
-    compiler: string;
-    framework: string;
-}
+// export interface IHelloProps {
+//     compiler: string;
+//     framework: string;
+// }
 
-export class MenuMain extends React.Component<IHelloProps, {}> {
+export class MenuMain extends React.Component<{}, {}> {
     constructor(props: any) {
         super(props);
     }
@@ -17,7 +17,7 @@ export class MenuMain extends React.Component<IHelloProps, {}> {
         // return <BodyCardsListMain />
         //TODO попробовать достучаться незалогиненным по ссылкам и поправить то что вылезет
         // return <BodyCardsListMain/> 
-        return <AppList/> 
+        return <AppList />
         // <Switch>
         //     <Route exact path="/menu" component={AppList} />
 

@@ -43,8 +43,12 @@ module.exports = {
     // предположить, что соответствующая глобальная переменная существует, и использовать
     // ее взамен. Это важно, так как позволяет избежать добавления в сборку всех зависимостей,
     // что дает браузерам возможность кэшировать файлы библиотек между различными сборками.
-    externals: {
-        "react": "React",
-        "react-dom": "ReactDOM"
-    },
+    //если так делать скрипты придется подключать отдельно и с правильными версиями
+    // @*<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    // <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    // <script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>*@
+    // externals: {
+    //     "react": "React",
+    //     "react-dom": "ReactDOM"
+    // },
 };

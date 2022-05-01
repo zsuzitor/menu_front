@@ -3,6 +3,7 @@
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import ReactDOMClient from 'react-dom/client';
 import MainComponent from './components/MainComponent';
 import { AjaxHelper } from './components/_ComponentsLink/AjaxLogic';
 import { AuthenticateController } from "./components/_ComponentsLink/Controllers/AuthenticateController";
@@ -57,11 +58,19 @@ window.G_PlaningPokerController = new PlaningPokerController();
 // G_AddAbsoluteAlertToState -->MainComponent
 //
 
+const container = document.getElementById('menu_all_main_content_start');
+
+// Create a root.
+// const root = ReactDOM.createRoot(container);
+const root = ReactDOMClient.createRoot(container);
+// Initial render
+root.render(<MainComponent />);
 
 
-ReactDOM.render(
-    <MainComponent />,
-    // <div>test</div>,
-    document.getElementById("menu_all_main_content_start")
-);
+
+// ReactDOM.render(
+//     <MainComponent />,
+//     // <div>test</div>,
+//     document.getElementById("menu_all_main_content_start")
+// );
 

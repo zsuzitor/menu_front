@@ -16,8 +16,8 @@ export class MenuAppMain extends React.Component<{}, {}> {
         //TODO попробовать достучаться незалогиненным по ссылкам и поправить то что вылезет
         // return <BodyCardsListMain/> 
         return <Routes>
-            <Route path="/menu-app" element={<BodyCardsListMain />} />
-            <Route path="/menu-app/detail/*" element={<OneCardDetailMain UpdateElement={null} />} />
+            <Route path="/" element={<BodyCardsListMain />} />
+            <Route path="/detail/*" element={<OneCardDetailMain UpdateElement={null} />} />
 
             {/* <Route path="/menu/auth/login" render={(props) => (
                 <MainAuth {...props} LoginPage={true} />

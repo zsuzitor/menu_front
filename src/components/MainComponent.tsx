@@ -178,7 +178,7 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
 
 
     return <div>
-        <React.StrictMode>
+        {/* <React.StrictMode> */}
             <BrowserRouter>
                 <HeaderMain AuthInfo={localState.Auth} />
                 {/* <BodyMain /> */}
@@ -186,7 +186,7 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
                 <FooterMain />
                 <MainAlertAbsolute Data={localState.AbsoluteAlerts} RemoveALert={RemoveMainALert} />
             </BrowserRouter>
-        </React.StrictMode>
+        {/* </React.StrictMode> */}
     </div>
 
 }

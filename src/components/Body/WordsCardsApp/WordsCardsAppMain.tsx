@@ -13,11 +13,12 @@ export class WordsCardsAppMain extends React.Component<{}, {}> {
 
     render() {
         // return <WordsCardsListMain/>
-        return <Routes>
-            <Route path="/words-cards-app" element={<WordsCardsListMain />} />
-            <Route path="/words-cards-app/force-add/*" element={<WordsCardsForceAdd />} />
-            <Route path="/words-cards-app/word-list/*" element={<WordsCardsListWork />
-            } />
-        </Routes >
+        return <>
+            <Routes>
+                <Route path="/" element={<WordsCardsListMain />} />
+                <Route path="/force-add/*" element={<WordsCardsForceAdd />} />
+                <Route path="/word-list/*" element={<WordsCardsListWork />} />
+            </Routes >
+        </>
     }
 }

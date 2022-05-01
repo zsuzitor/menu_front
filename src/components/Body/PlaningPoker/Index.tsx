@@ -27,28 +27,11 @@ class IndexProps {
     RoomInfo: RoomInfo;
     RoomNameChanged: (name: string) => void;
     RoomPasswordChanged: (name: string) => void;
-    // InRoom: boolean;
-    // SetHubHandlers:()=>void;
-
-    // SetRoomNotCreated:()=>void;
-    // SetConnectedToRoomError:()=>void;
+    
 }
 
 
 let Index = (props: IndexProps) => {
-
-    // const initState = new IndexState();
-    // const [localState, setLocalState] = useState(initState);
-    // const [test, setTestLocalState] = useState(false);
-    // const [withoutPasswordState, setWithoutPasswordState] = useState(false);
-
-    // if (!test) {
-    //     setTestLocalState(true);
-
-    // }
-
-
-
 
 
 
@@ -91,26 +74,6 @@ let Index = (props: IndexProps) => {
         props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.EnterInRoom, props.RoomInfo.Name, props.RoomInfo.Password, props.Username);
     }
 
-
-    // let withoutPasswordOnClick = () => {
-    //     setWithoutPasswordState(!withoutPasswordState);
-    // }
-
-
-
-
-
-
-
-
-
-    // let passwordAreaRender = () => {
-    //     if (withoutPasswordState) {
-    //         return <div></div>
-    //     }
-
-    //     return
-    // }
 
 
     //React.Fragment

@@ -81,6 +81,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
     //componentdidmount, должен вызваться уже когда childs отрендерятся
     useEffect(() => {
+
         hubConnection.onclose(() => {
             // console.log(JSON.stringify(__planing_poker_main_state_ref__));
             // alert("asd");
@@ -148,13 +149,13 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
             });
 
             // document.cookie = "planing_poker_roomname=" + __planing_poker_main_state_ref__.RoomInfo.Name + "; path=/;";
-            let lk = document.getElementById('move_to_room_link_react');
-            //todo типо костыль
-            //если этой линки нет, значит мы уже на странице румы
-            if (lk) {
-                // history.pushState(null, '/planing-poker/room/' + localState.RoomInfo.Name);
-                lk.click();
-            }
+            // let lk = document.getElementById('move_to_room_link_react');
+            // //todo типо костыль
+            // //если этой линки нет, значит мы уже на странице румы
+            // if (lk) {
+            //     // history.pushState(null, '/planing-poker/room/' + localState.RoomInfo.Name);
+            //     lk.click();
+            // }
 
             // history.pushState(null, '/');
             // history.pushState(null, '/messages');
@@ -218,6 +219,8 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
 
 
+
+
         return function cleanUp() {
             hubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.ConnectedToRoomError);
             hubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.EnteredInRoom);
@@ -241,9 +244,19 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
             });
         }
 
-    }, [props.AuthInfo.AuthSuccess])
+    }, [props.AuthInfo.AuthSuccess]);
 
 
+
+    useEffect(() => {
+        if (localState.RoomInfo.InRoom && !window.location.href.includes('planing-poker/room/')) {
+            let lk = document.getElementById('move_to_room_link_react');
+            if (lk) {
+                // history.pushState(null, '/planing-poker/room/' + localState.RoomInfo.Name);
+                lk.click();
+            }
+        }
+    }, [localState.RoomInfo.InRoom]);
 
     const userNameChange = (newName: string) => {
 
@@ -299,7 +312,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
     return <div>
         <Routes>
-            <Route path="/planing-poker/room/*" element={<Room
+            <Route path="/room/*" element={<Room
                 //  InRoom={localState.InRoom}
                 UserInfo={localState.User}
                 RoomInfo={localState.RoomInfo}
@@ -312,7 +325,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
             } />
 
             {/* exact */}
-            <Route path="/planing-poker/*" element={<Index
+            <Route path="/*" element={<Index
                 Username={localState.User.UserName}
                 ChangeUserName={userNameChange}
                 MyHubConnection={myHubConnection}

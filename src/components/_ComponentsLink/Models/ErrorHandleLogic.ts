@@ -1,5 +1,6 @@
 
 
+//todo это сейчас не работает?
 export interface IMainErrorHandler {
     NotAuth(): void;
 }

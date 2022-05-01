@@ -26,11 +26,6 @@ export class AppRouter extends React.Component<AppRouterProps, {}> {
     }
 
     render() {
-        // return <MainAuth login={true}/>
-        // return <BodyCardsListMain />
-        //TODO попробовать достучаться незалогиненным по ссылкам и поправить то что вылезет
-        // return <BodyCardsListMain/> 
-        // let props1 = this.props;
         return <Routes>
             <Route path="/menu" element={<MenuMain />} />
             <Route path="/menu-app/*" element={<MenuAppMain />} />

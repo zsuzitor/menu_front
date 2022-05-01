@@ -97,6 +97,7 @@ export class AjaxHelper implements IAjaxHelper {
         if (obj.NeedTryRefreshToken !== false) {
             obj.NeedTryRefreshToken = true;
         }
+        //todo а если false то что делать? никакого ни редиректа ничего не будет
 
         let ajaxObj: JQuery.AjaxSettings = {
             type: obj.Type,

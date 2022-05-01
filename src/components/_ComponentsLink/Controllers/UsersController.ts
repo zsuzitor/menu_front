@@ -2,17 +2,17 @@ import { MainErrorObjectBack } from "../BackModel/ErrorBack";
 import { UserShortBack } from "../BackModel/UserShort";
 
 
-export type GetUserShort = (error: MainErrorObjectBack,data:UserShortBack) => void;
+export type GetUserShort = (error: MainErrorObjectBack, data: UserShortBack) => void;
 
 export interface IUsersController {
-    GetShortestUserInfo: ( onSuccess: GetUserShort) => void;
+    GetShortestUserInfo: (onSuccess: GetUserShort) => void;
 
 }
 
 
-export class UsersController implements IUsersController{
-    GetShortestUserInfo( onSuccess: GetUserShort){
-         G_AjaxHelper.GoAjaxRequest({
+export class UsersController implements IUsersController {
+    GetShortestUserInfo(onSuccess: GetUserShort) {
+        G_AjaxHelper.GoAjaxRequest({
             Data: {},
             Type: "GET",
             NotRedirectWhenNotAuth: true,
@@ -20,24 +20,24 @@ export class UsersController implements IUsersController{
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
                     //TODO ошибка
-                    onSuccess(resp,null);
-        
+                    onSuccess(resp, null);
+
                 }
                 else {
                     let dataBack = xhr as UserShortBack;
-                    
+
                     if (!dataBack.id) {
                         //TODO какая то ошибка
                         alert('что то сломалось-1');
                         return;
                     }
-                    onSuccess(null,dataBack);
-                    
+                    onSuccess(null, dataBack);
+
                 }
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/users/get-shortest-user-info',
-        
+
         });
     }
 }

@@ -49,19 +49,6 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
             // WordListsLoaded:false,
         };
 
-        // for (let i = 0; i < 20; ++i) {
-        //     let card1 = new OneWordCardModel();
-        //     card1.Description = "description" + i;
-        //     card1.Id = i;
-        //     card1.Word = "words" + i;
-        //     card1.WordAnswer = "WordAnswer" + i;
-        //     this.state.Cards.push(card1);
-        // }
-        //действия над словами с бэком:
-        //добавить, удалить, получить список, обновить, спрятать, загрузить файл, скачать файл
-        //без бэка
-        //показать\спрятать: описание слово кратинку, перемешать, показать спрятанные, поиск
-
         this.ChangeShowCurrentWordAnswer = this.ChangeShowCurrentWordAnswer.bind(this);
         this.ChangeShowCurrentWord = this.ChangeShowCurrentWord.bind(this);
         this.ChangeShowCurrentWordImage = this.ChangeShowCurrentWordImage.bind(this);
@@ -113,36 +100,6 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
         G_WordsCardsController.GetAllForUser(success);
 
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: {},
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             // console.log(xhr);
-        //             let dataBack = xhr as IOneWordCardBack[];
-        //             let dataFront: OneWordCardModel[] = [];
-        //             dataBack.forEach(bk => {
-        //                 let nd = new OneWordCardModel();
-        //                 nd.FillByBackModel(bk);
-        //                 dataFront.push(nd);
-        //             });
-
-        //             this.setState({//смержит?????
-        //                 Cards: dataFront,
-        //                 CardsLoaded: true,
-        //                 // FollowedCards: followed,
-        //                 // NotFollowedCards: notFollowed,
-        //             });
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/wordscards/get-all-for-user',
-
-        // }, true);
     }
 
 
@@ -365,39 +322,6 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
         G_WordsCardsController.Hide(cardId, success);
 
 
-        // let data = new FormData();
-        // let cardId = this.state.CurrentCard.Id;
-        // data.append('id', cardId + '');
-        // let refThis = this;
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "PATCH",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             //TODO тут может быть ошибка, что мы не дождались ответа серва а выбранная картинка уже изменилась
-        //             let res = xhr as BoolResultBack;
-        //             let newState = { ...refThis.state };
-        //             let card = refThis.GetFromStateCardsById(newState, cardId);
-        //             if (card) {
-        //                 card.Hided = res.result;
-
-        //                 if ((!newState.ShowHidenCard) && card.Hided && newState.CurrentCard?.Id == cardId) {
-        //                     this.ChangeCurrentCard(newState);
-        //                 }
-
-        //                 refThis.setState(newState);
-        //             }
-
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/wordscards/hide',
-
-        // }, true);
     }
 
 
@@ -427,38 +351,6 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
         G_WordsListController.AddToList(cardId, listId, success);
 
-        // let data = new FormData();
-        // data.append('card_id', cardId + '');
-        // data.append('list_id', listId + '');
-        // let refThis = this;
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "PUT",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             //TODO тут может быть ошибка, что мы не дождались ответа серва а выбранная картинка уже изменилась
-        //             let res = xhr as IWordCardWordList;
-        //             if (res.id_list) {
-        //                 let newState = { ...refThis.state };
-        //                 card = this.GetFromStateCardsById(newState, cardId);
-        //                 if (card) {
-        //                     let newRec = new WordCardWordList();
-        //                     newRec.FillByBackModel(res);
-        //                     card.Lists.push(newRec);
-        //                     refThis.setState(newState);
-        //                 }
-        //             }
-
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/wordslist/add-to-list',
-
-        // }, true);
     }
 
     RemoveFromList(cardId: number, listId: number) {
@@ -492,41 +384,6 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
         G_WordsListController.RemoveFromList(cardId, listId, success);
 
-        // let data = new FormData();
-        // data.append('card_id', cardId + '');
-        // data.append('list_id', listId + '');
-        // let refThis = this;
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "DELETE",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             //TODO тут может быть ошибка, что мы не дождались ответа серва а выбранная картинка уже изменилась
-        //             let res = xhr as BoolResultBack;
-        //             if (res.result) {
-        //                 let newState = { ...refThis.state };
-        //                 card = this.GetFromStateCardsById(newState, cardId);
-        //                 for (let i = 0; i < card.Lists.length; ++i) {
-        //                     if (card.Lists[i].IdList == listId) {
-        //                         card.Lists.splice(i, 1)
-        //                         refThis.setState(newState);
-        //                         return;
-        //                     }
-        //                 }
-
-
-        //             }
-
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/wordslist/remove-from-list',
-
-        // }, true);
     }
 
 
@@ -551,36 +408,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
         G_WordsCardsController.Delete(cardId, success);
 
-        // let data = new FormData();
-        // let cardId = this.state.CurrentCard.Id;
-        // data.append('id', cardId + '');
-        // let refThis = this;
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "DELETE",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             //TODO тут может быть ошибка, что мы не дождались ответа серва а выбранная картинка уже изменилась
-        //             let res = xhr as IOneWordCardBack;
-        //             if (res?.id && res.id > 0) {
-        //                 let newState = { ...refThis.state };
-        //                 let card = refThis.TryRemoveFromStateCardsById(newState, cardId);
-        //                 if (card) {
-        //                     this.ChangeCurrentCard(newState);
-        //                     refThis.setState(newState);
-        //                 }
-        //             }
-
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/wordscards/delete',
-
-        // }, true);
+       
     }
 
 

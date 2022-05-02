@@ -7,6 +7,7 @@ import ReactDOMClient from 'react-dom/client';
 import MainComponent from './components/MainComponent';
 import { AjaxHelper } from './components/_ComponentsLink/AjaxLogic';
 import { AuthenticateController } from "./components/_ComponentsLink/Controllers/AuthenticateController";
+import { CodeReviewController } from "./components/_ComponentsLink/Controllers/CodeReviewApp/CodeReviewController";
 import { ArticleController } from "./components/_ComponentsLink/Controllers/MenuApp/ArticleController";
 import { PlaningPokerController } from "./components/_ComponentsLink/Controllers/PlaningPoker/PlaningPokerController";
 import { UsersController } from "./components/_ComponentsLink/Controllers/UsersController";
@@ -54,6 +55,7 @@ window.G_ArticleController = new ArticleController();
 window.G_WordsCardsController = new WordsCardsController();
 window.G_WordsListController = new WordsListController();
 window.G_PlaningPokerController = new PlaningPokerController();
+window.G_CodeReviewController = new CodeReviewController();
 //
 // G_AddAbsoluteAlertToState -->MainComponent
 //

@@ -15,7 +15,7 @@ export class AppList extends React.Component<{}, AppListState> {
             new AppItem({ Logo: G_EmptyImagePath, Name: "Dict", Path: "/words-cards-app" }),
             new AppItem({ Logo: G_EmptyImagePath, Name: "TimeBooking", Path: "/menu-app" }),
             new AppItem({ Logo: G_EmptyImagePath, Name: "PlaningPoker", Path: "/planing-poker" }),
-            new AppItem({ Logo: G_EmptyImagePath, Name: "MenuApp", Path: "/menu-app" }),
+            new AppItem({ Logo: G_EmptyImagePath, Name: "Code review", Path: "/code-review/" }),
         ];
 
         this.state = {

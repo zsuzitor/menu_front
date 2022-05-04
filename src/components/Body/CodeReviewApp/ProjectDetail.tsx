@@ -13,6 +13,15 @@ export interface IProjectDetailProps {
 
 
 const ProjectDetail = (props: IProjectDetailProps) => {
+    const [newUserName, setNewUserName] = useState('');
+    const [newTaskName, setNewTaskName] = useState('');
+
+
+
+    const addNewUser = () => {
+        //todo
+    }
+
 
 
     if (!props.Project) {
@@ -24,14 +33,43 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
     return <div>
         <div>
-            <p>название: {props.Project.Name}</p>
+            <h1>название: {props.Project.Name}</h1>
             <p>id: {props.Project.Id}</p>
-            <p>добавить человека</p>
+            <input type='text' placeholder='email или имя человека'
+                onChange={(e) => setNewUserName(e.target.value)} value={newUserName}></input>
+            <button onClick={() => addNewUser()}>Добавить человека</button>
+
             <p>добавить задачу</p>
+            <div>
+                <input type='text' onChange={(e) => setNewTaskName(e.target.value)} value={newTaskName}></input>
+                <select>
+                    <option>Creator1</option>
+                    <option>Creator2</option>
+                </select>
+                <select>
+                    <option>Reviewer1</option>
+                    <option>Reviewer2</option>
+                </select>
+                <button>Создать</button>
+            </div>
         </div>
         <div>
             <div>фильтры</div>
-
+            <select>
+                <option>Creator1</option>
+                <option>Creator2</option>
+            </select>
+            <select>
+                <option>Reviewer1</option>
+                <option>Reviewer2</option>
+            </select>
+            <select>
+                <option>Status1</option>
+                <option>Status2</option>
+            </select>
+        </div>
+        <div>
+            список задач
         </div>
     </div>
 }

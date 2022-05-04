@@ -1,10 +1,16 @@
+/// <reference path="../../../../../typings/globals.d.ts" />
+
 import React, { useState, useEffect } from 'react';
-import { IOneProjectInListDataBack } from '../../_ComponentsLink/BackModel/CodeReviewApp/IOneProjectInListDataBack';
-import { MainErrorObjectBack } from '../../_ComponentsLink/BackModel/ErrorBack';
+import { IOneProjectInListDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IOneProjectInListDataBack';
+import { MainErrorObjectBack } from '../../../_ComponentsLink/BackModel/ErrorBack';
 
-import { IAuthState } from "../../_ComponentsLink/Models/AuthState";
-import ProjectDetail from './ProjectDetail';
+import { IAuthState } from "../../../_ComponentsLink/Models/AuthState";
+import ProjectDetail from '../ProjectDetail';
+import ProjectsList from '../ProjectsList/ProjectsList';
 
+
+
+require('./CodeReviewMain.css');
 
 
 
@@ -22,7 +28,6 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
 
     const [currentProjectId, setCurrentProjectId] = useState(-1);
     const [projectsList, setProjectsList] = useState([] as IOneProjectInListDataBack[]);
-    const [newProjectName, setNewProjectName] = useState('');
 
 
     useEffect(() => {
@@ -43,7 +48,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
     }, []);
 
 
-    const addNewProject = () => {
+    const addNewProject = (newProjectName: string) => {
         let addProject = (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => {
             if (error) {
                 //TODO выбить из комнаты?
@@ -65,21 +70,14 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
 
 
 
-    return <div>
-        <div>
-            <div>
-                <input type='text' placeholder='название проекта'
-                    onChange={(e => setNewProjectName(e.target.value))} value={newProjectName}></input>
-                <button onClick={() => addNewProject()}>Создать проект</button>
-            </div>
-            {projectsList.map(x => {
-                return <div key={x.Id.toString()} onClick={() => setCurrentProjectId(x.Id)}>
-                    <p>{x.Name}</p>
-                </div>
-            })}
-
+    return <div className='code-review-main-container'>
+        <div className='code-review-projects-menu'>
+            <ProjectsList Projects={projectsList}
+                AddNewProject={addNewProject}
+                SetCurrentProject={setCurrentProjectId}
+                CurrentProjectId={currentProjectId}></ProjectsList>
         </div>
-        <div>
+        <div className='code-review-project-info'>
             выбранный проект:
             <ProjectDetail Project={projectsList.find(x => x.Id == currentProjectId)}></ProjectDetail>
         </div>

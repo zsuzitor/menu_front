@@ -1,0 +1,9 @@
+.selected-review-project {
+    background-color: grey;
+}
+
+.review-project {
+    border-radius: 20px;
+    border: 1px solid black;
+    padding: 3px;
+}

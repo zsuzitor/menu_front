@@ -25,7 +25,7 @@ const ProjectsList = (props: IProjectsListProps) => {
         }
 
         return props.Projects.map(x => {
-            return <OneProjectInList Project={x}
+            return <OneProjectInList Project={x} key={x.Id}
                 SetCurrentProject={props.SetCurrentProject}
                 CurrentProject={props.CurrentProjectId === x.Id}
             ></OneProjectInList>

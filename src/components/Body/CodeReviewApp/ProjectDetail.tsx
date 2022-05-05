@@ -5,6 +5,7 @@ import { IProjectUserDataBack } from '../../_ComponentsLink/BackModel/CodeReview
 import { MainErrorObjectBack } from '../../_ComponentsLink/BackModel/ErrorBack';
 
 import { IAuthState } from "../../_ComponentsLink/Models/AuthState";
+import OneReviewTask from './OneReviewTask/OneReviewTask';
 
 
 
@@ -22,15 +23,23 @@ export interface IProjectDetailProps {
 
 const ProjectDetail = (props: IProjectDetailProps) => {
     const [newUserName, setNewUserName] = useState('');
-
     const [newTaskName, setNewTaskName] = useState('');
-    const [newTaskCreator, setNewTaskCreator] = useState(-1);
+
+    let firstUser = props.ProjectUsers.find(() => true);
+    const [newTaskCreator, setNewTaskCreator] = useState(firstUser?.Id || -1);
     const [newTaskReviwer, setNewTaskReviwer] = useState(-1);
+    const [filterTaskCreator, setFilterTaskCreator] = useState(-1);
+    const [filterTaskReviwer, setFilterTaskReviwer] = useState(-1);
+
+
 
 
 
     const addNewUser = () => {
-        //todo
+        if (!newUserName) {
+            return;
+        }
+
         let addUser = (error: MainErrorObjectBack, data: IProjectUserDataBack) => {
             if (error) {
                 //TODO выбить из комнаты?
@@ -93,6 +102,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 </select>
                 <label>reviewer:</label>
                 <select value={newTaskReviwer} onChange={(e) => setNewTaskReviwer(+e.target.value)}>
+                    <option value={-1}>Не выбрано</option>
                     {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                 </select>
                 <button onClick={() => createNewTask()}>Создать</button>
@@ -100,21 +110,26 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         </div>
         <div>
             <div>фильтры</div>
-            <select>
-                <option>Creator1</option>
-                <option>Creator2</option>
+            <select value={filterTaskCreator} onChange={(e) => setFilterTaskCreator(+e.target.value)}>
+                <option value={-1}>Не выбрано</option>
+                {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
             </select>
             <select>
-                <option>Reviewer1</option>
-                <option>Reviewer2</option>
+                <select value={filterTaskReviwer} onChange={(e) => setFilterTaskReviwer(+e.target.value)}>
+                    <option value={-1}>Не выбрано</option>
+                    {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                </select>
             </select>
             <select>
-                <option>Status1</option>
-                <option>Status2</option>
+                <option value={0}>Необходимо код ревью</option>
+                <option value={1}>Необходимы правки</option>
+                <option value={2}>Готово</option>
             </select>
         </div>
         <div>
             список задач
+            {props.ProjectTasks.map(x => <OneReviewTask Task={x}
+                ProjectUsers={props.ProjectUsers}></OneReviewTask>)}
         </div>
     </div>
 }

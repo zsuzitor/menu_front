@@ -21,7 +21,7 @@ const OneProjectInList = (props: IOneProjectInListProps) => {
     }
 
 
-    return <div key={props.Project.Id.toString()}>
+    return <div key={props.Project.Id.toString()} className={projectClassName}>
         <div onClick={() => props.SetCurrentProject(props.Project.Id)}>
             {props.Project.Name}
         </div>

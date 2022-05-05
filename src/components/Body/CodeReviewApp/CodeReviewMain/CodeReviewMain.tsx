@@ -118,7 +118,6 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
                 CurrentProjectId={currentProjectId}></ProjectsList>
         </div>
         <div className='code-review-project-info'>
-            выбранный проект:
             <ProjectDetail Project={projectsList.find(x => x.Id == currentProjectId)}
                 ProjectUsers={currentProjectUsers}
                 AddUserToProject={addNewUserToProject}

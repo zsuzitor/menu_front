@@ -13,6 +13,10 @@ export type AddNewUserToProject = (error: MainErrorObjectBack, data: IProjectUse
 export type AddNewProjectTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => void;
 export type GetProjectInfo = (error: MainErrorObjectBack, data: IOneProjectInfoDataBack) => void;
 export type DeleteProject = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type ChangeUser = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type DeleteUser = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type UpdateTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+
 
 
 
@@ -24,11 +28,99 @@ export interface ICodeReviewController {
     AddTaskToProject: (taskName: string, taskCreatorId: number, taskReviwerId: number, projectId: number, onSuccess: AddNewProjectTask) => void;
     GetProjectInfo: (projectId: number, onSuccess: GetProjectInfo) => void;
     DeleteProject: (projectId: number, onSuccess: DeleteProject) => void;
+    ChangeProjectUser: (user: IProjectUserDataBack, onSuccess: ChangeUser) => void;
+    DeleteProjectUser: (id: number, onSuccess: DeleteUser) => void;
+    UpdateTask: (task: IProjectTaskDataBack, onSuccess: UpdateTask) => void;
 }
 
 
 
 export class CodeReviewController implements ICodeReviewController {
+
+    UpdateTask = (task: IProjectTaskDataBack, onSuccess: UpdateTask) => {
+        let data = {
+            "taskId": task.Id,
+            "name": task.Name,
+            "status": task.Status,
+            "creatorId": task.CreatorId,
+            "reviewerId": task.ReviewerId,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PATCH",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                    onSuccess(resp, null);
+
+                }
+                else {
+                    let dataBack = xhr as BoolResultBack;
+                    onSuccess(null, dataBack);
+
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/project/update-task'
+
+        });
+    }
+
+    DeleteProjectUser = (id: number, onSuccess: DeleteUser) => {
+        let data = {
+            "userId": id,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "DELETE",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                    onSuccess(resp, null);
+
+                }
+                else {
+                    let dataBack = xhr as BoolResultBack;
+                    onSuccess(null, dataBack);
+
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/project/delete-user'
+
+        });
+    }
+
+
+    ChangeProjectUser = (user: IProjectUserDataBack, onSuccess: ChangeUser) => {
+        let data = {
+            "userId": user.Id,
+            "name": user.Name,
+            "email": user.Email,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PATCH",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                    onSuccess(resp, null);
+
+                }
+                else {
+                    let dataBack = xhr as BoolResultBack;
+                    onSuccess(null, dataBack);
+
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/project/change-user'
+
+        });
+    }
 
 
     DeleteProject = (projectId: number, onSuccess: DeleteProject) => {

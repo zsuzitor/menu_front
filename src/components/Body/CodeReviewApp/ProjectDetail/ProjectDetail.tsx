@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { BoolResultBack } from '../../_ComponentsLink/BackModel/BoolResultBack';
-import { IOneProjectInListDataBack } from '../../_ComponentsLink/BackModel/CodeReviewApp/IOneProjectInListDataBack';
-import { IProjectTaskDataBack } from '../../_ComponentsLink/BackModel/CodeReviewApp/IProjectTaskDataBack';
-import { IProjectUserDataBack } from '../../_ComponentsLink/BackModel/CodeReviewApp/IProjectUserDataBack';
-import { MainErrorObjectBack } from '../../_ComponentsLink/BackModel/ErrorBack';
+import { BoolResultBack } from '../../../_ComponentsLink/BackModel/BoolResultBack';
+import { IOneProjectInListDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IOneProjectInListDataBack';
+import { IProjectTaskDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IProjectTaskDataBack';
+import { IProjectUserDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IProjectUserDataBack';
+import { MainErrorObjectBack } from '../../../_ComponentsLink/BackModel/ErrorBack';
 
-import { IAuthState } from "../../_ComponentsLink/Models/AuthState";
-import OneReviewTask from './OneReviewTask/OneReviewTask';
+import { IAuthState } from "../../../_ComponentsLink/Models/AuthState";
+import OneProjectUser from '../OneProjectUser/OneProjectUser';
+import OneReviewTask from '../OneReviewTask/OneReviewTask';
 
 
 
+require('./ProjectDetail.css');
 
 export interface IProjectDetailProps {
     Project: IOneProjectInListDataBack;//todo временно так
@@ -18,6 +20,9 @@ export interface IProjectDetailProps {
     AddUserToProject: (user: IProjectUserDataBack) => void;
     AddTaskToProject: (task: IProjectTaskDataBack) => void;
     DeleteProject: () => void;
+    ChangeUser: (user: IProjectUserDataBack) => void;
+    DeleteUser: (id: number) => void;
+    UpdateTask: (task: IProjectTaskDataBack) => void;
 
 }
 
@@ -31,6 +36,10 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     const [newTaskReviwer, setNewTaskReviwer] = useState(-1);
     const [filterTaskCreator, setFilterTaskCreator] = useState(-1);
     const [filterTaskReviwer, setFilterTaskReviwer] = useState(-1);
+    const [filterTaskStatus, setFilterTaskStatus] = useState(0);
+
+
+    const [showUserList, setShowUserList] = useState(false);
 
 
 
@@ -124,6 +133,12 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     }
 
 
+    let userListClass = ' height-0';
+    if (showUserList) {
+        userListClass = ' project-review-user-list-show'
+    }
+
+
     return <div>
         <div>
             <h1>название: {props.Project.Name}</h1>
@@ -133,9 +148,20 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                     deleteProject();
                 }
             }}>удалить проект</button>
+            <br />
             <input type='text' placeholder='имя человека'
                 onChange={(e) => setNewUserName(e.target.value)} value={newUserName}></input>
             <button onClick={() => addNewUser()}>Добавить человека</button>
+            <button onClick={() => setShowUserList(e => !e)}>список людей проекта:</button>
+
+            <div className={'project-review-user-list' + userListClass}>
+                {props.ProjectUsers.map(x => {
+                    return <OneProjectUser User={x}
+                        key={x.Id} ChangeUser={props.ChangeUser}
+                        DeleteUser={props.DeleteUser}></OneProjectUser>
+                })}
+            </div>
+
 
             <p>добавить задачу</p>
             <div>
@@ -162,7 +188,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 <option value={-1}>Не выбрано</option>
                 {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
             </select>
-            <select>
+            <select onChange={e => setFilterTaskStatus(+e.target.value)} value={filterTaskStatus}>
                 <option value={0}>Необходимо код ревью</option>
                 <option value={1}>Необходимы правки</option>
                 <option value={2}>Готово</option>
@@ -171,7 +197,8 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         <div>
             список задач
             {props.ProjectTasks.map(x => <OneReviewTask Task={x}
-                ProjectUsers={props.ProjectUsers}></OneReviewTask>)}
+                ProjectUsers={props.ProjectUsers}
+                UpdateTask={props.UpdateTask}></OneReviewTask>)}
         </div>
     </div>
 }

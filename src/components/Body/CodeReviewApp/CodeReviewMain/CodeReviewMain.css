@@ -6,6 +6,7 @@
 .code-review-projects-menu{
     /* flex-grow: 1; */
     width: 215px;
+    min-width: 215px;
     border-right: 1px solid black;
 }
 

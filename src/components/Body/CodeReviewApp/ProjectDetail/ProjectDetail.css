@@ -1,0 +1,9 @@
+.project-review-user-list {
+    transition: 1s;
+    overflow: hidden;
+}
+
+.project-review-user-list-show {
+    max-height: 300px;
+    overflow: auto;
+}

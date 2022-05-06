@@ -20,6 +20,10 @@
     padding-top: 10px;
 }
 
+.height-0 {
+    height: 0px;
+}
+
 /* 
  color: red;
     -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, 

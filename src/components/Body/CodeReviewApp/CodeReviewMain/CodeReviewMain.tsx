@@ -8,8 +8,9 @@ import { IProjectUserDataBack } from '../../../_ComponentsLink/BackModel/CodeRev
 import { MainErrorObjectBack } from '../../../_ComponentsLink/BackModel/ErrorBack';
 
 import { IAuthState } from "../../../_ComponentsLink/Models/AuthState";
-import ProjectDetail from '../ProjectDetail';
+import ProjectDetail from '../ProjectDetail/ProjectDetail';
 import ProjectsList from '../ProjectsList/ProjectsList';
+import cloneDeep from 'lodash/cloneDeep';
 
 
 
@@ -106,6 +107,19 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         });
     };
 
+    const updateTaskProject = (task: IProjectTaskDataBack) => {
+        setCurrentProjectTasks(oldState => {
+            let newState = cloneDeep(oldState);
+            var tsk = newState.find(x => x.Id == task.Id);
+            tsk.Name = task.Name;
+            tsk.Status = task.Status;
+            tsk.ReviewerId = task.ReviewerId;
+            tsk.CreatorId = task.CreatorId;
+
+            return newState;
+        });
+    };
+
     const deleteProject = () => {
         setCurrentProjectId(-1);
         setProjectsList(oldState => {
@@ -114,7 +128,22 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         });
     };
 
+    const changeUser = (user: IProjectUserDataBack) => {
+        setCurrentProjectUsers(oldState => {
+            let newState = cloneDeep(oldState);
+            let userState = newState.find(x => x.Id === user.Id);
+            userState.Email = user.Email;
+            userState.Name = user.Name;
+            return newState;
+        });
+    };
 
+    const deleteUser = (id: number) => {
+        setCurrentProjectUsers(oldState => {
+            let newState = [...oldState];
+            return newState.filter(x => x.Id != id);
+        });
+    }
 
 
     return <div className='code-review-main-container'>
@@ -131,6 +160,9 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
                 AddTaskToProject={addTaskToProject}
                 ProjectTasks={currentProjectTasks}
                 DeleteProject={deleteProject}
+                ChangeUser={changeUser}
+                DeleteUser={deleteUser}
+                UpdateTask={updateTaskProject}
             ></ProjectDetail>
         </div>
     </div>

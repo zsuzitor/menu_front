@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BoolResultBack } from '../../_ComponentsLink/BackModel/BoolResultBack';
 import { IOneProjectInListDataBack } from '../../_ComponentsLink/BackModel/CodeReviewApp/IOneProjectInListDataBack';
 import { IProjectTaskDataBack } from '../../_ComponentsLink/BackModel/CodeReviewApp/IProjectTaskDataBack';
 import { IProjectUserDataBack } from '../../_ComponentsLink/BackModel/CodeReviewApp/IProjectUserDataBack';
@@ -16,6 +17,7 @@ export interface IProjectDetailProps {
     ProjectTasks: IProjectTaskDataBack[];
     AddUserToProject: (user: IProjectUserDataBack) => void;
     AddTaskToProject: (task: IProjectTaskDataBack) => void;
+    DeleteProject: () => void;
 
 }
 
@@ -25,13 +27,36 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     const [newUserName, setNewUserName] = useState('');
     const [newTaskName, setNewTaskName] = useState('');
 
-    let firstUser = props.ProjectUsers.find(() => true);
-    const [newTaskCreator, setNewTaskCreator] = useState(firstUser?.Id || -1);
+    const [newTaskCreator, setNewTaskCreator] = useState(-1);//firstUser?.Id || 
     const [newTaskReviwer, setNewTaskReviwer] = useState(-1);
     const [filterTaskCreator, setFilterTaskCreator] = useState(-1);
     const [filterTaskReviwer, setFilterTaskReviwer] = useState(-1);
 
 
+
+    useEffect(() => {
+        if (newTaskCreator === -1) {
+            let firstUser = props.ProjectUsers.find(() => true);
+            setNewTaskCreator(firstUser?.Id || -1);
+
+        }
+
+        let reviwerExist = props.ProjectUsers.some((x) => x.Id === newTaskReviwer);
+        if (!reviwerExist) {
+            setNewTaskReviwer(-1);
+        }
+
+        let filterCreatorExist = props.ProjectUsers.some((x) => x.Id === filterTaskCreator);
+        if (!reviwerExist) {
+            setFilterTaskCreator(-1);
+        }
+
+        let filterReviwerExist = props.ProjectUsers.some((x) => x.Id === filterTaskReviwer);
+        if (!reviwerExist) {
+            setFilterTaskReviwer(-1);
+        }
+
+    }, [props.ProjectUsers.length]);//[firstUser?.Id]);
 
 
 
@@ -70,11 +95,25 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 props.AddTaskToProject(data);
                 setNewTaskName('');
             }
-
-
         };
 
         window.G_CodeReviewController.AddTaskToProject(newTaskName, newTaskCreator, newTaskReviwer, props.Project.Id, addTask);
+    };
+
+    const deleteProject = () => {
+        let deleteProject = (error: MainErrorObjectBack, data: BoolResultBack) => {
+            if (error) {
+                //TODO выбить из комнаты?
+                alert("todo что то пошло не так лучше обновить страницу");
+                return;
+            }
+
+            if (data?.result) {
+                props.DeleteProject();
+            }
+        };
+
+        window.G_CodeReviewController.DeleteProject(props.Project.Id, deleteProject);
     };
 
 
@@ -89,6 +128,11 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         <div>
             <h1>название: {props.Project.Name}</h1>
             <p>id: {props.Project.Id}</p>
+            <button onClick={() => {
+                if (confirm('удалить проект?')) {
+                    deleteProject();
+                }
+            }}>удалить проект</button>
             <input type='text' placeholder='имя человека'
                 onChange={(e) => setNewUserName(e.target.value)} value={newUserName}></input>
             <button onClick={() => addNewUser()}>Добавить человека</button>
@@ -114,11 +158,9 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 <option value={-1}>Не выбрано</option>
                 {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
             </select>
-            <select>
-                <select value={filterTaskReviwer} onChange={(e) => setFilterTaskReviwer(+e.target.value)}>
-                    <option value={-1}>Не выбрано</option>
-                    {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-                </select>
+            <select value={filterTaskReviwer} onChange={(e) => setFilterTaskReviwer(+e.target.value)}>
+                <option value={-1}>Не выбрано</option>
+                {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
             </select>
             <select>
                 <option value={0}>Необходимо код ревью</option>

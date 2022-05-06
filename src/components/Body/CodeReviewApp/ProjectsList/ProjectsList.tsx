@@ -4,6 +4,9 @@ import OneProjectInList from '../OneProjectInList/OneProjectInList';
 
 
 
+require('./ProjectsList.css');
+
+
 
 
 export interface IProjectsListProps {
@@ -17,6 +20,7 @@ export interface IProjectsListProps {
 
 const ProjectsList = (props: IProjectsListProps) => {
     const [newProjectName, setNewProjectName] = useState('');
+    const [filterProjectName, setFilterProjectName] = useState('');
 
 
     const renderList = () => {
@@ -24,20 +28,29 @@ const ProjectsList = (props: IProjectsListProps) => {
             return <div>нет проектов</div>
         }
 
-        return props.Projects.map(x => {
-            return <OneProjectInList Project={x} key={x.Id}
-                SetCurrentProject={props.SetCurrentProject}
-                CurrentProject={props.CurrentProjectId === x.Id}
-            ></OneProjectInList>
-        })
+        return props.Projects
+            .filter(x => filterProjectName ? x.Name.indexOf(filterProjectName) >= 0 : true)
+            .map(x => {
+                return <OneProjectInList Project={x} key={x.Id}
+                    SetCurrentProject={props.SetCurrentProject}
+                    CurrentProject={props.CurrentProjectId === x.Id}
+                ></OneProjectInList>
+            });
     }
 
 
     return <>
-        <div>
-            <input type='text' placeholder='название проекта'
+        <div className='review-project-new-block'>
+            <input type='text' placeholder='название нового проекта'
                 onChange={(e => setNewProjectName(e.target.value))} value={newProjectName}></input>
-            <button onClick={() => props.AddNewProject(newProjectName)}>Создать проект</button>
+            <button onClick={() => {
+                props.AddNewProject(newProjectName);
+                setNewProjectName('');
+            }}>Создать проект</button>
+        </div>
+        <div>
+            <input type="text" value={filterProjectName} placeholder='фильтр'
+                onChange={e => setFilterProjectName(e.target.value)} />
         </div>
         {renderList()}
     </>

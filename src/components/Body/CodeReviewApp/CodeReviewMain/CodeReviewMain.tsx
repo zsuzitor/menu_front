@@ -106,6 +106,13 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         });
     };
 
+    const deleteProject = () => {
+        setCurrentProjectId(-1);
+        setProjectsList(oldState => {
+            let newState = [...oldState];
+            return newState.filter(x => x.Id != currentProjectId);
+        });
+    };
 
 
 
@@ -123,6 +130,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
                 AddUserToProject={addNewUserToProject}
                 AddTaskToProject={addTaskToProject}
                 ProjectTasks={currentProjectTasks}
+                DeleteProject={deleteProject}
             ></ProjectDetail>
         </div>
     </div>

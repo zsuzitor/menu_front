@@ -1,5 +1,6 @@
 
 
+import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { IOneProjectInfoDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInfoDataBack";
 import { IOneProjectInListDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInListDataBack";
 import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
@@ -11,6 +12,7 @@ export type CreateNewProject = (error: MainErrorObjectBack, data: IOneProjectInL
 export type AddNewUserToProject = (error: MainErrorObjectBack, data: IProjectUserDataBack) => void;
 export type AddNewProjectTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => void;
 export type GetProjectInfo = (error: MainErrorObjectBack, data: IOneProjectInfoDataBack) => void;
+export type DeleteProject = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 
 
@@ -21,11 +23,39 @@ export interface ICodeReviewController {
     AddUserToProject: (newUserName: string, projectId: number, onSuccess: AddNewUserToProject) => void;
     AddTaskToProject: (taskName: string, taskCreatorId: number, taskReviwerId: number, projectId: number, onSuccess: AddNewProjectTask) => void;
     GetProjectInfo: (projectId: number, onSuccess: GetProjectInfo) => void;
+    DeleteProject: (projectId: number, onSuccess: DeleteProject) => void;
 }
 
 
 
 export class CodeReviewController implements ICodeReviewController {
+
+
+    DeleteProject = (projectId: number, onSuccess: DeleteProject) => {
+        let data = {
+            "projectId": projectId,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "DELETE",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                    onSuccess(resp, null);
+
+                }
+                else {
+                    let dataBack = xhr as BoolResultBack;
+                    onSuccess(null, dataBack);
+
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/project/delete-project'
+
+        });
+    }
 
     GetProjectInfo = (projectId: number, onSuccess: GetProjectInfo) => {
         let data = {

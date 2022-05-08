@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { BoolResultBack } from '../../../_ComponentsLink/BackModel/BoolResultBack';
+import { IOneTaskReviewComment } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IOneTaskReviewComment';
 import { IProjectTaskDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IProjectTaskDataBack';
 import { IProjectUserDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { MainErrorObjectBack } from '../../../_ComponentsLink/BackModel/ErrorBack';
@@ -15,6 +16,7 @@ export interface OneReviewTaskProps {
     Task: IProjectTaskDataBack;
     ProjectUsers: IProjectUserDataBack[];
     UpdateTask: (task: IProjectTaskDataBack) => void;
+    DeleteTask: (id: number) => void;
 }
 
 
@@ -26,6 +28,8 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
     const [taskStatus, setTaskStatus] = useState(props.Task.Status);
     const [taskReviwer, setTaskReviwer] = useState(props.Task.ReviewerId || -1);
     const [taskCreator, setTaskCreator] = useState(props.Task.CreatorId);
+    const [comments, setComments] = useState([] as IOneTaskReviewComment[]);
+    const [showComments, setShowComments] = useState(false);
 
 
 
@@ -44,6 +48,28 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
     useEffect(() => {
         setTaskCreator(props.Task.CreatorId);
     }, [props.Task.CreatorId]);
+
+    useEffect(() => {
+        if (!showComments) {
+            setComments([]);
+            return;
+        }
+
+        let loadComments = (error: MainErrorObjectBack, data: IOneTaskReviewComment[]) => {
+            if (error) {
+                //TODO выбить из комнаты?
+                alert("todo что то пошло не так лучше обновить страницу");
+                return;
+            }
+
+            if (data) {
+                setComments(data);
+            }
+        };
+
+        window.G_CodeReviewController.LoadComments(props.Task.Id, loadComments);
+
+    }, [showComments]);
 
 
     // let creator = props.ProjectUsers.find(x => x.Id == props.Task.CreatorId);
@@ -84,6 +110,26 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
     };
 
 
+    const deleteTask = () => {
+
+        let deleteTask = (error: MainErrorObjectBack, data: BoolResultBack) => {
+            if (error) {
+                //TODO выбить из комнаты?
+                alert("todo что то пошло не так лучше обновить страницу");
+                return;
+            }
+
+            if (data?.result) {
+                props.DeleteTask(props.Task.Id);
+            }
+        };
+
+        window.G_CodeReviewController.DeleteTask(props.Task.Id, deleteTask);
+    };
+
+
+
+
     return <div className='one-review-task-block'>
         <p>{props.Task.Id}</p>
         <input type='text' value={taskName} onChange={e => setTaskName(e.target.value)}></input>
@@ -100,18 +146,18 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
             <option value={2}>Готово</option>
         </select>
         <div className='review-task-save-button' onClick={() => updateTask()}>
-            <img className='persent-100-width-height' src={G_PathToBaseImages + 'save_icon.png'} alt="Save" />
+            <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'} alt="Save" title='сохранить'/>
         </div>
         <div className='review-task-cancel-button' onClick={() => cancelTask()}>
-            <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" />
+            <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" title='отменить изменения'/>
         </div>
         <div className='review-task-delete-button' onClick={() => deleteTask()}>
-            <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" />
+            <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='удалить задачу'/>
         </div>
-        <div className='review-task-comments-button' onClick={() => showComments()}>
-            <img className='persent-100-width-height' src={G_PathToBaseImages + 'comments.png'} alt="Comments" />
+        <div className='review-task-comments-button' onClick={() => setShowComments(oldState => !oldState)}>
+            <img className='persent-100-width-height' src={G_PathToBaseImages + 'comments.png'} alt="Comments" title='комментарии'/>
         </div>
-        
+
 
     </div>
 }

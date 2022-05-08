@@ -201,6 +201,12 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         });
     };
 
+    const deleteTask = (id: number) => {
+        setCurrentProjectTasks(oldState => {
+            return oldState.filter(x => x.Id != id);
+        });
+    };
+
 
 
     if (!props.Project) {
@@ -278,7 +284,10 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             {currentProjectTasks.map(x => <OneReviewTask key={x.Id}
                 Task={x}
                 ProjectUsers={props.ProjectUsers}
-                UpdateTask={updateTaskProject}></OneReviewTask>)}
+                UpdateTask={updateTaskProject}
+                DeleteTask={deleteTask}
+            ></OneReviewTask>)}
+
         </div>
     </div>
 }

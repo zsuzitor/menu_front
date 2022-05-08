@@ -3,6 +3,7 @@
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { IOneProjectInfoDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInfoDataBack";
 import { IOneProjectInListDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInListDataBack";
+import { IOneTaskReviewComment } from "../../BackModel/CodeReviewApp/IOneTaskReviewComment";
 import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
 import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
@@ -18,8 +19,8 @@ export type ChangeUser = (error: MainErrorObjectBack, data: BoolResultBack) => v
 export type DeleteUser = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 export type UpdateTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 export type LoadTasks = (error: MainErrorObjectBack, data: IProjectTaskDataBack[]) => void;
-
-
+export type LoadComments = (error: MainErrorObjectBack, data: IOneTaskReviewComment[]) => void;
+export type DeleteTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 
 
@@ -34,11 +35,33 @@ export interface ICodeReviewController {
     DeleteProjectUser: (id: number, onSuccess: DeleteUser) => void;
     UpdateTask: (task: IProjectTaskDataBack, onSuccess: UpdateTask) => void;
     LoadTasks: (taskFilter: ITaskFilter, onSuccess: LoadTasks) => void;
+    LoadComments: (id: number, onSuccess: LoadComments) => void;
+    DeleteTask: (id: number, onSuccess: DeleteTask) => void;
 }
 
 
 
 export class CodeReviewController implements ICodeReviewController {
+
+    LoadComments = (id: number, onSuccess: LoadComments) => {
+        alert('todo comments');
+    };
+
+    DeleteTask = (id: number, onSuccess: DeleteTask) => {
+        let data = {
+            "taskId": id,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "DELETE",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/project/delete-task'
+
+        });
+    };
 
 
     LoadTasks = (taskFilter: ITaskFilter, onSuccess: LoadTasks) => {
@@ -55,17 +78,7 @@ export class CodeReviewController implements ICodeReviewController {
             Data: data,
             Type: "GET",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                    onSuccess(resp, null);
-
-                }
-                else {
-                    let dataBack = xhr as IProjectTaskDataBack[];
-                    onSuccess(null, dataBack);
-
-                }
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/codereview/project/get-project-tasks'
@@ -85,17 +98,8 @@ export class CodeReviewController implements ICodeReviewController {
             Data: data,
             Type: "PATCH",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                    onSuccess(resp, null);
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
-                }
-                else {
-                    let dataBack = xhr as BoolResultBack;
-                    onSuccess(null, dataBack);
-
-                }
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/codereview/project/update-task'
@@ -111,17 +115,8 @@ export class CodeReviewController implements ICodeReviewController {
             Data: data,
             Type: "DELETE",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                    onSuccess(resp, null);
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
-                }
-                else {
-                    let dataBack = xhr as BoolResultBack;
-                    onSuccess(null, dataBack);
-
-                }
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/codereview/project/delete-user'
@@ -140,17 +135,8 @@ export class CodeReviewController implements ICodeReviewController {
             Data: data,
             Type: "PATCH",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                    onSuccess(resp, null);
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
-                }
-                else {
-                    let dataBack = xhr as BoolResultBack;
-                    onSuccess(null, dataBack);
-
-                }
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/codereview/project/change-user'
@@ -167,17 +153,8 @@ export class CodeReviewController implements ICodeReviewController {
             Data: data,
             Type: "DELETE",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                    onSuccess(resp, null);
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
-                }
-                else {
-                    let dataBack = xhr as BoolResultBack;
-                    onSuccess(null, dataBack);
-
-                }
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/codereview/project/delete-project'
@@ -193,17 +170,8 @@ export class CodeReviewController implements ICodeReviewController {
             Data: data,
             Type: "GET",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                    onSuccess(resp, null);
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
-                }
-                else {
-                    let dataBack = xhr as IOneProjectInfoDataBack;
-                    onSuccess(null, dataBack);
-
-                }
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/codereview/project/get-project-info'
@@ -223,17 +191,8 @@ export class CodeReviewController implements ICodeReviewController {
             Data: data,
             Type: "PUT",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                    onSuccess(resp, null);
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
-                }
-                else {
-                    let dataBack = xhr as IProjectTaskDataBack;
-                    onSuccess(null, dataBack);
-
-                }
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/codereview/project/add-new-task'
@@ -251,17 +210,8 @@ export class CodeReviewController implements ICodeReviewController {
             Data: data,
             Type: "PUT",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                    onSuccess(resp, null);
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
-                }
-                else {
-                    let dataBack = xhr as IProjectUserDataBack;
-                    onSuccess(null, dataBack);
-
-                }
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/codereview/project/add-new-user'
@@ -277,17 +227,8 @@ export class CodeReviewController implements ICodeReviewController {
             Data: data,
             Type: "PUT",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                    onSuccess(resp, null);
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
-                }
-                else {
-                    let dataBack = xhr as IOneProjectInListDataBack;
-                    onSuccess(null, dataBack);
-
-                }
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/codereview/project/add-new-project'
@@ -300,21 +241,28 @@ export class CodeReviewController implements ICodeReviewController {
             Data: {},
             Type: "GET",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                    onSuccess(resp, null);
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
-                }
-                else {
-                    let dataBack = xhr as IOneProjectInListDataBack[];
-                    onSuccess(null, dataBack);
-
-                }
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/codereview/project/get-projects',
 
         });
     };
+
+
+    mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
+        return (xhr: any, status: any, jqXHR: any) => {
+            let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+            if (resp.errors) {
+                //TODO ошибка
+                onSuccess(resp, null);
+            }
+            else {
+                let dataBack = xhr as T;
+                onSuccess(null, dataBack);
+
+            }
+        }
+    }
 }

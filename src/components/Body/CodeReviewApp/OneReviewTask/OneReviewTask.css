@@ -5,19 +5,24 @@
 .review-task-save-button {
     width: 30px;
     height: 30px;
+    cursor: pointer;
 }
 
 .review-task-cancel-button {
     width: 30px;
     height: 30px;
+    cursor: pointer;
+
 }
 
 .review-task-comments-button {
     width: 30px;
     height: 30px;
+    cursor: pointer;
 }
 
 .review-task-delete-button {
     width: 30px;
     height: 30px;
+    cursor: pointer;
 }

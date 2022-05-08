@@ -3,14 +3,13 @@
     flex-wrap: nowrap;
 }
 
-.code-review-projects-menu{
-    /* flex-grow: 1; */
-    width: 215px;
-    min-width: 215px;
-    border-right: 1px solid black;
-}
+
 
 .code-review-project-info{
     flex-grow: 2;
 
+}
+
+.code-review-projects-menu-main{
+    position: relative;
 }

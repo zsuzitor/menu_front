@@ -1,3 +1,23 @@
 .one-review-task-block {
     border: 1px solid black;
 }
+
+.review-task-save-button {
+    width: 30px;
+    height: 30px;
+}
+
+.review-task-cancel-button {
+    width: 30px;
+    height: 30px;
+}
+
+.review-task-comments-button {
+    width: 30px;
+    height: 30px;
+}
+
+.review-task-delete-button {
+    width: 30px;
+    height: 30px;
+}

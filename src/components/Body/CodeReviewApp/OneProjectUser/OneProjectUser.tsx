@@ -26,7 +26,7 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
     }, [props.User.Name]);
 
     useEffect(() => {
-        setUserName(props.User.Email);
+        setUserEmail(props.User.Email || '');
     }, [props.User.Email]);
 
 

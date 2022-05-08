@@ -6,6 +6,7 @@ import { IOneProjectInListDataBack } from "../../BackModel/CodeReviewApp/IOnePro
 import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
 import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
+import { ITaskFilter } from "../../Models/CodeReviewApp/TasksFilter";
 
 export type ListOfCardOnReturn = (error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => void;
 export type CreateNewProject = (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => void;
@@ -16,6 +17,7 @@ export type DeleteProject = (error: MainErrorObjectBack, data: BoolResultBack) =
 export type ChangeUser = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 export type DeleteUser = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 export type UpdateTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type LoadTasks = (error: MainErrorObjectBack, data: IProjectTaskDataBack[]) => void;
 
 
 
@@ -31,11 +33,45 @@ export interface ICodeReviewController {
     ChangeProjectUser: (user: IProjectUserDataBack, onSuccess: ChangeUser) => void;
     DeleteProjectUser: (id: number, onSuccess: DeleteUser) => void;
     UpdateTask: (task: IProjectTaskDataBack, onSuccess: UpdateTask) => void;
+    LoadTasks: (taskFilter: ITaskFilter, onSuccess: LoadTasks) => void;
 }
 
 
 
 export class CodeReviewController implements ICodeReviewController {
+
+
+    LoadTasks = (taskFilter: ITaskFilter, onSuccess: LoadTasks) => {
+        let data = {
+            "projectId": taskFilter.ProjectId,
+            "nameLike": taskFilter.Name,
+            "creatorId": taskFilter.CreatorId,
+            "reviewerId": taskFilter.ReviewerId,
+            "status": taskFilter.Status,
+            "pageNumber": taskFilter.PageNumber,
+            "pageSize": taskFilter.PageSize,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                    onSuccess(resp, null);
+
+                }
+                else {
+                    let dataBack = xhr as IProjectTaskDataBack[];
+                    onSuccess(null, dataBack);
+
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/project/get-project-tasks'
+
+        });
+    };
 
     UpdateTask = (task: IProjectTaskDataBack, onSuccess: UpdateTask) => {
         let data = {

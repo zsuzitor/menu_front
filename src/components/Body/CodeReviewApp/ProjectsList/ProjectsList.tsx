@@ -14,6 +14,7 @@ export interface IProjectsListProps {
     AddNewProject: (projectName: string) => void;
     SetCurrentProject: (projectId: number) => void;
     CurrentProjectId: number;
+    // ChangeListVisibility: () => void;
 }
 
 
@@ -21,6 +22,7 @@ export interface IProjectsListProps {
 const ProjectsList = (props: IProjectsListProps) => {
     const [newProjectName, setNewProjectName] = useState('');
     const [filterProjectName, setFilterProjectName] = useState('');
+    const [visibleList, setVisibleList] = useState(true);
 
 
     const renderList = () => {
@@ -38,21 +40,29 @@ const ProjectsList = (props: IProjectsListProps) => {
             });
     }
 
+    let mainListClass = ' code-review-projects-menu-hide';
+    if (visibleList) {
+        mainListClass = ' code-review-projects-menu-visible';
+    }
 
-    return <>
-        <div className='review-project-new-block'>
-            <input type='text' placeholder='название нового проекта'
-                onChange={(e => setNewProjectName(e.target.value))} value={newProjectName}></input>
-            <button onClick={() => {
-                props.AddNewProject(newProjectName);
-                setNewProjectName('');
-            }}>Создать проект</button>
+
+    return <><div onClick={() => setVisibleList(v => !v)}
+        className="hide-review-projects-list-button">{visibleList ? '<' : '>'}</div>
+        <div className={'code-review-projects-menu' + mainListClass}>
+            <div className='review-project-new-block'>
+                <input type='text' placeholder='название нового проекта'
+                    onChange={(e => setNewProjectName(e.target.value))} value={newProjectName}></input>
+                <button onClick={() => {
+                    props.AddNewProject(newProjectName);
+                    setNewProjectName('');
+                }}>Создать проект</button>
+            </div>
+            <div>
+                <input type="text" value={filterProjectName} placeholder='фильтр'
+                    onChange={e => setFilterProjectName(e.target.value)} />
+            </div>
+            {renderList()}
         </div>
-        <div>
-            <input type="text" value={filterProjectName} placeholder='фильтр'
-                onChange={e => setFilterProjectName(e.target.value)} />
-        </div>
-        {renderList()}
     </>
 }
 

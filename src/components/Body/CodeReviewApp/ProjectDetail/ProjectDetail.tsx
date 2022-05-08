@@ -8,6 +8,8 @@ import { MainErrorObjectBack } from '../../../_ComponentsLink/BackModel/ErrorBac
 import { IAuthState } from "../../../_ComponentsLink/Models/AuthState";
 import OneProjectUser from '../OneProjectUser/OneProjectUser';
 import OneReviewTask from '../OneReviewTask/OneReviewTask';
+import cloneDeep from 'lodash/cloneDeep';
+import { ITaskFilter } from '../../../_ComponentsLink/Models/CodeReviewApp/TasksFilter';
 
 
 
@@ -16,27 +18,35 @@ require('./ProjectDetail.css');
 export interface IProjectDetailProps {
     Project: IOneProjectInListDataBack;//todo временно так
     ProjectUsers: IProjectUserDataBack[];
-    ProjectTasks: IProjectTaskDataBack[];
+    // ProjectTasks: IProjectTaskDataBack[];
     AddUserToProject: (user: IProjectUserDataBack) => void;
-    AddTaskToProject: (task: IProjectTaskDataBack) => void;
+    // AddTaskToProject: (task: IProjectTaskDataBack) => void;
     DeleteProject: () => void;
     ChangeUser: (user: IProjectUserDataBack) => void;
     DeleteUser: (id: number) => void;
-    UpdateTask: (task: IProjectTaskDataBack) => void;
+    // UpdateTask: (task: IProjectTaskDataBack) => void;
 
 }
 
 
 
 const ProjectDetail = (props: IProjectDetailProps) => {
+
+    const [currentProjectTasks, setCurrentProjectTasks] = useState([] as IProjectTaskDataBack[]);
+
+
     const [newUserName, setNewUserName] = useState('');
     const [newTaskName, setNewTaskName] = useState('');
 
     const [newTaskCreator, setNewTaskCreator] = useState(-1);//firstUser?.Id || 
     const [newTaskReviwer, setNewTaskReviwer] = useState(-1);
+
     const [filterTaskCreator, setFilterTaskCreator] = useState(-1);
     const [filterTaskReviwer, setFilterTaskReviwer] = useState(-1);
-    const [filterTaskStatus, setFilterTaskStatus] = useState(0);
+    const [filterTaskStatus, setFilterTaskStatus] = useState(-1);
+    const [filterTaskName, setFilterTaskName] = useState('');
+    const [filterTaskPage, setFilterTaskPage] = useState(1);
+    const [loadTasksTimerId, setLoadTasksTimerId] = useState(null);
 
 
     const [showUserList, setShowUserList] = useState(false);
@@ -55,17 +65,62 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             setNewTaskReviwer(-1);
         }
 
-        let filterCreatorExist = props.ProjectUsers.some((x) => x.Id === filterTaskCreator);
+        // let filterCreatorExist = props.ProjectUsers.some((x) => x.Id === filterTaskCreator);
         if (!reviwerExist) {
             setFilterTaskCreator(-1);
         }
 
-        let filterReviwerExist = props.ProjectUsers.some((x) => x.Id === filterTaskReviwer);
+        // let filterReviwerExist = props.ProjectUsers.some((x) => x.Id === filterTaskReviwer);
         if (!reviwerExist) {
             setFilterTaskReviwer(-1);
         }
 
     }, [props.ProjectUsers.length]);//[firstUser?.Id]);
+
+
+    useEffect(() => {
+        if (!props.Project?.Id) {
+            return;
+        }
+        //todo тут нужно как то с setTimeout поиграть что бы не тригерить апи на каждый введенный сомвол
+        if (loadTasksTimerId) {
+            clearTimeout(loadTasksTimerId);
+        }
+
+        var timerId = setTimeout(() => {
+            reloadTasks();
+        }, 1500);
+
+        setLoadTasksTimerId(timerId);
+
+
+    }, [props.Project?.Id, filterTaskCreator, filterTaskReviwer, filterTaskStatus, filterTaskName, filterTaskPage]);
+
+
+
+    const reloadTasks = () => {
+        let loadTasks = (error: MainErrorObjectBack, data: IProjectTaskDataBack[]) => {
+            if (error) {
+                //TODO выбить из комнаты?
+                alert("todo что то пошло не так лучше обновить страницу");
+                return;
+            }
+
+            if (data) {
+                setCurrentProjectTasks(data);
+            }
+        };
+
+        let filter = {
+            Name: filterTaskName, CreatorId: filterTaskCreator
+            , PageNumber: filterTaskPage, PageSize: 5
+            , ProjectId: props.Project.Id, ReviewerId: filterTaskReviwer
+            , Status: filterTaskStatus
+        } as ITaskFilter;
+
+
+        window.G_CodeReviewController.LoadTasks(filter, loadTasks);
+    }
 
 
 
@@ -101,7 +156,8 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
             if (data) {
                 // props.AddUserToProject(data);
-                props.AddTaskToProject(data);
+                // addTaskToProject(data);
+                reloadTasks();
                 setNewTaskName('');
             }
         };
@@ -126,8 +182,29 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     };
 
 
+    // const addTaskToProject = (task: IProjectTaskDataBack) => {
+    //     setCurrentProjectTasks(oldState => {
+    //         return [...oldState, task];
+    //     });
+    // };
+
+    const updateTaskProject = (task: IProjectTaskDataBack) => {
+        setCurrentProjectTasks(oldState => {
+            let newState = cloneDeep(oldState);
+            var tsk = newState.find(x => x.Id == task.Id);
+            tsk.Name = task.Name;
+            tsk.Status = task.Status;
+            tsk.ReviewerId = task.ReviewerId;
+            tsk.CreatorId = task.CreatorId;
+
+            return newState;
+        });
+    };
+
+
+
     if (!props.Project) {
-        return <div>
+        return <div style={{ paddingTop: '20px' }}>
             <p>выберите проект</p>
         </div>
     }
@@ -139,7 +216,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     }
 
 
-    return <div>
+    return <div className='review-project-detail-main'>
         <div>
             <h1>название: {props.Project.Name}</h1>
             <p>id: {props.Project.Id}</p>
@@ -180,6 +257,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         </div>
         <div>
             <div>фильтры</div>
+            <input type='text' value={filterTaskName} onChange={e => setFilterTaskName(e.target.value)}></input>
             <select value={filterTaskCreator} onChange={(e) => setFilterTaskCreator(+e.target.value)}>
                 <option value={-1}>Не выбрано</option>
                 {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
@@ -189,6 +267,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
             </select>
             <select onChange={e => setFilterTaskStatus(+e.target.value)} value={filterTaskStatus}>
+                <option value={-1}>Любой</option>
                 <option value={0}>Необходимо код ревью</option>
                 <option value={1}>Необходимы правки</option>
                 <option value={2}>Готово</option>
@@ -196,9 +275,10 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         </div>
         <div>
             список задач
-            {props.ProjectTasks.map(x => <OneReviewTask Task={x}
+            {currentProjectTasks.map(x => <OneReviewTask key={x.Id}
+                Task={x}
                 ProjectUsers={props.ProjectUsers}
-                UpdateTask={props.UpdateTask}></OneReviewTask>)}
+                UpdateTask={updateTaskProject}></OneReviewTask>)}
         </div>
     </div>
 }

@@ -38,7 +38,7 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
     }, [props.Task.Status]);
 
     useEffect(() => {
-        setTaskReviwer(props.Task.ReviewerId);
+        setTaskReviwer(props.Task.ReviewerId || -1);
     }, [props.Task.ReviewerId]);
 
     useEffect(() => {
@@ -58,12 +58,15 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
     };
 
     const updateTask = () => {
+        if (!taskName) {
+            alert('необходимо заполнить название задачи');
+        }
 
         let forAdd = { ...props.Task };
-                forAdd.Name = taskName;
-                forAdd.Status = taskStatus;
-                forAdd.ReviewerId = taskReviwer;
-                forAdd.CreatorId = taskCreator;
+        forAdd.Name = taskName;
+        forAdd.Status = taskStatus;
+        forAdd.ReviewerId = taskReviwer;
+        forAdd.CreatorId = taskCreator;
 
         let updateTask = (error: MainErrorObjectBack, data: BoolResultBack) => {
             if (error) {
@@ -96,8 +99,19 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
             <option value={1}>Необходимы правки</option>
             <option value={2}>Готово</option>
         </select>
-        <button onClick={() => updateTask()}>Обновить</button>
-        <button onClick={() => cancelTask()}>Отменить</button>
+        <div className='review-task-save-button' onClick={() => updateTask()}>
+            <img className='persent-100-width-height' src={G_PathToBaseImages + 'save_icon.png'} alt="Save" />
+        </div>
+        <div className='review-task-cancel-button' onClick={() => cancelTask()}>
+            <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" />
+        </div>
+        <div className='review-task-delete-button' onClick={() => deleteTask()}>
+            <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" />
+        </div>
+        <div className='review-task-comments-button' onClick={() => showComments()}>
+            <img className='persent-100-width-height' src={G_PathToBaseImages + 'comments.png'} alt="Comments" />
+        </div>
+        
 
     </div>
 }

@@ -33,7 +33,6 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
     const [currentProjectId, setCurrentProjectId] = useState(-1);
     const [projectsList, setProjectsList] = useState([] as IOneProjectInListDataBack[]);
     const [currentProjectUsers, setCurrentProjectUsers] = useState([] as IProjectUserDataBack[]);
-    const [currentProjectTasks, setCurrentProjectTasks] = useState([] as IProjectTaskDataBack[]);
 
 
     useEffect(() => {
@@ -65,7 +64,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
 
                 if (data) {
                     setCurrentProjectUsers(data.Users);
-                    setCurrentProjectTasks(data.Tasks);
+                    // setCurrentProjectTasks(data.Tasks);
                 }
             };
 
@@ -75,6 +74,9 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
 
 
     const addNewProject = (newProjectName: string) => {
+        if (!newProjectName) {
+            alert('Введите название');
+        }
         let addProject = (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => {
             if (error) {
                 //TODO выбить из комнаты?
@@ -101,24 +103,9 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         });
     };
 
-    const addTaskToProject = (task: IProjectTaskDataBack) => {
-        setCurrentProjectTasks(oldState => {
-            return [...oldState, task];
-        });
-    };
 
-    const updateTaskProject = (task: IProjectTaskDataBack) => {
-        setCurrentProjectTasks(oldState => {
-            let newState = cloneDeep(oldState);
-            var tsk = newState.find(x => x.Id == task.Id);
-            tsk.Name = task.Name;
-            tsk.Status = task.Status;
-            tsk.ReviewerId = task.ReviewerId;
-            tsk.CreatorId = task.CreatorId;
 
-            return newState;
-        });
-    };
+
 
     const deleteProject = () => {
         setCurrentProjectId(-1);
@@ -147,22 +134,23 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
 
 
     return <div className='code-review-main-container'>
-        <div className='code-review-projects-menu'>
+        <div className='code-review-projects-menu-main'>
             <ProjectsList Projects={projectsList}
                 AddNewProject={addNewProject}
                 SetCurrentProject={setCurrentProjectId}
-                CurrentProjectId={currentProjectId}></ProjectsList>
+                CurrentProjectId={currentProjectId}
+            ></ProjectsList>
         </div>
         <div className='code-review-project-info'>
             <ProjectDetail Project={projectsList.find(x => x.Id == currentProjectId)}
                 ProjectUsers={currentProjectUsers}
                 AddUserToProject={addNewUserToProject}
-                AddTaskToProject={addTaskToProject}
-                ProjectTasks={currentProjectTasks}
+                // AddTaskToProject={addTaskToProject}
+                // ProjectTasks={currentProjectTasks}
                 DeleteProject={deleteProject}
                 ChangeUser={changeUser}
                 DeleteUser={deleteUser}
-                UpdateTask={updateTaskProject}
+            // UpdateTask={updateTaskProject}
             ></ProjectDetail>
         </div>
     </div>

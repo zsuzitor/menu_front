@@ -232,12 +232,12 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 }
             }}>удалить проект</button>
             <br />
-            <input type='text' placeholder='имя человека'
-                onChange={(e) => setNewUserName(e.target.value)} value={newUserName}></input>
-            <button onClick={() => addNewUser()}>Добавить человека</button>
-            <button onClick={() => setShowUserList(e => !e)}>список людей проекта:</button>
 
+            <button onClick={() => setShowUserList(e => !e)}>Люди проекта:</button>
             <div className={'project-review-user-list' + userListClass}>
+                <input type='text' placeholder='имя человека'
+                    onChange={(e) => setNewUserName(e.target.value)} value={newUserName}></input>
+                <button onClick={() => addNewUser()}>Добавить человека</button>
                 {props.ProjectUsers.map(x => {
                     return <OneProjectUser User={x}
                         key={x.Id} ChangeUser={props.ChangeUser}
@@ -246,9 +246,10 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             </div>
 
 
-            <p>добавить задачу</p>
-            <div>
-                <input type='text' onChange={(e) => setNewTaskName(e.target.value)} value={newTaskName}></input>
+            <div className='review-project-new-task-block'>
+                <p>добавить задачу</p>
+                <textarea onChange={(e) => setNewTaskName(e.target.value)}
+                    value={newTaskName} placeholder='название'></textarea>
                 <label>creator:</label>
                 <select value={newTaskCreator} onChange={(e) => setNewTaskCreator(+e.target.value)}>
                     {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
@@ -261,17 +262,21 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 <button onClick={() => createNewTask()}>Создать</button>
             </div>
         </div>
-        <div>
+        <div className='review-project-tasks-filters-block'>
             <div>фильтры</div>
-            <input type='text' value={filterTaskName} onChange={e => setFilterTaskName(e.target.value)}></input>
+            <input type='text' value={filterTaskName}
+                onChange={e => setFilterTaskName(e.target.value)} placeholder='название'></input>
+            <span>Создатель</span>
             <select value={filterTaskCreator} onChange={(e) => setFilterTaskCreator(+e.target.value)}>
                 <option value={-1}>Не выбрано</option>
                 {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
             </select>
+            <span>Ревьювер</span>
             <select value={filterTaskReviwer} onChange={(e) => setFilterTaskReviwer(+e.target.value)}>
                 <option value={-1}>Не выбрано</option>
                 {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
             </select>
+            <span>Статус</span>
             <select onChange={e => setFilterTaskStatus(+e.target.value)} value={filterTaskStatus}>
                 <option value={-1}>Любой</option>
                 <option value={0}>Необходимо код ревью</option>

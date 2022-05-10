@@ -3,7 +3,7 @@
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { IOneProjectInfoDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInfoDataBack";
 import { IOneProjectInListDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInListDataBack";
-import { IOneTaskReviewComment } from "../../BackModel/CodeReviewApp/IOneTaskReviewComment";
+import { IOneTaskReviewCommentDataBack } from "../../BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack";
 import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
 import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
@@ -19,10 +19,11 @@ export type ChangeUser = (error: MainErrorObjectBack, data: BoolResultBack) => v
 export type DeleteUser = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 export type UpdateTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 export type LoadTasks = (error: MainErrorObjectBack, data: IProjectTaskDataBack[]) => void;
-export type LoadComments = (error: MainErrorObjectBack, data: IOneTaskReviewComment[]) => void;
+export type LoadComments = (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack[]) => void;
 export type DeleteTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
-
-
+export type AddComment = (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack) => void;
+export type DeleteComment = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type UpdateComment = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 export interface ICodeReviewController {
     GetUserProjects: (onSuccess: ListOfCardOnReturn) => void;
@@ -37,15 +38,85 @@ export interface ICodeReviewController {
     LoadTasks: (taskFilter: ITaskFilter, onSuccess: LoadTasks) => void;
     LoadComments: (id: number, onSuccess: LoadComments) => void;
     DeleteTask: (id: number, onSuccess: DeleteTask) => void;
+    AddComment: (taskId: number, text: string, onSuccess: AddComment) => void;
+    DeleteComment: (id: number, onSuccess: DeleteComment) => void;
+    UpdateComment: (id: number, text: string, onSuccess: UpdateComment) => void;
 }
 
 
 
 export class CodeReviewController implements ICodeReviewController {
 
-    LoadComments = (id: number, onSuccess: LoadComments) => {
-        alert('todo comments');
+    UpdateComment = (id: number, text: string, onSuccess: UpdateComment) => {
+        let data = {
+            "commentId": id,
+            "text": text,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PATCH",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/project/edit-comment'
+
+        });
     };
+
+
+    DeleteComment = (id: number, onSuccess: DeleteComment) => {
+        let data = {
+            "commentId": id,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "DELETE",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/project/delete-comment'
+
+        });
+    };
+
+
+    AddComment = (taskId: number, text: string, onSuccess: AddComment) => {
+        let data = {
+            "taskId": taskId,
+            "text": text,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PUT",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/project/create-comment'
+
+        });
+    };
+
+    LoadComments = (id: number, onSuccess: LoadComments) => {
+        let data = {
+            "taskId": id,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/project/get-comments'
+
+        });
+    };
+
+
+
 
     DeleteTask = (id: number, onSuccess: DeleteTask) => {
         let data = {

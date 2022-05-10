@@ -1,5 +1,27 @@
 .one-review-task-block {
     border: 1px solid black;
+    position: relative;
+    border-radius: 10px;
+}
+
+.one-review-task-buttons {
+    /* position: absolute; */
+    /* right: 0px; */
+    width: 35px;
+}
+
+.one-review-task-content {
+    flex-grow: 2;
+}
+
+.review-task-name-input {
+    width: 100%;
+}
+
+.one-review-task-block-flex {
+    display: flex;
+    padding: 10px;
+    /* border-radius: 10px; */
 }
 
 .review-task-save-button {
@@ -25,4 +47,11 @@
     width: 30px;
     height: 30px;
     cursor: pointer;
+}
+
+.one-review-task-comments-block {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-left: 30px;
 }

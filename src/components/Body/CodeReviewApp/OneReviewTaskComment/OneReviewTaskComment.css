@@ -1,0 +1,6 @@
+.one-review-comment-block {
+    border-radius: 30px;
+    background-color: rgba(139, 139, 98, .5);
+    padding: 10px 22px 10px 22px;
+    box-shadow: 0px 0px 3px 1px black;
+}

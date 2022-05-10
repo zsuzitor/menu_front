@@ -1,11 +1,13 @@
 
 
+import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { BoolResultBack } from '../../../_ComponentsLink/BackModel/BoolResultBack';
-import { IOneTaskReviewComment } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IOneTaskReviewComment';
+import { IOneTaskReviewCommentDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack';
 import { IProjectTaskDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IProjectTaskDataBack';
 import { IProjectUserDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { MainErrorObjectBack } from '../../../_ComponentsLink/BackModel/ErrorBack';
+import OneReviewTaskComment from '../OneReviewTaskComment/OneReviewTaskComment';
 
 
 
@@ -28,8 +30,10 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
     const [taskStatus, setTaskStatus] = useState(props.Task.Status);
     const [taskReviwer, setTaskReviwer] = useState(props.Task.ReviewerId || -1);
     const [taskCreator, setTaskCreator] = useState(props.Task.CreatorId);
-    const [comments, setComments] = useState([] as IOneTaskReviewComment[]);
+    const [comments, setComments] = useState([] as IOneTaskReviewCommentDataBack[]);
     const [showComments, setShowComments] = useState(false);
+    const [newCommentName, setNewCommentName] = useState('');
+
 
 
 
@@ -55,7 +59,7 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
             return;
         }
 
-        let loadComments = (error: MainErrorObjectBack, data: IOneTaskReviewComment[]) => {
+        let loadComments = (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack[]) => {
             if (error) {
                 //TODO выбить из комнаты?
                 alert("todo что то пошло не так лучше обновить страницу");
@@ -77,6 +81,9 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
 
 
     const cancelTask = () => {
+        if (!confirm('Отменить изменения?')) {
+            return;
+        }
         setTaskName(props.Task.Name);
         setTaskStatus(props.Task.Status);
         setTaskReviwer(props.Task.ReviewerId);
@@ -111,6 +118,9 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
 
 
     const deleteTask = () => {
+        if (!confirm('Удалить задачу?')) {
+            return;
+        }
 
         let deleteTask = (error: MainErrorObjectBack, data: BoolResultBack) => {
             if (error) {
@@ -127,38 +137,115 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
         window.G_CodeReviewController.DeleteTask(props.Task.Id, deleteTask);
     };
 
+    const addComment = () => {
 
+        let addComment = (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack) => {
+            if (error) {
+                //TODO выбить из комнаты?
+                alert("todo что то пошло не так лучше обновить страницу");
+                return;
+            }
+
+            if (data) {
+                setComments(oldState => {
+                    let newState = [...oldState];
+                    newState.push(data);
+                    return newState;
+                });
+
+            }
+        };
+
+        window.G_CodeReviewController.AddComment(props.Task.Id, newCommentName, addComment);
+    };
+
+
+    const deleteComment = (id: number) => {
+        setComments(oldState => {
+            return oldState.filter(x => x.Id != id);
+        });
+    }
+
+    const updateComment = (id: number, text: string) => {
+        setComments(oldState => {
+            let newState = cloneDeep(oldState);
+            let comment = newState.find(x => x.Id == id);
+            if (comment) {
+                comment.Text = text;
+            }
+
+            return newState;
+        });
+    }
+
+
+    const renderComments = () => {
+        if (!showComments) {
+            return <></>
+        }
+
+        return <div className='one-review-task-comments-block'>
+            Комментарии:
+            {comments.map(x => {
+                return <OneReviewTaskComment
+                    Comment={x}
+                    DeleteComment={deleteComment}
+                    key={x.Id}
+                    UpdateComment={updateComment}
+                    ProjectUsers={props.ProjectUsers}
+                ></OneReviewTaskComment>
+
+            })}
+
+            <div>
+                <textarea value={newCommentName} onChange={e => setNewCommentName(e.target.value)}
+                    className='persent-100-width'></textarea>
+                <button onClick={() => addComment()}>Добавить</button>
+            </div>
+        </div>
+    }
 
 
     return <div className='one-review-task-block'>
-        <p>{props.Task.Id}</p>
-        <input type='text' value={taskName} onChange={e => setTaskName(e.target.value)}></input>
-        <select value={taskCreator} onChange={(e) => setTaskCreator(+e.target.value)}>
-            {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-        </select>
-        <select value={taskReviwer} onChange={(e) => setTaskReviwer(+e.target.value)}>
-            <option value={-1}>Не выбрано</option>
-            {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-        </select>
-        <select onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
-            <option value={0}>Необходимо код ревью</option>
-            <option value={1}>Необходимы правки</option>
-            <option value={2}>Готово</option>
-        </select>
-        <div className='review-task-save-button' onClick={() => updateTask()}>
-            <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'} alt="Save" title='сохранить'/>
+        <div className='one-review-task-block-flex'>
+            <div className='one-review-task-content'>
+                {/* <p>{props.Task.Id}</p> */}
+                <textarea value={taskName} onChange={e => setTaskName(e.target.value)}
+                    className="review-task-name-input"></textarea>
+                {/* <input type='text' value={taskName} onChange={e => setTaskName(e.target.value)}></input> */}
+                <br />
+                <span>Создатеть</span>
+                <select value={taskCreator} onChange={(e) => setTaskCreator(+e.target.value)}>
+                    {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                </select>
+                <span>Ревьювер</span>
+                <select value={taskReviwer} onChange={(e) => setTaskReviwer(+e.target.value)}>
+                    <option value={-1}>Не выбрано</option>
+                    {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                </select>
+                <span>Статус</span>
+                <select onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
+                    <option value={0}>Необходимо код ревью</option>
+                    <option value={1}>Необходимы правки</option>
+                    <option value={2}>Готово</option>
+                </select>
+            </div>
+            <div className='one-review-task-buttons'>
+                <div className='review-task-save-button' onClick={() => updateTask()}>
+                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'} alt="Save" title='сохранить' />
+                </div>
+                <div className='review-task-cancel-button' onClick={() => cancelTask()}>
+                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" title='отменить изменения' />
+                </div>
+                <div className='review-task-delete-button' onClick={() => deleteTask()}>
+                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='удалить задачу' />
+                </div>
+                <div className='review-task-comments-button' onClick={() => setShowComments(oldState => !oldState)}>
+                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'comments.png'} alt="Comments" title='комментарии' />
+                </div>
+            </div>
         </div>
-        <div className='review-task-cancel-button' onClick={() => cancelTask()}>
-            <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" title='отменить изменения'/>
-        </div>
-        <div className='review-task-delete-button' onClick={() => deleteTask()}>
-            <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='удалить задачу'/>
-        </div>
-        <div className='review-task-comments-button' onClick={() => setShowComments(oldState => !oldState)}>
-            <img className='persent-100-width-height' src={G_PathToBaseImages + 'comments.png'} alt="Comments" title='комментарии'/>
-        </div>
-
-
+        {renderComments()}
     </div>
 }
 

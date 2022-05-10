@@ -8,6 +8,16 @@
     overflow: auto;
 }
 
-.review-project-detail-main{
+.review-project-detail-main {
     padding-top: 20px;
+}
+
+.review-project-new-task-block {
+    border: 1px solid black;
+    padding-bottom: 15px;
+}
+
+.review-project-tasks-filters-block {
+    border: 1px solid black;
+    padding-bottom: 15px;
 }

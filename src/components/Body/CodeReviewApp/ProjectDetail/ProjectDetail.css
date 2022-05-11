@@ -1,6 +1,9 @@
 .project-review-user-list {
     transition: 1s;
     overflow: hidden;
+    border: 1px solid black;
+    max-height: 300px;
+    overflow: auto;
 }
 
 .project-review-user-list-show {
@@ -20,4 +23,10 @@
 .review-project-tasks-filters-block {
     border: 1px solid black;
     padding-bottom: 15px;
+}
+
+.review-project-delete-button{
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
 }

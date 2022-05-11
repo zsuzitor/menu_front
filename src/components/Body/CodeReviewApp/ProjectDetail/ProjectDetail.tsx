@@ -36,6 +36,9 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
     const [newUserName, setNewUserName] = useState('');
+    const [userMainAppEmail, setUserMainAppEmail] = useState('');
+
+
     const [newTaskName, setNewTaskName] = useState('');
 
     const [newTaskCreator, setNewTaskCreator] = useState(-1);//firstUser?.Id || 
@@ -141,7 +144,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             }
         };
 
-        window.G_CodeReviewController.AddUserToProject(newUserName, props.Project.Id, addUser);
+        window.G_CodeReviewController.AddUserToProject(newUserName, userMainAppEmail, props.Project.Id, addUser);
         setNewUserName('');
     };
 
@@ -216,68 +219,76 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     }
 
 
-    let userListClass = ' height-0';
+    let userListClass = ' display_none';
     if (showUserList) {
-        userListClass = ' project-review-user-list-show'
+        userListClass = '';//' project-review-user-list-show'
     }
 
 
     return <div className='review-project-detail-main'>
         <div>
             <h1>название: {props.Project.Name}</h1>
-            <p>id: {props.Project.Id}</p>
-            <button onClick={() => {
+            <span>id: {props.Project.Id}</span>
+            <div className='review-project-delete-button' onClick={() => {
                 if (confirm('удалить проект?')) {
                     deleteProject();
                 }
-            }}>удалить проект</button>
+            }}>
+                <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='удалить задачу' />
+            </div>
             <br />
 
-            <button onClick={() => setShowUserList(e => !e)}>Люди проекта:</button>
+            <button className='btn-b btn-border' onClick={() => setShowUserList(e => !e)}>Люди проекта:</button>
             <div className={'project-review-user-list' + userListClass}>
-                <input type='text' placeholder='имя человека'
+                <span>Имя человека</span>
+                <input className='form-control-b' type='text' placeholder='Имя человека'
                     onChange={(e) => setNewUserName(e.target.value)} value={newUserName}></input>
-                <button onClick={() => addNewUser()}>Добавить человека</button>
+                <br />
+                <span>Почта из основного приложения</span>
+                <input className='form-control-b' type='text' value={userMainAppEmail} placeholder="Почта  из основного приложения" onChange={e => setUserMainAppEmail(e.target.value)}></input>
+                <br />
+                <button className='btn-b btn-border' onClick={() => addNewUser()}>Добавить человека</button>
+                <br />
                 {props.ProjectUsers.map(x => {
                     return <OneProjectUser User={x}
                         key={x.Id} ChangeUser={props.ChangeUser}
                         DeleteUser={props.DeleteUser}></OneProjectUser>
                 })}
             </div>
-
+            <br />
 
             <div className='review-project-new-task-block'>
                 <p>добавить задачу</p>
-                <textarea onChange={(e) => setNewTaskName(e.target.value)}
+                <textarea className='form-control-b persent-100-width' onChange={(e) => setNewTaskName(e.target.value)}
                     value={newTaskName} placeholder='название'></textarea>
                 <label>creator:</label>
-                <select value={newTaskCreator} onChange={(e) => setNewTaskCreator(+e.target.value)}>
+                <select className='form-control-b' value={newTaskCreator} onChange={(e) => setNewTaskCreator(+e.target.value)}>
                     {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                 </select>
                 <label>reviewer:</label>
-                <select value={newTaskReviwer} onChange={(e) => setNewTaskReviwer(+e.target.value)}>
+                <select className='form-control-b' value={newTaskReviwer} onChange={(e) => setNewTaskReviwer(+e.target.value)}>
                     <option value={-1}>Не выбрано</option>
                     {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                 </select>
-                <button onClick={() => createNewTask()}>Создать</button>
+                <button className='btn-b btn-border' onClick={() => createNewTask()}>Создать</button>
             </div>
         </div>
         <div className='review-project-tasks-filters-block'>
             <div>фильтры</div>
-            <input type='text' value={filterTaskName}
+            <input className='form-control-b' type='text' value={filterTaskName}
                 onChange={e => setFilterTaskName(e.target.value)} placeholder='название'></input>
             <span>Создатель</span>
-            <select value={filterTaskCreator} onChange={(e) => setFilterTaskCreator(+e.target.value)}>
+            <select className='form-control-b' value={filterTaskCreator} onChange={(e) => setFilterTaskCreator(+e.target.value)}>
                 <option value={-1}>Не выбрано</option>
                 {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
             </select>
             <span>Ревьювер</span>
-            <select value={filterTaskReviwer} onChange={(e) => setFilterTaskReviwer(+e.target.value)}>
+            <select className='form-control-b' value={filterTaskReviwer} onChange={(e) => setFilterTaskReviwer(+e.target.value)}>
                 <option value={-1}>Не выбрано</option>
                 {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
             </select>
             <span>Статус</span>
-            <select onChange={e => setFilterTaskStatus(+e.target.value)} value={filterTaskStatus}>
+            <select className='form-control-b' onChange={e => setFilterTaskStatus(+e.target.value)} value={filterTaskStatus}>
                 <option value={-1}>Любой</option>
                 <option value={0}>Необходимо код ревью</option>
                 <option value={1}>Необходимы правки</option>
@@ -285,7 +296,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             </select>
         </div>
         <div>
-            список задач
+            <h2>список задач</h2>
             {currentProjectTasks.map(x => <OneReviewTask key={x.Id}
                 Task={x}
                 ProjectUsers={props.ProjectUsers}

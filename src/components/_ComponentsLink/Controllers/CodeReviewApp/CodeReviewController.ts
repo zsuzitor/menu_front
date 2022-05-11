@@ -28,7 +28,7 @@ export type UpdateComment = (error: MainErrorObjectBack, data: BoolResultBack) =
 export interface ICodeReviewController {
     GetUserProjects: (onSuccess: ListOfCardOnReturn) => void;
     CreateNewProject: (newProjectName: string, onSuccess: CreateNewProject) => void;
-    AddUserToProject: (newUserName: string, projectId: number, onSuccess: AddNewUserToProject) => void;
+    AddUserToProject: (newUserName: string, mainAppUserEmail: string, projectId: number, onSuccess: AddNewUserToProject) => void;
     AddTaskToProject: (taskName: string, taskCreatorId: number, taskReviwerId: number, projectId: number, onSuccess: AddNewProjectTask) => void;
     GetProjectInfo: (projectId: number, onSuccess: GetProjectInfo) => void;
     DeleteProject: (projectId: number, onSuccess: DeleteProject) => void;
@@ -272,10 +272,11 @@ export class CodeReviewController implements ICodeReviewController {
 
     }
 
-    AddUserToProject = (newUserName: string, projectId: number, onSuccess: AddNewUserToProject) => {
+    AddUserToProject = (newUserName: string, mainAppUserEmail: string, projectId: number, onSuccess: AddNewUserToProject) => {
         let data = {
             "userName": newUserName,
-            projectId: projectId,
+            "projectId": projectId,
+            "mainAppUserEmail": mainAppUserEmail,
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,

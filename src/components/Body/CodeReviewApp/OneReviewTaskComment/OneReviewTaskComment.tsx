@@ -5,7 +5,7 @@ import { IProjectUserDataBack } from '../../../_ComponentsLink/BackModel/CodeRev
 import { MainErrorObjectBack } from '../../../_ComponentsLink/BackModel/ErrorBack';
 
 
- require('./OneReviewTaskComment.css');
+require('./OneReviewTaskComment.css');
 
 
 export interface IOneReviewTaskCommentProps {
@@ -73,17 +73,25 @@ const OneReviewTaskComment = (props: IOneReviewTaskCommentProps) => {
     if (editMode) {
         return <div className='one-review-comment-block'>
             <p>{user?.Name || "id:" + props.Comment.CreatorId}</p>
-            <textarea value={changedText} onChange={e => setChangedText(e.target.value)} className='persent-100-width'></textarea>
-            <button onClick={() => cancelEditMode()}>Отменить</button>
-            <button onClick={() => updateComment()}>Сохранить изменения</button>
+            <textarea className='form-control-b persent-100-width' value={changedText} onChange={e => setChangedText(e.target.value)}></textarea>
+            <div className='review-task-comment-cancel-button' onClick={() => cancelEditMode()}>
+                <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" title='отменить изменения' />
+            </div>
+            <div className='review-task-comment-save-button' onClick={() => updateComment()}>
+                <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'} alt="Save" title='сохранить' />
+            </div>
         </div>
     }
 
     return <div className='one-review-comment-block'>
         <p>{user?.Name || "id:" + props.Comment.CreatorId}</p>
         <p>{props.Comment.Text}</p>
-        <button onClick={() => deleteComment()}>Удалить</button>
-        <button onClick={() => setEditMode(st => true)}>Изменить</button>
+        <div className='review-task-comment-delete-button' onClick={() => deleteComment()}>
+            <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='удалить задачу' />
+        </div>
+        <div className='review-task-comment-edit-button' onClick={() => setEditMode(st => true)}>
+            <img className='persent-100-width-height' src={G_PathToBaseImages + 'edit-1.svg'} alt="Edit" title='Редактировать' />
+        </div>
     </div>
 
 }

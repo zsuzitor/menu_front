@@ -50,15 +50,15 @@ const ProjectsList = (props: IProjectsListProps) => {
         className="hide-review-projects-list-button">{visibleList ? '<' : '>'}</div>
         <div className={'code-review-projects-menu' + mainListClass}>
             <div className='review-project-new-block'>
-                <input type='text' placeholder='название нового проекта'
+                <input className='form-control-b' type='text' placeholder='название нового проекта'
                     onChange={(e => setNewProjectName(e.target.value))} value={newProjectName}></input>
-                <button onClick={() => {
+                <button className='btn-b btn-border' onClick={() => {
                     props.AddNewProject(newProjectName);
                     setNewProjectName('');
                 }}>Создать проект</button>
             </div>
             <div>
-                <input type="text" value={filterProjectName} placeholder='фильтр'
+                <input className='form-control-b' type="text" value={filterProjectName} placeholder='фильтр'
                     onChange={e => setFilterProjectName(e.target.value)} />
             </div>
             {renderList()}

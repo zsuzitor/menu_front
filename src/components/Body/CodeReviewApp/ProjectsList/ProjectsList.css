@@ -5,7 +5,7 @@
 .code-review-projects-menu {
     /* flex-grow: 1; */
     overflow: hidden;
-    border-right: 1px solid black;
+    /* border-right: 1px solid black; */
 }
 
 .code-review-projects-menu-hide {

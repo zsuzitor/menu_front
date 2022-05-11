@@ -5,7 +5,7 @@ import { IProjectUserDataBack } from '../../../_ComponentsLink/BackModel/CodeRev
 import { MainErrorObjectBack } from '../../../_ComponentsLink/BackModel/ErrorBack';
 
 
-// require('./OneProjectInList.css');
+require('./OneProjectUser.css');
 
 
 export interface IOneProjectOneProjectUserProps {
@@ -21,6 +21,7 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
     const [userName, setUserName] = useState(props.User.Name);
     const [userEmail, setUserEmail] = useState(props.User.Email || '');
 
+
     useEffect(() => {
         setUserName(props.User.Name);
     }, [props.User.Name]);
@@ -31,7 +32,7 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
 
 
     const changeUser = () => {
-        if(!userName){
+        if (!userName) {
             alert('Введите имя пользователя');
             return;
         }
@@ -56,7 +57,7 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
 
 
     const deleteUser = () => {
-        
+
         let deleteUser = (error: MainErrorObjectBack, data: BoolResultBack) => {
             if (error) {
                 //TODO выбить из комнаты?
@@ -74,15 +75,28 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
     }
 
 
-    return <div>
-        <input type='text' value={userName} placeholder="Имя" onChange={e => setUserName(e.target.value)}></input>
-        <input type='text' value={userEmail} placeholder="Почта" onChange={e => setUserEmail(e.target.value)}></input>
-        <button onClick={() => changeUser()}>Сохранить</button>
-        <button onClick={() => {
-            setUserName(props.User.Name);
-            setUserEmail(props.User.Email);
-        }}>Отменить</button>
-        <button onClick={() => deleteUser()}>Удалить</button>
+    return <div className='one-project-user-content'>
+        <span>Имя</span>
+        <input className='form-control-b' type='text' value={userName} placeholder="Имя" onChange={e => setUserName(e.target.value)}></input>
+        <br />
+        <span>Почта для уведомлений</span>
+        <input className='form-control-b' type='text' value={userEmail} placeholder="Почта" onChange={e => setUserEmail(e.target.value)}></input>
+        
+
+        <div className='one-project-user-buttons'>
+            <div className='project-user-save-button' onClick={() => changeUser()}>
+                <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'} alt="Save" title='сохранить' />
+            </div>
+            <div className='project-user-cancel-button' onClick={() => {
+                setUserName(props.User.Name);
+                setUserEmail(props.User.Email);
+            }}>
+                <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" title='отменить изменения' />
+            </div>
+            <div className='project-user-delete-button' onClick={() => deleteUser()}>
+                <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='удалить задачу' />
+            </div>
+        </div>
     </div>
 
 }

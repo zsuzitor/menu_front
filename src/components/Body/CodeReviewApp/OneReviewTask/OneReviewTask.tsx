@@ -198,9 +198,9 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
             })}
 
             <div>
-                <textarea value={newCommentName} onChange={e => setNewCommentName(e.target.value)}
-                    className='persent-100-width'></textarea>
-                <button onClick={() => addComment()}>Добавить</button>
+                <textarea className='form-control-b persent-100-width' value={newCommentName} onChange={e => setNewCommentName(e.target.value)}
+                    ></textarea>
+                <button className='btn-b btn-border' onClick={() => addComment()}>Добавить</button>
             </div>
         </div>
     }
@@ -210,21 +210,21 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
         <div className='one-review-task-block-flex'>
             <div className='one-review-task-content'>
                 {/* <p>{props.Task.Id}</p> */}
-                <textarea value={taskName} onChange={e => setTaskName(e.target.value)}
-                    className="review-task-name-input"></textarea>
+                <textarea className='form-control-b review-task-name-input' value={taskName} onChange={e => setTaskName(e.target.value)}
+                   ></textarea>
                 {/* <input type='text' value={taskName} onChange={e => setTaskName(e.target.value)}></input> */}
                 <br />
                 <span>Создатеть</span>
-                <select value={taskCreator} onChange={(e) => setTaskCreator(+e.target.value)}>
+                <select className='form-control-b' value={taskCreator} onChange={(e) => setTaskCreator(+e.target.value)}>
                     {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                 </select>
                 <span>Ревьювер</span>
-                <select value={taskReviwer} onChange={(e) => setTaskReviwer(+e.target.value)}>
+                <select className='form-control-b' value={taskReviwer} onChange={(e) => setTaskReviwer(+e.target.value)}>
                     <option value={-1}>Не выбрано</option>
                     {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                 </select>
                 <span>Статус</span>
-                <select onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
+                <select className='form-control-b' onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
                     <option value={0}>Необходимо код ревью</option>
                     <option value={1}>Необходимы правки</option>
                     <option value={2}>Готово</option>

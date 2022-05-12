@@ -10,6 +10,8 @@ import OneProjectUser from '../OneProjectUser/OneProjectUser';
 import OneReviewTask from '../OneReviewTask/OneReviewTask';
 import cloneDeep from 'lodash/cloneDeep';
 import { ITaskFilter } from '../../../_ComponentsLink/Models/CodeReviewApp/TasksFilter';
+import { ILoadReviewTasksResultDataBask } from '../../../_ComponentsLink/BackModel/CodeReviewApp/ILoadReviewTasksResultDataBask';
+import Paggination from '../Paggination/Paggination';
 
 
 
@@ -31,8 +33,11 @@ export interface IProjectDetailProps {
 
 
 const ProjectDetail = (props: IProjectDetailProps) => {
+    const tasksOnPageCount = 5;
+
 
     const [currentProjectTasks, setCurrentProjectTasks] = useState([] as IProjectTaskDataBack[]);
+    const [allTasksCount, setAllTasksCount] = useState(0);
 
 
     const [newUserName, setNewUserName] = useState('');
@@ -102,7 +107,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
     const reloadTasks = () => {
-        let loadTasks = (error: MainErrorObjectBack, data: IProjectTaskDataBack[]) => {
+        let loadTasks = (error: MainErrorObjectBack, data: ILoadReviewTasksResultDataBask) => {
             if (error) {
                 //TODO выбить из комнаты?
                 alert("todo что то пошло не так лучше обновить страницу");
@@ -110,13 +115,14 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             }
 
             if (data) {
-                setCurrentProjectTasks(data);
+                setCurrentProjectTasks(data.Tasks);
+                setAllTasksCount(data.TasksCount);
             }
         };
 
         let filter = {
             Name: filterTaskName, CreatorId: filterTaskCreator
-            , PageNumber: filterTaskPage, PageSize: 5
+            , PageNumber: filterTaskPage, PageSize: tasksOnPageCount
             , ProjectId: props.Project.Id, ReviewerId: filterTaskReviwer
             , Status: filterTaskStatus
         } as ITaskFilter;
@@ -294,6 +300,13 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 <option value={1}>Необходимы правки</option>
                 <option value={2}>Готово</option>
             </select>
+            <div>
+                <Paggination
+                    ElementsCount={allTasksCount}
+                    PageNumber={filterTaskPage}
+                    ElementsOnPage={tasksOnPageCount}
+                    SetPageNumber={setFilterTaskPage}></Paggination>
+            </div>
         </div>
         <div>
             <h2>список задач</h2>

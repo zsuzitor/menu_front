@@ -1,6 +1,7 @@
 
 
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
+import { ILoadReviewTasksResultDataBask } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBask";
 import { IOneProjectInfoDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInfoDataBack";
 import { IOneProjectInListDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInListDataBack";
 import { IOneTaskReviewCommentDataBack } from "../../BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack";
@@ -18,7 +19,7 @@ export type DeleteProject = (error: MainErrorObjectBack, data: BoolResultBack) =
 export type ChangeUser = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 export type DeleteUser = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 export type UpdateTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
-export type LoadTasks = (error: MainErrorObjectBack, data: IProjectTaskDataBack[]) => void;
+export type LoadTasks = (error: MainErrorObjectBack, data: ILoadReviewTasksResultDataBask) => void;
 export type LoadComments = (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack[]) => void;
 export type DeleteTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 export type AddComment = (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack) => void;

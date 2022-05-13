@@ -17,7 +17,7 @@ export interface IPagginationProps {
 
 
 const Paggination = (props: IPagginationProps) => {
-    return <div></div>
+    // return <div></div>
 
     //todo сделать подругому
     //делаю кнопки:
@@ -28,52 +28,72 @@ const Paggination = (props: IPagginationProps) => {
     }
 
     let allPageCount = Math.floor(props.ElementsCount / props.ElementsOnPage);
-    if (allPageCount < 1) {
-        allPageCount = 1;
-    }
+    // if (allPageCount < 1) {
+    //     allPageCount = 1;
+    // }
 
     if (props.ElementsCount % props.ElementsOnPage != 0) {
         allPageCount++;
     }
 
+    let needPrevBut = true;
+    let needNextBut = true;
+    let needFirstBut = true;
+    let needLastBut = true;
 
-    let startBut = 1;
-    if (props.PageNumber === 1) {
-        startBut = 2;
-    }
-    else if (props.PageNumber === allPageCount) {
-        startBut = props.PageNumber - 4;
-    }
-    else {
-        startBut = props.PageNumber - 1;
+    if (props.PageNumber == 1) {
+        needPrevBut = false;
+        needFirstBut = false;
     }
 
-    if (startBut < 2) {
-        startBut = 2;
+    if (props.PageNumber == allPageCount) {
+        needNextBut = false;
+        needLastBut = false;
     }
 
+    // if (allPageCount == 1) {
+    //     needLastBut = false;
+    // }
 
+    return <div>
+        {needFirstBut ? <button onClick={() => props.SetPageNumber(1)} className='btn-b btn-border'>1</button> : <></>}
+        {needPrevBut ? <button onClick={() => props.SetPageNumber(props.PageNumber - 1)} className='btn-b btn-border'>prev</button> : <></>}
+        <button onClick={() => props.SetPageNumber(props.PageNumber)} className='btn-b btn-border'>{props.PageNumber}</button>
+        {needNextBut ? <button onClick={() => props.SetPageNumber(props.PageNumber + 1)} className='btn-b btn-border'>next</button> : <></>}
+        {needLastBut ? <button onClick={() => props.SetPageNumber(allPageCount)} className='btn-b btn-border'>{allPageCount}</button> : <></>}
 
-    let allBut = [];
-    allBut.push(1);
+    </div>
 
+    // let allBut = [];
+    // allBut.push(1);
 
+    // let startBut = 1;
+    // if (props.PageNumber === 1) {
+    //     startBut = 2;
+    // }
+    // else if (props.PageNumber === allPageCount) {
+    //     startBut = props.PageNumber - 4;
+    // }
+    // else {
+    //     startBut = props.PageNumber - 1;
+    // }
 
+    // if (startBut < 2) {
+    //     startBut = 2;
+    // }
 
+    // for (let i = 0; i < 3; ++i) {
+    //     if (startBut < allPageCount) {
+    //         allBut.push(startBut++);
+    //     }
+    // }
 
-
-    for (let i = 0; i < 3; ++i) {
-        if (startBut < allPageCount) {
-            allBut.push(startBut++);
-        }
-    }
-
-    if (startBut <= allPageCount) {
-        allBut.push(allPageCount);
-    }
-    else {
-        allBut.push(startBut++);
-    }
+    // if (startBut <= allPageCount) {
+    //     allBut.push(allPageCount);
+    // }
+    // else {
+    //     allBut.push(startBut++);
+    // }
 
 
 

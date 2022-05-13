@@ -86,7 +86,7 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
         }
         setTaskName(props.Task.Name);
         setTaskStatus(props.Task.Status);
-        setTaskReviwer(props.Task.ReviewerId);
+        setTaskReviwer(props.Task.ReviewerId || -1);
         setTaskCreator(props.Task.CreatorId);
     };
 

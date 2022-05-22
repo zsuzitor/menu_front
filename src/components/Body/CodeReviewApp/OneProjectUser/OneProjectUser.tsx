@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
-import { IOneProjectInListDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneProjectInListDataBack';
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 
@@ -20,6 +19,7 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
 
     const [userName, setUserName] = useState(props.User.Name);
     const [userEmail, setUserEmail] = useState(props.User.Email || '');
+    const [userIsAdmin, setUserIsAdmin] = useState(false);
 
 
     useEffect(() => {
@@ -30,6 +30,10 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
         setUserEmail(props.User.Email || '');
     }, [props.User.Email]);
 
+    useEffect(() => {
+        setUserIsAdmin(props.User.IsAdmin);
+    }, [props.User.Email]);
+
 
     const changeUser = () => {
         if (!userName) {
@@ -37,7 +41,7 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
             return;
         }
 
-        let newUserData = { Id: props.User.Id, Name: userName, Email: userEmail }
+        let newUserData = { Id: props.User.Id, Name: userName, Email: userEmail, IsAdmin: userIsAdmin }
 
         let changeUser = (error: MainErrorObjectBack, data: BoolResultBack) => {
             if (error) {
@@ -76,24 +80,26 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
 
 
     return <div className='one-project-user-content'>
-        <span>Имя</span>
+        <label>Имя</label>
         <input className='form-control-b' type='text' value={userName} placeholder="Имя" onChange={e => setUserName(e.target.value)}></input>
         <br />
-        <span>Почта для уведомлений</span>
+        <label>Почта для уведомлений</label>
         <input className='form-control-b' type='text' value={userEmail} placeholder="Почта" onChange={e => setUserEmail(e.target.value)}></input>
-        
+        <label>Роль Админа</label>
+        <input type="checkbox" checked={userIsAdmin} onChange={e => setUserIsAdmin(e.target.checked)} />
 
         <div className='one-project-user-buttons'>
-            <div className='project-user-save-button' onClick={() => changeUser()}>
+            <div className='project-user-action-btn' onClick={() => changeUser()}>
                 <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'} alt="Save" title='сохранить' />
             </div>
-            <div className='project-user-cancel-button' onClick={() => {
+            <div className='project-user-action-btn' onClick={() => {
                 setUserName(props.User.Name);
                 setUserEmail(props.User.Email);
+                setUserIsAdmin(props.User.IsAdmin);
             }}>
                 <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" title='отменить изменения' />
             </div>
-            <div className='project-user-delete-button' onClick={() => deleteUser()}>
+            <div className='project-user-action-btn' onClick={() => deleteUser()}>
                 <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='удалить задачу' />
             </div>
         </div>

@@ -1,6 +1,7 @@
 .code-review-main-container {
     display: flex;
     flex-wrap: nowrap;
+    /* background-color: #666262; */
 }
 
 

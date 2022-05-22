@@ -12,6 +12,8 @@ import cloneDeep from 'lodash/cloneDeep';
 import { ITaskFilter } from '../../../../Models/Models/CodeReviewApp/TasksFilter';
 import { ILoadReviewTasksResultDataBask } from '../../../../Models/BackModel/CodeReviewApp/ILoadReviewTasksResultDataBask';
 import Paggination from '../Paggination/Paggination';
+import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
+import ProjectUsers from '../ProjectUsers/ProjectUsers';
 
 
 
@@ -40,8 +42,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     const [allTasksCount, setAllTasksCount] = useState(0);
 
 
-    const [newUserName, setNewUserName] = useState('');
-    const [userMainAppEmail, setUserMainAppEmail] = useState('');
 
 
     const [newTaskName, setNewTaskName] = useState('');
@@ -133,28 +133,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
 
-    const addNewUser = () => {
-        if (!newUserName) {
-            return;
-        }
-
-        let addUser = (error: MainErrorObjectBack, data: IProjectUserDataBack) => {
-            if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
-                return;
-            }
-
-            if (data) {
-                props.AddUserToProject(data);
-            }
-        };
-
-        window.G_CodeReviewUserController.AddUserToProject(newUserName, userMainAppEmail, props.Project.Id, addUser);
-        setNewUserName('');
-    };
-
-
     const createNewTask = () => {
         let addTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => {
             if (error) {
@@ -244,23 +222,17 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             </div>
             <br />
 
-            <button className='btn-b btn-border' onClick={() => setShowUserList(e => !e)}>Люди проекта:</button>
-            <div className={'project-review-user-list' + userListClass}>
-                <span>Имя человека</span>
-                <input className='form-control-b' type='text' placeholder='Имя человека'
-                    onChange={(e) => setNewUserName(e.target.value)} value={newUserName}></input>
-                <br />
-                <span>Почта из основного приложения</span>
-                <input className='form-control-b' type='text' value={userMainAppEmail} placeholder="Почта  из основного приложения" onChange={e => setUserMainAppEmail(e.target.value)}></input>
-                <br />
-                <button className='btn-b btn-border' onClick={() => addNewUser()}>Добавить человека</button>
-                <br />
-                {props.ProjectUsers.map(x => {
-                    return <OneProjectUser User={x}
-                        key={x.Id} ChangeUser={props.ChangeUser}
-                        DeleteUser={props.DeleteUser}></OneProjectUser>
-                })}
-            </div>
+            <button className='btn-b btn-border' onClick={() => setShowUserList(e => true)}>Люди проекта</button>
+            {showUserList ? <AdditionalWindow CloseWindow={() => setShowUserList(false)}
+                IsHeightWindow={true}
+                InnerContent={() => <ProjectUsers
+                    AddUserToProject={props.AddUserToProject}
+                    ChangeUser={props.ChangeUser}
+                    DeleteUser={props.DeleteUser}
+                    ProjectId={props.Project.Id}
+                    ProjectUsers={props.ProjectUsers}></ProjectUsers>}></AdditionalWindow> : <></>}
+
+
             <br />
 
             <div className='review-project-new-task-block'>

@@ -1,27 +1,19 @@
-.project-user-save-button {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-}
 
-.project-user-cancel-button {
+.project-user-action-btn{
     width: 30px;
     height: 30px;
     cursor: pointer;
-}
-
-.project-user-delete-button {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
+    background-color: white;
+    border-radius: 5px;
 }
 
 .one-project-user-buttons {
     display: flex;
+    gap: 10px;
 }
 
 .one-project-user-content {
     padding: 5px;
     border-radius: 10px;
-    border: 1px solid black;
+    border: 1px solid white;
 }

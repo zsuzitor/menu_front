@@ -6,6 +6,8 @@
     /* flex-grow: 1; */
     overflow: hidden;
     /* border-right: 1px solid black; */
+    position: sticky;
+    top: 0;
 }
 
 .code-review-projects-menu-hide {

@@ -14,7 +14,7 @@ import OneReviewTaskComment from '../OneReviewTaskComment/OneReviewTaskComment';
 require('./OneReviewTask.css');
 
 
-export interface OneReviewTaskProps {
+export interface IOneReviewTaskProps {
     Task: IProjectTaskDataBack;
     ProjectUsers: IProjectUserDataBack[];
     UpdateTask: (task: IProjectTaskDataBack) => void;
@@ -23,7 +23,7 @@ export interface OneReviewTaskProps {
 
 
 
-const OneReviewTask = (props: OneReviewTaskProps) => {
+const OneReviewTask = (props: IOneReviewTaskProps) => {
 
 
     const [taskName, setTaskName] = useState(props.Task.Name);

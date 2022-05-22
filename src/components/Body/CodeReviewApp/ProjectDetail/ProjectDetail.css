@@ -1,17 +1,4 @@
-.project-review-user-list {
-    transition: 1s;
-    overflow: hidden;
-    border: 1px solid black;
-    max-height: 300px;
-    overflow: auto;
-    background-color: slategray;
-    /* box-shadow: 0px 0px 5px 1px black; */
-}
 
-.project-review-user-list-show {
-    max-height: 300px;
-    overflow: auto;
-}
 
 .review-project-detail-main {
     padding-top: 20px;

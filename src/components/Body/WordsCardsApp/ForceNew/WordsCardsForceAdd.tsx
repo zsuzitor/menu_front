@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
-import { IOneWordCardBack } from "../../../_ComponentsLink/BackModel/WordCardApp/OneWordCardBack";
-import { IWordListBack } from "../../../_ComponentsLink/BackModel/WordCardApp/WordListBack";
-import { AlertData, AlertTypeEnum } from "../../../_ComponentsLink/Models/AlertData";
-import { OneWordList } from "../../../_ComponentsLink/Models/WordsCardsApp/OneWordList";
+import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
+import { IOneWordCardBack } from "../../../../Models/BackModel/WordCardApp/OneWordCardBack";
+import { IWordListBack } from "../../../../Models/BackModel/WordCardApp/WordListBack";
+import { AlertData, AlertTypeEnum } from "../../../../Models/Models/AlertData";
+import { OneWordList } from "../../../../Models/Models/WordsCardsApp/OneWordList";
 import { CreateCardEdit, OneCard } from "./OneCard";
 
 export interface OneWordCardInListState {

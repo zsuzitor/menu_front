@@ -3,11 +3,11 @@
 import * as React from "react";
 import { MenuCardList } from './MenuCardList';
 import { CardsFilters } from './CardsFilters';
-import { ICardListFilters } from '../../../_ComponentsLink/Models/MenuApp/CardListFilters';
-import { IOneCardInListData, OneCardInListData } from '../../../_ComponentsLink/Models/MenuApp/OneCardInListData';
-import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
-import { IOneCardInListDataBack } from "../../../_ComponentsLink/BackModel/MenuApp/OneCardInListDataBack";
-import { BoolResultBack } from "../../../_ComponentsLink/BackModel/BoolResultBack";
+import { ICardListFilters } from '../../../../Models/Models/MenuApp/CardListFilters';
+import { IOneCardInListData, OneCardInListData } from '../../../../Models/Models/MenuApp/OneCardInListData';
+import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
+import { IOneCardInListDataBack } from "../../../../Models/BackModel/MenuApp/OneCardInListDataBack";
+import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 
 
 export interface IBodyCardsListMainProps {

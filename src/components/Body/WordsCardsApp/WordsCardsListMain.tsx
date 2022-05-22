@@ -1,16 +1,16 @@
 import * as React from "react";
 import { OneWordCard as OneWordCardView } from "./OneWordCard";
 import { WordsCardsList } from "./WordsCardsList";
-import { OneWordCard as OneWordCardModel } from "../../_ComponentsLink/Models/WordsCardsApp/OneWordCard";
-import { IEditCardState } from "../../_ComponentsLink/Models/WordsCardsApp/IEditCardState";
-import { AlertData, AlertTypeEnum } from "../../_ComponentsLink/Models/AlertData";
-import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
-import { IOneWordCardBack, IWordCardWordList } from "../../_ComponentsLink/BackModel/WordCardApp/OneWordCardBack";
-import { BoolResultBack } from "../../_ComponentsLink/BackModel/BoolResultBack";
-import { IWordListBack } from "../../_ComponentsLink/BackModel/WordCardApp/WordListBack";
-import { OneWordList } from "../../_ComponentsLink/Models/WordsCardsApp/OneWordList";
+import { OneWordCard as OneWordCardModel } from "../../../Models/Models/WordsCardsApp/OneWordCard";
+import { IEditCardState } from "../../../Models/Models/WordsCardsApp/IEditCardState";
+import { AlertData, AlertTypeEnum } from "../../../Models/Models/AlertData";
+import { MainErrorObjectBack } from "../../../Models/BackModel/ErrorBack";
+import { IOneWordCardBack, IWordCardWordList } from "../../../Models/BackModel/WordCardApp/OneWordCardBack";
+import { BoolResultBack } from "../../../Models/BackModel/BoolResultBack";
+import { IWordListBack } from "../../../Models/BackModel/WordCardApp/WordListBack";
+import { OneWordList } from "../../../Models/Models/WordsCardsApp/OneWordList";
 import { OneWordListState } from "./WordsList/WordsCardsListWork";
-import { WordCardWordList } from "../../_ComponentsLink/Models/WordsCardsApp/WordCardWordList";
+import { WordCardWordList } from "../../../Models/Models/WordsCardsApp/WordCardWordList";
 
 export interface WordsCardsListMainState {
     Cards: OneWordCardModel[];

@@ -1,4 +1,4 @@
-import { CustomImageEdit } from "../../../../Body/MenuApp/OneCardDetail/AdditionalImages";
+import { CustomImageEdit } from "../../../../components/Body/MenuApp/OneCardDetail/AdditionalImages";
 
 
 export interface IOneCardFullDataEdit {

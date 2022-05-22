@@ -1,4 +1,4 @@
-import { OneWordListEdit } from "../../../Body/WordsCardsApp/WordsList/WordsCardsListWork";
+import { OneWordListEdit } from "../../../components/Body/WordsCardsApp/WordsList/WordsCardsListWork";
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { IWordCardWordList } from "../../BackModel/WordCardApp/OneWordCardBack";

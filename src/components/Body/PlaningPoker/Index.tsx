@@ -6,7 +6,7 @@ import { type } from "os";
 import React, { useState, useEffect } from 'react';
 
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
-import { AlertData } from "../../_ComponentsLink/Models/AlertData";
+import { AlertData } from "../../../Models/Models/AlertData";
 import { RoomInfo } from "./Models/RoomInfo";
 
 

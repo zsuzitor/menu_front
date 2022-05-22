@@ -1,7 +1,7 @@
 import * as React from "react";
 import { HeaderLogo } from './HeaderLogo';
 import { HeaderUserMenu } from './HeaderUserMenu';
-import { IAuthState } from '../_ComponentsLink/Models/AuthState';
+import { IAuthState } from '../../Models/Models/AuthState';
 
 export interface IHeaderMainProps {
     AuthInfo: IAuthState;

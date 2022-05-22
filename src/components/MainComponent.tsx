@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-import { IAuthState, IAuthUserState } from './_ComponentsLink/Models/AuthState';
+import { IAuthState, IAuthUserState } from '../Models/Models/AuthState';
 
 import { HeaderMain } from './Header/HeaderMain';
 // import { BodyMain } from './Body/BodyMain';
@@ -10,10 +10,10 @@ import { FooterMain } from './Footer/FooterMain';
 import { MainAlertAbsolute } from './Alerts/MainAlertAbsolute';
 
 import { BrowserRouter } from "react-router-dom";
-import { AlertData, AlertDataStored } from "./_ComponentsLink/Models/AlertData";
+import { AlertData, AlertDataStored } from "../Models/Models/AlertData";
 import { AppRouter } from "./AppRouter";
-import { MainErrorObjectBack } from "./_ComponentsLink/BackModel/ErrorBack";
-import { UserShortBack } from "./_ComponentsLink/BackModel/UserShort";
+import { MainErrorObjectBack } from "../Models/BackModel/ErrorBack";
+import { UserShortBack } from "../Models/BackModel/UserShort";
 
 
 

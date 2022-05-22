@@ -1,4 +1,4 @@
-import { CreateCardEdit } from "../../../Body/WordsCardsApp/ForceNew/OneCard";
+import { CreateCardEdit } from "../../../components/Body/WordsCardsApp/ForceNew/OneCard";
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { IOneWordCardBack } from "../../BackModel/WordCardApp/OneWordCardBack";

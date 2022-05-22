@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { BoolResultBack } from '../../../_ComponentsLink/BackModel/BoolResultBack';
-import { IOneProjectInListDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IOneProjectInListDataBack';
-import { IProjectTaskDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IProjectTaskDataBack';
-import { IProjectUserDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IProjectUserDataBack';
-import { MainErrorObjectBack } from '../../../_ComponentsLink/BackModel/ErrorBack';
+import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
+import { IOneProjectInListDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneProjectInListDataBack';
+import { IProjectTaskDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectTaskDataBack';
+import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
+import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 
-import { IAuthState } from "../../../_ComponentsLink/Models/AuthState";
+import { IAuthState } from "../../../../Models/Models/AuthState";
 import OneProjectUser from '../OneProjectUser/OneProjectUser';
 import OneReviewTask from '../OneReviewTask/OneReviewTask';
 import cloneDeep from 'lodash/cloneDeep';
-import { ITaskFilter } from '../../../_ComponentsLink/Models/CodeReviewApp/TasksFilter';
-import { ILoadReviewTasksResultDataBask } from '../../../_ComponentsLink/BackModel/CodeReviewApp/ILoadReviewTasksResultDataBask';
+import { ITaskFilter } from '../../../../Models/Models/CodeReviewApp/TasksFilter';
+import { ILoadReviewTasksResultDataBask } from '../../../../Models/BackModel/CodeReviewApp/ILoadReviewTasksResultDataBask';
 import Paggination from '../Paggination/Paggination';
 
 

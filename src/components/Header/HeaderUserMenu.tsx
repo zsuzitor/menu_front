@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IAuthState } from '../_ComponentsLink/Models/AuthState';
+import { IAuthState } from '../../Models/Models/AuthState';
 
 export interface IHeaderUserMenuProps {
     AuthInfo: IAuthState;

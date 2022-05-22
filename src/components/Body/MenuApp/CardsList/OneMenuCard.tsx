@@ -1,7 +1,7 @@
 /// <reference path="../../../../../typings/globals.d.ts" />
 
 import * as React from "react";
-import { IOneCardInListData, OneCardInListData } from '../../../_ComponentsLink/Models/MenuApp/OneCardInListData';
+import { IOneCardInListData, OneCardInListData } from '../../../../Models/Models/MenuApp/OneCardInListData';
 
 // export interface IHeaderLogoProps {
 // }
@@ -10,12 +10,12 @@ import {
     Link,
     BrowserRouter
 } from "react-router-dom";
-import { BoolResultBack } from "../../../_ComponentsLink/BackModel/BoolResultBack";
-import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
-import { IOneCardInListDataBack, OneCardInListDataBack } from "../../../_ComponentsLink/BackModel/MenuApp/OneCardInListDataBack";
-import { IOneCardFullDataEdit } from "../../../_ComponentsLink/Models/MenuApp/Poco/IOneCardFullDataEdit";
-import { IOneWordCardBack } from "../../../_ComponentsLink/BackModel/WordCardApp/OneWordCardBack";
-import { IOneCardFullDataBack } from "../../../_ComponentsLink/BackModel/MenuApp/OneCardFullDataBack";
+import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
+import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
+import { IOneCardInListDataBack, OneCardInListDataBack } from "../../../../Models/BackModel/MenuApp/OneCardInListDataBack";
+import { IOneCardFullDataEdit } from "../../../../Models/Models/MenuApp/Poco/IOneCardFullDataEdit";
+import { IOneWordCardBack } from "../../../../Models/BackModel/WordCardApp/OneWordCardBack";
+import { IOneCardFullDataBack } from "../../../../Models/BackModel/MenuApp/OneCardFullDataBack";
 
 export interface IOneMenuCardProps {
     CardData?: IOneCardInListData;

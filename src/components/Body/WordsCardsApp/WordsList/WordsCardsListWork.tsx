@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
-import { IWordListBack } from "../../../_ComponentsLink/BackModel/WordCardApp/WordListBack";
-import { OneWordList } from "../../../_ComponentsLink/Models/WordsCardsApp/OneWordList";
+import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
+import { IWordListBack } from "../../../../Models/BackModel/WordCardApp/WordListBack";
+import { OneWordList } from "../../../../Models/Models/WordsCardsApp/OneWordList";
 
 
 export class OneWordListEdit {//TODO надо вынести в отдельный файл и повыше в иерархии тк используется в контроллерах

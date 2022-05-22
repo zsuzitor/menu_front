@@ -1,6 +1,6 @@
 import * as React from "react";
-import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
-import { AlertData } from "../../_ComponentsLink/Models/AlertData";
+import { MainErrorObjectBack } from "../../../Models/BackModel/ErrorBack";
+import { AlertData } from "../../../Models/Models/AlertData";
 /// <reference path="../../../typings/globals.d.ts" />
 
 export interface ILoginState {

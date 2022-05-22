@@ -29,7 +29,7 @@ export class CodeReviewUserController implements ICodeReviewUserController {
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/project/delete-user'
+            Url: G_PathToServer + 'api/codereview/user/delete-user'
 
         });
     }
@@ -49,7 +49,7 @@ export class CodeReviewUserController implements ICodeReviewUserController {
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/project/add-new-user'
+            Url: G_PathToServer + 'api/codereview/user/add-new-user'
 
         });
     };
@@ -68,7 +68,7 @@ export class CodeReviewUserController implements ICodeReviewUserController {
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/project/change-user'
+            Url: G_PathToServer + 'api/codereview/user/change-user'
 
         });
     }

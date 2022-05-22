@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AppItem } from "../../_ComponentsLink/Models/Poco/AppItem";
+import { AppItem } from "../../../Models/Models/Poco/AppItem";
 import { AppListItem } from "./AppListItem";
 
 export interface AppListState {

@@ -5,18 +5,18 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import ReactDOMClient from 'react-dom/client';
 import MainComponent from './components/MainComponent';
-import { AjaxHelper } from './components/_ComponentsLink/AjaxLogic';
-import { AuthenticateController } from "./components/_ComponentsLink/Controllers/AuthenticateController";
-import { CodeReviewCommentController } from "./components/_ComponentsLink/Controllers/CodeReviewApp/CodeReviewCommentController";
-import { CodeReviewProjectController } from "./components/_ComponentsLink/Controllers/CodeReviewApp/CodeReviewProjectController";
-import { CodeReviewTaskController } from "./components/_ComponentsLink/Controllers/CodeReviewApp/CodeReviewTaskController";
-import { CodeReviewUserController } from "./components/_ComponentsLink/Controllers/CodeReviewApp/CodeReviewUserController";
-import { ArticleController } from "./components/_ComponentsLink/Controllers/MenuApp/ArticleController";
-import { PlaningPokerController } from "./components/_ComponentsLink/Controllers/PlaningPoker/PlaningPokerController";
-import { UsersController } from "./components/_ComponentsLink/Controllers/UsersController";
-import { WordsCardsController } from "./components/_ComponentsLink/Controllers/WordsCardsApp/WordsCardsController";
-import { WordsListController } from "./components/_ComponentsLink/Controllers/WordsCardsApp/WordsListController";
-import { MainErrorHandler } from './components/_ComponentsLink/Models/ErrorHandleLogic';
+import { AjaxHelper } from './Models/AjaxLogic';
+import { AuthenticateController } from "./Models/Controllers/AuthenticateController";
+import { CodeReviewCommentController } from "./Models/Controllers/CodeReviewApp/CodeReviewCommentController";
+import { CodeReviewProjectController } from "./Models/Controllers/CodeReviewApp/CodeReviewProjectController";
+import { CodeReviewTaskController } from "./Models/Controllers/CodeReviewApp/CodeReviewTaskController";
+import { CodeReviewUserController } from "./Models/Controllers/CodeReviewApp/CodeReviewUserController";
+import { ArticleController } from "./Models/Controllers/MenuApp/ArticleController";
+import { PlaningPokerController } from "./Models/Controllers/PlaningPoker/PlaningPokerController";
+import { UsersController } from "./Models/Controllers/UsersController";
+import { WordsCardsController } from "./Models/Controllers/WordsCardsApp/WordsCardsController";
+import { WordsListController } from "./Models/Controllers/WordsCardsApp/WordsListController";
+import { MainErrorHandler } from './Models/Models/ErrorHandleLogic';
 
 
 

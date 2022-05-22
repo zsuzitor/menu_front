@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { OneWordList } from "../../_ComponentsLink/Models/WordsCardsApp/OneWordList";
+import { OneWordList } from "../../../Models/Models/WordsCardsApp/OneWordList";
 
 
 export interface IWordActionsState {

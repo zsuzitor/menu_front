@@ -4,15 +4,15 @@ import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 // import * as signalR from "@microsoft/signalr";
 import Index from "./Index";
 import Room from "./Room";
-import { AlertData, AlertTypeEnum } from '../../_ComponentsLink/Models/AlertData';
+import { AlertData, AlertTypeEnum } from '../../../Models/Models/AlertData';
 import { PlaningPokerUserInfo, RoomInfo } from './Models/RoomInfo';
 
 // import { HubConnection } from '@microsoft/signalr';
 // import signalR, { HubConnection } from "@aspnet/signalr";
 import * as signalR from "@aspnet/signalr";
-import { IAuthState } from '../../_ComponentsLink/Models/AuthState';
+import { IAuthState } from '../../../Models/Models/AuthState';
 import cloneDeep from 'lodash/cloneDeep';
-import { MainErrorObjectBack } from '../../_ComponentsLink/BackModel/ErrorBack';
+import { MainErrorObjectBack } from '../../../Models/BackModel/ErrorBack';
 
 // import * as signalR from '@aspnet/signalr'
 

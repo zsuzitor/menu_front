@@ -1,6 +1,6 @@
 import * as React from "react";
 // import { WordActions } from "./WordActions";
-import { OneWordCard as OneWordCardModel } from "../../_ComponentsLink/Models/WordsCardsApp/OneWordCard";
+import { OneWordCard as OneWordCardModel } from "../../../Models/Models/WordsCardsApp/OneWordCard";
 import { OneWordCardInList } from "./OneWordCardInList";
 
 export interface IWordsCardsListProps {

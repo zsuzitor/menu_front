@@ -10,7 +10,7 @@ import { MenuMain } from "./Body/Menu/MenuMain";
 import { MenuAppMain } from "./Body/MenuApp/MenuAppMain";
 import { WordsCardsAppMain } from "./Body/WordsCardsApp/WordsCardsAppMain";
 import PlaningPokerMain from "./Body/PlaningPoker/PlaningPokerMain";
-import { IAuthState } from "./_ComponentsLink/Models/AuthState";
+import { IAuthState } from "../Models/Models/AuthState";
 import CodeReviewMain from "./Body/CodeReviewApp/CodeReviewMain/CodeReviewMain";
 
 // 

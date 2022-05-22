@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AlertDataStored, AlertTypeEnum } from "../_ComponentsLink/Models/AlertData";
+import { AlertDataStored, AlertTypeEnum } from "../../Models/Models/AlertData";
 
 export interface IOneAlertProps {
     Data: AlertDataStored;

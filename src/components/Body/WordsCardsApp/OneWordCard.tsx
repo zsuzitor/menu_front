@@ -1,8 +1,8 @@
 import * as React from "react";
 import { WordActions } from "./WordActions";
-import { OneWordCard as OneWordCardModel } from "../../_ComponentsLink/Models/WordsCardsApp/OneWordCard";
-import { IEditCardState } from "../../_ComponentsLink/Models/WordsCardsApp/IEditCardState";
-import { OneWordList } from "../../_ComponentsLink/Models/WordsCardsApp/OneWordList";
+import { OneWordCard as OneWordCardModel } from "../../../Models/Models/WordsCardsApp/OneWordCard";
+import { IEditCardState } from "../../../Models/Models/WordsCardsApp/IEditCardState";
+import { OneWordList } from "../../../Models/Models/WordsCardsApp/OneWordList";
 
 export interface IOneWordCardStase {
     // EditNow: boolean;

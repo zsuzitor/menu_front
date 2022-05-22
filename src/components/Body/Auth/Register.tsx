@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MainErrorObjectBack } from "../../_ComponentsLink/BackModel/ErrorBack";
+import { MainErrorObjectBack } from "../../../Models/BackModel/ErrorBack";
 
 export interface IRegisterState {
     Login: string;

@@ -1,13 +1,13 @@
 /// <reference path="../../../../../typings/globals.d.ts" />
 
 import React, { useState, useEffect } from 'react';
-import { IOneProjectInfoDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IOneProjectInfoDataBack';
-import { IOneProjectInListDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IOneProjectInListDataBack';
-import { IProjectTaskDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IProjectTaskDataBack';
-import { IProjectUserDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IProjectUserDataBack';
-import { MainErrorObjectBack } from '../../../_ComponentsLink/BackModel/ErrorBack';
+import { IOneProjectInfoDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneProjectInfoDataBack';
+import { IOneProjectInListDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneProjectInListDataBack';
+import { IProjectTaskDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectTaskDataBack';
+import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
+import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 
-import { IAuthState } from "../../../_ComponentsLink/Models/AuthState";
+import { IAuthState } from "../../../../Models/Models/AuthState";
 import ProjectDetail from '../ProjectDetail/ProjectDetail';
 import ProjectsList from '../ProjectsList/ProjectsList';
 import cloneDeep from 'lodash/cloneDeep';

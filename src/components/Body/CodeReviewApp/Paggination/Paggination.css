@@ -3,3 +3,7 @@
     height: 15px;
     border: 1px solid black;
 }
+
+.paggination-current{
+    background-color: #b5e29c;
+}

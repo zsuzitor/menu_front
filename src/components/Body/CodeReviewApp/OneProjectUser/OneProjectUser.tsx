@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { BoolResultBack } from '../../../_ComponentsLink/BackModel/BoolResultBack';
-import { IOneProjectInListDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IOneProjectInListDataBack';
-import { IProjectUserDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IProjectUserDataBack';
-import { MainErrorObjectBack } from '../../../_ComponentsLink/BackModel/ErrorBack';
+import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
+import { IOneProjectInListDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneProjectInListDataBack';
+import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
+import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 
 
 require('./OneProjectUser.css');

@@ -2,11 +2,11 @@
 
 import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
-import { BoolResultBack } from '../../../_ComponentsLink/BackModel/BoolResultBack';
-import { IOneTaskReviewCommentDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack';
-import { IProjectTaskDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IProjectTaskDataBack';
-import { IProjectUserDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IProjectUserDataBack';
-import { MainErrorObjectBack } from '../../../_ComponentsLink/BackModel/ErrorBack';
+import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
+import { IOneTaskReviewCommentDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack';
+import { IProjectTaskDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectTaskDataBack';
+import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
+import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 import OneReviewTaskComment from '../OneReviewTaskComment/OneReviewTaskComment';
 
 

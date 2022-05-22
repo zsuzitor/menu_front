@@ -4,16 +4,16 @@ import { RoomInfo, UserInRoom, RoomStatus, PlaningPokerUserInfo, VoteInfo, Story
 
 
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
-import { MainErrorObjectBack } from '../../_ComponentsLink/BackModel/ErrorBack';
-import { IUserInRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/UserInRoomReturn';
+import { MainErrorObjectBack } from '../../../Models/BackModel/ErrorBack';
+import { IUserInRoomReturn } from '../../../Models/BackModel/PlaningPoker/UserInRoomReturn';
 import UserInList from './UserInList';
 import OneVoteCard from './OneVoteCard';
-import { IEndVoteInfoReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/EndVoteInfoReturn';
+import { IEndVoteInfoReturn } from '../../../Models/BackModel/PlaningPoker/EndVoteInfoReturn';
 // import { IOneRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/OneRoomReturn';
-import { AlertData, AlertTypeEnum } from '../../_ComponentsLink/Models/AlertData';
-import { IStoryReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/StoryReturn';
+import { AlertData, AlertTypeEnum } from '../../../Models/Models/AlertData';
+import { IStoryReturn } from '../../../Models/BackModel/PlaningPoker/StoryReturn';
 import StoriesSection from './StoriesSection';
-import { IRoomInfoReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/RoomInfoReturn';
+import { IRoomInfoReturn } from '../../../Models/BackModel/PlaningPoker/RoomInfoReturn';
 import cloneDeep from 'lodash/cloneDeep';
 import RoomTimer from './RoomTimer';
 

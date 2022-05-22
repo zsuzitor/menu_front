@@ -1,7 +1,7 @@
 /// <reference path="../../../../../typings/globals.d.ts" />
 
 import * as React from "react";
-import { CustomImage } from "../../../_ComponentsLink/Models/CustomImage";
+import { CustomImage } from "../../../../Models/Models/CustomImage";
 // export interface IHeaderLogoProps {
 // }
 

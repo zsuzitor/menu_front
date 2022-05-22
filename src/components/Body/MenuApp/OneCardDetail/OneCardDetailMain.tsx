@@ -3,14 +3,14 @@
 import * as React from "react";
 
 import { AdditionalImages, CustomImageEdit } from "./AdditionalImages";
-import { MappedWithBack } from "../../../_ComponentsLink/BL/Interfaces/MappedWithBack";
+import { MappedWithBack } from "../../../../Models/BL/Interfaces/MappedWithBack";
 
-import { BoolResultBack } from "../../../_ComponentsLink/BackModel/BoolResultBack";
-import { MainErrorObjectBack } from "../../../_ComponentsLink/BackModel/ErrorBack";
-import { IOneCardFullDataBack } from "../../../_ComponentsLink/BackModel/MenuApp/OneCardFullDataBack";
+import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
+import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
+import { IOneCardFullDataBack } from "../../../../Models/BackModel/MenuApp/OneCardFullDataBack";
 // import { IOneCardFullData, OneCardFullData } from '../../../_ComponentsLink/Models/MenuApp/OneCardFullData';
-import { IOneCardInListData, OneCardInListData } from '../../../_ComponentsLink/Models/MenuApp/OneCardInListData';
-import { IOneCardFullDataEdit, OneCardFullDataEdit } from "../../../_ComponentsLink/Models/MenuApp/Poco/IOneCardFullDataEdit";
+import { IOneCardInListData, OneCardInListData } from '../../../../Models/Models/MenuApp/OneCardInListData';
+import { IOneCardFullDataEdit, OneCardFullDataEdit } from "../../../../Models/Models/MenuApp/Poco/IOneCardFullDataEdit";
 // export interface IHeaderLogoProps {
 // }
 

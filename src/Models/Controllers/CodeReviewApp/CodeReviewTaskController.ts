@@ -36,7 +36,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/project/add-new-task'
+            Url: G_PathToServer + 'api/codereview/task/add-new-task'
 
         });
 
@@ -58,7 +58,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/project/update-task'
+            Url: G_PathToServer + 'api/codereview/task/update-task'
 
         });
     }
@@ -80,7 +80,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/project/get-project-tasks'
+            Url: G_PathToServer + 'api/codereview/task/get-project-tasks'
 
         });
     };
@@ -96,7 +96,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/project/delete-task'
+            Url: G_PathToServer + 'api/codereview/task/delete-task'
 
         });
     };

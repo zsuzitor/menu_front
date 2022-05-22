@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IOneProjectInListDataBack } from '../../../_ComponentsLink/BackModel/CodeReviewApp/IOneProjectInListDataBack';
+import { IOneProjectInListDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneProjectInListDataBack';
 
 
 require('./OneProjectInList.css');

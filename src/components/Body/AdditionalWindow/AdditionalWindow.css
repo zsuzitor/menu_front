@@ -33,3 +33,8 @@
     /* position: relative;
     height: auto; */
 }
+
+.additional-window-main .title{
+    font-size: 30px;
+    color: goldenrod;
+}

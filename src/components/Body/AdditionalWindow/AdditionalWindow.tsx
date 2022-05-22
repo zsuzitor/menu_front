@@ -9,6 +9,7 @@ export interface IAdditionalWindowProps {
     CloseWindow: () => void;
     InnerContent: () => JSX.Element;
     IsHeightWindow: boolean;
+    Title: string;
 }
 
 
@@ -20,6 +21,7 @@ const AdditionalWindow = (props: IAdditionalWindowProps) => {
     }
 
     return <div className={"additional-window-main" + additionClassMain}>
+        <label className='title'>{props.Title}</label>
         <div className="additional-window-close" onClick={() => props.CloseWindow()}>+</div>
         {/* <div className="cirle-logo-confirm">
             L

@@ -118,8 +118,12 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         setCurrentProjectUsers(oldState => {
             let newState = cloneDeep(oldState);
             let userState = newState.find(x => x.Id === user.Id);
-            userState.Email = user.Email;
-            userState.Name = user.Name;
+            if (userState) {
+                userState.Email = user.Email;
+                userState.Name = user.Name;
+                userState.IsAdmin = user.IsAdmin;
+            }
+
             return newState;
         });
     };
@@ -134,7 +138,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
 
     return <div className='code-review-main-container'>
         <div className='code-review-projects-menu-main'>
-            
+
             <ProjectsList Projects={projectsList}
                 AddNewProject={addNewProject}
                 SetCurrentProject={setCurrentProjectId}

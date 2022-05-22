@@ -11,8 +11,8 @@
 }
 
 .code-review-projects-menu-hide {
-    width: 20px;
-    min-width: 20px;
+    width: 0px;
+    /* min-width: 20px; */
 }
 
 .code-review-projects-menu-visible {

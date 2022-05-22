@@ -14,6 +14,7 @@ import { ILoadReviewTasksResultDataBask } from '../../../../Models/BackModel/Cod
 import Paggination from '../Paggination/Paggination';
 import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
 import ProjectUsers from '../ProjectUsers/ProjectUsers';
+import AddTask from '../AddTask/AddTask';
 
 
 
@@ -44,10 +45,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
 
-    const [newTaskName, setNewTaskName] = useState('');
-
-    const [newTaskCreator, setNewTaskCreator] = useState(-1);//firstUser?.Id || 
-    const [newTaskReviwer, setNewTaskReviwer] = useState(-1);
 
     const [filterTaskCreator, setFilterTaskCreator] = useState(-1);
     const [filterTaskReviwer, setFilterTaskReviwer] = useState(-1);
@@ -58,28 +55,19 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
     const [showUserList, setShowUserList] = useState(false);
+    const [showAddNewTaskForm, setShowAddNewTaskForm] = useState(false);
 
 
 
     useEffect(() => {
-        if (newTaskCreator === -1) {
-            let firstUser = props.ProjectUsers.find(() => true);
-            setNewTaskCreator(firstUser?.Id || -1);
 
-        }
-
-        let reviwerExist = props.ProjectUsers.some((x) => x.Id === newTaskReviwer);
-        if (!reviwerExist) {
-            setNewTaskReviwer(-1);
-        }
-
-        // let filterCreatorExist = props.ProjectUsers.some((x) => x.Id === filterTaskCreator);
-        if (!reviwerExist) {
+        let filterCreatorExist = props.ProjectUsers.some((x) => x.Id === filterTaskCreator);
+        if (!filterCreatorExist) {
             setFilterTaskCreator(-1);
         }
 
-        // let filterReviwerExist = props.ProjectUsers.some((x) => x.Id === filterTaskReviwer);
-        if (!reviwerExist) {
+        let filterReviwerExist = props.ProjectUsers.some((x) => x.Id === filterTaskReviwer);
+        if (!filterReviwerExist) {
             setFilterTaskReviwer(-1);
         }
 
@@ -133,24 +121,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
 
-    const createNewTask = () => {
-        let addTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => {
-            if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
-                return;
-            }
 
-            if (data) {
-                // props.AddUserToProject(data);
-                // addTaskToProject(data);
-                reloadTasks();
-                setNewTaskName('');
-            }
-        };
-
-        window.G_CodeReviewTaskController.AddTaskToProject(newTaskName, newTaskCreator, newTaskReviwer, props.Project.Id, addTask);
-    };
 
     const deleteProject = () => {
         let deleteProject = (error: MainErrorObjectBack, data: BoolResultBack) => {
@@ -225,6 +196,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             <button className='btn-b btn-border' onClick={() => setShowUserList(e => true)}>Люди проекта</button>
             {showUserList ? <AdditionalWindow CloseWindow={() => setShowUserList(false)}
                 IsHeightWindow={true}
+                Title='Люди проекта'
                 InnerContent={() => <ProjectUsers
                     AddUserToProject={props.AddUserToProject}
                     ChangeUser={props.ChangeUser}
@@ -236,19 +208,16 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             <br />
 
             <div className='review-project-new-task-block'>
-                <p>добавить задачу</p>
-                <textarea className='form-control-b persent-100-width' onChange={(e) => setNewTaskName(e.target.value)}
-                    value={newTaskName} placeholder='название'></textarea>
-                <label>creator:</label>
-                <select className='form-control-b' value={newTaskCreator} onChange={(e) => setNewTaskCreator(+e.target.value)}>
-                    {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-                </select>
-                <label>reviewer:</label>
-                <select className='form-control-b' value={newTaskReviwer} onChange={(e) => setNewTaskReviwer(+e.target.value)}>
-                    <option value={-1}>Не выбрано</option>
-                    {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-                </select>
-                <button className='btn-b btn-border' onClick={() => createNewTask()}>Создать</button>
+                <button className='btn-b btn-border' onClick={() => setShowAddNewTaskForm(true)}>Добавить задачу</button>
+                {showAddNewTaskForm ? <AdditionalWindow CloseWindow={() => setShowAddNewTaskForm(false)}
+                    IsHeightWindow={false}
+                    Title='Добавление задачи'
+                    InnerContent={() => <AddTask
+                        ProjectId={props.Project.Id}
+                        ProjectUsers={props.ProjectUsers}
+                        ReloadTasks={reloadTasks}
+                        ></AddTask>}></AdditionalWindow> : <></>}
+
             </div>
         </div>
         <div className='review-project-tasks-filters-block'>

@@ -128,7 +128,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         } as ITaskFilter;
 
 
-        window.G_CodeReviewController.LoadTasks(filter, loadTasks);
+        window.G_CodeReviewTaskController.LoadTasks(filter, loadTasks);
     }
 
 
@@ -150,7 +150,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             }
         };
 
-        window.G_CodeReviewController.AddUserToProject(newUserName, userMainAppEmail, props.Project.Id, addUser);
+        window.G_CodeReviewUserController.AddUserToProject(newUserName, userMainAppEmail, props.Project.Id, addUser);
         setNewUserName('');
     };
 
@@ -171,7 +171,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             }
         };
 
-        window.G_CodeReviewController.AddTaskToProject(newTaskName, newTaskCreator, newTaskReviwer, props.Project.Id, addTask);
+        window.G_CodeReviewTaskController.AddTaskToProject(newTaskName, newTaskCreator, newTaskReviwer, props.Project.Id, addTask);
     };
 
     const deleteProject = () => {
@@ -187,7 +187,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             }
         };
 
-        window.G_CodeReviewController.DeleteProject(props.Project.Id, deleteProject);
+        window.G_CodeReviewProjectController.DeleteProject(props.Project.Id, deleteProject);
     };
 
 

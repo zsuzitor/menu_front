@@ -49,7 +49,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
             }
         };
 
-        window.G_CodeReviewController.GetUserProjects(getProjects);
+        window.G_CodeReviewProjectController.GetUserProjects(getProjects);
     }, []);
 
 
@@ -68,7 +68,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
                 }
             };
 
-            window.G_CodeReviewController.GetProjectInfo(currentProjectId, getProjectInfo);
+            window.G_CodeReviewProjectController.GetProjectInfo(currentProjectId, getProjectInfo);
         }
     }, [currentProjectId]);
 
@@ -93,7 +93,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
             }
         };
 
-        window.G_CodeReviewController.CreateNewProject(newProjectName, addProject);
+        window.G_CodeReviewProjectController.CreateNewProject(newProjectName, addProject);
     };
 
 

@@ -21,6 +21,9 @@ declare var G_WordsCardsController: import("../src/components/_ComponentsLink/Co
 declare var G_WordsListController: import("../src/components/_ComponentsLink/Controllers/WordsCardsApp/WordsListController").IWordsListController;
 declare var G_UsersController: import("../src/components/_ComponentsLink/Controllers/UsersController").IUsersController;
 declare var G_PlaningPokerController: import("../src/components/_ComponentsLink/Controllers/PlaningPoker/PlaningPokerController").IPlaningPokerController;
-declare var G_CodeReviewController: import("../src/components/_ComponentsLink/Controllers/CodeReviewApp/CodeReviewController").ICodeReviewController;
+declare var G_CodeReviewProjectController: import("../src/components/_ComponentsLink/Controllers/CodeReviewApp/CodeReviewProjectController").ICodeReviewProjectController;
+declare var G_CodeReviewTaskController: import("../src/components/_ComponentsLink/Controllers/CodeReviewApp/CodeReviewTaskController").ICodeReviewTaskController;
+declare var G_CodeReviewUserController: import("../src/components/_ComponentsLink/Controllers/CodeReviewApp/CodeReviewUserController").ICodeReviewUserController;
+declare var G_CodeReviewCommentController: import("../src/components/_ComponentsLink/Controllers/CodeReviewApp/CodeReviewCommentController").ICodeReviewCommentController;
 
 

@@ -42,7 +42,7 @@ const OneReviewTaskComment = (props: IOneReviewTaskCommentProps) => {
             }
         };
 
-        window.G_CodeReviewController.DeleteComment(props.Comment.Id, deleteComment);
+        window.G_CodeReviewCommentController.DeleteComment(props.Comment.Id, deleteComment);
     }
 
 
@@ -60,7 +60,7 @@ const OneReviewTaskComment = (props: IOneReviewTaskCommentProps) => {
             }
         };
 
-        window.G_CodeReviewController.UpdateComment(props.Comment.Id, changedText, updateComment);
+        window.G_CodeReviewCommentController.UpdateComment(props.Comment.Id, changedText, updateComment);
     }
 
     const cancelEditMode = () => {

@@ -52,7 +52,7 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
             }
         };
 
-        window.G_CodeReviewController.ChangeProjectUser(newUserData, changeUser);
+        window.G_CodeReviewUserController.ChangeProjectUser(newUserData, changeUser);
     };
 
 
@@ -71,7 +71,7 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
             }
         };
 
-        window.G_CodeReviewController.DeleteProjectUser(props.User.Id, deleteUser);
+        window.G_CodeReviewUserController.DeleteProjectUser(props.User.Id, deleteUser);
     }
 
 

@@ -71,7 +71,7 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
             }
         };
 
-        window.G_CodeReviewController.LoadComments(props.Task.Id, loadComments);
+        window.G_CodeReviewCommentController.LoadComments(props.Task.Id, loadComments);
 
     }, [showComments]);
 
@@ -113,7 +113,7 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
             }
         };
 
-        window.G_CodeReviewController.UpdateTask(forAdd, updateTask);
+        window.G_CodeReviewTaskController.UpdateTask(forAdd, updateTask);
     };
 
 
@@ -134,7 +134,7 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
             }
         };
 
-        window.G_CodeReviewController.DeleteTask(props.Task.Id, deleteTask);
+        window.G_CodeReviewTaskController.DeleteTask(props.Task.Id, deleteTask);
     };
 
     const addComment = () => {
@@ -156,7 +156,7 @@ const OneReviewTask = (props: OneReviewTaskProps) => {
             }
         };
 
-        window.G_CodeReviewController.AddComment(props.Task.Id, newCommentName, addComment);
+        window.G_CodeReviewCommentController.AddComment(props.Task.Id, newCommentName, addComment);
     };
 
 

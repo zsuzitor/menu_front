@@ -1,6 +1,6 @@
 // import * as React from "react";
 import React, { useState, useEffect } from 'react';
-import { RoomInfo, UserInRoom, RoomStatus, PlaningPokerUserInfo, VoteInfo, Story, StoriesHelper } from './Models/RoomInfo';
+import { RoomInfo, UserInRoom, RoomStatus, PlaningPokerUserInfo, VoteInfo, Story, StoriesHelper } from '../../../Models/Models/PlaningPoker/RoomInfo';
 
 
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
@@ -714,12 +714,13 @@ const Room = (props: RoomProps) => {
     const renderVotePlaceIfNeed = () => {
 
         if (roomStatusState !== RoomStatus.AllCanVote) {
-            return <div></div>
+            return <></>
         }
-        let voteArr = [1, 2, 3, 5, 7, 10, 13, 15, 18, 20, 25, 30, 35, 40, 50, "tea"];
+
+        let voteArr = [0.5, 1, 2, 3, 5, 7, 10, 13, 15, 18, 20, 25, 30, 35, 40, 50, "tea"];
 
         return <div onClick={(e) => doVote(e)} className="planing-cards-container">
-            {voteArr.map(x => <OneVoteCard key={x} Val={x + ''} NeedSelect={selectedVoteCard == x} />)}
+            {voteArr.map((x, i) => <OneVoteCard key={i} Val={x + ''} NeedSelect={selectedVoteCard == x} />)}
             {/* <OneVoteCard key="vote_card_tea" Val="tea" NeedSelect={selectedVoteCard === x} /> */}
         </div>
 
@@ -729,7 +730,7 @@ const Room = (props: RoomProps) => {
 
         //UNCOMMENT
         if (roomStatusState !== RoomStatus.CloseVote) {
-            return <div></div>
+            return <></>
         }
 
         return <div>

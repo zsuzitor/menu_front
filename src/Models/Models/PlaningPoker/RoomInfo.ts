@@ -1,7 +1,7 @@
-import { IEndVoteInfoReturn } from "../../../../Models/BackModel/PlaningPoker/EndVoteInfoReturn";
-import { IStoryReturn } from "../../../../Models/BackModel/PlaningPoker/StoryReturn";
-import { IUserInRoomReturn } from "../../../../Models/BackModel/PlaningPoker/UserInRoomReturn";
-import { MappedWithBack } from "../../../../Models/BL/Interfaces/MappedWithBack"
+import { IEndVoteInfoReturn } from "../../BackModel/PlaningPoker/EndVoteInfoReturn";
+import { IStoryReturn } from "../../BackModel/PlaningPoker/StoryReturn";
+import { IUserInRoomReturn } from "../../BackModel/PlaningPoker/UserInRoomReturn";
+import { MappedWithBack } from "../../BL/Interfaces/MappedWithBack"
 
 //todo хорошо бы по файликам раскидать
 

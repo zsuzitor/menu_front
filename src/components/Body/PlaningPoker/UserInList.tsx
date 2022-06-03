@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RoomStatus, UserInRoom, UserRoles } from './Models/RoomInfo';
+import { RoomStatus, UserInRoom, UserRoles } from '../../../Models/Models/PlaningPoker/RoomInfo';
 
 
 class UserInListProp {

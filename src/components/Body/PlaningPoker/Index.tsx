@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 import { AlertData } from "../../../Models/Models/AlertData";
-import { RoomInfo } from "./Models/RoomInfo";
+import { RoomInfo } from "../../../Models/Models/PlaningPoker/RoomInfo";
 
 
 class IndexState {

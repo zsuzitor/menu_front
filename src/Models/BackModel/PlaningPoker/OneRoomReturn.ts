@@ -1,4 +1,4 @@
-import { RoomStatus } from "../../../components/Body/PlaningPoker/Models/RoomInfo";
+import { RoomStatus } from "../../Models/PlaningPoker/RoomInfo";
 import { IStoryReturn } from "./StoryReturn";
 import { IUserInRoomReturn } from "./UserInRoomReturn";
 

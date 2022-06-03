@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { IStoryReturn } from '../../../Models/BackModel/PlaningPoker/StoryReturn';
-import { RoomStatus, StoriesHelper, Story } from './Models/RoomInfo';
+import { RoomStatus, StoriesHelper, Story } from '../../../Models/Models/PlaningPoker/RoomInfo';
 import cloneDeep from 'lodash/cloneDeep';
 
 

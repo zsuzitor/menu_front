@@ -4,5 +4,6 @@ export interface IProjectUserDataBack {
     Name: string;
     Email: string;
     IsAdmin: boolean;
+    MainAppUserId?: number;
     // IsAdmin
 }

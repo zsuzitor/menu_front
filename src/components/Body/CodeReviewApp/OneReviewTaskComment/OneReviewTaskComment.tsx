@@ -3,12 +3,14 @@ import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
 import { IOneTaskReviewCommentDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack';
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
+import { IAuthState } from '../../../../Models/Models/AuthState';
 
 
 require('./OneReviewTaskComment.css');
 
 
 export interface IOneReviewTaskCommentProps {
+    AuthInfo: IAuthState;
     Comment: IOneTaskReviewCommentDataBack;
     ProjectUsers: IProjectUserDataBack[];
     DeleteComment: (id: number) => void;
@@ -69,29 +71,38 @@ const OneReviewTaskComment = (props: IOneReviewTaskCommentProps) => {
     }
 
     let user = props.ProjectUsers.find(x => x.Id == props.Comment.CreatorId);
+    // let userCurrent = props.ProjectUsers.find(x => x.MainAppUserId == props.AuthInfo?.User?.Id);
+    let commentOwner = user && user.MainAppUserId === props.AuthInfo?.User?.Id;
+
+    let haveChenges = changedText !== props.Comment.Text;
 
     if (editMode) {
         return <div className='one-review-comment-block'>
-            <p>{user?.Name || "id:" + props.Comment.CreatorId}</p>
+            <span>{user?.Name || "id:" + props.Comment.CreatorId}</span>
             <textarea className='form-control-b persent-100-width' value={changedText} onChange={e => setChangedText(e.target.value)}></textarea>
-            <div className='review-task-comment-cancel-button' onClick={() => cancelEditMode()}>
-                <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" title='отменить изменения' />
-            </div>
-            <div className='review-task-comment-save-button' onClick={() => updateComment()}>
-                <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'} alt="Save" title='сохранить' />
-            </div>
+            {haveChenges ? <>
+                <div className='review-task-comment-cancel-button' onClick={() => cancelEditMode()}>
+                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" title='отменить изменения' />
+                </div>
+                <div className='review-task-comment-save-button' onClick={() => updateComment()}>
+                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'} alt="Save" title='сохранить' />
+                </div></> : <></>}
+
         </div>
     }
 
     return <div className='one-review-comment-block'>
-        <p>{user?.Name || "id:" + props.Comment.CreatorId}</p>
-        <p>{props.Comment.Text}</p>
-        <div className='review-task-comment-delete-button' onClick={() => deleteComment()}>
-            <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='удалить задачу' />
-        </div>
-        <div className='review-task-comment-edit-button' onClick={() => setEditMode(st => true)}>
-            <img className='persent-100-width-height' src={G_PathToBaseImages + 'edit-1.svg'} alt="Edit" title='Редактировать' />
-        </div>
+        <span>{user?.Name || "id:" + props.Comment.CreatorId}</span>
+        <br />
+        <span>{props.Comment.Text}</span>
+        {commentOwner ? <>
+            <div className='review-task-comment-delete-button' onClick={() => deleteComment()}>
+                <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='удалить задачу' />
+            </div>
+            <div className='review-task-comment-edit-button' onClick={() => setEditMode(st => true)}>
+                <img className='persent-100-width-height' src={G_PathToBaseImages + 'edit-1.svg'} alt="Edit" title='Редактировать' />
+            </div></> : <></>}
+
     </div>
 
 }

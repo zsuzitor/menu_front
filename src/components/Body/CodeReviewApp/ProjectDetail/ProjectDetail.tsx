@@ -21,6 +21,7 @@ import AddTask from '../AddTask/AddTask';
 require('./ProjectDetail.css');
 
 export interface IProjectDetailProps {
+    AuthInfo: IAuthState;
     Project: IOneProjectInListDataBack;//todo временно так
     ProjectUsers: IProjectUserDataBack[];
     // ProjectTasks: IProjectTaskDataBack[];
@@ -216,7 +217,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                         ProjectId={props.Project.Id}
                         ProjectUsers={props.ProjectUsers}
                         ReloadTasks={reloadTasks}
-                        ></AddTask>}></AdditionalWindow> : <></>}
+                    ></AddTask>}></AdditionalWindow> : <></>}
 
             </div>
         </div>
@@ -252,6 +253,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         <div>
             <h2>список задач</h2>
             {currentProjectTasks.map(x => <OneReviewTask key={x.Id}
+                AuthInfo={props.AuthInfo}
                 Task={x}
                 ProjectUsers={props.ProjectUsers}
                 UpdateTask={updateTaskProject}

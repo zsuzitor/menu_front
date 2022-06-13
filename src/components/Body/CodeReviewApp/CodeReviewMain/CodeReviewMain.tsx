@@ -147,6 +147,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         </div>
         <div className='code-review-project-info'>
             <ProjectDetail Project={projectsList.find(x => x.Id == currentProjectId)}
+                AuthInfo={props.AuthInfo}
                 ProjectUsers={currentProjectUsers}
                 AddUserToProject={addNewUserToProject}
                 // AddTaskToProject={addTaskToProject}

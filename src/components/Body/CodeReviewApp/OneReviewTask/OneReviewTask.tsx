@@ -7,6 +7,7 @@ import { IOneTaskReviewCommentDataBack } from '../../../../Models/BackModel/Code
 import { IProjectTaskDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectTaskDataBack';
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
+import { IAuthState } from '../../../../Models/Models/AuthState';
 import OneReviewTaskComment from '../OneReviewTaskComment/OneReviewTaskComment';
 
 
@@ -15,6 +16,8 @@ require('./OneReviewTask.css');
 
 
 export interface IOneReviewTaskProps {
+    AuthInfo: IAuthState;
+
     Task: IProjectTaskDataBack;
     ProjectUsers: IProjectUserDataBack[];
     UpdateTask: (task: IProjectTaskDataBack) => void;
@@ -188,6 +191,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
             Комментарии:
             {comments.map(x => {
                 return <OneReviewTaskComment
+                    AuthInfo={props.AuthInfo}
                     Comment={x}
                     DeleteComment={deleteComment}
                     key={x.Id}
@@ -199,7 +203,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
             <div>
                 <textarea className='form-control-b persent-100-width' value={newCommentName} onChange={e => setNewCommentName(e.target.value)}
-                    ></textarea>
+                ></textarea>
                 <button className='btn-b btn-border' onClick={() => addComment()}>Добавить</button>
             </div>
         </div>
@@ -211,7 +215,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
             <div className='one-review-task-content'>
                 {/* <p>{props.Task.Id}</p> */}
                 <textarea className='form-control-b review-task-name-input' value={taskName} onChange={e => setTaskName(e.target.value)}
-                   ></textarea>
+                ></textarea>
                 {/* <input type='text' value={taskName} onChange={e => setTaskName(e.target.value)}></input> */}
                 <br />
                 <span>Создатеть</span>

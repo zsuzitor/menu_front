@@ -98,8 +98,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     const reloadTasks = () => {
         let loadTasks = (error: MainErrorObjectBack, data: ILoadReviewTasksResultDataBask) => {
             if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
                 return;
             }
 
@@ -127,8 +125,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     const deleteProject = () => {
         let deleteProject = (error: MainErrorObjectBack, data: BoolResultBack) => {
             if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
                 return;
             }
 
@@ -215,7 +211,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                     Title='Добавление задачи'
                     InnerContent={() => <AddTask
                         ProjectId={props.Project.Id}
-                        ProjectUsers={props.ProjectUsers}
+                        ProjectUsers={props.ProjectUsers.filter(us => !us.Deactivated)}
                         ReloadTasks={reloadTasks}
                     ></AddTask>}></AdditionalWindow> : <></>}
 

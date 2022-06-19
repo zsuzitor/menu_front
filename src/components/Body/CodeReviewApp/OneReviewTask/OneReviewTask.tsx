@@ -31,7 +31,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
     const [taskName, setTaskName] = useState(props.Task.Name);
     const [taskStatus, setTaskStatus] = useState(props.Task.Status);
-    const [taskReviwer, setTaskReviwer] = useState(props.Task.ReviewerId || -1);
+    const [taskReviewer, setTaskreviewer] = useState(props.Task.ReviewerId || -1);
     const [taskCreator, setTaskCreator] = useState(props.Task.CreatorId);
     const [comments, setComments] = useState([] as IOneTaskReviewCommentDataBack[]);
     const [showComments, setShowComments] = useState(false);
@@ -49,7 +49,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
     }, [props.Task.Status]);
 
     useEffect(() => {
-        setTaskReviwer(props.Task.ReviewerId || -1);
+        setTaskreviewer(props.Task.ReviewerId || -1);
     }, [props.Task.ReviewerId]);
 
     useEffect(() => {
@@ -64,8 +64,6 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
         let loadComments = (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack[]) => {
             if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
                 return;
             }
 
@@ -80,7 +78,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
 
     // let creator = props.ProjectUsers.find(x => x.Id == props.Task.CreatorId);
-    // let reviwer = props.ProjectUsers.find(x => x.Id == props.Task.ReviewerId);
+    // let reviewer = props.ProjectUsers.find(x => x.Id == props.Task.ReviewerId);
 
 
     const cancelTask = () => {
@@ -89,7 +87,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         }
         setTaskName(props.Task.Name);
         setTaskStatus(props.Task.Status);
-        setTaskReviwer(props.Task.ReviewerId || -1);
+        setTaskreviewer(props.Task.ReviewerId || -1);
         setTaskCreator(props.Task.CreatorId);
     };
 
@@ -101,13 +99,11 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         let forAdd = { ...props.Task };
         forAdd.Name = taskName;
         forAdd.Status = taskStatus;
-        forAdd.ReviewerId = taskReviwer;
+        forAdd.ReviewerId = taskReviewer;
         forAdd.CreatorId = taskCreator;
 
         let updateTask = (error: MainErrorObjectBack, data: BoolResultBack) => {
             if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
                 return;
             }
 
@@ -127,8 +123,6 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
         let deleteTask = (error: MainErrorObjectBack, data: BoolResultBack) => {
             if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
                 return;
             }
 
@@ -144,8 +138,6 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
         let addComment = (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack) => {
             if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
                 return;
             }
 
@@ -210,6 +202,26 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
     }
 
 
+
+    let taskHasChanges = taskName !== props.Task.Name ||
+        taskStatus !== props.Task.Status ||
+        taskReviewer !== props.Task.ReviewerId ||
+        taskCreator !== props.Task.CreatorId;
+
+
+    let creator = props.ProjectUsers.find(x => x.Id === taskCreator);
+    let creatorsList = props.ProjectUsers.filter(us => !us.Deactivated);
+    if (creator && creator.Deactivated) {
+        creatorsList.push(creator);
+    }
+
+    let reviewer = props.ProjectUsers.find(x => x.Id === taskReviewer);
+    let reviewerList = props.ProjectUsers.filter(us => !us.Deactivated);
+    if (reviewer && reviewer.Deactivated) {
+        reviewerList.push(reviewer);
+    }
+
+
     return <div className='one-review-task-block'>
         <div className='one-review-task-block-flex'>
             <div className='one-review-task-content'>
@@ -220,12 +232,12 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                 <br />
                 <span>Создатеть</span>
                 <select className='form-control-b' value={taskCreator} onChange={(e) => setTaskCreator(+e.target.value)}>
-                    {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                    {creatorsList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                 </select>
                 <span>Ревьювер</span>
-                <select className='form-control-b' value={taskReviwer} onChange={(e) => setTaskReviwer(+e.target.value)}>
+                <select className='form-control-b' value={taskReviewer} onChange={(e) => setTaskreviewer(+e.target.value)}>
                     <option value={-1}>Не выбрано</option>
-                    {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                    {reviewerList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                 </select>
                 <span>Статус</span>
                 <select className='form-control-b' onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
@@ -235,12 +247,14 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                 </select>
             </div>
             <div className='one-review-task-buttons'>
-                <div className='review-task-save-button' onClick={() => updateTask()}>
-                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'} alt="Save" title='сохранить' />
-                </div>
-                <div className='review-task-cancel-button' onClick={() => cancelTask()}>
-                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" title='отменить изменения' />
-                </div>
+                {taskHasChanges ?
+                    <>
+                        <div className='review-task-save-button' onClick={() => updateTask()}>
+                            <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'} alt="Save" title='сохранить' />
+                        </div>
+                        <div className='review-task-cancel-button' onClick={() => cancelTask()}>
+                            <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" title='отменить изменения' />
+                        </div></> : <></>}
                 <div className='review-task-delete-button' onClick={() => deleteTask()}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='удалить задачу' />
                 </div>

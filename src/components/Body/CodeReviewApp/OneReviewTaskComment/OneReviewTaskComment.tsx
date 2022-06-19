@@ -34,8 +34,6 @@ const OneReviewTaskComment = (props: IOneReviewTaskCommentProps) => {
 
         let deleteComment = (error: MainErrorObjectBack, data: BoolResultBack) => {
             if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
                 return;
             }
 
@@ -51,8 +49,6 @@ const OneReviewTaskComment = (props: IOneReviewTaskCommentProps) => {
     const updateComment = () => {
         let updateComment = (error: MainErrorObjectBack, data: BoolResultBack) => {
             if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
                 return;
             }
 

@@ -35,8 +35,6 @@ const ProjectUsers = (props: IProjectUsersProps) => {
 
         let addUser = (error: MainErrorObjectBack, data: IProjectUserDataBack) => {
             if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
                 return;
             }
 

@@ -60,6 +60,7 @@ export class CodeReviewUserController implements ICodeReviewUserController {
             "name": user.Name,
             "email": user.Email,
             "isAdmin": user.IsAdmin,
+            "deactivated": user.Deactivated,
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,

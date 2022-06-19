@@ -37,8 +37,6 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
     useEffect(() => {
         let getProjects = (error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => {
             if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
                 return;
             }
 
@@ -56,8 +54,6 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         if (currentProjectId > 0) {
             let getProjectInfo = (error: MainErrorObjectBack, data: IOneProjectInfoDataBack) => {
                 if (error) {
-                    //TODO выбить из комнаты?
-                    alert("todo что то пошло не так лучше обновить страницу");
                     return;
                 }
 
@@ -78,8 +74,6 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         }
         let addProject = (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => {
             if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
                 return;
             }
 
@@ -122,6 +116,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
                 userState.Email = user.Email;
                 userState.Name = user.Name;
                 userState.IsAdmin = user.IsAdmin;
+                userState.Deactivated = user.Deactivated;
             }
 
             return newState;

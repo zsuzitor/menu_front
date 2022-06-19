@@ -42,10 +42,12 @@ const AddTask = (props: IAddTaskProps) => {
 
 
     const createNewTask = () => {
+        if(!newTaskName){
+            alert('Введите название');
+        }
+        
         let addTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => {
             if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
                 return;
             }
 

@@ -19,7 +19,9 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
 
     const [userName, setUserName] = useState(props.User.Name);
     const [userEmail, setUserEmail] = useState(props.User.Email || '');
-    const [userIsAdmin, setUserIsAdmin] = useState(false);
+    const [userIsAdmin, setUserIsAdmin] = useState(props.User.IsAdmin);
+    const [userIsDeactivated, setUserIsDeactivated] = useState(props.User.Deactivated);
+
 
 
     useEffect(() => {
@@ -32,7 +34,11 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
 
     useEffect(() => {
         setUserIsAdmin(props.User.IsAdmin);
-    }, [props.User.Email]);
+    }, [props.User.IsAdmin]);
+
+    useEffect(() => {
+        setUserIsDeactivated(props.User.Deactivated);
+    }, [props.User.Deactivated]);
 
 
     const changeUser = () => {
@@ -41,12 +47,13 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
             return;
         }
 
-        let newUserData = { Id: props.User.Id, Name: userName, Email: userEmail, IsAdmin: userIsAdmin }
+        let newUserData = {
+            Id: props.User.Id, Name: userName
+            , Email: userEmail, IsAdmin: userIsAdmin, Deactivated: userIsDeactivated
+        }
 
         let changeUser = (error: MainErrorObjectBack, data: BoolResultBack) => {
             if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
                 return;
             }
 
@@ -60,23 +67,27 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
     };
 
 
-    const deleteUser = () => {
+    // const deleteUser = () => {
 
-        let deleteUser = (error: MainErrorObjectBack, data: BoolResultBack) => {
-            if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
-                return;
-            }
+    //     let deleteUser = (error: MainErrorObjectBack, data: BoolResultBack) => {
+    //         if (error) {
+    //             return;
+    //         }
 
-            if (data?.result) {
+    //         if (data?.result) {
 
-                props.DeleteUser(props.User.Id);
-            }
-        };
+    //             props.DeleteUser(props.User.Id);
+    //         }
+    //     };
 
-        window.G_CodeReviewUserController.DeleteProjectUser(props.User.Id, deleteUser);
-    }
+    //     window.G_CodeReviewUserController.DeleteProjectUser(props.User.Id, deleteUser);
+    // }
+
+
+    let userHasChanges = userName !== props.User.Name ||
+        userEmail !== props.User.Email ||
+        userIsAdmin !== props.User.IsAdmin ||
+        userIsDeactivated !== props.User.Deactivated;
 
 
     return <div className='one-project-user-content'>
@@ -87,8 +98,10 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
         <input className='form-control-b' type='text' value={userEmail} placeholder="Почта" onChange={e => setUserEmail(e.target.value)}></input>
         <label>Роль Админа</label>
         <input type="checkbox" checked={userIsAdmin} onChange={e => setUserIsAdmin(e.target.checked)} />
+        <label>Пользователь деактивирован</label>
+        <input type="checkbox" checked={userIsDeactivated} onChange={e => setUserIsDeactivated(e.target.checked)} />
 
-        <div className='one-project-user-buttons'>
+        {userHasChanges ? <div className='one-project-user-buttons'>
             <div className='project-user-action-btn' onClick={() => changeUser()}>
                 <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'} alt="Save" title='сохранить' />
             </div>
@@ -96,13 +109,15 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
                 setUserName(props.User.Name);
                 setUserEmail(props.User.Email);
                 setUserIsAdmin(props.User.IsAdmin);
+                setUserIsDeactivated(props.User.Deactivated);
             }}>
                 <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'} alt="Cancel" title='отменить изменения' />
             </div>
-            <div className='project-user-action-btn' onClick={() => deleteUser()}>
+            {/* <div className='project-user-action-btn' onClick={() => deleteUser()}>
                 <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='удалить задачу' />
-            </div>
-        </div>
+            </div> */}
+        </div> : <></>}
+
     </div>
 
 }

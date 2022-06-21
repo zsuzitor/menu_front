@@ -19,6 +19,12 @@ import { WordsListController } from "./Models/Controllers/WordsCardsApp/WordsLis
 import { MainErrorHandler } from './Models/Models/ErrorHandleLogic';
 
 
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware, Store } from 'redux';
+import thunk from 'redux-thunk';
+// import { AppAction } from './Models/Actions/Actions';
+import { AppReducer } from "./Models/Models/Reducers/Reducer";
+import { AppState } from './Models/Models/State/AppState';
 
 
 require('../style/main.css');
@@ -66,6 +72,20 @@ window.G_CodeReviewCommentController = new CodeReviewCommentController();
 
 
 
+let configureStore = (initialState: AppState) => {
+
+    const store = createStore(AppReducer, initialState,
+        applyMiddleware(thunk));//подключаем thunk
+
+
+    return store;
+};
+
+
+const store = configureStore(new AppState());
+
+
+
 //
 // G_AddAbsoluteAlertToState -->MainComponent
 //
@@ -76,7 +96,8 @@ const container = document.getElementById('menu_all_main_content_start');
 // const root = ReactDOM.createRoot(container);
 const root = ReactDOMClient.createRoot(container);
 // Initial render
-root.render(<MainComponent />);
+root.render(<Provider store={store}>
+    <MainComponent /></Provider>);
 
 
 

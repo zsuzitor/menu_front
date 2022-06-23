@@ -10,125 +10,143 @@ import { IAuthState } from "../../../../Models/Models/AuthState";
 import ProjectDetail from '../ProjectDetail/ProjectDetail';
 import ProjectsList from '../ProjectsList/ProjectsList';
 import cloneDeep from 'lodash/cloneDeep';
+import { AppState } from '../../../../Models/Models/State/AppState';
 
+import { connect } from "react-redux";
 
 
 require('./CodeReviewMain.css');
 
 
 
-class CodeReviewMainProps {
+interface CodeReviewMainOwnProps {
     AuthInfo: IAuthState;
 }
 
-// class CodeReviewMainState{
 
-// }
+interface ICodeReviewMainStateToProps {
+    // Test: string;
+    CurrentProjectId: number;
+    ProjectsList: IOneProjectInListDataBack[];
+    CurrentProjectUsers: IProjectUserDataBack[];
+}
+
+interface CodeReviewMainDispatchToProps {
+    // ChangeTestString: (v: string) => void;
+    SetCurrentProjectId: (id: number) => void;
+    SetProjectsList: (lst: IOneProjectInListDataBack[]) => void;
+    AddProjectList: (rec: IOneProjectInListDataBack) => void;
+    RemoveProjectList: (recId: number) => void;
+
+    SetCurrentProjectUsers: (lst: IProjectUserDataBack[]) => void;
+    AddCurrentProjectUser: (rec: IProjectUserDataBack) => void;
+    ChangeCurrentProjectUser: (rec: IProjectUserDataBack) => void;
+    RemoveCurrentProjectUser: (rec: IProjectUserDataBack) => void;
+}
+
+
+interface CodeReviewMainProps extends ICodeReviewMainStateToProps, CodeReviewMainOwnProps, CodeReviewMainDispatchToProps {
+}
 
 
 
 const CodeReviewMain = (props: CodeReviewMainProps) => {
 
-    const [currentProjectId, setCurrentProjectId] = useState(-1);
-    const [projectsList, setProjectsList] = useState([] as IOneProjectInListDataBack[]);
-    const [currentProjectUsers, setCurrentProjectUsers] = useState([] as IProjectUserDataBack[]);
+    // const [currentProjectId, setCurrentProjectId] = useState(-1);
+    // const [projectsList, setProjectsList] = useState([] as IOneProjectInListDataBack[]);
+    // const [currentProjectUsers, setCurrentProjectUsers] = useState([] as IProjectUserDataBack[]);
 
 
     useEffect(() => {
-        let getProjects = (error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => {
-            if (error) {
-                return;
-            }
+        // let getProjects = (error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => {
+        //     if (error) {
+        //         return;
+        //     }
 
-            if (data) {
-                setCurrentProjectId(-1);
-                setProjectsList(data);
-            }
-        };
+        //     if (data) {
+        //         props.SetCurrentProjectId(-1);
+        //         props.SetProjectsList(data);
+        //     }
+        // };
 
-        window.G_CodeReviewProjectController.GetUserProjects(getProjects);
+        window.G_CodeReviewProjectController.GetUserProjectsRedux();
     }, []);
 
 
     useEffect(() => {
-        if (currentProjectId > 0) {
-            let getProjectInfo = (error: MainErrorObjectBack, data: IOneProjectInfoDataBack) => {
-                if (error) {
-                    return;
-                }
+        if (props.CurrentProjectId > 0) {
+            // let getProjectInfo = (error: MainErrorObjectBack, data: IOneProjectInfoDataBack) => {
+            //     if (error) {
+            //         return;
+            //     }
 
-                if (data) {
-                    setCurrentProjectUsers(data.Users);
-                    // setCurrentProjectTasks(data.Tasks);
-                }
-            };
+            //     if (data) {
+            //         props.SetCurrentProjectUsers(data.Users);
+            //         // setCurrentProjectTasks(data.Tasks);
+            //     }
+            // };
 
-            window.G_CodeReviewProjectController.GetProjectInfo(currentProjectId, getProjectInfo);
+            window.G_CodeReviewProjectController.GetProjectInfoRedux(props.CurrentProjectId);
         }
-    }, [currentProjectId]);
+    }, [props.CurrentProjectId]);
 
 
     const addNewProject = (newProjectName: string) => {
         if (!newProjectName) {
             alert('Введите название');
         }
-        let addProject = (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => {
-            if (error) {
-                return;
-            }
+        // let addProject = (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => {
+        //     if (error) {
+        //         return;
+        //     }
 
-            if (data) {
-                // setCurrentProjectId(-1);
-                setProjectsList((oldState) => {
-                    let newState = [...oldState, data];
-                    return newState;
-                });
-            }
-        };
+        //     if (data) {
+        //         // setCurrentProjectId(-1);
+        //         props.AddProjectList(data);
+        //     }
+        // };
 
-        window.G_CodeReviewProjectController.CreateNewProject(newProjectName, addProject);
+        window.G_CodeReviewProjectController.CreateNewProjectRedux(newProjectName);
     };
 
 
-    const addNewUserToProject = (user: IProjectUserDataBack) => {
-        setCurrentProjectUsers(oldState => {
-            return [...oldState, user];
-        });
-    };
+    // const addNewUserToProject = (user: IProjectUserDataBack) => {
+    //     props.AddCurrentProjectUser(user);
+    // };
 
 
 
 
 
-    const deleteProject = () => {
-        setCurrentProjectId(-1);
-        setProjectsList(oldState => {
-            let newState = [...oldState];
-            return newState.filter(x => x.Id != currentProjectId);
-        });
-    };
+    // const deleteProject = () => {
+    //     props.SetCurrentProjectId(-1);
+    //     props.RemoveProjectList(oldState => {
+    //         let newState = [...oldState];
+    //         return newState.filter(x => x.Id != currentProjectId);
+    //     });
+    // };
 
-    const changeUser = (user: IProjectUserDataBack) => {
-        setCurrentProjectUsers(oldState => {
-            let newState = cloneDeep(oldState);
-            let userState = newState.find(x => x.Id === user.Id);
-            if (userState) {
-                userState.Email = user.Email;
-                userState.Name = user.Name;
-                userState.IsAdmin = user.IsAdmin;
-                userState.Deactivated = user.Deactivated;
-            }
+    // const changeUser = (user: IProjectUserDataBack) => {
+    //     props.ChangeCurrentProjectUser(oldState => {
+    //         let newState = cloneDeep(oldState);
+    //         let userState = newState.find(x => x.Id === user.Id);
+    //         if (userState) {
+    //             userState.Email = user.Email;
+    //             userState.Name = user.Name;
+    //             userState.IsAdmin = user.IsAdmin;
+    //             userState.Deactivated = user.Deactivated;
+    //         }
 
-            return newState;
-        });
-    };
+    //         return newState;
+    //     });
+    // };
 
-    const deleteUser = (id: number) => {
-        setCurrentProjectUsers(oldState => {
-            let newState = [...oldState];
-            return newState.filter(x => x.Id != id);
-        });
-    }
+    // const deleteUser = (id: number) => {
+    //     props.RemoveCurrentProjectUser(oldState => {
+    //         let newState = [...oldState];
+    //         return newState.filter(x => x.Id != id);
+    //     });
+    // }
 
 
     return <div className='code-review-main-container'>
@@ -159,4 +177,26 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
 
 
 
-export default CodeReviewMain;
+
+
+
+const mapStateToProps = (state: AppState, ownProps: CodeReviewMainOwnProps) => {
+    let res = {} as ICodeReviewMainStateToProps;
+    res.CurrentProjectId = state.CodeReviewApp.CurrentProjectId;
+    res.CurrentProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
+    res.ProjectsList = state.CodeReviewApp.ProjectsList;
+    // res.Test = state.TestMessage;
+    // res.FilmData = state.Films.find(x => x.Id === ownProps.FilmId);
+    return res;
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: CodeReviewMainOwnProps) => {
+    let res = {} as CodeReviewMainDispatchToProps;
+
+    return res;
+};
+
+
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+// and that function returns the connected, wrapper component:
+export default connectToStore(CodeReviewMain);

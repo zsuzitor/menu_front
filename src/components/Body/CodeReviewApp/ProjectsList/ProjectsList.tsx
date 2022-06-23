@@ -20,11 +20,11 @@ export interface IProjectsListOwnProps {
 }
 
 interface IProjectsListStateToProps {
-    Test: string;
+    // Test: string;
 }
 
 interface IProjectsListDispatchToProps {
-    ChangeTestString: (v: string) => void;
+    // ChangeTestString: (v: string) => void;
 }
 
 
@@ -65,8 +65,8 @@ const ProjectsList = (props: IProjectsListProps) => {
         className="hide-review-projects-list-button">{visibleList ? '<' : '>'}</div>
         <div className={'code-review-projects-menu' + mainListClass}>
             <div className='review-project-new-block'>
-                <input type="test" onChange={e => props.ChangeTestString(e.target.value)} value={props.Test}></input>
-                <p>{props.Test}</p>
+                {/* <input type="test" onChange={e => props.ChangeTestString(e.target.value)} value={props.Test}></input>
+                <p>{props.Test}</p> */}
                 <input className='form-control-b' type='text' placeholder='название нового проекта'
                     onChange={(e => setNewProjectName(e.target.value))} value={newProjectName}></input>
                 <button className='btn-b btn-border' onClick={() => {
@@ -86,7 +86,7 @@ const ProjectsList = (props: IProjectsListProps) => {
 
 const mapStateToProps = (state: AppState, ownProps: IProjectsListOwnProps) => {
     let res = {} as IProjectsListStateToProps;
-    res.Test = state.TestMessage;
+    // res.Test = state.TestMessage;
     // res.FilmData = state.Films.find(x => x.Id === ownProps.FilmId);
     return res;
 }

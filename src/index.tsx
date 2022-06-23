@@ -23,7 +23,7 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware, Store } from 'redux';
 import thunk from 'redux-thunk';
 // import { AppAction } from './Models/Actions/Actions';
-import { AppReducer } from "./Models/Models/Reducers/Reducer";
+import { AppReducer } from "./Models/Reducers/Reducer";
 import { AppState } from './Models/Models/State/AppState';
 
 

@@ -1,5 +1,6 @@
 
 
+import { AddNewProjectActionCreator, DeleteProjectActionCreator, SetCurrentProjectIdActionCreator, SetCurrentProjectUsersActionCreator, SetProjectsActionCreator } from "../../Actions/CodeReviewApp/Actions";
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { ILoadReviewTasksResultDataBask } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBask";
 import { IOneProjectInfoDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInfoDataBack";
@@ -15,16 +16,34 @@ export type GetProjectInfo = (error: MainErrorObjectBack, data: IOneProjectInfoD
 export type DeleteProject = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 export interface ICodeReviewProjectController {
-    GetUserProjects: (onSuccess: ListOfCardOnReturn) => void;
-    CreateNewProject: (newProjectName: string, onSuccess: CreateNewProject) => void;
-    GetProjectInfo: (projectId: number, onSuccess: GetProjectInfo) => void;
-    DeleteProject: (projectId: number, onSuccess: DeleteProject) => void;
+    // GetUserProjects: (onSuccess: ListOfCardOnReturn) => void;
+    // CreateNewProject: (newProjectName: string, onSuccess: CreateNewProject) => void;
+    // GetProjectInfo: (projectId: number, onSuccess: GetProjectInfo) => void;
+    // DeleteProject: (projectId: number, onSuccess: DeleteProject) => void;
+    GetUserProjectsRedux: () => void;
+    CreateNewProjectRedux: (newProjectName: string,) => void;
+    GetProjectInfoRedux: (projectId: number) => void;
+    DeleteProjectRedux: (projectId: number) => void;
 }
 
 
 
 export class CodeReviewProjectController implements ICodeReviewProjectController {
 
+
+    DeleteProjectRedux = (projectId: number) => {
+        return (dispatch: any, getState: any) => {
+            this.DeleteProject(projectId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                if (error) {
+                    return;
+                }
+
+                if (data?.result) {
+                    dispatch(DeleteProjectActionCreator(projectId));
+                }
+            });
+        };
+    }
 
 
     DeleteProject = (projectId: number, onSuccess: DeleteProject) => {
@@ -42,6 +61,21 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
             Url: G_PathToServer + 'api/codereview/project/delete-project'
 
         });
+    }
+
+
+    GetProjectInfoRedux = (projectId: number) => {
+        return (dispatch: any, getState: any) => {
+            this.GetProjectInfo(projectId, (error: MainErrorObjectBack, data: IOneProjectInfoDataBack) => {
+                if (error) {
+                    return;
+                }
+
+                if (data) {
+                    dispatch(SetCurrentProjectUsersActionCreator(data.Users));
+                }
+            });
+        };
     }
 
     GetProjectInfo = (projectId: number, onSuccess: GetProjectInfo) => {
@@ -62,9 +96,21 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
     };
 
 
-    
 
-    
+    CreateNewProjectRedux = (newProjectName: string) => {
+        return (dispatch: any, getState: any) => {
+            this.CreateNewProject(newProjectName, (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => {
+                if (error) {
+                    return;
+                }
+
+                if (data) {
+                    dispatch(AddNewProjectActionCreator(data));
+                }
+            });
+        };
+    }
+
 
     CreateNewProject = (newProjectName: string, onSuccess: CreateNewProject) => {
         let data = {
@@ -82,6 +128,22 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
 
         });
     };
+
+
+    GetUserProjectsRedux = () => {
+        return (dispatch: any, getState: any) => {
+            this.GetUserProjects((error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => {
+                if (error) {
+                    return;
+                }
+
+                if (data) {
+                    dispatch(SetCurrentProjectIdActionCreator(-1));
+                    dispatch(SetProjectsActionCreator(data));
+                }
+            });
+        };
+    }
 
     GetUserProjects = (onSuccess: ListOfCardOnReturn) => {
         G_AjaxHelper.GoAjaxRequest({

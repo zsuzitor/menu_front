@@ -1,11 +1,11 @@
+import { CodeReviewAppState } from "../CodeReviewApp/State/CodeReviewAppState";
 
 
 export class AppState {
-    TestMessage: string;
+    CodeReviewApp: CodeReviewAppState;
 
 
     constructor() {
-        this.TestMessage = "t1";
-
+        this.CodeReviewApp = new CodeReviewAppState();
     }
 }

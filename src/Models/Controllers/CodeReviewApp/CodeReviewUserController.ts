@@ -1,3 +1,4 @@
+import { AddProjectUserActionCreator, ChangeProjectUserActionCreator, DeleteProjectUserActionCreator } from "../../Actions/CodeReviewApp/Actions";
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
@@ -9,13 +10,31 @@ export type DeleteUser = (error: MainErrorObjectBack, data: BoolResultBack) => v
 
 
 export interface ICodeReviewUserController {
-    AddUserToProject: (newUserName: string, mainAppUserEmail: string, projectId: number, onSuccess: AddNewUserToProject) => void;
-    ChangeProjectUser: (user: IProjectUserDataBack, onSuccess: ChangeUser) => void;
-    DeleteProjectUser: (id: number, onSuccess: DeleteUser) => void;
+    // AddUserToProject: (newUserName: string, mainAppUserEmail: string, projectId: number, onSuccess: AddNewUserToProject) => void;
+    // ChangeProjectUser: (user: IProjectUserDataBack, onSuccess: ChangeUser) => void;
+    // DeleteProjectUser: (id: number, onSuccess: DeleteUser) => void;
+    AddUserToProjectRedux: (newUserName: string, mainAppUserEmail: string, projectId: number) => void;
+    ChangeProjectUserRedux: (user: IProjectUserDataBack) => void;
+    DeleteProjectUserRedux: (id: number) => void;
 }
 
 
 export class CodeReviewUserController implements ICodeReviewUserController {
+
+
+    DeleteProjectUserRedux = (id: number) => {
+        return (dispatch: any, getState: any) => {
+            this.DeleteProjectUser(id, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                if (error) {
+                    return;
+                }
+
+                if (data?.result) {
+                    dispatch(DeleteProjectUserActionCreator(id));
+                }
+            });
+        };
+    }
 
     DeleteProjectUser = (id: number, onSuccess: DeleteUser) => {
         let data = {
@@ -35,6 +54,21 @@ export class CodeReviewUserController implements ICodeReviewUserController {
     }
 
 
+    AddUserToProjectRedux = (newUserName: string, mainAppUserEmail: string, projectId: number) => {
+        return (dispatch: any, getState: any) => {
+            this.AddUserToProject(newUserName, mainAppUserEmail, projectId
+                , (error: MainErrorObjectBack, data: IProjectUserDataBack) => {
+                    if (error) {
+                        return;
+                    }
+
+                    if (data) {
+                        dispatch(AddProjectUserActionCreator(data));
+                    }
+                });
+        };
+    }
+
     AddUserToProject = (newUserName: string, mainAppUserEmail: string, projectId: number, onSuccess: AddNewUserToProject) => {
         let data = {
             "userName": newUserName,
@@ -53,6 +87,21 @@ export class CodeReviewUserController implements ICodeReviewUserController {
 
         });
     };
+
+
+    ChangeProjectUserRedux = (user: IProjectUserDataBack) => {
+        return (dispatch: any, getState: any) => {
+            this.ChangeProjectUser(user, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                if (error) {
+                    return;
+                }
+
+                if (data?.result) {
+                    dispatch(ChangeProjectUserActionCreator(user));
+                }
+            });
+        };
+    }
 
     ChangeProjectUser = (user: IProjectUserDataBack, onSuccess: ChangeUser) => {
         let data = {

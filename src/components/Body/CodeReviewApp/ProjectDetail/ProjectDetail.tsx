@@ -10,7 +10,7 @@ import OneProjectUser from '../OneProjectUser/OneProjectUser';
 import OneReviewTask from '../OneReviewTask/OneReviewTask';
 import cloneDeep from 'lodash/cloneDeep';
 import { ITaskFilter } from '../../../../Models/Models/CodeReviewApp/TasksFilter';
-import { ILoadReviewTasksResultDataBask } from '../../../../Models/BackModel/CodeReviewApp/ILoadReviewTasksResultDataBask';
+import { ILoadReviewTasksResultDataBack } from '../../../../Models/BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack';
 import Paggination from '../Paggination/Paggination';
 import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
 import ProjectUsers from '../ProjectUsers/ProjectUsers';
@@ -194,12 +194,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             {showUserList ? <AdditionalWindow CloseWindow={() => setShowUserList(false)}
                 IsHeightWindow={true}
                 Title='Люди проекта'
-                InnerContent={() => <ProjectUsers
-                    AddUserToProject={props.AddUserToProject}
-                    ChangeUser={props.ChangeUser}
-                    DeleteUser={props.DeleteUser}
-                    ProjectId={props.Project.Id}
-                    ProjectUsers={props.ProjectUsers}></ProjectUsers>}></AdditionalWindow> : <></>}
+                InnerContent={() => <ProjectUsers></ProjectUsers>}></AdditionalWindow> : <></>}
 
 
             <br />

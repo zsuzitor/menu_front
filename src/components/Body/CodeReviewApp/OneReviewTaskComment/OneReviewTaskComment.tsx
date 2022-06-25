@@ -1,20 +1,36 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
 import { IOneTaskReviewCommentDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack';
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 import { IAuthState } from '../../../../Models/Models/AuthState';
+import { TaskUpdate } from '../../../../Models/Models/CodeReviewApp/TaskUpdate';
+import { AppState } from '../../../../Models/Models/State/AppState';
 
 
 require('./OneReviewTaskComment.css');
 
 
-export interface IOneReviewTaskCommentProps {
+
+
+interface IOneReviewTaskCommentOwnProps {
     AuthInfo: IAuthState;
     Comment: IOneTaskReviewCommentDataBack;
+
+}
+
+
+interface IOneReviewTaskCommentStateToProps {
     ProjectUsers: IProjectUserDataBack[];
-    DeleteComment: (id: number) => void;
+}
+
+interface IOneReviewTaskCommentDispatchToProps {
     UpdateComment: (id: number, text: string) => void;
+    DeleteComment: (id: number) => void;
+}
+
+interface IOneReviewTaskCommentProps extends IOneReviewTaskCommentStateToProps, IOneReviewTaskCommentOwnProps, IOneReviewTaskCommentDispatchToProps {
 }
 
 
@@ -32,33 +48,36 @@ const OneReviewTaskComment = (props: IOneReviewTaskCommentProps) => {
             return;
         }
 
-        let deleteComment = (error: MainErrorObjectBack, data: BoolResultBack) => {
-            if (error) {
-                return;
-            }
+        // let deleteComment = (error: MainErrorObjectBack, data: BoolResultBack) => {
+        //     if (error) {
+        //         return;
+        //     }
 
-            if (data?.result) {
-                props.DeleteComment(props.Comment.Id);
-            }
-        };
+        //     if (data?.result) {
+        //         props.DeleteComment(props.Comment.Id);
+        //     }
+        // };
 
-        window.G_CodeReviewCommentController.DeleteComment(props.Comment.Id, deleteComment);
+        // window.G_CodeReviewCommentController.DeleteCommentRedux(props.Comment.Id);
+        props.DeleteComment(props.Comment.Id);
     }
 
 
     const updateComment = () => {
-        let updateComment = (error: MainErrorObjectBack, data: BoolResultBack) => {
-            if (error) {
-                return;
-            }
+        // let updateComment = (error: MainErrorObjectBack, data: BoolResultBack) => {
+        //     if (error) {
+        //         return;
+        //     }
 
-            if (data?.result) {
-                props.UpdateComment(props.Comment.Id, changedText);
-                setEditMode(false);
-            }
-        };
+        //     if (data?.result) {
+        //         props.UpdateComment(props.Comment.Id, changedText);
+        //         setEditMode(false);
+        //     }
+        // };
 
-        window.G_CodeReviewCommentController.UpdateComment(props.Comment.Id, changedText, updateComment);
+        // window.G_CodeReviewCommentController.UpdateCommentRedux(props.Comment.Id, changedText);
+        props.UpdateComment(props.Comment.Id, changedText);
+
     }
 
     const cancelEditMode = () => {
@@ -106,4 +125,31 @@ const OneReviewTaskComment = (props: IOneReviewTaskCommentProps) => {
 
 
 
-export default OneReviewTaskComment
+
+
+const mapStateToProps = (state: AppState, ownProps: IOneReviewTaskCommentOwnProps) => {
+    let res = {} as IOneReviewTaskCommentStateToProps;
+    res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
+    return res;
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: IOneReviewTaskCommentOwnProps) => {
+    let res = {} as IOneReviewTaskCommentDispatchToProps;
+    res.DeleteComment = (id: number) => {
+        dispatch(window.G_CodeReviewCommentController.DeleteCommentRedux(id));
+    };
+
+    res.UpdateComment = (id: number, text: string) => {
+        let comm = new TaskUpdate();
+        comm.Id = id;
+        comm.Text = text;
+        dispatch(window.G_CodeReviewCommentController.UpdateCommentRedux(comm));
+    };
+
+    return res;
+};
+
+
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+// and that function returns the connected, wrapper component:
+export default connectToStore(OneReviewTaskComment);

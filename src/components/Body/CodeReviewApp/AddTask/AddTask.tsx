@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { IProjectTaskDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectTaskDataBack';
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
+import { AppState } from '../../../../Models/Models/State/AppState';
 
 
 
@@ -10,12 +12,26 @@ require('./AddTask.css');
 
 
 
-export interface IAddTaskProps {
-    ProjectUsers: IProjectUserDataBack[];
-    ReloadTasks: () => void;
-    ProjectId: number;
+
+
+
+interface IAddTaskOwnProps {
 }
 
+
+interface IAddTaskStateToProps {
+    ProjectUsers: IProjectUserDataBack[];
+    ProjectId: number;
+
+}
+
+interface IAddTaskDispatchToProps {
+    AddTaskToProject: (newTaskName: string, newTaskCreator: number, newTaskReviwer: number, projectId: number) => void;
+
+}
+
+interface IAddTaskProps extends IAddTaskStateToProps, IAddTaskOwnProps, IAddTaskDispatchToProps {
+}
 
 
 const AddTask = (props: IAddTaskProps) => {
@@ -42,24 +58,25 @@ const AddTask = (props: IAddTaskProps) => {
 
 
     const createNewTask = () => {
-        if(!newTaskName){
+        if (!newTaskName) {
             alert('Введите название');
         }
-        
-        let addTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => {
-            if (error) {
-                return;
-            }
 
-            if (data) {
-                // props.AddUserToProject(data);
-                // addTaskToProject(data);
-                props.ReloadTasks();
-                
-            }
-        };
+        // let addTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => {
+        //     if (error) {
+        //         return;
+        //     }
 
-        window.G_CodeReviewTaskController.AddTaskToProject(newTaskName, newTaskCreator, newTaskReviwer, props.ProjectId, addTask);
+        //     if (data) {
+        //         // props.AddUserToProject(data);
+        //         // addTaskToProject(data);
+        //         props.ReloadTasks();
+
+        //     }
+        // };
+
+        // window.G_CodeReviewTaskController.AddTaskToProjectRedux(newTaskName, newTaskCreator, newTaskReviwer, props.ProjectId);
+        props.AddTaskToProject(newTaskName, newTaskCreator, newTaskReviwer, props.ProjectId);
         setNewTaskName('');
     };
 
@@ -85,4 +102,23 @@ const AddTask = (props: IAddTaskProps) => {
 
 
 
-export default AddTask;
+
+const mapStateToProps = (state: AppState, ownProps: IAddTaskOwnProps) => {
+    let res = {} as IAddTaskStateToProps;
+
+    return res;
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: IAddTaskOwnProps) => {
+    let res = {} as IAddTaskDispatchToProps;
+    res.AddTaskToProject = (newTaskName: string, newTaskCreator: number, newTaskReviwer: number, projectId: number) => {
+        dispatch(window.G_CodeReviewTaskController.AddTaskToProjectRedux(newTaskName, newTaskCreator, newTaskReviwer, projectId));
+    };
+
+    return res;
+};
+
+
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+// and that function returns the connected, wrapper component:
+export default connectToStore(AddTask);

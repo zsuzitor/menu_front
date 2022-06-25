@@ -1,7 +1,7 @@
 import { IProjectTaskDataBack } from "./IProjectTaskDataBack";
 
 
-export interface ILoadReviewTasksResultDataBask {
+export interface ILoadReviewTasksResultDataBack {
     Tasks: IProjectTaskDataBack[];
     TasksCount: number;
 }

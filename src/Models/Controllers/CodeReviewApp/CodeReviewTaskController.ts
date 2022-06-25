@@ -1,5 +1,6 @@
+import { AddTaskToProjectActionCreator, DeleteTaskActionCreator, LoadTasksActionCreator, UpdateTaskActionCreator } from "../../Actions/CodeReviewApp/TaskActions";
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
-import { ILoadReviewTasksResultDataBask } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBask";
+import { ILoadReviewTasksResultDataBack } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack";
 import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { ITaskFilter } from "../../Models/CodeReviewApp/TasksFilter";
@@ -7,20 +8,37 @@ import { ITaskFilter } from "../../Models/CodeReviewApp/TasksFilter";
 
 export type AddNewProjectTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => void;
 export type UpdateTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
-export type LoadTasks = (error: MainErrorObjectBack, data: ILoadReviewTasksResultDataBask) => void;
+export type LoadTasks = (error: MainErrorObjectBack, data: ILoadReviewTasksResultDataBack) => void;
 export type DeleteTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 
 export interface ICodeReviewTaskController {
-    AddTaskToProject: (taskName: string, taskCreatorId: number, taskReviwerId: number, projectId: number, onSuccess: AddNewProjectTask) => void;
-    UpdateTask: (task: IProjectTaskDataBack, onSuccess: UpdateTask) => void;
-    LoadTasks: (taskFilter: ITaskFilter, onSuccess: LoadTasks) => void;
-    DeleteTask: (id: number, onSuccess: DeleteTask) => void;
+    AddTaskToProjectRedux: (taskName: string, taskCreatorId: number, taskReviwerId: number, projectId: number) => void;
+    UpdateTaskRedux: (task: IProjectTaskDataBack) => void;
+    LoadTasksRedux: (taskFilter: ITaskFilter) => void;
+    DeleteTaskRedux: (id: number) => void;
 }
 
 
 
 export class CodeReviewTaskController implements ICodeReviewTaskController {
+
+    AddTaskToProjectRedux = (taskName: string, taskCreatorId: number, taskReviwerId: number, projectId: number) => {
+        return (dispatch: any, getState: any) => {
+            this.AddTaskToProject(taskName, taskCreatorId, taskReviwerId, projectId,
+                (error: MainErrorObjectBack, data: IProjectTaskDataBack) => {
+                    if (error) {
+                        return;
+                    }
+
+                    if (data) {
+                        dispatch(AddTaskToProjectActionCreator(data));
+                        dispatch(todo тут надо тригернуть перезагрузку тасок);
+                    }
+                });
+        };
+    }
+
     AddTaskToProject = (taskName: string, taskCreatorId: number, taskReviwerId: number, projectId: number, onSuccess: AddNewProjectTask) => {
         let data = {
             "taskName": taskName,
@@ -40,6 +58,21 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
 
         });
 
+    }
+
+
+    UpdateTaskRedux = (task: IProjectTaskDataBack) => {
+        return (dispatch: any, getState: any) => {
+            this.UpdateTask(task, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                if (error) {
+                    return;
+                }
+
+                if (data?.result) {
+                    dispatch(UpdateTaskActionCreator(task));
+                }
+            });
+        };
     }
 
     UpdateTask = (task: IProjectTaskDataBack, onSuccess: UpdateTask) => {
@@ -63,6 +96,20 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
         });
     }
 
+    LoadTasksRedux = (taskFilter: ITaskFilter) => {
+        return (dispatch: any, getState: any) => {
+            this.LoadTasks(taskFilter, (error: MainErrorObjectBack, data: ILoadReviewTasksResultDataBack) => {
+                if (error) {
+                    return;
+                }
+
+                if (data) {
+                    dispatch(LoadTasksActionCreator(data));
+                }
+            });
+        };
+    }
+
     LoadTasks = (taskFilter: ITaskFilter, onSuccess: LoadTasks) => {
         let data = {
             "projectId": taskFilter.ProjectId,
@@ -84,6 +131,20 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
 
         });
     };
+
+    DeleteTaskRedux = (id: number) => {
+        return (dispatch: any, getState: any) => {
+            this.DeleteTask(id, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                if (error) {
+                    return;
+                }
+
+                if (data?.result) {
+                    dispatch(DeleteTaskActionCreator(id));
+                }
+            });
+        };
+    }
 
     DeleteTask = (id: number, onSuccess: DeleteTask) => {
         let data = {

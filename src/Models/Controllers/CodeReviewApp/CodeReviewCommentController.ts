@@ -1,6 +1,8 @@
+import { AddCommentActionCreator, DeleteCommentActionCreator, LoadCommentsActionCreator, UpdateCommentActionCreator } from "../../Actions/CodeReviewApp/CommentActions";
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { IOneTaskReviewCommentDataBack } from "../../BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
+import { TaskUpdate } from "../../Models/CodeReviewApp/TaskUpdate";
 
 
 
@@ -11,16 +13,30 @@ export type UpdateComment = (error: MainErrorObjectBack, data: BoolResultBack) =
 
 
 export interface ICodeReviewCommentController {
-    LoadComments: (id: number, onSuccess: LoadComments) => void;
-    AddComment: (taskId: number, text: string, onSuccess: AddComment) => void;
-    DeleteComment: (id: number, onSuccess: DeleteComment) => void;
-    UpdateComment: (id: number, text: string, onSuccess: UpdateComment) => void;
+    LoadCommentsRedux: (id: number) => void;
+    AddCommentRedux: (taskId: number, text: string) => void;
+    DeleteCommentRedux: (id: number) => void;
+    UpdateCommentRedux: (comment: TaskUpdate) => void;
 }
 
 
 
 export class CodeReviewCommentController implements ICodeReviewCommentController {
 
+
+    UpdateCommentRedux = (comment: TaskUpdate) => {
+        return (dispatch: any, getState: any) => {
+            this.UpdateComment(comment.Id, comment.Text, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                if (error) {
+                    return;
+                }
+
+                if (data?.result) {
+                    dispatch(UpdateCommentActionCreator(comment));
+                }
+            });
+        };
+    }
 
     UpdateComment = (id: number, text: string, onSuccess: UpdateComment) => {
         let data = {
@@ -40,6 +56,20 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
     };
 
 
+    DeleteCommentRedux = (id: number) => {
+        return (dispatch: any, getState: any) => {
+            this.DeleteComment(id, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                if (error) {
+                    return;
+                }
+
+                if (data?.result) {
+                    dispatch(DeleteCommentActionCreator(id));
+                }
+            });
+        };
+    }
+
     DeleteComment = (id: number, onSuccess: DeleteComment) => {
         let data = {
             "commentId": id,
@@ -56,6 +86,19 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
         });
     };
 
+    AddCommentRedux = (taskId: number, text: string) => {
+        return (dispatch: any, getState: any) => {
+            this.AddComment(taskId, text, (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack) => {
+                if (error) {
+                    return;
+                }
+
+                if (data?.Id) {
+                    dispatch(AddCommentActionCreator(data));
+                }
+            });
+        };
+    }
 
     AddComment = (taskId: number, text: string, onSuccess: AddComment) => {
         let data = {
@@ -73,6 +116,20 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
 
         });
     };
+
+    LoadCommentsRedux = (id: number) => {
+        return (dispatch: any, getState: any) => {
+            this.LoadComments(id, (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack[]) => {
+                if (error) {
+                    return;
+                }
+
+                if (data) {
+                    dispatch(LoadCommentsActionCreator(data));
+                }
+            });
+        };
+    }
 
     LoadComments = (id: number, onSuccess: LoadComments) => {
         let data = {

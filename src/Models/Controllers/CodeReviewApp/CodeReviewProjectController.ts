@@ -1,8 +1,8 @@
 
 
-import { AddNewProjectActionCreator, DeleteProjectActionCreator, SetCurrentProjectIdActionCreator, SetCurrentProjectUsersActionCreator, SetProjectsActionCreator } from "../../Actions/CodeReviewApp/Actions";
+import { AddNewProjectActionCreator, DeleteProjectActionCreator, SetCurrentProjectIdActionCreator, SetCurrentProjectUsersActionCreator, SetProjectsActionCreator } from "../../Actions/CodeReviewApp/ProjectActions";
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
-import { ILoadReviewTasksResultDataBask } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBask";
+import { ILoadReviewTasksResultDataBack } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack";
 import { IOneProjectInfoDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInfoDataBack";
 import { IOneProjectInListDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInListDataBack";
 import { IOneTaskReviewCommentDataBack } from "../../BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack";
@@ -16,10 +16,6 @@ export type GetProjectInfo = (error: MainErrorObjectBack, data: IOneProjectInfoD
 export type DeleteProject = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 export interface ICodeReviewProjectController {
-    // GetUserProjects: (onSuccess: ListOfCardOnReturn) => void;
-    // CreateNewProject: (newProjectName: string, onSuccess: CreateNewProject) => void;
-    // GetProjectInfo: (projectId: number, onSuccess: GetProjectInfo) => void;
-    // DeleteProject: (projectId: number, onSuccess: DeleteProject) => void;
     GetUserProjectsRedux: () => void;
     CreateNewProjectRedux: (newProjectName: string,) => void;
     GetProjectInfoRedux: (projectId: number) => void;

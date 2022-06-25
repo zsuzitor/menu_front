@@ -4,6 +4,7 @@ import { AppState } from '../../../../Models/Models/State/AppState';
 import OneProjectInList from '../OneProjectInList/OneProjectInList';
 
 import { connect } from "react-redux";
+import { SetCurrentProjectIdActionCreator } from '../../../../Models/Actions/CodeReviewApp/ProjectActions';
 
 
 require('./ProjectsList.css');
@@ -13,8 +14,6 @@ require('./ProjectsList.css');
 
 export interface IProjectsListOwnProps {
     Projects: IOneProjectInListDataBack[];//todo временно так
-    AddNewProject: (projectName: string) => void;
-    SetCurrentProject: (projectId: number) => void;
     CurrentProjectId: number;
     // ChangeListVisibility: () => void;
 }
@@ -25,6 +24,8 @@ interface IProjectsListStateToProps {
 
 interface IProjectsListDispatchToProps {
     // ChangeTestString: (v: string) => void;
+    AddNewProject: (projectName: string) => void;
+    
 }
 
 
@@ -49,7 +50,6 @@ const ProjectsList = (props: IProjectsListProps) => {
             .filter(x => filterProjectName ? x.Name.indexOf(filterProjectName) >= 0 : true)
             .map(x => {
                 return <OneProjectInList Project={x} key={x.Id}
-                    SetCurrentProject={props.SetCurrentProject}
                     CurrentProject={props.CurrentProjectId === x.Id}
                 ></OneProjectInList>
             });
@@ -92,12 +92,12 @@ const mapStateToProps = (state: AppState, ownProps: IProjectsListOwnProps) => {
 }
 
 const mapDispatchToProps = (dispatch: any, ownProps: IProjectsListOwnProps) => {
-    return {
-        ChangeTestString: (str: string) => {
-            dispatch({ type: "test", payload: str });
-        },
-    } as IProjectsListDispatchToProps;
-
+    let res = {} as IProjectsListDispatchToProps;
+    res.AddNewProject = (projectName: string) => {
+        dispatch(window.G_CodeReviewProjectController.CreateNewProjectRedux(projectName));
+    };
+   
+    return res;
 };
 
 

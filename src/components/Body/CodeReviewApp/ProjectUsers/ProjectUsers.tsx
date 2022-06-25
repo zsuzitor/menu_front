@@ -4,20 +4,31 @@ import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
+import { AppState } from '../../../../Models/Models/State/AppState';
 import OneProjectUser from '../OneProjectUser/OneProjectUser';
+
+import { connect } from "react-redux";
 
 
 require('./ProjectUsers.css');
 
 
-export interface IProjectUsersProps {
+
+
+interface IProjectUsersOwnProps {
+}
+
+
+interface IProjectUsersStateToProps {
     ProjectId: number;
-    AddUserToProject: (user: IProjectUserDataBack) => void;
     ProjectUsers: IProjectUserDataBack[];
+}
 
-    ChangeUser: (user: IProjectUserDataBack) => void;
-    DeleteUser: (id: number) => void;
+interface IProjectUsersDispatchToProps {
+    AddUserToProject: (newUserName: string, userMainAppEmail: string, projectId: number) => void;
+}
 
+interface IProjectUsersProps extends IProjectUsersStateToProps, IProjectUsersOwnProps, IProjectUsersDispatchToProps {
 }
 
 
@@ -33,17 +44,8 @@ const ProjectUsers = (props: IProjectUsersProps) => {
             return;
         }
 
-        let addUser = (error: MainErrorObjectBack, data: IProjectUserDataBack) => {
-            if (error) {
-                return;
-            }
-
-            if (data) {
-                props.AddUserToProject(data);
-            }
-        };
-
-        window.G_CodeReviewUserController.AddUserToProject(newUserName, userMainAppEmail, props.ProjectId, addUser);
+        props.AddUserToProject(newUserName, userMainAppEmail, props.ProjectId);
+        // window.G_CodeReviewUserController.AddUserToProjectRedux(newUserName, userMainAppEmail, props.ProjectId);
         setNewUserName('');
     };
 
@@ -59,8 +61,7 @@ const ProjectUsers = (props: IProjectUsersProps) => {
         <br />
         {props.ProjectUsers.map(x => {
             return <OneProjectUser User={x}
-                key={x.Id} ChangeUser={props.ChangeUser}
-                DeleteUser={props.DeleteUser}></OneProjectUser>
+                key={x.Id} ></OneProjectUser>
         })}
     </div>
 }
@@ -68,4 +69,26 @@ const ProjectUsers = (props: IProjectUsersProps) => {
 
 
 
-export default ProjectUsers;
+
+
+
+
+const mapStateToProps = (state: AppState, ownProps: IProjectUsersOwnProps) => {
+    let res = {} as IProjectUsersStateToProps;
+    res.ProjectId = state.CodeReviewApp.CurrentProjectId;
+    res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
+    return res;
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: IProjectUsersOwnProps) => {
+    let res = {} as IProjectUsersDispatchToProps;
+    res.AddUserToProject = (newUserName: string, userMainAppEmail: string, projectId: number) => {
+        dispatch(window.G_CodeReviewUserController.AddUserToProjectRedux(newUserName, userMainAppEmail, projectId))
+    };
+    return res;
+};
+
+
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+// and that function returns the connected, wrapper component:
+export default connectToStore(ProjectUsers);

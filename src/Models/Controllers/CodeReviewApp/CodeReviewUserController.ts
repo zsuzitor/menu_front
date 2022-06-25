@@ -1,4 +1,4 @@
-import { AddProjectUserActionCreator, ChangeProjectUserActionCreator, DeleteProjectUserActionCreator } from "../../Actions/CodeReviewApp/Actions";
+import { AddProjectUserActionCreator, ChangeProjectUserActionCreator, DeleteProjectUserActionCreator } from "../../Actions/CodeReviewApp/UserActions";
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";

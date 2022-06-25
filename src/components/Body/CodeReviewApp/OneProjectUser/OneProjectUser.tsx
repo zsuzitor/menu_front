@@ -1,16 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
+import { AppState } from '../../../../Models/Models/State/AppState';
 
 
 require('./OneProjectUser.css');
 
 
-export interface IOneProjectOneProjectUserProps {
+
+interface IOneProjectOneProjectUserOwnProps {
     User: IProjectUserDataBack;
+
+}
+
+
+interface IOneProjectOneProjectUserStateToProps {
+}
+
+interface IOneProjectOneProjectUserDispatchToProps {
     ChangeUser: (user: IProjectUserDataBack) => void;
-    DeleteUser: (id: number) => void;
+}
+
+interface IOneProjectOneProjectUserProps extends IOneProjectOneProjectUserStateToProps, IOneProjectOneProjectUserOwnProps, IOneProjectOneProjectUserDispatchToProps {
 }
 
 
@@ -52,36 +65,8 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
             , Email: userEmail, IsAdmin: userIsAdmin, Deactivated: userIsDeactivated
         }
 
-        let changeUser = (error: MainErrorObjectBack, data: BoolResultBack) => {
-            if (error) {
-                return;
-            }
-
-            if (data?.result) {
-
-                props.ChangeUser(newUserData);
-            }
-        };
-
-        window.G_CodeReviewUserController.ChangeProjectUser(newUserData, changeUser);
+        props.ChangeUser(newUserData);
     };
-
-
-    // const deleteUser = () => {
-
-    //     let deleteUser = (error: MainErrorObjectBack, data: BoolResultBack) => {
-    //         if (error) {
-    //             return;
-    //         }
-
-    //         if (data?.result) {
-
-    //             props.DeleteUser(props.User.Id);
-    //         }
-    //     };
-
-    //     window.G_CodeReviewUserController.DeleteProjectUser(props.User.Id, deleteUser);
-    // }
 
 
     let userHasChanges = userName !== props.User.Name ||
@@ -125,4 +110,21 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
 
 
 
-export default OneProjectUser;
+const mapStateToProps = (state: AppState, ownProps: IOneProjectOneProjectUserOwnProps) => {
+    let res = {} as IOneProjectOneProjectUserStateToProps;
+
+    return res;
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: IOneProjectOneProjectUserOwnProps) => {
+    let res = {} as IOneProjectOneProjectUserDispatchToProps;
+    res.ChangeUser = (user) => { dispatch(window.G_CodeReviewUserController.ChangeProjectUserRedux(user)) };
+    return res;
+};
+
+
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+// and that function returns the connected, wrapper component:
+export default connectToStore(OneProjectUser);
+
+

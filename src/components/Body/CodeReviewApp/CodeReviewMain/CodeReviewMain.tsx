@@ -19,7 +19,7 @@ require('./CodeReviewMain.css');
 
 
 
-interface CodeReviewMainOwnProps {
+interface ICodeReviewMainOwnProps {
     AuthInfo: IAuthState;
 }
 
@@ -31,7 +31,7 @@ interface ICodeReviewMainStateToProps {
     CurrentProjectUsers: IProjectUserDataBack[];
 }
 
-interface CodeReviewMainDispatchToProps {
+interface ICodeReviewMainDispatchToProps {
     // ChangeTestString: (v: string) => void;
     SetCurrentProjectId: (id: number) => void;
     SetProjectsList: (lst: IOneProjectInListDataBack[]) => void;
@@ -45,7 +45,7 @@ interface CodeReviewMainDispatchToProps {
 }
 
 
-interface CodeReviewMainProps extends ICodeReviewMainStateToProps, CodeReviewMainOwnProps, CodeReviewMainDispatchToProps {
+interface CodeReviewMainProps extends ICodeReviewMainStateToProps, ICodeReviewMainOwnProps, ICodeReviewMainDispatchToProps {
 }
 
 
@@ -91,23 +91,23 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
     }, [props.CurrentProjectId]);
 
 
-    const addNewProject = (newProjectName: string) => {
-        if (!newProjectName) {
-            alert('Введите название');
-        }
-        // let addProject = (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => {
-        //     if (error) {
-        //         return;
-        //     }
+    // const addNewProject = (newProjectName: string) => {
+    //     if (!newProjectName) {
+    //         alert('Введите название');
+    //     }
+    //     // let addProject = (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => {
+    //     //     if (error) {
+    //     //         return;
+    //     //     }
 
-        //     if (data) {
-        //         // setCurrentProjectId(-1);
-        //         props.AddProjectList(data);
-        //     }
-        // };
+    //     //     if (data) {
+    //     //         // setCurrentProjectId(-1);
+    //     //         props.AddProjectList(data);
+    //     //     }
+    //     // };
 
-        window.G_CodeReviewProjectController.CreateNewProjectRedux(newProjectName);
-    };
+    //     window.G_CodeReviewProjectController.CreateNewProjectRedux(newProjectName);
+    // };
 
 
     // const addNewUserToProject = (user: IProjectUserDataBack) => {
@@ -180,7 +180,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
 
 
 
-const mapStateToProps = (state: AppState, ownProps: CodeReviewMainOwnProps) => {
+const mapStateToProps = (state: AppState, ownProps: ICodeReviewMainOwnProps) => {
     let res = {} as ICodeReviewMainStateToProps;
     res.CurrentProjectId = state.CodeReviewApp.CurrentProjectId;
     res.CurrentProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
@@ -190,9 +190,9 @@ const mapStateToProps = (state: AppState, ownProps: CodeReviewMainOwnProps) => {
     return res;
 }
 
-const mapDispatchToProps = (dispatch: any, ownProps: CodeReviewMainOwnProps) => {
-    let res = {} as CodeReviewMainDispatchToProps;
-
+const mapDispatchToProps = (dispatch: any, ownProps: ICodeReviewMainOwnProps) => {
+    let res = {} as ICodeReviewMainDispatchToProps;
+todo;
     return res;
 };
 

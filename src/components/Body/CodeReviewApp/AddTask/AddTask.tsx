@@ -16,12 +16,14 @@ require('./AddTask.css');
 
 
 interface IAddTaskOwnProps {
+    ProjectUsers: IProjectUserDataBack[];
+    ProjectId: number;
+
+
 }
 
 
 interface IAddTaskStateToProps {
-    ProjectUsers: IProjectUserDataBack[];
-    ProjectId: number;
 
 }
 

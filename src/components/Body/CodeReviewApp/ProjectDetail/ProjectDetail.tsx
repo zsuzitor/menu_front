@@ -15,23 +15,49 @@ import Paggination from '../Paggination/Paggination';
 import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
 import ProjectUsers from '../ProjectUsers/ProjectUsers';
 import AddTask from '../AddTask/AddTask';
+import { TasksFilter } from '../../../../Models/Models/CodeReviewApp/State/TasksFilter';
+import { OneTask } from '../../../../Models/Models/CodeReviewApp/State/OneTask';
+import { connect } from 'react-redux';
+import { AppState } from '../../../../Models/Models/State/AppState';
+import { SetFilterTaskCreatorActionCreator, SetFilterTaskNameActionCreator, SetFilterTaskPageActionCreator, SetFilterTaskReviewerActionCreator, SetFilterTaskStatusActionCreator } from '../../../../Models/Actions/CodeReviewApp/TaskActions';
 
 
 
 require('./ProjectDetail.css');
 
-export interface IProjectDetailProps {
+
+
+interface IProjectDetailOwnProps {
     AuthInfo: IAuthState;
     Project: IOneProjectInListDataBack;//todo временно так
-    ProjectUsers: IProjectUserDataBack[];
-    // ProjectTasks: IProjectTaskDataBack[];
-    AddUserToProject: (user: IProjectUserDataBack) => void;
-    // AddTaskToProject: (task: IProjectTaskDataBack) => void;
-    DeleteProject: () => void;
-    ChangeUser: (user: IProjectUserDataBack) => void;
-    DeleteUser: (id: number) => void;
-    // UpdateTask: (task: IProjectTaskDataBack) => void;
+    Tasks: OneTask[];
+}
 
+
+interface IProjectDetailStateToProps {
+    ProjectUsers: IProjectUserDataBack[];
+    TasksFilters: TasksFilter;
+
+    CurrentProjectTasksAllCount: number;
+}
+
+interface IProjectDetailDispatchToProps {
+    SetFilterTaskCreator: (id: number) => void;
+    SetFilterTaskReviewer: (id: number) => void;
+    SetFilterTaskName: (name: string) => void;
+    SetFilterTaskPage: (num: number) => void;
+    SetFilterTaskStatus: (status: number) => void;
+
+    ReloadTasks: (filters: ITaskFilter) => void;
+
+    // AddUserToProject: (user: IProjectUserDataBack) => void;
+    // AddTaskToProject: (task: IProjectTaskDataBack) => void;
+    DeleteProject: (id: number) => void;
+    // ChangeUser: (user: IProjectUserDataBack) => void;
+    // DeleteUser: (id: number) => void;
+}
+
+interface IProjectDetailProps extends IProjectDetailStateToProps, IProjectDetailOwnProps, IProjectDetailDispatchToProps {
 }
 
 
@@ -40,18 +66,18 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     const tasksOnPageCount = 5;
 
 
-    const [currentProjectTasks, setCurrentProjectTasks] = useState([] as IProjectTaskDataBack[]);
-    const [allTasksCount, setAllTasksCount] = useState(0);
+    // const [currentProjectTasks, setCurrentProjectTasks] = useState([] as IProjectTaskDataBack[]);
+    // const [allTasksCount, setAllTasksCount] = useState(0);
 
 
 
 
 
-    const [filterTaskCreator, setFilterTaskCreator] = useState(-1);
-    const [filterTaskReviwer, setFilterTaskReviwer] = useState(-1);
-    const [filterTaskStatus, setFilterTaskStatus] = useState(-1);
-    const [filterTaskName, setFilterTaskName] = useState('');
-    const [filterTaskPage, setFilterTaskPage] = useState(1);
+    // const [filterTaskCreator, setFilterTaskCreator] = useState(-1);
+    // const [filterTaskReviwer, setFilterTaskReviwer] = useState(-1);
+    // const [filterTaskStatus, setFilterTaskStatus] = useState(-1);
+    // const [filterTaskName, setFilterTaskName] = useState('');
+    // const [filterTaskPage, setFilterTaskPage] = useState(1);
     const [loadTasksTimerId, setLoadTasksTimerId] = useState(null);
 
 
@@ -62,14 +88,14 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
     useEffect(() => {
 
-        let filterCreatorExist = props.ProjectUsers.some((x) => x.Id === filterTaskCreator);
+        let filterCreatorExist = props.ProjectUsers.some((x) => x.Id === props.TasksFilters.CreatorId);
         if (!filterCreatorExist) {
-            setFilterTaskCreator(-1);
+            props.SetFilterTaskCreator(-1);
         }
 
-        let filterReviwerExist = props.ProjectUsers.some((x) => x.Id === filterTaskReviwer);
-        if (!filterReviwerExist) {
-            setFilterTaskReviwer(-1);
+        let filterReviewerExist = props.ProjectUsers.some((x) => x.Id === props.TasksFilters.ReviewerId);
+        if (!filterReviewerExist) {
+            props.SetFilterTaskReviewer(-1);
         }
 
     }, [props.ProjectUsers.length]);//[firstUser?.Id]);
@@ -91,31 +117,33 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         setLoadTasksTimerId(timerId);
 
 
-    }, [props.Project?.Id, filterTaskCreator, filterTaskReviwer, filterTaskStatus, filterTaskName, filterTaskPage]);
+    }, [props.Project?.Id, props.TasksFilters.CreatorId, props.TasksFilters.ReviewerId
+        , props.TasksFilters.Status, props.TasksFilters.TaskName, props.TasksFilters.Page, props.TasksFilters.Retrigger]);
 
 
 
     const reloadTasks = () => {
-        let loadTasks = (error: MainErrorObjectBack, data: ILoadReviewTasksResultDataBask) => {
-            if (error) {
-                return;
-            }
+        // let loadTasks = (error: MainErrorObjectBack, data: ILoadReviewTasksResultDataBask) => {
+        //     if (error) {
+        //         return;
+        //     }
 
-            if (data) {
-                setCurrentProjectTasks(data.Tasks);
-                setAllTasksCount(data.TasksCount);
-            }
-        };
+        //     if (data) {
+        //         setCurrentProjectTasks(data.Tasks);
+        //         setAllTasksCount(data.TasksCount);
+        //     }
+        // };
 
         let filter = {
-            Name: filterTaskName, CreatorId: filterTaskCreator
-            , PageNumber: filterTaskPage, PageSize: tasksOnPageCount
-            , ProjectId: props.Project.Id, ReviewerId: filterTaskReviwer
-            , Status: filterTaskStatus
+            Name: props.TasksFilters.TaskName, CreatorId: props.TasksFilters.CreatorId
+            , PageNumber: props.TasksFilters.Page, PageSize: tasksOnPageCount
+            , ProjectId: props.Project.Id, ReviewerId: props.TasksFilters.ReviewerId
+            , Status: props.TasksFilters.Status
         } as ITaskFilter;
 
 
-        window.G_CodeReviewTaskController.LoadTasks(filter, loadTasks);
+        // window.G_CodeReviewTaskController.LoadTasksRedux(filter, loadTasks);
+        props.ReloadTasks(filter);
     }
 
 
@@ -123,17 +151,18 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
     const deleteProject = () => {
-        let deleteProject = (error: MainErrorObjectBack, data: BoolResultBack) => {
-            if (error) {
-                return;
-            }
+        // let deleteProject = (error: MainErrorObjectBack, data: BoolResultBack) => {
+        //     if (error) {
+        //         return;
+        //     }
 
-            if (data?.result) {
-                props.DeleteProject();
-            }
-        };
+        //     if (data?.result) {
+        //         props.DeleteProject();
+        //     }
+        // };
 
-        window.G_CodeReviewProjectController.DeleteProject(props.Project.Id, deleteProject);
+        // window.G_CodeReviewProjectController.DeleteProject(props.Project.Id, deleteProject);
+        props.DeleteProject(props.Project.Id);
     };
 
 
@@ -143,24 +172,24 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     //     });
     // };
 
-    const updateTaskProject = (task: IProjectTaskDataBack) => {
-        setCurrentProjectTasks(oldState => {
-            let newState = cloneDeep(oldState);
-            var tsk = newState.find(x => x.Id == task.Id);
-            tsk.Name = task.Name;
-            tsk.Status = task.Status;
-            tsk.ReviewerId = task.ReviewerId;
-            tsk.CreatorId = task.CreatorId;
+    // const updateTaskProject = (task: IProjectTaskDataBack) => {
+    //     setCurrentProjectTasks(oldState => {
+    //         let newState = cloneDeep(oldState);
+    //         var tsk = newState.find(x => x.Id == task.Id);
+    //         tsk.Name = task.Name;
+    //         tsk.Status = task.Status;
+    //         tsk.ReviewerId = task.ReviewerId;
+    //         tsk.CreatorId = task.CreatorId;
 
-            return newState;
-        });
-    };
+    //         return newState;
+    //     });
+    // };
 
-    const deleteTask = (id: number) => {
-        setCurrentProjectTasks(oldState => {
-            return oldState.filter(x => x.Id != id);
-        });
-    };
+    // const deleteTask = (id: number) => {
+    //     setCurrentProjectTasks(oldState => {
+    //         return oldState.filter(x => x.Id != id);
+    //     });
+    // };
 
 
 
@@ -207,27 +236,26 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                     InnerContent={() => <AddTask
                         ProjectId={props.Project.Id}
                         ProjectUsers={props.ProjectUsers.filter(us => !us.Deactivated)}
-                        ReloadTasks={reloadTasks}
                     ></AddTask>}></AdditionalWindow> : <></>}
 
             </div>
         </div>
         <div className='review-project-tasks-filters-block'>
             <div>фильтры</div>
-            <input className='form-control-b' type='text' value={filterTaskName}
-                onChange={e => setFilterTaskName(e.target.value)} placeholder='название'></input>
+            <input className='form-control-b' type='text' value={props.TasksFilters.TaskName}
+                onChange={e => props.SetFilterTaskName(e.target.value)} placeholder='название'></input>
             <span>Создатель</span>
-            <select className='form-control-b' value={filterTaskCreator} onChange={(e) => setFilterTaskCreator(+e.target.value)}>
+            <select className='form-control-b' value={props.TasksFilters.CreatorId} onChange={(e) => props.SetFilterTaskCreator(+e.target.value)}>
                 <option value={-1}>Не выбрано</option>
                 {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
             </select>
             <span>Ревьювер</span>
-            <select className='form-control-b' value={filterTaskReviwer} onChange={(e) => setFilterTaskReviwer(+e.target.value)}>
+            <select className='form-control-b' value={props.TasksFilters.ReviewerId} onChange={(e) => props.SetFilterTaskReviewer(+e.target.value)}>
                 <option value={-1}>Не выбрано</option>
                 {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
             </select>
             <span>Статус</span>
-            <select className='form-control-b' onChange={e => setFilterTaskStatus(+e.target.value)} value={filterTaskStatus}>
+            <select className='form-control-b' onChange={e => props.SetFilterTaskStatus(+e.target.value)} value={props.TasksFilters.Status}>
                 <option value={-1}>Любой</option>
                 <option value={0}>Необходимо код ревью</option>
                 <option value={1}>Необходимы правки</option>
@@ -235,20 +263,18 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             </select>
             <div>
                 <Paggination
-                    ElementsCount={allTasksCount}
-                    PageNumber={filterTaskPage}
+                    ElementsCount={props.CurrentProjectTasksAllCount}
+                    PageNumber={props.TasksFilters.Page}
                     ElementsOnPage={tasksOnPageCount}
-                    SetPageNumber={setFilterTaskPage}></Paggination>
+                    SetPageNumber={props.SetFilterTaskPage}></Paggination>
             </div>
         </div>
         <div>
             <h2>список задач</h2>
-            {currentProjectTasks.map(x => <OneReviewTask key={x.Id}
+            {props.Tasks.map(x => <OneReviewTask key={x.Id}
                 AuthInfo={props.AuthInfo}
                 Task={x}
-                ProjectUsers={props.ProjectUsers}
-                UpdateTask={updateTaskProject}
-                DeleteTask={deleteTask}
+                Comments={x.Comments}
             ></OneReviewTask>)}
 
         </div>
@@ -257,5 +283,58 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
 
+const mapStateToProps = (state: AppState, ownProps: IProjectDetailOwnProps) => {
+    let res = {} as IProjectDetailStateToProps;
+    res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
 
-export default ProjectDetail;
+    return res;
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: IProjectDetailOwnProps) => {
+    let res = {} as IProjectDetailDispatchToProps;
+
+    res.SetFilterTaskCreator = (id: number) => {
+        dispatch(SetFilterTaskCreatorActionCreator(id));
+    };
+    res.SetFilterTaskReviewer = (id: number) => {
+        dispatch(SetFilterTaskReviewerActionCreator(id));
+    };
+    res.SetFilterTaskName = (name: string) => {
+        dispatch(SetFilterTaskNameActionCreator(name));
+    };
+    res.SetFilterTaskPage = (num: number) => {
+        dispatch(SetFilterTaskPageActionCreator(num));
+    };
+    res.SetFilterTaskStatus = (status: number) => {
+        dispatch(SetFilterTaskStatusActionCreator(status));
+    };
+
+    res.ReloadTasks = (filter: ITaskFilter) => {
+        dispatch(window.G_CodeReviewTaskController.LoadTasksRedux(filter));
+    };
+
+    // res.AddUserToProject = (user:IProjectUserDataBack) => { };
+    // AddTaskToProject: (task: IProjectTaskDataBack) => void;
+    res.DeleteProject = (id: number) => {
+        dispatch(window.G_CodeReviewProjectController.DeleteProjectRedux(id));
+    };
+    // res.ChangeUser = () => { };
+    // res.DeleteUser = () => { };
+
+
+
+
+
+    // res.UpdateTask = (forAdd: IProjectTaskDataBack) => {
+    //     dispatch(window.G_CodeReviewTaskController.UpdateTaskRedux(forAdd));
+    // };
+    // res.SetEmptyTaskComments = (taskId: number) => {
+    //     dispatch(SetEmptyTaskCommentsActionCreator(taskId))
+    // }
+    return res;
+};
+
+
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+// and that function returns the connected, wrapper component:
+export default connectToStore(ProjectDetail);

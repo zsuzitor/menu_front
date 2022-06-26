@@ -1,9 +1,10 @@
-import { AddTaskToProjectActionCreator, DeleteTaskActionCreator, LoadTasksActionCreator, UpdateTaskActionCreator } from "../../Actions/CodeReviewApp/TaskActions";
+import { AddLoadTriggerActionCreator, AddTaskToProjectActionCreator, DeleteTaskActionCreator, LoadTasksActionCreator, UpdateTaskActionCreator } from "../../Actions/CodeReviewApp/TaskActions";
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { ILoadReviewTasksResultDataBack } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack";
 import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { ITaskFilter } from "../../Models/CodeReviewApp/TasksFilter";
+import { AppState } from "../../Models/State/AppState";
 
 
 export type AddNewProjectTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => void;
@@ -32,8 +33,18 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
                     }
 
                     if (data) {
-                        dispatch(AddTaskToProjectActionCreator(data));
-                        dispatch(todo тут надо тригернуть перезагрузку тасок);
+                        // dispatch(AddTaskToProjectActionCreator(data));
+                        dispatch(AddLoadTriggerActionCreator());
+
+                        // let st = getState() as AppState;
+                        // let filter = {
+                        //     Name: st.CodeReviewApp.CurrentProjectTasksFilters.TaskName
+                        //     , CreatorId: st.CodeReviewApp.CurrentProjectTasksFilters.CreatorId
+                        //     , PageNumber: st.CodeReviewApp.CurrentProjectTasksFilters.Page, PageSize: tasksOnPageCount
+                        //     , ProjectId: st.CodeReviewApp.CurrentProjectId, ReviewerId: st.CodeReviewApp.CurrentProjectTasksFilters.ReviewerId
+                        //     , Status: st.CodeReviewApp.CurrentProjectTasksFilters.Status
+                        // } as ITaskFilter;
+                        // dispatch(this.LoadTasksRedux());
                     }
                 });
         };

@@ -13,6 +13,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { AppState } from '../../../../Models/Models/State/AppState';
 
 import { connect } from "react-redux";
+import { OneTask } from '../../../../Models/Models/CodeReviewApp/State/OneTask';
 
 
 require('./CodeReviewMain.css');
@@ -29,19 +30,22 @@ interface ICodeReviewMainStateToProps {
     CurrentProjectId: number;
     ProjectsList: IOneProjectInListDataBack[];
     CurrentProjectUsers: IProjectUserDataBack[];
+    Tasks: OneTask[];
 }
 
 interface ICodeReviewMainDispatchToProps {
     // ChangeTestString: (v: string) => void;
     SetCurrentProjectId: (id: number) => void;
-    SetProjectsList: (lst: IOneProjectInListDataBack[]) => void;
-    AddProjectList: (rec: IOneProjectInListDataBack) => void;
-    RemoveProjectList: (recId: number) => void;
+    // SetProjectsList: (lst: IOneProjectInListDataBack[]) => void;
+    // AddProjectList: (rec: IOneProjectInListDataBack) => void;
+    // RemoveProjectList: (recId: number) => void;
 
-    SetCurrentProjectUsers: (lst: IProjectUserDataBack[]) => void;
-    AddCurrentProjectUser: (rec: IProjectUserDataBack) => void;
-    ChangeCurrentProjectUser: (rec: IProjectUserDataBack) => void;
-    RemoveCurrentProjectUser: (rec: IProjectUserDataBack) => void;
+    // SetCurrentProjectUsers: (lst: IProjectUserDataBack[]) => void;
+    // AddCurrentProjectUser: (rec: IProjectUserDataBack) => void;
+    // ChangeCurrentProjectUser: (rec: IProjectUserDataBack) => void;
+    // RemoveCurrentProjectUser: (rec: IProjectUserDataBack) => void;
+    GetUserProjects: () => void;
+    GetProjectInfo: (id: number) => void;
 }
 
 
@@ -69,7 +73,8 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         //     }
         // };
 
-        window.G_CodeReviewProjectController.GetUserProjectsRedux();
+        // window.G_CodeReviewProjectController.GetUserProjectsRedux();
+        props.GetUserProjects();
     }, []);
 
 
@@ -86,7 +91,8 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
             //     }
             // };
 
-            window.G_CodeReviewProjectController.GetProjectInfoRedux(props.CurrentProjectId);
+            // window.G_CodeReviewProjectController.GetProjectInfoRedux(props.CurrentProjectId);
+            props.GetProjectInfo(props.CurrentProjectId);
         }
     }, [props.CurrentProjectId]);
 
@@ -152,22 +158,14 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
     return <div className='code-review-main-container'>
         <div className='code-review-projects-menu-main'>
 
-            <ProjectsList Projects={projectsList}
-                AddNewProject={addNewProject}
-                SetCurrentProject={setCurrentProjectId}
-                CurrentProjectId={currentProjectId}
+            <ProjectsList Projects={props.ProjectsList}
+                CurrentProjectId={props.CurrentProjectId}
             ></ProjectsList>
         </div>
         <div className='code-review-project-info'>
-            <ProjectDetail Project={projectsList.find(x => x.Id == currentProjectId)}
+            <ProjectDetail Project={props.ProjectsList.find(x => x.Id == props.CurrentProjectId)}
                 AuthInfo={props.AuthInfo}
-                ProjectUsers={currentProjectUsers}
-                AddUserToProject={addNewUserToProject}
-                // AddTaskToProject={addTaskToProject}
-                // ProjectTasks={currentProjectTasks}
-                DeleteProject={deleteProject}
-                ChangeUser={changeUser}
-                DeleteUser={deleteUser}
+                Tasks={props.Tasks}
             // UpdateTask={updateTaskProject}
             ></ProjectDetail>
         </div>
@@ -185,6 +183,7 @@ const mapStateToProps = (state: AppState, ownProps: ICodeReviewMainOwnProps) => 
     res.CurrentProjectId = state.CodeReviewApp.CurrentProjectId;
     res.CurrentProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
     res.ProjectsList = state.CodeReviewApp.ProjectsList;
+    res.Tasks = state.CodeReviewApp.CurrentProjectTasks;
     // res.Test = state.TestMessage;
     // res.FilmData = state.Films.find(x => x.Id === ownProps.FilmId);
     return res;
@@ -192,7 +191,13 @@ const mapStateToProps = (state: AppState, ownProps: ICodeReviewMainOwnProps) => 
 
 const mapDispatchToProps = (dispatch: any, ownProps: ICodeReviewMainOwnProps) => {
     let res = {} as ICodeReviewMainDispatchToProps;
-todo;
+    res.GetUserProjects = () => {
+        dispatch(window.G_CodeReviewProjectController.GetUserProjectsRedux());
+    };
+
+    res.GetProjectInfo = (id: number) => {
+        dispatch(window.G_CodeReviewProjectController.GetProjectInfoRedux(id));
+    }
     return res;
 };
 

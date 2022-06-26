@@ -25,3 +25,8 @@ export function LoadCommentsActionCreator(data: IOneTaskReviewCommentDataBack[])
     return { type: LoadCommentsActionName, payload: data };
 };
 
+export const SetEmptyTaskCommentsActionName: string = 'SetEmptyTaskCommentsAction';
+export function SetEmptyTaskCommentsActionCreator(taskId: number): AppAction<number> {
+    return { type: SetEmptyTaskCommentsActionName, payload: taskId };
+};
+

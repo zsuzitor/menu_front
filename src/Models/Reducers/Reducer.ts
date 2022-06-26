@@ -4,10 +4,13 @@ import { AppState } from "../Models/State/AppState";
 
 
 import cloneDeep from 'lodash/cloneDeep';
-import { CodeReviewReducer } from "./CodeReviewApp/Reducer";
+import { CodeReviewProjectReducer } from "./CodeReviewApp/ProjectReducer";
+import { CodeReviewUserReducer } from "./CodeReviewApp/UserReducer";
 
 export function AppReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
-    let st = CodeReviewReducer(state, action);
+    let st = CodeReviewProjectReducer(state, action);
+    CodeReviewUserReducer(st, action);
+
     //...
     return st;
     switch (action.type) {

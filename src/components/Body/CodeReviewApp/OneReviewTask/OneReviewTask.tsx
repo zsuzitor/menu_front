@@ -3,13 +3,14 @@
 import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { SetEmptyTaskCommentsActionCreator } from '../../../../Models/Actions/CodeReviewApp/CommentActions';
+import { SetCommentsActionCreator } from '../../../../Models/Actions/CodeReviewApp/CommentActions';
 import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
 import { IOneTaskReviewCommentDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack';
 import { IProjectTaskDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectTaskDataBack';
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 import { IAuthState } from '../../../../Models/Models/AuthState';
+import { CommentSet } from '../../../../Models/Models/CodeReviewApp/CommentSet';
 import { AppState } from '../../../../Models/Models/State/AppState';
 import OneReviewTaskComment from '../OneReviewTaskComment/OneReviewTaskComment';
 
@@ -209,6 +210,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                 return <OneReviewTaskComment
                     AuthInfo={props.AuthInfo}
                     Comment={x}
+                    TaskId={props.Task.Id}
                     key={x.Id}
                 ></OneReviewTaskComment>
 
@@ -316,7 +318,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneReviewTaskOwnProps) => 
     };
 
     res.SetEmptyTaskComments = (taskId: number) => {
-        dispatch(SetEmptyTaskCommentsActionCreator(taskId))
+        let dt = new CommentSet();
+        dt.Comments = [];
+        dt.TaskId = taskId;
+        dispatch(SetCommentsActionCreator(dt))
     }
 
     res.LoadTaskComments = (taskId: number) => {

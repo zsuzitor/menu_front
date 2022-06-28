@@ -1,8 +1,11 @@
-import { AddCommentActionCreator, DeleteCommentActionCreator, LoadCommentsActionCreator, UpdateCommentActionCreator } from "../../Actions/CodeReviewApp/CommentActions";
+import { AddCommentActionCreator, DeleteCommentActionCreator, SetCommentsActionCreator, UpdateCommentActionCreator } from "../../Actions/CodeReviewApp/CommentActions";
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { IOneTaskReviewCommentDataBack } from "../../BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
-import { TaskUpdate } from "../../Models/CodeReviewApp/TaskUpdate";
+import { CommentAdd } from "../../Models/CodeReviewApp/CommentAdd";
+import { CommentDelete } from "../../Models/CodeReviewApp/CommentDelete";
+import { CommentSet } from "../../Models/CodeReviewApp/CommentSet";
+import { CommentUpdate } from "../../Models/CodeReviewApp/CommentUpdate";
 
 
 
@@ -15,8 +18,8 @@ export type UpdateComment = (error: MainErrorObjectBack, data: BoolResultBack) =
 export interface ICodeReviewCommentController {
     LoadCommentsRedux: (id: number) => void;
     AddCommentRedux: (taskId: number, text: string) => void;
-    DeleteCommentRedux: (id: number) => void;
-    UpdateCommentRedux: (comment: TaskUpdate) => void;
+    DeleteCommentRedux: (data: CommentDelete) => void;
+    UpdateCommentRedux: (comment: CommentUpdate) => void;
 }
 
 
@@ -24,7 +27,7 @@ export interface ICodeReviewCommentController {
 export class CodeReviewCommentController implements ICodeReviewCommentController {
 
 
-    UpdateCommentRedux = (comment: TaskUpdate) => {
+    UpdateCommentRedux = (comment: CommentUpdate) => {
         return (dispatch: any, getState: any) => {
             this.UpdateComment(comment.Id, comment.Text, (error: MainErrorObjectBack, data: BoolResultBack) => {
                 if (error) {
@@ -56,15 +59,15 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
     };
 
 
-    DeleteCommentRedux = (id: number) => {
+    DeleteCommentRedux = (dataForDel: CommentDelete) => {
         return (dispatch: any, getState: any) => {
-            this.DeleteComment(id, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteComment(dataForDel.Id, (error: MainErrorObjectBack, data: BoolResultBack) => {
                 if (error) {
                     return;
                 }
 
                 if (data?.result) {
-                    dispatch(DeleteCommentActionCreator(id));
+                    dispatch(DeleteCommentActionCreator(dataForDel));
                 }
             });
         };
@@ -94,7 +97,8 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
                 }
 
                 if (data?.Id) {
-                    dispatch(AddCommentActionCreator(data));
+                    let forAdd = new CommentAdd(data, taskId);
+                    dispatch(AddCommentActionCreator(forAdd));
                 }
             });
         };
@@ -125,7 +129,10 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
                 }
 
                 if (data) {
-                    dispatch(LoadCommentsActionCreator(data));
+                    let forSet = new CommentSet();
+                    forSet.Comments = data;
+                    forSet.TaskId = id;
+                    dispatch(SetCommentsActionCreator(forSet));
                 }
             });
         };

@@ -5,6 +5,7 @@ import { AppState } from "../../Models/State/AppState";
 
 import cloneDeep from 'lodash/cloneDeep';
 import { AddLoadTriggerActionName, AddTaskToProjectActionName, DeleteTaskActionName, LoadTasksActionName, SetFilterTaskCreatorActionName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskReviewerName, SetFilterTaskStatusActionName, UpdateTaskActionName } from "../../Actions/CodeReviewApp/TaskActions";
+import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
 
 
 export function CodeReviewTaskReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
@@ -24,7 +25,12 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
         case UpdateTaskActionName:
             {
                 let newState = cloneDeep(state);
-
+                let payload = action.payload as IProjectTaskDataBack;
+                var tsk = newState.CodeReviewApp.CurrentProjectTasks.find(x => x.Id == payload.Id);
+                tsk.Name = payload.Name;
+                tsk.Status = payload.Status;
+                tsk.ReviewerId = payload.ReviewerId;
+                tsk.CreatorId = payload.CreatorId;
                 return newState;
             }
         case LoadTasksActionName:

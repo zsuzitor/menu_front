@@ -5,7 +5,8 @@ import { IOneTaskReviewCommentDataBack } from '../../../../Models/BackModel/Code
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 import { IAuthState } from '../../../../Models/Models/AuthState';
-import { TaskUpdate } from '../../../../Models/Models/CodeReviewApp/TaskUpdate';
+import { CommentDelete } from '../../../../Models/Models/CodeReviewApp/CommentDelete';
+import { CommentUpdate } from '../../../../Models/Models/CodeReviewApp/CommentUpdate';
 import { AppState } from '../../../../Models/Models/State/AppState';
 
 
@@ -17,7 +18,7 @@ require('./OneReviewTaskComment.css');
 interface IOneReviewTaskCommentOwnProps {
     AuthInfo: IAuthState;
     Comment: IOneTaskReviewCommentDataBack;
-
+    TaskId: number;
 }
 
 
@@ -136,11 +137,15 @@ const mapStateToProps = (state: AppState, ownProps: IOneReviewTaskCommentOwnProp
 const mapDispatchToProps = (dispatch: any, ownProps: IOneReviewTaskCommentOwnProps) => {
     let res = {} as IOneReviewTaskCommentDispatchToProps;
     res.DeleteComment = (id: number) => {
-        dispatch(window.G_CodeReviewCommentController.DeleteCommentRedux(id));
+        let forDel = new CommentDelete();
+        forDel.Id = id;
+        forDel.TaskId = ownProps.TaskId;
+        dispatch(window.G_CodeReviewCommentController.DeleteCommentRedux(forDel));
     };
 
     res.UpdateComment = (id: number, text: string) => {
-        let comm = new TaskUpdate();
+        let comm = new CommentUpdate();
+        comm.TaskId = ownProps.TaskId;
         comm.Id = id;
         comm.Text = text;
         dispatch(window.G_CodeReviewCommentController.UpdateCommentRedux(comm));

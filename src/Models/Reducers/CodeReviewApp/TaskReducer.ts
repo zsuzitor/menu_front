@@ -4,10 +4,11 @@ import { AppState } from "../../Models/State/AppState";
 
 
 import cloneDeep from 'lodash/cloneDeep';
-import { AddLoadTriggerActionName, AddTaskToProjectActionName, DeleteTaskActionName, LoadTasksActionName, SetFilterTaskCreatorActionName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskReviewerName, SetFilterTaskStatusActionName, UpdateTaskActionName } from "../../Actions/CodeReviewApp/TaskActions";
+import { AddLoadTriggerActionName, AddTaskToProjectActionName, DeleteTaskActionName, LoadTasksActionName, SetFilterTaskActionName, SetFilterTaskCreatorActionName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskReviewerName, SetFilterTaskStatusActionName, UpdateTaskActionName } from "../../Actions/CodeReviewApp/TaskActions";
 import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
 import { OneTask } from "../../Models/CodeReviewApp/State/OneTask";
 import { ILoadReviewTasksResultDataBack } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack";
+import { TasksFilter } from "../../Models/CodeReviewApp/State/TasksFilter";
 
 
 export function CodeReviewTaskReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
@@ -94,6 +95,15 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
                 newState.CodeReviewApp.CurrentProjectTasksFilters.Status = payload;
                 return newState;
             }
+        case SetFilterTaskActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as TasksFilter;
+                newState.CodeReviewApp.CurrentProjectTasksFilters = payload;
+
+                return newState;
+            }
+
 
 
         default:

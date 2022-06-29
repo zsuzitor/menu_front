@@ -8,10 +8,7 @@ export function DeleteProjectActionCreator(projectId: number): AppAction<number>
 };
 
 
-export const SetCurrentProjectUsersActionName: string = 'SetCurrentProjectUsersAction';
-export function SetCurrentProjectUsersActionCreator(users: IProjectUserDataBack[]): AppAction<IProjectUserDataBack[]> {
-    return { type: SetCurrentProjectUsersActionName, payload: users };
-};
+
 
 
 export const AddNewProjectActionName: string = 'AddNewProjectAction';

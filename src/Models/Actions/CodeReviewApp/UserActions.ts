@@ -1,6 +1,11 @@
 import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
 import { AppAction } from "../Actions";
 
+export const SetCurrentProjectUsersActionName: string = 'SetCurrentProjectUsersAction';
+export function SetCurrentProjectUsersActionCreator(users: IProjectUserDataBack[]): AppAction<IProjectUserDataBack[]> {
+    return { type: SetCurrentProjectUsersActionName, payload: users };
+};
+
 export const DeleteProjectUserActionName: string = 'DeleteProjectUserAction';
 export function DeleteProjectUserActionCreator(id: number): AppAction<number> {
     return { type: DeleteProjectUserActionName, payload: id };

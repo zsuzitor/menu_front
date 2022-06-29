@@ -1,6 +1,8 @@
 
 
-import { AddNewProjectActionCreator, DeleteProjectActionCreator, SetCurrentProjectIdActionCreator, SetCurrentProjectUsersActionCreator, SetProjectsActionCreator } from "../../Actions/CodeReviewApp/ProjectActions";
+import { AddNewProjectActionCreator, DeleteProjectActionCreator, SetCurrentProjectIdActionCreator, SetProjectsActionCreator } from "../../Actions/CodeReviewApp/ProjectActions";
+import { LoadTasksActionCreator, SetFilterTaskActionCreator } from "../../Actions/CodeReviewApp/TaskActions";
+import { SetCurrentProjectUsersActionCreator } from "../../Actions/CodeReviewApp/UserActions";
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { ILoadReviewTasksResultDataBack } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack";
 import { IOneProjectInfoDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInfoDataBack";
@@ -9,6 +11,8 @@ import { IOneTaskReviewCommentDataBack } from "../../BackModel/CodeReviewApp/IOn
 import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
 import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
+import { TasksFilter } from "../../Models/CodeReviewApp/State/TasksFilter";
+import { AppState } from "../../Models/State/AppState";
 
 export type ListOfCardOnReturn = (error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => void;
 export type CreateNewProject = (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => void;
@@ -35,7 +39,19 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
                 }
 
                 if (data?.result) {
+                    //let state = getState() as AppState;
+                    // if (state.CodeReviewApp.CurrentProjectId === projectId) {
+                    //     dispatch(SetCurrentProjectUsersActionCreator([]));
+                    //     let tasks = {} as ILoadReviewTasksResultDataBack;
+                    //     tasks.Tasks = [];
+                    //     tasks.TasksCount = 0;
+                    //     dispatch(SetFilterTaskActionCreator(new TasksFilter()));
+                    //     dispatch(LoadTasksActionCreator(tasks));
+                    // }
+
                     dispatch(DeleteProjectActionCreator(projectId));
+
+
                 }
             });
         };

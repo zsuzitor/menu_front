@@ -5,7 +5,7 @@ import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUser
 
 
 import cloneDeep from 'lodash/cloneDeep';
-import { AddProjectUserActionName, ChangeProjectUserActionName, DeleteProjectUserActionName } from "../../Actions/CodeReviewApp/UserActions";
+import { AddProjectUserActionName, ChangeProjectUserActionName, DeleteProjectUserActionName, SetCurrentProjectUsersActionName } from "../../Actions/CodeReviewApp/UserActions";
 
 // return Object.assign({}, state, { TestMessage: str });
 
@@ -43,6 +43,14 @@ export function CodeReviewUserReducer(state: AppState = new AppState(), action: 
 
                 return newState;
             }
+        case SetCurrentProjectUsersActionName:
+            {
+                let newState = cloneDeep(state);
+                let users = action.payload as IProjectUserDataBack[];
+                newState.CodeReviewApp.CurrentProjectUsers = users;
+                return newState;
+            }
+
 
 
 

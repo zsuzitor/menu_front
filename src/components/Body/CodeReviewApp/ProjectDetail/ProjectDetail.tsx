@@ -286,7 +286,8 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 const mapStateToProps = (state: AppState, ownProps: IProjectDetailOwnProps) => {
     let res = {} as IProjectDetailStateToProps;
     res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
-
+    res.TasksFilters = state.CodeReviewApp.CurrentProjectTasksFilters;
+    res.CurrentProjectTasksAllCount = state.CodeReviewApp.CurrentProjectTasksAllCount;
     return res;
 }
 

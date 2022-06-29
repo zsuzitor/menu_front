@@ -11,9 +11,9 @@ import { CodeReviewTaskReducer } from "./CodeReviewApp/TaskReducer";
 
 export function AppReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
     let st = CodeReviewProjectReducer(state, action);
-    CodeReviewUserReducer(st, action);
-    CodeReviewCommentReducer(st, action);
-    CodeReviewTaskReducer(st, action);
+    st = CodeReviewUserReducer(st, action);
+    st = CodeReviewCommentReducer(st, action);
+    st = CodeReviewTaskReducer(st, action);
 
 
     //...

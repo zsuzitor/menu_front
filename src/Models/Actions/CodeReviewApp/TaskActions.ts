@@ -1,5 +1,6 @@
 import { ILoadReviewTasksResultDataBack } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack";
 import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
+import { TasksFilter } from "../../Models/CodeReviewApp/State/TasksFilter";
 import { AppAction } from "../Actions";
 
 
@@ -54,6 +55,10 @@ export function SetFilterTaskStatusActionCreator(num: number): AppAction<number>
     return { type: SetFilterTaskStatusActionName, payload: num };
 };
 
+export const SetFilterTaskActionName: string = 'SetFilterTaskAction';
+export function SetFilterTaskActionCreator(num: TasksFilter): AppAction<TasksFilter> {
+    return { type: SetFilterTaskActionName, payload: num };
+};
 
 
 

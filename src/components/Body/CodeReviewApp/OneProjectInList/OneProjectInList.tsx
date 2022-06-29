@@ -17,6 +17,7 @@ export interface IOneProjectInListOwnProps {
 }
 
 interface IOneProjectInListStateToProps {
+    // CurrentProjectId: number;
 }
 
 interface IOneProjectInListDispatchToProps {
@@ -37,7 +38,11 @@ const OneProjectInList = (props: IOneProjectInListProps) => {
 
 
     return <div key={props.Project.Id.toString()} className={projectClassName}>
-        <div onClick={() => props.SetCurrentProject(props.Project.Id)} title={props.Project.Name}>
+        <div onClick={() => {
+            if (!props.CurrentProject) {
+                props.SetCurrentProject(props.Project.Id)
+            }
+        }} title={props.Project.Name}>
             {props.Project.Name}
         </div>
     </div>
@@ -51,7 +56,7 @@ const OneProjectInList = (props: IOneProjectInListProps) => {
 
 const mapStateToProps = (state: AppState, ownProps: IOneProjectInListOwnProps) => {
     let res = {} as IOneProjectInListStateToProps;
-
+    // res.CurrentProjectId = state.CodeReviewApp.CurrentProjectId;
     return res;
 }
 

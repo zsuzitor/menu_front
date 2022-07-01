@@ -70,7 +70,7 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
 
 
     let userHasChanges = userName !== props.User.Name ||
-        userEmail !== props.User.Email ||
+        ((props.User.Email || userEmail) && userEmail !== props.User.Email) ||
         userIsAdmin !== props.User.IsAdmin ||
         userIsDeactivated !== props.User.Deactivated;
 
@@ -92,7 +92,7 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
             </div>
             <div className='project-user-action-btn' onClick={() => {
                 setUserName(props.User.Name);
-                setUserEmail(props.User.Email);
+                setUserEmail(props.User.Email || '');
                 setUserIsAdmin(props.User.IsAdmin);
                 setUserIsDeactivated(props.User.Deactivated);
             }}>

@@ -259,6 +259,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 <option value={-1}>Любой</option>
                 <option value={0}>Необходимо код ревью</option>
                 <option value={1}>Необходимы правки</option>
+                <option value={3}>В процессе</option>
                 <option value={2}>Готово</option>
             </select>
             <div>

@@ -70,6 +70,10 @@ const ProjectsList = (props: IProjectsListProps) => {
                 <input className='form-control-b' type='text' placeholder='название нового проекта'
                     onChange={(e => setNewProjectName(e.target.value))} value={newProjectName}></input>
                 <button className='btn-b btn-border' onClick={() => {
+                    if(!newProjectName){
+                        alert('Введите название проекта');
+                        return;
+                    }
                     props.AddNewProject(newProjectName);
                     setNewProjectName('');
                 }}>Создать проект</button>

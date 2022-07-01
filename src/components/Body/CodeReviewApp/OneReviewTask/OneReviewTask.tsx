@@ -228,7 +228,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
     let taskHasChanges = taskName !== props.Task.Name ||
         taskStatus !== props.Task.Status ||
-        taskReviewer !== props.Task.ReviewerId ||
+        ((props.Task.ReviewerId || taskReviewer != -1) && taskReviewer !== props.Task.ReviewerId) ||
         taskCreator !== props.Task.CreatorId;
 
 
@@ -266,6 +266,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                 <select className='form-control-b' onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
                     <option value={0}>Необходимо код ревью</option>
                     <option value={1}>Необходимы правки</option>
+                    <option value={3}>В процессе</option>
                     <option value={2}>Готово</option>
                 </select>
             </div>

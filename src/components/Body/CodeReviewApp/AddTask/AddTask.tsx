@@ -62,6 +62,7 @@ const AddTask = (props: IAddTaskProps) => {
     const createNewTask = () => {
         if (!newTaskName) {
             alert('Введите название');
+            return;
         }
 
         // let addTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => {

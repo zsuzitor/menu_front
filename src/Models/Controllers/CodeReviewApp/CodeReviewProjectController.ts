@@ -33,7 +33,9 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
 
     DeleteProjectRedux = (projectId: number) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.DeleteProject(projectId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                this.preloader(false);
                 if (error) {
                     return;
                 }
@@ -78,7 +80,9 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
 
     GetProjectInfoRedux = (projectId: number) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.GetProjectInfo(projectId, (error: MainErrorObjectBack, data: IOneProjectInfoDataBack) => {
+                this.preloader(false);
                 if (error) {
                     return;
                 }
@@ -111,7 +115,9 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
 
     CreateNewProjectRedux = (newProjectName: string) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.CreateNewProject(newProjectName, (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => {
+                this.preloader(false);
                 if (error) {
                     return;
                 }
@@ -144,7 +150,9 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
 
     GetUserProjectsRedux = () => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.GetUserProjects((error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => {
+                this.preloader(false);
                 if (error) {
                     return;
                 }
@@ -184,6 +192,28 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
                 let dataBack = xhr as T;
                 onSuccess(null, dataBack);
 
+            }
+        }
+    }
+
+    preloader(show: boolean) {
+        if (!window.CodeReviewCounter) {
+            window.CodeReviewCounter = 0;
+        }
+
+        var preloader = document.getElementById('code_review_preloader');
+        if (!preloader) {
+            return;
+        }
+
+        if (show) {
+            window.CodeReviewCounter++;
+            preloader.style.display = 'block';
+        }
+        else {
+            window.CodeReviewCounter--;
+            if (!window.CodeReviewCounter) {
+                preloader.style.display = 'none';
             }
         }
     }

@@ -24,7 +24,9 @@ export class CodeReviewUserController implements ICodeReviewUserController {
 
     DeleteProjectUserRedux = (id: number) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.DeleteProjectUser(id, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                this.preloader(false);
                 if (error) {
                     return;
                 }
@@ -56,8 +58,10 @@ export class CodeReviewUserController implements ICodeReviewUserController {
 
     AddUserToProjectRedux = (newUserName: string, mainAppUserEmail: string, projectId: number) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.AddUserToProject(newUserName, mainAppUserEmail, projectId
                 , (error: MainErrorObjectBack, data: IProjectUserDataBack) => {
+                    this.preloader(false);
                     if (error) {
                         return;
                     }
@@ -91,7 +95,9 @@ export class CodeReviewUserController implements ICodeReviewUserController {
 
     ChangeProjectUserRedux = (user: IProjectUserDataBack) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.ChangeProjectUser(user, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                this.preloader(false);
                 if (error) {
                     return;
                 }
@@ -139,5 +145,26 @@ export class CodeReviewUserController implements ICodeReviewUserController {
         }
     }
 
+    preloader(show: boolean) {
+        if (!window.CodeReviewCounter) {
+            window.CodeReviewCounter = 0;
+        }
+
+        var preloader = document.getElementById('code_review_preloader');
+        if (!preloader) {
+            return;
+        }
+
+        if (show) {
+            window.CodeReviewCounter++;
+            preloader.style.display = 'block';
+        }
+        else {
+            window.CodeReviewCounter--;
+            if (!window.CodeReviewCounter) {
+                preloader.style.display = 'none';
+            }
+        }
+    }
 }
 

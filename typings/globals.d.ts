@@ -26,4 +26,6 @@ declare var G_CodeReviewTaskController: import("../src/Models/Controllers/CodeRe
 declare var G_CodeReviewUserController: import("../src/Models/Controllers/CodeReviewApp/CodeReviewUserController").ICodeReviewUserController;
 declare var G_CodeReviewCommentController: import("../src/Models/Controllers/CodeReviewApp/CodeReviewCommentController").ICodeReviewCommentController;
 
+declare var CodeReviewCounter: number;
+
 

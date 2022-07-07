@@ -26,8 +26,10 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
 
     AddTaskToProjectRedux = (taskName: string, taskCreatorId: number, taskReviwerId: number, projectId: number) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.AddTaskToProject(taskName, taskCreatorId, taskReviwerId, projectId,
                 (error: MainErrorObjectBack, data: IProjectTaskDataBack) => {
+                    this.preloader(false);
                     if (error) {
                         return;
                     }
@@ -74,7 +76,9 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
 
     UpdateTaskRedux = (task: IProjectTaskDataBack) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.UpdateTask(task, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                this.preloader(false);
                 if (error) {
                     return;
                 }
@@ -109,7 +113,9 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
 
     LoadTasksRedux = (taskFilter: ITaskFilter) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.LoadTasks(taskFilter, (error: MainErrorObjectBack, data: ILoadReviewTasksResultDataBack) => {
+                this.preloader(false);
                 if (error) {
                     return;
                 }
@@ -145,7 +151,9 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
 
     DeleteTaskRedux = (id: number) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.DeleteTask(id, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                this.preloader(false);
                 if (error) {
                     return;
                 }
@@ -184,6 +192,28 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
                 let dataBack = xhr as T;
                 onSuccess(null, dataBack);
 
+            }
+        }
+    }
+
+    preloader(show: boolean) {
+        if (!window.CodeReviewCounter) {
+            window.CodeReviewCounter = 0;
+        }
+
+        var preloader = document.getElementById('code_review_preloader');
+        if (!preloader) {
+            return;
+        }
+
+        if (show) {
+            window.CodeReviewCounter++;
+            preloader.style.display = 'block';
+        }
+        else {
+            window.CodeReviewCounter--;
+            if (!window.CodeReviewCounter) {
+                preloader.style.display = 'none';
             }
         }
     }

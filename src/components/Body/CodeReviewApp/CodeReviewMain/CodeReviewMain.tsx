@@ -156,6 +156,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
 
 
     return <div className='code-review-main-container'>
+        <div className='preloader' id='code_review_preloader'></div>
         <div className='code-review-projects-menu-main'>
 
             <ProjectsList Projects={props.ProjectsList}

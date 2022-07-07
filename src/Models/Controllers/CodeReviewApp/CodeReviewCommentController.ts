@@ -29,13 +29,16 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
 
     UpdateCommentRedux = (comment: CommentUpdate) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.UpdateComment(comment.Id, comment.Text, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                this.preloader(false);
                 if (error) {
                     return;
                 }
 
                 if (data?.result) {
                     dispatch(UpdateCommentActionCreator(comment));
+
                 }
             });
         };
@@ -61,7 +64,9 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
 
     DeleteCommentRedux = (dataForDel: CommentDelete) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.DeleteComment(dataForDel.Id, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                this.preloader(false);
                 if (error) {
                     return;
                 }
@@ -91,7 +96,9 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
 
     AddCommentRedux = (taskId: number, text: string) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.AddComment(taskId, text, (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack) => {
+                this.preloader(false);
                 if (error) {
                     return;
                 }
@@ -123,7 +130,9 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
 
     LoadCommentsRedux = (id: number) => {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.LoadComments(id, (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack[]) => {
+                this.preloader(false);
                 if (error) {
                     return;
                 }
@@ -165,6 +174,28 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
                 let dataBack = xhr as T;
                 onSuccess(null, dataBack);
 
+            }
+        }
+    }
+
+    preloader(show: boolean) {
+        if (!window.CodeReviewCounter) {
+            window.CodeReviewCounter = 0;
+        }
+
+        var preloader = document.getElementById('code_review_preloader');
+        if (!preloader) {
+            return;
+        }
+
+        if (show) {
+            window.CodeReviewCounter++;
+            preloader.style.display = 'block';
+        }
+        else {
+            window.CodeReviewCounter--;
+            if (!window.CodeReviewCounter) {
+                preloader.style.display = 'none';
             }
         }
     }

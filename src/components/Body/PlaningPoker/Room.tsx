@@ -244,9 +244,8 @@ const Room = (props: RoomProps) => {
         props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.UserNameChange
             , props.RoomInfo.Name, userNameLocalState).then(dt => {
                 if (!dt) {
-                    let alert = new AlertData();
-                    alert.Text = "изменить имя не удалось";
-                    alert.Type = AlertTypeEnum.Error;
+                    let alertFactory = new AlertData();
+                    let alert = alertFactory.GetDefaultError("изменить имя не удалось");
                     window.G_AddAbsoluteAlertToState(alert);
                     return;
                 }
@@ -377,10 +376,8 @@ const Room = (props: RoomProps) => {
             });
 
             if (allAreVotedChanged) {
-                let alert = new AlertData();
-                alert.Text = "Все участники проголосовали";
-                alert.Type = AlertTypeEnum.Success;
-                alert.Timeout = 5000;
+                let alertFactory = new AlertData();
+                let alert = alertFactory.GetDefaultNotify("Все участники проголосовали");
                 window.G_AddAbsoluteAlertToState(alert);
             }
         });
@@ -687,10 +684,9 @@ const Room = (props: RoomProps) => {
         }
 
         if (!CurrentUserCanVote(localState.UsersList, props.UserInfo.UserId)) {
-            let alert = new AlertData();
-            alert.Text = "Вы не можете голосовать";
-            alert.Type = AlertTypeEnum.Error;
-            alert.Timeout = 5000;
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultError("Вы не можете голосовать");
+            
             window.G_AddAbsoluteAlertToState(alert);
             return;
         }

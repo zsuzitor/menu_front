@@ -82,7 +82,7 @@ export class AjaxHelper implements IAjaxHelper {
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/authenticate/refresh-access-token',
-
+            NotGlobalError: true,
         });
     }
 

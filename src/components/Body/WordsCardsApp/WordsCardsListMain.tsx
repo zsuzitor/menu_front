@@ -129,9 +129,8 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
     StartEditCard() {
         if (!this.state.CurrentCard) {
-            let alert = new AlertData();
-            alert.Text = 'Не выбрано слово';
-            alert.Type = AlertTypeEnum.Error;
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultError('Не выбрано слово');
             G_AddAbsoluteAlertToState(alert);
             return;
         }
@@ -223,9 +222,6 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
     CancelEditCard() {
         if (!this.state.EditCurrentCard) {
-            // let alert = new AlertData();
-            // alert.Text = 'Не выбрано слово';
-            // G_AddAbsoluteAlertToState(alert);
             return;
         }
 
@@ -237,9 +233,8 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
     SaveCard() {
         if (!this.state.EditCurrentCard) {
-            let alert = new AlertData();
-            alert.Text = 'Активируйте режим редактирования';
-            alert.Type = AlertTypeEnum.Error;
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultError('Активируйте режим редактирования');
             G_AddAbsoluteAlertToState(alert);
             return;
         }
@@ -408,7 +403,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
         G_WordsCardsController.Delete(cardId, success);
 
-       
+
     }
 
 

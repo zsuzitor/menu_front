@@ -6,6 +6,7 @@ import { AlertData } from "../../../Models/Models/AlertData";
 export interface ILoginState {
     Login: string;
     Password: string;
+    ShowForgetPassword: boolean;
 }
 
 
@@ -21,6 +22,7 @@ export class Login extends React.Component<{}, ILoginState> {
         let newState: ILoginState = {
             Login: null,
             Password: null,
+            ShowForgetPassword: false,
         };
 
         this.state = newState;
@@ -53,7 +55,7 @@ export class Login extends React.Component<{}, ILoginState> {
             Email: this.state.Login,
             Password: this.state.Password,
         };
-        
+
         let onSuccess = (error: MainErrorObjectBack) => {
             if (!error) {
                 document.location.href = "/menu";
@@ -61,52 +63,47 @@ export class Login extends React.Component<{}, ILoginState> {
         }
 
         window.G_AuthenticateController.Login(data, onSuccess);
-        //TODO отправляем запрос и чистим state
-        // let data = {
-        //     'email': this.state.Login,
-        //     'password': this.state.Password,
-        // };
 
-        // let ajx: AjaxHelper.IAjaxHelper = new AjaxHelper.AjaxHelper();
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "POST",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             // //TODO ошибка
-        //             // if (G_AddAbsoluteAlertToState) {
-        //             //     let alertLogic = new AlertData();
-        //             //     resp.errors.forEach(error => {
-        //             //         let errArr = alertLogic.GetByErrorBack(error);
-        //             //         errArr.forEach(alertForShow => {
-        //             //             G_AddAbsoluteAlertToState(alertForShow);
-        //             //         });
-        //             //     });
-        //             // }
-        //         }
-        //         else {
-        //             //TODO записываем полученные токены
-        //             document.location.href = "/menu";
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/authenticate/login',
+    }
 
-        // });
+    setForgetPassword() {
+        let newState = { ...this.state };//Object.assign({}, this.state);
+        newState.ShowForgetPassword = !newState.ShowForgetPassword;
+        this.setState(newState);
+    }
 
+    sendMessageForgotPassword() {
+
+        let onSuccess = (error: MainErrorObjectBack) => {
+            if (!error) {
+                alert('Сообщение отправлено');
+            }
+        }
+
+        window.G_AuthenticateController.SendMessageForgotPassword(this.state.Login, onSuccess);
     }
 
     render() {
         return <div className='persent-100-width'>
             <div className='persent-100-width'>
                 <div className='persent-100-width padding-10-top'>
-                    <input className='form-control persent-100-width' type='text' placeholder='email' onChange={this.LoginOnChange}></input>
+                    <input className='form-control persent-100-width' type='text'
+                        placeholder='email' onChange={this.LoginOnChange}></input>
                 </div>
-                <div className='persent-100-width padding-10-top'>
-                    <input className='form-control persent-100-width' type='password' placeholder='password' onChange={this.PasswordOnChange}></input>
-                </div>
-                <button className='btn persent-100-width' onClick={this.TryLogin}>Войти</button>
+                {this.state.ShowForgetPassword ? <>
+                    <button className='btn persent-100-width' onClick={this.setForgetPassword}>Войти</button>
+                    <button className='btn persent-100-width'
+                        onClick={this.sendMessageForgotPassword}>Отправить письмо на почту</button>
+                </> : <>
+                    <div className='persent-100-width padding-10-top'>
+                        <input className='form-control persent-100-width'
+                            type='password' placeholder='password' onChange={this.PasswordOnChange}></input>
+                    </div>
+                    <button className='btn persent-100-width' onClick={this.TryLogin}>Войти</button>
+                    <button className='btn persent-100-width' onClick={this.setForgetPassword}>Восстановить пароль</button>
+                </>}
+
+
             </div>
 
 

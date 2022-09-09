@@ -9,7 +9,7 @@ export interface IAuthenticateController {
     Register: (model: RegisterModel, onSuccess: OnlyError) => void;
     Logout: () => void;
     RefreshAccessToken: (notRedirectWhenNotAuth: boolean, callBack?: () => void) => void;
-
+    SendMessageForgotPassword: (login: string, onSuccess: OnlyError) => void;
 }
 
 export class LoginModel {
@@ -84,11 +84,57 @@ export class AuthenticateController implements IAuthenticateController {
         });
     }
 
+    SendMessageForgotPassword(login: string, onSuccess: OnlyError): void {
+
+        let data = {
+            'email': login,
+        };
+
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "POST",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    onSuccess(resp);
+                }
+                else {
+                    onSuccess(null);
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/authenticate/SendMessageForgotPassword',
+
+        });
+
+    }
+
+
 
     Logout() {
         alert('not inplemented');
+        return;
+        let data = {
+        };
+
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                // if (resp.errors) {
+                //     onSuccess(resp);
+                // }
+                // else {
+                //     onSuccess(null);
+                // }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/authenticate/logout',
+
+        });
     }
-    
+
     RefreshAccessToken(notRedirectWhenNotAuth: boolean, callBack?: () => void) {
         G_AjaxHelper.TryRefreshToken(notRedirectWhenNotAuth, callBack);
     }

@@ -45,9 +45,8 @@ let Index = (props: IndexProps) => {
 
         // console.log("Index");
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.RoomNotCreated, function () {
-            let alert = new AlertData();
-            alert.Text = "Комната не создана";
-            alert.Type = 1;
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultError("Комната не создана");
             window.G_AddAbsoluteAlertToState(alert);
             return;
         });

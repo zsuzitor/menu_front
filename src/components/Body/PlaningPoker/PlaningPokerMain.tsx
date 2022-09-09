@@ -114,17 +114,15 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
         hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.PlaningNotifyFromServer, function (data) {
             let dataT = data as MainErrorObjectBack;
-            let alert = new AlertData();
-            if (!dataT) {
+            if (!dataT?.errors) {
                 return;
             }
+            let alertFactory = new AlertData();
 
             dataT.errors.forEach(errLvl1 => {
                 errLvl1.errors.forEach(errTxt => {
-
-                    alert.Text = errTxt;
-                    alert.Type = AlertTypeEnum.Error;
-                    alert.Timeout = 5000;
+                    let alert = alertFactory.GetDefaultError(errTxt);
+                    window.G_AddAbsoluteAlertToState(alert);
                 });
             });
 
@@ -132,7 +130,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
             // alert.Type = data.status;
 
 
-            window.G_AddAbsoluteAlertToState(alert);
+
         });
 
         hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.EnteredInRoom, function (roomUserId, loginnedInMainApp: boolean) {
@@ -165,9 +163,8 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
 
         hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.ConnectedToRoomError, function () {
-            let alert = new AlertData();
-            alert.Text = "подключение не удалось";
-            alert.Type = 1;
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultError("подключение не удалось");
             window.G_AddAbsoluteAlertToState(alert);
             if (!location.href.includes("/planing-poker") || location.href.includes("/planing-poker/room")) {// && !location.href.endsWith("/planing-poker/")) {
                 let roomName = __planing_poker_main_state_ref__.RoomInfo.Name || "";

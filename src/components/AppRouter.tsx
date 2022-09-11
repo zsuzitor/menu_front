@@ -12,6 +12,7 @@ import { WordsCardsAppMain } from "./Body/WordsCardsApp/WordsCardsAppMain";
 import PlaningPokerMain from "./Body/PlaningPoker/PlaningPokerMain";
 import { IAuthState } from "../Models/Models/AuthState";
 import CodeReviewMain from "./Body/CodeReviewApp/CodeReviewMain/CodeReviewMain";
+import Recovery from "./Body/Auth/Recovery/Recovery";
 
 // 
 
@@ -35,6 +36,8 @@ export class AppRouter extends React.Component<AppRouterProps, {}> {
 
             <Route path="/menu/auth/login/*" element={<MainAuth LoginPage={true} />} />
             <Route path="/menu/auth/register/*" element={<MainAuth LoginPage={false} />} />
+            <Route path="/menu/auth/password-recovery/*" element={<Recovery />} />
+
             {/* <Route component={NotFound} /> */}
         </Routes>
 

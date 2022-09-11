@@ -10,6 +10,8 @@ export interface IAuthenticateController {
     Logout: () => void;
     RefreshAccessToken: (notRedirectWhenNotAuth: boolean, callBack?: () => void) => void;
     SendMessageForgotPassword: (login: string, onSuccess: OnlyError) => void;
+    CheckRecoverPasswordCode: (code: string, onSuccess: OnlyError) => void;
+    RecoverPassword: (code: string, password: string, onSuccess: OnlyError) => void;
 }
 
 export class LoginModel {
@@ -109,6 +111,52 @@ export class AuthenticateController implements IAuthenticateController {
 
     }
 
+    CheckRecoverPasswordCode(code: string, onSuccess: OnlyError): void {
+
+        let data = {
+            'code': code,
+        };
+
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "POST",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    onSuccess(resp);
+                }
+                else {
+                    onSuccess(null);
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/authenticate/CheckRecoverPasswordCode',
+        });
+    }
+
+    RecoverPassword(code: string, password: string, onSuccess: OnlyError): void {
+
+        let data = {
+            'code': code,
+            'password': password,
+        };
+
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "POST",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    onSuccess(resp);
+                }
+                else {
+                    onSuccess(null);
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/authenticate/RecoverPassword',
+        });
+    }
 
 
     Logout() {

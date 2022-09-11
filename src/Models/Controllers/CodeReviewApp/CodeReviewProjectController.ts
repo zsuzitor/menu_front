@@ -180,7 +180,7 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
     };
 
 
-    //todo вынести в какой то общей кусок
+    //todo вынести в какой то общий кусок
     mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
         return (xhr: any, status: any, jqXHR: any) => {
             let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;

@@ -20,8 +20,8 @@ export class Login extends React.Component<{}, ILoginState> {
         super(props);
 
         let newState: ILoginState = {
-            Login: null,
-            Password: null,
+            Login: '',
+            Password: '',
             ShowForgetPassword: false,
         };
 
@@ -30,7 +30,8 @@ export class Login extends React.Component<{}, ILoginState> {
         this.LoginOnChange = this.LoginOnChange.bind(this);
         this.PasswordOnChange = this.PasswordOnChange.bind(this);
         this.TryLogin = this.TryLogin.bind(this);
-
+        this.SetForgetPassword = this.SetForgetPassword.bind(this);
+        this.SendMessageForgotPassword = this.SendMessageForgotPassword.bind(this);
     }
 
     LoginOnChange(e: any) {
@@ -66,17 +67,18 @@ export class Login extends React.Component<{}, ILoginState> {
 
     }
 
-    setForgetPassword() {
+    SetForgetPassword() {
         let newState = { ...this.state };//Object.assign({}, this.state);
         newState.ShowForgetPassword = !newState.ShowForgetPassword;
         this.setState(newState);
     }
 
-    sendMessageForgotPassword() {
+    SendMessageForgotPassword() {
 
         let onSuccess = (error: MainErrorObjectBack) => {
             if (!error) {
                 alert('Сообщение отправлено');
+                document.location.href = "/menu/auth/password-recovery/";
             }
         }
 
@@ -85,28 +87,26 @@ export class Login extends React.Component<{}, ILoginState> {
 
     render() {
         return <div className='persent-100-width'>
-            <div className='persent-100-width'>
                 <div className='persent-100-width padding-10-top'>
                     <input className='form-control persent-100-width' type='text'
-                        placeholder='email' onChange={this.LoginOnChange}></input>
+                        placeholder='email' onChange={this.LoginOnChange}
+                        value={this.state.Login}></input>
                 </div>
                 {this.state.ShowForgetPassword ? <>
-                    <button className='btn persent-100-width' onClick={this.setForgetPassword}>Войти</button>
+                    <button className='btn persent-100-width' onClick={this.SetForgetPassword}>Войти</button>
                     <button className='btn persent-100-width'
-                        onClick={this.sendMessageForgotPassword}>Отправить письмо на почту</button>
+                        onClick={this.SendMessageForgotPassword}>Отправить письмо на почту</button>
                 </> : <>
                     <div className='persent-100-width padding-10-top'>
                         <input className='form-control persent-100-width'
-                            type='password' placeholder='password' onChange={this.PasswordOnChange}></input>
+                            type='password' placeholder='password' onChange={this.PasswordOnChange}
+                            value={this.state.Password}></input>
                     </div>
                     <button className='btn persent-100-width' onClick={this.TryLogin}>Войти</button>
-                    <button className='btn persent-100-width' onClick={this.setForgetPassword}>Восстановить пароль</button>
+                    <button className='btn persent-100-width' onClick={this.SetForgetPassword}>Восстановить пароль</button>
                 </>}
 
 
             </div>
-
-
-        </div>
     }
 }

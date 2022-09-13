@@ -6,7 +6,16 @@
 }
 
 .app-one-item-inner {
-    border: 1px solid rgb(0, 0, 0);
-    max-height: 300px;
+    /* border: 1px solid rgb(0, 0, 0); */
+    max-height: 330px;
     max-width: 300px;
+    border-radius: 15px;
+    overflow: hidden;
+    border-bottom: 2px solid black;
+    transition: .1s;
+}
+
+.app-one-item-inner:hover {
+    border-bottom: 5px solid black;
+    transition: .1s;
 }

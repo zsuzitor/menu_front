@@ -51,7 +51,7 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
                 {this.UserImageRender(this.props.AuthInfo.User.Image)}
             </span>
         </div>
-            <div className="dropdown-menu" style={{ backgroundColor: 'greenyellow' }}>
+            <div className="dropdown-menu" style={{ backgroundColor: 'RGBA(2,0,39,0.314)' }}>
                 <Link className="dropdown-item" to="/menu/auth/login/">Войти</Link>
                 <Link className="dropdown-item" to="/menu/auth/register/">Зарегистрироваться</Link>
                 <a className="dropdown-item" href="#">Action</a>

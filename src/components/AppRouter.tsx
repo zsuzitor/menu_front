@@ -27,19 +27,21 @@ export class AppRouter extends React.Component<AppRouterProps, {}> {
     }
 
     render() {
-        return <Routes>
-            <Route path="/menu" element={<MenuMain />} />
-            <Route path="/menu-app/*" element={<MenuAppMain />} />
-            <Route path="/words-cards-app/*" element={<WordsCardsAppMain />} />
-            <Route path="/planing-poker/*" element={<PlaningPokerMain AuthInfo={this.props.AuthInfo} />} />
-            <Route path="/code-review/*" element={<CodeReviewMain AuthInfo={this.props.AuthInfo} />} />
+        return <div className="all-apps-wrapper">
+            <Routes>
+                <Route path="/menu" element={<MenuMain />} />
+                <Route path="/menu-app/*" element={<MenuAppMain />} />
+                <Route path="/words-cards-app/*" element={<WordsCardsAppMain />} />
+                <Route path="/planing-poker/*" element={<PlaningPokerMain AuthInfo={this.props.AuthInfo} />} />
+                <Route path="/code-review/*" element={<CodeReviewMain AuthInfo={this.props.AuthInfo} />} />
 
-            <Route path="/menu/auth/login/*" element={<MainAuth LoginPage={true} />} />
-            <Route path="/menu/auth/register/*" element={<MainAuth LoginPage={false} />} />
-            <Route path="/menu/auth/password-recovery/*" element={<Recovery />} />
+                <Route path="/menu/auth/login/*" element={<MainAuth LoginPage={true} />} />
+                <Route path="/menu/auth/register/*" element={<MainAuth LoginPage={false} />} />
+                <Route path="/menu/auth/password-recovery/*" element={<Recovery />} />
 
-            {/* <Route component={NotFound} /> */}
-        </Routes>
+                {/* <Route component={NotFound} /> */}
+            </Routes>
+        </div>
 
     }
 }

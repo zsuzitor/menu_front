@@ -81,8 +81,8 @@ let Index = (props: IndexProps) => {
     </div>
     if (props.Username) {
         actionsButton = <div>
-            <button className="btn btn-primary" onClick={createRoom}>создать комнату</button>
-            <button className="btn btn-primary" onClick={enterInRoom}>подключиться к существующей комнате</button>
+            <button className="btn" onClick={createRoom}>Создать</button>
+            <button className="btn" onClick={enterInRoom}>Подключиться</button>
         </div>
     }
 

@@ -17,6 +17,22 @@ img.main-header-logo-img {
     width: 70px;
 }
 
+.main-header-logo-a {
+    text-decoration: none;
+}
+
+.main-header-logo-a:hover {
+    text-decoration: none;
+}
+
+.main-header-logo-text {
+    width: 50px;
+    height: 50px;
+    font-size: 40px;
+    text-align: center;
+    color: red;
+}
+
 div.main-header-logo {
     height: 100%;
 }
@@ -64,6 +80,6 @@ div.header-user-block-inner {
 }
 
 div.header-user-block-inner:hover {
-    background-color: greenyellow;
+    /* background-color: greenyellow; */
     /* transition: 1s; */
 }

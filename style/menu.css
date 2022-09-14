@@ -18,4 +18,15 @@
 .app-one-item-inner:hover {
     border-bottom: 5px solid black;
     transition: .1s;
+    box-shadow: 0 0 10px rgb(0 0 0 / 50%);
+}
+
+.app-one-item-inner a {
+    color: black;
+    font-weight: bold;
+}
+
+.all-apps-wrapper {
+    background: rgb(2, 0, 39);
+    background: linear-gradient(360deg, rgba(2, 0, 39, 0.7150210425967262) 0%, rgba(255, 255, 255, 1) 100%);
 }

@@ -1,21 +1,25 @@
 // import * as React from "react";
 import React, { useState, useEffect } from 'react';
-import { RoomInfo, UserInRoom, RoomStatus, PlaningPokerUserInfo, VoteInfo, Story, StoriesHelper } from '../../../Models/Models/PlaningPoker/RoomInfo';
+import { RoomInfo, UserInRoom, RoomStatus, PlaningPokerUserInfo, VoteInfo, Story, StoriesHelper } from '../../../../Models/Models/PlaningPoker/RoomInfo';
 
 
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
-import { MainErrorObjectBack } from '../../../Models/BackModel/ErrorBack';
-import { IUserInRoomReturn } from '../../../Models/BackModel/PlaningPoker/UserInRoomReturn';
-import UserInList from './UserInList';
-import OneVoteCard from './OneVoteCard';
-import { IEndVoteInfoReturn } from '../../../Models/BackModel/PlaningPoker/EndVoteInfoReturn';
+import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
+import { IUserInRoomReturn } from '../../../../Models/BackModel/PlaningPoker/UserInRoomReturn';
+import UserInList from '../UserInList/UserInList';
+import OneVoteCard from '../OneVoteCard';
+import { IEndVoteInfoReturn } from '../../../../Models/BackModel/PlaningPoker/EndVoteInfoReturn';
 // import { IOneRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/OneRoomReturn';
-import { AlertData, AlertTypeEnum } from '../../../Models/Models/AlertData';
-import { IStoryReturn } from '../../../Models/BackModel/PlaningPoker/StoryReturn';
-import StoriesSection from './StoriesSection';
-import { IRoomInfoReturn } from '../../../Models/BackModel/PlaningPoker/RoomInfoReturn';
+import { AlertData, AlertTypeEnum } from '../../../../Models/Models/AlertData';
+import { IStoryReturn } from '../../../../Models/BackModel/PlaningPoker/StoryReturn';
+import StoriesSection from '../StoriesSection';
+import { IRoomInfoReturn } from '../../../../Models/BackModel/PlaningPoker/RoomInfoReturn';
 import cloneDeep from 'lodash/cloneDeep';
-import RoomTimer from './RoomTimer';
+import RoomTimer from '../RoomTimer/RoomTimer';
+
+
+
+require('./Room.css');
 
 
 class RoomProps {
@@ -686,7 +690,7 @@ const Room = (props: RoomProps) => {
         if (!CurrentUserCanVote(localState.UsersList, props.UserInfo.UserId)) {
             let alertFactory = new AlertData();
             let alert = alertFactory.GetDefaultError("Вы не можете голосовать");
-            
+
             window.G_AddAbsoluteAlertToState(alert);
             return;
         }
@@ -766,6 +770,10 @@ const Room = (props: RoomProps) => {
     }
 
     const deleteRoom = () => {
+        if(!confirm('Удалить комнату?')){
+            return;
+        }
+        
         props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.DeleteRoom, props.RoomInfo.Name);
     }
 
@@ -817,16 +825,31 @@ const Room = (props: RoomProps) => {
 
         let saveBut = <></>
         if (props.UserInfo.LoginnedInMainApp) {
-            saveBut = <button className="btn btn-danger" onClick={() => saveRoom()}>Сохранить комнату</button>
-
+            // saveBut = <button className="btn btn-danger" onClick={() => saveRoom()}>Сохранить комнату</button>
+            saveBut = <div className='room-action-btn' onClick={() => saveRoom()}
+                title='Сохранить комнату'>
+                <img className='persent-100-width-height' src="/images/delete-icon.png" />
+            </div>
         }
 
         if (currentUserIsAdmin) {
-            return <div>
-                <button className="btn btn-primary" onClick={() => tryStartVote()}>Начать голосование</button>
-                <button className="btn btn-primary" onClick={() => tryEndVote()}>Закончить голосование</button>
+            return <div className='planit-room-buttons'>
+                {/* <button className="btn btn-primary" onClick={() => tryStartVote()}>Начать голосование</button> */}
+                <div className='room-action-btn' onClick={() => tryStartVote()}
+                    title='Начать голосование'>
+                    <img className='persent-100-width-height' src="/images/vote2.png" />
+                </div>
+                {/* <button className="btn btn-primary" onClick={() => tryEndVote()}>Закончить голосование</button> */}
+                <div className='room-action-btn' onClick={() => tryEndVote()}
+                    title='Закончить голосование'>
+                    <img className='persent-100-width-height' src="/images/vote3.png" />
+                </div>
                 {saveBut}
-                <button className="btn btn-danger" onClick={() => deleteRoom()}>Удалить комнату</button>
+                {/* <button className="btn btn-danger" onClick={() => deleteRoom()}>Удалить комнату</button> */}
+                <div className='room-action-btn room-action-btn-del' onClick={() => deleteRoom()}
+                    title='Удалить комнату'>
+                    <img className='persent-100-width-height' src="/images/delete-icon.png" />
+                </div>
             </div>
         }
 
@@ -855,41 +878,8 @@ const Room = (props: RoomProps) => {
         }
 
 
-
-        const updateAllUsers = () => {
-            let loadedUsers = (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => {
-                if (error) {
-                    //TODO выбить из комнаты?
-                    alert("todo что то пошло не так лучше обновить страницу");
-                    return;
-                }
-
-                if (data) {
-                    let newUsersData = data.map(x => {
-                        let us = new UserInRoom();
-                        us.FillByBackModel(x);
-                        return us;
-                    });
-
-
-                    setLocalState(prevState => {
-                        // let newState = { ...prevState };
-                        let newState = cloneDeep(prevState);
-                        newState.UsersList.splice(0, newState.UsersList.length);
-                        newState.UsersList.push(...newUsersData);
-
-                        return newState;
-                    });
-                }
-
-            };
-            // console.log(JSON.stringify(props));
-            window.G_PlaningPokerController.GetUsersIsRoom(props.RoomInfo.Name, props.UserInfo.UserConnectionId, loadedUsers);
-        };
-
-
         return <div>
-            <p>доп настройки</p>
+            <p>Пользователь</p>
             <input type="text" className="persent-100-width form-control"
                 onChange={(e) => {
                     // setUserNameLocalState(e.target.value)
@@ -898,16 +888,48 @@ const Room = (props: RoomProps) => {
                     });
                 }}
                 value={userNameLocalState}></input>
-            <button className="btn btn-primary"
-                onClick={() => props.ChangeUserName(userNameLocalState)}>Изменить имя</button>
-            <button className="btn btn-primary"
-                onClick={() => updateAllUsers()}>Обновить список пользователей</button>
+            {/* <button className="btn btn-primary"
+                onClick={() => props.ChangeUserName(userNameLocalState)}>Изменить имя</button> */}
+            <div className='planing-name-change-but' onClick={() => props.ChangeUserName(userNameLocalState)}>
+                <img className='persent-100-width-height' src="/images/pencil-edit.png" />
+            </div>
+            {/* <button className="btn btn-primary"
+                onClick={() => updateAllUsers()}>Обновить список пользователей</button> */}
             {hideVotesSetting}
         </div>
     };
 
 
+    const updateAllUsers = () => {
+        let loadedUsers = (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => {
+            if (error) {
+                //TODO выбить из комнаты?
+                alert("todo что то пошло не так лучше обновить страницу");
+                return;
+            }
 
+            if (data) {
+                let newUsersData = data.map(x => {
+                    let us = new UserInRoom();
+                    us.FillByBackModel(x);
+                    return us;
+                });
+
+
+                setLocalState(prevState => {
+                    // let newState = { ...prevState };
+                    let newState = cloneDeep(prevState);
+                    newState.UsersList.splice(0, newState.UsersList.length);
+                    newState.UsersList.push(...newUsersData);
+
+                    return newState;
+                });
+            }
+
+        };
+        // console.log(JSON.stringify(props));
+        window.G_PlaningPokerController.GetUsersIsRoom(props.RoomInfo.Name, props.UserInfo.UserConnectionId, loadedUsers);
+    };
 
     const renderNotAuthMessage = () => {
         if (props.UserInfo.LoginnedInMainApp) {
@@ -921,15 +943,18 @@ const Room = (props: RoomProps) => {
     }
 
     return <div className="container">
-        <div className="padding-10-top"></div>
-        <h1>Room: {props.RoomInfo.Name}</h1>
+        <div className="padding-10-top planing-room-header">
+            <h1>Комната: {props.RoomInfo.Name}</h1>
+            {renderNotAuthMessage()}
+        </div>
+
         <div>
             {/* {renderRoomAliveTimer()} */}
             <RoomTimer
                 DieDate={localState.DieRoomTime}
                 AliveRoom={aliveRoom} />
         </div>
-        {renderNotAuthMessage()}
+
 
         <div className="row">
             {/* <div className="persent-100-width"> */}
@@ -962,7 +987,12 @@ const Room = (props: RoomProps) => {
 
                 </div>
                 <div className="padding-10-top"></div>
-                <div>люди</div>
+                <div className='people-room-header'>
+                    <span>Участники</span>
+                    <div className='planing-people-refresh' onClick={() => updateAllUsers()}>
+                        <img className='persent-100-width-height' src="/images/refresh.png" />
+                    </div>
+                </div>
                 {localState.UsersList.map(x =>
                     <UserInList key={x.Id}
                         User={x}

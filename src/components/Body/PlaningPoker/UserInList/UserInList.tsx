@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { RoomStatus, UserInRoom, UserRoles } from '../../../Models/Models/PlaningPoker/RoomInfo';
+import { RoomStatus, UserInRoom, UserRoles } from '../../../../Models/Models/PlaningPoker/RoomInfo';
+
+
+require('./UserInList.css');
 
 
 class UserInListProp {
@@ -48,9 +51,12 @@ const UserInList = (props: UserInListProp) => {
     let delButton = <div></div>
     let statusChange = <div></div>
     if (props.RenderForAdmin) {
-        delButton = <div>
-            <button className="btn btn-danger"
-                onClick={() => props.TryToRemoveUserFromRoom(props.User.Id)}>Выгнать</button>
+        delButton = <div className='user-list-del-but'
+            onClick={() => props.TryToRemoveUserFromRoom(props.User.Id)}>
+            {/* <button className="btn btn-danger"
+                onClick={() => props.TryToRemoveUserFromRoom(props.User.Id)}>Выгнать</button> */}
+            <img className='persent-100-width-height' src="/images/delete-icon.png" />
+
         </div>
 
         statusChange = <div>
@@ -66,10 +72,16 @@ const UserInList = (props: UserInListProp) => {
                 <option value={UserRoles.Admin}>{UserRoles.Admin}</option>
                 <option value={UserRoles.Observer}>{UserRoles.Observer}</option>
             </select>
-            <button className="btn btn-success"
+            <div className='user-list-role-but'>
+                <div className='user-role-but user-role-but-add'
+                    onClick={() => addNewRoleToUser()}>+</div>
+                <div className='user-role-but user-role-but-del'
+                    onClick={() => removeRoleUser()}>-</div>
+            </div>
+            {/* <button className="btn btn-success"
                 onClick={() => addNewRoleToUser()}>Добавить роль</button>
             <button className="btn btn-danger"
-                onClick={() => removeRoleUser()}>Удалить роль</button>
+                onClick={() => removeRoleUser()}>Удалить роль</button> */}
         </div>
     }
 

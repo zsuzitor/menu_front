@@ -27,7 +27,7 @@ class IndexProps {
     RoomInfo: RoomInfo;
     RoomNameChanged: (name: string) => void;
     RoomPasswordChanged: (name: string) => void;
-    
+
 }
 
 
@@ -66,10 +66,20 @@ let Index = (props: IndexProps) => {
         //этот метод вроде как  может подождать результат выполнения и как то получить ответ
         // props.MyHubConnection.invoke("CreateRoom", localState.RoomName, localState.RoomPassword, props.Username);
         //а вот этот не ждет
+        if (!props.RoomInfo.Name) {
+            alert('Введите название комнаты');
+            return;
+        }
+
         props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.CreateRoom, props.RoomInfo.Name, props.RoomInfo.Password, props.Username);
     };
 
     let enterInRoom = () => {
+        if (!props.RoomInfo.Name) {
+            alert('Введите название комнаты');
+            return;
+        }
+
         props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.EnterInRoom, props.RoomInfo.Name, props.RoomInfo.Password, props.Username);
     }
 
@@ -81,8 +91,8 @@ let Index = (props: IndexProps) => {
     </div>
     if (props.Username) {
         actionsButton = <div>
-            <button className="btn" onClick={createRoom}>Создать</button>
-            <button className="btn" onClick={enterInRoom}>Подключиться</button>
+            <button className="btn btn-b-light" onClick={createRoom}>Создать</button>
+            <button className="btn btn-b-light" onClick={enterInRoom}>Подключиться</button>
         </div>
     }
 
@@ -107,7 +117,7 @@ let Index = (props: IndexProps) => {
                         onChange={(e) => { props.RoomPasswordChanged(e.target.value) }}></input>
                 </div>
                 <p>если создать комнату без авторизации в основном приложении,
-                     создается одноразовая комната(будет удалена через некоторое время)</p>
+                    создается одноразовая комната(будет удалена через некоторое время)</p>
             </div>
             {actionsButton}
             <div className="display_none">

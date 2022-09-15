@@ -1,17 +1,17 @@
 .planit-room-left-part {
     /* border: 2px solid black; */
-    background: -webkit-gradient(linear, left top, right top, from(transparent), to(#745959));
+    /* background: -webkit-gradient(linear, left top, right top, from(transparent), to(#745959));
     background: -o-linear-gradient(left, transparent, #745959);
-    background: linear-gradient(to right, transparent, #745959);
+    background: linear-gradient(to right, transparent, #745959); */
     /* #2a4061); */
     min-height: 500px;
 }
 
 .planit-room-right-part {
     /* border: 2px solid black; */
-    background: -webkit-gradient(linear, right top, left top, from(transparent), to(gray));
+    /* background: -webkit-gradient(linear, right top, left top, from(transparent), to(gray));
     background: -o-linear-gradient(right, transparent, gray);
-    background: linear-gradient(to left, transparent, gray);
+    background: linear-gradient(to left, transparent, gray); */
     min-height: 500px;
 }
 
@@ -112,7 +112,7 @@
 
 .planing-poker-left-one-section {
     background-color: white;
-    border-radius: 20px;
+    border-radius: 7px;
     padding-left: 10px;
 }
 
@@ -133,12 +133,13 @@
 
 .planing-room-not-auth {
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 25px;
+    height: 25px;
     border: 1px solid #07135c;
     /* display: block; */
     text-align: center;
     color: white;
     background-color: #e53535;
-    font-size: 180%;
+    font-size: 95%;
+    cursor: default;
 }

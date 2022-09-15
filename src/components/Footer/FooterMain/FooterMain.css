@@ -3,6 +3,7 @@ div.main-footer {
     /* border: 2px solid black;
     background-color: #343943; */
     background-color: RGBA(2,0,39,0.714);
+    padding-top: 30px;
 }
 
 div.footer-social-link {
@@ -11,10 +12,7 @@ div.footer-social-link {
     border: 2px solid black;
 }
 
-div.sub-footer-under {
-    background-color: #3e4550;
-    height: 60px;
-}
+
 
 p.social-link-head {
     color: white;

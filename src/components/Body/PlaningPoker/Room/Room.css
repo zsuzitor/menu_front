@@ -1,0 +1,38 @@
+.planing-room-header {
+    display: flex;
+
+}
+
+
+.planing-people-refresh {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.planing-name-change-but {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.people-room-header {
+    display: flex;
+}
+
+
+.room-action-btn {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.planit-room-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 120px;
+}
+
+.room-action-btn-del {
+    background-color: #dc3545;
+}

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 // import * as signalR from "@microsoft/signalr";
 import Index from "./Index";
-import Room from "./Room";
+import Room from "./Room/Room";
 import { AlertData, AlertTypeEnum } from '../../../Models/Models/AlertData';
 import { PlaningPokerUserInfo, RoomInfo } from '../../../Models/Models/PlaningPoker/RoomInfo';
 
@@ -21,6 +21,8 @@ import { MainErrorObjectBack } from '../../../Models/BackModel/ErrorBack';
 // "@microsoft/signalr": "^5.0.6",
 //
 
+
+require('../../../../style/planing_poker.css');
 
 
 
@@ -42,7 +44,7 @@ class PlaningPokerMainProps {
     AuthInfo: IAuthState;
 }
 
-require('../../../../style/planing_poker.css');
+
 
 
 //см коммент для __planing_room_props_ref__

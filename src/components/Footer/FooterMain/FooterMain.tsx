@@ -1,9 +1,11 @@
 import * as React from "react";
-import { PostFooter } from './PostFooter';
-import { SocialLinkGroup } from './SocialLinkGroup';
+import { PostFooter } from '../PostFooter/PostFooter';
+import { SocialLinkGroup } from '../SocialLinkGroup';
 
 // export interface IHeaderLogoProps {
 // }
+
+require('./FooterMain.css');
 
 export class FooterMain extends React.Component<{}, {}> {
 

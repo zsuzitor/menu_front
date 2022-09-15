@@ -1,0 +1,32 @@
+.user-list-role-but {
+    display: flex;
+}
+
+.user-role-but {
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    border-radius: 3px;
+    font-size: 30px;
+    line-height: 19px;
+    cursor: pointer;
+}
+
+.user-role-but-add {
+    background-color: #28a745;
+
+}
+
+
+.user-role-but-del {
+    background-color: #dc3545;
+
+}
+
+.user-list-del-but {
+    background-color: #dc3545;
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    cursor: pointer;
+}

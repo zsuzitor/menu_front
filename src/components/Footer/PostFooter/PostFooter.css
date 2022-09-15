@@ -1,0 +1,14 @@
+div.sub-footer-under {
+    background-color: #3e4550;
+    height: 60px;
+    cursor: pointer;
+}
+
+.footer-arrow-up {
+    width: 50px;
+    height: 50px;
+    background-color: #3e4550;
+    rotate: 180deg;
+    margin-left: auto;
+    margin-right: auto;
+}

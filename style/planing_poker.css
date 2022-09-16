@@ -15,30 +15,7 @@
     min-height: 500px;
 }
 
-.one-planing-vote-card {
-    width: 100px;
-    height: 100px;
-    border: 2px solid rgb(65 152 174);
-    font-size: 60px;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    border-radius: 5px;
-}
 
-.one-planing-vote-card:hover {
-    cursor: pointer;
-}
-
-.one-planing-selected-vote-card {
-    background-color: pink;
-}
 
 .planing-cards-container {
     display: -webkit-box;

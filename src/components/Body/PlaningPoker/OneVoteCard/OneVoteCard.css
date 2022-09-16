@@ -1,0 +1,59 @@
+.one-planing-vote-card {
+    width: 124px;
+    height: 144px;
+    border: 2px solid rgb(65 152 174);
+    /* display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center; */
+    align-items: center;
+    border-radius: 5px;
+    position: relative;
+}
+
+.one-planing-vote-card:hover {
+    cursor: pointer;
+}
+
+
+.one-planing-vote-card .vote-card-inner {
+    border: 1px solid rgb(65 152 174);
+    width: 84px;
+    height: 90px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    font-size: 60px;
+    border-radius: 5px;
+    left: 20px;
+    top: 27px;
+    position: absolute;
+}
+
+.vote-card-mark-left {
+    font-size: 15px;
+    position: absolute;
+    left: 2px;
+    top: 0px;
+    font-weight: bold;
+}
+
+.vote-card-mark-right {
+    font-size: 15px;
+    position: absolute;
+    right: 2px;
+    bottom: 0px;
+    font-weight: bold;
+    rotate: 180deg;
+}
+
+.one-planing-selected-vote-card {
+    background-color: pink;
+}

@@ -1,0 +1,15 @@
+.room-stories-type-selector {
+    display: flex;
+    border-radius: 4px 4px 0 0;
+    border: 2px solid grey;
+}
+
+.room-stories-type-selector .type-section {
+    padding: 5px;
+    border-bottom: 2px solid grey;
+    cursor: pointer;
+}
+
+.room-stories-type-selector .type-section-select {
+    border-bottom: 2px solid blue;
+}

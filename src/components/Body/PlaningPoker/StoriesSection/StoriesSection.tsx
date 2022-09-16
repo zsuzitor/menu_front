@@ -1,10 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { IStoryReturn } from '../../../Models/BackModel/PlaningPoker/StoryReturn';
-import { RoomStatus, StoriesHelper, Story } from '../../../Models/Models/PlaningPoker/RoomInfo';
+import { IStoryReturn } from '../../../../Models/BackModel/PlaningPoker/StoryReturn';
+import { RoomStatus, StoriesHelper, Story } from '../../../../Models/Models/PlaningPoker/RoomInfo';
 import cloneDeep from 'lodash/cloneDeep';
+import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
 
 
-
+require('./StoriesSection.css');
 
 
 
@@ -58,6 +59,9 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
     const initStories = new StoriesSectionState();
     const [storiesState, setStoriesState] = useState(initStories);
+    const [listStoryTypeState, setListStoryTypeState] = useState(1);
+    const [showNewStoryForm, setShowNewStoryForm] = useState(false);
+
 
     const storiesHelper = new StoriesHelper();
 
@@ -144,8 +148,6 @@ const StoriesSection = (props: StoriesSectionProp) => {
                 props.CurrentStoryId);
         }
     }
-
-
 
     const completedStoryInfo = (story: Story) => {
         if (!storiesState.ShowOnlyCompleted) {
@@ -247,7 +249,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                 <button className="btn btn-success" onClick={() => AddNewStory()}>Добавить</button>
             </div>
 
-            addNewForm = <div>
+            addNewForm = listStoryTypeState !== 1 ? <></> : <div>
                 <p>Добавить новую:</p>
                 <span>Название:</span>
                 <input className="persent-100-width form-control"
@@ -295,7 +297,20 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
         return <div className="planing-stories-list-main planing-poker-left-one-section">
-            <p>Истории:</p>
+            {/* {!showNewStoryForm ? <></> : <AdditionalWindow CloseWindow={() => setShowNewStoryForm(false)}
+                IsHeightWindow={false}
+                Title='Добавление истории'
+                InnerContent={() => <ProjectUsers></ProjectUsers>}></AdditionalWindow>
+            } */}
+            {/* <p>Истории:</p> */}
+            <div className='room-stories-type-selector'>
+                <div className={'type-section' + (listStoryTypeState === 1 ? ' type-section-select' : '')}
+                    onClick={() => setListStoryTypeState(1)}>Актуальные истории</div>
+                <div className={'type-section' + (listStoryTypeState === 2 ? ' type-section-select' : '')}
+                    onClick={() => setListStoryTypeState(2)}>Оцененные истории</div>
+                <div className={'type-section' + (listStoryTypeState === 3 ? ' type-section-select' : '')}
+                    onClick={() => setListStoryTypeState(3)}>Все истории</div>
+            </div>
             <span>Показать выполненные: </span>
             <input onClick={() => {
                 setStoriesState(prevState => {

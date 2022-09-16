@@ -52,6 +52,7 @@ const UserInList = (props: UserInListProp) => {
     let statusChange = <div></div>
     if (props.RenderForAdmin) {
         delButton = <div className='user-list-del-but'
+            title='Выгнать пользователя'
             onClick={() => props.TryToRemoveUserFromRoom(props.User.Id)}>
             {/* <button className="btn btn-danger"
                 onClick={() => props.TryToRemoveUserFromRoom(props.User.Id)}>Выгнать</button> */}

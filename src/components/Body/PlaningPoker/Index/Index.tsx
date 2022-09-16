@@ -6,9 +6,11 @@ import { type } from "os";
 import React, { useState, useEffect } from 'react';
 
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
-import { AlertData } from "../../../Models/Models/AlertData";
-import { RoomInfo } from "../../../Models/Models/PlaningPoker/RoomInfo";
+import { AlertData } from "../../../../Models/Models/AlertData";
+import { RoomInfo } from "../../../../Models/Models/PlaningPoker/RoomInfo";
 
+
+require('./Index.css');
 
 class IndexState {
     // RoomName: string;

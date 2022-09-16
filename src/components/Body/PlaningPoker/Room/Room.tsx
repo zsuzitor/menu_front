@@ -556,33 +556,35 @@ const Room = (props: RoomProps) => {
 
 
 
-        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.MovedStoryToComplete, function (oldId, newData: IStoryReturn) {
-            if (!newData) {
-                return;
-            }
-
-            setStoriesState(prevState => {
-                // let newState = { ...prevState };
-                let newState = cloneDeep(prevState);
-                let story = storiesHelper.GetStoryById(newState.Stories, oldId);
-
-
-                if (story) {
-                    story.Id = newData.id;
-                    story.Completed = newData.completed;
-                    story.Date = newData.date;
-                    story.Vote = newData.vote;
-                    if (newState.CurrentStoryId === newData.id) {
-                        newState.CurrentStoryId = "";
-                    }
-
-                    newState.CurrentStoryDescriptionChange = "";
-                    newState.CurrentStoryNameChange = "";
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.MovedStoryToComplete
+            , function (oldId, newData: IStoryReturn) {
+                if (!newData) {
+                    return;
                 }
-                return newState;
-            });
 
-        });
+                setStoriesState(prevState => {
+                    // let newState = { ...prevState };
+                    let newState = cloneDeep(prevState);
+                    let story = storiesHelper.GetStoryById(newState.Stories, oldId);
+
+
+                    if (story) {
+                        story.Id = newData.id;
+                        story.Completed = newData.completed;
+                        story.Date = newData.date;
+                        story.Vote = newData.vote;
+                        story.ThisSession = newData.currentSession;
+                        if (newState.CurrentStoryId === newData.id) {
+                            newState.CurrentStoryId = "";
+                        }
+
+                        newState.CurrentStoryDescriptionChange = "";
+                        newState.CurrentStoryNameChange = "";
+                    }
+                    return newState;
+                });
+
+            });
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.NewRoomAlive, function (newDieTime: string) {
             if (!newDieTime) {
@@ -770,10 +772,10 @@ const Room = (props: RoomProps) => {
     }
 
     const deleteRoom = () => {
-        if(!confirm('Удалить комнату?')){
+        if (!confirm('Удалить комнату?')) {
             return;
         }
-        
+
         props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.DeleteRoom, props.RoomInfo.Name);
     }
 
@@ -858,6 +860,10 @@ const Room = (props: RoomProps) => {
 
 
     const settingsUpUserListRender = () => {
+        let showVoteImage = 'eye5.png';
+        if (hideVoteState) {
+            showVoteImage = 'eye1.png';
+        }
 
         let hideVotesSetting = <div></div>
         // if (CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId)) {
@@ -865,14 +871,20 @@ const Room = (props: RoomProps) => {
             hideVotesSetting = <div>
                 <div className="padding-10-top"></div>
                 <div className="planning-vote-settings">
-                    <label>Скрывать оценки</label>
+                    <label>Оценки</label>
+                    <div className='planing-vote-show-but'
+                        title='Показать\скрыть оценки' onClick={() => setHideVoteState(prevState => {
+                            return !hideVoteState;
+                        })}>
+                        <img className='persent-100-width-height' src={"/images/" + showVoteImage} />
+                    </div>
                     {/* className="form-control persent-100-width" */}
-                    <input onClick={() => {
+                    {/* <input onClick={() => {
                         // setHideVoteState(!hideVoteState)
                         setHideVoteState(prevState => {
                             return !hideVoteState;
                         });
-                    }} type="checkbox"></input>
+                    }} type="checkbox"></input> */}
                 </div>
             </div>
         }
@@ -890,7 +902,9 @@ const Room = (props: RoomProps) => {
                 value={userNameLocalState}></input>
             {/* <button className="btn btn-primary"
                 onClick={() => props.ChangeUserName(userNameLocalState)}>Изменить имя</button> */}
-            <div className='planing-name-change-but' onClick={() => props.ChangeUserName(userNameLocalState)}>
+            <div className='planing-name-change-but'
+                title='Изменить имя'
+                onClick={() => props.ChangeUserName(userNameLocalState)}>
                 <img className='persent-100-width-height' src="/images/pencil-edit.png" />
             </div>
             {/* <button className="btn btn-primary"

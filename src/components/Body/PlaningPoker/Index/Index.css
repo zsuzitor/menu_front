@@ -1,0 +1,16 @@
+
+.planing-enter-main {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    /* https://cssgradient.io/ */
+    /* background: rgb(2, 0, 39);
+    background: linear-gradient(360deg, rgba(2, 0, 39, 0.7150210425967262) 0%, rgba(255, 255, 255, 1) 100%); */
+    
+}
+
+
+
+.planing-enter-inner {
+    -webkit-box-shadow: 0 0 10px rgb(0 0 0 / 50%);
+    box-shadow: 0 0 10px rgb(0 0 0 / 50%);
+}

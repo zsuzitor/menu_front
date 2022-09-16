@@ -103,6 +103,7 @@ export class Story implements MappedWithBack<IStoryReturn>{
     Name: string;
     Description: string;
     Completed: boolean;
+    ThisSession: boolean;
 
     Vote?: number;
     Date?: string;
@@ -116,6 +117,7 @@ export class Story implements MappedWithBack<IStoryReturn>{
         this.Vote = null;
         this.Date = null;
         this.Completed = false;
+        this.ThisSession = true;
     }
 
 
@@ -126,6 +128,7 @@ export class Story implements MappedWithBack<IStoryReturn>{
         this.Vote = newData.vote;
         this.Date = newData.date;
         this.Completed = newData.completed;
+        this.ThisSession = newData.currentSession;
     }
 }
 

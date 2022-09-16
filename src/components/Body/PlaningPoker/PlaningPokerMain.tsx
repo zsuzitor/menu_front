@@ -22,7 +22,6 @@ import { MainErrorObjectBack } from '../../../Models/BackModel/ErrorBack';
 //
 
 
-require('../../../../style/planing_poker.css');
 
 
 

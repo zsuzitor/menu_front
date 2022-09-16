@@ -9,4 +9,5 @@ export interface IStoryReturn {
     vote?: number;
     date?: string;
     completed: boolean;
+    currentSession: boolean;
 }

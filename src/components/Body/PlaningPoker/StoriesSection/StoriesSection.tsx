@@ -36,7 +36,7 @@ class StoriesSectionState {
 
     NameForAdd: string;
     DescriptionForAdd: string;
-    ShowOnlyCompleted: boolean;
+    // ShowOnlyCompleted: boolean;
     NotActualStoriesLoaded: boolean;
 
     SortByDateAsc: boolean;
@@ -45,7 +45,7 @@ class StoriesSectionState {
     constructor() {
         this.NameForAdd = "";
         this.DescriptionForAdd = "";
-        this.ShowOnlyCompleted = false;
+        // this.ShowOnlyCompleted = false;
         this.NotActualStoriesLoaded = false;
         this.SortByDateAsc = false;
     }
@@ -150,13 +150,15 @@ const StoriesSection = (props: StoriesSectionProp) => {
     }
 
     const completedStoryInfo = (story: Story) => {
-        if (!storiesState.ShowOnlyCompleted) {
+        if (!story.Completed) {
             return <div></div>
         }
-
+        <br />
         return <div>
-            <p>Дата оценки: {story.Date}</p>
-            <p>Оценка: {story.Vote + ""}</p>
+            <span>Оценка: {story.Vote + "   "}</span>
+            <span>Дата оценки: {story.Date}</span>
+            {/* <br /> */}
+            
         </div>
     }
 
@@ -232,12 +234,10 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
     const storiesListRender = () => {
         let adminButtonInList = (id: string) => {
-            return <Fragment></Fragment>
+            return <></>
         };
-        //todo как то норм назвать
         let addNewForm = <div></div>
-        let adminButtonNotInList = <div></div>
-        if (props.IsAdmin && !storiesState.ShowOnlyCompleted) {
+        if (props.IsAdmin && listStoryTypeState === 1) {
             adminButtonInList = (id: string) => {
                 return <div>
                     <button className="btn btn-success" onClick={() => props.MakeCurrentStory(id)}>Сделать текущей</button>
@@ -245,46 +245,14 @@ const StoriesSection = (props: StoriesSectionProp) => {
                 </div>
             };
 
-            adminButtonNotInList = <div>
-                <button className="btn btn-success" onClick={() => AddNewStory()}>Добавить</button>
-            </div>
-
             addNewForm = listStoryTypeState !== 1 ? <></> : <div>
-                <p>Добавить новую:</p>
-                <span>Название:</span>
-                <input className="persent-100-width form-control"
-                    placeholder="Название"
-                    value={storiesState.NameForAdd}
-                    type="text" onChange={(e) => {
-
-                        setStoriesState(prevState => {
-                            // let newState = { ...prevState };
-                            let newState = cloneDeep(prevState);
-                            newState.NameForAdd = e.target.value;
-                            return newState;
-                        });
-                    }}></input>
-                <span>Описание:</span>
-                <textarea className="persent-100-width form-control"
-                    placeholder="Описание"
-                    value={storiesState.DescriptionForAdd}
-                    onChange={(e) => {
-
-                        setStoriesState(prevState => {
-                            // let newState = { ...prevState };
-                            let newState = cloneDeep(prevState);
-                            newState.DescriptionForAdd = e.target.value;
-                            return newState;
-                        });
-                    }}
-                >
-                </textarea>
-                {adminButtonNotInList}
+                <button className='btn btn-b-light'
+                    onClick={() => setShowNewStoryForm(!showNewStoryForm)}>Добавить историю</button>
             </div>
         }
 
         let sortByDateButton = <></>
-        if (storiesState.ShowOnlyCompleted) {
+        if (listStoryTypeState === 2 || listStoryTypeState === 3) {
             sortByDateButton = <button className="btn btn-primary"
                 onClick={(e) => {
                     setStoriesState(prevState => {
@@ -297,11 +265,45 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
         return <div className="planing-stories-list-main planing-poker-left-one-section">
-            {/* {!showNewStoryForm ? <></> : <AdditionalWindow CloseWindow={() => setShowNewStoryForm(false)}
+            {!showNewStoryForm ? <></> : <AdditionalWindow CloseWindow={() => setShowNewStoryForm(false)}
                 IsHeightWindow={false}
                 Title='Добавление истории'
-                InnerContent={() => <ProjectUsers></ProjectUsers>}></AdditionalWindow>
-            } */}
+                InnerContent={() => <div>
+                    {/* <p>Добавить новую:</p> */}
+                    <span>Название:</span>
+                    <input className="persent-100-width form-control"
+                        placeholder="Название"
+                        value={storiesState.NameForAdd}
+                        type="text" onChange={(e) => {
+
+                            setStoriesState(prevState => {
+                                // let newState = { ...prevState };
+                                let newState = cloneDeep(prevState);
+                                newState.NameForAdd = e.target.value;
+                                return newState;
+                            });
+                        }}></input>
+                    <span>Описание:</span>
+                    <textarea className="persent-100-width form-control"
+                        placeholder="Описание"
+                        value={storiesState.DescriptionForAdd}
+                        onChange={(e) => {
+
+                            setStoriesState(prevState => {
+                                // let newState = { ...prevState };
+                                let newState = cloneDeep(prevState);
+                                newState.DescriptionForAdd = e.target.value;
+                                return newState;
+                            });
+                        }}
+                    >
+                    </textarea>
+                    <div>
+                        <button className="btn btn-success" onClick={() => AddNewStory()}>Добавить</button>
+                    </div>
+                </div>}></AdditionalWindow>
+
+            }
             {/* <p>Истории:</p> */}
             <div className='room-stories-type-selector'>
                 <div className={'type-section' + (listStoryTypeState === 1 ? ' type-section-select' : '')}
@@ -311,7 +313,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                 <div className={'type-section' + (listStoryTypeState === 3 ? ' type-section-select' : '')}
                     onClick={() => setListStoryTypeState(3)}>Все истории</div>
             </div>
-            <span>Показать выполненные: </span>
+            {/* <span>Показать выполненные: </span>
             <input onClick={() => {
                 setStoriesState(prevState => {
                     // let newState = { ...prevState };
@@ -319,12 +321,17 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     newState.ShowOnlyCompleted = !newState.ShowOnlyCompleted;
                     return newState;
                 });
-            }} type="checkbox" defaultChecked={storiesState.ShowOnlyCompleted}></input>
+            }} type="checkbox" defaultChecked={storiesState.ShowOnlyCompleted}></input> */}
+            <div>
+                {addNewForm}
+            </div>
             {sortByDateButton}
             <div>
                 <div className="stories-data-list">
                     {props.Stories
-                        .filter(x => x.Completed === storiesState.ShowOnlyCompleted)
+                        .filter(x => (!x.Completed && listStoryTypeState === 1)
+                            || (x.Completed && listStoryTypeState === 2 && x.ThisSession)
+                            || (x.Completed && listStoryTypeState === 3 && !x.ThisSession))
                         .sort((x1, x2) => {
                             let x1Date = new Date(x1.Date || 0);
                             let x2Date = new Date(x2.Date || 0);
@@ -339,27 +346,25 @@ const StoriesSection = (props: StoriesSectionProp) => {
                             <div
                                 className={"planing-story-in-list " + (x.Completed ? "completed-story" : "not-completed-story")}
                                 key={x.Id}>
-                                <p>Id: {x.Id}</p>
-                                <p>Название: {x.Name}</p>
-                                <p>Описание: {x.Description}</p>
+                                {/* <p>Id: {x.Id}</p> */}
+                                <span>Название: {x.Name}</span>
+                                <br />
+                                <span>Описание: {x.Description}</span>
                                 {completedStoryInfo(x)}
 
                                 {adminButtonInList(x.Id)}
                                 <hr />
                             </div>)}
                 </div>
-                <div>
+                {/* <div>
                     {storiesState.ShowOnlyCompleted && !storiesState.NotActualStoriesLoaded ?
                         <button className="btn btn-primary" onClick={() => loadOldStories()}>Загрузить прошлые</button>
                         :
                         <div></div>
                     }
-                </div>
+                </div> */}
             </div>
-            <div>
-                {addNewForm}
 
-            </div>
         </div>
     }
 

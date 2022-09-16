@@ -2,14 +2,29 @@
     display: flex;
     border-radius: 4px 4px 0 0;
     border: 2px solid grey;
+    justify-content: space-around;
 }
 
 .room-stories-type-selector .type-section {
     padding: 5px;
-    border-bottom: 2px solid grey;
+    /* border-bottom: 2px solid grey; */
     cursor: pointer;
 }
 
 .room-stories-type-selector .type-section-select {
     border-bottom: 2px solid blue;
+}
+
+
+.stories-data-list {
+    max-height: 500px;
+    overflow: auto;
+}
+
+.not-completed-story {
+    background-color: #e9f3a8;
+}
+
+.completed-story {
+    background-color: #b2f593;
 }

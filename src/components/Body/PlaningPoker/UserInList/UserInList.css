@@ -30,3 +30,27 @@
     border-radius: 3px;
     cursor: pointer;
 }
+
+.planing-user-voted {
+    background-color: lawngreen;
+}
+
+.planing-user-not-voted {
+    background-color: lavenderblush;
+}
+
+.planing-user-voted-min {
+    background-color: darksalmon;
+}
+
+.planing-user-voted-max {
+    background-color: peru;
+}
+
+.planing-user {
+    -webkit-box-shadow: 0 0 10px rgb(0 0 0 / 50%);
+    box-shadow: 0 0 10px rgb(0 0 0 / 50%);
+    border-radius: 5px;
+    padding: 10px;
+    /* background-color: white; */
+}

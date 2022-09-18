@@ -1,8 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { IStoryReturn } from '../../../../Models/BackModel/PlaningPoker/StoryReturn';
-import { RoomStatus, StoriesHelper, Story } from '../../../../Models/Models/PlaningPoker/RoomInfo';
+import { PlaningPokerUserInfo, RoomStatus, StoriesHelper, Story } from '../../../../Models/Models/PlaningPoker/RoomInfo';
 import cloneDeep from 'lodash/cloneDeep';
 import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
+import Paggination from '../../Paggination/Paggination';
+import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
+import { INotActualStoriesReturn } from '../../../../Models/BackModel/PlaningPoker/RoomInfoReturn';
 
 
 require('./StoriesSection.css');
@@ -12,6 +15,8 @@ require('./StoriesSection.css');
 class StoriesSectionProp {
     Stories: Story[];
     CurrentStoryId: string;
+    TotalNotActualStoriesCount: number;
+    UserInfo: PlaningPokerUserInfo;
 
     // storiesInfo:StoriesInfo;
     MyHubConnection: signalR.HubConnection;
@@ -27,7 +32,7 @@ class StoriesSectionProp {
     CurrentStoryNameOnChange: (str: string) => void;
     CurrentStoryDescriptionChange: string;
     CurrentStoryDescriptionOnChange: (str: string) => void;
-    StoriesLoaded: (stories: IStoryReturn[]) => void;
+    // StoriesLoaded: (stories: IStoryReturn[]) => void;
 }
 
 class StoriesSectionState {
@@ -37,17 +42,20 @@ class StoriesSectionState {
     NameForAdd: string;
     DescriptionForAdd: string;
     // ShowOnlyCompleted: boolean;
-    NotActualStoriesLoaded: boolean;
+    // NotActualStoriesLoaded: boolean;
 
     SortByDateAsc: boolean;
+
+    NotActualStories: Story[];
 
 
     constructor() {
         this.NameForAdd = "";
         this.DescriptionForAdd = "";
         // this.ShowOnlyCompleted = false;
-        this.NotActualStoriesLoaded = false;
+        // this.NotActualStoriesLoaded = false;
         this.SortByDateAsc = false;
+        this.NotActualStories = [];
     }
 }
 
@@ -61,6 +69,10 @@ const StoriesSection = (props: StoriesSectionProp) => {
     const [storiesState, setStoriesState] = useState(initStories);
     const [listStoryTypeState, setListStoryTypeState] = useState(1);
     const [showNewStoryForm, setShowNewStoryForm] = useState(false);
+    const [storiesPageNumber, setstoriesPageNumber] = useState(1);
+
+
+    const countStoriesOnPage = 3;
 
 
     const storiesHelper = new StoriesHelper();
@@ -77,6 +89,13 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
     }, []);
+
+
+
+    useEffect(() => {
+        loadOldStories();
+
+    }, [storiesPageNumber]);
 
 
 
@@ -101,17 +120,32 @@ const StoriesSection = (props: StoriesSectionProp) => {
     }
 
     const loadOldStories = () => {
-        props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.LoadNotActualStories,
-            props.RoomName).then(data => {
-                var dataTyped = data as IStoryReturn[];
+
+        let loadedStories = (error: MainErrorObjectBack, data: INotActualStoriesReturn) => {
+            if (error) {
+                alert("todo что то пошло не так лучше обновить страницу");
+                return;
+            }
+
+            if (data) {
                 setStoriesState(prevState => {
                     // let newState = { ...prevState };
                     let newState = cloneDeep(prevState);
-                    newState.NotActualStoriesLoaded = true;
+                    newState.NotActualStories = data.stories.map(x => {
+                        let st = new Story();
+                        st.FillByBackModel(x);
+                        return st;
+                    });
                     return newState;
                 });
-                props.StoriesLoaded(dataTyped);
-            });
+            }
+
+        };
+        // console.log(JSON.stringify(props));
+        window.G_PlaningPokerController.GetNotActualStories(props.RoomName, props.UserInfo.UserConnectionId, storiesPageNumber, countStoriesOnPage, loadedStories);
+
+
+
     }
 
 
@@ -149,18 +183,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
         }
     }
 
-    const completedStoryInfo = (story: Story) => {
-        if (!story.Completed) {
-            return <div></div>
-        }
-        <br />
-        return <div>
-            <span>Оценка: {story.Vote + "   "}</span>
-            <span>Дата оценки: {story.Date}</span>
-            {/* <br /> */}
-            
-        </div>
-    }
+
 
 
 
@@ -232,6 +255,9 @@ const StoriesSection = (props: StoriesSectionProp) => {
             storiesState.NameForAdd, storiesState.DescriptionForAdd);
     }
 
+
+
+
     const storiesListRender = () => {
         let adminButtonInList = (id: string) => {
             return <></>
@@ -251,17 +277,64 @@ const StoriesSection = (props: StoriesSectionProp) => {
             </div>
         }
 
-        let sortByDateButton = <></>
-        if (listStoryTypeState === 2 || listStoryTypeState === 3) {
-            sortByDateButton = <button className="btn btn-primary"
-                onClick={(e) => {
-                    setStoriesState(prevState => {
-                        let newState = cloneDeep(prevState);
-                        newState.SortByDateAsc = !newState.SortByDateAsc;
-                        return newState;
-                    });
-                }}>Сортировка по дате</button>
+        const completedStoryInfo = (story: Story) => {
+            if (!story.Completed) {
+                return <div></div>
+            }
+            <br />
+            return <div>
+                <span>Оценка: {story.Vote + "   "}</span>
+                <span>Дата оценки: {story.Date}</span>
+                {/* <br /> */}
+
+            </div>
         }
+
+
+        let sortByDateButton = <></>
+        // if (listStoryTypeState === 2 || listStoryTypeState === 3) {
+        //     sortByDateButton = <button className="btn btn-primary"
+        //         onClick={(e) => {
+        //             setStoriesState(prevState => {
+        //                 let newState = cloneDeep(prevState);
+        //                 newState.SortByDateAsc = !newState.SortByDateAsc;
+        //                 return newState;
+        //             });
+        //         }}>Сортировка по дате</button>
+        // }
+
+        let storiesForRender: Story[] = [];
+
+        let paggination = <></>
+        if (listStoryTypeState === 3) {
+            paggination = <Paggination
+                ElementsCount={props.TotalNotActualStoriesCount}
+                PageNumber={storiesPageNumber}
+                ElementsOnPage={countStoriesOnPage}
+                SetPageNumber={setstoriesPageNumber}></Paggination>
+
+            storiesForRender = storiesState.NotActualStories;
+
+        }
+        else {
+            storiesForRender = props.Stories
+                .filter(x => (!x.Completed && listStoryTypeState === 1)
+                    || (x.Completed && listStoryTypeState === 2 && x.ThisSession)
+                    // || (x.Completed && listStoryTypeState === 3 && !x.ThisSession)
+                )
+                .sort((x1, x2) => {
+                    let x1Date = new Date(x1.Date || 0);
+                    let x2Date = new Date(x2.Date || 0);
+                    if (storiesState.SortByDateAsc) {
+                        return (x1Date.valueOf() - x2Date.valueOf());
+                    }
+                    else {
+                        return (x2Date.valueOf() - x1Date.valueOf());
+                    }
+                });
+        }
+
+
 
 
         return <div className="planing-stories-list-main planing-poker-left-one-section">
@@ -326,22 +399,10 @@ const StoriesSection = (props: StoriesSectionProp) => {
                 {addNewForm}
             </div>
             {sortByDateButton}
+            {paggination}
             <div>
                 <div className="stories-data-list">
-                    {props.Stories
-                        .filter(x => (!x.Completed && listStoryTypeState === 1)
-                            || (x.Completed && listStoryTypeState === 2 && x.ThisSession)
-                            || (x.Completed && listStoryTypeState === 3 && !x.ThisSession))
-                        .sort((x1, x2) => {
-                            let x1Date = new Date(x1.Date || 0);
-                            let x2Date = new Date(x2.Date || 0);
-                            if (storiesState.SortByDateAsc) {
-                                return (x1Date.valueOf() - x2Date.valueOf());
-                            }
-                            else {
-                                return (x2Date.valueOf() - x1Date.valueOf());
-                            }
-                        })
+                    {storiesForRender
                         .map(x =>
                             <div
                                 className={"planing-story-in-list " + (x.Completed ? "completed-story" : "not-completed-story")}
@@ -355,6 +416,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                                 {adminButtonInList(x.Id)}
                                 <hr />
                             </div>)}
+
                 </div>
                 {/* <div>
                     {storiesState.ShowOnlyCompleted && !storiesState.NotActualStoriesLoaded ?

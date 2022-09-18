@@ -1,12 +1,13 @@
 
 
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
-import { IRoomInfoReturn } from "../../BackModel/PlaningPoker/RoomInfoReturn";
+import { IRoomInfoReturn, INotActualStoriesReturn } from "../../BackModel/PlaningPoker/RoomInfoReturn";
 import { IUserInRoomReturn } from "../../BackModel/PlaningPoker/UserInRoomReturn";
 
 
 export type ListUserInRoomReturn = (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => void;
 export type GetRoomInfoReturn = (error: MainErrorObjectBack, data: IRoomInfoReturn) => void;
+export type GetNotActualStoriesReturn = (error: MainErrorObjectBack, data: INotActualStoriesReturn) => void;
 
 
 export class HubEndpointsFront {
@@ -28,6 +29,7 @@ export class HubEndpointsFront {
     PlaningNotifyFromServer: string;
     NeedRefreshTokens: string;
     NewRoomAlive: string;
+    RoomWasSaved: string;
 
     constructor() {
         this.MovedStoryToComplete = "MovedStoryToComplete";
@@ -48,6 +50,8 @@ export class HubEndpointsFront {
         this.PlaningNotifyFromServer = "PlaningNotifyFromServer";
         this.NeedRefreshTokens = "NeedRefreshTokens";
         this.NewRoomAlive = "NewRoomAlive";
+        this.RoomWasSaved = "RoomWasSaved";
+
     }
 }
 
@@ -112,6 +116,7 @@ export interface IPlaningPokerController {
     //TODO тут userId хорошо бы убрать на бэк. см бэк контроллер
     GetUsersIsRoom: (roomname: string, userId: string, onSuccess: ListUserInRoomReturn) => void;
     GetRoomInfo: (roomname: string, userId: string, onSuccess: GetRoomInfoReturn) => void;
+    GetNotActualStories: (roomname: string, userId: string, page: number, countOnPage: number, onSuccess: GetNotActualStoriesReturn) => void;
 
     EndPoints: HubEndpoints;
 }
@@ -123,6 +128,34 @@ export class PlaningPokerController implements IPlaningPokerController {
 
     constructor() {
         this.EndPoints = new HubEndpoints();
+    }
+
+    GetNotActualStories(roomname: string, userId: string, page: number, countOnPage: number, onSuccess: GetNotActualStoriesReturn) {
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'roomname': roomname,
+                'userConnectionId': userId,
+                'pageNumber': page,
+                'pageSize': countOnPage,
+            },
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+                if (resp.errors) {
+                    //TODO ошибка
+                    onSuccess(resp, null);
+
+                }
+                else {
+                    let dataBack = xhr as INotActualStoriesReturn;
+                    onSuccess(null, dataBack);
+
+                }
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/PlanitPoker/get-not-actual-stories',
+
+        });
     }
 
     GetUsersIsRoom(roomname: string, userId: string, onSuccess: ListUserInRoomReturn) {

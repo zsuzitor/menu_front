@@ -11,7 +11,7 @@ import OneReviewTask from '../OneReviewTask/OneReviewTask';
 import cloneDeep from 'lodash/cloneDeep';
 import { ITaskFilter } from '../../../../Models/Models/CodeReviewApp/TasksFilter';
 import { ILoadReviewTasksResultDataBack } from '../../../../Models/BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack';
-import Paggination from '../Paggination/Paggination';
+import Paggination from '../../Paggination/Paggination';
 import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
 import ProjectUsers from '../ProjectUsers/ProjectUsers';
 import AddTask from '../AddTask/AddTask';

@@ -16,6 +16,7 @@ import StoriesSection from '../StoriesSection/StoriesSection';
 import { IRoomInfoReturn } from '../../../../Models/BackModel/PlaningPoker/RoomInfoReturn';
 import cloneDeep from 'lodash/cloneDeep';
 import RoomTimer from '../RoomTimer/RoomTimer';
+import { IRoomWasSavedUpdateReturn } from '../../../../Models/BackModel/PlaningPoker/RoomWasSavedUpdateReturn';
 
 
 
@@ -39,10 +40,12 @@ class RoomState {
     UsersList: UserInRoom[];
     VoteInfo: VoteInfo;
     DieRoomTime: Date;
+    TotalNotActualStoriesCount: number;
     constructor() {
         this.UsersList = [];
         this.VoteInfo = new VoteInfo();
         this.DieRoomTime = null;
+        this.TotalNotActualStoriesCount = 0;
     }
 
 }
@@ -200,6 +203,7 @@ const Room = (props: RoomProps) => {
                     newState.UsersList.splice(0, newState.UsersList.length);
                     newState.UsersList.push(...newUsersData);
                     newState.DieRoomTime = new Date(data.room.die_date);
+                    newState.TotalNotActualStoriesCount = data.room.total_stories_count;
 
                     fillVoteInfo(newState, data.end_vote_info);
                     newState.UsersList.forEach(us => {
@@ -562,29 +566,64 @@ const Room = (props: RoomProps) => {
                     return;
                 }
 
+                // let needIncrementTotalCount = false;
                 setStoriesState(prevState => {
                     // let newState = { ...prevState };
                     let newState = cloneDeep(prevState);
                     let story = storiesHelper.GetStoryById(newState.Stories, oldId);
-
 
                     if (story) {
                         story.Id = newData.id;
                         story.Completed = newData.completed;
                         story.Date = newData.date;
                         story.Vote = newData.vote;
-                        story.ThisSession = newData.currentSession;
-                        if (newState.CurrentStoryId === newData.id) {
+                        story.ThisSession = newData.current_session;
+                        if (newState.CurrentStoryId === oldId) {
                             newState.CurrentStoryId = "";
                         }
 
                         newState.CurrentStoryDescriptionChange = "";
                         newState.CurrentStoryNameChange = "";
                     }
+
                     return newState;
                 });
 
+                // if (needIncrementTotalCount) {
+                //     setLocalState(prevState => {
+                //         // let newState = { ...prevState };
+                //         let newState = cloneDeep(prevState);
+                //         newState.TotalNotActualStoriesCount++;
+                //         return newState;
+                //     });
+                // }
+
             });
+
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.RoomWasSaved, function (newData: IRoomWasSavedUpdateReturn) {
+            if (!newData?.success) {
+                return;
+            }
+
+            setStoriesState(prevState => {
+                // let newState = { ...prevState };
+                let newState = cloneDeep(prevState);
+                newState.Stories.forEach(st => {
+                    let fromBack = newData.stories_mapping.find(x => x.old_id.toUpperCase() === st.Id.toUpperCase());
+                    if (fromBack) {
+                        st.Id = fromBack.new_id + '';
+                    }
+                });
+                let fromBack = newData.stories_mapping
+                    .find(x => x.old_id.toUpperCase() === newState.CurrentStoryId.toUpperCase());
+                if (fromBack) {
+                    newState.CurrentStoryId = fromBack.new_id + '';
+                }
+
+                return newState;
+            });
+
+        });
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.NewRoomAlive, function (newDieTime: string) {
             if (!newDieTime) {
@@ -602,7 +641,6 @@ const Room = (props: RoomProps) => {
 
 
 
-
         return function cleanUp() {
             props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.MovedStoryToComplete);
             props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.DeletedStory);
@@ -617,6 +655,7 @@ const Room = (props: RoomProps) => {
             props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.UserNameChanged);
             props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewUserInRoom);
             props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewRoomAlive);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.RoomWasSaved);
 
         };
     }, []);
@@ -768,7 +807,17 @@ const Room = (props: RoomProps) => {
     }
 
     const saveRoom = () => {
-        props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.SaveRoom, props.RoomInfo.Name).then(() => alert("Сохранено"));
+        props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.SaveRoom, props.RoomInfo.Name).then(() => {
+            // setStoriesState(prevState => {
+            //     // let newState = { ...prevState };
+            //     let newState = cloneDeep(prevState);
+            //     newState.CurrentStoryId = "";
+            //     newState.CurrentStoryDescriptionChange = "";
+            //     newState.CurrentStoryNameChange = "";
+            //     return newState;
+            // });
+            alert("Сохранено")
+        });
     }
 
     const deleteRoom = () => {
@@ -830,7 +879,7 @@ const Room = (props: RoomProps) => {
             // saveBut = <button className="btn btn-danger" onClick={() => saveRoom()}>Сохранить комнату</button>
             saveBut = <div className='room-action-btn' onClick={() => saveRoom()}
                 title='Сохранить комнату'>
-                <img className='persent-100-width-height' src="/images/delete-icon.png" />
+                <img className='persent-100-width-height' src="/images/save-icon.png" />
             </div>
         }
 
@@ -984,6 +1033,7 @@ const Room = (props: RoomProps) => {
                     MyHubConnection={props.MyHubConnection}
                     RoomName={props.RoomInfo.Name}
                     Stories={storiesState.Stories}
+                    TotalNotActualStoriesCount={localState.TotalNotActualStoriesCount}
                     DeleteStory={deleteStory}
                     MakeCurrentStory={makeCurrentStory}
                     IsAdmin={currentUserIsAdmin}
@@ -992,7 +1042,7 @@ const Room = (props: RoomProps) => {
                     CurrentStoryDescriptionOnChange={currentStoryDescriptionOnChange}
                     CurrentStoryNameOnChange={currentStoryNameOnChange}
                     RoomStatus={roomStatusState}
-                    StoriesLoaded={storiesLoaded}
+                    UserInfo={props.UserInfo}
                 />
             </div>
             <div className="planit-room-right-part col-12 col-md-3">

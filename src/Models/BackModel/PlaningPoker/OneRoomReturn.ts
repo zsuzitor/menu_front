@@ -13,5 +13,6 @@ export interface IOneRoomReturn {
     // end_vote_info: IEndVoteInfoReturn;
     actual_stories: IStoryReturn[];
     current_story_id: string;
+    total_stories_count: number;
 
 }

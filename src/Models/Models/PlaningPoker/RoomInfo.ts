@@ -128,7 +128,7 @@ export class Story implements MappedWithBack<IStoryReturn>{
         this.Vote = newData.vote;
         this.Date = newData.date;
         this.Completed = newData.completed;
-        this.ThisSession = newData.currentSession;
+        this.ThisSession = newData.current_session;
     }
 }
 

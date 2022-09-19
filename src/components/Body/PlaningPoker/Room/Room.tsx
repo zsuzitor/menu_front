@@ -1006,6 +1006,10 @@ const Room = (props: RoomProps) => {
     }
 
     return <div className="container">
+        {/* что бы кратинки прогрузились и не пришлось из грузить при нажатии кнопки */}
+        <img className='display_none' src="/images/eye5.png" />
+        <img className='display_none' src="/images/eye1.png" />
+
         <div className="padding-10-top planing-room-header">
             <h1>Комната: {props.RoomInfo.Name}</h1>
             {renderNotAuthMessage()}

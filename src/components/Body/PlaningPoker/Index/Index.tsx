@@ -29,6 +29,7 @@ class IndexProps {
     RoomInfo: RoomInfo;
     RoomNameChanged: (name: string) => void;
     RoomPasswordChanged: (name: string) => void;
+    HubConnected: boolean;
 
 }
 
@@ -91,7 +92,7 @@ let Index = (props: IndexProps) => {
     let actionsButton = <div>
 
     </div>
-    if (props.Username) {
+    if (props.Username && props.HubConnected) {
         actionsButton = <div>
             <button className="btn btn-b-light" onClick={createRoom}>Создать</button>
             <button className="btn btn-b-light" onClick={enterInRoom}>Подключиться</button>

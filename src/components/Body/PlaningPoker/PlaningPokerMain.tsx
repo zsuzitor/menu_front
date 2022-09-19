@@ -330,6 +330,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
                 RoomNameChanged={roomNameChanged}
                 RoomPasswordChanged={roomPasswordChanged}
                 RoomInfo={localState.RoomInfo}
+                HubConnected={hubConnected}
             // InRoom={localState.InRoom}
             />
             } />

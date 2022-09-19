@@ -57,9 +57,9 @@ const Paggination = (props: IPagginationProps) => {
 
     return <div>
         {needFirstBut ? <button onClick={() => props.SetPageNumber(1)} className='btn-b btn-border'>1</button> : <></>}
-        {needPrevBut ? <button onClick={() => props.SetPageNumber(props.PageNumber - 1)} className='btn-b btn-border'>prev</button> : <></>}
+        {needPrevBut ? <button onClick={() => props.SetPageNumber(props.PageNumber - 1)} className='btn-b btn-border'>{'<'}</button> : <></>}
         <button onClick={() => props.SetPageNumber(props.PageNumber)} className='btn-b btn-border paggination-current'>{props.PageNumber}</button>
-        {needNextBut ? <button onClick={() => props.SetPageNumber(props.PageNumber + 1)} className='btn-b btn-border'>next</button> : <></>}
+        {needNextBut ? <button onClick={() => props.SetPageNumber(props.PageNumber + 1)} className='btn-b btn-border'>{'>'}</button> : <></>}
         {needLastBut ? <button onClick={() => props.SetPageNumber(allPageCount)} className='btn-b btn-border'>{allPageCount}</button> : <></>}
 
     </div>

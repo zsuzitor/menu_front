@@ -18,42 +18,28 @@ class StoriesSectionProp {
     TotalNotActualStoriesCount: number;
     UserInfo: PlaningPokerUserInfo;
 
-    // storiesInfo:StoriesInfo;
     MyHubConnection: signalR.HubConnection;
-    // HubConnected: boolean;
-    // ChangeCurrentStory:;
     MakeCurrentStory: (id: string) => void;
     DeleteStory: (id: string) => void;
     RoomName: string;
     RoomStatus: RoomStatus;
     IsAdmin: boolean;
-    // SetClearTmpFuncForStories: (func: () => void) => void;
     CurrentStoryNameChange: string;
     CurrentStoryNameOnChange: (str: string) => void;
     CurrentStoryDescriptionChange: string;
     CurrentStoryDescriptionOnChange: (str: string) => void;
-    // StoriesLoaded: (stories: IStoryReturn[]) => void;
 }
 
 class StoriesSectionState {
-    // CurrentStoryNameChange: string;
-    // CurrentStoryDescriptionChange: string;
-
     NameForAdd: string;
     DescriptionForAdd: string;
-    // ShowOnlyCompleted: boolean;
-    // NotActualStoriesLoaded: boolean;
-
     SortByDateAsc: boolean;
-
     NotActualStories: Story[];
 
 
     constructor() {
         this.NameForAdd = "";
         this.DescriptionForAdd = "";
-        // this.ShowOnlyCompleted = false;
-        // this.NotActualStoriesLoaded = false;
         this.SortByDateAsc = false;
         this.NotActualStories = [];
     }
@@ -151,17 +137,10 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
     const ResetCurrentStoryById = () => {
         if (!props.CurrentStoryId) {
-
-
             props.CurrentStoryDescriptionOnChange("");
             props.CurrentStoryNameOnChange("");
-
-
             return;
         }
-
-
-
 
         let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
         props.CurrentStoryDescriptionOnChange(story.Description);
@@ -189,16 +168,16 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
     const currentStoryDescriptionRender = () => {
         if (!props.CurrentStoryId) {
-            return <div></div>
+            return <></>
         }
 
         const story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
 
         if (!story) {
-            return <div></div>
+            return <></>
         }
 
-        let adminButton = <div></div>
+        let adminButton = <></>
         if (props.IsAdmin) {
             adminButton = <div>
                 <button className="btn btn-success" onClick={() => changeCurrentStory()}>Изменить</button>
@@ -241,7 +220,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
         return <div className="planing-current-story-main planing-poker-left-one-section">
             <p>Описание текущей задачи</p>
             <div>
-                <p>Id: {story.Id}</p>
+                {/* <p>Id: {story.Id}</p> */}
                 {storyBodyRender()}
             </div>
             {adminButton}
@@ -253,6 +232,13 @@ const StoriesSection = (props: StoriesSectionProp) => {
     const AddNewStory = () => {
         props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.AddNewStory, props.RoomName,
             storiesState.NameForAdd, storiesState.DescriptionForAdd);
+        setStoriesState(prevState => {
+            // let newState = { ...prevState };
+            let newState = cloneDeep(prevState);
+            newState.DescriptionForAdd = '';
+            newState.NameForAdd = '';
+            return newState;
+        });
     }
 
 
@@ -262,12 +248,20 @@ const StoriesSection = (props: StoriesSectionProp) => {
         let adminButtonInList = (id: string) => {
             return <></>
         };
-        let addNewForm = <div></div>
+        let addNewForm = <></>
         if (props.IsAdmin && listStoryTypeState === 1) {
             adminButtonInList = (id: string) => {
-                return <div>
-                    <button className="btn btn-success" onClick={() => props.MakeCurrentStory(id)}>Сделать текущей</button>
-                    <button className="btn btn-danger" onClick={() => props.DeleteStory(id)}>Удалить</button>
+                return <div className='stories-but-block'>
+                    <div className='stories-action-btn' onClick={() => props.MakeCurrentStory(id)}
+                        title='Сделать текущей'>
+                        <img className='persent-100-width-height' src="/images/vote2.png" />
+                    </div>
+                    <div className='stories-del-but'
+                        title='Удалить'
+                        onClick={() => props.DeleteStory(id)}>
+                        <img className='persent-100-width-height' src="/images/delete-icon.png" />
+
+                    </div>
                 </div>
             };
 
@@ -279,7 +273,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
         const completedStoryInfo = (story: Story) => {
             if (!story.Completed) {
-                return <div></div>
+                return <></>
             }
             <br />
             return <div>
@@ -291,27 +285,18 @@ const StoriesSection = (props: StoriesSectionProp) => {
         }
 
 
-        let sortByDateButton = <></>
-        // if (listStoryTypeState === 2 || listStoryTypeState === 3) {
-        //     sortByDateButton = <button className="btn btn-primary"
-        //         onClick={(e) => {
-        //             setStoriesState(prevState => {
-        //                 let newState = cloneDeep(prevState);
-        //                 newState.SortByDateAsc = !newState.SortByDateAsc;
-        //                 return newState;
-        //             });
-        //         }}>Сортировка по дате</button>
-        // }
 
         let storiesForRender: Story[] = [];
 
         let paggination = <></>
         if (listStoryTypeState === 3) {
-            paggination = <Paggination
-                ElementsCount={props.TotalNotActualStoriesCount}
-                PageNumber={storiesPageNumber}
-                ElementsOnPage={countStoriesOnPage}
-                SetPageNumber={setstoriesPageNumber}></Paggination>
+            if (props.TotalNotActualStoriesCount > countStoriesOnPage) {
+                paggination = <Paggination
+                    ElementsCount={props.TotalNotActualStoriesCount}
+                    PageNumber={storiesPageNumber}
+                    ElementsOnPage={countStoriesOnPage}
+                    SetPageNumber={setstoriesPageNumber}></Paggination>
+            }
 
             storiesForRender = storiesState.NotActualStories;
 
@@ -320,7 +305,6 @@ const StoriesSection = (props: StoriesSectionProp) => {
             storiesForRender = props.Stories
                 .filter(x => (!x.Completed && listStoryTypeState === 1)
                     || (x.Completed && listStoryTypeState === 2 && x.ThisSession)
-                    // || (x.Completed && listStoryTypeState === 3 && !x.ThisSession)
                 )
                 .sort((x1, x2) => {
                     let x1Date = new Date(x1.Date || 0);
@@ -377,7 +361,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                 </div>}></AdditionalWindow>
 
             }
-            {/* <p>Истории:</p> */}
+            
             <div className='room-stories-type-selector'>
                 <div className={'type-section' + (listStoryTypeState === 1 ? ' type-section-select' : '')}
                     onClick={() => setListStoryTypeState(1)}>Актуальные истории</div>
@@ -386,19 +370,9 @@ const StoriesSection = (props: StoriesSectionProp) => {
                 <div className={'type-section' + (listStoryTypeState === 3 ? ' type-section-select' : '')}
                     onClick={() => setListStoryTypeState(3)}>Все истории</div>
             </div>
-            {/* <span>Показать выполненные: </span>
-            <input onClick={() => {
-                setStoriesState(prevState => {
-                    // let newState = { ...prevState };
-                    let newState = cloneDeep(prevState);
-                    newState.ShowOnlyCompleted = !newState.ShowOnlyCompleted;
-                    return newState;
-                });
-            }} type="checkbox" defaultChecked={storiesState.ShowOnlyCompleted}></input> */}
             <div>
                 {addNewForm}
             </div>
-            {sortByDateButton}
             {paggination}
             <div>
                 <div className="stories-data-list">
@@ -418,13 +392,6 @@ const StoriesSection = (props: StoriesSectionProp) => {
                             </div>)}
 
                 </div>
-                {/* <div>
-                    {storiesState.ShowOnlyCompleted && !storiesState.NotActualStoriesLoaded ?
-                        <button className="btn btn-primary" onClick={() => loadOldStories()}>Загрузить прошлые</button>
-                        :
-                        <div></div>
-                    }
-                </div> */}
             </div>
 
         </div>
@@ -436,7 +403,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
     return <div>
-        <div>
+        <div className='planing-current-story'>
 
             {currentStoryDescriptionRender()}
 

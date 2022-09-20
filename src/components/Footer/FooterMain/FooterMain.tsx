@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState, useEffect } from 'react';
+
 import { PostFooter } from '../PostFooter/PostFooter';
 import { SocialLinkGroup } from '../SocialLinkGroup';
 
@@ -7,15 +8,24 @@ import { SocialLinkGroup } from '../SocialLinkGroup';
 
 require('./FooterMain.css');
 
-export class FooterMain extends React.Component<{}, {}> {
+export interface IFooterMainProps {
 
-    constructor(props: any) {
-        super(props);
-    }
+}
 
-    render() {
-        // return <input placeholder="Поиск" onChange={this.onTextChanged} />;
-        return <div className='main-footer'>
+const FooterMain = (props: IFooterMainProps) => {
+    const [showDefaultFooter, setShowDefaultFooter] = useState(true);
+
+
+    return <div className='main-footer'>
+        <div className="footer-cloud"
+            // onClick={() => setShowDefaultFooter(!showDefaultFooter)}>
+            onClick={() => setShowDefaultFooter(true)}>
+            <img className='persent-100-width-height' src="/images/red_cloud.png" />
+        </div>
+        {!showDefaultFooter ? <div className="footer-eye">
+            <img className='persent-100-width-height footer-eye-img' src="/images/eye3.png" />
+        </div>
+            :
             <div className='main-footer-inner container'>
                 <div className='row'>
                     <div className='col-md-4'>
@@ -39,8 +49,12 @@ export class FooterMain extends React.Component<{}, {}> {
                 </div>
 
             </div>
-            <PostFooter />
-        </div>
+        }
 
-    }
+
+        <PostFooter />
+    </div>
 }
+
+
+export default FooterMain;

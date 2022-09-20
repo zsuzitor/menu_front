@@ -6,7 +6,7 @@ import { IAuthState, IAuthUserState } from '../Models/Models/AuthState';
 
 import { HeaderMain } from './Header/HeaderMain';
 // import { BodyMain } from './Body/BodyMain';
-import { FooterMain } from './Footer/FooterMain/FooterMain';
+import FooterMain from './Footer/FooterMain/FooterMain';
 import { MainAlertAbsolute } from './Alerts/MainAlertAbsolute';
 
 import { BrowserRouter } from "react-router-dom";

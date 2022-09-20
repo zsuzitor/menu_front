@@ -74,9 +74,9 @@ const UserInList = (props: UserInListProp) => {
                 <option value={UserRoles.Observer}>{UserRoles.Observer}</option>
             </select>
             <div className='user-list-role-but'>
-                <div className='user-role-but user-role-but-add'
+                <div className='user-role-but user-role-but-add' title='Добавить роль'
                     onClick={() => addNewRoleToUser()}>+</div>
-                <div className='user-role-but user-role-but-del'
+                <div className='user-role-but user-role-but-del' title='Удалить роль'
                     onClick={() => removeRoleUser()}>-</div>
             </div>
             {/* <button className="btn btn-success"
@@ -137,7 +137,7 @@ const UserInList = (props: UserInListProp) => {
             <p>оценка: {vote}</p>
             {delButton}
             {/* <hr /> */}
-            <p>Роли: {props.User.Roles.join(',')}</p>
+            <p>Роли: {props.User.Roles.join(', ')}</p>
             {statusChange}
         </div>
         <div className="padding-10-top"></div>

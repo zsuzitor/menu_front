@@ -7,6 +7,10 @@
     display: none;
 }
 
+.visibility-hidden {
+    visibility: hidden;
+}
+
 .persent-100-width {
     width: 100%;
 }
@@ -22,6 +26,11 @@
 
 .height-0 {
     height: 0px;
+}
+
+.size-0 {
+    height: 0px;
+    width: 0px;
 }
 
 .form-control-b {

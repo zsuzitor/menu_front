@@ -23,7 +23,9 @@ const RoomTimer = (props: IRoomTimerProps) => {
     useEffect(() => {
         let interv = setInterval(() => {
             if (__planing_room_timer_props_ref__.DieDate) {
-                setLifeTime(__planing_room_timer_props_ref__.DieDate.getTime() - new Date().getTime());
+                let timerVal = __planing_room_timer_props_ref__.DieDate.getTime() - new Date().getTime();
+                timerVal = timerVal > 0 ? timerVal : 0
+                setLifeTime(timerVal);
             }
         }, 1000);
 
@@ -45,7 +47,7 @@ const RoomTimer = (props: IRoomTimerProps) => {
     let smallTime = hours === 0 && minutes < 10;
     let blockClass = 'planing-room-timer-block';
     if (smallTime) {
-        blockClass+=' planing-room-timer-block-alert';
+        blockClass += ' planing-room-timer-block-alert';
     }
     return <div className={blockClass}>
         <h3 className='planing-room-time'

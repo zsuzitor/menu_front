@@ -24,6 +24,7 @@
     background-color: white;
     border-radius: 7px;
     padding-left: 10px;
+    overflow: hidden;
 }
 
 .planing-room-not-auth {

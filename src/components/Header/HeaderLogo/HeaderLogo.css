@@ -1,0 +1,32 @@
+img.main-header-logo-img {
+    height: 100%;
+    width: 70px;
+}
+
+
+.main-header-logo-a {
+    text-decoration: none;
+}
+
+.main-header-logo-a:hover {
+    text-decoration: none;
+}
+
+
+
+.main-header-logo-text {
+    width: 50px;
+    height: 50px;
+    font-size: 40px;
+    text-align: center;
+    color: red;
+    font-family: cursive;
+    cursor: pointer;
+}
+
+div.main-header-logo {
+    height: 100%;
+    width: 90px;
+    position: relative;
+    padding-left: 30px;
+}

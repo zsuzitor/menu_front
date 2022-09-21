@@ -1,3 +1,55 @@
 .header-user-menu {
     background-color: white;
 }
+
+
+div.header-user-block {
+    height: 100%;
+    /* transition: 1s; */
+    /* border-left: 1px solid white; */
+    /* cursor: pointer; */
+}
+
+div.header-user-dropdown {
+    height: 100%;
+    /* cursor: pointer; */
+    text-align: right;
+}
+
+div.header-auth-dropdown {
+    height: 100%;
+    /* cursor: pointer; */
+    font-size: 20px;
+    text-align: center;
+}
+
+
+
+img.header-user-img {
+    height: 100%;
+    border-radius: 50%;
+}
+
+span.header-user-name-text {
+    display: block;
+    max-width: 50%;
+    overflow: hidden;
+    /* padding-right: 10px; */
+    margin-right: 10px;
+}
+
+span.header-user-img {
+    height: 100%;
+}
+
+
+
+div.header-user-block-inner {
+    height: 100%;
+    cursor: pointer;
+}
+
+div.header-user-block-inner:hover {
+    /* background-color: greenyellow; */
+    /* transition: 1s; */
+}

@@ -44,18 +44,19 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
         if (loggined) {
             return this.LogginedUserRender();
         }
-        
+
         return this.NotLogginedUserRender();
     }
 
 
     LogginedUserRender() {
-        return <div className='header-user-block-inner'><div className='dropdown-toggle header-user-dropdown' data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span className='header-user-name-text d-inline-block'>{this.props.AuthInfo.User.Name}</span>
-            <span className='d-inline-block header-user-img'>
-                {this.UserImageRender(this.props.AuthInfo.User.Image)}
-            </span>
-        </div>
+        return <div className='header-user-block-inner'>
+            <div className='dropdown-toggle header-user-dropdown' data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span className='header-user-name-text d-inline-block'>{this.props.AuthInfo.User.Name}</span>
+                <span className='d-inline-block header-user-img'>
+                    {this.UserImageRender(this.props.AuthInfo.User.Image)}
+                </span>
+            </div>
             <div className="dropdown-menu header-user-menu">
                 <Link className="dropdown-item" to="/menu/auth/login/">Войти</Link>
                 <Link className="dropdown-item" to="/menu/auth/register/">Зарегистрироваться</Link>
@@ -70,9 +71,11 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
 
 
     NotLogginedUserRender() {
-        return <div className='header-user-block-inner'><div className='dropdown-toggle header-auth-dropdown' data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Авторизация
-        </div>
+        return <div className='header-user-block-inner'>
+            <div className='dropdown-toggle header-auth-dropdown' data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Авторизация
+            </div>
             <div className="dropdown-menu header-user-menu">
                 <Link className="dropdown-item" to="/menu/auth/login/">Войти</Link>
                 <Link className="dropdown-item" to="/menu/auth/register/">Зарегистрироваться</Link>

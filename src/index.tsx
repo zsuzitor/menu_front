@@ -30,7 +30,6 @@ import { AppState } from './Models/Models/State/AppState';
 require('../style/main.css');
 require('../style/auth.css');
 require('../style/body.css');
-require('../style/header.css');
 require('../style/alerts.css');
 
 require('../style/menu.css');

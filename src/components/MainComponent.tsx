@@ -4,16 +4,17 @@ import React, { useEffect, useState } from "react";
 
 import { IAuthState, IAuthUserState } from '../Models/Models/AuthState';
 
-import { HeaderMain } from './Header/HeaderMain';
+import HeaderMain from './Header/HeaderMain/HeaderMain';
 // import { BodyMain } from './Body/BodyMain';
 import FooterMain from './Footer/FooterMain/FooterMain';
 import { MainAlertAbsolute } from './Alerts/MainAlertAbsolute';
 
 import { BrowserRouter } from "react-router-dom";
 import { AlertData, AlertDataStored } from "../Models/Models/AlertData";
-import { AppRouter } from "./AppRouter";
+import AppRouter from "./AppRouter";
 import { MainErrorObjectBack } from "../Models/BackModel/ErrorBack";
 import { UserShortBack } from "../Models/BackModel/UserShort";
+import { AppItem } from "../Models/Models/Poco/AppItem";
 
 
 
@@ -25,6 +26,7 @@ export interface IMainComponentState {
     AbsoluteAlerts: AlertDataStored[];
     MaxIdMainAlert: number;
 }
+
 
 
 
@@ -44,6 +46,14 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
 
     const [localState, setLocalState] = useState(initState);
 
+    //todo есть способ это закешить реакт хуком
+    const ApplacationsList: AppItem[] = [
+        new AppItem({ Logo: G_EmptyImagePath, Name: "MenuApp", Path: "/menu-app" }),
+        new AppItem({ Logo: G_EmptyImagePath, Name: "Dict", Path: "/words-cards-app" }),
+        new AppItem({ Logo: G_EmptyImagePath, Name: "TimeBooking", Path: "/menu-app" }),
+        new AppItem({ Logo: "/images/poker_logo.jpg", Name: "PlaningPoker", Path: "/planing-poker" }),
+        new AppItem({ Logo: "/images/code_review_logo.png", Name: "Code review", Path: "/code-review/" }),
+    ];
 
 
     useEffect(() => {
@@ -179,13 +189,13 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
 
     return <div>
         {/* <React.StrictMode> */}
-            <BrowserRouter>
-                <HeaderMain AuthInfo={localState.Auth} />
-                {/* <BodyMain /> */}
-                <AppRouter AuthInfo={localState.Auth} />
-                <FooterMain />
-                <MainAlertAbsolute Data={localState.AbsoluteAlerts} RemoveALert={RemoveMainALert} />
-            </BrowserRouter>
+        <BrowserRouter>
+            <HeaderMain AuthInfo={localState.Auth} Apps={ApplacationsList} />
+            {/* <BodyMain /> */}
+            <AppRouter AuthInfo={localState.Auth} Apps={ApplacationsList} />
+            <FooterMain />
+            <MainAlertAbsolute Data={localState.AbsoluteAlerts} RemoveALert={RemoveMainALert} />
+        </BrowserRouter>
         {/* </React.StrictMode> */}
     </div>
 

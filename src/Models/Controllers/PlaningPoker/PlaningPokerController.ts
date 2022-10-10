@@ -114,9 +114,13 @@ export class HubEndpoints {
 
 export interface IPlaningPokerController {
     //TODO тут userId хорошо бы убрать на бэк. см бэк контроллер
-    GetUsersIsRoom: (roomname: string, userId: string, onSuccess: ListUserInRoomReturn) => void;
-    GetRoomInfo: (roomname: string, userId: string, onSuccess: GetRoomInfoReturn) => void;
-    GetNotActualStories: (roomname: string, userId: string, page: number, countOnPage: number, onSuccess: GetNotActualStoriesReturn) => void;
+    // GetUsersIsRoom: (roomname: string, userId: string, onSuccess: ListUserInRoomReturn) => void;
+    // GetRoomInfo: (roomname: string, userId: string, onSuccess: GetRoomInfoReturn) => void;
+    // GetNotActualStories: (roomname: string, userId: string, page: number, countOnPage: number, onSuccess: GetNotActualStoriesReturn) => void;
+
+    GetUsersIsRoomRedux: (roomname: string, userId: string) => void;
+    GetRoomInfoRedux: (roomname: string, userId: string) => void;
+    GetNotActualStoriesRedux: (roomname: string, userId: string, page: number, countOnPage: number) => void;
 
     EndPoints: HubEndpoints;
 }
@@ -130,6 +134,15 @@ export class PlaningPokerController implements IPlaningPokerController {
         this.EndPoints = new HubEndpoints();
     }
 
+    GetNotActualStoriesRedux(roomname: string, userId: string, page: number, countOnPage: number) {
+        return (dispatch: any, getState: any) => {
+            this.GetNotActualStories(roomname, userId, page, countOnPage,
+                (error: MainErrorObjectBack, data: INotActualStoriesReturn) => {
+                    //todo r
+                });
+        };
+    }
+
     GetNotActualStories(roomname: string, userId: string, page: number, countOnPage: number, onSuccess: GetNotActualStoriesReturn) {
         G_AjaxHelper.GoAjaxRequest({
             Data: {
@@ -140,22 +153,21 @@ export class PlaningPokerController implements IPlaningPokerController {
             },
             Type: "GET",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                    onSuccess(resp, null);
-
-                }
-                else {
-                    let dataBack = xhr as INotActualStoriesReturn;
-                    onSuccess(null, dataBack);
-
-                }
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/PlanitPoker/get-not-actual-stories',
 
         });
+    }
+
+    GetUsersIsRoomRedux(roomname: string, userId: string) {
+        return (dispatch: any, getState: any) => {
+            this.GetUsersIsRoom(roomname, userId,
+                (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => {
+                    //todo r
+                });
+        };
     }
 
     GetUsersIsRoom(roomname: string, userId: string, onSuccess: ListUserInRoomReturn) {
@@ -166,22 +178,21 @@ export class PlaningPokerController implements IPlaningPokerController {
             },
             Type: "GET",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                    onSuccess(resp, null);
-
-                }
-                else {
-                    let dataBack = xhr as IUserInRoomReturn[];
-                    onSuccess(null, dataBack);
-
-                }
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
 
         });
+    }
+
+    GetRoomInfoRedux(roomname: string, userId: string) {
+        return (dispatch: any, getState: any) => {
+            this.GetRoomInfo(roomname, userId,
+                (error: MainErrorObjectBack, data: IRoomInfoReturn) => {
+                    //todo r
+                });
+        };
     }
 
     GetRoomInfo(roomname: string, userId: string, onSuccess: GetRoomInfoReturn) {
@@ -192,22 +203,29 @@ export class PlaningPokerController implements IPlaningPokerController {
             },
             Type: "GET",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    //TODO ошибка
-                    onSuccess(resp, null);
-
-                }
-                else {
-                    let dataBack = xhr as IRoomInfoReturn;
-                    onSuccess(null, dataBack);
-
-                }
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+                
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/PlanitPoker/get-room-info',
 
         });
+    }
+
+
+    mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
+        return (xhr: any, status: any, jqXHR: any) => {
+            let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
+            if (resp.errors) {
+                //TODO ошибка
+                onSuccess(resp, null);
+            }
+            else {
+                let dataBack = xhr as T;
+                onSuccess(null, dataBack);
+
+            }
+        }
     }
 
 }

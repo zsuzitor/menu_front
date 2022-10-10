@@ -1,27 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { RoomStatus, UserInRoom, UserRoles } from '../../../../Models/Models/PlaningPoker/RoomInfo';
+import { connect } from 'react-redux';
+import { AppState } from '../../../../Models/Models/State/AppState';
+
+
 
 
 require('./UserInList.css');
 
 
-class UserInListProp {
+interface UserInListOwnProps {
     User: UserInRoom;
-    TryToRemoveUserFromRoom: (userId: string) => void;
     RenderForAdmin: boolean;
     HideVote: boolean;
     HasVote: boolean;
-    RoomStatus: RoomStatus;
-    MinVote: number;
-    MaxVote: number;
-    RoomName: string;
-
     MyHubConnection: signalR.HubConnection;
-    // HubConnected: boolean;
+
+
 }
 
 
-const UserInList = (props: UserInListProp) => {
+interface UserInListStateToProps {
+
+    RoomStatus: RoomStatus;
+
+    MinVote: number;
+    MaxVote: number;
+    RoomName: string;
+    CurrentUserIsAdmin: boolean;
+
+}
+
+interface UserInListDispatchToProps {
+    // TryToRemoveUserFromRoom: (userId: string, roomname: string, currentUserIsAdmin: boolean) => void;
+
+}
+
+interface UserInListProps extends UserInListStateToProps, UserInListOwnProps, UserInListDispatchToProps {
+
+}
+
+
+
+const UserInList = (props: UserInListProps) => {
 
     const [selectedEditRole, changeSelectedEditRoleState] = useState("-");
 
@@ -45,6 +66,14 @@ const UserInList = (props: UserInListProp) => {
     }
 
 
+    const tryToRemoveUserFromRoom = () => {
+        if (!props.CurrentUserIsAdmin) {
+            return;
+        }
+
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.KickUser, props.RoomName, props.User.Id);
+    };
+
 
 
 
@@ -53,9 +82,7 @@ const UserInList = (props: UserInListProp) => {
     if (props.RenderForAdmin) {
         delButton = <div className='user-list-del-but'
             title='Выгнать пользователя'
-            onClick={() => props.TryToRemoveUserFromRoom(props.User.Id)}>
-            {/* <button className="btn btn-danger"
-                onClick={() => props.TryToRemoveUserFromRoom(props.User.Id)}>Выгнать</button> */}
+            onClick={() => tryToRemoveUserFromRoom()}>
             <img className='persent-100-width-height' src="/images/delete-icon.png" />
 
         </div>
@@ -79,10 +106,6 @@ const UserInList = (props: UserInListProp) => {
                 <div className='user-role-but user-role-but-del' title='Удалить роль'
                     onClick={() => removeRoleUser()}>-</div>
             </div>
-            {/* <button className="btn btn-success"
-                onClick={() => addNewRoleToUser()}>Добавить роль</button>
-            <button className="btn btn-danger"
-                onClick={() => removeRoleUser()}>Удалить роль</button> */}
         </div>
     }
 
@@ -149,6 +172,30 @@ const UserInList = (props: UserInListProp) => {
 
 
 
-export default UserInList;
+const mapStateToProps = (state: AppState, ownProps: UserInListOwnProps) => {
+    let res = {} as UserInListStateToProps;
+    res.RoomName = ;
+    res.RoomStatus = ;
+    res.MaxVote = ;
+    res.MinVote = ;
+    res.CurrentUserIsAdmin = ;
+    return res;
+}
 
+const mapDispatchToProps = (dispatch: any, ownProps: UserInListOwnProps) => {
+    let res = {} as UserInListDispatchToProps;
+
+    //     ownProps.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.KickUser, roomname, userId);
+    // };
+    // res.AddTaskToProject = (newTaskName: string, newTaskCreator: number, newTaskReviwer: number, projectId: number) => {
+    //     dispatch(window.G_CodeReviewTaskController.AddTaskToProjectRedux(newTaskName, newTaskCreator, newTaskReviwer, projectId));
+    // };
+
+    return res;
+};
+
+
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+// and that function returns the connected, wrapper component:
+export default connectToStore(UserInList);
 

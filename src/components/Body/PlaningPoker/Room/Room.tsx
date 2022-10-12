@@ -17,35 +17,52 @@ import { IRoomInfoReturn } from '../../../../Models/BackModel/PlaningPoker/RoomI
 import cloneDeep from 'lodash/cloneDeep';
 import RoomTimer from '../RoomTimer/RoomTimer';
 import { IRoomWasSavedUpdateReturn } from '../../../../Models/BackModel/PlaningPoker/RoomWasSavedUpdateReturn';
+import { connect } from 'react-redux';
+import { AppState } from '../../../../Models/Models/State/AppState';
 
 
 
 require('./Room.css');
 
 
-class RoomProps {
-    // InRoom: boolean;
+
+interface RoomOwnProps {
+    MyHubConnection: signalR.HubConnection;
+    HubConnected: boolean;
+    UsersList: UserInRoom[];
+    VoteInfo: VoteInfo;
+    TotalNotActualStoriesCount: number;
+
+}
+
+
+interface RoomStateToProps {
+    
     UserInfo: PlaningPokerUserInfo;
     RoomInfo: RoomInfo;
 
-    MyHubConnection: signalR.HubConnection;
-    HubConnected: boolean;
+}
 
+interface RoomDispatchToProps {
+    
     RoomNameChanged: (name: string) => void;
     ChangeUserName: ((newName: string) => void);
     ClearUserId: () => void;
 }
 
+interface RoomProps extends RoomStateToProps, RoomOwnProps, RoomDispatchToProps {
+
+}
+
+
+
+
 class RoomState {
-    UsersList: UserInRoom[];
-    VoteInfo: VoteInfo;
     DieRoomTime: Date;
-    TotalNotActualStoriesCount: number;
+
     constructor() {
-        this.UsersList = [];
-        this.VoteInfo = new VoteInfo();
         this.DieRoomTime = null;
-        this.TotalNotActualStoriesCount = 0;
+
     }
 
 }
@@ -166,7 +183,7 @@ const Room = (props: RoomProps) => {
     const storiesHelper = new StoriesHelper();
 
 
-    const currentUserIsAdmin = CurrentUserIsAdmin(localState.UsersList, props.UserInfo.UserId);
+    const currentUserIsAdmin = CurrentUserIsAdmin(props.UsersList, props.UserInfo.UserId);
 
 
     useEffect(() => {
@@ -1036,4 +1053,22 @@ const Room = (props: RoomProps) => {
 
 
 
-export default Room;
+const mapStateToProps = (state: AppState, ownProps: RoomOwnProps) => {
+    let res = {} as RoomStateToProps;
+    
+    return res;
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: RoomOwnProps) => {
+    let res = {} as RoomDispatchToProps;
+
+    
+    return res;
+};
+
+
+
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+// and that function returns the connected, wrapper component:
+export default connectToStore(Room);
+

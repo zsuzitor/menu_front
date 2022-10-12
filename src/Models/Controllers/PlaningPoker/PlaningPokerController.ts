@@ -1,5 +1,6 @@
 
 
+import { SetNotActualStoriesActionCreator } from "../../Actions/PlaningPokerApp/Actions";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { IRoomInfoReturn, INotActualStoriesReturn } from "../../BackModel/PlaningPoker/RoomInfoReturn";
 import { IUserInRoomReturn } from "../../BackModel/PlaningPoker/UserInRoomReturn";
@@ -139,6 +140,13 @@ export class PlaningPokerController implements IPlaningPokerController {
             this.GetNotActualStories(roomname, userId, page, countOnPage,
                 (error: MainErrorObjectBack, data: INotActualStoriesReturn) => {
                     //todo r
+                    if (error) {
+                        return;
+                    }
+    
+                    if (data) {
+                        dispatch(SetNotActualStoriesActionCreator(data.stories));
+                    }
                 });
         };
     }

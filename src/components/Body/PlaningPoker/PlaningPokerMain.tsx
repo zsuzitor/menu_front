@@ -28,13 +28,11 @@ import { MainErrorObjectBack } from '../../../Models/BackModel/ErrorBack';
 
 class PlaningPokerMainState {
     // MyHubConnection: signalR.HubConnection;
-    User: PlaningPokerUserInfo;
-    RoomInfo: RoomInfo;
+    
     // InRoom: boolean;//по сути надо дернуть обновление стейта для перерендера
     constructor() {
         // this.MyHubConnection = null;
-        this.User = new PlaningPokerUserInfo();
-        this.RoomInfo = new RoomInfo();
+        
 
     }
 }

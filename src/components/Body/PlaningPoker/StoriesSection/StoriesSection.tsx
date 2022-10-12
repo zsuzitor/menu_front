@@ -4,44 +4,62 @@ import { PlaningPokerUserInfo, RoomStatus, StoriesHelper, Story } from '../../..
 import cloneDeep from 'lodash/cloneDeep';
 import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
 import Paggination from '../../Paggination/Paggination';
-import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
-import { INotActualStoriesReturn } from '../../../../Models/BackModel/PlaningPoker/RoomInfoReturn';
+import { connect } from 'react-redux';
+import { AppState } from '../../../../Models/Models/State/AppState';
 
 
 require('./StoriesSection.css');
 
 
 
-class StoriesSectionProp {
+interface StoriesSectionOwnProps {
+    MyHubConnection: signalR.HubConnection;
     Stories: Story[];
     CurrentStoryId: string;
     TotalNotActualStoriesCount: number;
-    UserInfo: PlaningPokerUserInfo;
+    CurrentStoryNameChange: string;
+    CurrentStoryDescriptionChange: string;
+    IsAdmin: boolean;
 
-    MyHubConnection: signalR.HubConnection;
-    MakeCurrentStory: (id: string) => void;
-    DeleteStory: (id: string) => void;
+
+}
+
+
+interface StoriesSectionStateToProps {
+    UserInfo: PlaningPokerUserInfo;
     RoomName: string;
     RoomStatus: RoomStatus;
-    IsAdmin: boolean;
-    CurrentStoryNameChange: string;
-    CurrentStoryNameOnChange: (str: string) => void;
-    CurrentStoryDescriptionChange: string;
-    CurrentStoryDescriptionOnChange: (str: string) => void;
+    NotActualStories: Story[];
+
 }
+
+interface StoriesSectionDispatchToProps {
+    MakeCurrentStory: (id: string) => void;
+    DeleteStory: (id: string) => void;
+    CurrentStoryNameOnChange: (str: string) => void;
+    CurrentStoryDescriptionOnChange: (str: string) => void;
+    LoadOldStories: (roomname: string, userConnectionId: string
+        , storiesPageNumber: number, countStoriesOnPage: number) => void;
+}
+
+interface StoriesSectionProps extends StoriesSectionStateToProps, StoriesSectionOwnProps, StoriesSectionDispatchToProps {
+
+}
+
+
+
 
 class StoriesSectionState {
     NameForAdd: string;
     DescriptionForAdd: string;
     SortByDateAsc: boolean;
-    NotActualStories: Story[];
+
 
 
     constructor() {
         this.NameForAdd = "";
         this.DescriptionForAdd = "";
         this.SortByDateAsc = false;
-        this.NotActualStories = [];
     }
 }
 
@@ -49,7 +67,7 @@ class StoriesSectionState {
 
 
 
-const StoriesSection = (props: StoriesSectionProp) => {
+const StoriesSection = (props: StoriesSectionProps) => {
 
     const initStories = new StoriesSectionState();
     const [storiesState, setStoriesState] = useState(initStories);
@@ -79,9 +97,9 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
     useEffect(() => {
-        loadOldStories();
+        props.LoadOldStories(props.RoomName, props.UserInfo.UserConnectionId, storiesPageNumber, countStoriesOnPage);
 
-    }, [storiesPageNumber]);
+    }, [props.RoomName, props.UserInfo.UserConnectionId, storiesPageNumber, countStoriesOnPage]);
 
 
 
@@ -105,34 +123,6 @@ const StoriesSection = (props: StoriesSectionProp) => {
             props.CurrentStoryDescriptionChange);
     }
 
-    const loadOldStories = () => {
-
-        let loadedStories = (error: MainErrorObjectBack, data: INotActualStoriesReturn) => {
-            if (error) {
-                alert("todo что то пошло не так лучше обновить страницу");
-                return;
-            }
-
-            if (data) {
-                setStoriesState(prevState => {
-                    // let newState = { ...prevState };
-                    let newState = cloneDeep(prevState);
-                    newState.NotActualStories = data.stories.map(x => {
-                        let st = new Story();
-                        st.FillByBackModel(x);
-                        return st;
-                    });
-                    return newState;
-                });
-            }
-
-        };
-        // console.log(JSON.stringify(props));
-        window.G_PlaningPokerController.GetNotActualStories(props.RoomName, props.UserInfo.UserConnectionId, storiesPageNumber, countStoriesOnPage, loadedStories);
-
-
-
-    }
 
 
     const ResetCurrentStoryById = () => {
@@ -298,7 +288,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                     SetPageNumber={setstoriesPageNumber}></Paggination>
             }
 
-            storiesForRender = storiesState.NotActualStories;
+            storiesForRender = props.NotActualStories;
 
         }
         else {
@@ -361,7 +351,7 @@ const StoriesSection = (props: StoriesSectionProp) => {
                 </div>}></AdditionalWindow>
 
             }
-            
+
             <div className='room-stories-type-selector'>
                 <div className={'type-section' + (listStoryTypeState === 1 ? ' type-section-select' : '')}
                     onClick={() => setListStoryTypeState(1)}>Актуальные истории</div>
@@ -399,9 +389,6 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
 
-
-
-
     return <div>
         <div className='planing-current-story'>
 
@@ -420,4 +407,39 @@ const StoriesSection = (props: StoriesSectionProp) => {
 
 
 
-export default StoriesSection;
+const mapStateToProps = (state: AppState, ownProps: StoriesSectionOwnProps) => {
+    let res = {} as StoriesSectionStateToProps;
+    res.RoomName =state.PlaningPokerApp.;
+    res.RoomStatus =;
+    res.UserInfo =;
+    res.NotActualStories = state.PlaningPokerApp.NotActualStories;
+
+    return res;
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: StoriesSectionOwnProps) => {
+    let res = {} as StoriesSectionDispatchToProps;
+    res.CurrentStoryDescriptionOnChange = ;
+    res.CurrentStoryNameOnChange = ;
+    res.DeleteStory = ;
+    res.MakeCurrentStory =;
+    res.LoadOldStories = (roomname: string, userConnectionId: string
+        , storiesPageNumber: number, countStoriesOnPage: number) => {
+        // console.log(JSON.stringify(props));
+        dispatch(window.G_PlaningPokerController.GetNotActualStoriesRedux(roomname, userConnectionId, storiesPageNumber, countStoriesOnPage));
+
+    };
+    //     ownProps.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.KickUser, roomname, userId);
+    // };
+    // res.AddTaskToProject = (newTaskName: string, newTaskCreator: number, newTaskReviwer: number, projectId: number) => {
+    //     dispatch(window.G_CodeReviewTaskController.AddTaskToProjectRedux(newTaskName, newTaskCreator, newTaskReviwer, projectId));
+    // };
+
+    return res;
+};
+
+
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+// and that function returns the connected, wrapper component:
+export default connectToStore(StoriesSection);
+

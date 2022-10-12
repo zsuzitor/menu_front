@@ -15,7 +15,7 @@ interface UserInListOwnProps {
     HideVote: boolean;
     HasVote: boolean;
     MyHubConnection: signalR.HubConnection;
-
+    CurrentUserIsAdmin: boolean;
 
 }
 
@@ -27,7 +27,6 @@ interface UserInListStateToProps {
     MinVote: number;
     MaxVote: number;
     RoomName: string;
-    CurrentUserIsAdmin: boolean;
 
 }
 
@@ -174,11 +173,10 @@ const UserInList = (props: UserInListProps) => {
 
 const mapStateToProps = (state: AppState, ownProps: UserInListOwnProps) => {
     let res = {} as UserInListStateToProps;
-    res.RoomName = ;
+    res.RoomName = state.PlaningPokerApp.RoomInfo?.Name;
     res.RoomStatus = ;
-    res.MaxVote = ;
-    res.MinVote = ;
-    res.CurrentUserIsAdmin = ;
+    res.MaxVote = state.PlaningPokerApp.VoteInfo?.MaxVote;
+    res.MinVote = state.PlaningPokerApp.VoteInfo?.MinVote;
     return res;
 }
 

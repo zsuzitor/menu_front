@@ -1,4 +1,4 @@
-import { PlaningPokerUserInfo, RoomInfo, Story, UserInRoom, VoteInfo } from "../RoomInfo";
+import { PlaningPokerUserInfo, RoomInfo, RoomStatus, Story, UserInRoom, VoteInfo } from "../RoomInfo";
 
 
 export class PlaningPokerAppState {
@@ -8,6 +8,9 @@ export class PlaningPokerAppState {
     TotalNotActualStoriesCount: number;
     User: PlaningPokerUserInfo;
     RoomInfo: RoomInfo;
+    StoriesInfo: StoriesInfo;
+    SelectedVoteCard: string;
+    RoomStatus: RoomStatus;
 
     constructor() {
         this.NotActualStories = [];
@@ -17,5 +20,25 @@ export class PlaningPokerAppState {
         this.User = new PlaningPokerUserInfo();
         this.User.UserName = 'enter_your_name';
         this.RoomInfo = new RoomInfo();
+        this.StoriesInfo = new StoriesInfo();
+        this.SelectedVoteCard = '-1';
+        this.RoomStatus = RoomStatus.None;
+    }
+}
+
+
+export class StoriesInfo {
+    Stories: Story[];
+
+    CurrentStoryId: string;
+    // CurrentStoryNameChange: string;
+    // CurrentStoryDescriptionChange: string;
+
+
+    constructor() {
+        this.Stories = [];
+        this.CurrentStoryId = "";
+        // this.CurrentStoryNameChange = "";
+        // this.CurrentStoryDescriptionChange = "";
     }
 }

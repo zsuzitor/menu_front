@@ -174,7 +174,7 @@ const UserInList = (props: UserInListProps) => {
 const mapStateToProps = (state: AppState, ownProps: UserInListOwnProps) => {
     let res = {} as UserInListStateToProps;
     res.RoomName = state.PlaningPokerApp.RoomInfo?.Name;
-    res.RoomStatus = ;
+    res.RoomStatus = state.PlaningPokerApp.RoomStatus;
     res.MaxVote = state.PlaningPokerApp.VoteInfo?.MaxVote;
     res.MinVote = state.PlaningPokerApp.VoteInfo?.MinVote;
     return res;

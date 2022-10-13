@@ -20,7 +20,7 @@ declare var G_ArticleController: import("../src/Models/Controllers/MenuApp/Artic
 declare var G_WordsCardsController: import("../src/Models/Controllers/WordsCardsApp/WordsCardsController").IWordsCardsController;
 declare var G_WordsListController: import("../src/Models/Controllers/WordsCardsApp/WordsListController").IWordsListController;
 declare var G_UsersController: import("../src/Models/Controllers/UsersController").IUsersController;
-declare var G_PlaningPokerController: import("../src/Models/Controllers/PlaningPoker/PlaningPokerController").IPlaningPokerController;
+declare var G_PlaningPokerController: import("../src/Models/Controllers/PlaningPokerApp/PlaningPokerController").IPlaningPokerController;
 declare var G_CodeReviewProjectController: import("../src/Models/Controllers/CodeReviewApp/CodeReviewProjectController").ICodeReviewProjectController;
 declare var G_CodeReviewTaskController: import("../src/Models/Controllers/CodeReviewApp/CodeReviewTaskController").ICodeReviewTaskController;
 declare var G_CodeReviewUserController: import("../src/Models/Controllers/CodeReviewApp/CodeReviewUserController").ICodeReviewUserController;

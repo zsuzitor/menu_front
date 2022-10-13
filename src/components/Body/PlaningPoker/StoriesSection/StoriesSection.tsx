@@ -1,11 +1,12 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { IStoryReturn } from '../../../../Models/BackModel/PlaningPoker/StoryReturn';
-import { PlaningPokerUserInfo, RoomStatus, StoriesHelper, Story } from '../../../../Models/Models/PlaningPoker/RoomInfo';
+import { PlaningPokerUserInfo, RoomStatus, Story } from '../../../../Models/Models/PlaningPoker/RoomInfo';
 import cloneDeep from 'lodash/cloneDeep';
 import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
 import Paggination from '../../Paggination/Paggination';
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Models/State/AppState';
+import { StoriesHelper } from '../../../../Models/BL/PlaningPokerApp/PlaningPokerHelper';
 
 
 require('./StoriesSection.css');
@@ -14,12 +15,10 @@ require('./StoriesSection.css');
 
 interface StoriesSectionOwnProps {
     MyHubConnection: signalR.HubConnection;
-    Stories: Story[];
-    CurrentStoryId: string;
-    TotalNotActualStoriesCount: number;
-    CurrentStoryNameChange: string;
-    CurrentStoryDescriptionChange: string;
+    // CurrentStoryNameChange: string;
+    // CurrentStoryDescriptionChange: string;
     IsAdmin: boolean;
+
 
 
 }
@@ -30,14 +29,16 @@ interface StoriesSectionStateToProps {
     RoomName: string;
     RoomStatus: RoomStatus;
     NotActualStories: Story[];
+    Stories: Story[];
+    CurrentStoryId: string;
+    TotalNotActualStoriesCount: number;
+
 
 }
 
 interface StoriesSectionDispatchToProps {
-    MakeCurrentStory: (id: string) => void;
-    DeleteStory: (id: string) => void;
-    CurrentStoryNameOnChange: (str: string) => void;
-    CurrentStoryDescriptionOnChange: (str: string) => void;
+    // CurrentStoryNameOnChange: (str: string) => void;
+    // CurrentStoryDescriptionOnChange: (str: string) => void;
     LoadOldStories: (roomname: string, userConnectionId: string
         , storiesPageNumber: number, countStoriesOnPage: number) => void;
 }
@@ -74,6 +75,11 @@ const StoriesSection = (props: StoriesSectionProps) => {
     const [listStoryTypeState, setListStoryTypeState] = useState(1);
     const [showNewStoryForm, setShowNewStoryForm] = useState(false);
     const [storiesPageNumber, setstoriesPageNumber] = useState(1);
+    let storyHelper = new StoriesHelper();
+    let currentStory = storyHelper.GetStoryById(props.Stories, props.CurrentStoryId);
+    const [currentStoryNameChange, setCurrentStoryNameChange] = useState(currentStory?.Name || '');
+    const [currentStoryDescriptionChange, setCurrentStoryDescriptionChange] = useState(currentStory?.Description || '');
+
 
 
     const countStoriesOnPage = 3;
@@ -82,11 +88,24 @@ const StoriesSection = (props: StoriesSectionProps) => {
     const storiesHelper = new StoriesHelper();
 
     useEffect(() => {
-        ResetCurrentStoryById();
+        // ResetCurrentStoryById();
+        setCurrentStoryNameChange(currentStory?.Name || '');
+        setCurrentStoryDescriptionChange(currentStory?.Description || '');
+        if (currentStory) {
+        }
 
 
-    }, [props.CurrentStoryId])
+    }, [props.CurrentStoryId]);
 
+    useEffect(() => {
+        setCurrentStoryNameChange(currentStory?.Name || '');
+
+    }, [currentStory?.Name]);
+
+    useEffect(() => {
+        setCurrentStoryDescriptionChange(currentStory?.Description || '');
+
+    }, [currentStory?.Description]);
 
 
     useEffect(() => {
@@ -106,37 +125,32 @@ const StoriesSection = (props: StoriesSectionProps) => {
 
 
     const cancelChangeCurrentStory = () => {
-
-
-        let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
-        props.CurrentStoryDescriptionOnChange(story.Description);
-        props.CurrentStoryNameOnChange(story.Name);
-
-
+        setCurrentStoryNameChange(currentStory?.Name || '');
+        setCurrentStoryDescriptionChange(currentStory?.Description || '');
     }
 
 
     const changeCurrentStory = () => {
         props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.ChangeCurrentStory,
             props.RoomName, props.CurrentStoryId,
-            props.CurrentStoryNameChange,
-            props.CurrentStoryDescriptionChange);
+            currentStoryNameChange,
+            currentStoryDescriptionChange);
     }
 
 
 
-    const ResetCurrentStoryById = () => {
-        if (!props.CurrentStoryId) {
-            props.CurrentStoryDescriptionOnChange("");
-            props.CurrentStoryNameOnChange("");
-            return;
-        }
+    // const ResetCurrentStoryById = () => {
+    //     if (!props.CurrentStoryId) {
+    //         props.CurrentStoryDescriptionOnChange("");
+    //         props.CurrentStoryNameOnChange("");
+    //         return;
+    //     }
 
-        let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
-        props.CurrentStoryDescriptionOnChange(story.Description);
-        props.CurrentStoryNameOnChange(story.Name);
+    //     let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
+    //     props.CurrentStoryDescriptionOnChange(story.Description);
+    //     props.CurrentStoryNameOnChange(story.Name);
 
-    }
+    // }
 
 
     const tryMakeStoryComplete = () => {
@@ -152,6 +166,18 @@ const StoriesSection = (props: StoriesSectionProps) => {
         }
     }
 
+    const deleteStory = (id: string) => {
+        if (!confirm('Удалить историю?')) {
+            return;
+        }
+
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.DeleteStory, props.RoomName, id);
+    }
+
+
+    const makeCurrentStory = (id: string) => {
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.MakeCurrentStory, props.RoomName, id);
+    }
 
 
 
@@ -181,21 +207,15 @@ const StoriesSection = (props: StoriesSectionProps) => {
             if (props.IsAdmin) {
                 return <div><input className="persent-100-width form-control"
                     placeholder="Название"
-                    value={props.CurrentStoryNameChange}
+                    value={currentStoryNameChange}
                     type="text" onChange={(e) => {
-
-                        props.CurrentStoryNameOnChange(e.target.value);
-
-
+                        setCurrentStoryNameChange(e.target.value);
                     }}></input>
                     <input className="persent-100-width form-control"
                         placeholder="Описание"
-                        value={props.CurrentStoryDescriptionChange}
+                        value={currentStoryDescriptionChange}
                         type="text" onChange={(e) => {
-
-                            props.CurrentStoryDescriptionOnChange(e.target.value);
-
-
+                            setCurrentStoryDescriptionChange(e.target.value);
                         }}></input></div>
             }
             else {
@@ -242,13 +262,13 @@ const StoriesSection = (props: StoriesSectionProps) => {
         if (props.IsAdmin && listStoryTypeState === 1) {
             adminButtonInList = (id: string) => {
                 return <div className='stories-but-block'>
-                    <div className='stories-action-btn' onClick={() => props.MakeCurrentStory(id)}
+                    <div className='stories-action-btn' onClick={() => makeCurrentStory(id)}
                         title='Сделать текущей'>
                         <img className='persent-100-width-height' src="/images/vote2.png" />
                     </div>
                     <div className='stories-del-but'
                         title='Удалить'
-                        onClick={() => props.DeleteStory(id)}>
+                        onClick={() => deleteStory(id)}>
                         <img className='persent-100-width-height' src="/images/delete-icon.png" />
 
                     </div>
@@ -409,9 +429,9 @@ const StoriesSection = (props: StoriesSectionProps) => {
 
 const mapStateToProps = (state: AppState, ownProps: StoriesSectionOwnProps) => {
     let res = {} as StoriesSectionStateToProps;
-    res.RoomName =state.PlaningPokerApp.;
-    res.RoomStatus =;
-    res.UserInfo =;
+    res.RoomName = state.PlaningPokerApp.RoomInfo.Name;
+    res.RoomStatus = state.PlaningPokerApp.RoomStatus;
+    res.UserInfo = state.PlaningPokerApp.User;
     res.NotActualStories = state.PlaningPokerApp.NotActualStories;
 
     return res;
@@ -419,10 +439,6 @@ const mapStateToProps = (state: AppState, ownProps: StoriesSectionOwnProps) => {
 
 const mapDispatchToProps = (dispatch: any, ownProps: StoriesSectionOwnProps) => {
     let res = {} as StoriesSectionDispatchToProps;
-    res.CurrentStoryDescriptionOnChange = ;
-    res.CurrentStoryNameOnChange = ;
-    res.DeleteStory = ;
-    res.MakeCurrentStory =;
     res.LoadOldStories = (roomname: string, userConnectionId: string
         , storiesPageNumber: number, countStoriesOnPage: number) => {
         // console.log(JSON.stringify(props));
@@ -434,6 +450,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: StoriesSectionOwnProps) => 
     // res.AddTaskToProject = (newTaskName: string, newTaskCreator: number, newTaskReviwer: number, projectId: number) => {
     //     dispatch(window.G_CodeReviewTaskController.AddTaskToProjectRedux(newTaskName, newTaskCreator, newTaskReviwer, projectId));
     // };
+    
 
     return res;
 };

@@ -1,6 +1,6 @@
 // import * as React from "react";
 import React, { useState, useEffect } from 'react';
-import { RoomInfo, UserInRoom, RoomStatus, PlaningPokerUserInfo, VoteInfo, Story, StoriesHelper } from '../../../../Models/Models/PlaningPoker/RoomInfo';
+import { RoomInfo, UserInRoom, RoomStatus, PlaningPokerUserInfo, VoteInfo, Story } from '../../../../Models/Models/PlaningPoker/RoomInfo';
 
 
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
@@ -16,9 +16,12 @@ import StoriesSection from '../StoriesSection/StoriesSection';
 import { IRoomInfoReturn } from '../../../../Models/BackModel/PlaningPoker/RoomInfoReturn';
 import cloneDeep from 'lodash/cloneDeep';
 import RoomTimer from '../RoomTimer/RoomTimer';
-import { IRoomWasSavedUpdateReturn } from '../../../../Models/BackModel/PlaningPoker/RoomWasSavedUpdateReturn';
+import { IRoomWasSavedUpdateReturn, IStoryMappingReturn } from '../../../../Models/BackModel/PlaningPoker/RoomWasSavedUpdateReturn';
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Models/State/AppState';
+import { AddNewStoryActionCreator, AddUserToRoomActionCreator, ChangeUserNameInRoomActionCreator, ClearVoteActionCreator, DeleteStoryActionCreator, MoveStoryToCompleteActionCreator, RemoveUserActionCreator, SetCurrentStoryIdActionCreator, SetRoomNameActionCreator, SetRoomStatusActionCreator, SetRoomUserIdActionCreator, SetRoomUsersActionCreator, SetSelectedCardActionCreator, SetStoriesActionCreator, SetUserNameActionCreator, SetVoteInfoActionCreator, StoryChangeActionCreator, UpdateStoriesIdActionCreator, UserRoleChangedActionCreator, VoteChangedActionCreator } from '../../../../Models/Actions/PlaningPokerApp/Actions';
+import _ from 'lodash';
+import { PlaningPokerHelper, StoriesHelper } from '../../../../Models/BL/PlaningPokerApp/PlaningPokerHelper';
 
 
 
@@ -29,25 +32,46 @@ require('./Room.css');
 interface RoomOwnProps {
     MyHubConnection: signalR.HubConnection;
     HubConnected: boolean;
-    UsersList: UserInRoom[];
-    VoteInfo: VoteInfo;
-    TotalNotActualStoriesCount: number;
 
 }
 
 
 interface RoomStateToProps {
-    
+
     UserInfo: PlaningPokerUserInfo;
     RoomInfo: RoomInfo;
-
+    VoteInfo: VoteInfo;
+    UsersList: UserInRoom[];
+    TotalNotActualStoriesCount: number;
+    RoomStatus: RoomStatus;
+    SelectedVoteCard: string;
 }
 
 interface RoomDispatchToProps {
-    
-    RoomNameChanged: (name: string) => void;
-    ChangeUserName: ((newName: string) => void);
-    ClearUserId: () => void;
+
+    SetRoomName: (name: string) => void;
+    SetUserName: ((newName: string) => void);
+    SetUserId: (userId: string) => void;
+    SetRoomUsers: (users: UserInRoom[]) => void;
+    SetVoteInfo: (voteInfo: IEndVoteInfoReturn) => void;
+    SetCurrentStoryId: (id: string) => void;
+    SetStories: (id: Story[]) => void;
+    SetRoomStatus: (status: RoomStatus) => void;
+    AddUserToRoom: (data: UserInRoom) => void;
+
+    //какой то пользователь изменил имя, надо прорастить изменения
+    ChangeAnotherUserName: (userId: string, newUserName: string) => void;
+    RemoveUsers: (usersId: string[]) => void;
+    VoteChanged: (userId: string, vote: string) => void;
+    UserRoleChanged: (userId: string, changeType: number, role: string) => void;
+    SetSelectedCard: (val: string) => void;
+    ClearVote: () => void;
+    AddNewStory: (story: Story) => void;
+    StoryChange: (story: Story) => void;
+    DeleteStory: (id: string) => void;
+    MoveStoryToComplete: (oldId: string, data: Story) => void;
+    UpdateStoriesId: (data: IStoryMappingReturn[]) => void;
+
 }
 
 interface RoomProps extends RoomStateToProps, RoomOwnProps, RoomDispatchToProps {
@@ -69,60 +93,12 @@ class RoomState {
 
 
 
-class StoriesInfo {
-    Stories: Story[];
-
-    CurrentStoryId: string;
-    CurrentStoryNameChange: string;
-    CurrentStoryDescriptionChange: string;
-
-
-    constructor() {
-        this.Stories = [];
-        this.CurrentStoryId = "";
-        this.CurrentStoryNameChange = "";
-        this.CurrentStoryDescriptionChange = "";
-    }
-}
-
-
-//TODO а так можно? не будут ли они затирать в теории методы с других компонентов с такими же названиями, может их переименовать более сложно?
-const CurrentUserIsAdmin = (users: UserInRoom[], userId: string): boolean => {
-    let user = GetUserById(users, userId);
-    if (user && user.IsAdmin()) {
-        return true;
-    }
-
-    return false;
-}
 
 
 
-const CurrentUserCanVote = (users: UserInRoom[], userId: string): boolean => {
-    let user = GetUserById(users, userId);
-    if (user && user.CanVote()) {
-        return true;
-    }
 
-    return false;
-}
 
-const GetUserIndexById = (users: UserInRoom[], userId: string): number => {
-    if (!users || !userId) {
-        return -1;
-    }
 
-    return users.findIndex(x => x.Id === userId);
-}
-
-const GetUserById = (users: UserInRoom[], userId: string): UserInRoom => {
-    let index = GetUserIndexById(users, userId);
-    if (index < 0 || index >= users.length) {
-        return null;
-    }
-
-    return users[index];
-}
 
 
 
@@ -137,11 +113,31 @@ const Room = (props: RoomProps) => {
     __planing_room_props_ref__ = props;
     //эффект для доступа по прямой ссылке
     //
+
+
+    //#state
+    let initState = new RoomState();
+    const [localState, setLocalState] = useState(initState);
+    // const [roomStatusState, setRoomStatusState] = useState(RoomStatus.None);
+    // const [selectedVoteCard, setSelectedVoteCard] = useState("-1");
+    const [hideVoteState, setHideVoteState] = useState(false);
+    const [userNameLocalState, setUserNameLocalState] = useState(props.UserInfo.UserName);//для редактирования
+    // const initStories = new StoriesInfo();
+    // const [storiesState, setStoriesState] = useState(initStories);
+
+
+
+
+    const currentUserIsAdmin = (new PlaningPokerHelper()).CurrentUserIsAdmin(props.UsersList, props.UserInfo.UserId);
+
+
+
+
     useEffect(() => {
         if (!props.RoomInfo.Name) {
             let pathNameUrlSplit = document.location.pathname.split('/');
             if (pathNameUrlSplit && pathNameUrlSplit.length > 3 && pathNameUrlSplit[3]) {
-                props.RoomNameChanged(pathNameUrlSplit[3]);
+                props.SetRoomName(pathNameUrlSplit[3]);
             }
             else {
                 //todo тут можно ошибку какую нибудь бахнуть, типо вход не удался
@@ -154,7 +150,8 @@ const Room = (props: RoomProps) => {
     useEffect(() => {
         if (props.HubConnected) {
             if (props.RoomInfo.Name && !props.RoomInfo.InRoom) {
-                props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.EnterInRoom, props.RoomInfo.Name, props.RoomInfo.Password, props.UserInfo.UserName);
+                props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.EnterInRoom
+                    , props.RoomInfo.Name, props.RoomInfo.Password, props.UserInfo.UserName);
             }
 
             setUserNameLocalState(props.UserInfo.UserName);
@@ -169,22 +166,6 @@ const Room = (props: RoomProps) => {
 
 
 
-    //#state
-    let initState = new RoomState();
-    const [localState, setLocalState] = useState(initState);
-    const [roomStatusState, setRoomStatusState] = useState(RoomStatus.None);
-    const [selectedVoteCard, setSelectedVoteCard] = useState("-1");
-    const [hideVoteState, setHideVoteState] = useState(false);
-    const [userNameLocalState, setUserNameLocalState] = useState(props.UserInfo.UserName);//для редактирования
-    const initStories = new StoriesInfo();
-    const [storiesState, setStoriesState] = useState(initStories);
-
-
-    const storiesHelper = new StoriesHelper();
-
-
-    const currentUserIsAdmin = CurrentUserIsAdmin(props.UsersList, props.UserInfo.UserId);
-
 
     useEffect(() => {
         if (!props.RoomInfo.InRoom) {
@@ -193,66 +174,22 @@ const Room = (props: RoomProps) => {
         //мы проставили все необходимые данные, подключились к хабу и готовы работать
 
         let getRoomInfo = (error: MainErrorObjectBack, data: IRoomInfoReturn) => {
-            if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
-                return;
-            }
-
             if (data) {
                 // console.log(data);
-                let newUsersData = data.room.users.map(x => {
-
-                    let us = new UserInRoom();
-                    us.FillByBackModel(x);
-                    return us;
-                });
-
-                setRoomStatusState(prevState => {
-                    // let newState = { ...prevState };
-                    return data.room.status;
-                    // return newState;
-                });
 
                 setLocalState(prevState => {
                     // let newState = { ...prevState };
                     let newState = cloneDeep(prevState);
-                    newState.UsersList.splice(0, newState.UsersList.length);
-                    newState.UsersList.push(...newUsersData);
                     newState.DieRoomTime = new Date(data.room.die_date);
-                    newState.TotalNotActualStoriesCount = data.room.total_stories_count;
-
-                    fillVoteInfo(newState, data.end_vote_info);
-                    newState.UsersList.forEach(us => {
-                        if (us.Id === props.UserInfo.UserId) {
-                            if (us.Vote) {
-                                setSelectedVoteCard(us.Vote);
-                            }
-                        }
-                    });
-
 
                     return newState;
-                });
-
-
-                setStoriesState(prevState => {
-                    // let newState = { ...prevState };
-                    let newStoriesState = cloneDeep(prevState);
-                    newStoriesState.CurrentStoryId = data.room.current_story_id;
-                    newStoriesState.Stories = data.room.actual_stories.map(x => {
-                        let st = new Story();
-                        st.FillByBackModel(x);
-                        return st;
-                    });
-                    return newStoriesState;
                 });
 
             }
         };
 
 
-        window.G_PlaningPokerController.GetRoomInfo(props.RoomInfo.Name, props.UserInfo.UserConnectionId, getRoomInfo);
+        window.G_PlaningPokerController.GetRoomInfoReduxCB(props.RoomInfo.Name, props.UserInfo.UserConnectionId, getRoomInfo);
 
     }, [props.RoomInfo.InRoom]);
 
@@ -289,22 +226,11 @@ const Room = (props: RoomProps) => {
                 return;
             }
 
-
             let dataTyped = data as IUserInRoomReturn;
             let us = new UserInRoom();
             us.FillByBackModel(dataTyped);
 
-
-            setLocalState(prevState => {
-                // let newState = { ...prevState };
-                let newState = cloneDeep(prevState);
-                var existUser = GetUserById(newState.UsersList, dataTyped.id);
-                if (!existUser) {
-                    newState.UsersList.push(us);
-                }
-
-                return newState;
-            });
+            props.AddUserToRoom(us);
 
         });
 
@@ -315,19 +241,8 @@ const Room = (props: RoomProps) => {
                 return;
             }
 
+            props.ChangeAnotherUserName(userId, newUserName);
 
-            setLocalState(prevState => {
-                // let newState = { ...prevState };
-                let newState = cloneDeep(prevState);
-                let user = GetUserById(newState.UsersList, userId);
-                if (!user) {
-                    return newState;
-                }
-
-                user.Name = newUserName;
-
-                return newState;
-            });
         });
 
 
@@ -341,29 +256,13 @@ const Room = (props: RoomProps) => {
                     // document.cookie = "planing_poker_roomname=; path=/;";
                     alert("you kicked or leave");//TODO может как то получше сделать, и хорошо бы без перезагрузки\редиректа
                     window.location.href = "/planing-poker";
-                    __planing_room_props_ref__.ClearUserId();//todo тут наверное стоит еще что то чистить
+                    __planing_room_props_ref__.SetUserId('');//todo тут наверное стоит еще что то чистить
 
                     return;
                 }
             });
 
-
-
-
-            setLocalState(prevState => {
-                // let newState = { ...prevState };
-                let newState = cloneDeep(prevState);
-                usersId.forEach(x => {
-                    let userIndex = GetUserIndexById(newState.UsersList, x);
-                    if (userIndex < 0) {
-                        return newState;
-                    }
-
-                    newState.UsersList.splice(userIndex, 1);
-                });
-
-                return newState;
-            });
+            props.RemoveUsers(usersId);
         });
 
 
@@ -372,206 +271,67 @@ const Room = (props: RoomProps) => {
                 return;
             }
 
-
-            let allAreVotedChanged = false;
-            setLocalState(prevState => {
-                // let newState = { ...prevState };
-                let newState = cloneDeep(prevState);
-                let user = GetUserById(newState.UsersList, userId);
-                if (!user) {
-                    return newState;
-                }
-
-                user.HasVote = true;
-
-
-                // if (!isNaN(vote)) {
-                if (vote !== "?") {
-                    user.Vote = vote;
-                }
-
-                if (newState.UsersList.every(x => x.HasVote || !x.CanVote()) && !newState.VoteInfo.AllAreVoted) {
-                    newState.VoteInfo.AllAreVoted = true;
-                    allAreVotedChanged = true;
-
-                    // return;
-                }
-
-                return newState;
-            });
-
-            if (allAreVotedChanged) {
-                let alertFactory = new AlertData();
-                let alert = alertFactory.GetDefaultNotify("Все участники проголосовали");
-                window.G_AddAbsoluteAlertToState(alert);
-            }
+            props.VoteChanged(userId, vote);
         });
 
 
-        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.UserRoleChanged, function (userId, changeType, role) {
-            if (!userId) {
-                return;
-            }
-
-
-
-            setLocalState(prevState => {
-                // let newState = { ...prevState };
-                let newState = cloneDeep(prevState);
-                let user = GetUserById(newState.UsersList, userId);
-                if (!user) {
-                    return newState;
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.UserRoleChanged
+            , function (userId, changeType, role) {
+                if (!userId) {
+                    return;
                 }
 
-                if (changeType === 1) {
-                    //добавлен
-                    let index = user.Roles.findIndex(x => x === role);
-                    if (index == -1) {
-                        user.Roles.push(role);
-                    }
-                }
-                else {
-                    //удален
-                    let index = user.Roles.findIndex(x => x === role);
-                    if (index >= 0) {
-                        user.Roles.splice(index, 1);
-                    }
-                }
+                props.UserRoleChanged(userId, changeType, role);
 
-                if (!user.CanVote()) {
-                    //todo убрать все оценки
 
-                    // GetUserById(localState.UsersList,);
-                    // users
-                    user.Vote = null;
-                    user.HasVote = false;
-                    if (userId === __planing_room_props_ref__.UserInfo.UserId) {
-                        setSelectedVoteCard("-1");
-                    }
-
-                }
-
-                return newState;
             });
-        });
 
 
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.VoteStart, function () {
 
-
-            setSelectedVoteCard(prevState => {
-                return "-1";
-            });
-
-            setLocalState(prevState => {
-                // let newState = { ...prevState };
-                let newState = cloneDeep(prevState);
-                newState.UsersList.forEach(x => {
-                    x.Vote = null;
-                    x.HasVote = false;
-                });
-                newState.VoteInfo = new VoteInfo();
-
-                return newState;
-            });
-
-            // setRoomStatusState(RoomSatus.AllCanVote);
-            setRoomStatusState(prevState => {
-                // let newState = { ...prevState };
-                return RoomStatus.AllCanVote;
-                // return newState;
-            });
+            props.SetSelectedCard('-1');
+            props.ClearVote();
+            props.SetRoomStatus(RoomStatus.AllCanVote);
         });
 
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.VoteEnd, function (data: IEndVoteInfoReturn) {
 
-            // fillVoteInfo(null, data);
-            setLocalState(prevState => {
-                // let newState = { ...prevState };
-                let newState = cloneDeep(prevState);
-
-                fillVoteInfo(newState, data);
-
-                return newState;
-            });
-
-
-
-            // setRoomStatusState(RoomSatus.CloseVote);
-            setRoomStatusState(prevState => {
-                // let newState = { ...prevState };
-                return RoomStatus.CloseVote;
-                // return newState;
-            });
+            props.SetVoteInfo(data);
+            props.SetRoomStatus(RoomStatus.CloseVote);
         });
 
 
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.AddedNewStory, function (data: IStoryReturn) {
+            let newStory = new Story();
+            newStory.FillByBackModel(data);
+            props.AddNewStory(newStory);
 
-            setStoriesState(prevState => {
-                // let newState = { ...prevState };
-                let newState = cloneDeep(prevState);
-                let newStory = new Story();
-                newStory.FillByBackModel(data);
-                newState.Stories.push(newStory);
-                return newState;
-            });
         });
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.NewCurrentStory, function (id: string) {
             //изменении в целом объекта текущей истории
 
-
-            setStoriesState(prevState => {
-                // let newState = { ...prevState };
-                let newState = cloneDeep(prevState);
-                newState.CurrentStoryId = id;
-                return newState;
-            });
+            props.SetCurrentStoryId(id);
         });
 
-        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.CurrentStoryChanged, function (id: string, newName: string, newDescription: string) {
-            //изменение данных текущей истории
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.CurrentStoryChanged
+            , function (id: string, newName: string, newDescription: string) {
+                //изменение данных текущей истории
+                let story = new Story();
+                story.Id = id;
+                story.Name = newName;
+                story.Description = newDescription;
+                props.StoryChange(story);
 
 
-            setStoriesState(prevState => {
-                // let newState = { ...prevState };
-                let newState = cloneDeep(prevState);
-                let story = storiesHelper.GetStoryById(newState.Stories, id);
-
-                newState.CurrentStoryNameChange = newName;
-                newState.CurrentStoryDescriptionChange = newDescription;
-                if (story) {
-                    newState.CurrentStoryId = id;
-                    story.Name = newName;
-                    story.Description = newDescription;
-
-                }
-                return newState;
             });
-
-        });
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.DeletedStory, function (id: string) {
             //изменение данных текущей истории
-
-            setStoriesState(prevState => {
-                // let newState = { ...prevState };
-                let newState = cloneDeep(prevState);
-                let storyIndex = storiesHelper.GetStoryIndexById(newState.Stories, id);
-                if (storyIndex < 0) {
-                    return newState;
-                }
-
-                newState.Stories.splice(storyIndex, 1);
-                if (newState.CurrentStoryId == id) {
-                    newState.CurrentStoryId = "";
-                }
-                return newState;
-            });
+            props.DeleteStory(id);
         });
 
 
@@ -583,28 +343,11 @@ const Room = (props: RoomProps) => {
                     return;
                 }
 
-                // let needIncrementTotalCount = false;
-                setStoriesState(prevState => {
-                    // let newState = { ...prevState };
-                    let newState = cloneDeep(prevState);
-                    let story = storiesHelper.GetStoryById(newState.Stories, oldId);
+                let st = new Story();
+                st.FillByBackModel(newData);
 
-                    if (story) {
-                        story.Id = newData.id;
-                        story.Completed = newData.completed;
-                        story.Date = newData.date;
-                        story.Vote = newData.vote;
-                        story.ThisSession = newData.current_session;
-                        if (newState.CurrentStoryId === oldId) {
-                            newState.CurrentStoryId = "";
-                        }
+                props.MoveStoryToComplete(oldId, st);
 
-                        newState.CurrentStoryDescriptionChange = "";
-                        newState.CurrentStoryNameChange = "";
-                    }
-
-                    return newState;
-                });
             });
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.RoomWasSaved, function (newData: IRoomWasSavedUpdateReturn) {
@@ -612,23 +355,7 @@ const Room = (props: RoomProps) => {
                 return;
             }
 
-            setStoriesState(prevState => {
-                // let newState = { ...prevState };
-                let newState = cloneDeep(prevState);
-                newState.Stories.forEach(st => {
-                    let fromBack = newData.stories_mapping.find(x => x.old_id.toUpperCase() === st.Id.toUpperCase());
-                    if (fromBack) {
-                        st.Id = fromBack.new_id + '';
-                    }
-                });
-                let fromBack = newData.stories_mapping
-                    .find(x => x.old_id.toUpperCase() === newState.CurrentStoryId.toUpperCase());
-                if (fromBack) {
-                    newState.CurrentStoryId = fromBack.new_id + '';
-                }
-
-                return newState;
-            });
+            props.UpdateStoriesId(newData.stories_mapping);
 
         });
 
@@ -669,30 +396,6 @@ const Room = (props: RoomProps) => {
 
 
 
-    const fillVoteInfo = (state: RoomState, data: IEndVoteInfoReturn) => {
-        setSelectedVoteCard(prevState => {
-            return "-1";
-        });
-
-        if (!data) {
-            state.VoteInfo = new VoteInfo();
-            return;
-        }
-
-
-        state.UsersList.forEach(x => {
-            let userFromRes = data.users_info.find(x1 => x1.id === x.Id);
-            if (userFromRes) {
-                x.Vote = userFromRes.vote;
-            }
-
-        });
-
-        state.VoteInfo.FillByBackModel(data);
-
-    }
-
-
 
 
     if (!props.RoomInfo.InRoom) {
@@ -716,13 +419,11 @@ const Room = (props: RoomProps) => {
 
 
     const doVote = async (voteCardBlock: any) => {//number
-        // console.log(vote);
-        // console.dir(vote);
         if (!voteCardBlock?.target?.dataset?.vote) {
             return;
         }
 
-        if (!CurrentUserCanVote(localState.UsersList, props.UserInfo.UserId)) {
+        if (!(new PlaningPokerHelper()).CurrentUserCanVote(props.UsersList, props.UserInfo.UserId)) {
             let alertFactory = new AlertData();
             let alert = alertFactory.GetDefaultError("Вы не можете голосовать");
 
@@ -730,7 +431,7 @@ const Room = (props: RoomProps) => {
             return;
         }
 
-        if (selectedVoteCard === voteCardBlock.target.dataset.vote) {
+        if (props.SelectedVoteCard === voteCardBlock.target.dataset.vote) {
             return;
         }
 
@@ -739,40 +440,39 @@ const Room = (props: RoomProps) => {
             return;
         }
 
-        setSelectedVoteCard(prevState => {
-            return voteCardBlock.target.dataset.vote;
-        });
+        props.SetSelectedCard(voteCardBlock.target.dataset.vote);
+
 
     }
 
 
     const renderVotePlaceIfNeed = () => {
 
-        if (roomStatusState !== RoomStatus.AllCanVote) {
+        if (props.RoomStatus !== RoomStatus.AllCanVote) {
             return <></>
         }
 
         let voteArr = [0.5, 1, 2, 3, 5, 7, 10, 13, 15, 18, 20, 25, 30, 35, 40, 50, "tea"];
 
         return <div onClick={(e) => doVote(e)} className="planing-cards-container">
-            {voteArr.map((x, i) => <OneVoteCard key={i} Val={x + ''} NeedSelect={selectedVoteCard == x} />)}
+            {voteArr.map((x, i) => <OneVoteCard key={i} Val={x + ''} NeedSelect={props.SelectedVoteCard == x} />)}
         </div>
 
     }
 
     const renderVoteResultIfNeed = () => {
 
-        if (roomStatusState !== RoomStatus.CloseVote) {
+        if (props.RoomStatus !== RoomStatus.CloseVote) {
             return <></>
         }
 
-        let maximumNames = localState.UsersList.filter(x => x.HasVote
-            && x.Vote === (localState.VoteInfo.MaxVote + ''))
+        let maximumNames = props.UsersList.filter(x => x.HasVote
+            && x.Vote === (props.VoteInfo.MaxVote + ''))
             .map(x => x.Name).join(', ');
-        let minimumNames = localState.UsersList.filter(x => x.HasVote
-            && x.Vote === (localState.VoteInfo.MinVote + ''))
+        let minimumNames = props.UsersList.filter(x => x.HasVote
+            && x.Vote === (props.VoteInfo.MinVote + ''))
             .map(x => x.Name).join(', ');
-        let withoutMarkNames = localState.UsersList.filter(x => x.Vote === 'tea' || !x.HasVote)
+        let withoutMarkNames = props.UsersList.filter(x => x.Vote === 'tea' || !x.HasVote)
             .map(x => x.Name).join(', ');
         //
 
@@ -781,9 +481,9 @@ const Room = (props: RoomProps) => {
             <div className="padding-10-top"></div>
             <div className="planing-poker-left-one-section">
                 <p>Результат голосования</p>
-                <p>Максимальная оценка: {localState.VoteInfo.MaxVote} - {maximumNames}</p>
-                <p>Минимальная оценка: {localState.VoteInfo.MinVote} - {minimumNames}</p>
-                <p>Среднняя оценка: {localState.VoteInfo.AverageVote}</p>
+                <p>Максимальная оценка: {props.VoteInfo.MaxVote} - {maximumNames}</p>
+                <p>Минимальная оценка: {props.VoteInfo.MinVote} - {minimumNames}</p>
+                <p>Среднняя оценка: {props.VoteInfo.AverageVote}</p>
                 <p>Не голосовали: {withoutMarkNames}</p>
 
             </div>
@@ -801,17 +501,8 @@ const Room = (props: RoomProps) => {
     }
 
 
-    const makeCurrentStory = (id: string) => {
-        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.MakeCurrentStory, props.RoomInfo.Name, id);
-    }
 
-    const deleteStory = (id: string) => {
-        if (!confirm('Удалить историю?')) {
-            return;
-        }
 
-        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.DeleteStory, props.RoomInfo.Name, id);
-    }
 
     const saveRoom = () => {
         props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.SaveRoom, props.RoomInfo.Name).then(() => {
@@ -832,23 +523,23 @@ const Room = (props: RoomProps) => {
         props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.AliveRoom, props.RoomInfo.Name);
     }
 
-    const currentStoryDescriptionOnChange = (str: string) => {
-        setStoriesState(prevState => {
-            // let newState = { ...prevState };
-            let newState = cloneDeep(prevState);
-            newState.CurrentStoryDescriptionChange = str;
-            return newState;
-        });
-    }
+    // const currentStoryDescriptionOnChange = (str: string) => {
+    //     setStoriesState(prevState => {
+    //         // let newState = { ...prevState };
+    //         let newState = cloneDeep(prevState);
+    //         newState.CurrentStoryDescriptionChange = str;
+    //         return newState;
+    //     });
+    // }
 
-    const currentStoryNameOnChange = (str: string) => {
-        setStoriesState(prevState => {
-            // let newState = { ...prevState };
-            let newState = cloneDeep(prevState);
-            newState.CurrentStoryNameChange = str;
-            return newState;
-        });
-    }
+    // const currentStoryNameOnChange = (str: string) => {
+    //     setStoriesState(prevState => {
+    //         // let newState = { ...prevState };
+    //         let newState = cloneDeep(prevState);
+    //         newState.CurrentStoryNameChange = str;
+    //         return newState;
+    //     });
+    // }
 
 
 
@@ -920,7 +611,7 @@ const Room = (props: RoomProps) => {
 
             <div className='planing-name-change-but'
                 title='Изменить имя'
-                onClick={() => props.ChangeUserName(userNameLocalState)}>
+                onClick={() => props.SetUserName(userNameLocalState)}>
                 <img className='persent-100-width-height' src="/images/pencil-edit.png" />
             </div>
             {hideVotesSetting}
@@ -929,34 +620,9 @@ const Room = (props: RoomProps) => {
 
 
     const updateAllUsers = () => {
-        let loadedUsers = (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => {
-            if (error) {
-                //TODO выбить из комнаты?
-                alert("todo что то пошло не так лучше обновить страницу");
-                return;
-            }
 
-            if (data) {
-                let newUsersData = data.map(x => {
-                    let us = new UserInRoom();
-                    us.FillByBackModel(x);
-                    return us;
-                });
-
-
-                setLocalState(prevState => {
-                    // let newState = { ...prevState };
-                    let newState = cloneDeep(prevState);
-                    newState.UsersList.splice(0, newState.UsersList.length);
-                    newState.UsersList.push(...newUsersData);
-
-                    return newState;
-                });
-            }
-
-        };
         // console.log(JSON.stringify(props));
-        window.G_PlaningPokerController.GetUsersIsRoom(props.RoomInfo.Name, props.UserInfo.UserConnectionId, loadedUsers);
+        window.G_PlaningPokerController.GetUsersIsRoomRedux(props.RoomInfo.Name, props.UserInfo.UserConnectionId);
     };
 
     const renderNotAuthMessage = () => {
@@ -996,20 +662,13 @@ const Room = (props: RoomProps) => {
                 </div>
                 {/* <div>оценки</div> */}
                 <StoriesSection
-                    CurrentStoryId={storiesState.CurrentStoryId}
                     MyHubConnection={props.MyHubConnection}
-                    RoomName={props.RoomInfo.Name}
-                    Stories={storiesState.Stories}
-                    TotalNotActualStoriesCount={localState.TotalNotActualStoriesCount}
-                    DeleteStory={deleteStory}
-                    MakeCurrentStory={makeCurrentStory}
                     IsAdmin={currentUserIsAdmin}
-                    CurrentStoryDescriptionChange={storiesState.CurrentStoryDescriptionChange}
-                    CurrentStoryNameChange={storiesState.CurrentStoryNameChange}
-                    CurrentStoryDescriptionOnChange={currentStoryDescriptionOnChange}
-                    CurrentStoryNameOnChange={currentStoryNameOnChange}
-                    RoomStatus={roomStatusState}
-                    UserInfo={props.UserInfo}
+                    // CurrentStoryDescriptionChange={props.CurrentStoryDescriptionChange}
+                    // CurrentStoryNameChange={storiesState.CurrentStoryNameChange}
+                    // CurrentStoryDescriptionOnChange={currentStoryDescriptionOnChange}
+                    // CurrentStoryNameOnChange={currentStoryNameOnChange}
+                    // UserInfo={props.UserInfo}
                 />
             </div>
             <div className="planit-room-right-part col-12 col-md-3">
@@ -1024,18 +683,14 @@ const Room = (props: RoomProps) => {
                         <img className='persent-100-width-height' src="/images/refresh.png" />
                     </div>
                 </div>
-                {localState.UsersList.map(x =>
+                {props.UsersList.map(x =>
                     <UserInList key={x.Id}
                         User={x}
-                        TryToRemoveUserFromRoom={tryToRemoveUserFromRoom}
                         RenderForAdmin={currentUserIsAdmin}
                         HideVote={hideVoteState}
                         HasVote={x.HasVote}
-                        RoomStatus={roomStatusState}
-                        MaxVote={localState.VoteInfo.MaxVote}
-                        MinVote={localState.VoteInfo.MinVote}
                         MyHubConnection={props.MyHubConnection}
-                        RoomName={props.RoomInfo.Name}
+                        CurrentUserIsAdmin={currentUserIsAdmin}
                     />
                 )}
             </div>
@@ -1055,14 +710,111 @@ const Room = (props: RoomProps) => {
 
 const mapStateToProps = (state: AppState, ownProps: RoomOwnProps) => {
     let res = {} as RoomStateToProps;
-    
+    res.UserInfo = state.PlaningPokerApp.User;
+    res.RoomInfo = state.PlaningPokerApp.RoomInfo;
+    res.VoteInfo = state.PlaningPokerApp.VoteInfo;
+    res.UsersList = state.PlaningPokerApp.UsersList;
+    res.TotalNotActualStoriesCount = state.PlaningPokerApp.TotalNotActualStoriesCount;
+    res.RoomStatus = state.PlaningPokerApp.RoomStatus;
+    res.SelectedVoteCard = state.PlaningPokerApp.SelectedVoteCard;
     return res;
 }
 
 const mapDispatchToProps = (dispatch: any, ownProps: RoomOwnProps) => {
     let res = {} as RoomDispatchToProps;
+    res.SetUserId = (userId: string) => {
+        dispatch(SetRoomUserIdActionCreator(userId));
+    };
 
-    
+    res.SetUserName = (username: string) => {
+        dispatch(SetUserNameActionCreator(username));
+    };
+
+    res.SetRoomName = (roomname: string) => {
+        dispatch(SetRoomNameActionCreator(roomname));
+    };
+
+
+    res.SetRoomUsers = (users: UserInRoom[]) => {
+        dispatch(SetRoomUsersActionCreator(users));
+    };
+
+
+    res.SetVoteInfo = (voteInfo: IEndVoteInfoReturn) => {
+        dispatch(SetVoteInfoActionCreator(voteInfo));
+    };
+
+    res.SetCurrentStoryId = (id: string) => {
+        dispatch(SetCurrentStoryIdActionCreator(id));
+    };
+
+
+    res.SetStories = (data: Story[]) => {
+        dispatch(SetStoriesActionCreator(data));
+    };
+
+    res.SetRoomStatus = (status: RoomStatus) => {
+        dispatch(SetRoomStatusActionCreator(status));
+
+    }
+
+    res.AddUserToRoom = (data: UserInRoom) => {
+        dispatch(AddUserToRoomActionCreator(data));
+    };
+
+
+    res.ChangeAnotherUserName = (userId: string, newUserName: string) => {
+        dispatch(ChangeUserNameInRoomActionCreator({ UserId: userId, UserName: newUserName }));
+    };
+
+    res.RemoveUsers = (usersId: string[]) => {
+        dispatch(RemoveUserActionCreator(usersId));
+
+    };
+
+    res.VoteChanged = (userId: string, vote: string) => {
+        dispatch(VoteChangedActionCreator({ UserId: userId, Vote: vote }));
+
+    };
+
+    res.UserRoleChanged = (userId: string, changeType: number, role: string) => {
+        dispatch(UserRoleChangedActionCreator({ UserId: userId, ChangeType: changeType, Role: role }));
+    }
+
+    res.SetSelectedCard = (val: string) => {
+        dispatch(SetSelectedCardActionCreator(val));
+
+    }
+
+    res.ClearVote = () => {
+        dispatch(ClearVoteActionCreator());
+
+    }
+
+    res.AddNewStory = (story: Story) => {
+        dispatch(AddNewStoryActionCreator(story));
+    }
+
+    res.StoryChange = (story: Story) => {
+        dispatch(StoryChangeActionCreator(story));
+    };
+
+    res.DeleteStory = (id: string) => {
+        dispatch(DeleteStoryActionCreator(id));
+
+    }
+
+    res.MoveStoryToComplete = (oldId: string, data: Story) => {
+        dispatch(MoveStoryToCompleteActionCreator({ OldId: oldId, Story: data }));
+
+    };
+
+    res.UpdateStoriesId = (data: IStoryMappingReturn[]) => {
+        dispatch(UpdateStoriesIdActionCreator(data));
+
+    };
+
+
     return res;
 };
 

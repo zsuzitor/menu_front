@@ -8,30 +8,41 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 import { AlertData } from "../../../../Models/Models/AlertData";
 import { RoomInfo } from "../../../../Models/Models/PlaningPoker/RoomInfo";
+import { connect } from 'react-redux';
+import { AppState } from "../../../../Models/Models/State/AppState";
+import { SetRoomNameActionCreator, SetRoomPasswordActionCreator, SetUserNameActionCreator } from "../../../../Models/Actions/PlaningPokerApp/Actions";
 
 
 require('./Index.css');
 
-class IndexState {
-    // RoomName: string;
-    // RoomPassword: string;
 
-    constructor() {
-        // this.RoomName = "";
-        // this.RoomPassword = "";
-    }
-}
 
-class IndexProps {
-    Username: string;
-    ChangeUserName: ((newName: string) => void);
+interface IndexOwnProps {
     MyHubConnection: signalR.HubConnection;
-    RoomInfo: RoomInfo;
-    RoomNameChanged: (name: string) => void;
-    RoomPasswordChanged: (name: string) => void;
     HubConnected: boolean;
 
 }
+
+
+interface IndexStateToProps {
+    RoomInfo: RoomInfo;
+    Username: string;
+
+
+}
+
+interface IndexDispatchToProps {
+    SetUserName: ((newName: string) => void);
+    SetRoomName: (name: string) => void;
+    SetRoomPassword: (name: string) => void;
+
+}
+
+interface IndexProps extends IndexStateToProps, IndexOwnProps, IndexDispatchToProps {
+
+}
+
+
 
 
 let Index = (props: IndexProps) => {
@@ -43,7 +54,7 @@ let Index = (props: IndexProps) => {
     useEffect(() => {
         let pathNameUrlSplit = document.location.pathname.split('/');
         if (pathNameUrlSplit && pathNameUrlSplit.length > 2) {
-            props.RoomNameChanged(pathNameUrlSplit[2]);
+            props.SetRoomName(pathNameUrlSplit[2]);
         }
 
         // console.log("Index");
@@ -105,19 +116,21 @@ let Index = (props: IndexProps) => {
         <div className="planing-enter-inner col-sm-6 col-md-5 col-lg-4 offset-sm-3 offset-lg-4">
             <div>
                 <p>изменить имя: {props.Username}</p>
-                <input className="form-control persent-100-width" onChange={(e) => props.ChangeUserName(e.target.value)} type="text" value={props.Username}></input>
+                <input className="form-control persent-100-width"
+                    onChange={(e) => props.SetUserName(e.target.value)}
+                    type="text" value={props.Username}></input>
             </div>
             <div>
                 <p>название</p>
                 <input className="form-control persent-100-width" type="text" value={props.RoomInfo.Name}
-                    onChange={(e) => { props.RoomNameChanged(e.target.value) }}></input>
+                    onChange={(e) => { props.SetRoomName(e.target.value) }}></input>
 
                 {/* <span>создать без пароля</span>
                 <input onClick={() => withoutPasswordOnClick()} type="checkbox"></input> */}
                 <div>
                     <p>пароль(необязательно)</p>
                     <input className="form-control persent-100-width" type="text" value={props.RoomInfo.Password}
-                        onChange={(e) => { props.RoomPasswordChanged(e.target.value) }}></input>
+                        onChange={(e) => { props.SetRoomPassword(e.target.value) }}></input>
                 </div>
                 <p>если создать комнату без авторизации в основном приложении,
                     создается одноразовая комната(будет удалена через некоторое время)</p>
@@ -133,4 +146,42 @@ let Index = (props: IndexProps) => {
 
 
 
-export default Index;
+
+
+const mapStateToProps = (state: AppState, ownProps: IndexOwnProps) => {
+    let res = {} as IndexStateToProps;
+    res.RoomInfo = state.PlaningPokerApp.RoomInfo;
+    res.Username = state.PlaningPokerApp.User.UserName;
+
+    return res;
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: IndexOwnProps) => {
+    let res = {} as IndexDispatchToProps;
+    res.SetUserName = (username: string) => {
+        dispatch(SetUserNameActionCreator(username));
+    };
+
+    res.SetRoomName = (roomname: string) => {
+        dispatch(SetRoomNameActionCreator(roomname));
+    }
+
+    res.SetRoomPassword = (roompass: string) => {
+        dispatch(SetRoomPasswordActionCreator(roompass));
+    }
+
+
+
+    //     ownProps.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.KickUser, roomname, userId);
+    // };
+    // res.AddTaskToProject = (newTaskName: string, newTaskCreator: number, newTaskReviwer: number, projectId: number) => {
+    //     dispatch(window.G_CodeReviewTaskController.AddTaskToProjectRedux(newTaskName, newTaskCreator, newTaskReviwer, projectId));
+    // };
+
+    return res;
+};
+
+
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+// and that function returns the connected, wrapper component:
+export default connectToStore(Index);

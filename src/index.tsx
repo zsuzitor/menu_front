@@ -12,7 +12,7 @@ import { CodeReviewProjectController } from "./Models/Controllers/CodeReviewApp/
 import { CodeReviewTaskController } from "./Models/Controllers/CodeReviewApp/CodeReviewTaskController";
 import { CodeReviewUserController } from "./Models/Controllers/CodeReviewApp/CodeReviewUserController";
 import { ArticleController } from "./Models/Controllers/MenuApp/ArticleController";
-import { PlaningPokerController } from "./Models/Controllers/PlaningPoker/PlaningPokerController";
+import { PlaningPokerController } from "./Models/Controllers/PlaningPokerApp/PlaningPokerController";
 import { UsersController } from "./Models/Controllers/UsersController";
 import { WordsCardsController } from "./Models/Controllers/WordsCardsApp/WordsCardsController";
 import { WordsListController } from "./Models/Controllers/WordsCardsApp/WordsListController";

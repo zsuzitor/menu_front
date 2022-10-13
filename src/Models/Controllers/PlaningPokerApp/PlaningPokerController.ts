@@ -1,9 +1,10 @@
 
 
-import { SetNotActualStoriesActionCreator } from "../../Actions/PlaningPokerApp/Actions";
+import { SetCurrentStoryIdActionCreator, SetNotActualStoriesActionCreator, SetRoomStatusActionCreator, SetRoomUsersActionCreator, SetStoriesActionCreator, SetTotalNotActualStoriesCountActionCreator, SetVoteInfoActionCreator } from "../../Actions/PlaningPokerApp/Actions";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { IRoomInfoReturn, INotActualStoriesReturn } from "../../BackModel/PlaningPoker/RoomInfoReturn";
 import { IUserInRoomReturn } from "../../BackModel/PlaningPoker/UserInRoomReturn";
+import { Story, UserInRoom } from "../../Models/PlaningPoker/RoomInfo";
 
 
 export type ListUserInRoomReturn = (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => void;
@@ -115,12 +116,10 @@ export class HubEndpoints {
 
 export interface IPlaningPokerController {
     //TODO тут userId хорошо бы убрать на бэк. см бэк контроллер
-    // GetUsersIsRoom: (roomname: string, userId: string, onSuccess: ListUserInRoomReturn) => void;
-    // GetRoomInfo: (roomname: string, userId: string, onSuccess: GetRoomInfoReturn) => void;
-    // GetNotActualStories: (roomname: string, userId: string, page: number, countOnPage: number, onSuccess: GetNotActualStoriesReturn) => void;
 
     GetUsersIsRoomRedux: (roomname: string, userId: string) => void;
     GetRoomInfoRedux: (roomname: string, userId: string) => void;
+    GetRoomInfoReduxCB: (roomname: string, userId: string, onSuccess: GetRoomInfoReturn) => void;
     GetNotActualStoriesRedux: (roomname: string, userId: string, page: number, countOnPage: number) => void;
 
     EndPoints: HubEndpoints;
@@ -139,13 +138,17 @@ export class PlaningPokerController implements IPlaningPokerController {
         return (dispatch: any, getState: any) => {
             this.GetNotActualStories(roomname, userId, page, countOnPage,
                 (error: MainErrorObjectBack, data: INotActualStoriesReturn) => {
-                    //todo r
                     if (error) {
                         return;
                     }
-    
+
                     if (data) {
-                        dispatch(SetNotActualStoriesActionCreator(data.stories));
+                        var stories = data.stories.map(x => {
+                            let st = new Story();
+                            st.FillByBackModel(x);
+                            return st;
+                        });
+                        dispatch(SetNotActualStoriesActionCreator(stories));
                     }
                 });
         };
@@ -173,7 +176,16 @@ export class PlaningPokerController implements IPlaningPokerController {
         return (dispatch: any, getState: any) => {
             this.GetUsersIsRoom(roomname, userId,
                 (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => {
-                    //todo r
+                    if (data) {
+                        let newUsersData = data.map(x => {
+                            let us = new UserInRoom();
+                            us.FillByBackModel(x);
+                            return us;
+                        });
+
+                        dispatch(SetRoomUsersActionCreator(newUsersData));
+
+                    }
                 });
         };
     }
@@ -195,13 +207,38 @@ export class PlaningPokerController implements IPlaningPokerController {
     }
 
     GetRoomInfoRedux(roomname: string, userId: string) {
+        return this.GetRoomInfoReduxCB(roomname, userId, null);
+    }
+
+    GetRoomInfoReduxCB(roomname: string, userId: string, onSuccess: GetRoomInfoReturn) {
         return (dispatch: any, getState: any) => {
             this.GetRoomInfo(roomname, userId,
                 (error: MainErrorObjectBack, data: IRoomInfoReturn) => {
-                    //todo r
+                    let newUsersData = data.room.users.map(x => {
+
+                        let us = new UserInRoom();
+                        us.FillByBackModel(x);
+                        return us;
+                    });
+
+                    dispatch(SetRoomUsersActionCreator(newUsersData));
+                    dispatch(SetTotalNotActualStoriesCountActionCreator(data.room.total_stories_count));
+                    dispatch(SetVoteInfoActionCreator(data.end_vote_info));
+                    dispatch(SetCurrentStoryIdActionCreator(data.room.current_story_id));
+                    dispatch(SetRoomStatusActionCreator(data.room.status));
+                    dispatch(SetStoriesActionCreator(data.room.actual_stories.map(x => {
+                        let st = new Story();
+                        st.FillByBackModel(x);
+                        return st;
+                    })));
+
+                    if (onSuccess) {
+                        onSuccess(error, data);
+                    }
                 });
         };
     }
+
 
     GetRoomInfo(roomname: string, userId: string, onSuccess: GetRoomInfoReturn) {
         G_AjaxHelper.GoAjaxRequest({
@@ -212,7 +249,7 @@ export class PlaningPokerController implements IPlaningPokerController {
             Type: "GET",
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-                
+
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/PlanitPoker/get-room-info',
@@ -225,12 +262,16 @@ export class PlaningPokerController implements IPlaningPokerController {
         return (xhr: any, status: any, jqXHR: any) => {
             let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
             if (resp.errors) {
-                //TODO ошибка
                 onSuccess(resp, null);
             }
             else {
                 let dataBack = xhr as T;
-                onSuccess(null, dataBack);
+                if (dataBack) {
+                    onSuccess(null, dataBack);
+                }
+                else {
+                    //todo что то не так planingController1
+                }
 
             }
         }

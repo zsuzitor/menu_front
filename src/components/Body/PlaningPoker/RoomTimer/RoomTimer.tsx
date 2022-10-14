@@ -14,12 +14,9 @@ let __planing_room_timer_props_ref__: IRoomTimerProps = null;
 const RoomTimer = (props: IRoomTimerProps) => {
 
     const [lifeTime, setLifeTime] = useState(0);
-    // const [interval, setStateInterval] = useState(null);
-
     __planing_room_timer_props_ref__ = props;
 
-    // const secRender = new Date().getSeconds();
-
+    
     useEffect(() => {
         let interv = setInterval(() => {
             if (__planing_room_timer_props_ref__.DieDate) {

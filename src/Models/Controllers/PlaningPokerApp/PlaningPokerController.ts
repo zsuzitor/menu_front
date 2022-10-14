@@ -1,6 +1,6 @@
 
 
-import { SetCurrentStoryIdActionCreator, SetNotActualStoriesActionCreator, SetRoomStatusActionCreator, SetRoomUsersActionCreator, SetStoriesActionCreator, SetTotalNotActualStoriesCountActionCreator, SetVoteInfoActionCreator } from "../../Actions/PlaningPokerApp/Actions";
+import { SetCurrentStoryIdActionCreator, SetInitialRoomDieTimeActionCreator, SetNotActualStoriesActionCreator, SetRoomStatusActionCreator, SetRoomUsersActionCreator, SetStoriesActionCreator, SetTotalNotActualStoriesCountActionCreator, SetVoteInfoActionCreator } from "../../Actions/PlaningPokerApp/Actions";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { IRoomInfoReturn, INotActualStoriesReturn } from "../../BackModel/PlaningPoker/RoomInfoReturn";
 import { IUserInRoomReturn } from "../../BackModel/PlaningPoker/UserInRoomReturn";
@@ -119,7 +119,7 @@ export interface IPlaningPokerController {
 
     GetUsersIsRoomRedux: (roomname: string, userId: string) => void;
     GetRoomInfoRedux: (roomname: string, userId: string) => void;
-    GetRoomInfoReduxCB: (roomname: string, userId: string, onSuccess: GetRoomInfoReturn) => void;
+    // GetRoomInfoReduxCB: (roomname: string, userId: string, onSuccess: GetRoomInfoReturn) => void;
     GetNotActualStoriesRedux: (roomname: string, userId: string, page: number, countOnPage: number) => void;
 
     EndPoints: HubEndpoints;
@@ -221,6 +221,8 @@ export class PlaningPokerController implements IPlaningPokerController {
                         return us;
                     });
 
+                    
+                    dispatch(SetInitialRoomDieTimeActionCreator(new Date(data.room.die_date)));
                     dispatch(SetRoomUsersActionCreator(newUsersData));
                     dispatch(SetTotalNotActualStoriesCountActionCreator(data.room.total_stories_count));
                     dispatch(SetVoteInfoActionCreator(data.end_vote_info));

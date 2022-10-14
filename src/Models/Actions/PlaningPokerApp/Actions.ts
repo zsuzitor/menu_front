@@ -156,3 +156,8 @@ export const UpdateStoriesIdActionName: string = 'UpdateStoriesIdAction';
 export function UpdateStoriesIdActionCreator(data: IStoryMappingReturn[]): AppAction<IStoryMappingReturn[]> {
     return { type: UpdateStoriesIdActionName, payload: data };
 };
+
+export const SetInitialRoomDieTimeActionName: string = 'SetInitialRoomDieTimeAction';
+export function SetInitialRoomDieTimeActionCreator(data: Date | null): AppAction<Date | null> {
+    return { type: SetInitialRoomDieTimeActionName, payload: data };
+};

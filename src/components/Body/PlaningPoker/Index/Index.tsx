@@ -20,36 +20,25 @@ require('./Index.css');
 interface IndexOwnProps {
     MyHubConnection: signalR.HubConnection;
     HubConnected: boolean;
-
 }
-
-
 interface IndexStateToProps {
     RoomInfo: RoomInfo;
     Username: string;
-
-
 }
 
 interface IndexDispatchToProps {
     SetUserName: ((newName: string) => void);
     SetRoomName: (name: string) => void;
     SetRoomPassword: (name: string) => void;
-
 }
 
 interface IndexProps extends IndexStateToProps, IndexOwnProps, IndexDispatchToProps {
-
 }
 
 
 
 
 let Index = (props: IndexProps) => {
-
-
-
-
 
     useEffect(() => {
         let pathNameUrlSplit = document.location.pathname.split('/');
@@ -64,9 +53,6 @@ let Index = (props: IndexProps) => {
             window.G_AddAbsoluteAlertToState(alert);
             return;
         });
-
-
-
 
         return function cleanUp() {
             props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.RoomNotCreated);
@@ -169,14 +155,6 @@ const mapDispatchToProps = (dispatch: any, ownProps: IndexOwnProps) => {
     res.SetRoomPassword = (roompass: string) => {
         dispatch(SetRoomPasswordActionCreator(roompass));
     }
-
-
-
-    //     ownProps.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.KickUser, roomname, userId);
-    // };
-    // res.AddTaskToProject = (newTaskName: string, newTaskCreator: number, newTaskReviwer: number, projectId: number) => {
-    //     dispatch(window.G_CodeReviewTaskController.AddTaskToProjectRedux(newTaskName, newTaskCreator, newTaskReviwer, projectId));
-    // };
 
     return res;
 };

@@ -4,7 +4,7 @@ import { AppState } from "../../Models/State/AppState";
 
 
 import cloneDeep from 'lodash/cloneDeep';
-import { AddNewStoryActionName, AddUserToRoomActionName, ChangeUserNameInRoomActionName, ChangeUserNameInRoomPayload, ClearVoteActionName, DeleteStoryActionName, EnteredInRoomActionName, IEnteredInRoomActionPayload, MoveStoryToCompleteActionName, MoveStoryToCompletePayload, RemoveUserActionName, SetCurrentStoryIdActionName, SetNotActualStoriesActionName, SetRoomNameActionName, SetRoomPasswordActionName, SetRoomStatusActionName, SetRoomUserIdActionName, SetRoomUsersActionName, SetSelectedCardActionName, SetStoriesActionName, SetTotalNotActualStoriesCountActionName, SetUserConnectionIdActionName, SetUserNameActionName, SetVoteInfoActionName, StoryChangeActionName, UpdateStoriesIdActionName, UserRoleChangedActionName, UserRoleChangedPayload, VoteChangedActionName, VoteChangedPayload } from "../../Actions/PlaningPokerApp/Actions";
+import { AddNewStoryActionName, AddUserToRoomActionName, ChangeUserNameInRoomActionName, ChangeUserNameInRoomPayload, ClearVoteActionName, DeleteStoryActionName, EnteredInRoomActionName, IEnteredInRoomActionPayload, MoveStoryToCompleteActionName, MoveStoryToCompletePayload, RemoveUserActionName, SetCurrentStoryIdActionName, SetInitialRoomDieTimeActionName, SetNotActualStoriesActionName, SetRoomNameActionName, SetRoomPasswordActionName, SetRoomStatusActionName, SetRoomUserIdActionName, SetRoomUsersActionName, SetSelectedCardActionName, SetStoriesActionName, SetTotalNotActualStoriesCountActionName, SetUserConnectionIdActionName, SetUserNameActionName, SetVoteInfoActionName, StoryChangeActionName, UpdateStoriesIdActionName, UserRoleChangedActionName, UserRoleChangedPayload, VoteChangedActionName, VoteChangedPayload } from "../../Actions/PlaningPokerApp/Actions";
 import { IStoryReturn } from "../../BackModel/PlaningPoker/StoryReturn";
 import { RoomStatus, Story, UserInRoom, VoteInfo } from "../../Models/PlaningPoker/RoomInfo";
 import { IEndVoteInfoReturn } from "../../BackModel/PlaningPoker/EndVoteInfoReturn";
@@ -372,6 +372,15 @@ export function PlaningPokerReducer(state: AppState = new AppState(), action: Ap
 
                 return newState;
             }
+        case SetInitialRoomDieTimeActionName:
+            {
+                let newState = cloneDeep(state);
+                let data = action.payload as Date | null;
+                newState.PlaningPokerApp.DieRoomTimeInitial = data;
+
+                return newState;
+            }
+
 
 
 

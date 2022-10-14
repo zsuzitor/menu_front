@@ -17,21 +17,10 @@ import { connect } from 'react-redux';
 import { AppState } from '../../../Models/Models/State/AppState';
 import { EnteredInRoomActionCreator, SetUserConnectionIdActionCreator, SetUserNameActionCreator } from '../../../Models/Actions/PlaningPokerApp/Actions';
 
-// import * as signalR from '@aspnet/signalr'
-
-
-
-// "@microsoft/signalr": "^5.0.6",
-//
-
-
-
 
 interface PlaningPokerMainOwnProps {
     AuthInfo: IAuthState;
-
 }
-
 
 interface PlaningPokerMainStateToProps {
     RoomInfo: RoomInfo;
@@ -44,8 +33,6 @@ interface PlaningPokerMainDispatchToProps {
     EnteredInRoom: (roomUserId: string, loginnedInMainApp: boolean) => void;
     SetUserConnectionId: (userConnectionId: string) => void;
     SetUserName: ((newName: string) => void);
-
-
 }
 
 interface PlaningPokerMainProps extends PlaningPokerMainStateToProps, PlaningPokerMainOwnProps, PlaningPokerMainDispatchToProps {
@@ -55,23 +42,8 @@ interface PlaningPokerMainProps extends PlaningPokerMainStateToProps, PlaningPok
 
 
 
-class PlaningPokerMainState {
-    // MyHubConnection: signalR.HubConnection;
-
-    // InRoom: boolean;//по сути надо дернуть обновление стейта для перерендера
-    constructor() {
-        // this.MyHubConnection = null;
-
-
-    }
-}
-
-
-
-
-
 //см коммент для __planing_room_props_ref__
-let __planing_poker_main_state_ref__: PlaningPokerMainState = null;
+
 let __planing_poker_hubConnected_ref__: boolean = false;
 let __planing_poker_roomname_ref__: string = '';//todo надо проверить можно ли убрать это
 
@@ -79,8 +51,7 @@ let __planing_poker_roomname_ref__: string = '';//todo надо проверит
 const PlaningPokerMain = (props: PlaningPokerMainProps) => {
     __planing_poker_roomname_ref__ = props.RoomInfo?.Name;
 
-
-    let initState = new PlaningPokerMainState();
+    
     // initState.User.UserName = "enter_your_name";
     // console.log(initState.User.UserName);
     const hubConnection = new signalR.HubConnectionBuilder()
@@ -110,8 +81,6 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
     useEffect(() => {
 
         hubConnection.onclose(() => {
-            // console.log(JSON.stringify(__planing_poker_main_state_ref__));
-            // alert("asd");
             //todo тут сообщение об ошибке или что то еще мб перезагрузить страницу\редирект?
         });
 
@@ -152,11 +121,6 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
                     window.G_AddAbsoluteAlertToState(alert);
                 });
             });
-
-            // alert.Text = data.text;
-            // alert.Type = data.status;
-
-
 
         });
 
@@ -299,7 +263,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: PlaningPokerMainOwnProps) =
     res.EnteredInRoom = (roomUserId: string, loginnedInMainApp: boolean) => {
 
         dispatch(EnteredInRoomActionCreator({ RoomUserId: roomUserId, LoginnedInMainApp: loginnedInMainApp }));
-    }
+    };
 
     res.SetUserConnectionId = (userConnectionId: string) => {
         dispatch(SetUserConnectionIdActionCreator(userConnectionId));
@@ -309,13 +273,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: PlaningPokerMainOwnProps) =
         dispatch(SetUserNameActionCreator(username));
     };
 
-
-    //     ownProps.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.KickUser, roomname, userId);
-    // };
-    // res.AddTaskToProject = (newTaskName: string, newTaskCreator: number, newTaskReviwer: number, projectId: number) => {
-    //     dispatch(window.G_CodeReviewTaskController.AddTaskToProjectRedux(newTaskName, newTaskCreator, newTaskReviwer, projectId));
-    // };
-
+    
     return res;
 };
 

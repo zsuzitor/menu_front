@@ -23,11 +23,6 @@ const OneVoteCard = (props: OneVoteCardProp) => {
         <div className='vote-card-mark-right' data-vote={"" + props.Val}>{props.Val}</div>
 
     </div>
-
-
 }
-
-
-
 
 export default OneVoteCard;

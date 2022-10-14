@@ -11,6 +11,7 @@ export class PlaningPokerAppState {
     StoriesInfo: StoriesInfo;
     SelectedVoteCard: string;
     RoomStatus: RoomStatus;
+    DieRoomTimeInitial: Date;
 
     constructor() {
         this.NotActualStories = [];
@@ -23,6 +24,7 @@ export class PlaningPokerAppState {
         this.StoriesInfo = new StoriesInfo();
         this.SelectedVoteCard = '-1';
         this.RoomStatus = RoomStatus.None;
+        this.DieRoomTimeInitial = null;
     }
 }
 

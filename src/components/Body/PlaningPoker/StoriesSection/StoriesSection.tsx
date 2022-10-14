@@ -15,12 +15,7 @@ require('./StoriesSection.css');
 
 interface StoriesSectionOwnProps {
     MyHubConnection: signalR.HubConnection;
-    // CurrentStoryNameChange: string;
-    // CurrentStoryDescriptionChange: string;
     IsAdmin: boolean;
-
-
-
 }
 
 
@@ -32,13 +27,9 @@ interface StoriesSectionStateToProps {
     Stories: Story[];
     CurrentStoryId: string;
     TotalNotActualStoriesCount: number;
-
-
 }
 
 interface StoriesSectionDispatchToProps {
-    // CurrentStoryNameOnChange: (str: string) => void;
-    // CurrentStoryDescriptionOnChange: (str: string) => void;
     LoadOldStories: (roomname: string, userConnectionId: string
         , storiesPageNumber: number, countStoriesOnPage: number) => void;
 }
@@ -46,9 +37,6 @@ interface StoriesSectionDispatchToProps {
 interface StoriesSectionProps extends StoriesSectionStateToProps, StoriesSectionOwnProps, StoriesSectionDispatchToProps {
 
 }
-
-
-
 
 class StoriesSectionState {
     NameForAdd: string;
@@ -63,8 +51,6 @@ class StoriesSectionState {
         this.SortByDateAsc = false;
     }
 }
-
-
 
 
 
@@ -109,8 +95,6 @@ const StoriesSection = (props: StoriesSectionProps) => {
 
 
     useEffect(() => {
-
-
     }, []);
 
 
@@ -119,9 +103,6 @@ const StoriesSection = (props: StoriesSectionProps) => {
         props.LoadOldStories(props.RoomName, props.UserInfo.UserConnectionId, storiesPageNumber, countStoriesOnPage);
 
     }, [props.RoomName, props.UserInfo.UserConnectionId, storiesPageNumber, countStoriesOnPage]);
-
-
-
 
 
     const cancelChangeCurrentStory = () => {
@@ -136,21 +117,6 @@ const StoriesSection = (props: StoriesSectionProps) => {
             currentStoryNameChange,
             currentStoryDescriptionChange);
     }
-
-
-
-    // const ResetCurrentStoryById = () => {
-    //     if (!props.CurrentStoryId) {
-    //         props.CurrentStoryDescriptionOnChange("");
-    //         props.CurrentStoryNameOnChange("");
-    //         return;
-    //     }
-
-    //     let story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
-    //     props.CurrentStoryDescriptionOnChange(story.Description);
-    //     props.CurrentStoryNameOnChange(story.Name);
-
-    // }
 
 
     const tryMakeStoryComplete = () => {
@@ -433,7 +399,9 @@ const mapStateToProps = (state: AppState, ownProps: StoriesSectionOwnProps) => {
     res.RoomStatus = state.PlaningPokerApp.RoomStatus;
     res.UserInfo = state.PlaningPokerApp.User;
     res.NotActualStories = state.PlaningPokerApp.NotActualStories;
-
+    res.Stories = state.PlaningPokerApp.StoriesInfo.Stories;
+    res.CurrentStoryId = state.PlaningPokerApp.StoriesInfo.CurrentStoryId;
+    res.TotalNotActualStoriesCount = state.PlaningPokerApp.TotalNotActualStoriesCount;
     return res;
 }
 
@@ -445,12 +413,6 @@ const mapDispatchToProps = (dispatch: any, ownProps: StoriesSectionOwnProps) => 
         dispatch(window.G_PlaningPokerController.GetNotActualStoriesRedux(roomname, userConnectionId, storiesPageNumber, countStoriesOnPage));
 
     };
-    //     ownProps.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.KickUser, roomname, userId);
-    // };
-    // res.AddTaskToProject = (newTaskName: string, newTaskCreator: number, newTaskReviwer: number, projectId: number) => {
-    //     dispatch(window.G_CodeReviewTaskController.AddTaskToProjectRedux(newTaskName, newTaskCreator, newTaskReviwer, projectId));
-    // };
-    
 
     return res;
 };

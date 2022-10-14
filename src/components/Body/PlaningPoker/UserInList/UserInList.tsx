@@ -31,7 +31,6 @@ interface UserInListStateToProps {
 }
 
 interface UserInListDispatchToProps {
-    // TryToRemoveUserFromRoom: (userId: string, roomname: string, currentUserIsAdmin: boolean) => void;
 
 }
 
@@ -44,15 +43,6 @@ interface UserInListProps extends UserInListStateToProps, UserInListOwnProps, Us
 const UserInList = (props: UserInListProps) => {
 
     const [selectedEditRole, changeSelectedEditRoleState] = useState("-");
-
-
-
-    // useEffect(() => {
-    //     if (props.HubConnected) {
-    //     }
-    // }, [props.HubConnected]);
-
-
 
     const addNewRoleToUser = () => {
         props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.AddNewRoleToUser, props.RoomName, props.User.Id, selectedEditRole);
@@ -107,10 +97,6 @@ const UserInList = (props: UserInListProps) => {
             </div>
         </div>
     }
-
-
-
-
 
 
     let vote = "отсутствует";
@@ -177,17 +163,12 @@ const mapStateToProps = (state: AppState, ownProps: UserInListOwnProps) => {
     res.RoomStatus = state.PlaningPokerApp.RoomStatus;
     res.MaxVote = state.PlaningPokerApp.VoteInfo?.MaxVote;
     res.MinVote = state.PlaningPokerApp.VoteInfo?.MinVote;
+    
     return res;
 }
 
 const mapDispatchToProps = (dispatch: any, ownProps: UserInListOwnProps) => {
     let res = {} as UserInListDispatchToProps;
-
-    //     ownProps.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.KickUser, roomname, userId);
-    // };
-    // res.AddTaskToProject = (newTaskName: string, newTaskCreator: number, newTaskReviwer: number, projectId: number) => {
-    //     dispatch(window.G_CodeReviewTaskController.AddTaskToProjectRedux(newTaskName, newTaskCreator, newTaskReviwer, projectId));
-    // };
 
     return res;
 };

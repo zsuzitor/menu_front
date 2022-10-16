@@ -29,4 +29,54 @@ div.main-header-logo {
     width: 90px;
     position: relative;
     padding-left: 30px;
+    padding-top: 10px;
+}
+
+
+
+
+
+.main-header-logo-burger {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    position: relative;
+    transition: 1s;
+}
+
+.main-header-logo-burger-opened {
+    padding-top: 15px;
+
+}
+
+
+div.header-burger-line {
+    height: 5px;
+    background-color: red;
+    border-radius: 2px;
+    position: absolute;
+    width: 100%;
+    transition: 1s;
+}
+
+.main-header-logo-burger div.header-burger-line-closed:nth-child(2) {
+    /* top: calc(50%-5px) */
+    top: 15px;
+}
+
+.main-header-logo-burger div.header-burger-line-closed:nth-child(3) {
+    /* top: calc(50%+5px) */
+    top: 30px;
+}
+
+.main-header-logo-burger div.header-burger-line-opened:nth-child(1) {
+    rotate: 45deg;
+}
+
+.main-header-logo-burger div.header-burger-line-opened:nth-child(2) {
+    rotate: -45deg;
+}
+
+.main-header-logo-burger div.header-burger-line-opened:nth-child(3) {
+    display: none;
 }

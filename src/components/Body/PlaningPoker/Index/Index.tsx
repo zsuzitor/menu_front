@@ -2,7 +2,6 @@
 // import { HubConnection } from "@aspnet/signalr";
 import * as signalR from "@aspnet/signalr";
 
-import { type } from "os";
 import React, { useState, useEffect } from 'react';
 
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
@@ -40,6 +39,11 @@ interface IndexProps extends IndexStateToProps, IndexOwnProps, IndexDispatchToPr
 
 let Index = (props: IndexProps) => {
 
+    const [roomName, setRoomName] = useState(props.RoomInfo.Name || '');
+    const [roomPassword, setRoomPassword] = useState(props.RoomInfo.Password || '');
+
+
+
     useEffect(() => {
         let pathNameUrlSplit = document.location.pathname.split('/');
         if (pathNameUrlSplit && pathNameUrlSplit.length > 2) {
@@ -61,26 +65,39 @@ let Index = (props: IndexProps) => {
     }, []);
 
 
+    useEffect(() => {
+        setRoomName(props.RoomInfo.Name || '');
+    }, [props.RoomInfo.Name]);
+
+    useEffect(() => {
+        setRoomPassword(props.RoomInfo.Password || '');
+    }, [props.RoomInfo.Password]);
+
 
     let createRoom = () => {
         //этот метод вроде как  может подождать результат выполнения и как то получить ответ
         // props.MyHubConnection.invoke("CreateRoom", localState.RoomName, localState.RoomPassword, props.Username);
         //а вот этот не ждет
-        if (!props.RoomInfo.Name) {
+        if (!roomName) {
             alert('Введите название комнаты');
             return;
         }
 
-        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.CreateRoom, props.RoomInfo.Name, props.RoomInfo.Password, props.Username);
+        props.SetRoomName(roomName);
+        props.SetRoomPassword(roomPassword);
+
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.CreateRoom
+            , roomName, roomPassword, props.Username);
     };
 
     let enterInRoom = () => {
-        if (!props.RoomInfo.Name) {
+        if (!roomName) {
             alert('Введите название комнаты');
             return;
         }
 
-        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.EnterInRoom, props.RoomInfo.Name, props.RoomInfo.Password, props.Username);
+        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.EnterInRoom
+            , roomName, roomPassword, props.Username);
     }
 
 
@@ -108,23 +125,22 @@ let Index = (props: IndexProps) => {
             </div>
             <div>
                 <p>название</p>
-                <input className="form-control persent-100-width" type="text" value={props.RoomInfo.Name}
-                    onChange={(e) => { props.SetRoomName(e.target.value) }}></input>
+                <input className="form-control persent-100-width" type="text" value={roomName}
+                    onChange={(e) => { setRoomName(e.target.value) }}></input>
 
                 {/* <span>создать без пароля</span>
                 <input onClick={() => withoutPasswordOnClick()} type="checkbox"></input> */}
                 <div>
                     <p>пароль(необязательно)</p>
-                    <input className="form-control persent-100-width" type="text" value={props.RoomInfo.Password}
-                        onChange={(e) => { props.SetRoomPassword(e.target.value) }}></input>
+                    <input className="form-control persent-100-width" type="password" value={roomPassword}
+                        onChange={(e) => { setRoomPassword(e.target.value) }}></input>
                 </div>
                 <p>если создать комнату без авторизации в основном приложении,
                     создается одноразовая комната(будет удалена через некоторое время)</p>
             </div>
             {actionsButton}
             <div className="display_none">
-                <Link id="move_to_room_link_react" to={"/planing-poker/room/" + props.RoomInfo.Name}>hidden</Link>
-
+                <Link id="move_to_room_link_react" to={"/planing-poker/room/" + roomName}>hidden</Link>
             </div>
         </div>
     </div>

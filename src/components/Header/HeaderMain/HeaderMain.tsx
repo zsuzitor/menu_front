@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HeaderLogo } from '../HeaderLogo/HeaderLogo';
+import HeaderLogo from '../HeaderLogo/HeaderLogo';
 import { HeaderUserMenu } from '../HeaderUserMenu/HeaderUserMenu';
 import { IAuthState } from '../../../Models/Models/AuthState';
 import { AppItem } from '../../../Models/Models/Poco/AppItem';
@@ -33,6 +33,7 @@ const HeaderMain = (props: IHeaderMainProps) => {
             <div className='main-header-row'>
                 <HeaderLogo
                     ShowMenu={() => setShowMenu(!showMenu)}
+                    MenuShowed={showMenu}
                 />
                 {/* <div className='d-none d-md-inline-block col-md-7'></div> */}
                 <HeaderUserMenu AuthInfo={props.AuthInfo} />

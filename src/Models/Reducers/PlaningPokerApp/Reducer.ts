@@ -53,7 +53,6 @@ export function PlaningPokerReducer(state: AppState = new AppState(), action: Ap
             }
         case SetRoomNameActionName:
             {
-                //todo это событие дергается на каждую введенную букву
                 let newState = cloneDeep(state);
                 let data = action.payload as string;
                 newState.PlaningPokerApp.RoomInfo.Name = data;
@@ -61,7 +60,6 @@ export function PlaningPokerReducer(state: AppState = new AppState(), action: Ap
             }
         case SetRoomPasswordActionName:
             {
-                //todo это событие дергается на каждую введенную букву
                 let newState = cloneDeep(state);
                 let data = action.payload as string;
                 newState.PlaningPokerApp.RoomInfo.Password = data;
@@ -69,7 +67,6 @@ export function PlaningPokerReducer(state: AppState = new AppState(), action: Ap
             }
         case SetRoomUserIdActionName:
             {
-                //todo это событие дергается на каждую введенную букву
                 let newState = cloneDeep(state);
                 let data = action.payload as string;
                 newState.PlaningPokerApp.User.UserId = data;
@@ -142,7 +139,6 @@ export function PlaningPokerReducer(state: AppState = new AppState(), action: Ap
             }
         case ChangeUserNameInRoomActionName:
             {
-                //todo это событие дергается на каждую введенную букву
                 let newState = cloneDeep(state);
                 let data = action.payload as ChangeUserNameInRoomPayload;
                 let user = (new PlaningPokerHelper()).GetUserById(newState.PlaningPokerApp.UsersList, data.UserId);
@@ -183,7 +179,6 @@ export function PlaningPokerReducer(state: AppState = new AppState(), action: Ap
         case VoteChangedActionName:
             {
                 let allAreVotedChanged = false;
-                //todo это событие дергается на каждую введенную букву
                 let newState = cloneDeep(state);
                 let data = action.payload as VoteChangedPayload;
                 let user = (new PlaningPokerHelper()).GetUserById(newState.PlaningPokerApp.UsersList, data.UserId);

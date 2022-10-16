@@ -6,23 +6,41 @@ require('./HeaderLogo.css');
 
 export interface IHeaderLogoProps {
     ShowMenu: () => void;
+    MenuShowed: boolean;
 }
 
-export class HeaderLogo extends React.Component<IHeaderLogoProps, {}> {
+const HeaderLogo = (props: IHeaderLogoProps) => {
 
-    constructor(props: IHeaderLogoProps) {
-        super(props);
+    let logoBurgerClass = 'main-header-logo-burger';
+    let burgerLineClass = 'header-burger-line';
+    if (props.MenuShowed) {
+        logoBurgerClass += ' main-header-logo-burger-opened';
+        burgerLineClass += ' header-burger-line-opened';
+    }
+    else {
+        burgerLineClass += ' header-burger-line-closed';
+
     }
 
-    render() {
-        return <div className='main-header-logo'>
-            <div className="main-header-logo-text"
-                onClick={() => this.props.ShowMenu()}
-            >M</div>
 
-            {/* <a href="/menu" className="main-header-logo-a">
+
+    return <div className='main-header-logo'>
+        {/* <div className="main-header-logo-text"
+                onClick={() => this.props.ShowMenu()}
+            >M</div> */}
+        <div className={logoBurgerClass}
+            onClick={() => props.ShowMenu()}
+        >
+            <div className={burgerLineClass}></div>
+            <div className={burgerLineClass}></div>
+            <div className={burgerLineClass}></div>
+        </div>
+
+        {/* <a href="/menu" className="main-header-logo-a">
                 <div className="main-header-logo-text">M</div>
             </a> */}
-        </div>
-    }
+    </div>
 }
+
+
+export default HeaderLogo;

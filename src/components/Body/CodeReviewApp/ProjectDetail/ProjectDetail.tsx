@@ -20,6 +20,7 @@ import { OneTask } from '../../../../Models/Models/CodeReviewApp/State/OneTask';
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Models/State/AppState';
 import { SetFilterTaskCreatorActionCreator, SetFilterTaskNameActionCreator, SetFilterTaskPageActionCreator, SetFilterTaskReviewerActionCreator, SetFilterTaskStatusActionCreator } from '../../../../Models/Actions/CodeReviewApp/TaskActions';
+import { CodeReviewLocalStorageHelper } from '../../../../Models/BL/PlaningPokerApp/PlaningPokerHelper';
 
 
 
@@ -50,11 +51,7 @@ interface IProjectDetailDispatchToProps {
 
     ReloadTasks: (filters: ITaskFilter) => void;
 
-    // AddUserToProject: (user: IProjectUserDataBack) => void;
-    // AddTaskToProject: (task: IProjectTaskDataBack) => void;
     DeleteProject: (id: number) => void;
-    // ChangeUser: (user: IProjectUserDataBack) => void;
-    // DeleteUser: (id: number) => void;
 }
 
 interface IProjectDetailProps extends IProjectDetailStateToProps, IProjectDetailOwnProps, IProjectDetailDispatchToProps {
@@ -65,25 +62,26 @@ interface IProjectDetailProps extends IProjectDetailStateToProps, IProjectDetail
 const ProjectDetail = (props: IProjectDetailProps) => {
     const tasksOnPageCount = 5;
 
-
-    // const [currentProjectTasks, setCurrentProjectTasks] = useState([] as IProjectTaskDataBack[]);
-    // const [allTasksCount, setAllTasksCount] = useState(0);
-
-
-
-
-
-    // const [filterTaskCreator, setFilterTaskCreator] = useState(-1);
-    // const [filterTaskReviwer, setFilterTaskReviwer] = useState(-1);
-    // const [filterTaskStatus, setFilterTaskStatus] = useState(-1);
-    // const [filterTaskName, setFilterTaskName] = useState('');
-    // const [filterTaskPage, setFilterTaskPage] = useState(1);
     const [loadTasksTimerId, setLoadTasksTimerId] = useState(null);
-
-
     const [showUserList, setShowUserList] = useState(false);
     const [showAddNewTaskForm, setShowAddNewTaskForm] = useState(false);
 
+
+    useEffect(() => {
+        if (props.Project?.Id) {
+            let filterSaveHelper = new CodeReviewLocalStorageHelper();
+            let statusFromLocalStorage = filterSaveHelper.GetFilterStatus(props.Project.Id);
+            if (!statusFromLocalStorage && statusFromLocalStorage !== '0') {
+                filterSaveHelper.SetFilterStatus(props.Project.Id, props.TasksFilters.Status + '');
+                statusFromLocalStorage = filterSaveHelper.GetFilterStatus(props.Project.Id);
+            }
+
+            if ((props.TasksFilters.Status + '') !== statusFromLocalStorage) {
+                props.SetFilterTaskStatus(+statusFromLocalStorage);
+            }
+        }
+
+    }, [props.Project?.Id]);
 
 
     useEffect(() => {
@@ -98,7 +96,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             props.SetFilterTaskReviewer(-1);
         }
 
-    }, [props.ProjectUsers.length]);//[firstUser?.Id]);
+    }, [props.ProjectUsers.length]);
 
 
     useEffect(() => {
@@ -110,12 +108,18 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             clearTimeout(loadTasksTimerId);
         }
 
+        let filterSaveHelper = new CodeReviewLocalStorageHelper();
+        let statusFromLocalStorage = filterSaveHelper.GetFilterStatus(props.Project.Id);
+        if ((props.TasksFilters.Status + '') !== statusFromLocalStorage) {
+            filterSaveHelper.SetFilterStatus(props.Project.Id, props.TasksFilters.Status + '');
+            // return;
+        }
+
         var timerId = setTimeout(() => {
             reloadTasks();
         }, 1500);
 
         setLoadTasksTimerId(timerId);
-
 
     }, [props.Project?.Id, props.TasksFilters.CreatorId, props.TasksFilters.ReviewerId
         , props.TasksFilters.Status, props.TasksFilters.TaskName, props.TasksFilters.Page, props.TasksFilters.Retrigger]);
@@ -123,16 +127,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
     const reloadTasks = () => {
-        // let loadTasks = (error: MainErrorObjectBack, data: ILoadReviewTasksResultDataBask) => {
-        //     if (error) {
-        //         return;
-        //     }
-
-        //     if (data) {
-        //         setCurrentProjectTasks(data.Tasks);
-        //         setAllTasksCount(data.TasksCount);
-        //     }
-        // };
 
         let filter = {
             Name: props.TasksFilters.TaskName, CreatorId: props.TasksFilters.CreatorId
@@ -141,8 +135,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             , Status: props.TasksFilters.Status
         } as ITaskFilter;
 
-
-        // window.G_CodeReviewTaskController.LoadTasksRedux(filter, loadTasks);
         props.ReloadTasks(filter);
     }
 
@@ -151,46 +143,8 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
     const deleteProject = () => {
-        // let deleteProject = (error: MainErrorObjectBack, data: BoolResultBack) => {
-        //     if (error) {
-        //         return;
-        //     }
-
-        //     if (data?.result) {
-        //         props.DeleteProject();
-        //     }
-        // };
-
-        // window.G_CodeReviewProjectController.DeleteProject(props.Project.Id, deleteProject);
         props.DeleteProject(props.Project.Id);
     };
-
-
-    // const addTaskToProject = (task: IProjectTaskDataBack) => {
-    //     setCurrentProjectTasks(oldState => {
-    //         return [...oldState, task];
-    //     });
-    // };
-
-    // const updateTaskProject = (task: IProjectTaskDataBack) => {
-    //     setCurrentProjectTasks(oldState => {
-    //         let newState = cloneDeep(oldState);
-    //         var tsk = newState.find(x => x.Id == task.Id);
-    //         tsk.Name = task.Name;
-    //         tsk.Status = task.Status;
-    //         tsk.ReviewerId = task.ReviewerId;
-    //         tsk.CreatorId = task.CreatorId;
-
-    //         return newState;
-    //     });
-    // };
-
-    // const deleteTask = (id: number) => {
-    //     setCurrentProjectTasks(oldState => {
-    //         return oldState.filter(x => x.Id != id);
-    //     });
-    // };
-
 
 
     if (!props.Project) {
@@ -315,24 +269,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: IProjectDetailOwnProps) => 
         dispatch(window.G_CodeReviewTaskController.LoadTasksRedux(filter));
     };
 
-    // res.AddUserToProject = (user:IProjectUserDataBack) => { };
-    // AddTaskToProject: (task: IProjectTaskDataBack) => void;
     res.DeleteProject = (id: number) => {
         dispatch(window.G_CodeReviewProjectController.DeleteProjectRedux(id));
     };
-    // res.ChangeUser = () => { };
-    // res.DeleteUser = () => { };
 
-
-
-
-
-    // res.UpdateTask = (forAdd: IProjectTaskDataBack) => {
-    //     dispatch(window.G_CodeReviewTaskController.UpdateTaskRedux(forAdd));
-    // };
-    // res.SetEmptyTaskComments = (taskId: number) => {
-    //     dispatch(SetEmptyTaskCommentsActionCreator(taskId))
-    // }
     return res;
 };
 

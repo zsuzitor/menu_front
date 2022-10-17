@@ -68,3 +68,37 @@ export class StoriesHelper {
         return stories[index];
     }
 }
+
+export class CodeReviewLocalStorageHelper {
+    static CodeReviewFilterPrefix: string = 'code_review_filter_';
+    GetFilterCreatorId = (projectId: number): string => {
+        return localStorage.getItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_creator_id');
+    }
+    SetFilterCreatorId = (projectId: number, value: string): void => {
+        localStorage.setItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_creator_id', value);
+    }
+    GetFilterReviewerId = (projectId: number): string => {
+        return localStorage.getItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_reviewer_id');
+    }
+    SetFilterReviewerId = (projectId: number, value: string): void => {
+        localStorage.setItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_reviewer_id', value);
+    }
+    GetFilterStatus = (projectId: number): string => {
+        return localStorage.getItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_status');
+    }
+    SetFilterStatus = (projectId: number, value: string): void => {
+        localStorage.setItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_status', value);
+    }
+    GetFilterTaskname = (projectId: number): string => {
+        return localStorage.getItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_taskname');
+    }
+    SetFilterTaskname = (projectId: number, value: string): void => {
+        localStorage.setItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_taskname', value);
+    }
+    GetFilterPage = (projectId: number): string => {
+        return localStorage.getItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_page');
+    }
+    SetFilterPage = (projectId: number, value: string): void => {
+        localStorage.setItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_page', value);
+    }
+}

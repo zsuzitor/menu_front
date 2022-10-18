@@ -161,3 +161,13 @@ export const SetInitialRoomDieTimeActionName: string = 'SetInitialRoomDieTimeAct
 export function SetInitialRoomDieTimeActionCreator(data: Date | null): AppAction<Date | null> {
     return { type: SetInitialRoomDieTimeActionName, payload: data };
 };
+
+export const SetEditRoomActionName: string = 'SetEditRoomAction';
+export function SetEditRoomActionCreator(data: boolean): AppAction<boolean> {
+    return { type: SetEditRoomActionName, payload: data };
+};
+
+export const SetRoomCardsActionName: string = 'SetRoomCardsAction';
+export function SetRoomCardsActionCreator(data: string[]): AppAction<string[]> {
+    return { type: SetRoomCardsActionName, payload: data };
+};

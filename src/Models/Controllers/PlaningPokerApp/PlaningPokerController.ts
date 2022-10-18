@@ -1,6 +1,7 @@
 
 
-import { SetCurrentStoryIdActionCreator, SetInitialRoomDieTimeActionCreator, SetNotActualStoriesActionCreator, SetRoomStatusActionCreator, SetRoomUsersActionCreator, SetStoriesActionCreator, SetTotalNotActualStoriesCountActionCreator, SetVoteInfoActionCreator } from "../../Actions/PlaningPokerApp/Actions";
+import { SetCurrentStoryIdActionCreator, SetInitialRoomDieTimeActionCreator, SetNotActualStoriesActionCreator, SetRoomCardsActionCreator, SetRoomStatusActionCreator, SetRoomUsersActionCreator, SetStoriesActionCreator, SetTotalNotActualStoriesCountActionCreator, SetVoteInfoActionCreator } from "../../Actions/PlaningPokerApp/Actions";
+import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { IRoomInfoReturn, INotActualStoriesReturn } from "../../BackModel/PlaningPoker/RoomInfoReturn";
 import { IUserInRoomReturn } from "../../BackModel/PlaningPoker/UserInRoomReturn";
@@ -10,6 +11,7 @@ import { Story, UserInRoom } from "../../Models/PlaningPoker/RoomInfo";
 export type ListUserInRoomReturn = (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => void;
 export type GetRoomInfoReturn = (error: MainErrorObjectBack, data: IRoomInfoReturn) => void;
 export type GetNotActualStoriesReturn = (error: MainErrorObjectBack, data: INotActualStoriesReturn) => void;
+export type ChangeRoomPasswordReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 
 export class HubEndpointsFront {
@@ -32,6 +34,7 @@ export class HubEndpointsFront {
     NeedRefreshTokens: string;
     NewRoomAlive: string;
     RoomWasSaved: string;
+    RoomCardsChanged: string;
 
     constructor() {
         this.MovedStoryToComplete = "MovedStoryToComplete";
@@ -53,7 +56,7 @@ export class HubEndpointsFront {
         this.NeedRefreshTokens = "NeedRefreshTokens";
         this.NewRoomAlive = "NewRoomAlive";
         this.RoomWasSaved = "RoomWasSaved";
-
+        this.RoomCardsChanged = "RoomCardsChanged";
     }
 }
 
@@ -78,6 +81,7 @@ export class HubEndpointsBack {
     Vote: string;
     OnWindowClosedAsync: string;
     AliveRoom: string;
+    SetRoomCards: string;
 
     constructor() {
         this.GetConnectionId = "GetConnectionId";
@@ -100,6 +104,7 @@ export class HubEndpointsBack {
         this.Vote = "Vote";
         this.OnWindowClosedAsync = "OnWindowClosedAsync";
         this.AliveRoom = "AliveRoom";
+        this.SetRoomCards = "SetRoomCards";
     }
 }
 
@@ -121,7 +126,9 @@ export interface IPlaningPokerController {
     GetRoomInfoRedux: (roomname: string, userId: string) => void;
     // GetRoomInfoReduxCB: (roomname: string, userId: string, onSuccess: GetRoomInfoReturn) => void;
     GetNotActualStoriesRedux: (roomname: string, userId: string, page: number, countOnPage: number) => void;
-
+    // ChangeRoomPasswordRedux: (roomname: string, userConnectionId: string, oldPassword: string, newPassword: string) => void;
+    ChangeRoomPassword: (roomname: string, userConnectionId: string
+        , oldPassword: string, newPassword: string, onSuccess: ChangeRoomPasswordReturn) => void;
     EndPoints: HubEndpoints;
 }
 
@@ -172,6 +179,47 @@ export class PlaningPokerController implements IPlaningPokerController {
         });
     }
 
+    // ChangeRoomPasswordRedux(roomname: string, userConnectionId: string, oldPassword: string, newPassword: string) {
+    //     return (dispatch: any, getState: any) => {
+    //         this.ChangeRoomPassword(roomname, userConnectionId, oldPassword, newPassword,
+    //             (error: MainErrorObjectBack, data: BoolResultBack) => {
+    //                 if (error) {
+    //                     return;
+    //                 }
+
+    //                 if (data) {
+    //                     var stories = data.stories.map(x => {
+    //                         let st = new Story();
+    //                         st.FillByBackModel(x);
+    //                         return st;
+    //                     });
+    //                     dispatch(SetNotActualStoriesActionCreator(stories));
+    //                 }
+    //             });
+    //     };
+    // }
+
+    ChangeRoomPassword(roomname: string, userConnectionId: string
+        , oldPassword: string, newPassword: string, onSuccess: ChangeRoomPasswordReturn) {
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'roomname': roomname,
+                'userConnectionId': userConnectionId,
+                'oldPassword': oldPassword,
+                'newPassword': newPassword,
+            },
+            Type: "PATCH",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/PlanitPoker/room-password-change',
+
+        });
+    }
+
+
+
     GetUsersIsRoomRedux(roomname: string, userId: string) {
         return (dispatch: any, getState: any) => {
             this.GetUsersIsRoom(roomname, userId,
@@ -221,7 +269,7 @@ export class PlaningPokerController implements IPlaningPokerController {
                         return us;
                     });
 
-                    
+                    dispatch(SetRoomCardsActionCreator(data.room.cards));
                     dispatch(SetInitialRoomDieTimeActionCreator(new Date(data.room.die_date)));
                     dispatch(SetRoomUsersActionCreator(newUsersData));
                     dispatch(SetTotalNotActualStoriesCountActionCreator(data.room.total_stories_count));
@@ -233,6 +281,7 @@ export class PlaningPokerController implements IPlaningPokerController {
                         st.FillByBackModel(x);
                         return st;
                     })));
+
 
                     if (onSuccess) {
                         onSuccess(error, data);

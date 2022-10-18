@@ -12,6 +12,8 @@ export class PlaningPokerAppState {
     SelectedVoteCard: string;
     RoomStatus: RoomStatus;
     DieRoomTimeInitial: Date;
+    EditRoom: boolean;
+    RoomCards: (string | number)[];
 
     constructor() {
         this.NotActualStories = [];
@@ -25,6 +27,8 @@ export class PlaningPokerAppState {
         this.SelectedVoteCard = '-1';
         this.RoomStatus = RoomStatus.None;
         this.DieRoomTimeInitial = null;
+        this.EditRoom = false;
+        this.RoomCards = [];
     }
 }
 

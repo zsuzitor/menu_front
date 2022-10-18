@@ -9,7 +9,7 @@ import UserInList from '../UserInList/UserInList';
 import OneVoteCard from '../OneVoteCard/OneVoteCard';
 import { IEndVoteInfoReturn } from '../../../../Models/BackModel/PlaningPoker/EndVoteInfoReturn';
 // import { IOneRoomReturn } from '../../_ComponentsLink/BackModel/PlaningPoker/OneRoomReturn';
-import { AlertData, AlertTypeEnum } from '../../../../Models/Models/AlertData';
+import { AlertData } from '../../../../Models/Models/AlertData';
 import { IStoryReturn } from '../../../../Models/BackModel/PlaningPoker/StoryReturn';
 import StoriesSection from '../StoriesSection/StoriesSection';
 import cloneDeep from 'lodash/cloneDeep';
@@ -17,9 +17,11 @@ import RoomTimer from '../RoomTimer/RoomTimer';
 import { IRoomWasSavedUpdateReturn, IStoryMappingReturn } from '../../../../Models/BackModel/PlaningPoker/RoomWasSavedUpdateReturn';
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Models/State/AppState';
-import { AddNewStoryActionCreator, AddUserToRoomActionCreator, ChangeUserNameInRoomActionCreator, ClearVoteActionCreator, DeleteStoryActionCreator, MoveStoryToCompleteActionCreator, RemoveUserActionCreator, SetCurrentStoryIdActionCreator, SetRoomNameActionCreator, SetRoomStatusActionCreator, SetRoomUserIdActionCreator, SetRoomUsersActionCreator, SetSelectedCardActionCreator, SetStoriesActionCreator, SetUserNameActionCreator, SetVoteInfoActionCreator, StoryChangeActionCreator, UpdateStoriesIdActionCreator, UserRoleChangedActionCreator, VoteChangedActionCreator } from '../../../../Models/Actions/PlaningPokerApp/Actions';
+import { AddNewStoryActionCreator, AddUserToRoomActionCreator, ChangeUserNameInRoomActionCreator, ClearVoteActionCreator, DeleteStoryActionCreator, MoveStoryToCompleteActionCreator, RemoveUserActionCreator, SetCurrentStoryIdActionCreator, SetEditRoomActionCreator, SetRoomCardsActionCreator, SetRoomNameActionCreator, SetRoomStatusActionCreator, SetRoomUserIdActionCreator, SetRoomUsersActionCreator, SetSelectedCardActionCreator, SetStoriesActionCreator, SetUserNameActionCreator, SetVoteInfoActionCreator, StoryChangeActionCreator, UpdateStoriesIdActionCreator, UserRoleChangedActionCreator, VoteChangedActionCreator } from '../../../../Models/Actions/PlaningPokerApp/Actions';
 import _ from 'lodash';
 import { PlaningPokerHelper } from '../../../../Models/BL/PlaningPokerApp/PlaningPokerHelper';
+import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
+import EditRoom from '../EditRoom/EditRoom';
 
 
 
@@ -44,6 +46,8 @@ interface RoomStateToProps {
     RoomStatus: RoomStatus;
     SelectedVoteCard: string;
     DieRoomTimeInitial?: Date;
+    EditRoom: boolean;
+    RoomCards: (string | number)[];
 }
 
 interface RoomDispatchToProps {
@@ -73,6 +77,9 @@ interface RoomDispatchToProps {
 
     UpdateAllUsers: (roomname: string, userConnectionId: string) => void;
     GetRoomInfo: (roomname: string, userConnectionId: string) => void;
+    StartEditRoom: () => void;
+    EndEditRoom: () => void;
+    SetRoomCards: (cards: string[]) => void;
 }
 
 interface RoomProps extends RoomStateToProps, RoomOwnProps, RoomDispatchToProps {
@@ -184,7 +191,6 @@ const Room = (props: RoomProps) => {
             us.FillByBackModel(dataTyped);
 
             props.AddUserToRoom(us);
-
         });
 
 
@@ -194,7 +200,6 @@ const Room = (props: RoomProps) => {
             }
 
             props.ChangeAnotherUserName(userId, newUserName);
-
         });
 
 
@@ -234,8 +239,6 @@ const Room = (props: RoomProps) => {
                 }
 
                 props.UserRoleChanged(userId, changeType, role);
-
-
             });
 
 
@@ -260,7 +263,6 @@ const Room = (props: RoomProps) => {
             let newStory = new Story();
             newStory.FillByBackModel(data);
             props.AddNewStory(newStory);
-
         });
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.NewCurrentStory, function (id: string) {
@@ -277,8 +279,6 @@ const Room = (props: RoomProps) => {
                 story.Name = newName;
                 story.Description = newDescription;
                 props.StoryChange(story);
-
-
             });
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.DeletedStory, function (id: string) {
@@ -297,7 +297,6 @@ const Room = (props: RoomProps) => {
                 st.FillByBackModel(newData);
 
                 props.MoveStoryToComplete(oldId, st);
-
             });
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.RoomWasSaved, function (newData: IRoomWasSavedUpdateReturn) {
@@ -306,7 +305,6 @@ const Room = (props: RoomProps) => {
             }
 
             props.UpdateStoriesId(newData.stories_mapping);
-
         });
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.NewRoomAlive, function (newDieTime: string) {
@@ -315,10 +313,12 @@ const Room = (props: RoomProps) => {
             }
 
             setDieRoomTime(new Date(newDieTime));
-
         });
 
 
+        props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.RoomCardsChanged, function (newData: string[]) {
+            props.SetRoomCards(newData);
+        });
 
         return function cleanUp() {
             props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.MovedStoryToComplete);
@@ -335,6 +335,7 @@ const Room = (props: RoomProps) => {
             props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewUserInRoom);
             props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewRoomAlive);
             props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.RoomWasSaved);
+            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.RoomCardsChanged);
 
         };
     }, []);
@@ -387,7 +388,7 @@ const Room = (props: RoomProps) => {
             return <></>
         }
 
-        let voteArr = [0.5, 1, 2, 3, 5, 7, 10, 13, 15, 18, 20, 25, 30, 35, 40, 50, "tea"];
+        let voteArr = props.RoomCards;
 
         return <div onClick={(e) => doVote(e)} className="planing-cards-container">
             {voteArr.map((x, i) => <OneVoteCard key={i} Val={x + ''} NeedSelect={props.SelectedVoteCard == x} />)}
@@ -477,6 +478,10 @@ const Room = (props: RoomProps) => {
                     title='Удалить комнату'>
                     <img className='persent-100-width-height' src="/images/delete-icon.png" />
                 </div>
+                <div className='room-action-btn' onClick={() => props.StartEditRoom()}
+                    title='Редактировать комнату'>
+                    <img className='persent-100-width-height' src="/images/pencil-edit.png" />
+                </div>
             </div>
         }
 
@@ -542,6 +547,11 @@ const Room = (props: RoomProps) => {
         {/* что бы кратинки прогрузились и не пришлось из грузить при нажатии кнопки */}
         <img className='visibility-hidden size-0' src="/images/eye5.png" />
         <img className='visibility-hidden size-0' src="/images/eye1.png" />
+        {props.EditRoom ? <AdditionalWindow CloseWindow={() => props.EndEditRoom()}
+            IsHeightWindow={true}
+            Title='Редактирование комнаты'
+            InnerContent={() => <EditRoom
+                MyHubConnection={props.MyHubConnection}></EditRoom>}></AdditionalWindow> : <></>}
 
         <div className="padding-10-top planing-room-header">
             <h1>Комната: {props.RoomInfo.Name}</h1>
@@ -615,6 +625,8 @@ const mapStateToProps = (state: AppState, ownProps: RoomOwnProps) => {
     res.RoomStatus = state.PlaningPokerApp.RoomStatus;
     res.SelectedVoteCard = state.PlaningPokerApp.SelectedVoteCard;
     res.DieRoomTimeInitial = state.PlaningPokerApp.DieRoomTimeInitial;
+    res.EditRoom = state.PlaningPokerApp.EditRoom;
+    res.RoomCards = state.PlaningPokerApp.RoomCards;
     return res;
 }
 
@@ -718,7 +730,19 @@ const mapDispatchToProps = (dispatch: any, ownProps: RoomOwnProps) => {
 
     res.GetRoomInfo = (roomname: string, userConnectionId: string) => {
         dispatch(window.G_PlaningPokerController.GetRoomInfoRedux(roomname, userConnectionId));
-    }
+    };
+
+    res.StartEditRoom = () => {
+        dispatch(SetEditRoomActionCreator(true));
+    };
+
+    res.EndEditRoom = () => {
+        dispatch(SetEditRoomActionCreator(false));
+    };
+
+    res.SetRoomCards = (cards: string[]) => {
+        dispatch(SetRoomCardsActionCreator(cards));
+    };
 
     return res;
 };

@@ -14,5 +14,6 @@ export interface IOneRoomReturn {
     actual_stories: IStoryReturn[];
     current_story_id: string;
     total_stories_count: number;
+    cards: string[];//(number | string)[];
 
 }

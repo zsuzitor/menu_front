@@ -157,24 +157,7 @@ const Room = (props: RoomProps) => {
 
 
     useEffect(() => {
-        if (props.UserInfo.UserName === "enter_your_name") {
-            return;
-        }
-
-        if (!props.HubConnected) {
-            return;
-        }
-
-        props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.UserNameChange
-            , props.RoomInfo.Name, userNameLocalState).then(dt => {
-                if (!dt) {
-                    let alertFactory = new AlertData();
-                    let alert = alertFactory.GetDefaultError("изменить имя не удалось");
-                    window.G_AddAbsoluteAlertToState(alert);
-                    return;
-                }
-
-            });
+        setUserNameLocalState(props.UserInfo.UserName);
 
     }, [props.UserInfo.UserName]);
 
@@ -318,6 +301,9 @@ const Room = (props: RoomProps) => {
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.RoomCardsChanged, function (newData: string[]) {
             props.SetRoomCards(newData);
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultNotify("Оценки были изменены");
+            window.G_AddAbsoluteAlertToState(alert);
         });
 
         return function cleanUp() {
@@ -347,12 +333,27 @@ const Room = (props: RoomProps) => {
     }
 
 
-    const tryToRemoveUserFromRoom = (userId: string) => {
-        if (!currentUserIsAdmin) {
+    const changeCurrentUserName = () => {
+        if (userNameLocalState === "enter_your_name") {
             return;
         }
 
-        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.KickUser, props.RoomInfo.Name, userId);
+        if (!props.HubConnected || !props.RoomInfo.Name) {
+            return;
+        }
+
+        props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.UserNameChange
+            , props.RoomInfo.Name, userNameLocalState).then(dt => {
+                if (!dt) {
+                    let alertFactory = new AlertData();
+                    let alert = alertFactory.GetDefaultError("изменить имя не удалось");
+                    window.G_AddAbsoluteAlertToState(alert);
+                    return;
+                }
+
+                props.SetUserName(userNameLocalState)
+
+            });
     }
 
 
@@ -408,8 +409,22 @@ const Room = (props: RoomProps) => {
         let minimumNames = props.UsersList.filter(x => x.HasVote
             && x.Vote === (props.VoteInfo.MinVote + ''))
             .map(x => x.Name).join(', ');
-        let withoutMarkNames = props.UsersList.filter(x => x.Vote === 'tea' || !x.HasVote)
+
+        let notNumberMarks = props.UsersList.filter(x => x.HasVote
+            && isNaN(x.Vote as any)).map(x => x.Vote)
+            .filter((v, i, a) => a.indexOf(v) === i);
+        let withoutMarkNames = props.UsersList.filter(x => !x.HasVote)
             .map(x => x.Name).join(', ');
+
+        const renderOneNonNumberMark = (vote: string) => {
+            return <>
+                <p key={'vote_res' + vote}>Оценка {vote}: {props.UsersList.filter(x => x.HasVote
+                    && x.Vote === vote)
+                    .map(x => x.Name).join(', ')}</p>
+
+            </>
+
+        }
         return <div>
             <div className="padding-10-top"></div>
             <div className="planing-poker-left-one-section">
@@ -417,6 +432,7 @@ const Room = (props: RoomProps) => {
                 <p>Максимальная оценка: {props.VoteInfo.MaxVote} - {maximumNames}</p>
                 <p>Минимальная оценка: {props.VoteInfo.MinVote} - {minimumNames}</p>
                 <p>Среднняя оценка: {props.VoteInfo.AverageVote}</p>
+                {notNumberMarks.map(x => renderOneNonNumberMark(x))}
                 <p>Не голосовали: {withoutMarkNames}</p>
 
             </div>
@@ -436,7 +452,10 @@ const Room = (props: RoomProps) => {
 
     const saveRoom = () => {
         props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.SaveRoom, props.RoomInfo.Name).then(() => {
-            alert("Сохранено")
+            
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultNotify("Сохранено");
+            window.G_AddAbsoluteAlertToState(alert);
         });
     }
 
@@ -473,14 +492,14 @@ const Room = (props: RoomProps) => {
                     title='Закончить голосование'>
                     <img className='persent-100-width-height' src="/images/vote3.png" />
                 </div>
+                <div className='room-action-btn' onClick={() => props.StartEditRoom()}
+                    title='Редактировать комнату'>
+                    <img className='persent-100-width-height' src="/images/pencil-edit.png" />
+                </div>
                 {saveBut}
                 <div className='room-action-btn room-action-btn-del' onClick={() => deleteRoom()}
                     title='Удалить комнату'>
                     <img className='persent-100-width-height' src="/images/delete-icon.png" />
-                </div>
-                <div className='room-action-btn' onClick={() => props.StartEditRoom()}
-                    title='Редактировать комнату'>
-                    <img className='persent-100-width-height' src="/images/pencil-edit.png" />
                 </div>
             </div>
         }
@@ -524,7 +543,7 @@ const Room = (props: RoomProps) => {
 
             <div className='planing-name-change-but'
                 title='Изменить имя'
-                onClick={() => props.SetUserName(userNameLocalState)}>
+                onClick={() => changeCurrentUserName()}>
                 <img className='persent-100-width-height' src="/images/pencil-edit.png" />
             </div>
             {hideVotesSetting}

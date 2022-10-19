@@ -145,7 +145,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
         hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.ConnectedToRoomError, function () {
             let alertFactory = new AlertData();
-            let alert = alertFactory.GetDefaultError("подключение не удалось");
+            let alert = alertFactory.GetDefaultError("Подключение не удалось");
             window.G_AddAbsoluteAlertToState(alert);
             if (!location.href.includes("/planing-poker") || location.href.includes("/planing-poker/room")) {// && !location.href.endsWith("/planing-poker/")) {
                 let roomName = __planing_poker_roomname_ref__ || "";

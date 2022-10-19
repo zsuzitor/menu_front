@@ -78,7 +78,7 @@
 .planit-room-buttons {
     display: flex;
     justify-content: space-between;
-    width: 120px;
+    width: 170px;
 }
 
 .room-action-btn-del {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
+import { AlertData } from '../../../../Models/Models/AlertData';
 import { PlaningPokerUserInfo, RoomStatus } from '../../../../Models/Models/PlaningPoker/RoomInfo';
 import { AppState } from '../../../../Models/Models/State/AppState';
 
@@ -43,7 +44,10 @@ const EditRoom = (props: EditRoomProps) => {
 
     const changePassword = () => {
         if (newPassword !== newPasswordConfirm) {
-            alert('Пароли не совпадают');
+
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultError("Пароли не совпадают");
+            window.G_AddAbsoluteAlertToState(alert);
             return;
         }
 
@@ -51,10 +55,14 @@ const EditRoom = (props: EditRoomProps) => {
         window.G_PlaningPokerController.ChangeRoomPassword(props.RoomName
             , props.UserInfo.UserConnectionId, oldPassword, newPassword, (error: MainErrorObjectBack, data: BoolResultBack) => {
                 if (data?.result) {
-                    alert('Пароль изменен');
+                    let alertFactory = new AlertData();
+                    let alert = alertFactory.GetDefaultNotify("Пароль изменен");
+                    window.G_AddAbsoluteAlertToState(alert);
                 }
                 else {
-                    alert('Что то пошло не так, попробуйте позже');
+                    let alertFactory = new AlertData();
+                    let alert = alertFactory.GetDefaultError("Что то пошло не так, попробуйте позже");
+                    window.G_AddAbsoluteAlertToState(alert);
 
                 }
             })
@@ -62,7 +70,9 @@ const EditRoom = (props: EditRoomProps) => {
 
     const changeCards = () => {
         if (props.RoomStatus != RoomStatus.CloseVote) {
-            alert('Необходимо закрыть текущее голосование');
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultError("Необходимо закрыть текущее голосование");
+            window.G_AddAbsoluteAlertToState(alert);
             return;
         }
         props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.SetRoomCards, props.RoomName, cards);

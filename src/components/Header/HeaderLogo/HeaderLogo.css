@@ -52,7 +52,8 @@ div.main-header-logo {
 
 div.header-burger-line {
     height: 5px;
-    background-color: red;
+    /* background-color: red; */
+    background-color: oldlace;
     border-radius: 2px;
     position: absolute;
     width: 100%;

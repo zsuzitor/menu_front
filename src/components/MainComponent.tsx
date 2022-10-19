@@ -48,9 +48,9 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
 
     //todo есть способ это закешить реакт хуком
     const ApplacationsList: AppItem[] = [
-        new AppItem({ Logo: G_EmptyImagePath, Name: "MenuApp", Path: "/menu-app" }),
-        new AppItem({ Logo: G_EmptyImagePath, Name: "Dict", Path: "/words-cards-app" }),
-        new AppItem({ Logo: G_EmptyImagePath, Name: "TimeBooking", Path: "/menu-app" }),
+        // new AppItem({ Logo: G_EmptyImagePath, Name: "MenuApp", Path: "/menu-app" }),
+        // new AppItem({ Logo: G_EmptyImagePath, Name: "Dict", Path: "/words-cards-app" }),
+        // new AppItem({ Logo: G_EmptyImagePath, Name: "TimeBooking", Path: "/menu-app" }),
         new AppItem({ Logo: "/images/poker_logo.jpg", Name: "PlaningPoker", Path: "/planing-poker" }),
         new AppItem({ Logo: "/images/code_review_logo.png", Name: "Code review", Path: "/code-review/" }),
     ];

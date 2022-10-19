@@ -1,5 +1,7 @@
 .one-planing-vote-card {
-    width: 124px;
+    /* width: 124px; */
+    width: 128px;
+
     height: 144px;
     border: 2px solid rgb(65 152 174);
     /* display: -webkit-box;

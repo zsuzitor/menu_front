@@ -79,7 +79,9 @@ let Index = (props: IndexProps) => {
         // props.MyHubConnection.invoke("CreateRoom", localState.RoomName, localState.RoomPassword, props.Username);
         //а вот этот не ждет
         if (!roomName) {
-            alert('Введите название комнаты');
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultError("Введите название комнаты");
+            window.G_AddAbsoluteAlertToState(alert);
             return;
         }
 
@@ -92,9 +94,14 @@ let Index = (props: IndexProps) => {
 
     let enterInRoom = () => {
         if (!roomName) {
-            alert('Введите название комнаты');
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultError("Введите название комнаты");
+            window.G_AddAbsoluteAlertToState(alert);
             return;
         }
+
+        props.SetRoomName(roomName);
+        props.SetRoomPassword(roomPassword);
 
         props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.EnterInRoom
             , roomName, roomPassword, props.Username);

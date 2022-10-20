@@ -2,6 +2,7 @@ import { AddProjectUserActionCreator, ChangeProjectUserActionCreator, DeleteProj
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
+import { ControllerHelper } from "../ControllerHelper";
 
 export type AddNewUserToProject = (error: MainErrorObjectBack, data: IProjectUserDataBack) => void;
 
@@ -10,9 +11,6 @@ export type DeleteUser = (error: MainErrorObjectBack, data: BoolResultBack) => v
 
 
 export interface ICodeReviewUserController {
-    // AddUserToProject: (newUserName: string, mainAppUserEmail: string, projectId: number, onSuccess: AddNewUserToProject) => void;
-    // ChangeProjectUser: (user: IProjectUserDataBack, onSuccess: ChangeUser) => void;
-    // DeleteProjectUser: (id: number, onSuccess: DeleteUser) => void;
     AddUserToProjectRedux: (newUserName: string, mainAppUserEmail: string, projectId: number) => void;
     ChangeProjectUserRedux: (user: IProjectUserDataBack) => void;
     DeleteProjectUserRedux: (id: number) => void;
@@ -131,18 +129,8 @@ export class CodeReviewUserController implements ICodeReviewUserController {
     }
 
     mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
-        return (xhr: any, status: any, jqXHR: any) => {
-            let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-            if (resp.errors) {
-                //TODO ошибка
-                onSuccess(resp, null);
-            }
-            else {
-                let dataBack = xhr as T;
-                onSuccess(null, dataBack);
+        return new ControllerHelper().MapWithResult(onSuccess);
 
-            }
-        }
     }
 
     preloader(show: boolean) {

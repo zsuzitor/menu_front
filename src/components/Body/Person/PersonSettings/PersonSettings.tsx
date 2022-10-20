@@ -3,87 +3,101 @@ import { connect } from 'react-redux';
 import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 import { AlertData } from '../../../../Models/Models/AlertData';
+import { IAuthState } from '../../../../Models/Models/AuthState';
 import { PlaningPokerUserInfo, RoomStatus } from '../../../../Models/Models/PlaningPoker/RoomInfo';
 import { AppState } from '../../../../Models/Models/State/AppState';
 
 
-require('./EditRoom.css');
+require('./PersonSettings.css');
 
-interface EditRoomOwnProps {
-    MyHubConnection: signalR.HubConnection;
-
+interface PersonSettingsOwnProps {
+    AuthInfo: IAuthState;
 }
 
-interface EditRoomStateToProps {
-    RoomName: string;
-    UserInfo: PlaningPokerUserInfo;
-    RoomStatus: RoomStatus;
-    Cards: (string | number)[];
+interface PersonSettingsStateToProps {
 }
 
-interface EditRoomDispatchToProps {
+interface PersonSettingsDispatchToProps {
     // SetUserName: ((newName: string) => void);
     // ChangeRoomPassword: (roomname: string, userConnectionId: string, oldPassword: string, newPassword: string) => void;
 }
 
-interface EditRoomProps extends EditRoomStateToProps, EditRoomOwnProps, EditRoomDispatchToProps {
+interface PersonSettingsProps extends PersonSettingsStateToProps, PersonSettingsOwnProps, PersonSettingsDispatchToProps {
 }
 
-const EditRoom = (props: EditRoomProps) => {
+const PersonSettings = (props: PersonSettingsProps) => {
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
-    const stringCards = props.Cards.join(';');
-    const [cards, setCards] = useState(stringCards);
-    const [showSection, setShowSection] = useState(0);
+
+    const [name, setName] = useState('');
+
+
+    let alertFactory = new AlertData();
 
 
     useEffect(() => {
-        setCards(stringCards);
-    }, [stringCards]);
+    }, []);
+
 
 
     const changePassword = () => {
         if (newPassword !== newPasswordConfirm) {
-            let alertFactory = new AlertData();
             let alert = alertFactory.GetDefaultError("Пароли не совпадают");
             window.G_AddAbsoluteAlertToState(alert);
             return;
         }
 
         // props.ChangeRoomPassword(props.RoomName, props.UserInfo.UserConnectionId, oldPassword, newPasswordConfirm);
-        window.G_PlaningPokerController.ChangeRoomPassword(props.RoomName
-            , props.UserInfo.UserConnectionId, oldPassword, newPassword, (error: MainErrorObjectBack, data: BoolResultBack) => {
+        window.G_UsersController.ChangePassword(oldPassword
+            , newPassword, (error: MainErrorObjectBack, data: BoolResultBack) => {
                 if (data?.result) {
-                    let alertFactory = new AlertData();
                     let alert = alertFactory.GetDefaultNotify("Пароль изменен");
                     window.G_AddAbsoluteAlertToState(alert);
                 }
                 else {
-                    let alertFactory = new AlertData();
                     let alert = alertFactory.GetDefaultError("Что то пошло не так, попробуйте позже");
                     window.G_AddAbsoluteAlertToState(alert);
 
                 }
-            })
+            });
     }
 
-    const changeCards = () => {
-        if (props.RoomStatus != RoomStatus.CloseVote) {
-            let alertFactory = new AlertData();
-            let alert = alertFactory.GetDefaultError("Необходимо закрыть текущее голосование");
+    const changeName = () => {
+        if (!name) {
+
+            let alert = alertFactory.GetDefaultError("Имя не заполнено");
             window.G_AddAbsoluteAlertToState(alert);
             return;
         }
-        props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.SetRoomCards, props.RoomName, cards);
 
+        window.G_UsersController.ChangeName(name, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            if (data?.result) {
+                let alert = alertFactory.GetDefaultNotify("Имя изменено");
+                window.G_AddAbsoluteAlertToState(alert);
+            }
+            else {
+                let alert = alertFactory.GetDefaultError("Что то пошло не так, попробуйте позже");
+                window.G_AddAbsoluteAlertToState(alert);
+
+            }
+        })
     }
 
 
-    let sectionContent = <></>
 
-    if (showSection === 1) {
-        sectionContent = <>
+    return <div className='person-settings-outer'>
+        <div>
+            <input type='text' className='persent-100-width form-control'
+                onChange={(e) => setName(e.target.value)}
+                placeholder='Имя пользователя' value={name}></input>
+            <button className='btn btn-b-light' onClick={() => changeName()}>Изменить имя</button>
+        </div>
+        <div>
+
+        </div>
+
+        <div className='person-settings-passwords'>
             <label>Старый пароль</label>
             <input type='password' className='persent-100-width form-control'
                 onChange={(e) => setOldPassword(e.target.value)}
@@ -96,26 +110,8 @@ const EditRoom = (props: EditRoomProps) => {
             <input type='password' className='persent-100-width form-control'
                 onChange={(e) => setNewPasswordConfirm(e.target.value)}
                 placeholder='Новый пароль' value={newPasswordConfirm}></input>
-            <button className='btn btn-b-light' onClick={() => changePassword()}>Изменить пароль</button></>
-    }
-    else if (showSection === 2) {
-        sectionContent = <>
-            <label>Оценки через ;</label>
-            <input type='text' className='persent-100-width form-control'
-                onChange={(e) => setCards(e.target.value)}
-                placeholder='Оценки' value={cards}></input>
-            <button className='btn btn-b-light' onClick={() => changeCards()}>Изменить оценки</button></>
-    }
-
-    return <div>
-        <label>Секция</label>
-        <button className='btn btn-b-light'
-            onClick={() => setShowSection(1)}>Пароль</button>
-        <button className='btn btn-b-light'
-            onClick={() => setShowSection(2)}>Оценки</button>
-        <hr></hr>
-        {sectionContent}
-
+            <button className='btn btn-b-light' onClick={() => changePassword()}>Изменить пароль</button>
+        </div>
     </div>
 }
 
@@ -124,17 +120,14 @@ const EditRoom = (props: EditRoomProps) => {
 
 
 
-const mapStateToProps = (state: AppState, ownProps: EditRoomOwnProps) => {
-    let res = {} as EditRoomStateToProps;
-    res.RoomName = state.PlaningPokerApp.RoomInfo?.Name;
-    res.UserInfo = state.PlaningPokerApp.User;
-    res.RoomStatus = state.PlaningPokerApp.RoomStatus;
-    res.Cards = state.PlaningPokerApp.RoomCards;
+const mapStateToProps = (state: AppState, ownProps: PersonSettingsOwnProps) => {
+    let res = {} as PersonSettingsStateToProps;
+
     return res;
 }
 
-const mapDispatchToProps = (dispatch: any, ownProps: EditRoomOwnProps) => {
-    let res = {} as EditRoomDispatchToProps;
+const mapDispatchToProps = (dispatch: any, ownProps: PersonSettingsOwnProps) => {
+    let res = {} as PersonSettingsDispatchToProps;
     // res.ChangeRoomPassword = (roomname: string, userConnectionId: string, oldPassword: string, newPassword: string) => {
     //     dispatch(window.G_PlaningPokerController.ChangeRoomPasswordRedux(roomname, userConnectionId, oldPassword, newPassword));
     // }
@@ -145,4 +138,4 @@ const mapDispatchToProps = (dispatch: any, ownProps: EditRoomOwnProps) => {
 
 const connectToStore = connect(mapStateToProps, mapDispatchToProps);
 // and that function returns the connected, wrapper component:
-export default connectToStore(EditRoom);
+export default connectToStore(PersonSettings);

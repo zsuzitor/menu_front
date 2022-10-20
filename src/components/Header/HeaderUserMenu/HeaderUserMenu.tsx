@@ -60,6 +60,7 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
             <div className="dropdown-menu header-user-menu">
                 <Link className="dropdown-item" to="/menu/auth/login/">Войти</Link>
                 <Link className="dropdown-item" to="/menu/auth/register/">Зарегистрироваться</Link>
+                <Link className="dropdown-item" to="/menu/person-settings/">Настройки</Link>
                 {/* <a className="dropdown-item" href="#">Action</a>
                 <a className="dropdown-item" href="#">Another action</a>
                 <a className="dropdown-item" href="#">Something else here</a>

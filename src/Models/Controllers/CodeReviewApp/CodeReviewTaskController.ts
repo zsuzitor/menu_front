@@ -5,6 +5,7 @@ import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTask
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { ITaskFilter } from "../../Models/CodeReviewApp/TasksFilter";
 import { AppState } from "../../Models/State/AppState";
+import { ControllerHelper } from "../ControllerHelper";
 
 
 export type AddNewProjectTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => void;
@@ -182,18 +183,8 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
     };
 
     mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
-        return (xhr: any, status: any, jqXHR: any) => {
-            let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-            if (resp.errors) {
-                //TODO ошибка
-                onSuccess(resp, null);
-            }
-            else {
-                let dataBack = xhr as T;
-                onSuccess(null, dataBack);
+        return new ControllerHelper().MapWithResult(onSuccess);
 
-            }
-        }
     }
 
     preloader(show: boolean) {

@@ -6,6 +6,7 @@ import { CommentAdd } from "../../Models/CodeReviewApp/CommentAdd";
 import { CommentDelete } from "../../Models/CodeReviewApp/CommentDelete";
 import { CommentSet } from "../../Models/CodeReviewApp/CommentSet";
 import { CommentUpdate } from "../../Models/CodeReviewApp/CommentUpdate";
+import { ControllerHelper } from "../ControllerHelper";
 
 
 
@@ -164,18 +165,8 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
     };
 
     mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
-        return (xhr: any, status: any, jqXHR: any) => {
-            let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-            if (resp.errors) {
-                //TODO ошибка
-                onSuccess(resp, null);
-            }
-            else {
-                let dataBack = xhr as T;
-                onSuccess(null, dataBack);
+        return new ControllerHelper().MapWithResult(onSuccess);
 
-            }
-        }
     }
 
     preloader(show: boolean) {

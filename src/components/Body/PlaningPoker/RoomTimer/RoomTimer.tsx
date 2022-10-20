@@ -6,6 +6,7 @@ require('./RoomTimer.css');
 interface IRoomTimerProps {
     DieDate: Date;
     AliveRoom: () => void;
+    ForceLeaveFromRoom: () => void;
 }
 
 
@@ -16,13 +17,17 @@ const RoomTimer = (props: IRoomTimerProps) => {
     const [lifeTime, setLifeTime] = useState(0);
     __planing_room_timer_props_ref__ = props;
 
-    
+
     useEffect(() => {
         let interv = setInterval(() => {
             if (__planing_room_timer_props_ref__.DieDate) {
                 let timerVal = __planing_room_timer_props_ref__.DieDate.getTime() - new Date().getTime();
                 timerVal = timerVal > 0 ? timerVal : 0
                 setLifeTime(timerVal);
+                if (timerVal === 0) {
+                    clearInterval(interv);
+                    props.ForceLeaveFromRoom();
+                }
             }
         }, 1000);
 

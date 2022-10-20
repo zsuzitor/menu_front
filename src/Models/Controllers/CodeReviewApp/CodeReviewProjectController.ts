@@ -13,6 +13,7 @@ import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUser
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { TasksFilter } from "../../Models/CodeReviewApp/State/TasksFilter";
 import { AppState } from "../../Models/State/AppState";
+import { ControllerHelper } from "../ControllerHelper";
 
 export type ListOfCardOnReturn = (error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => void;
 export type CreateNewProject = (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => void;
@@ -182,18 +183,8 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
 
     //todo вынести в какой то общий кусок
     mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
-        return (xhr: any, status: any, jqXHR: any) => {
-            let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-            if (resp.errors) {
-                //TODO ошибка
-                onSuccess(resp, null);
-            }
-            else {
-                let dataBack = xhr as T;
-                onSuccess(null, dataBack);
+        return new ControllerHelper().MapWithResult(onSuccess);
 
-            }
-        }
     }
 
     preloader(show: boolean) {

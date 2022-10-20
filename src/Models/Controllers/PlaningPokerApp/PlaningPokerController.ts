@@ -6,6 +6,7 @@ import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { IRoomInfoReturn, INotActualStoriesReturn } from "../../BackModel/PlaningPoker/RoomInfoReturn";
 import { IUserInRoomReturn } from "../../BackModel/PlaningPoker/UserInRoomReturn";
 import { Story, UserInRoom } from "../../Models/PlaningPoker/RoomInfo";
+import { ControllerHelper } from "../ControllerHelper";
 
 
 export type ListUserInRoomReturn = (error: MainErrorObjectBack, data: IUserInRoomReturn[]) => void;
@@ -310,22 +311,8 @@ export class PlaningPokerController implements IPlaningPokerController {
 
 
     mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
-        return (xhr: any, status: any, jqXHR: any) => {
-            let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-            if (resp.errors) {
-                onSuccess(resp, null);
-            }
-            else {
-                let dataBack = xhr as T;
-                if (dataBack) {
-                    onSuccess(null, dataBack);
-                }
-                else {
-                    //todo что то не так planingController1
-                }
+        return new ControllerHelper().MapWithResult(onSuccess);
 
-            }
-        }
     }
 
 }

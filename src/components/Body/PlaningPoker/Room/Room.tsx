@@ -193,11 +193,7 @@ const Room = (props: RoomProps) => {
 
             usersId.forEach(x => {
                 if (x == __planing_room_props_ref__.UserInfo.UserId) {
-                    // document.cookie = "planing_poker_roomname=; path=/;";
-                    alert("you kicked or leave");//TODO может как то получше сделать, и хорошо бы без перезагрузки\редиректа
-                    window.location.href = "/planing-poker";
-                    __planing_room_props_ref__.SetUserId('');//todo тут наверное стоит еще что то чистить
-
+                    forceLeaveFromRoom();
                     return;
                 }
             });
@@ -333,6 +329,15 @@ const Room = (props: RoomProps) => {
     }
 
 
+    const forceLeaveFromRoom = () => {
+        // document.cookie = "planing_poker_roomname=; path=/;";
+        alert("you kicked or leave");//TODO может как то получше сделать, и хорошо бы без перезагрузки\редиректа
+        window.location.href = "/planing-poker";
+        // __planing_room_props_ref__.SetUserId('');//todo тут наверное стоит еще что то чистить
+
+    }
+
+
     const changeCurrentUserName = () => {
         if (userNameLocalState === "enter_your_name") {
             return;
@@ -452,7 +457,7 @@ const Room = (props: RoomProps) => {
 
     const saveRoom = () => {
         props.MyHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.SaveRoom, props.RoomInfo.Name).then(() => {
-            
+
             let alertFactory = new AlertData();
             let alert = alertFactory.GetDefaultNotify("Сохранено");
             window.G_AddAbsoluteAlertToState(alert);
@@ -580,7 +585,8 @@ const Room = (props: RoomProps) => {
         <div>
             <RoomTimer
                 DieDate={dieRoomTime}
-                AliveRoom={aliveRoom} />
+                AliveRoom={aliveRoom}
+                ForceLeaveFromRoom={forceLeaveFromRoom} />
         </div>
 
 

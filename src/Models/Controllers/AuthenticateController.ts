@@ -1,5 +1,6 @@
 import { MainErrorObjectBack } from "../BackModel/ErrorBack";
 import { OnlyError } from "./BO/ControllersOutput";
+import { ControllerHelper } from "./ControllerHelper";
 
 
 
@@ -41,15 +42,8 @@ export class AuthenticateController implements IAuthenticateController {
             Data: data,
             Type: "POST",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    onSuccess(resp);
-                }
-                else {
-                    onSuccess(null);
-                    //TODO записываем полученные токены
-                    // document.location.href = "/menu";
-                }
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/authenticate/login',
@@ -71,15 +65,8 @@ export class AuthenticateController implements IAuthenticateController {
             Data: data,
             Type: "PUT",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    onSuccess(resp);
-                }
-                else {
-                    onSuccess(null);
-                    //TODO записываем полученные токены
-                    // document.location.href = "/menu";
-                }
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+
             },
             Url: G_PathToServer + 'api/authenticate/register',
 
@@ -96,13 +83,8 @@ export class AuthenticateController implements IAuthenticateController {
             Data: data,
             Type: "POST",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    onSuccess(resp);
-                }
-                else {
-                    onSuccess(null);
-                }
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/authenticate/SendMessageForgotPassword',
@@ -121,13 +103,8 @@ export class AuthenticateController implements IAuthenticateController {
             Data: data,
             Type: "POST",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    onSuccess(resp);
-                }
-                else {
-                    onSuccess(null);
-                }
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/authenticate/CheckRecoverPasswordCode',
@@ -145,13 +122,8 @@ export class AuthenticateController implements IAuthenticateController {
             Data: data,
             Type: "POST",
             FuncSuccess: (xhr, status, jqXHR) => {
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                if (resp.errors) {
-                    onSuccess(resp);
-                }
-                else {
-                    onSuccess(null);
-                }
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/authenticate/RecoverPassword',
@@ -169,6 +141,7 @@ export class AuthenticateController implements IAuthenticateController {
             Data: data,
             Type: "GET",
             FuncSuccess: (xhr, status, jqXHR) => {
+                
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 // if (resp.errors) {
                 //     onSuccess(resp);
@@ -185,6 +158,14 @@ export class AuthenticateController implements IAuthenticateController {
 
     RefreshAccessToken(notRedirectWhenNotAuth: boolean, callBack?: () => void) {
         G_AjaxHelper.TryRefreshToken(notRedirectWhenNotAuth, callBack);
+    }
+
+
+
+
+    mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
+        return new ControllerHelper().MapWithResult(onSuccess);
+
     }
 }
 

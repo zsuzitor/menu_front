@@ -272,12 +272,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
                         refThis.setState(newState);
                     }
-                    // newState.CurrentCard.FillByBackModel(fromBack);
-                    // newState.Card.Title=newState.NewCardData.Title;
-                    // newState.Card.Title=newState.NewCardData.body;
-                    // newState.EditCurrentCard = null;
-
-                    // refThis.setState(newState);
+                    
                 });
         }
     }
@@ -542,40 +537,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
         G_WordsCardsController.Update(newElement, success);
 
-        // let data = new FormData();
-        // data.append('id', newElement.Id + '');
-        // data.append('word', newElement.Word);
-        // data.append('word_answer', newElement.WordAnswer);
-        // data.append('description', newElement.Description);
-        // data.append('delete_main_image', JSON.stringify(newElement.NeedDeleteMainImage));
-
-        // if (newElement.MainImageSave) {
-        //     data.append('main_image_new', newElement.MainImageSave);
-        // }
-
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "PATCH",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             let res = xhr as IOneWordCardBack;
-        //             if (res.id && res.id > 0) {
-
-        //                 callBack(res);
-        //             }
-        //             else {
-        //                 //что то не то вернулось
-        //             }
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/wordscards/update',
-
-        // }, true);
+        
     }
 
 
@@ -589,39 +551,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
         G_WordsCardsController.Create(newElement, success);
 
-
-        // let data = new FormData();
-        // data.append('word', newElement.Word);
-        // data.append('word_answer', newElement.WordAnswer);
-        // data.append('description', newElement.Description);
-
-        // if (newElement.MainImageSave) {
-        //     data.append('main_image_new', newElement.MainImageSave);
-        // }
-
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "PUT",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             let res = xhr as IOneWordCardBack;
-        //             if (res.id && res.id > 0) {
-
-        //                 callBack(res);
-        //             }
-        //             else {
-        //                 //что то не то вернулось
-        //             }
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/wordscards/create',
-
-        // }, true);
+        
     }
 
     private ChangeCurrentCard(stateCopy: WordsCardsListMainState) {

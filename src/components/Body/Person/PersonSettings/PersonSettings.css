@@ -1,7 +1,43 @@
 div.person-settings-outer {
     padding: 30px;
+    position: relative;
+    min-height: 400px;
 }
 
 div.person-settings-passwords {
     width: 300px;
+}
+
+div.person-settings-image {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    /* float: right; */
+
+    overflow: hidden;
+}
+
+.person-settings-image-block {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 300px;
+    height: 350px;
+}
+
+.person-settings-username {
+    width: 200px;
+}
+
+.person-settings-inner {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.person-settings-inner-right {
+    min-width: 300px;
+    position: relative;
+    min-height: 400px;
+
 }

@@ -60,9 +60,9 @@ export class Register extends React.Component<{}, IRegisterState> {
         let data = {
             Email: this.state.Login,
             Password: this.state.Password,
-            ConfirmPassword:this.state.ConfirmPassword,
+            ConfirmPassword: this.state.ConfirmPassword,
         };
-        
+
         let onSuccess = (error: MainErrorObjectBack) => {
             if (!error) {
                 document.location.href = "/menu";
@@ -70,7 +70,7 @@ export class Register extends React.Component<{}, IRegisterState> {
         }
 
         window.G_AuthenticateController.Register(data, onSuccess);
-        
+
 
 
 
@@ -80,13 +80,16 @@ export class Register extends React.Component<{}, IRegisterState> {
         return <div className='persent-100-width'>
             <div className='persent-100-width'>
                 <div className='persent-100-width padding-10-top'>
-                    <input className='form-control persent-100-width' type='text' placeholder='email' onChange={this.LoginOnChange}></input>
+                    <input className='form-control persent-100-width'
+                        type='text' placeholder='email' onChange={this.LoginOnChange}></input>
                 </div>
                 <div className='persent-100-width padding-10-top'>
-                    <input className='form-control persent-100-width' type='password' placeholder='password' onChange={this.PasswordOnChange}></input>
+                    <input className='form-control persent-100-width'
+                        type='password' placeholder='password' onChange={this.PasswordOnChange}></input>
                 </div>
                 <div className='persent-100-width padding-10-top'>
-                    <input className='form-control persent-100-width' type='password' placeholder='confirm password' onChange={this.ConfirmPasswordOnChange}></input>
+                    <input className='form-control persent-100-width'
+                        type='password' placeholder='confirm password' onChange={this.ConfirmPasswordOnChange}></input>
                 </div>
                 <button className='btn persent-100-width' onClick={this.TryRegister}>Зарегистрироваться</button>
             </div>

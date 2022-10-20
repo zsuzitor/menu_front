@@ -54,3 +54,10 @@
     padding: 10px;
     /* background-color: white; */
 }
+
+.planing-user-img {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+}

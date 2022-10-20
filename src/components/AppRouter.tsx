@@ -30,13 +30,13 @@ const AppRouter = (props: AppRouterProps) => {
             <Route path="/menu" element={<MenuMain Apps={props.Apps} />} />
             <Route path="/menu-app/*" element={<MenuAppMain />} />
             <Route path="/words-cards-app/*" element={<WordsCardsAppMain />} />
-            <Route path="/planing-poker/*" element={<PlaningPokerMain AuthInfo={props.AuthInfo} />} />
-            <Route path="/code-review/*" element={<CodeReviewMain AuthInfo={props.AuthInfo} />} />
+            <Route path="/planing-poker/*" element={<PlaningPokerMain />} />
+            <Route path="/code-review/*" element={<CodeReviewMain />} />
 
             <Route path="/menu/auth/login/*" element={<MainAuth LoginPage={true} />} />
             <Route path="/menu/auth/register/*" element={<MainAuth LoginPage={false} />} />
             <Route path="/menu/auth/password-recovery/*" element={<Recovery />} />
-            <Route path="/menu/person-settings/*" element={<PersonSettings AuthInfo={props.AuthInfo} />} />
+            <Route path="/menu/person-settings/*" element={<PersonSettings />} />
 
 
 

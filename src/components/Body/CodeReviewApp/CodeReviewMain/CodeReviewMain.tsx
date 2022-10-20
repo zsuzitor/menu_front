@@ -21,7 +21,6 @@ require('./CodeReviewMain.css');
 
 
 interface ICodeReviewMainOwnProps {
-    AuthInfo: IAuthState;
 }
 
 
@@ -56,103 +55,18 @@ interface CodeReviewMainProps extends ICodeReviewMainStateToProps, ICodeReviewMa
 
 const CodeReviewMain = (props: CodeReviewMainProps) => {
 
-    // const [currentProjectId, setCurrentProjectId] = useState(-1);
-    // const [projectsList, setProjectsList] = useState([] as IOneProjectInListDataBack[]);
-    // const [currentProjectUsers, setCurrentProjectUsers] = useState([] as IProjectUserDataBack[]);
-
-
     useEffect(() => {
-        // let getProjects = (error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => {
-        //     if (error) {
-        //         return;
-        //     }
-
-        //     if (data) {
-        //         props.SetCurrentProjectId(-1);
-        //         props.SetProjectsList(data);
-        //     }
-        // };
-
-        // window.G_CodeReviewProjectController.GetUserProjectsRedux();
         props.GetUserProjects();
     }, []);
 
 
     useEffect(() => {
         if (props.CurrentProjectId > 0) {
-            // let getProjectInfo = (error: MainErrorObjectBack, data: IOneProjectInfoDataBack) => {
-            //     if (error) {
-            //         return;
-            //     }
 
-            //     if (data) {
-            //         props.SetCurrentProjectUsers(data.Users);
-            //         // setCurrentProjectTasks(data.Tasks);
-            //     }
-            // };
-
-            // window.G_CodeReviewProjectController.GetProjectInfoRedux(props.CurrentProjectId);
             props.GetProjectInfo(props.CurrentProjectId);
         }
     }, [props.CurrentProjectId]);
 
-
-    // const addNewProject = (newProjectName: string) => {
-    //     if (!newProjectName) {
-    //         alert('Введите название');
-    //     }
-    //     // let addProject = (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => {
-    //     //     if (error) {
-    //     //         return;
-    //     //     }
-
-    //     //     if (data) {
-    //     //         // setCurrentProjectId(-1);
-    //     //         props.AddProjectList(data);
-    //     //     }
-    //     // };
-
-    //     window.G_CodeReviewProjectController.CreateNewProjectRedux(newProjectName);
-    // };
-
-
-    // const addNewUserToProject = (user: IProjectUserDataBack) => {
-    //     props.AddCurrentProjectUser(user);
-    // };
-
-
-
-
-
-    // const deleteProject = () => {
-    //     props.SetCurrentProjectId(-1);
-    //     props.RemoveProjectList(oldState => {
-    //         let newState = [...oldState];
-    //         return newState.filter(x => x.Id != currentProjectId);
-    //     });
-    // };
-
-    // const changeUser = (user: IProjectUserDataBack) => {
-    //     props.ChangeCurrentProjectUser(oldState => {
-    //         let newState = cloneDeep(oldState);
-    //         let userState = newState.find(x => x.Id === user.Id);
-    //         if (userState) {
-    //             userState.Email = user.Email;
-    //             userState.Name = user.Name;
-    //             userState.IsAdmin = user.IsAdmin;
-    //             userState.Deactivated = user.Deactivated;
-    //         }
-
-    //         return newState;
-    //     });
-    // };
-
-    // const deleteUser = (id: number) => {
-    //     props.RemoveCurrentProjectUser(oldState => {
-    //         let newState = [...oldState];
-    //         return newState.filter(x => x.Id != id);
-    //     });
-    // }
 
 
     return <div className='code-review-main-container'>
@@ -165,7 +79,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         </div>
         <div className='code-review-project-info'>
             <ProjectDetail Project={props.ProjectsList.find(x => x.Id == props.CurrentProjectId)}
-                AuthInfo={props.AuthInfo}
+                
                 Tasks={props.Tasks}
             // UpdateTask={updateTaskProject}
             ></ProjectDetail>

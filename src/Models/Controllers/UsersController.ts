@@ -1,4 +1,4 @@
-import { BoolResultBack } from "../BackModel/BoolResultBack";
+import { BoolResultBack, StringResultBack } from "../BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../BackModel/ErrorBack";
 import { UserShortBack } from "../BackModel/UserShort";
 import { ControllerHelper } from "./ControllerHelper";
@@ -7,6 +7,7 @@ import { ControllerHelper } from "./ControllerHelper";
 export type GetUserShort = (error: MainErrorObjectBack, data: UserShortBack) => void;
 export type ChangePassword = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 export type ChangeName = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type ImageChanged = (error: MainErrorObjectBack, data: StringResultBack) => void;
 
 
 
@@ -14,6 +15,7 @@ export interface IUsersController {
     GetShortestUserInfo: (onSuccess: GetUserShort) => void;
     ChangePassword: (oldPassword: string, newPassword: string, onSuccess: ChangePassword) => void;
     ChangeName: (newName: string, onSuccess: ChangeName) => void;
+    UpdateImage: (mainImageSave: File, onSuccess: ImageChanged) => void;
 }
 
 
@@ -84,6 +86,24 @@ export class UsersController implements IUsersController {
             Url: G_PathToServer + 'api/users/change-user-name'
 
         });
+    }
+
+
+
+    UpdateImage(mainImageSave: File, onSuccess: ImageChanged) {
+        let data = new FormData();
+        data.append('image', mainImageSave);
+
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PATCH",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/users/change-user-image',
+
+        }, true);
     }
 
 

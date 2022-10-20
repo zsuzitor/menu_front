@@ -1,4 +1,6 @@
 import * as React from "react";
+import { connect } from 'react-redux';
+
 import { IAuthState } from '../../../Models/Models/AuthState';
 
 
@@ -6,55 +8,57 @@ import {
     Link,
     BrowserRouter
 } from "react-router-dom";
+import { AppState } from "../../../Models/Models/State/AppState";
 
 
 require('./HeaderUserMenu.css');
 
 
-export interface IHeaderUserMenuProps {
-    AuthInfo: IAuthState;
+interface HeaderUserMenuOwnProps {
+
+}
+
+interface HeaderUserMenuStateToProps {
+    Auth: IAuthState;
+}
+
+interface HeaderUserMenuDispatchToProps {
+
+}
+
+interface HeaderUserMenuProps extends HeaderUserMenuStateToProps, HeaderUserMenuOwnProps, HeaderUserMenuDispatchToProps {
 }
 
 
-export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
 
-    constructor(props: IHeaderUserMenuProps) {
-        super(props);
+const HeaderUserMenu = (props: HeaderUserMenuProps) => {
 
-
-        this.LogginedUserRender = this.LogginedUserRender.bind(this);
-
-    }
-
-    componentDidMount() {
-        //TODO стучимся в апи, устанавливаем стейт
-    }
-
-    UserImageRender(imgPath: string) {
+    const UserImageRender = (imgPath: string) => {
         let path = imgPath;
         if (!path) {
-            path = G_PathToBaseImages + 'user_empty_image.png';
+            path = G_EmptyImagePath;
         }
 
         return <img className='header-user-img' src={path}></img>
     }
 
 
-    LogginedOrNotRender(loggined: boolean) {
+    const LogginedOrNotRender = (loggined: boolean) => {
         if (loggined) {
-            return this.LogginedUserRender();
+            return LogginedUserRender();
         }
 
-        return this.NotLogginedUserRender();
+        return NotLogginedUserRender();
     }
 
 
-    LogginedUserRender() {
+    const LogginedUserRender = () => {
         return <div className='header-user-block-inner'>
-            <div className='dropdown-toggle header-user-dropdown' data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span className='header-user-name-text d-inline-block'>{this.props.AuthInfo.User.Name}</span>
+            <div className='dropdown-toggle header-user-dropdown'
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span className='header-user-name-text d-inline-block'>{props.Auth.User.Name}</span>
                 <span className='d-inline-block header-user-img'>
-                    {this.UserImageRender(this.props.AuthInfo.User.Image)}
+                    {UserImageRender(props.Auth.User.Image)}
                 </span>
             </div>
             <div className="dropdown-menu header-user-menu">
@@ -71,7 +75,7 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
     }
 
 
-    NotLogginedUserRender() {
+    const NotLogginedUserRender = () => {
         return <div className='header-user-block-inner'>
             <div className='dropdown-toggle header-auth-dropdown' data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -84,11 +88,27 @@ export class HeaderUserMenu extends React.Component<IHeaderUserMenuProps, {}> {
         </div>
     }
 
+    return <div className='header-user-block col-5 col-md-3 nopadding '>
+        {LogginedOrNotRender(props.Auth.AuthSuccess)}
+    </div>
 
-
-    render() {
-        return <div className='header-user-block col-5 col-md-3 nopadding '>
-            {this.LogginedOrNotRender(this.props.AuthInfo.AuthSuccess)}
-        </div>
-    }
 }
+
+
+
+
+const mapStateToProps = (state: AppState, ownProps: HeaderUserMenuOwnProps) => {
+    let res = {} as HeaderUserMenuStateToProps;
+    res.Auth = state.Auth;
+    return res;
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: HeaderUserMenuOwnProps) => {
+    let res = {} as HeaderUserMenuDispatchToProps;
+    return res;
+};
+
+
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+// and that function returns the connected, wrapper component:
+export default connectToStore(HeaderUserMenu);

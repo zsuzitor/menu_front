@@ -24,7 +24,6 @@ require('./ProjectDetail.css');
 
 
 interface IProjectDetailOwnProps {
-    AuthInfo: IAuthState;
     Project: IOneProjectInListDataBack;//todo временно так
     Tasks: OneTask[];
 }
@@ -222,7 +221,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         <div>
             <h2>список задач</h2>
             {props.Tasks.map(x => <OneReviewTask key={x.Id}
-                AuthInfo={props.AuthInfo}
                 Task={x}
                 Comments={x.Comments}
             ></OneReviewTask>)}

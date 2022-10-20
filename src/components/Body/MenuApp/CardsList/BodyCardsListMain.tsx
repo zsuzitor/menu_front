@@ -7,14 +7,10 @@ import { ICardListFilters } from '../../../../Models/Models/MenuApp/CardListFilt
 import { IOneCardInListData, OneCardInListData } from '../../../../Models/Models/MenuApp/OneCardInListData';
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { IOneCardInListDataBack } from "../../../../Models/BackModel/MenuApp/OneCardInListDataBack";
-import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 
 
 export interface IBodyCardsListMainProps {
 }
-
-
-
 
 
 export interface IBodyCardsListMainState {
@@ -37,7 +33,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             CardsListFilters: {
                 FollowOnly: false,
             },
-            EmptyImagePath: G_EmptyImagePath,//"../../images/user_empty_image.png",
+            EmptyImagePath: G_EmptyImagePath,
             CardsLoaded: false,
         };
 
@@ -72,36 +68,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
             });
         }
         window.G_ArticleController.GetAllShortForUser(success);
-        // await G_AjaxHelper.GoAjaxRequest({
-        //     Data: {},
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-
-        //         }
-        //         else {
-        //             let dataBack = xhr as IOneCardInListDataBack[];
-        //             let dataFront: OneCardInListData[] = [];
-        //             dataBack.forEach(bk => {
-        //                 dataFront.push(new OneCardInListData(bk));
-        //             });
-
-        //             this.setState({//смержит?????
-        //                 AllCardsData: dataFront,
-        //                 CardsLoaded: true,
-        //                 // FollowedCards: followed,
-        //                 // NotFollowedCards: notFollowed,
-        //             });
-
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/article/get-all-short-for-user',
-
-        // });
-
+        
     }
 
 

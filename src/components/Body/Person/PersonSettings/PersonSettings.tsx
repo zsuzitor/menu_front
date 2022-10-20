@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
+import { SetAuthActionCreator } from '../../../../Models/Actions/App/Actions';
+import { BoolResultBack, StringResultBack } from '../../../../Models/BackModel/BoolResultBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 import { AlertData } from '../../../../Models/Models/AlertData';
 import { IAuthState } from '../../../../Models/Models/AuthState';
-import { PlaningPokerUserInfo, RoomStatus } from '../../../../Models/Models/PlaningPoker/RoomInfo';
 import { AppState } from '../../../../Models/Models/State/AppState';
+import cloneDeep from 'lodash/cloneDeep';
 
 
 require('./PersonSettings.css');
 
 interface PersonSettingsOwnProps {
-    AuthInfo: IAuthState;
 }
 
 interface PersonSettingsStateToProps {
+    AuthInfo: IAuthState;
+
 }
 
 interface PersonSettingsDispatchToProps {
-    // SetUserName: ((newName: string) => void);
-    // ChangeRoomPassword: (roomname: string, userConnectionId: string, oldPassword: string, newPassword: string) => void;
+    SetAuth: ((data: IAuthState) => void);
 }
 
 interface PersonSettingsProps extends PersonSettingsStateToProps, PersonSettingsOwnProps, PersonSettingsDispatchToProps {
@@ -31,6 +32,7 @@ const PersonSettings = (props: PersonSettingsProps) => {
     const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
 
     const [name, setName] = useState('');
+    const [passwordsBlockShow, setPasswordsBlockShow] = useState(false);
 
 
     let alertFactory = new AlertData();
@@ -39,6 +41,11 @@ const PersonSettings = (props: PersonSettingsProps) => {
     useEffect(() => {
     }, []);
 
+
+    useEffect(() => {
+        setName(props.AuthInfo?.User?.Name || '');
+        // console.log(props.AuthInfo?.User?.Name || '-');
+    }, [props.AuthInfo?.User?.Name]);
 
 
     const changePassword = () => {
@@ -54,6 +61,9 @@ const PersonSettings = (props: PersonSettingsProps) => {
                 if (data?.result) {
                     let alert = alertFactory.GetDefaultNotify("Пароль изменен");
                     window.G_AddAbsoluteAlertToState(alert);
+                    setOldPassword('');
+                    setNewPassword('');
+                    setNewPasswordConfirm('');
                 }
                 else {
                     let alert = alertFactory.GetDefaultError("Что то пошло не так, попробуйте позже");
@@ -73,7 +83,28 @@ const PersonSettings = (props: PersonSettingsProps) => {
 
         window.G_UsersController.ChangeName(name, (error: MainErrorObjectBack, data: BoolResultBack) => {
             if (data?.result) {
+                let auth = cloneDeep(props.AuthInfo);
+                auth.User.Name = name;
+                props.SetAuth(auth);
                 let alert = alertFactory.GetDefaultNotify("Имя изменено");
+                window.G_AddAbsoluteAlertToState(alert);
+            }
+            else {
+                let alert = alertFactory.GetDefaultError("Что то пошло не так, попробуйте позже");
+                window.G_AddAbsoluteAlertToState(alert);
+
+            }
+        });
+    }
+
+    const loadImage = () => {
+        var img = ($('#main_image_input')[0] as HTMLInputElement).files[0];//пример по этому же id есть
+        window.G_UsersController.UpdateImage(img, (error: MainErrorObjectBack, data: StringResultBack) => {
+            if (data?.result) {
+                let auth = cloneDeep(props.AuthInfo);
+                auth.User.Image = data.result;
+                props.SetAuth(auth);
+                let alert = alertFactory.GetDefaultNotify("Изображение изменено");
                 window.G_AddAbsoluteAlertToState(alert);
             }
             else {
@@ -87,31 +118,64 @@ const PersonSettings = (props: PersonSettingsProps) => {
 
 
     return <div className='person-settings-outer'>
-        <div>
-            <input type='text' className='persent-100-width form-control'
-                onChange={(e) => setName(e.target.value)}
-                placeholder='Имя пользователя' value={name}></input>
-            <button className='btn btn-b-light' onClick={() => changeName()}>Изменить имя</button>
-        </div>
-        <div>
+        {/* <form autoComplete="disabled"> */}
+        {/* <form autoComplete="off"> */}
+        <div className='person-settings-inner'>
+            <div>
+                <div>
+                    <input type='text' className='person-settings-username form-control'
+                        autoComplete="us-name"
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder='Имя пользователя' value={name}></input>
+                    <button className='btn btn-b-light'
+                        type="button"
+                        onClick={() => changeName()}>Изменить имя</button>
+                </div>
 
+                <button
+                    type="button"
+                    className='btn btn-b-light'
+                    onClick={() => setPasswordsBlockShow(!passwordsBlockShow)}
+                >Пароли</button>
+                {passwordsBlockShow ? <div className='person-settings-passwords'>
+                    <label>Старый пароль</label>
+                    <input type='password' className='persent-100-width form-control'
+                        autoComplete="old-password"
+                        onChange={(e) => setOldPassword(e.target.value)}
+                        placeholder='Старый пароль' value={oldPassword}></input>
+                    <label>Новый пароль</label>
+                    <input type='password' className='persent-100-width form-control'
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder='Новый пароль' value={newPassword}></input>
+                    <label>Подтвердите новый пароль</label>
+                    <input type='password' className='persent-100-width form-control'
+                        onChange={(e) => setNewPasswordConfirm(e.target.value)}
+                        placeholder='Новый пароль' value={newPasswordConfirm}></input>
+                    <button className='btn btn-b-light'
+                        type="button"
+                        onClick={() => changePassword()}>Изменить пароль</button>
+                </div> : <></>}
+            </div>
+            <div className='person-settings-inner-right'>
+                <div className='person-settings-image-block'>
+                    <div className='person-settings-image'>
+                        <img className='persent-100-width-height'
+                            src={props.AuthInfo?.User?.Image || G_EmptyImagePath}
+                            alt="Аватар" title='Аватар' />
+                    </div>
+                    <input className='form-control' type='file' id='main_image_input'></input>
+                    <button type="button" className='btn btn-b-light'
+                        onClick={() => loadImage()}>Загрузить</button>
+                </div>
+            </div>
         </div>
 
-        <div className='person-settings-passwords'>
-            <label>Старый пароль</label>
-            <input type='password' className='persent-100-width form-control'
-                onChange={(e) => setOldPassword(e.target.value)}
-                placeholder='Старый пароль' value={oldPassword}></input>
-            <label>Новый пароль</label>
-            <input type='password' className='persent-100-width form-control'
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder='Новый пароль' value={newPassword}></input>
-            <label>Подтвердите новый пароль</label>
-            <input type='password' className='persent-100-width form-control'
-                onChange={(e) => setNewPasswordConfirm(e.target.value)}
-                placeholder='Новый пароль' value={newPasswordConfirm}></input>
-            <button className='btn btn-b-light' onClick={() => changePassword()}>Изменить пароль</button>
-        </div>
+
+
+
+
+        {/* </form> */}
+
     </div>
 }
 
@@ -122,15 +186,15 @@ const PersonSettings = (props: PersonSettingsProps) => {
 
 const mapStateToProps = (state: AppState, ownProps: PersonSettingsOwnProps) => {
     let res = {} as PersonSettingsStateToProps;
-
+    res.AuthInfo = state.Auth;
     return res;
 }
 
 const mapDispatchToProps = (dispatch: any, ownProps: PersonSettingsOwnProps) => {
     let res = {} as PersonSettingsDispatchToProps;
-    // res.ChangeRoomPassword = (roomname: string, userConnectionId: string, oldPassword: string, newPassword: string) => {
-    //     dispatch(window.G_PlaningPokerController.ChangeRoomPasswordRedux(roomname, userConnectionId, oldPassword, newPassword));
-    // }
+    res.SetAuth = (data: IAuthState) => {
+        dispatch(SetAuthActionCreator(data));
+    }
 
     return res;
 };

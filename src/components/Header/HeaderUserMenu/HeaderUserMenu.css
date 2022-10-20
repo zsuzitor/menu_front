@@ -38,6 +38,9 @@ span.header-user-name-text {
     overflow: hidden;
     /* padding-right: 10px; */
     margin-right: 10px;
+    color: oldlace;
+    font-weight: 600;
+    font-size: 20px;
 }
 
 span.header-user-img {

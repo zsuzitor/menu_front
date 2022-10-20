@@ -1,17 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+
 import HeaderLogo from '../HeaderLogo/HeaderLogo';
-import { HeaderUserMenu } from '../HeaderUserMenu/HeaderUserMenu';
+import HeaderUserMenu from '../HeaderUserMenu/HeaderUserMenu';
 import { IAuthState } from '../../../Models/Models/AuthState';
 import { AppItem } from '../../../Models/Models/Poco/AppItem';
+import { AppState } from '../../../Models/Models/State/AppState';
 
 require('./HeaderMain.css');
 
 
 
-export interface IHeaderMainProps {
+interface HeaderMainOwnProps {
     Apps: AppItem[];
-    AuthInfo: IAuthState;
+
 }
+
+interface HeaderMainStateToProps {
+}
+
+interface HeaderMainDispatchToProps {
+
+}
+
+interface IHeaderMainProps extends HeaderMainStateToProps, HeaderMainOwnProps, HeaderMainDispatchToProps {
+}
+
+
+
 
 const HeaderMain = (props: IHeaderMainProps) => {
 
@@ -36,11 +52,28 @@ const HeaderMain = (props: IHeaderMainProps) => {
                     MenuShowed={showMenu}
                 />
                 {/* <div className='d-none d-md-inline-block col-md-7'></div> */}
-                <HeaderUserMenu AuthInfo={props.AuthInfo} />
+                <HeaderUserMenu />
             </div>
         </div>
     </div>
 }
 
-export default HeaderMain;
 
+
+
+const mapStateToProps = (state: AppState, ownProps: HeaderMainOwnProps) => {
+    let res = {} as HeaderMainStateToProps;
+    return res;
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: HeaderMainOwnProps) => {
+    let res = {} as HeaderMainDispatchToProps;
+
+
+    return res;
+};
+
+
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+// and that function returns the connected, wrapper component:
+export default connectToStore(HeaderMain);

@@ -125,24 +125,25 @@ let Index = (props: IndexProps) => {
         {/* TODO из за того что сделано бутстрапом, сейчас криво, слева может быть отступ меньше чем справа, перписать*/}
         <div className="planing-enter-inner col-sm-6 col-md-5 col-lg-4 offset-sm-3 offset-lg-4">
             <div>
-                <p>изменить имя: {props.Username}</p>
+                <p>Имя пользователя: {props.Username}</p>
                 <input className="form-control persent-100-width"
                     onChange={(e) => props.SetUserName(e.target.value)}
-                    type="text" value={props.Username}></input>
+                    type="text" value={props.Username}
+                    placeholder='Имя пользователя'></input>
             </div>
             <div>
-                <p>название</p>
+                <p>Название комнаты</p>
                 <input className="form-control persent-100-width" type="text" value={roomName}
-                    onChange={(e) => { setRoomName(e.target.value) }}></input>
+                    onChange={(e) => { setRoomName(e.target.value) }}
+                    placeholder='Название комнаты'></input>
 
-                {/* <span>создать без пароля</span>
-                <input onClick={() => withoutPasswordOnClick()} type="checkbox"></input> */}
                 <div>
-                    <p>пароль(необязательно)</p>
+                    <p>Пароль(необязательно)</p>
                     <input className="form-control persent-100-width" type="password" value={roomPassword}
-                        onChange={(e) => { setRoomPassword(e.target.value) }}></input>
+                        onChange={(e) => { setRoomPassword(e.target.value) }}
+                        placeholder='Пароль(необязательно)'></input>
                 </div>
-                <p>если создать комнату без авторизации в основном приложении,
+                <p>Если создать комнату без авторизации в основном приложении,
                     создается одноразовая комната(будет удалена через некоторое время)</p>
             </div>
             {actionsButton}

@@ -1,6 +1,7 @@
 /// <reference path="../../typings/globals.d.ts" />
 
 import React, { useEffect, useState } from "react";
+import { connect } from 'react-redux';
 
 import { IAuthState, IAuthUserState } from '../Models/Models/AuthState';
 
@@ -15,30 +16,39 @@ import AppRouter from "./AppRouter";
 import { MainErrorObjectBack } from "../Models/BackModel/ErrorBack";
 import { UserShortBack } from "../Models/BackModel/UserShort";
 import { AppItem } from "../Models/Models/Poco/AppItem";
+import { AppState } from "../Models/Models/State/AppState";
+import { SetAuthActionCreator } from "../Models/Actions/App/Actions";
 
 
 
-export interface MainComponentProps {
+// require('./MainComponent.css');
+
+interface MainComponentOwnProps {
+
 }
 
-export interface IMainComponentState {
+interface MainComponentStateToProps {
     Auth: IAuthState;
+}
+
+interface MainComponentDispatchToProps {
+    SetAuth: ((data: IAuthState) => void);
+}
+
+interface MainComponentProps extends MainComponentStateToProps, MainComponentOwnProps, MainComponentDispatchToProps {
+}
+
+
+export interface IMainComponentState {
     AbsoluteAlerts: AlertDataStored[];
     MaxIdMainAlert: number;
 }
 
 
 
-
-
-
 let MainComponent = (props: MainComponentProps) => {// extends React.Component<MainComponentProps, IMainComponentState> {
 
     let initState: IMainComponentState = {
-        Auth: {
-            AuthSuccess: false,
-            User: null,
-        },
         AbsoluteAlerts: [],
         MaxIdMainAlert: 0,
     };
@@ -60,7 +70,8 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
         window.G_AddAbsoluteAlertToState = AddMainALert;
         // let thisRef = this;
         // window.addEventListener("logout", function (e) { thisRef.LogOutHandler() });
-        window.addEventListener("tokens_was_refreshed", function (e) { ReloadUserState() });
+        // window.addEventListener("tokens_was_refreshed", function (e) { ReloadUserState() });
+        window.addEventListener("tokens_was_refreshed", ReloadUserState);
 
 
         let authStoredJson = localStorage.getItem('header_auth');
@@ -76,13 +87,7 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
                 }
             };
 
-            setLocalState(prevState => {
-                let newState = { ...prevState };
-                newState.Auth = auth;
-                newState.AbsoluteAlerts = [];
-                return newState;
-            });
-
+            props.SetAuth(auth);
             return;
         }
 
@@ -92,8 +97,9 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
 
         ReloadUserState();
 
-
-
+        return function cleanUp() {
+            window.removeEventListener("tokens_was_refreshed", ReloadUserState);
+        }
     }, [])
 
 
@@ -106,12 +112,7 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
         // localStorage.setItem('header_auth', JSON.stringify(auth));
         localStorage.removeItem("header_auth");
 
-        setLocalState(prevState => {
-            let newState = { ...prevState };
-            newState.Auth = auth;
-            newState.AbsoluteAlerts = [];
-            return newState;
-        });
+        props.SetAuth(auth);
     }
 
     const ReloadUserState = () => {
@@ -131,14 +132,7 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
             };
 
             localStorage.setItem('header_auth', JSON.stringify(auth.User));
-            setLocalState(prevState => {
-                let newState = { ...prevState };
-                newState.Auth = auth;
-                newState.AbsoluteAlerts = [];
-
-                return newState;
-            });
-
+            props.SetAuth(auth);
         }
 
         window.G_UsersController.GetShortestUserInfo(success);
@@ -190,9 +184,9 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
     return <div>
         {/* <React.StrictMode> */}
         <BrowserRouter>
-            <HeaderMain AuthInfo={localState.Auth} Apps={ApplacationsList} />
+            <HeaderMain Apps={ApplacationsList} />
             {/* <BodyMain /> */}
-            <AppRouter AuthInfo={localState.Auth} Apps={ApplacationsList} />
+            <AppRouter AuthInfo={props.Auth} Apps={ApplacationsList} />
             <FooterMain />
             <MainAlertAbsolute Data={localState.AbsoluteAlerts} RemoveALert={RemoveMainALert} />
         </BrowserRouter>
@@ -202,4 +196,25 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
 }
 
 
-export default MainComponent;
+
+
+
+const mapStateToProps = (state: AppState, ownProps: MainComponentOwnProps) => {
+    let res = {} as MainComponentStateToProps;
+    res.Auth = state.Auth;
+    return res;
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: MainComponentOwnProps) => {
+    let res = {} as MainComponentDispatchToProps;
+    res.SetAuth = (data: IAuthState) => {
+        dispatch(SetAuthActionCreator(data));
+    }
+
+    return res;
+};
+
+
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+// and that function returns the connected, wrapper component:
+export default connectToStore(MainComponent);

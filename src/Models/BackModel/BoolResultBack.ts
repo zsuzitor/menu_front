@@ -7,3 +7,9 @@ export class BoolResultBack {
 }
 
 
+export class StringResultBack {
+    result: string;
+
+}
+
+

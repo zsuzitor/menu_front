@@ -1,6 +1,5 @@
 import { IEndVoteInfoReturn } from "../../BackModel/PlaningPoker/EndVoteInfoReturn";
 import { IStoryMappingReturn } from "../../BackModel/PlaningPoker/RoomWasSavedUpdateReturn";
-import { IStoryReturn } from "../../BackModel/PlaningPoker/StoryReturn";
 import { RoomStatus, Story, UserInRoom } from "../../Models/PlaningPoker/RoomInfo";
 import { AppAction } from "../Actions";
 

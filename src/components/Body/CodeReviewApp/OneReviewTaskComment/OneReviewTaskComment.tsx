@@ -16,7 +16,6 @@ require('./OneReviewTaskComment.css');
 
 
 interface IOneReviewTaskCommentOwnProps {
-    AuthInfo: IAuthState;
     Comment: IOneTaskReviewCommentDataBack;
     TaskId: number;
 }
@@ -24,6 +23,8 @@ interface IOneReviewTaskCommentOwnProps {
 
 interface IOneReviewTaskCommentStateToProps {
     ProjectUsers: IProjectUserDataBack[];
+    AuthInfo: IAuthState;
+
 }
 
 interface IOneReviewTaskCommentDispatchToProps {
@@ -132,6 +133,7 @@ const OneReviewTaskComment = (props: IOneReviewTaskCommentProps) => {
 const mapStateToProps = (state: AppState, ownProps: IOneReviewTaskCommentOwnProps) => {
     let res = {} as IOneReviewTaskCommentStateToProps;
     res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
+    res.AuthInfo = state.Auth;
     return res;
 }
 

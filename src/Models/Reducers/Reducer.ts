@@ -1,32 +1,26 @@
-import { AppAction } from "../Actions/Actions";
-import { AppState } from "../Models/State/AppState";
 
 
 
 import cloneDeep from 'lodash/cloneDeep';
-import { CodeReviewProjectReducer } from "./CodeReviewApp/ProjectReducer";
-import { CodeReviewUserReducer } from "./CodeReviewApp/UserReducer";
-import { CodeReviewCommentReducer } from "./CodeReviewApp/CommentReducer";
-import { CodeReviewTaskReducer } from "./CodeReviewApp/TaskReducer";
-import { PlaningPokerReducer } from "./PlaningPokerApp/Reducer";
+import { AppAction } from '../Actions/Actions';
+import { SetAuthActionName } from '../Actions/App/Actions';
+import { IAuthState } from '../Models/AuthState';
+import { AppState } from '../Models/State/AppState';
+
 
 export function AppReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
-    let st = CodeReviewProjectReducer(state, action);
-    st = CodeReviewUserReducer(st, action);
-    st = CodeReviewCommentReducer(st, action);
-    st = CodeReviewTaskReducer(st, action);
-
-    st = PlaningPokerReducer(st, action);
-    
-
-
-    //...
-    return st;
     switch (action.type) {
+        case SetAuthActionName:
+            {
+                let newState = cloneDeep(state);
+                let data = action.payload as IAuthState;
+                newState.Auth = data;
+                localStorage.removeItem("header_auth");
 
-        case "test":
-            let str = action.payload as string;
-            return Object.assign({}, state, { TestMessage: str });
+                return newState;
+            }
+
+
         default:
             return state;
     }

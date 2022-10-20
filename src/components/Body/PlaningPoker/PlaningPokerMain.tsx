@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 import Index from "./Index";
 import Room from "./Room/Room";
 import { AlertData } from '../../../Models/Models/AlertData';
-import {  RoomInfo } from '../../../Models/Models/PlaningPoker/RoomInfo';
+import { RoomInfo } from '../../../Models/Models/PlaningPoker/RoomInfo';
 
 // import { HubConnection } from '@microsoft/signalr';
 // import signalR, { HubConnection } from "@aspnet/signalr";
@@ -19,13 +19,11 @@ import { EnteredInRoomActionCreator, SetUserConnectionIdActionCreator, SetUserNa
 
 
 interface PlaningPokerMainOwnProps {
-    AuthInfo: IAuthState;
 }
 
 interface PlaningPokerMainStateToProps {
     RoomInfo: RoomInfo;
-
-
+    AuthInfo: IAuthState;
 }
 
 interface PlaningPokerMainDispatchToProps {
@@ -51,7 +49,7 @@ let __planing_poker_roomname_ref__: string = '';//todo надо проверит
 const PlaningPokerMain = (props: PlaningPokerMainProps) => {
     __planing_poker_roomname_ref__ = props.RoomInfo?.Name;
 
-    
+
     // initState.User.UserName = "enter_your_name";
     // console.log(initState.User.UserName);
     const hubConnection = new signalR.HubConnectionBuilder()
@@ -203,7 +201,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
     useEffect(() => {
         if (props.AuthInfo.AuthSuccess) {
-            props.SetUserName(props.AuthInfo.User.Email);
+            props.SetUserName(props.AuthInfo.User.Name || props.AuthInfo.User.Email);
         }
 
     }, [props.AuthInfo.AuthSuccess]);
@@ -220,8 +218,8 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
         }
     }, [props.RoomInfo.InRoom]);
 
-   
-   
+
+
 
 
 
@@ -255,6 +253,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 const mapStateToProps = (state: AppState, ownProps: PlaningPokerMainOwnProps) => {
     let res = {} as PlaningPokerMainStateToProps;
     res.RoomInfo = state.PlaningPokerApp.RoomInfo;
+    res.AuthInfo = state.Auth;
     return res;
 }
 
@@ -273,7 +272,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: PlaningPokerMainOwnProps) =
         dispatch(SetUserNameActionCreator(username));
     };
 
-    
+
     return res;
 };
 

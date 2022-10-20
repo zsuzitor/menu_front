@@ -23,7 +23,6 @@ require('./OneReviewTask.css');
 
 
 interface IOneReviewTaskOwnProps {
-    AuthInfo: IAuthState;
     Task: IProjectTaskDataBack;
     Comments: IOneTaskReviewCommentDataBack[];
 
@@ -84,24 +83,14 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
             return;
         }
 
-        // let loadComments = (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack[]) => {
-        //     if (error) {
-        //         return;
-        //     }
-
-        //     if (data) {
-        //         setComments(data);
-        //     }
-        // };
-
+    
+        
         // window.G_CodeReviewCommentController.LoadCommentsRedux(props.Task.Id, loadComments);
         props.LoadTaskComments(props.Task.Id);
     }, [showComments]);
 
 
-    // let creator = props.ProjectUsers.find(x => x.Id == props.Task.CreatorId);
-    // let reviewer = props.ProjectUsers.find(x => x.Id == props.Task.ReviewerId);
-
+    
 
     const cancelTask = () => {
         if (!confirm('Отменить изменения?')) {
@@ -124,16 +113,8 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         forAdd.ReviewerId = taskReviewer;
         forAdd.CreatorId = taskCreator;
 
-        // let updateTask = (error: MainErrorObjectBack, data: BoolResultBack) => {
-        //     if (error) {
-        //         return;
-        //     }
-
-        //     if (data?.result) {
-        //         props.UpdateTask(forAdd);
-        //     }
-        // };
-
+    
+        
         // window.G_CodeReviewTaskController.UpdateTask(forAdd, updateTask);
         props.UpdateTask(forAdd);
     };
@@ -144,60 +125,22 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
             return;
         }
 
-        // let deleteTask = (error: MainErrorObjectBack, data: BoolResultBack) => {
-        //     if (error) {
-        //         return;
-        //     }
-
-        //     if (data?.result) {
-        //         props.DeleteTask(props.Task.Id);
-        //     }
-        // };
-
+      
+        
         // window.G_CodeReviewTaskController.DeleteTask(props.Task.Id, deleteTask);
         props.DeleteTask(props.Task.Id);
     };
 
     const addComment = () => {
 
-        // let addComment = (error: MainErrorObjectBack, data: IOneTaskReviewCommentDataBack) => {
-        //     if (error) {
-        //         return;
-        //     }
-
-        //     if (data) {
-        //         setComments(oldState => {
-        //             let newState = [...oldState];
-        //             newState.push(data);
-        //             return newState;
-        //         });
-
-        //     }
-        // };
-
+     
         // window.G_CodeReviewCommentController.AddComment(props.Task.Id, newCommentName, addComment);
         props.AddComment(props.Task.Id, newCommentName);
     };
 
 
-    // const deleteComment = (id: number) => {
-    //     setComments(oldState => {
-    //         return oldState.filter(x => x.Id != id);
-    //     });
-    // }
-
-    // const updateComment = (id: number, text: string) => {
-    //     setComments(oldState => {
-    //         let newState = cloneDeep(oldState);
-    //         let comment = newState.find(x => x.Id == id);
-    //         if (comment) {
-    //             comment.Text = text;
-    //         }
-
-    //         return newState;
-    //     });
-    // }
-
+   
+    
 
     const renderComments = () => {
         if (!showComments) {
@@ -208,7 +151,6 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
             Комментарии:
             {props.Comments.map(x => {
                 return <OneReviewTaskComment
-                    AuthInfo={props.AuthInfo}
                     Comment={x}
                     TaskId={props.Task.Id}
                     key={x.Id}

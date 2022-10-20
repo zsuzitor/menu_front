@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { RoomStatus, UserInRoom, UserRoles } from '../../../../Models/Models/PlaningPoker/RoomInfo';
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Models/State/AppState';
+import { IAuthState } from '../../../../Models/Models/AuthState';
 
 
 
@@ -27,6 +28,7 @@ interface UserInListStateToProps {
     MinVote: number;
     MaxVote: number;
     RoomName: string;
+    AuthInfo: IAuthState;
 
 }
 
@@ -140,6 +142,11 @@ const UserInList = (props: UserInListProps) => {
 
     return <div>
         <div className={"planing-user" + classColorize}>
+            {/* <div className='planing-user-img'>
+                <img className='persent-100-width-height'
+                    src={props.AuthInfo?.User?.Image || G_EmptyImagePath}
+                    alt="Аватар" title='Аватар' />
+            </div> */}
             <p>{props.User.Name}</p>
             {/* <p>{props.User.Id}</p> */}
             <p>оценка: {vote}</p>
@@ -163,7 +170,8 @@ const mapStateToProps = (state: AppState, ownProps: UserInListOwnProps) => {
     res.RoomStatus = state.PlaningPokerApp.RoomStatus;
     res.MaxVote = state.PlaningPokerApp.VoteInfo?.MaxVote;
     res.MinVote = state.PlaningPokerApp.VoteInfo?.MinVote;
-    
+    res.AuthInfo = state.Auth;
+
     return res;
 }
 

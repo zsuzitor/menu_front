@@ -23,7 +23,7 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware, Store } from 'redux';
 import thunk from 'redux-thunk';
 // import { AppAction } from './Models/Actions/Actions';
-import { AppReducer } from "./Models/Reducers/Reducer";
+import { ReducerCombiner } from "./Models/Reducers/ReducerCombiner";
 import { AppState } from './Models/Models/State/AppState';
 
 
@@ -72,7 +72,7 @@ window.G_CodeReviewCommentController = new CodeReviewCommentController();
 
 let configureStore = (initialState: AppState) => {
 
-    const store = createStore(AppReducer, initialState,
+    const store = createStore(ReducerCombiner, initialState,
         applyMiddleware(thunk));//подключаем thunk
 
 

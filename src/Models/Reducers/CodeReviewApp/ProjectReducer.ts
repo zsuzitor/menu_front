@@ -1,6 +1,5 @@
 import { AppAction } from "../../Actions/Actions";
 import { AppState } from "../../Models/State/AppState";
-import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
 import { IOneProjectInListDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInListDataBack";
 
 
@@ -8,7 +7,7 @@ import { IOneProjectInListDataBack } from "../../BackModel/CodeReviewApp/IOnePro
 import cloneDeep from 'lodash/cloneDeep';
 import { AddNewProjectActionName, DeleteProjectActionName, SetCurrentProjectIdActionName, SetProjectsActionName } from "../../Actions/CodeReviewApp/ProjectActions";
 import { SetCurrentProjectUsersActionCreator } from "../../Actions/CodeReviewApp/UserActions";
-import { AppReducer } from "../Reducer";
+import { ReducerCombiner } from "../ReducerCombiner";
 import { LoadTasksActionCreator, SetFilterTaskActionCreator } from "../../Actions/CodeReviewApp/TaskActions";
 import { TasksFilter } from "../../Models/CodeReviewApp/State/TasksFilter";
 import { ILoadReviewTasksResultDataBack } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack";
@@ -30,12 +29,12 @@ export function CodeReviewProjectReducer(state: AppState = new AppState(), actio
 
                 if (newState.CodeReviewApp.CurrentProjectId === projectId) {
                     //todo тут куча копирований стейта
-                    newState = AppReducer(newState, SetCurrentProjectUsersActionCreator([]));
+                    newState = ReducerCombiner(newState, SetCurrentProjectUsersActionCreator([]));
                     let tasks = {} as ILoadReviewTasksResultDataBack;
                     tasks.Tasks = [];
                     tasks.TasksCount = 0;
-                    newState = AppReducer(newState, SetFilterTaskActionCreator(new TasksFilter()));
-                    newState = AppReducer(newState, LoadTasksActionCreator(tasks));
+                    newState = ReducerCombiner(newState, SetFilterTaskActionCreator(new TasksFilter()));
+                    newState = ReducerCombiner(newState, LoadTasksActionCreator(tasks));
                 }
 
                 return newState;
@@ -55,12 +54,12 @@ export function CodeReviewProjectReducer(state: AppState = new AppState(), actio
                 let projectId = action.payload as number;
                 newState.CodeReviewApp.CurrentProjectId = projectId;
                 //todo тут куча копирований стейта
-                newState = AppReducer(newState, SetCurrentProjectUsersActionCreator([]));
+                newState = ReducerCombiner(newState, SetCurrentProjectUsersActionCreator([]));
                 let tasks = {} as ILoadReviewTasksResultDataBack;
                 tasks.Tasks = [];
                 tasks.TasksCount = 0;
-                newState = AppReducer(newState, SetFilterTaskActionCreator(new TasksFilter()));
-                newState = AppReducer(newState, LoadTasksActionCreator(tasks));
+                newState = ReducerCombiner(newState, SetFilterTaskActionCreator(new TasksFilter()));
+                newState = ReducerCombiner(newState, LoadTasksActionCreator(tasks));
                 return newState;
             }
         case SetProjectsActionName:

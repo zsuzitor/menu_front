@@ -37,14 +37,17 @@ const OneProjectInList = (props: IOneProjectInListProps) => {
     }
 
 
-    return <div key={props.Project.Id.toString()} className={projectClassName}>
-        <div onClick={() => {
+    return <div key={props.Project.Id.toString()}
+        className={projectClassName}
+        onClick={() => {
             if (!props.CurrentProject) {
                 props.SetCurrentProject(props.Project.Id)
             }
-        }} title={props.Project.Name}>
-            {props.Project.Name}
-        </div>
+        }}>
+        {props.Project.Name}
+
+        {/* <div  title={props.Project.Name}>
+        </div> */}
     </div>
 
 }

@@ -11,6 +11,7 @@ export class OneTask {
     CreatorId: number;
     ReviewerId?: number;
     Status: number;
+    Link: string;
     Comments: IOneTaskReviewCommentDataBack[];//todo
 
     constructor() {
@@ -23,5 +24,6 @@ export class OneTask {
         this.CreatorId = data.CreatorId;
         this.ReviewerId = data.ReviewerId;
         this.Status = data.Status;
+        this.Link = data.Link;
     }
 }

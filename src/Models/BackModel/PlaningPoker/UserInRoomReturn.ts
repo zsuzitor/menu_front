@@ -8,4 +8,6 @@ export interface IUserInRoomReturn {
     name: string;
     vote?: string;//number|string
     has_vote:boolean;
+    image_link: string;
+
 }

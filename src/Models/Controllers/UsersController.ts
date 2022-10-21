@@ -92,7 +92,9 @@ export class UsersController implements IUsersController {
 
     UpdateImage(mainImageSave: File, onSuccess: ImageChanged) {
         let data = new FormData();
-        data.append('image', mainImageSave);
+        if (mainImageSave) {
+            data.append('image', mainImageSave);
+        }
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,

@@ -75,7 +75,6 @@ const PersonSettings = (props: PersonSettingsProps) => {
 
     const changeName = () => {
         if (!name) {
-
             let alert = alertFactory.GetDefaultError("Имя не заполнено");
             window.G_AddAbsoluteAlertToState(alert);
             return;
@@ -92,15 +91,27 @@ const PersonSettings = (props: PersonSettingsProps) => {
             else {
                 let alert = alertFactory.GetDefaultError("Что то пошло не так, попробуйте позже");
                 window.G_AddAbsoluteAlertToState(alert);
-
             }
         });
     }
 
     const loadImage = () => {
         var img = ($('#main_image_input')[0] as HTMLInputElement).files[0];//пример по этому же id есть
+        if (!img) {
+            alert('Выберите изображение');
+            return;
+        }
+
+        updateImage(img);
+    }
+
+    const removeImage = () => {
+        updateImage(null);
+    }
+
+    const updateImage = (img: File) => {
         window.G_UsersController.UpdateImage(img, (error: MainErrorObjectBack, data: StringResultBack) => {
-            if (data?.result) {
+            if (data) {
                 let auth = cloneDeep(props.AuthInfo);
                 auth.User.Image = data.result;
                 props.SetAuth(auth);
@@ -114,8 +125,6 @@ const PersonSettings = (props: PersonSettingsProps) => {
             }
         })
     }
-
-
 
     return <div className='person-settings-outer'>
         {/* <form autoComplete="disabled"> */}
@@ -162,20 +171,18 @@ const PersonSettings = (props: PersonSettingsProps) => {
                         <img className='persent-100-width-height'
                             src={props.AuthInfo?.User?.Image || G_EmptyImagePath}
                             alt="Аватар" title='Аватар' />
+                        {/* <div className='person-settings-image-hv'></div> */}
+
                     </div>
+
                     <input className='form-control' type='file' id='main_image_input'></input>
                     <button type="button" className='btn btn-b-light'
                         onClick={() => loadImage()}>Загрузить</button>
+                    <button type="button" className='btn btn-b-light'
+                        onClick={() => removeImage()}>Удалить</button>
                 </div>
             </div>
         </div>
-
-
-
-
-
-        {/* </form> */}
-
     </div>
 }
 

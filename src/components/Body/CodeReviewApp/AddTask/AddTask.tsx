@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
+import { OneTask } from '../../../../Models/Models/CodeReviewApp/State/OneTask';
 import { AppState } from '../../../../Models/Models/State/AppState';
 
 
@@ -16,18 +17,14 @@ require('./AddTask.css');
 interface IAddTaskOwnProps {
     ProjectUsers: IProjectUserDataBack[];
     ProjectId: number;
-
-
 }
 
 
 interface IAddTaskStateToProps {
-
 }
 
 interface IAddTaskDispatchToProps {
-    AddTaskToProject: (newTaskName: string, newTaskCreator: number, newTaskReviwer: number, projectId: number) => void;
-
+    AddTaskToProject: (task: OneTask, projectId: number) => void;
 }
 
 interface IAddTaskProps extends IAddTaskStateToProps, IAddTaskOwnProps, IAddTaskDispatchToProps {
@@ -37,6 +34,7 @@ interface IAddTaskProps extends IAddTaskStateToProps, IAddTaskOwnProps, IAddTask
 const AddTask = (props: IAddTaskProps) => {
 
     const [newTaskName, setNewTaskName] = useState('');
+    const [newTaskLink, setNewTaskLink] = useState('');
     const [newTaskCreator, setNewTaskCreator] = useState(-1);//firstUser?.Id || 
     const [newTaskReviwer, setNewTaskReviwer] = useState(-1);
 
@@ -63,28 +61,24 @@ const AddTask = (props: IAddTaskProps) => {
             return;
         }
 
-        // let addTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => {
-        //     if (error) {
-        //         return;
-        //     }
-
-        //     if (data) {
-        //         // props.AddUserToProject(data);
-        //         // addTaskToProject(data);
-        //         props.ReloadTasks();
-
-        //     }
-        // };
-
-        // window.G_CodeReviewTaskController.AddTaskToProjectRedux(newTaskName, newTaskCreator, newTaskReviwer, props.ProjectId);
-        props.AddTaskToProject(newTaskName, newTaskCreator, newTaskReviwer, props.ProjectId);
+        let tsk = new OneTask()
+        tsk.Name = newTaskName;
+        tsk.CreatorId = newTaskCreator;
+        tsk.ReviewerId = newTaskReviwer;
+        tsk.Link = newTaskLink;
+        props.AddTaskToProject(tsk, props.ProjectId);
         setNewTaskName('');
+        setNewTaskLink('');
     };
 
 
     return <div>
         <textarea className='form-control-b persent-100-width' onChange={(e) => setNewTaskName(e.target.value)}
-            value={newTaskName} placeholder='название'></textarea>
+            value={newTaskName} placeholder='Название'></textarea>
+        <input type='text'
+            className='form-control-b persent-100-width'
+            onChange={(e) => setNewTaskLink(e.target.value)}
+            value={newTaskLink} placeholder='Ссылка'></input>
         <label>creator:</label>
         <select className='form-control-b' value={newTaskCreator} onChange={(e) => setNewTaskCreator(+e.target.value)}>
             {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
@@ -112,8 +106,8 @@ const mapStateToProps = (state: AppState, ownProps: IAddTaskOwnProps) => {
 
 const mapDispatchToProps = (dispatch: any, ownProps: IAddTaskOwnProps) => {
     let res = {} as IAddTaskDispatchToProps;
-    res.AddTaskToProject = (newTaskName: string, newTaskCreator: number, newTaskReviwer: number, projectId: number) => {
-        dispatch(window.G_CodeReviewTaskController.AddTaskToProjectRedux(newTaskName, newTaskCreator, newTaskReviwer, projectId));
+    res.AddTaskToProject = (task: OneTask, projectId: number) => {
+        dispatch(window.G_CodeReviewTaskController.AddTaskToProjectRedux(task, projectId));
     };
 
     return res;

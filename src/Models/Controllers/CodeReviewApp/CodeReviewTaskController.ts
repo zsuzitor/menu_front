@@ -3,6 +3,7 @@ import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { ILoadReviewTasksResultDataBack } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack";
 import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
+import { OneTask } from "../../Models/CodeReviewApp/State/OneTask";
 import { ITaskFilter } from "../../Models/CodeReviewApp/TasksFilter";
 import { AppState } from "../../Models/State/AppState";
 import { ControllerHelper } from "../ControllerHelper";
@@ -15,7 +16,7 @@ export type DeleteTask = (error: MainErrorObjectBack, data: BoolResultBack) => v
 
 
 export interface ICodeReviewTaskController {
-    AddTaskToProjectRedux: (taskName: string, taskCreatorId: number, taskReviwerId: number, projectId: number) => void;
+    AddTaskToProjectRedux: (task: OneTask, projectId: number) => void;
     UpdateTaskRedux: (task: IProjectTaskDataBack) => void;
     LoadTasksRedux: (taskFilter: ITaskFilter) => void;
     DeleteTaskRedux: (id: number) => void;
@@ -25,10 +26,10 @@ export interface ICodeReviewTaskController {
 
 export class CodeReviewTaskController implements ICodeReviewTaskController {
 
-    AddTaskToProjectRedux = (taskName: string, taskCreatorId: number, taskReviwerId: number, projectId: number) => {
+    AddTaskToProjectRedux = (task: OneTask, projectId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.AddTaskToProject(taskName, taskCreatorId, taskReviwerId, projectId,
+            this.AddTaskToProject(task, projectId,
                 (error: MainErrorObjectBack, data: IProjectTaskDataBack) => {
                     this.preloader(false);
                     if (error) {
@@ -36,28 +37,18 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
                     }
 
                     if (data) {
-                        // dispatch(AddTaskToProjectActionCreator(data));
                         dispatch(AddLoadTriggerActionCreator());
-
-                        // let st = getState() as AppState;
-                        // let filter = {
-                        //     Name: st.CodeReviewApp.CurrentProjectTasksFilters.TaskName
-                        //     , CreatorId: st.CodeReviewApp.CurrentProjectTasksFilters.CreatorId
-                        //     , PageNumber: st.CodeReviewApp.CurrentProjectTasksFilters.Page, PageSize: tasksOnPageCount
-                        //     , ProjectId: st.CodeReviewApp.CurrentProjectId, ReviewerId: st.CodeReviewApp.CurrentProjectTasksFilters.ReviewerId
-                        //     , Status: st.CodeReviewApp.CurrentProjectTasksFilters.Status
-                        // } as ITaskFilter;
-                        // dispatch(this.LoadTasksRedux());
                     }
                 });
         };
     }
 
-    AddTaskToProject = (taskName: string, taskCreatorId: number, taskReviwerId: number, projectId: number, onSuccess: AddNewProjectTask) => {
+    AddTaskToProject = (task: OneTask, projectId: number, onSuccess: AddNewProjectTask) => {
         let data = {
-            "taskName": taskName,
-            "taskCreatorId": taskCreatorId,
-            "taskReviwerId": taskReviwerId,
+            "taskName": task.Name,
+            "taskCreatorId": task.CreatorId,
+            "taskReviwerId": task.ReviewerId,
+            "taskLink": task.Link,
             "projectId": projectId,
         };
         G_AjaxHelper.GoAjaxRequest({
@@ -98,6 +89,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
             "status": task.Status,
             "creatorId": task.CreatorId,
             "reviewerId": task.ReviewerId,
+            "taskLink": task.Link,
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,

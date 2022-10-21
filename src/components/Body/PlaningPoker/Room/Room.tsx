@@ -538,19 +538,25 @@ const Room = (props: RoomProps) => {
 
         return <div>
             <p>Пользователь</p>
-            <input type="text" className="persent-100-width form-control"
-                onChange={(e) => {
-                    setUserNameLocalState(prevState => {
-                        return e.target.value;
-                    });
-                }}
-                value={userNameLocalState}></input>
-
-            <div className='planing-name-change-but'
-                title='Изменить имя'
-                onClick={() => changeCurrentUserName()}>
-                <img className='persent-100-width-height' src="/images/pencil-edit.png" />
+            <div className='planing-name-block'>
+                <div className='planing-name-block-input-block'>
+                    <input type="text" className="persent-100-width form-control"
+                        onChange={(e) => {
+                            setUserNameLocalState(prevState => {
+                                return e.target.value;
+                            });
+                        }}
+                        value={userNameLocalState}></input>
+                </div>
+                <div className='planing-name-change-but'
+                    title='Изменить имя'
+                    onClick={() => changeCurrentUserName()}>
+                    <img className='persent-100-width-height' src="/images/pencil-edit.png" />
+                </div>
             </div>
+
+
+
             {hideVotesSetting}
         </div>
     };

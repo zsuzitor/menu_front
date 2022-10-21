@@ -5,4 +5,5 @@ export interface IProjectTaskDataBack {
     CreatorId: number;
     ReviewerId?: number;
     Status: number;
+    Link: string;
 }

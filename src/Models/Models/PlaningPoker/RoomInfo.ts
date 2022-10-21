@@ -36,6 +36,7 @@ export class UserInRoom implements MappedWithBack<IUserInRoomReturn> {
     Vote?: string;//number|string
     Roles: string[];
     HasVote: boolean;
+    ImageLink: string;
 
 
     FillByBackModel(newData: IUserInRoomReturn): void {
@@ -44,7 +45,7 @@ export class UserInRoom implements MappedWithBack<IUserInRoomReturn> {
         this.Vote = newData.vote;
         this.Roles = newData.roles;
         this.HasVote = newData.has_vote;
-
+        this.ImageLink = newData.image_link;
     }
 
     IsAdmin(): boolean {

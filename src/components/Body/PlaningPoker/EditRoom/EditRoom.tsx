@@ -22,8 +22,6 @@ interface EditRoomStateToProps {
 }
 
 interface EditRoomDispatchToProps {
-    // SetUserName: ((newName: string) => void);
-    // ChangeRoomPassword: (roomname: string, userConnectionId: string, oldPassword: string, newPassword: string) => void;
 }
 
 interface EditRoomProps extends EditRoomStateToProps, EditRoomOwnProps, EditRoomDispatchToProps {
@@ -108,19 +106,15 @@ const EditRoom = (props: EditRoomProps) => {
     }
 
     return <div>
-        <label>Секция</label>
-        <button className='btn btn-b-light'
-            onClick={() => setShowSection(1)}>Пароль</button>
-        <button className='btn btn-b-light'
-            onClick={() => setShowSection(2)}>Оценки</button>
+        <div className='edit-room-sections-block'>
+            <div onClick={() => setShowSection(1)}>Пароль</div>
+            <div onClick={() => setShowSection(2)}>Оценки</div>
+        </div>
         <hr></hr>
         {sectionContent}
 
     </div>
 }
-
-
-
 
 
 
@@ -135,9 +129,6 @@ const mapStateToProps = (state: AppState, ownProps: EditRoomOwnProps) => {
 
 const mapDispatchToProps = (dispatch: any, ownProps: EditRoomOwnProps) => {
     let res = {} as EditRoomDispatchToProps;
-    // res.ChangeRoomPassword = (roomname: string, userConnectionId: string, oldPassword: string, newPassword: string) => {
-    //     dispatch(window.G_PlaningPokerController.ChangeRoomPasswordRedux(roomname, userConnectionId, oldPassword, newPassword));
-    // }
 
     return res;
 };

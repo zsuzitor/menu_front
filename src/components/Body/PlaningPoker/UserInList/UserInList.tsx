@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RoomStatus, UserInRoom, UserRoles } from '../../../../Models/Models/PlaningPoker/RoomInfo';
+import { PlaningPokerUserInfo, RoomStatus, UserInRoom, UserRoles } from '../../../../Models/Models/PlaningPoker/RoomInfo';
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Models/State/AppState';
 import { IAuthState } from '../../../../Models/Models/AuthState';
@@ -29,6 +29,7 @@ interface UserInListStateToProps {
     MaxVote: number;
     RoomName: string;
     AuthInfo: IAuthState;
+    PlaningUserInfo: PlaningPokerUserInfo;
 
 }
 
@@ -62,26 +63,37 @@ const UserInList = (props: UserInListProps) => {
             return;
         }
 
+        if (props.PlaningUserInfo.UserId === props.User.Id) {
+            if (!confirm('Вы уверены что хотите выгнать себя?')) {
+                return;
+            }
+        }
+
         props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.KickUser, props.RoomName, props.User.Id);
     };
 
 
 
 
-    let delButton = <div></div>
-    let statusChange = <div></div>
+    let userButton = <></>
+    let statusChange = <></>
     if (props.RenderForAdmin) {
-        delButton = <div className='user-list-del-but'
-            title='Выгнать пользователя'
-            onClick={() => tryToRemoveUserFromRoom()}>
-            <img className='persent-100-width-height' src="/images/delete-icon.png" />
-
+        userButton = <div className='user-list-buttons'>
+            <div className='user-list-role-but'>
+                <div className='user-role-but user-role-but-add' title='Добавить роль'
+                    onClick={() => addNewRoleToUser()}>+</div>
+                <div className='user-role-but user-role-but-del' title='Удалить роль'
+                    onClick={() => removeRoleUser()}>-</div>
+            </div>
+            <div className='user-list-del-but'
+                title='Выгнать пользователя'
+                onClick={() => tryToRemoveUserFromRoom()}>
+                <img className='persent-100-width-height' src="/images/delete-icon.png" />
+            </div>
         </div>
 
         statusChange = <div>
             <select className="form-control" value={selectedEditRole} onChange={(e) => {
-
-                // changeSelectedEditRoleState(e.target.value)
                 changeSelectedEditRoleState(prevState => {
                     return e.target.value;
                 });
@@ -91,12 +103,7 @@ const UserInList = (props: UserInListProps) => {
                 <option value={UserRoles.Admin}>{UserRoles.Admin}</option>
                 <option value={UserRoles.Observer}>{UserRoles.Observer}</option>
             </select>
-            <div className='user-list-role-but'>
-                <div className='user-role-but user-role-but-add' title='Добавить роль'
-                    onClick={() => addNewRoleToUser()}>+</div>
-                <div className='user-role-but user-role-but-del' title='Удалить роль'
-                    onClick={() => removeRoleUser()}>-</div>
-            </div>
+
         </div>
     }
 
@@ -142,18 +149,17 @@ const UserInList = (props: UserInListProps) => {
 
     return <div>
         <div className={"planing-user" + classColorize}>
-            {/* <div className='planing-user-img'>
+            <div className='planing-user-img'>
                 <img className='persent-100-width-height'
-                    src={props.AuthInfo?.User?.Image || G_EmptyImagePath}
+                    src={props.User.ImageLink || G_EmptyImagePath}
                     alt="Аватар" title='Аватар' />
-            </div> */}
-            <p>{props.User.Name}</p>
-            {/* <p>{props.User.Id}</p> */}
+            </div>
+            <span>{props.User.Name}</span>
             <p>оценка: {vote}</p>
-            {delButton}
             {/* <hr /> */}
-            <p>Роли: {props.User.Roles.join(', ')}</p>
+            <span>Роли: {props.User.Roles.join(', ')}</span>
             {statusChange}
+            {userButton}
         </div>
         <div className="padding-10-top"></div>
     </div>
@@ -171,6 +177,7 @@ const mapStateToProps = (state: AppState, ownProps: UserInListOwnProps) => {
     res.MaxVote = state.PlaningPokerApp.VoteInfo?.MaxVote;
     res.MinVote = state.PlaningPokerApp.VoteInfo?.MinVote;
     res.AuthInfo = state.Auth;
+    res.PlaningUserInfo = state.PlaningPokerApp.User;
 
     return res;
 }

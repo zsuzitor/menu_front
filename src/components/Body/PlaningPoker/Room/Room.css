@@ -49,8 +49,9 @@
 
 .planing-name-change-but {
     width: 20px;
-    height: 20px;
+    height: 25px;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .planning-vote-settings {
@@ -58,7 +59,7 @@
     display: flex;
 }
 
-.planing-vote-show-but{
+.planing-vote-show-but {
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -103,4 +104,12 @@
 
 .planing-cards-container>div {
     margin: 6px;
+}
+
+.planing-name-block {
+    display: flex;
+}
+
+.planing-name-block-input-block {
+    flex-grow: 2;
 }

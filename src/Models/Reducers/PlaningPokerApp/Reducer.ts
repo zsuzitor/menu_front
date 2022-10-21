@@ -5,7 +5,6 @@ import { AppState } from "../../Models/State/AppState";
 
 import cloneDeep from 'lodash/cloneDeep';
 import { AddNewStoryActionName, AddUserToRoomActionName, ChangeUserNameInRoomActionName, ChangeUserNameInRoomPayload, ClearVoteActionName, DeleteStoryActionName, EnteredInRoomActionName, IEnteredInRoomActionPayload, MoveStoryToCompleteActionName, MoveStoryToCompletePayload, RemoveUserActionName, SetCurrentStoryIdActionName, SetEditRoomActionName, SetInitialRoomDieTimeActionName, SetNotActualStoriesActionName, SetRoomCardsActionName, SetRoomNameActionName, SetRoomPasswordActionName, SetRoomStatusActionName, SetRoomUserIdActionName, SetRoomUsersActionName, SetSelectedCardActionName, SetStoriesActionName, SetTotalNotActualStoriesCountActionName, SetUserConnectionIdActionName, SetUserNameActionName, SetVoteInfoActionName, StoryChangeActionName, UpdateStoriesIdActionName, UserRoleChangedActionName, UserRoleChangedPayload, VoteChangedActionName, VoteChangedPayload } from "../../Actions/PlaningPokerApp/Actions";
-import { IStoryReturn } from "../../BackModel/PlaningPoker/StoryReturn";
 import { RoomStatus, Story, UserInRoom, VoteInfo } from "../../Models/PlaningPoker/RoomInfo";
 import { IEndVoteInfoReturn } from "../../BackModel/PlaningPoker/EndVoteInfoReturn";
 import { PlaningPokerHelper, StoriesHelper } from "../../BL/PlaningPokerApp/PlaningPokerHelper";

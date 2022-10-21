@@ -15,7 +15,27 @@ div.person-settings-image {
     /* float: right; */
 
     overflow: hidden;
+    position: relative;
 }
+
+/* div.person-settings-image> */
+/* div.person-settings-image-hv {
+    height: 200px;
+    background-color: black;
+    visibility: hidden;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+} */
+
+/* div.person-settings-image-hv:hover {
+    visibility: visible;
+
+} */
+
+/* div.person-settings-image:hover+div.person-settings-image>div.person-settings-image-hv {
+    height: 100px;
+} */
 
 .person-settings-image-block {
     position: absolute;

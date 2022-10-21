@@ -13,13 +13,12 @@
 }
 
 .user-role-but-add {
-    background-color: #28a745;
-
+    background-color: #66cb7d;
 }
 
 
 .user-role-but-del {
-    background-color: #dc3545;
+    background-color: #d95a66;
 
 }
 
@@ -53,6 +52,8 @@
     border-radius: 5px;
     padding: 10px;
     /* background-color: white; */
+    position: relative;
+    overflow: hidden;
 }
 
 .planing-user-img {
@@ -60,4 +61,11 @@
     width: 30px;
     height: 30px;
     overflow: hidden;
+    display: inline-block;
+}
+
+.user-list-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
 }

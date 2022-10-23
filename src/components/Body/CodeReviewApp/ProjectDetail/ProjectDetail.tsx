@@ -14,7 +14,7 @@ import { TasksFilter } from '../../../../Models/Models/CodeReviewApp/State/Tasks
 import { OneTask } from '../../../../Models/Models/CodeReviewApp/State/OneTask';
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Models/State/AppState';
-import { SetFilterTaskCreatorActionCreator, SetFilterTaskNameActionCreator, SetFilterTaskPageActionCreator, SetFilterTaskReviewerActionCreator, SetFilterTaskStatusActionCreator } from '../../../../Models/Actions/CodeReviewApp/TaskActions';
+import { SetFilterTaskActionCreator, SetFilterTaskCreatorActionCreator, SetFilterTaskNameActionCreator, SetFilterTaskPageActionCreator, SetFilterTaskReviewerActionCreator, SetFilterTaskStatusActionCreator } from '../../../../Models/Actions/CodeReviewApp/TaskActions';
 import { CodeReviewLocalStorageHelper } from '../../../../Models/BL/PlaningPokerApp/PlaningPokerHelper';
 
 
@@ -42,6 +42,7 @@ interface IProjectDetailDispatchToProps {
     SetFilterTaskName: (name: string) => void;
     SetFilterTaskPage: (num: number) => void;
     SetFilterTaskStatus: (status: number) => void;
+    ClearFilterTask: () => void;
 
     ReloadTasks: (filters: ITaskFilter) => void;
 
@@ -141,6 +142,11 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     };
 
 
+    const clearFilters = () => {
+        props.ClearFilterTask();
+    }
+
+
     if (!props.Project) {
         return <div style={{ paddingTop: '20px' }}>
             <p>выберите проект</p>
@@ -148,16 +154,11 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     }
 
 
-    let userListClass = ' display_none';
-    if (showUserList) {
-        userListClass = '';//' project-review-user-list-show'
-    }
 
 
     return <div className='review-project-detail-main'>
         <div>
-            <h1>название: {props.Project.Name}</h1>
-            <span>id: {props.Project.Id}</span>
+            <h1>{props.Project.Name}</h1>
             <div className='review-project-delete-button' onClick={() => {
                 if (confirm('удалить проект?')) {
                     deleteProject();
@@ -189,7 +190,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             </div>
         </div>
         <div className='review-project-tasks-filters-block'>
-            <div>фильтры</div>
+            <div>Фильтры</div>
             <input className='form-control-b' type='text' value={props.TasksFilters.TaskName}
                 onChange={e => props.SetFilterTaskName(e.target.value)} placeholder='название'></input>
             <span>Создатель</span>
@@ -210,6 +211,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 <option value={3}>В процессе</option>
                 <option value={2}>Готово</option>
             </select>
+            <button className='btn-b btn-border' onClick={() => clearFilters()}>Очистить</button>
             <div>
                 <Paggination
                     ElementsCount={props.CurrentProjectTasksAllCount}
@@ -219,7 +221,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             </div>
         </div>
         <div>
-            <h2>список задач</h2>
+            <h2>Задачи</h2>
             {props.Tasks.map(x => <OneReviewTask key={x.Id}
                 Task={x}
                 Comments={x.Comments}
@@ -265,6 +267,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: IProjectDetailOwnProps) => 
     res.DeleteProject = (id: number) => {
         dispatch(window.G_CodeReviewProjectController.DeleteProjectRedux(id));
     };
+
+    res.ClearFilterTask = () => {
+        dispatch(SetFilterTaskActionCreator(new TasksFilter()));
+    }
 
     return res;
 };

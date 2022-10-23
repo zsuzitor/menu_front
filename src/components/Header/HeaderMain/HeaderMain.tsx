@@ -40,7 +40,9 @@ const HeaderMain = (props: IHeaderMainProps) => {
 
     return <div className='main-header'>
         <div className={'main-header-menu ' + menuClass}>
-            <a href="/menu">Home</a>
+            
+            <div key='menu-home' className='main-header-menu-line'>
+            <a href="/menu">Home</a></div>
             <hr />
             {props.Apps.map(x => <div key={x.Name} className='main-header-menu-line'>
                 <a href={x.Path}>{x.Name}</a></div>)}

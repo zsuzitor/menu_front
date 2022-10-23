@@ -1,5 +1,8 @@
 
+import { BoolResultBack } from "./BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "./BackModel/ErrorBack";
+import { BoolWithError } from "./Controllers/BO/ControllersOutput";
+import { ControllerHelper } from "./Controllers/ControllerHelper";
 import { AlertData } from "./Models/AlertData";
 
 
@@ -61,27 +64,57 @@ export class AjaxHelper implements IAjaxHelper {
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
-                    //TODO ошибка
-                    localStorage.removeItem("header_auth");
-                    var eventLogOut = new CustomEvent("logout", {});
-                    window.dispatchEvent(eventLogOut);
-                    if (!notRedirectWhenNotAuth) {
-                        location.href = '/menu/auth/login/';
-                    }
-
+                    //есть кейс когда сразу уходит 2 запроса, оба падают с просроченным токеном
+                    //и 1 из просов его уже обновил, второй пытается но падает тк прошлый токены уже все
+                    //в таком случае надо сходить и посмотреть а может уже все в порядке?
+                    //есть еще 2 вариант фикса, если с этим будут траблы, то надо рефрешить строго по очереди
+                    //тоесть если хотя бы 1 рефреш ушел, второй ждет и потом уже думать, можно его просто отпускать всегда
+                    //а можно проверять ответ первого(сложнее)
+                    this.CheckAuth((error: MainErrorObjectBack, data: BoolResultBack) => {
+                        if (data?.result) {
+                            var eventTokensRefresh = new CustomEvent("tokens_was_refreshed", {});
+                            window.dispatchEvent(eventTokensRefresh);
+                            if (callBack) {
+                                callBack();
+                            }
+                        }
+                        else {
+                            localStorage.removeItem("header_auth");
+                            var eventLogOut = new CustomEvent("logout", {});
+                            window.dispatchEvent(eventLogOut);
+                            if (!notRedirectWhenNotAuth) {
+                                location.href = '/menu/auth/login/';
+                            }
+                        }
+                    });
                 }
                 else {
                     var eventTokensRefresh = new CustomEvent("tokens_was_refreshed", {});
                     window.dispatchEvent(eventTokensRefresh);
-                    //TODO записываем полученные токены
                     if (callBack) {
                         callBack();
                     }
-
                 }
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/authenticate/refresh-access-token',
+            NotGlobalError: true,
+        });
+    }
+
+
+    public CheckAuth(onSuccess: BoolWithError): void {
+        this.GoAjaxRequest({
+            Data: {},
+            Type: "GET",
+            NeedTryRefreshToken: false,
+            NotRedirectWhenNotAuth: true,
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/authenticate/check-auth',
             NotGlobalError: true,
         });
     }
@@ -184,12 +217,12 @@ export class AjaxHelper implements IAjaxHelper {
         }
 
         //TODO логику получения установки вынести в отдельный класс, встречается не только тут
-        let haders: any = { 'Authorization_Access_Token': localStorage.getItem('access_token') };
-        if (obj.NeedTryRefreshToken) {
-            haders['Authorization_Refresh_Token'] = localStorage.getItem('refresh_token');
-        }
+        // let haders: any = { 'Authorization_Access_Token': localStorage.getItem('access_token') };
+        // if (obj.NeedTryRefreshToken) {
+        //     haders['Authorization_Refresh_Token'] = localStorage.getItem('refresh_token');
+        // }
 
-        ajaxObj.headers = haders;
+        // ajaxObj.headers = haders;
 
         try {
             await this.TrySend(ajaxObj);
@@ -202,6 +235,10 @@ export class AjaxHelper implements IAjaxHelper {
 
         await $.ajax(ajaxObj);//await
 
+    }
+
+    mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
+        return new ControllerHelper().MapWithResult(onSuccess);
     }
 }
 

@@ -56,9 +56,7 @@ export function SetFilterTaskStatusActionCreator(num: number): AppAction<number>
 };
 
 export const SetFilterTaskActionName: string = 'SetFilterTaskAction';
-export function SetFilterTaskActionCreator(num: TasksFilter): AppAction<TasksFilter> {
-    return { type: SetFilterTaskActionName, payload: num };
+export function SetFilterTaskActionCreator(data: TasksFilter): AppAction<TasksFilter> {
+    return { type: SetFilterTaskActionName, payload: data };
 };
-
-
 

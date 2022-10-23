@@ -3,7 +3,6 @@
 import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
-import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 import { AppState } from '../../../../Models/Models/State/AppState';
 import OneProjectUser from '../OneProjectUser/OneProjectUser';
 
@@ -38,6 +37,7 @@ const ProjectUsers = (props: IProjectUsersProps) => {
 
     const [newUserName, setNewUserName] = useState('');
     const [userMainAppEmail, setUserMainAppEmail] = useState('');
+    const [hideDeactivated, setHideDeactivated] = useState(true);
 
     const addNewUser = () => {
         if (!newUserName) {
@@ -59,10 +59,13 @@ const ProjectUsers = (props: IProjectUsersProps) => {
         <br />
         <button className='btn-b btn-border add-new-review-person-btn' onClick={() => addNewUser()}>Добавить человека</button>
         <br />
-        {props.ProjectUsers.map(x => {
-            return <OneProjectUser User={x}
-                key={x.Id} ></OneProjectUser>
-        })}
+        <label>Скрывать неактивных пользователей</label>
+        <input type="checkbox" checked={hideDeactivated} onChange={e => setHideDeactivated(e.target.checked)} />
+        {props.ProjectUsers.filter(x => !hideDeactivated || !x.Deactivated)
+            .map(x => {
+                return <OneProjectUser User={x}
+                    key={x.Id} ></OneProjectUser>
+            })}
     </div>
 }
 

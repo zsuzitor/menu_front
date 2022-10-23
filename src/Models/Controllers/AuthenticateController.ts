@@ -1,5 +1,6 @@
+import { BoolResultBack } from "../BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../BackModel/ErrorBack";
-import { OnlyError } from "./BO/ControllersOutput";
+import { BoolWithError, OnlyError } from "./BO/ControllersOutput";
 import { ControllerHelper } from "./ControllerHelper";
 
 
@@ -8,7 +9,8 @@ import { ControllerHelper } from "./ControllerHelper";
 export interface IAuthenticateController {
     Login: (model: LoginModel, onSuccess: OnlyError) => void;//(success: OnlyError) => void;
     Register: (model: RegisterModel, onSuccess: OnlyError) => void;
-    Logout: () => void;
+    Logout: (onSuccess: (error: MainErrorObjectBack, data: BoolResultBack) => void) => void;
+    CheckAuth: (data: BoolWithError) => void;
     RefreshAccessToken: (notRedirectWhenNotAuth: boolean, callBack?: () => void) => void;
     SendMessageForgotPassword: (login: string, onSuccess: OnlyError) => void;
     CheckRecoverPasswordCode: (code: string, onSuccess: OnlyError) => void;
@@ -131,30 +133,44 @@ export class AuthenticateController implements IAuthenticateController {
     }
 
 
-    Logout() {
-        alert('not inplemented');
-        return;
+    Logout(onSuccess: (error: MainErrorObjectBack, data: BoolResultBack) => void) {
+
         let data = {
         };
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "GET",
+            Type: "POST",
             FuncSuccess: (xhr, status, jqXHR) => {
-                
-                let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-                // if (resp.errors) {
-                //     onSuccess(resp);
-                // }
-                // else {
-                //     onSuccess(null);
-                // }
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/authenticate/logout',
 
         });
     }
+
+    CheckAuth(onSuccess: BoolWithError): void {
+
+        let data = {
+        };
+
+        // let ajx: AjaxHelper.IAjaxHelper = new AjaxHelper.AjaxHelper();
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/authenticate/check-auth',
+
+        });
+
+    }
+
 
     RefreshAccessToken(notRedirectWhenNotAuth: boolean, callBack?: () => void) {
         G_AjaxHelper.TryRefreshToken(notRedirectWhenNotAuth, callBack);
@@ -165,7 +181,6 @@ export class AuthenticateController implements IAuthenticateController {
 
     mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
         return new ControllerHelper().MapWithResult(onSuccess);
-
     }
 }
 

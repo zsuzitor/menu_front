@@ -9,6 +9,9 @@ import {
     BrowserRouter
 } from "react-router-dom";
 import { AppState } from "../../../Models/Models/State/AppState";
+import { MainErrorObjectBack } from "../../../Models/BackModel/ErrorBack";
+import { BoolResultBack } from "../../../Models/BackModel/BoolResultBack";
+import { AlertData } from "../../../Models/Models/AlertData";
 
 
 require('./HeaderUserMenu.css');
@@ -51,6 +54,19 @@ const HeaderUserMenu = (props: HeaderUserMenuProps) => {
         return NotLogginedUserRender();
     }
 
+    const exitApp = () => {
+        window.G_AuthenticateController.Logout((error: MainErrorObjectBack, data: BoolResultBack) => {
+            if (data?.result) {
+                location.href = '/menu/auth/login/';
+            }
+            else {
+                let alertFactory = new AlertData();
+                let alert = alertFactory.GetDefaultNotify("Не удалось");
+                window.G_AddAbsoluteAlertToState(alert);
+            }
+        });
+    }
+
 
     const LogginedUserRender = () => {
         return <div className='header-user-block-inner'>
@@ -65,6 +81,7 @@ const HeaderUserMenu = (props: HeaderUserMenuProps) => {
                 <Link className="dropdown-item" to="/menu/auth/login/">Войти</Link>
                 <Link className="dropdown-item" to="/menu/auth/register/">Зарегистрироваться</Link>
                 <Link className="dropdown-item" to="/menu/person-settings/">Настройки</Link>
+                <p className="dropdown-item" onClick={() => exitApp()}>Выход</p>
                 {/* <a className="dropdown-item" href="#">Action</a>
                 <a className="dropdown-item" href="#">Another action</a>
                 <a className="dropdown-item" href="#">Something else here</a>

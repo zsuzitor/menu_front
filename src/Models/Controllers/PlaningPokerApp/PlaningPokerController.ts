@@ -1,6 +1,8 @@
 
 
-import { SetCurrentStoryIdActionCreator, SetInitialRoomDieTimeActionCreator, SetNotActualStoriesActionCreator, SetRoomCardsActionCreator, SetRoomStatusActionCreator, SetRoomUsersActionCreator, SetStoriesActionCreator, SetTotalNotActualStoriesCountActionCreator, SetVoteInfoActionCreator } from "../../Actions/PlaningPokerApp/Actions";
+import { SetRoomCardsActionCreator, SetInitialRoomDieTimeActionCreator, SetVoteInfoActionCreator, SetRoomStatusActionCreator } from "../../Actions/PlaningPokerApp/RoomAction";
+import { SetNotActualStoriesActionCreator, SetTotalNotActualStoriesCountActionCreator, SetCurrentStoryIdActionCreator, SetStoriesActionCreator } from "../../Actions/PlaningPokerApp/StoryActions";
+import { SetRoomUsersActionCreator } from "../../Actions/PlaningPokerApp/UserActions";
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { IRoomInfoReturn, INotActualStoriesReturn } from "../../BackModel/PlaningPoker/RoomInfoReturn";

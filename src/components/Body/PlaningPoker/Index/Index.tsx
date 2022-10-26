@@ -9,7 +9,8 @@ import { AlertData } from "../../../../Models/Models/AlertData";
 import { RoomInfo } from "../../../../Models/Models/PlaningPoker/RoomInfo";
 import { connect } from 'react-redux';
 import { AppState } from "../../../../Models/Models/State/AppState";
-import { SetRoomNameActionCreator, SetRoomPasswordActionCreator, SetUserNameActionCreator } from "../../../../Models/Actions/PlaningPokerApp/Actions";
+import { SetRoomNameActionCreator, SetRoomPasswordActionCreator } from "../../../../Models/Actions/PlaningPokerApp/RoomAction";
+import { SetUserNameActionCreator } from "../../../../Models/Actions/PlaningPokerApp/UserActions";
 
 
 require('./Index.css');

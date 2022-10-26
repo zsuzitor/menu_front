@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { IStoryReturn } from '../../../../Models/BackModel/PlaningPoker/StoryReturn';
 import { PlaningPokerUserInfo, RoomStatus, Story } from '../../../../Models/Models/PlaningPoker/RoomInfo';
 import cloneDeep from 'lodash/cloneDeep';
 import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';

@@ -15,7 +15,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { MainErrorObjectBack } from '../../../Models/BackModel/ErrorBack';
 import { connect } from 'react-redux';
 import { AppState } from '../../../Models/Models/State/AppState';
-import { EnteredInRoomActionCreator, SetUserConnectionIdActionCreator, SetUserNameActionCreator } from '../../../Models/Actions/PlaningPokerApp/Actions';
+import { EnteredInRoomActionCreator, SetUserConnectionIdActionCreator, SetUserNameActionCreator } from '../../../Models/Actions/PlaningPokerApp/UserActions';
 
 
 interface PlaningPokerMainOwnProps {
@@ -217,9 +217,6 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
             }
         }
     }, [props.RoomInfo.InRoom]);
-
-
-
 
 
 

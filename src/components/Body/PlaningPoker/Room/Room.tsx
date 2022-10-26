@@ -17,11 +17,13 @@ import RoomTimer from '../RoomTimer/RoomTimer';
 import { IRoomWasSavedUpdateReturn, IStoryMappingReturn } from '../../../../Models/BackModel/PlaningPoker/RoomWasSavedUpdateReturn';
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Models/State/AppState';
-import { AddNewStoryActionCreator, AddUserToRoomActionCreator, ChangeUserNameInRoomActionCreator, ClearVoteActionCreator, DeleteStoryActionCreator, MoveStoryToCompleteActionCreator, RemoveUserActionCreator, SetCurrentStoryIdActionCreator, SetEditRoomActionCreator, SetRoomCardsActionCreator, SetRoomNameActionCreator, SetRoomStatusActionCreator, SetRoomUserIdActionCreator, SetRoomUsersActionCreator, SetSelectedCardActionCreator, SetStoriesActionCreator, SetUserNameActionCreator, SetVoteInfoActionCreator, StoryChangeActionCreator, UpdateStoriesIdActionCreator, UserRoleChangedActionCreator, VoteChangedActionCreator } from '../../../../Models/Actions/PlaningPokerApp/Actions';
 import _ from 'lodash';
 import { PlaningPokerHelper } from '../../../../Models/BL/PlaningPokerApp/PlaningPokerHelper';
 import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
 import EditRoom from '../EditRoom/EditRoom';
+import { SetRoomNameActionCreator, SetVoteInfoActionCreator, SetRoomStatusActionCreator, VoteChangedActionCreator, SetSelectedCardActionCreator, ClearVoteActionCreator, SetEditRoomActionCreator, SetRoomCardsActionCreator } from '../../../../Models/Actions/PlaningPokerApp/RoomAction';
+import { SetCurrentStoryIdActionCreator, SetStoriesActionCreator, AddNewStoryActionCreator, StoryChangeActionCreator, DeleteStoryActionCreator, MoveStoryToCompleteActionCreator, UpdateStoriesIdActionCreator } from '../../../../Models/Actions/PlaningPokerApp/StoryActions';
+import { SetRoomUserIdActionCreator, SetUserNameActionCreator, SetRoomUsersActionCreator, AddUserToRoomActionCreator, ChangeUserNameInRoomActionCreator, RemoveUserActionCreator, UserRoleChangedActionCreator } from '../../../../Models/Actions/PlaningPokerApp/UserActions';
 
 
 

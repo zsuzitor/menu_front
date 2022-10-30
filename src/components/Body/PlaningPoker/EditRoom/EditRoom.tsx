@@ -61,7 +61,6 @@ const EditRoom = (props: EditRoomProps) => {
                     let alertFactory = new AlertData();
                     let alert = alertFactory.GetDefaultError("Что то пошло не так, попробуйте позже");
                     window.G_AddAbsoluteAlertToState(alert);
-
                 }
             })
     }
@@ -73,8 +72,41 @@ const EditRoom = (props: EditRoomProps) => {
             window.G_AddAbsoluteAlertToState(alert);
             return;
         }
+
         props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.SetRoomCards, props.RoomName, cards);
 
+    }
+
+    const setLineCards = () => {
+        let arr = Array.from(Array(99).keys());
+        setCards('tea;' + arr.join(';'));
+    }
+
+    const fibonacciCards = () => {
+        let calc = (start: number, end: number): number[] => {
+            let arr: number[] = [];
+            if (start < 0) {
+                return arr;
+            }
+
+            for (let i = start; i < end; ++i) {
+                if (i == 0) {
+                    arr[i] = 0;
+                    continue;
+                }
+
+                if (i == 1) {
+                    arr[i] = 1;
+                    continue;
+                }
+
+                arr[i] = arr[i - 2] + arr[i - 1];
+            }
+
+            return arr;
+        }
+
+        setCards('tea;' + calc(0, 15).filter((v, i, a) => a.indexOf(v) === i).join(';'));
     }
 
 
@@ -102,7 +134,9 @@ const EditRoom = (props: EditRoomProps) => {
             <input type='text' className='persent-100-width form-control'
                 onChange={(e) => setCards(e.target.value)}
                 placeholder='Оценки' value={cards}></input>
-            <button className='btn btn-b-light' onClick={() => changeCards()}>Изменить оценки</button></>
+            <button className='btn btn-b-light' onClick={() => setLineCards()}>Линейная 0-100</button>
+            <button className='btn btn-b-light' onClick={() => fibonacciCards()}>Фибоначи</button>
+            <button className='btn btn-b-light' onClick={() => changeCards()}>Сохранить изменения</button></>
     }
 
     return <div>

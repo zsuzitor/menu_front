@@ -1,8 +1,8 @@
 .one-planing-vote-card {
     /* width: 124px; */
-    width: 128px;
+    width: 138px;
 
-    height: 144px;
+    height: 154px;
     border: 2px solid rgb(65 152 174);
     /* display: -webkit-box;
     display: -ms-flexbox;
@@ -24,8 +24,8 @@
 
 .one-planing-vote-card .vote-card-inner {
     border: 1px solid rgb(65 152 174);
-    width: 84px;
-    height: 90px;
+    width: 94px;
+    height: 100px;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;

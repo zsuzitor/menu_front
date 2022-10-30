@@ -32,7 +32,9 @@ const PersonSettings = (props: PersonSettingsProps) => {
     const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
 
     const [name, setName] = useState('');
-    const [passwordsBlockShow, setPasswordsBlockShow] = useState(false);
+    // const [passwordsBlockShow, setPasswordsBlockShow] = useState(false);
+
+    const [showSection, setShowSection] = useState(0);
 
 
     let alertFactory = new AlertData();
@@ -121,68 +123,78 @@ const PersonSettings = (props: PersonSettingsProps) => {
             else {
                 let alert = alertFactory.GetDefaultError("Что то пошло не так, попробуйте позже");
                 window.G_AddAbsoluteAlertToState(alert);
-
             }
         })
     }
 
-    return <div className='person-settings-outer'>
-        {/* <form autoComplete="disabled"> */}
-        {/* <form autoComplete="off"> */}
-        <div className='person-settings-inner'>
-            <div>
+
+    let sectionContent = <></>
+
+    if (showSection == 1) {
+        sectionContent = <>
+            <div className='person-settings-inner'>
                 <div>
-                    <input type='text' className='person-settings-username form-control'
-                        autoComplete="us-name"
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder='Имя пользователя' value={name}></input>
-                    <button className='btn btn-b-light'
-                        type="button"
-                        onClick={() => changeName()}>Изменить имя</button>
-                </div>
-
-                <button
-                    type="button"
-                    className='btn btn-b-light'
-                    onClick={() => setPasswordsBlockShow(!passwordsBlockShow)}
-                >Пароли</button>
-                {passwordsBlockShow ? <div className='person-settings-passwords'>
-                    <label>Старый пароль</label>
-                    <input type='password' className='persent-100-width form-control'
-                        autoComplete="old-password"
-                        onChange={(e) => setOldPassword(e.target.value)}
-                        placeholder='Старый пароль' value={oldPassword}></input>
-                    <label>Новый пароль</label>
-                    <input type='password' className='persent-100-width form-control'
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        placeholder='Новый пароль' value={newPassword}></input>
-                    <label>Подтвердите новый пароль</label>
-                    <input type='password' className='persent-100-width form-control'
-                        onChange={(e) => setNewPasswordConfirm(e.target.value)}
-                        placeholder='Новый пароль' value={newPasswordConfirm}></input>
-                    <button className='btn btn-b-light'
-                        type="button"
-                        onClick={() => changePassword()}>Изменить пароль</button>
-                </div> : <></>}
-            </div>
-            <div className='person-settings-inner-right'>
-                <div className='person-settings-image-block'>
-                    <div className='person-settings-image'>
-                        <img className='persent-100-width-height'
-                            src={props.AuthInfo?.User?.Image || G_EmptyImagePath}
-                            alt="Аватар" title='Аватар' />
-                        {/* <div className='person-settings-image-hv'></div> */}
-
+                    <div>
+                        <input type='text' className='person-settings-username form-control'
+                            autoComplete="us-name"
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder='Имя пользователя' value={name}></input>
+                        <button className='btn btn-b-light'
+                            type="button"
+                            onClick={() => changeName()}>Изменить имя</button>
                     </div>
-
-                    <input className='form-control' type='file' id='main_image_input'></input>
-                    <button type="button" className='btn btn-b-light'
-                        onClick={() => loadImage()}>Загрузить</button>
-                    <button type="button" className='btn btn-b-light'
-                        onClick={() => removeImage()}>Удалить</button>
                 </div>
+                <div className='person-settings-inner-right'>
+                    <div className='person-settings-image-block'>
+                        <div className='person-settings-image'>
+                            <img className='persent-100-width-height'
+                                src={props.AuthInfo?.User?.Image || G_EmptyImagePath}
+                                alt="Аватар" title='Аватар' />
+                            {/* <div className='person-settings-image-hv'></div> */}
+
+                        </div>
+                        <input className='form-control' type='file' id='main_image_input'></input>
+                        <button type="button" className='btn btn-b-light'
+                            onClick={() => loadImage()}>Загрузить</button>
+                        <button type="button" className='btn btn-b-light'
+                            onClick={() => removeImage()}>Удалить</button>
+                    </div>
+                </div>
+            </div></>
+    }
+    else if (showSection == 2) {
+        sectionContent = <><div className='person-settings-passwords'>
+            <label>Старый пароль</label>
+            <input type='password' className='persent-100-width form-control'
+                autoComplete="old-password"
+                onChange={(e) => setOldPassword(e.target.value)}
+                placeholder='Старый пароль' value={oldPassword}></input>
+            <label>Новый пароль</label>
+            <input type='password' className='persent-100-width form-control'
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder='Новый пароль' value={newPassword}></input>
+            <label>Подтвердите новый пароль</label>
+            <input type='password' className='persent-100-width form-control'
+                onChange={(e) => setNewPasswordConfirm(e.target.value)}
+                placeholder='Новый пароль' value={newPasswordConfirm}></input>
+            <button className='btn btn-b-light'
+                type="button"
+                onClick={() => changePassword()}>Изменить пароль</button>
+        </div></>
+    }
+
+
+    return <div className='person-settings-outer'>
+        <div>
+            <div className='edit-person-sections-block'>
+                <div onClick={() => setShowSection(1)}>Информация профиля</div>
+                <div onClick={() => setShowSection(2)}>Безопасность</div>
             </div>
+            <hr></hr>
+            {sectionContent}
+
         </div>
+
     </div>
 }
 

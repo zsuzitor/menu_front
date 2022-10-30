@@ -99,7 +99,7 @@ interface RoomProps extends RoomStateToProps, RoomOwnProps, RoomDispatchToProps 
 //подписки сигналр захватывают пропсы непонятно как, раньше это работало, но предположительно после введения deepClone
 //все вообще отвалилось. 6.30.2021, вот так получилось пофиксить, замена обработчика подписки на => не помогала
 let __planing_room_props_ref__: RoomProps = null;
-
+let __planing_room_forceLeaveFromRoom: () => void;
 const Room = (props: RoomProps) => {
     __planing_room_props_ref__ = props;
     //эффект для доступа по прямой ссылке
@@ -326,9 +326,6 @@ const Room = (props: RoomProps) => {
 
 
 
-    if (!props.RoomInfo.InRoom) {
-        return <h1>пытаемся войти</h1>
-    }
 
 
     const forceLeaveFromRoom = () => {
@@ -337,6 +334,13 @@ const Room = (props: RoomProps) => {
         window.location.href = "/planing-poker";
         // __planing_room_props_ref__.SetUserId('');//todo тут наверное стоит еще что то чистить
 
+    }
+
+    __planing_room_forceLeaveFromRoom = forceLeaveFromRoom;
+
+
+    if (!props.RoomInfo.InRoom) {
+        return <h1>пытаемся войти</h1>
     }
 
 

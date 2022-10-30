@@ -7,6 +7,7 @@ import { SetCommentsActionCreator } from '../../../../Models/Actions/CodeReviewA
 import { IOneTaskReviewCommentDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack';
 import { IProjectTaskDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectTaskDataBack';
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
+import { AlertData } from '../../../../Models/Models/AlertData';
 import { CommentSet } from '../../../../Models/Models/CodeReviewApp/CommentSet';
 import { AppState } from '../../../../Models/Models/State/AppState';
 import OneReviewTaskComment from '../OneReviewTaskComment/OneReviewTaskComment';
@@ -47,7 +48,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
 
     const [taskName, setTaskName] = useState(props.Task.Name);
-    const [taskLink, setTaskLink] = useState('');
+    const [taskLink, setTaskLink] = useState(props.Task.Link || '');
 
     const [taskStatus, setTaskStatus] = useState(props.Task.Status);
     const [taskReviewer, setTaskreviewer] = useState(props.Task.ReviewerId || -1);
@@ -64,7 +65,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
     }, [props.Task.Name]);
 
     useEffect(() => {
-        setTaskLink(props.Task.Link);
+        setTaskLink(props.Task.Link || '');
     }, [props.Task.Link]);
 
     useEffect(() => {
@@ -105,7 +106,10 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
     const updateTask = () => {
         if (!taskName) {
-            alert('необходимо заполнить название задачи');
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultError("Необходимо заполнить название задачи");
+            window.G_AddAbsoluteAlertToState(alert);
+            return;
         }
 
         let forAdd = { ...props.Task };
@@ -166,7 +170,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
 
     let taskHasChanges = taskName !== props.Task.Name ||
-        taskLink !== props.Task.Link ||
+        (taskLink !== props.Task.Link && (taskLink || props.Task.Link)) ||
         taskStatus !== props.Task.Status ||
         ((props.Task.ReviewerId || taskReviewer != -1) && taskReviewer !== props.Task.ReviewerId) ||
         taskCreator !== props.Task.CreatorId;

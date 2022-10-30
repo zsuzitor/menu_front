@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
+import { AlertData } from '../../../../Models/Models/AlertData';
 import { AppState } from '../../../../Models/Models/State/AppState';
 
 
@@ -56,7 +57,9 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
 
     const changeUser = () => {
         if (!userName) {
-            alert('Введите имя пользователя');
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultError("Введите имя пользователя");
+            window.G_AddAbsoluteAlertToState(alert);
             return;
         }
 

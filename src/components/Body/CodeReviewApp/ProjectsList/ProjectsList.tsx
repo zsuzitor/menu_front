@@ -5,6 +5,7 @@ import OneProjectInList from '../OneProjectInList/OneProjectInList';
 
 import { connect } from "react-redux";
 import { SetCurrentProjectIdActionCreator } from '../../../../Models/Actions/CodeReviewApp/ProjectActions';
+import { AlertData } from '../../../../Models/Models/AlertData';
 
 
 require('./ProjectsList.css');
@@ -25,7 +26,7 @@ interface IProjectsListStateToProps {
 interface IProjectsListDispatchToProps {
     // ChangeTestString: (v: string) => void;
     AddNewProject: (projectName: string) => void;
-    
+
 }
 
 
@@ -70,8 +71,10 @@ const ProjectsList = (props: IProjectsListProps) => {
                 <input className='form-control-b' type='text' placeholder='название нового проекта'
                     onChange={(e => setNewProjectName(e.target.value))} value={newProjectName}></input>
                 <button className='btn-b btn-border' onClick={() => {
-                    if(!newProjectName){
-                        alert('Введите название проекта');
+                    if (!newProjectName) {
+                        let alertFactory = new AlertData();
+                        let alert = alertFactory.GetDefaultError("Введите название проекта");
+                        window.G_AddAbsoluteAlertToState(alert);
                         return;
                     }
                     props.AddNewProject(newProjectName);
@@ -100,7 +103,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: IProjectsListOwnProps) => {
     res.AddNewProject = (projectName: string) => {
         dispatch(window.G_CodeReviewProjectController.CreateNewProjectRedux(projectName));
     };
-   
+
     return res;
 };
 

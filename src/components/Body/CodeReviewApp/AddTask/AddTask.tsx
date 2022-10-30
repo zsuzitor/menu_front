@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
+import { AlertData } from '../../../../Models/Models/AlertData';
 import { OneTask } from '../../../../Models/Models/CodeReviewApp/State/OneTask';
 import { AppState } from '../../../../Models/Models/State/AppState';
 
@@ -57,7 +58,9 @@ const AddTask = (props: IAddTaskProps) => {
 
     const createNewTask = () => {
         if (!newTaskName) {
-            alert('Введите название');
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultError("Введите название");
+            window.G_AddAbsoluteAlertToState(alert);
             return;
         }
 

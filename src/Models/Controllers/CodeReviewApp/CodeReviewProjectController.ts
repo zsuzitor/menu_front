@@ -1,18 +1,11 @@
 
 
 import { AddNewProjectActionCreator, DeleteProjectActionCreator, SetCurrentProjectIdActionCreator, SetProjectsActionCreator } from "../../Actions/CodeReviewApp/ProjectActions";
-import { LoadTasksActionCreator, SetFilterTaskActionCreator } from "../../Actions/CodeReviewApp/TaskActions";
 import { SetCurrentProjectUsersActionCreator } from "../../Actions/CodeReviewApp/UserActions";
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
-import { ILoadReviewTasksResultDataBack } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack";
 import { IOneProjectInfoDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInfoDataBack";
 import { IOneProjectInListDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInListDataBack";
-import { IOneTaskReviewCommentDataBack } from "../../BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack";
-import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
-import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
-import { TasksFilter } from "../../Models/CodeReviewApp/State/TasksFilter";
-import { AppState } from "../../Models/State/AppState";
 import { ControllerHelper } from "../ControllerHelper";
 
 export type ListOfCardOnReturn = (error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => void;

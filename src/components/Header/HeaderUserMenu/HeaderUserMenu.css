@@ -1,7 +1,33 @@
 .header-user-menu {
+    position: absolute;
     background-color: white;
+    /* transition: 0.5s; */
+    border-radius: 3px;
+    z-index: 2;
+    border: 1px solid rgba(0, 0, 0, .15);
+    font-size: 18px;
+    top: 65px;
+    right: 10px;
+    width: 200px;
+    height: 100px;
+
 }
 
+.header-user-menu-show {
+    visibility: visible;
+}
+
+.header-user-menu-hide {
+    /* right: -230px; */
+    /* right: 0px;
+    width: 0px;
+    height: 0px; */
+    visibility: hidden;
+}
+
+.header-user-menu a {
+    text-decoration: none;
+}
 
 div.header-user-block {
     height: 100%;
@@ -12,8 +38,14 @@ div.header-user-block {
 
 div.header-user-dropdown {
     height: 100%;
-    /* cursor: pointer; */
+    cursor: pointer;
     text-align: right;
+    display: flex;
+    padding-top: 5px;
+    /* padding-right: 5px; */
+    min-width: 100px;
+    justify-content: space-around;
+    max-width: 250px;
 }
 
 div.header-auth-dropdown {
@@ -22,19 +54,16 @@ div.header-auth-dropdown {
     font-size: 20px;
     text-align: center;
     color: oldlace;
+    cursor: pointer;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
 }
 
 
-
-
-img.header-user-img {
-    height: 100%;
-    border-radius: 50%;
-}
-
-span.header-user-name-text {
-    display: block;
-    max-width: 50%;
+.header-user-name-text {
+    /* display: block;
+    max-width: 50%; */
     overflow: hidden;
     /* padding-right: 10px; */
     margin-right: 10px;
@@ -43,18 +72,41 @@ span.header-user-name-text {
     font-size: 20px;
 }
 
-span.header-user-img {
+div.header-user-img {
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 50px;
+    flex-shrink: 0;
+}
+
+div.header-user-img img {
     height: 100%;
+    width: 100%;
 }
 
 
 
 div.header-user-block-inner {
     height: 100%;
-    cursor: pointer;
+    /* cursor: pointer; */
+    position: relative;
 }
 
 div.header-user-block-inner:hover {
     /* background-color: greenyellow; */
     /* transition: 1s; */
+}
+
+.header-user-menu-line {
+    padding-left: 5px;
+    padding-top: 3px;
+    cursor: pointer;
+    border-radius: 3px;
+    color: #007bff;
+
+}
+
+.header-user-menu-line:hover {
+    background-color: #c4c1d6;
 }

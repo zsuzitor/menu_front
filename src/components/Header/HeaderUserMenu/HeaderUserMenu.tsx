@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { connect } from 'react-redux';
 
 import { IAuthState } from '../../../Models/Models/AuthState';
@@ -36,13 +36,20 @@ interface HeaderUserMenuProps extends HeaderUserMenuStateToProps, HeaderUserMenu
 
 const HeaderUserMenu = (props: HeaderUserMenuProps) => {
 
+    const [showMenu, setShowMenu] = useState(false);
+
+    let menuClass = 'header-user-menu header-user-menu-hide';
+    if (showMenu) {
+        menuClass = 'header-user-menu header-user-menu-show';
+    }
+
     const UserImageRender = (imgPath: string) => {
         let path = imgPath;
         if (!path) {
             path = G_EmptyImagePath;
         }
 
-        return <img className='header-user-img' src={path}></img>
+        return <img className='' src={path}></img>
     }
 
 
@@ -69,43 +76,61 @@ const HeaderUserMenu = (props: HeaderUserMenuProps) => {
 
 
     const LogginedUserRender = () => {
-        return <div className='header-user-block-inner'>
-            <div className='dropdown-toggle header-user-dropdown'
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span className='header-user-name-text d-inline-block'>{props.Auth.User.Name}</span>
-                <span className='d-inline-block header-user-img'>
+        return <>
+            <div className='header-user-dropdown' onClick={() => setShowMenu(!showMenu)}>
+                <div className='header-user-name-text'>{props.Auth.User.Name}</div>
+                <div className='header-user-img'>
                     {UserImageRender(props.Auth.User.Image)}
-                </span>
+                </div>
             </div>
-            <div className="dropdown-menu header-user-menu">
-                <Link className="dropdown-item" to="/menu/auth/login/">Войти</Link>
-                <Link className="dropdown-item" to="/menu/auth/register/">Зарегистрироваться</Link>
-                <Link className="dropdown-item" to="/menu/person-settings/">Настройки</Link>
-                <p className="dropdown-item" onClick={() => exitApp()}>Выход</p>
-                {/* <a className="dropdown-item" href="#">Action</a>
-                <a className="dropdown-item" href="#">Another action</a>
-                <a className="dropdown-item" href="#">Something else here</a>
-                <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="#">Separated link</a> */}
+            <div className={menuClass}>
+                {/* <div>
+                    <a href="/menu/auth/login/">Войти</a>
+                </div>
+                <div>
+                    <a href="/menu/auth/register/">Зарегистрироваться</a>
+                </div> */}
+                <div onClick={() => location.href = '/menu/person-settings/'}
+                    className='header-user-menu-line'>
+                    Настройки
+                    {/* <Link className="" to="/menu/person-settings/">Настройки</Link> */}
+                    {/* <a href="/menu/person-settings/">Настройки</a> */}
+                </div>
+                <div onClick={() => exitApp()}
+                    className='header-user-menu-line'>
+                    Выход
+                </div>
+
             </div>
-        </div>
+        </>
     }
 
 
     const NotLogginedUserRender = () => {
-        return <div className='header-user-block-inner'>
-            <div className='dropdown-toggle header-auth-dropdown' data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+        return <>
+            <div className='header-auth-dropdown' onClick={() => setShowMenu(!showMenu)}>
                 Авторизация
             </div>
-            <div className="dropdown-menu header-user-menu">
-                <Link className="dropdown-item" to="/menu/auth/login/">Войти</Link>
-                <Link className="dropdown-item" to="/menu/auth/register/">Зарегистрироваться</Link>
+            <div className={menuClass}>
+                <div onClick={() => location.href = '/menu/auth/login/'}
+                    className='header-user-menu-line'>
+                    Войти
+                    {/* <Link className="" to="/menu/auth/login/">Войти</Link> */}
+                    {/* <a href="/menu/auth/login/">Войти</a> */}
+
+                </div>
+                <div onClick={() => location.href = '/menu/auth/register/'}
+                    className='header-user-menu-line'>
+                    Зарегистрироваться
+                    {/* <Link className="" to="/menu/auth/register/">Зарегистрироваться</Link> */}
+                    {/* <a href="/menu/auth/register/">Зарегистрироваться</a> */}
+
+                </div>
             </div>
-        </div>
+        </>
     }
 
-    return <div className='header-user-block col-5 col-md-3 nopadding '>
+    return <div className='header-user-block-inner'>
         {LogginedOrNotRender(props.Auth.AuthSuccess)}
     </div>
 

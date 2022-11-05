@@ -1,4 +1,3 @@
-import { IOneTaskReviewCommentDataBack } from "../../BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack";
 import { CommentAdd } from "../../Models/CodeReviewApp/CommentAdd";
 import { CommentDelete } from "../../Models/CodeReviewApp/CommentDelete";
 import { CommentSet } from "../../Models/CodeReviewApp/CommentSet";

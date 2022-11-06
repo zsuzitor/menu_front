@@ -2,6 +2,7 @@ import { AddProjectUserActionCreator, ChangeProjectUserActionCreator, DeleteProj
 import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
+import { ProjectUser } from "../../Models/CodeReviewApp/State/ProjectUser";
 import { ControllerHelper } from "../ControllerHelper";
 
 export type AddNewUserToProject = (error: MainErrorObjectBack, data: IProjectUserDataBack) => void;
@@ -12,7 +13,7 @@ export type DeleteUser = (error: MainErrorObjectBack, data: BoolResultBack) => v
 
 export interface ICodeReviewUserController {
     AddUserToProjectRedux: (newUserName: string, mainAppUserEmail: string, projectId: number) => void;
-    ChangeProjectUserRedux: (user: IProjectUserDataBack) => void;
+    ChangeProjectUserRedux: (user: ProjectUser) => void;
     DeleteProjectUserRedux: (id: number) => void;
 }
 
@@ -65,7 +66,9 @@ export class CodeReviewUserController implements ICodeReviewUserController {
                     }
 
                     if (data) {
-                        dispatch(AddProjectUserActionCreator(data));
+                        let dt = new ProjectUser();
+                        dt.FillByBackModel(data);
+                        dispatch(AddProjectUserActionCreator(dt));
                     }
                 });
         };
@@ -91,7 +94,7 @@ export class CodeReviewUserController implements ICodeReviewUserController {
     };
 
 
-    ChangeProjectUserRedux = (user: IProjectUserDataBack) => {
+    ChangeProjectUserRedux = (user: ProjectUser) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
             this.ChangeProjectUser(user, (error: MainErrorObjectBack, data: BoolResultBack) => {
@@ -107,7 +110,7 @@ export class CodeReviewUserController implements ICodeReviewUserController {
         };
     }
 
-    ChangeProjectUser = (user: IProjectUserDataBack, onSuccess: ChangeUser) => {
+    ChangeProjectUser = (user: ProjectUser, onSuccess: ChangeUser) => {
         let data = {
             "userId": user.Id,
             "name": user.Name,

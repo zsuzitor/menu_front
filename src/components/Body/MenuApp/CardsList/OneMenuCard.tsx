@@ -60,11 +60,6 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
         this.RenderFollowButton = this.RenderFollowButton.bind(this);
         this.RenderFollowIcon = this.RenderFollowIcon.bind(this);
 
-        // this.bodyRender = this.bodyRender.bind(this);
-        // this.bodyRender = this.bodyRender.bind(this);
-
-
-
     }
 
 
@@ -74,13 +69,14 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
             let newState = { ...this.state };
 
             newState.EditNow = true;
-            newState.NewState = {
-                Id: -1,
-                Title: 'Новая',
-                Body: 'Новая',
-                Image: G_EmptyImagePath,
-                Followed: false,
-            } as OneCardInListData;//TODO надо проверить сломается что то или нет,
+            let ns = new OneCardInListData();
+            ns.Id = -1;
+            ns.Title = 'Новая';
+            ns.Body = 'Новая';
+            ns.Image = G_EmptyImagePath;
+            ns.Followed = false;
+            newState.NewState = ns;
+            
             this.setState(newState);
         }
     }
@@ -156,7 +152,6 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
         if (!this.props.FollowRequstSuccess) {
             return;
         }
-        //TODO запрос
 
         let thisRef = this;
         let success = (error: MainErrorObjectBack, data: BoolResultBack) => {
@@ -164,7 +159,6 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
                 return;
             }
             if (data.result === true) {
-
                 thisRef.props.FollowRequstSuccess(thisRef.props.CardData.Id, true);
             }
             else if (data.result === false) {
@@ -172,37 +166,6 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
             }
         }
         window.G_ArticleController.Follow({ Id: this.props.CardData.Id }, success);
-
-        // let data = {
-        //     "id": this.props.CardData.Id,
-        // };
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "PATCH",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             let boolRes = xhr as BoolResultBack;
-
-        //             if (boolRes.result === true) {
-
-        //                 this.props.FollowRequstSuccess(this.props.CardData.Id, true);
-        //             }
-        //             else if (boolRes.result === false) {
-        //                 this.props.FollowRequstSuccess(this.props.CardData.Id, false);
-        //             }
-        //             else {
-        //                 //что то не то вернулось
-        //             }
-
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/article/follow',
-        // });
 
 
     }
@@ -242,10 +205,6 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
 
                 });
         }
-
-
-        //дальше работаем и в компоненты выше передаем то что вернулось в бэка
-
 
     }
 
@@ -353,36 +312,6 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
 
         window.G_ArticleController.Edit(forSend, success);
 
-        // let data = {
-        //     "id": newElement.Id,
-        //     "title": newElement.Title,
-        //     "body": newElement.Body,
-        //     // "main_image_new":newElement.Image,
-        // };
-
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "PATCH",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             let res = xhr as IOneCardInListDataBack;
-        //             if (res.id && res.id > 0) {
-
-        //                 callBack(res);
-        //             }
-        //             else {
-        //                 //какая то ошибка
-        //             }
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/article/edit',
-
-        // });
     }
 
     ///создание именно из списка карт
@@ -399,42 +328,6 @@ export class OneMenuCard extends React.Component<IOneMenuCardProps, IOneMenuCard
             callBack(forApply);
         }
         window.G_ArticleController.Create(newElement, success);
-
-
-
-        // let data = {
-        //     "title": newElement.Title,
-        //     "body": newElement.Body,
-        //     // "main_image_new":newElement.Image,
-        // };
-
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "PUT",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-
-        //         }
-        //         else {
-        //             let resBack = xhr as IOneCardInListDataBack;
-        //             if (Number.isInteger(resBack.id) && resBack.id > 0) {
-
-        //                 callBack(resBack);
-        //             }
-        //             else {
-        //                 //что то не то вернулось
-        //             }
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/article/create',
-
-        // });
     }
-
-
-
 
 }

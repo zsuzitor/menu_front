@@ -17,6 +17,7 @@ export function DeleteCommentActionCreator(data: CommentDelete): AppAction<Comme
 };
 
 
+
 export const AddCommentActionName: string = 'AddCommentAction';
 export function AddCommentActionCreator(data: CommentAdd): AppAction<CommentAdd> {
     return { type: AddCommentActionName, payload: data };
@@ -27,8 +28,4 @@ export function SetCommentsActionCreator(data: CommentSet): AppAction<CommentSet
     return { type: SetCommentsActionName, payload: data };
 };
 
-// export const SetEmptyTaskCommentsActionName: string = 'SetEmptyTaskCommentsAction';
-// export function SetEmptyTaskCommentsActionCreator(taskId: number): AppAction<number> {
-//     return { type: SetEmptyTaskCommentsActionName, payload: taskId };
-// };
 

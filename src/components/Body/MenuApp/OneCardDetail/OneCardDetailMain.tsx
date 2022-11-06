@@ -8,11 +8,8 @@ import { MappedWithBack } from "../../../../Models/BL/Interfaces/MappedWithBack"
 import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { IOneCardFullDataBack } from "../../../../Models/BackModel/MenuApp/OneCardFullDataBack";
-// import { IOneCardFullData, OneCardFullData } from '../../../_ComponentsLink/Models/MenuApp/OneCardFullData';
 import { IOneCardInListData, OneCardInListData } from '../../../../Models/Models/MenuApp/OneCardInListData';
 import { IOneCardFullDataEdit, OneCardFullDataEdit } from "../../../../Models/Models/MenuApp/Poco/IOneCardFullDataEdit";
-// export interface IHeaderLogoProps {
-// }
 
 
 //TODO сейчас не используется, что бы добавить такое надо вроде норм переписать логику, нужно ли это? походу нет
@@ -133,38 +130,6 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         window.G_ArticleController.Detail(
             { Id: cardId },
             success);
-
-        // let data = {
-        //     "id": cardId,
-        // };
-        // let thisRef = this;
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             let dataBack = xhr as IOneCardFullDataBack;
-
-        //             if (dataBack.id && dataBack.id > 0) {
-        //                 let newState = { ...thisRef.state };
-        //                 newState.Card = new OneCardFullDataView();
-        //                 newState.Card.FillByBackModel(dataBack);
-        //                 thisRef.setState(newState);
-        //             }
-        //             else {
-        //                 //ошибка
-        //             }
-
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/article/detail',
-        // });
-
 
     }
 
@@ -321,42 +286,6 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         }
         window.G_ArticleController.Follow({ Id: this.state.Card.Id }, success);
 
-        // let data = {
-        //     "id": this.state.Card.Id,
-        // };
-
-        // let newState = { ...this.state };
-
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "PATCH",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             let boolRes = xhr as BoolResultBack;
-
-        //             if (boolRes.result === true) {
-
-        //                 newState.Card.Followed = true;
-        //                 this.setState(newState);
-        //             }
-        //             else if (boolRes.result === false) {
-        //                 newState.Card.Followed = false;
-        //                 this.setState(newState);
-        //             }
-        //             else {
-        //                 //что то не то вернулось
-        //             }
-
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/article/follow',
-        // });
-
     }
 
     DeleteMainImageClick() {
@@ -470,7 +399,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
 
 
     RenderCardOrPreloader() {
-        if (!this.state.Card) {//TODO нужен кастомный
+        if (!this.state.Card) {
             return <div className='card-list-preloader'>
                 {/* <img src={G_PreloaderPath} className='persent-100-width-height'></img> */}
                 <div className="spinner-border persent-100-width-height" role="status">
@@ -522,13 +451,6 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
 
 
     private EditCardInListRequest(newElement: IOneCardFullDataEdit, callBack: any) {//TODO схожий метод уже есть, вынести куда нибудь?? #any
-        // let data = {
-        //     "id": newElement.Id,
-        //     "title": newElement.Title,
-        //     "body": newElement.Body,
-        //     // "main_image_new": $('#main_image_input').val(),
-        //     // "main_image_new":newElement.Image,
-        // };
 
         let success = (error: MainErrorObjectBack, data: IOneCardFullDataBack) => {
             if (error || !data) {
@@ -538,43 +460,7 @@ export class OneCardDetailMain extends React.Component<IBodyOneCardDetailMainPro
         }
         window.G_ArticleController.Edit(newElement, success);
 
-        // let data = new FormData();
-        // data.append('id', newElement.Id + '');
-        // data.append('title', newElement.Title);
-        // data.append('body', newElement.Body);
-        // data.append('delete_main_image', JSON.stringify(newElement.NeedDeleteMainImage));
-        // if (newElement.MainImageSave) {
-        //     data.append('main_image_new', newElement.MainImageSave);
-        // }
 
-        // newElement.AdditionalImagesSave.forEach((addImage, index) => {
-        //     data.append('additional_images', addImage);//' + index + '
-        // });
-
-
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "PATCH",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             let res = xhr as IOneCardFullDataBack;
-        //             if (res.id && res.id > 0) {
-
-        //                 callBack(res);
-        //             }
-        //             else {
-        //                 //что то не то вернулось
-        //             }
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/article/edit',
-
-        // }, true);
     }
 
     private ChangeRemoveStatusAdditionalImage(id: number, newStatus: boolean) {

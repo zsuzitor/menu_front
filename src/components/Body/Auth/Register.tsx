@@ -56,7 +56,6 @@ export class Register extends React.Component<{}, IRegisterState> {
 
 
     TryRegister() {
-        //TODO отправляем запрос и чистим state?
         let data = {
             Email: this.state.Login,
             Password: this.state.Password,

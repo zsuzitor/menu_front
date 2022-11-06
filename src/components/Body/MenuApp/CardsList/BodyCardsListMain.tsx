@@ -134,7 +134,7 @@ export class BodyCardsListMain extends React.Component<IBodyCardsListMainProps, 
     }
 
 
-    ChangeFilterFollow(e: any) {//TODO onChange для input
+    ChangeFilterFollow(e: any) {
         // e.persist();
         let newState = { ...this.state };
         newState.CardsListFilters.FollowOnly = !newState.CardsListFilters.FollowOnly;

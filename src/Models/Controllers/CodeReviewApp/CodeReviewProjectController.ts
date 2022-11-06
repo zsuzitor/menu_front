@@ -6,6 +6,8 @@ import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { IOneProjectInfoDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInfoDataBack";
 import { IOneProjectInListDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInListDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
+import { OneProjectInList } from "../../Models/CodeReviewApp/State/OneProjectInList";
+import { ProjectUser } from "../../Models/CodeReviewApp/State/ProjectUser";
 import { ControllerHelper } from "../ControllerHelper";
 
 export type ListOfCardOnReturn = (error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => void;
@@ -82,7 +84,12 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
                 }
 
                 if (data) {
-                    dispatch(SetCurrentProjectUsersActionCreator(data.Users));
+                    let dtUsers = data.Users.map(x => {
+                        let u = new ProjectUser();
+                        u.FillByBackModel(x);
+                        return u;
+                    });
+                    dispatch(SetCurrentProjectUsersActionCreator(dtUsers));
                 }
             });
         };
@@ -117,7 +124,9 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
                 }
 
                 if (data) {
-                    dispatch(AddNewProjectActionCreator(data));
+                    let dt = new OneProjectInList();
+                    dt.FillByBackModel(data);
+                    dispatch(AddNewProjectActionCreator(dt));
                 }
             });
         };
@@ -153,7 +162,13 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
 
                 if (data) {
                     dispatch(SetCurrentProjectIdActionCreator(-1));
-                    dispatch(SetProjectsActionCreator(data));
+                    let dt = data.map(x => {
+                        let pr = new OneProjectInList();
+                        pr.FillByBackModel(x);
+                        return pr;
+                    });
+
+                    dispatch(SetProjectsActionCreator(dt));
                 }
             });
         };

@@ -1,8 +1,9 @@
-import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
+
+import { ProjectUser } from "../../Models/CodeReviewApp/State/ProjectUser";
 import { AppAction } from "../Actions";
 
 export const SetCurrentProjectUsersActionName: string = 'SetCurrentProjectUsersAction';
-export function SetCurrentProjectUsersActionCreator(users: IProjectUserDataBack[]): AppAction<IProjectUserDataBack[]> {
+export function SetCurrentProjectUsersActionCreator(users: ProjectUser[]): AppAction<ProjectUser[]> {
     return { type: SetCurrentProjectUsersActionName, payload: users };
 };
 
@@ -14,11 +15,11 @@ export function DeleteProjectUserActionCreator(id: number): AppAction<number> {
 
 
 export const AddProjectUserActionName: string = 'AddProjectUserAction';
-export function AddProjectUserActionCreator(user: IProjectUserDataBack): AppAction<IProjectUserDataBack> {
+export function AddProjectUserActionCreator(user: ProjectUser): AppAction<ProjectUser> {
     return { type: AddProjectUserActionName, payload: user };
 };
 
 export const ChangeProjectUserActionName: string = 'ChangeProjectUserAction';
-export function ChangeProjectUserActionCreator(user: IProjectUserDataBack): AppAction<IProjectUserDataBack> {
+export function ChangeProjectUserActionCreator(user: ProjectUser): AppAction<ProjectUser> {
     return { type: ChangeProjectUserActionName, payload: user };
 };

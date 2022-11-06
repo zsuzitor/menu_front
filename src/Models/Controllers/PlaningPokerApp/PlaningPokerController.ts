@@ -7,6 +7,7 @@ import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { IRoomInfoReturn, INotActualStoriesReturn } from "../../BackModel/PlaningPoker/RoomInfoReturn";
 import { IUserInRoomReturn } from "../../BackModel/PlaningPoker/UserInRoomReturn";
+import { EndVoteInfo } from "../../Models/PlaningPoker/EndVoteInfo";
 import { Story, UserInRoom } from "../../Models/PlaningPoker/RoomInfo";
 import { ControllerHelper } from "../ControllerHelper";
 
@@ -276,7 +277,9 @@ export class PlaningPokerController implements IPlaningPokerController {
                     dispatch(SetInitialRoomDieTimeActionCreator(new Date(data.room.die_date)));
                     dispatch(SetRoomUsersActionCreator(newUsersData));
                     dispatch(SetTotalNotActualStoriesCountActionCreator(data.room.total_stories_count));
-                    dispatch(SetVoteInfoActionCreator(data.end_vote_info));
+                    let endVoteInfo = new EndVoteInfo();
+                    endVoteInfo.FillByBackModel(data.end_vote_info);
+                    dispatch(SetVoteInfoActionCreator(endVoteInfo));
                     dispatch(SetCurrentStoryIdActionCreator(data.room.current_story_id));
                     dispatch(SetRoomStatusActionCreator(data.room.status));
                     dispatch(SetStoriesActionCreator(data.room.actual_stories.map(x => {

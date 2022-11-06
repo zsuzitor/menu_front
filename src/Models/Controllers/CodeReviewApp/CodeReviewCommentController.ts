@@ -6,6 +6,7 @@ import { CommentAdd } from "../../Models/CodeReviewApp/CommentAdd";
 import { CommentDelete } from "../../Models/CodeReviewApp/CommentDelete";
 import { CommentSet } from "../../Models/CodeReviewApp/CommentSet";
 import { CommentUpdate } from "../../Models/CodeReviewApp/CommentUpdate";
+import { OneTaskReviewComment } from "../../Models/CodeReviewApp/OneTaskReviewComment";
 import { ControllerHelper } from "../ControllerHelper";
 
 
@@ -140,7 +141,11 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
 
                 if (data) {
                     let forSet = new CommentSet();
-                    forSet.Comments = data;
+                    forSet.Comments = data.map(x => {
+                        let cm = new OneTaskReviewComment();
+                        cm.FillByBackModel(x);
+                        return cm;
+                    });
                     forSet.TaskId = id;
                     dispatch(SetCommentsActionCreator(forSet));
                 }

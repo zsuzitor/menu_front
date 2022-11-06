@@ -1,12 +1,7 @@
 /// <reference path="../../../../../typings/globals.d.ts" />
 
 import React, { useState, useEffect } from 'react';
-import { IOneProjectInfoDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneProjectInfoDataBack';
-import { IOneProjectInListDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneProjectInListDataBack';
-import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
-import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 
-import { IAuthState } from "../../../../Models/Models/AuthState";
 import ProjectDetail from '../ProjectDetail/ProjectDetail';
 import ProjectsList from '../ProjectsList/ProjectsList';
 import cloneDeep from 'lodash/cloneDeep';
@@ -14,6 +9,8 @@ import { AppState } from '../../../../Models/Models/State/AppState';
 
 import { connect } from "react-redux";
 import { OneTask } from '../../../../Models/Models/CodeReviewApp/State/OneTask';
+import { OneProjectInList } from '../../../../Models/Models/CodeReviewApp/State/OneProjectInList';
+import { ProjectUser } from '../../../../Models/Models/CodeReviewApp/State/ProjectUser';
 
 
 require('./CodeReviewMain.css');
@@ -27,22 +24,13 @@ interface ICodeReviewMainOwnProps {
 interface ICodeReviewMainStateToProps {
     // Test: string;
     CurrentProjectId: number;
-    ProjectsList: IOneProjectInListDataBack[];
-    CurrentProjectUsers: IProjectUserDataBack[];
+    ProjectsList: OneProjectInList[];
+    CurrentProjectUsers: ProjectUser[];
     Tasks: OneTask[];
 }
 
 interface ICodeReviewMainDispatchToProps {
-    // ChangeTestString: (v: string) => void;
     SetCurrentProjectId: (id: number) => void;
-    // SetProjectsList: (lst: IOneProjectInListDataBack[]) => void;
-    // AddProjectList: (rec: IOneProjectInListDataBack) => void;
-    // RemoveProjectList: (recId: number) => void;
-
-    // SetCurrentProjectUsers: (lst: IProjectUserDataBack[]) => void;
-    // AddCurrentProjectUser: (rec: IProjectUserDataBack) => void;
-    // ChangeCurrentProjectUser: (rec: IProjectUserDataBack) => void;
-    // RemoveCurrentProjectUser: (rec: IProjectUserDataBack) => void;
     GetUserProjects: () => void;
     GetProjectInfo: (id: number) => void;
 }

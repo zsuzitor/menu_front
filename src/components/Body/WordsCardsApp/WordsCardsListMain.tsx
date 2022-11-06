@@ -622,41 +622,7 @@ export class WordsCardsListMain extends React.Component<{}, WordsCardsListMainSt
 
         G_WordsListController.GetAllForUser(success);
 
-
-
-
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: {},
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             let dataBack = xhr as IWordListBack[];
-        //             if (dataBack.length == 0) {
-        //                 return;//todo
-        //             }
-
-        //             let newState = { ...refThis.state };
-        //             let dataFront: OneWordList[] = [];
-        //             dataBack.forEach(bk => {
-        //                 let nd = new OneWordList();
-        //                 nd.FillByBackModel(bk);
-        //                 dataFront.push(nd);
-        //             });
-
-        //             // newState.WordListsLoaded = true;
-        //             newState.WordLists = dataFront;
-        //             this.setState(newState);
-
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/wordslist/get-all-for-user',
-
-        // }, true);
+        
     }
 
 }

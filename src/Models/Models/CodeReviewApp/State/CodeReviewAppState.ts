@@ -1,13 +1,13 @@
-import { IOneProjectInListDataBack } from "../../../BackModel/CodeReviewApp/IOneProjectInListDataBack";
-import { IProjectUserDataBack } from "../../../BackModel/CodeReviewApp/IProjectUserDataBack";
+import { OneProjectInList } from "./OneProjectInList";
+import { ProjectUser } from "./ProjectUser";
 import { OneTask } from "./OneTask";
 import { TasksFilter } from "./TasksFilter";
 
 
 export class CodeReviewAppState {
     CurrentProjectId: number;
-    ProjectsList: IOneProjectInListDataBack[];
-    CurrentProjectUsers: IProjectUserDataBack[];
+    ProjectsList: OneProjectInList[];
+    CurrentProjectUsers: ProjectUser[];
     CurrentProjectTasks: OneTask[];
     CurrentProjectTasksAllCount: number;
     CurrentProjectTasksFilters: TasksFilter;

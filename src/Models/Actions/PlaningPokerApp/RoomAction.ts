@@ -1,4 +1,5 @@
-import { IEndVoteInfoReturn } from "../../BackModel/PlaningPoker/EndVoteInfoReturn";
+
+import { EndVoteInfo } from "../../Models/PlaningPoker/EndVoteInfo";
 import { RoomStatus } from "../../Models/PlaningPoker/RoomInfo";
 import { AppAction } from "../Actions";
 
@@ -14,7 +15,7 @@ export function SetRoomPasswordActionCreator(data: string): AppAction<string> {
 };
 
 export const SetVoteInfoActionName: string = 'SetVoteInfoAction';
-export function SetVoteInfoActionCreator(data: IEndVoteInfoReturn): AppAction<IEndVoteInfoReturn> {
+export function SetVoteInfoActionCreator(data: EndVoteInfo): AppAction<EndVoteInfo> {
     return { type: SetVoteInfoActionName, payload: data };
 };
 

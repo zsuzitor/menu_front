@@ -9,6 +9,7 @@
 .code-review-project-info {
     flex-grow: 2;
     padding-left: 15px;
+    padding-right: 15px;
 }
 
 .code-review-projects-menu-main {

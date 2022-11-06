@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { AlertData } from '../../../../Models/Models/AlertData';
 import { OneTask } from '../../../../Models/Models/CodeReviewApp/State/OneTask';
+import { ProjectUser } from '../../../../Models/Models/CodeReviewApp/State/ProjectUser';
 import { AppState } from '../../../../Models/Models/State/AppState';
 
 
@@ -16,7 +16,7 @@ require('./AddTask.css');
 
 
 interface IAddTaskOwnProps {
-    ProjectUsers: IProjectUserDataBack[];
+    ProjectUsers: ProjectUser[];
     ProjectId: number;
 }
 

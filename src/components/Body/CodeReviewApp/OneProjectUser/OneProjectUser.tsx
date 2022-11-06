@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
-import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
-import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 import { AlertData } from '../../../../Models/Models/AlertData';
+import { ProjectUser } from '../../../../Models/Models/CodeReviewApp/State/ProjectUser';
 import { AppState } from '../../../../Models/Models/State/AppState';
 
 
@@ -12,7 +10,7 @@ require('./OneProjectUser.css');
 
 
 interface IOneProjectOneProjectUserOwnProps {
-    User: IProjectUserDataBack;
+    User: ProjectUser;
 
 }
 
@@ -21,7 +19,7 @@ interface IOneProjectOneProjectUserStateToProps {
 }
 
 interface IOneProjectOneProjectUserDispatchToProps {
-    ChangeUser: (user: IProjectUserDataBack) => void;
+    ChangeUser: (user: ProjectUser) => void;
 }
 
 interface IOneProjectOneProjectUserProps extends IOneProjectOneProjectUserStateToProps, IOneProjectOneProjectUserOwnProps, IOneProjectOneProjectUserDispatchToProps {
@@ -63,11 +61,13 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
             return;
         }
 
-        let newUserData = {
-            Id: props.User.Id, Name: userName
-            , Email: userEmail, IsAdmin: userIsAdmin, Deactivated: userIsDeactivated
-        }
-
+        let newUserData = new ProjectUser();
+        newUserData.Id = props.User.Id;
+        newUserData.Name = userName;
+        newUserData.Email = userEmail;
+        newUserData.IsAdmin = userIsAdmin;
+        newUserData.Deactivated = userIsDeactivated;
+       
         props.ChangeUser(newUserData);
     };
 

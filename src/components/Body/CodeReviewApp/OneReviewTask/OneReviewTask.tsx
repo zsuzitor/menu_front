@@ -4,11 +4,11 @@ import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { SetCommentsActionCreator } from '../../../../Models/Actions/CodeReviewApp/CommentActions';
-import { IOneTaskReviewCommentDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack';
-import { IProjectTaskDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectTaskDataBack';
-import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { AlertData } from '../../../../Models/Models/AlertData';
 import { CommentSet } from '../../../../Models/Models/CodeReviewApp/CommentSet';
+import { OneTaskReviewComment } from '../../../../Models/Models/CodeReviewApp/OneTaskReviewComment';
+import { OneTask } from '../../../../Models/Models/CodeReviewApp/State/OneTask';
+import { ProjectUser } from '../../../../Models/Models/CodeReviewApp/State/ProjectUser';
 import { AppState } from '../../../../Models/Models/State/AppState';
 import OneReviewTaskComment from '../OneReviewTaskComment/OneReviewTaskComment';
 
@@ -21,19 +21,19 @@ require('./OneReviewTask.css');
 
 
 interface IOneReviewTaskOwnProps {
-    Task: IProjectTaskDataBack;
-    Comments: IOneTaskReviewCommentDataBack[];
+    Task: OneTask;
+    Comments: OneTaskReviewComment[];
 
 }
 
 
 interface IOneReviewTaskStateToProps {
-    ProjectUsers: IProjectUserDataBack[];
+    ProjectUsers: ProjectUser[];
 
 }
 
 interface IOneReviewTaskDispatchToProps {
-    UpdateTask: (task: IProjectTaskDataBack) => void;
+    UpdateTask: (task: OneTask) => void;
     DeleteTask: (id: number) => void;
     AddComment: (taskId: number, newCommentText: string) => void;
     SetEmptyTaskComments: (taskId: number) => void;
@@ -112,7 +112,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
             return;
         }
 
-        let forAdd = { ...props.Task };
+        let forAdd = { ...props.Task } as OneTask;
         forAdd.Name = taskName;
         forAdd.Link = taskLink;
         forAdd.Status = taskStatus;
@@ -148,22 +148,25 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         }
 
         return <div className='one-review-task-comments-block'>
-            Комментарии:
-            {props.Comments.map(x => {
-                return <OneReviewTaskComment
-                    Comment={x}
-                    TaskId={props.Task.Id}
-                    key={x.Id}
-                ></OneReviewTaskComment>
+            <div className='one-review-task-comments-block-inner'>
+                Комментарии:
+                {props.Comments.map(x => {
+                    return <OneReviewTaskComment
+                        Comment={x}
+                        TaskId={props.Task.Id}
+                        key={x.Id}
+                    ></OneReviewTaskComment>
 
-            })}
+                })}
 
-            <div>
-                <textarea className='form-control-b persent-100-width' value={newCommentName}
-                    onChange={e => setNewCommentName(e.target.value)}
-                ></textarea>
-                <button className='btn-b btn-border' onClick={() => addComment()}>Добавить</button>
+                <div>
+                    <textarea className='form-control-b persent-100-width' value={newCommentName}
+                        onChange={e => setNewCommentName(e.target.value)}
+                    ></textarea>
+                    <button className='btn-b btn-border' onClick={() => addComment()}>Добавить</button>
+                </div>
             </div>
+
         </div>
     }
 
@@ -241,7 +244,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'comments.png'}
                         alt="Comments" title='Комментарии' />
                 </div>
-                <div className='review-task-link-button' onClick={() => window.open(taskLink)}>
+                <div className='review-task-link-button' onClick={() => taskLink && window.open(taskLink)}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'external-link.png'}
                         alt="Comments" title='Открыть ссылку' />
                 </div>
@@ -266,7 +269,7 @@ const mapStateToProps = (state: AppState, ownProps: IOneReviewTaskOwnProps) => {
 
 const mapDispatchToProps = (dispatch: any, ownProps: IOneReviewTaskOwnProps) => {
     let res = {} as IOneReviewTaskDispatchToProps;
-    res.UpdateTask = (forAdd: IProjectTaskDataBack) => {
+    res.UpdateTask = (forAdd: OneTask) => {
         dispatch(window.G_CodeReviewTaskController.UpdateTaskRedux(forAdd));
     };
 

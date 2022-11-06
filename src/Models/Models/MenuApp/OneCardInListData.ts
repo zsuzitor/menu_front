@@ -26,6 +26,7 @@ export class OneCardInListData implements IOneCardInListData {
         }
 
     }
+    
     FillByFullModel(newData: IOneCardFullData): void {
         this.Id = newData.Id;
         this.Title = newData.Title;

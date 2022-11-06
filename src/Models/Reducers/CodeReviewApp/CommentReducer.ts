@@ -6,11 +6,10 @@ import { AppState } from "../../Models/State/AppState";
 import cloneDeep from 'lodash/cloneDeep';
 import { AddCommentActionName, DeleteCommentActionName, SetCommentsActionName, UpdateCommentActionName } from "../../Actions/CodeReviewApp/CommentActions";
 import { CommentUpdate } from "../../Models/CodeReviewApp/CommentUpdate";
-import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
 import { CommentDelete } from "../../Models/CodeReviewApp/CommentDelete";
-import { IOneTaskReviewCommentDataBack } from "../../BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack";
 import { CommentAdd } from "../../Models/CodeReviewApp/CommentAdd";
 import { CommentSet } from "../../Models/CodeReviewApp/CommentSet";
+import { OneTaskReviewComment } from "../../Models/CodeReviewApp/OneTaskReviewComment";
 
 
 export function CodeReviewCommentReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
@@ -55,7 +54,12 @@ export function CodeReviewCommentReducer(state: AppState = new AppState(), actio
                     return newState;
                 }
 
-                task.Comments.push(payload);
+                let comment = new OneTaskReviewComment();
+                comment.Id = payload.Id;
+                comment.Text = payload.Text;
+                comment.CreateDate = payload.CreateDate;
+                comment.CreatorId = payload.CreatorId;
+                task.Comments.push(comment);
 
                 return newState;
             }

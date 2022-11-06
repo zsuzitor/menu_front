@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { SetCurrentProjectIdActionCreator } from '../../../../Models/Actions/CodeReviewApp/ProjectActions';
-import { IOneProjectInListDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneProjectInListDataBack';
 import { AppState } from '../../../../Models/Models/State/AppState';
+import { OneProjectInList as OneProjectInListModel } from '../../../../Models/Models/CodeReviewApp/State/OneProjectInList';
 
 
 require('./OneProjectInList.css');
@@ -12,7 +12,7 @@ require('./OneProjectInList.css');
 
 export interface IOneProjectInListOwnProps {
     CurrentProject: boolean;
-    Project: IOneProjectInListDataBack;
+    Project: OneProjectInListModel;
 
 }
 

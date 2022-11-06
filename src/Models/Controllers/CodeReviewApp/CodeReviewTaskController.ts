@@ -3,9 +3,9 @@ import { BoolResultBack } from "../../BackModel/BoolResultBack";
 import { ILoadReviewTasksResultDataBack } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack";
 import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
+import { LoadReviewTasksResult, ProjectTaskData } from "../../Models/CodeReviewApp/LoadReviewTasksResult";
 import { OneTask } from "../../Models/CodeReviewApp/State/OneTask";
-import { ITaskFilter } from "../../Models/CodeReviewApp/TasksFilter";
-import { AppState } from "../../Models/State/AppState";
+import { ITaskFilter } from "../../Models/CodeReviewApp/ITaskFilter";
 import { ControllerHelper } from "../ControllerHelper";
 
 
@@ -17,7 +17,7 @@ export type DeleteTask = (error: MainErrorObjectBack, data: BoolResultBack) => v
 
 export interface ICodeReviewTaskController {
     AddTaskToProjectRedux: (task: OneTask, projectId: number) => void;
-    UpdateTaskRedux: (task: IProjectTaskDataBack) => void;
+    UpdateTaskRedux: (task: OneTask) => void;
     LoadTasksRedux: (taskFilter: ITaskFilter) => void;
     DeleteTaskRedux: (id: number) => void;
 }
@@ -66,7 +66,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
     }
 
 
-    UpdateTaskRedux = (task: IProjectTaskDataBack) => {
+    UpdateTaskRedux = (task: OneTask) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
             this.UpdateTask(task, (error: MainErrorObjectBack, data: BoolResultBack) => {
@@ -82,7 +82,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
         };
     }
 
-    UpdateTask = (task: IProjectTaskDataBack, onSuccess: UpdateTask) => {
+    UpdateTask = (task: OneTask, onSuccess: UpdateTask) => {
         let data = {
             "taskId": task.Id,
             "name": task.Name,
@@ -114,7 +114,9 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
                 }
 
                 if (data) {
-                    dispatch(LoadTasksActionCreator(data));
+                    let dt = new LoadReviewTasksResult();
+                    dt.FillByBackModel(data);
+                    dispatch(LoadTasksActionCreator(dt));
                 }
             });
         };

@@ -2,6 +2,7 @@ import { IEndVoteInfoReturn } from "../../BackModel/PlaningPoker/EndVoteInfoRetu
 import { IStoryReturn } from "../../BackModel/PlaningPoker/StoryReturn";
 import { IUserInRoomReturn } from "../../BackModel/PlaningPoker/UserInRoomReturn";
 import { MappedWithBack } from "../../BL/Interfaces/MappedWithBack"
+import { EndVoteInfo } from "./EndVoteInfo";
 
 //todo хорошо бы по файликам раскидать
 
@@ -94,6 +95,14 @@ export class VoteInfo implements MappedWithBack<IEndVoteInfoReturn>{
         this.AllAreVoted = false;
     }
 
+    FillByEndVoteInfo(newData: EndVoteInfo): void {
+        this.MaxVote = newData.MaxVote;
+        this.MinVote = newData.MinVote;
+        this.AverageVote = newData.AverageVote;
+        this.AllAreVoted = false;
+    }
+
+    
 }
 
 

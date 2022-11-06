@@ -52,9 +52,17 @@
 .stories-but-block{
     display: flex;
     justify-content: space-between;
-    width: 110px;
+    width: 90px;
 }
 
 .planing-current-story{
     padding-top: 15px;
+}
+
+.stories-current-buttons{
+    display: flex;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    justify-content: space-between;
+    width: 120px;
 }

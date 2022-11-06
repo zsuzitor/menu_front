@@ -123,8 +123,6 @@ export function UserReducer(state: AppState = new AppState(), action: AppAction<
                 if (!user.CanVote()) {
                     //todo убрать все оценки
 
-                    // GetUserById(localState.UsersList,);
-                    // users
                     user.Vote = null;
                     user.HasVote = false;
                     if (data.UserId === newState.PlaningPokerApp.User.UserId) {

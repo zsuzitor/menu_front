@@ -8,7 +8,7 @@ declare var G_PathToBaseImages: string;
 declare var G_PathToServer: string;
 declare var G_PathToServerMenu: string;
 declare var G_PreloaderPath: string;
-declare var G_AjaxHelper: import("../src/Models/AjaxLogic").IAjaxHelper;//TODO записать
+declare var G_AjaxHelper: import("../src/Models/AjaxLogic").IAjaxHelper;
 declare var G_ErrorHandleLogic: import("../src/Models/Models/ErrorHandleLogic").IMainErrorHandler;
 declare var G_AddAbsoluteAlertToState: (alert: import("../src/Models/Models/AlertData").AlertData) => void;
 // declare var G_PathToServerMenu: string;

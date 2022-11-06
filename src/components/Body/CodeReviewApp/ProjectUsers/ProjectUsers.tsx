@@ -2,9 +2,9 @@
 
 import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
-import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 import { AppState } from '../../../../Models/Models/State/AppState';
 import OneProjectUser from '../OneProjectUser/OneProjectUser';
+import { ProjectUser } from '../../../../Models/Models/CodeReviewApp/State/ProjectUser';
 
 import { connect } from "react-redux";
 
@@ -20,7 +20,7 @@ interface IProjectUsersOwnProps {
 
 interface IProjectUsersStateToProps {
     ProjectId: number;
-    ProjectUsers: IProjectUserDataBack[];
+    ProjectUsers: ProjectUser[];
 }
 
 interface IProjectUsersDispatchToProps {

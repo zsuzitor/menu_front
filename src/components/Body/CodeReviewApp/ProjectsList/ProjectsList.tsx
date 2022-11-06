@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { IOneProjectInListDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneProjectInListDataBack';
 import { AppState } from '../../../../Models/Models/State/AppState';
 import OneProjectInList from '../OneProjectInList/OneProjectInList';
 
 import { connect } from "react-redux";
-import { SetCurrentProjectIdActionCreator } from '../../../../Models/Actions/CodeReviewApp/ProjectActions';
 import { AlertData } from '../../../../Models/Models/AlertData';
-
+import { OneProjectInList as OneProjectInListModel } from '../../../../Models/Models/CodeReviewApp/State/OneProjectInList';
 
 require('./ProjectsList.css');
 
@@ -14,17 +12,14 @@ require('./ProjectsList.css');
 
 
 export interface IProjectsListOwnProps {
-    Projects: IOneProjectInListDataBack[];//todo временно так
+    Projects: OneProjectInListModel[];
     CurrentProjectId: number;
-    // ChangeListVisibility: () => void;
 }
 
 interface IProjectsListStateToProps {
-    // Test: string;
 }
 
 interface IProjectsListDispatchToProps {
-    // ChangeTestString: (v: string) => void;
     AddNewProject: (projectName: string) => void;
 
 }
@@ -93,8 +88,6 @@ const ProjectsList = (props: IProjectsListProps) => {
 
 const mapStateToProps = (state: AppState, ownProps: IProjectsListOwnProps) => {
     let res = {} as IProjectsListStateToProps;
-    // res.Test = state.TestMessage;
-    // res.FilmData = state.Films.find(x => x.Id === ownProps.FilmId);
     return res;
 }
 

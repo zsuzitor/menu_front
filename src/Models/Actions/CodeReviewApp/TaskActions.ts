@@ -1,11 +1,11 @@
-import { ILoadReviewTasksResultDataBack } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack";
-import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
+import { LoadReviewTasksResult, ProjectTaskData } from "../../Models/CodeReviewApp/LoadReviewTasksResult";
+import { OneTask } from "../../Models/CodeReviewApp/State/OneTask";
 import { TasksFilter } from "../../Models/CodeReviewApp/State/TasksFilter";
 import { AppAction } from "../Actions";
 
 
 export const AddTaskToProjectActionName: string = 'AddTaskToProjectAction';
-export function AddTaskToProjectActionCreator(data: IProjectTaskDataBack): AppAction<IProjectTaskDataBack> {
+export function AddTaskToProjectActionCreator(data: ProjectTaskData): AppAction<ProjectTaskData> {
     return { type: AddTaskToProjectActionName, payload: data };
 };
 
@@ -16,12 +16,12 @@ export function AddLoadTriggerActionCreator(): AppAction<null> {
 
 
 export const UpdateTaskActionName: string = 'UpdateTaskAction';
-export function UpdateTaskActionCreator(data: IProjectTaskDataBack): AppAction<IProjectTaskDataBack> {
+export function UpdateTaskActionCreator(data: OneTask): AppAction<OneTask> {
     return { type: UpdateTaskActionName, payload: data };
 };
 
 export const LoadTasksActionName: string = 'LoadTasksAction';
-export function LoadTasksActionCreator(data: ILoadReviewTasksResultDataBack): AppAction<ILoadReviewTasksResultDataBack> {
+export function LoadTasksActionCreator(data: LoadReviewTasksResult): AppAction<LoadReviewTasksResult> {
     return { type: LoadTasksActionName, payload: data };
 };
 

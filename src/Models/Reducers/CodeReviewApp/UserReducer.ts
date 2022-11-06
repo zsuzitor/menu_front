@@ -1,11 +1,11 @@
 import { AppAction } from "../../Actions/Actions";
 import { AppState } from "../../Models/State/AppState";
-import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
 
 
 
 import cloneDeep from 'lodash/cloneDeep';
 import { AddProjectUserActionName, ChangeProjectUserActionName, DeleteProjectUserActionName, SetCurrentProjectUsersActionName } from "../../Actions/CodeReviewApp/UserActions";
+import { ProjectUser } from "../../Models/CodeReviewApp/State/ProjectUser";
 
 // return Object.assign({}, state, { TestMessage: str });
 
@@ -24,7 +24,7 @@ export function CodeReviewUserReducer(state: AppState = new AppState(), action: 
         case AddProjectUserActionName:
             {
                 let newState = cloneDeep(state);
-                let user = action.payload as IProjectUserDataBack;
+                let user = action.payload as ProjectUser;
                 newState.CodeReviewApp.CurrentProjectUsers.push(user);
                 return newState;
             }
@@ -32,7 +32,7 @@ export function CodeReviewUserReducer(state: AppState = new AppState(), action: 
         case ChangeProjectUserActionName:
             {
                 let newState = cloneDeep(state);
-                let user = action.payload as IProjectUserDataBack;
+                let user = action.payload as ProjectUser;
                 let userState = newState.CodeReviewApp.CurrentProjectUsers.find(x => x.Id === user.Id);
                 if (userState) {
                     userState.Email = user.Email;
@@ -46,7 +46,7 @@ export function CodeReviewUserReducer(state: AppState = new AppState(), action: 
         case SetCurrentProjectUsersActionName:
             {
                 let newState = cloneDeep(state);
-                let users = action.payload as IProjectUserDataBack[];
+                let users = action.payload as ProjectUser[];
                 newState.CodeReviewApp.CurrentProjectUsers = users;
                 return newState;
             }

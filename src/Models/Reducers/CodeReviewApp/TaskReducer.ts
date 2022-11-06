@@ -5,10 +5,10 @@ import { AppState } from "../../Models/State/AppState";
 
 import cloneDeep from 'lodash/cloneDeep';
 import { AddLoadTriggerActionName, AddTaskToProjectActionName, DeleteTaskActionName, LoadTasksActionName, SetFilterTaskActionName, SetFilterTaskCreatorActionName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskReviewerName, SetFilterTaskStatusActionName, UpdateTaskActionName } from "../../Actions/CodeReviewApp/TaskActions";
-import { IProjectTaskDataBack } from "../../BackModel/CodeReviewApp/IProjectTaskDataBack";
+
 import { OneTask } from "../../Models/CodeReviewApp/State/OneTask";
-import { ILoadReviewTasksResultDataBack } from "../../BackModel/CodeReviewApp/ILoadReviewTasksResultDataBack";
 import { TasksFilter } from "../../Models/CodeReviewApp/State/TasksFilter";
+import { LoadReviewTasksResult, ProjectTaskData } from "../../Models/CodeReviewApp/LoadReviewTasksResult";
 
 
 export function CodeReviewTaskReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
@@ -16,7 +16,7 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
         case AddTaskToProjectActionName:
             {
                 let newState = cloneDeep(state);
-                let payload = action.payload as IProjectTaskDataBack;
+                let payload = action.payload as ProjectTaskData;
                 let tsk = new OneTask();
                 tsk.FillByIProjectTaskDataBack(payload);
                 newState.CodeReviewApp.CurrentProjectTasks.push(tsk);
@@ -31,7 +31,7 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
         case UpdateTaskActionName:
             {
                 let newState = cloneDeep(state);
-                let payload = action.payload as IProjectTaskDataBack;
+                let payload = action.payload as OneTask;
                 var tsk = newState.CodeReviewApp.CurrentProjectTasks.find(x => x.Id == payload.Id);
                 tsk.Name = payload.Name;
                 tsk.Status = payload.Status;
@@ -43,7 +43,7 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
         case LoadTasksActionName:
             {
                 let newState = cloneDeep(state);
-                let payload = action.payload as ILoadReviewTasksResultDataBack;
+                let payload = action.payload as LoadReviewTasksResult;
                 newState.CodeReviewApp.CurrentProjectTasks = payload.Tasks.map(x => {
                     let tsk = new OneTask();
                     tsk.FillByIProjectTaskDataBack(x);

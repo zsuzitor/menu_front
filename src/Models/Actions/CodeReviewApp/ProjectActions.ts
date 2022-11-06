@@ -1,5 +1,4 @@
-import { IOneProjectInListDataBack } from "../../BackModel/CodeReviewApp/IOneProjectInListDataBack";
-import { IProjectUserDataBack } from "../../BackModel/CodeReviewApp/IProjectUserDataBack";
+import { OneProjectInList } from "../../Models/CodeReviewApp/State/OneProjectInList";
 import { AppAction } from "../Actions";
 
 export const DeleteProjectActionName: string = 'DeleteProjectAction';
@@ -12,7 +11,7 @@ export function DeleteProjectActionCreator(projectId: number): AppAction<number>
 
 
 export const AddNewProjectActionName: string = 'AddNewProjectAction';
-export function AddNewProjectActionCreator(data: IOneProjectInListDataBack): AppAction<IOneProjectInListDataBack> {
+export function AddNewProjectActionCreator(data: OneProjectInList): AppAction<OneProjectInList> {
     return { type: AddNewProjectActionName, payload: data };
 };
 
@@ -22,6 +21,6 @@ export function SetCurrentProjectIdActionCreator(projectId: number): AppAction<n
 };
 
 export const SetProjectsActionName: string = 'SetProjectsAction';
-export function SetProjectsActionCreator(projects: IOneProjectInListDataBack[]): AppAction<IOneProjectInListDataBack[]> {
+export function SetProjectsActionCreator(projects: OneProjectInList[]): AppAction<OneProjectInList[]> {
     return { type: SetProjectsActionName, payload: projects };
 };

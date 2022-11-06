@@ -5,10 +5,10 @@ import { AppState } from "../../Models/State/AppState";
 
 import cloneDeep from 'lodash/cloneDeep';
 import { RoomStatus, VoteInfo } from "../../Models/PlaningPoker/RoomInfo";
-import { IEndVoteInfoReturn } from "../../BackModel/PlaningPoker/EndVoteInfoReturn";
 import { PlaningPokerHelper } from "../../BL/PlaningPokerApp/PlaningPokerHelper";
 import { AlertData } from "../../Models/AlertData";
 import { SetRoomNameActionName, SetRoomPasswordActionName, SetVoteInfoActionName, SetRoomStatusActionName, VoteChangedActionName, VoteChangedPayload, SetSelectedCardActionName, ClearVoteActionName, SetInitialRoomDieTimeActionName, SetEditRoomActionName, SetRoomCardsActionName } from "../../Actions/PlaningPokerApp/RoomAction";
+import { EndVoteInfo } from "../../Models/PlaningPoker/EndVoteInfo";
 
 
 export function RoomReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
@@ -34,7 +34,7 @@ export function RoomReducer(state: AppState = new AppState(), action: AppAction<
         case SetVoteInfoActionName:
             {
                 let newState = cloneDeep(state);
-                let data = action.payload as IEndVoteInfoReturn;
+                let data = action.payload as EndVoteInfo;
                 newState.PlaningPokerApp.SelectedVoteCard = '-1';
 
 
@@ -44,14 +44,14 @@ export function RoomReducer(state: AppState = new AppState(), action: AppAction<
                 }
 
                 newState.PlaningPokerApp.UsersList.forEach(x => {
-                    let userFromRes = data.users_info.find(x1 => x1.id === x.Id);
+                    let userFromRes = data.UsersInfo.find(x1 => x1.Id === x.Id);
                     if (userFromRes) {
-                        x.Vote = userFromRes.vote;
+                        x.Vote = userFromRes.Vote;
                     }
 
                 });
 
-                newState.PlaningPokerApp.VoteInfo.FillByBackModel(data);
+                newState.PlaningPokerApp.VoteInfo.FillByEndVoteInfo(data);
 
                 return newState;
             }

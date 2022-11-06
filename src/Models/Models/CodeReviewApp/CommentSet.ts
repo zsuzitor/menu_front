@@ -1,7 +1,7 @@
-import { IOneTaskReviewCommentDataBack } from "../../BackModel/CodeReviewApp/IOneTaskReviewCommentDataBack";
+import { OneTaskReviewComment } from "./OneTaskReviewComment";
 
 export class CommentSet {
-    Comments: IOneTaskReviewCommentDataBack[];
+    Comments: OneTaskReviewComment[];
     TaskId: number;
 
     constructor() {

@@ -160,10 +160,22 @@ const StoriesSection = (props: StoriesSectionProps) => {
 
         let adminButton = <></>
         if (props.IsAdmin) {
-            adminButton = <div>
-                <button className="btn btn-success" onClick={() => changeCurrentStory()}>Изменить</button>
-                <button className="btn btn-success" onClick={() => cancelChangeCurrentStory()}>Отменить</button>
-                <button className="btn btn-success" onClick={() => tryMakeStoryComplete()}>Отметить как выполненную</button>
+            adminButton = <div className='stories-current-buttons'>
+                <div className='stories-action-btn' onClick={() => changeCurrentStory()}
+                    title='Изменить'>
+                    <img className='persent-100-width-height' src="/images/save-icon.png" />
+                </div>
+                <div className='stories-action-btn' onClick={() => cancelChangeCurrentStory()}
+                    title='Отменить изменения'>
+                    <img className='persent-100-width-height' src="/images/cancel.png" />
+                </div>
+                <div className='stories-action-btn' onClick={() => tryMakeStoryComplete()}
+                    title='Отметить как выполненную'>
+                    <img className='persent-100-width-height' src="/images/vote4.png" />
+                </div>
+                {/* <button className="btn btn-success" onClick={() => changeCurrentStory()}>Изменить</button> */}
+                {/* <button className="btn btn-success" onClick={() => cancelChangeCurrentStory()}>Отменить</button> */}
+                {/* <button className="btn btn-success" onClick={() => tryMakeStoryComplete()}>Отметить как выполненную</button> */}
             </div>
         }
 

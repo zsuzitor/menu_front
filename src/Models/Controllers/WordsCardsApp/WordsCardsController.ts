@@ -31,7 +31,6 @@ export class WordsCardsController implements IWordsCardsController {
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
-                    //TODO ошибка
                     onSuccess(resp, null);
                 }
                 else {
@@ -63,7 +62,6 @@ export class WordsCardsController implements IWordsCardsController {
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
-                    //TODO ошибка
                     onSuccess(resp, null);
                 }
                 else {
@@ -100,7 +98,6 @@ export class WordsCardsController implements IWordsCardsController {
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
-                    //TODO ошибка
                     success(resp, null);
                 }
                 else {
@@ -125,7 +122,6 @@ export class WordsCardsController implements IWordsCardsController {
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
-                    //TODO ошибка
                     success(resp, null);
                 }
                 else {
@@ -163,7 +159,6 @@ export class WordsCardsController implements IWordsCardsController {
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
-                    //TODO ошибка
                     onSuccess(resp, null);
                 }
                 else {
@@ -194,7 +189,6 @@ export class WordsCardsController implements IWordsCardsController {
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
-                    //TODO ошибка
                     onSuccess(resp, null);
                 }
                 else {

@@ -24,6 +24,7 @@ import EditRoom from '../EditRoom/EditRoom';
 import { SetRoomNameActionCreator, SetVoteInfoActionCreator, SetRoomStatusActionCreator, VoteChangedActionCreator, SetSelectedCardActionCreator, ClearVoteActionCreator, SetEditRoomActionCreator, SetRoomCardsActionCreator } from '../../../../Models/Actions/PlaningPokerApp/RoomAction';
 import { SetCurrentStoryIdActionCreator, SetStoriesActionCreator, AddNewStoryActionCreator, StoryChangeActionCreator, DeleteStoryActionCreator, MoveStoryToCompleteActionCreator, UpdateStoriesIdActionCreator } from '../../../../Models/Actions/PlaningPokerApp/StoryActions';
 import { SetRoomUserIdActionCreator, SetUserNameActionCreator, SetRoomUsersActionCreator, AddUserToRoomActionCreator, ChangeUserNameInRoomActionCreator, RemoveUserActionCreator, UserRoleChangedActionCreator } from '../../../../Models/Actions/PlaningPokerApp/UserActions';
+import { EndVoteInfo } from '../../../../Models/Models/PlaningPoker/EndVoteInfo';
 
 
 
@@ -58,7 +59,7 @@ interface RoomDispatchToProps {
     SetUserName: ((newName: string) => void);
     SetUserId: (userId: string) => void;
     SetRoomUsers: (users: UserInRoom[]) => void;
-    SetVoteInfo: (voteInfo: IEndVoteInfoReturn) => void;
+    SetVoteInfo: (voteInfo: EndVoteInfo) => void;
     SetCurrentStoryId: (id: string) => void;
     SetStories: (id: Story[]) => void;
     SetRoomStatus: (status: RoomStatus) => void;
@@ -233,8 +234,9 @@ const Room = (props: RoomProps) => {
 
 
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.VoteEnd, function (data: IEndVoteInfoReturn) {
-
-            props.SetVoteInfo(data);
+            let vtInfo = new EndVoteInfo();
+            vtInfo.FillByBackModel(data);
+            props.SetVoteInfo(vtInfo);
             props.SetRoomStatus(RoomStatus.CloseVote);
         });
 
@@ -521,8 +523,10 @@ const Room = (props: RoomProps) => {
 
     const settingsUpUserListRender = () => {
         let showVoteImage = 'eye5.png';
+        let showVoteTitle = 'Скрыть оценки';
         if (hideVoteState) {
             showVoteImage = 'eye1.png';
+            showVoteTitle = 'Показать оценки';
         }
 
         let hideVotesSetting = <></>
@@ -532,7 +536,7 @@ const Room = (props: RoomProps) => {
                 <div className="planning-vote-settings">
                     <label>Оценки</label>
                     <div className='planing-vote-show-but'
-                        title='Показать\скрыть оценки' onClick={() => setHideVoteState(prevState => {
+                        title={showVoteTitle} onClick={() => setHideVoteState(prevState => {
                             return !hideVoteState;
                         })}>
                         <img className='persent-100-width-height' src={"/images/" + showVoteImage} />
@@ -623,6 +627,7 @@ const Room = (props: RoomProps) => {
                 <div className='people-room-header'>
                     <span>Участники</span>
                     <div className='planing-people-refresh'
+                        title='Обновить список пользователей'
                         onClick={() => props.UpdateAllUsers(props.RoomInfo.Name, props.UserInfo.UserConnectionId)}>
                         <img className='persent-100-width-height' src="/images/refresh.png" />
                     </div>
@@ -687,7 +692,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: RoomOwnProps) => {
     };
 
 
-    res.SetVoteInfo = (voteInfo: IEndVoteInfoReturn) => {
+    res.SetVoteInfo = (voteInfo: EndVoteInfo) => {
         dispatch(SetVoteInfoActionCreator(voteInfo));
     };
 

@@ -37,7 +37,6 @@ export class ArticleController implements IArticleController {
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
-                    //TODO ошибка
                     onSuccess(resp, null);
 
                 }
@@ -68,7 +67,6 @@ export class ArticleController implements IArticleController {
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
-                    //TODO ошибка
                     onSuccess(resp, null);
                 }
                 else {
@@ -100,7 +98,6 @@ export class ArticleController implements IArticleController {
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
-                    //TODO ошибка
                     onSuccess(resp, null);
                 }
                 else {
@@ -131,7 +128,6 @@ export class ArticleController implements IArticleController {
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
-                    //TODO ошибка
                     success(resp, null);
 
                 }
@@ -176,7 +172,6 @@ export class ArticleController implements IArticleController {
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
-                    //TODO ошибка
                     success(resp, null);
                 }
                 else {

@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { IOneProjectInListDataBack } from '../../../../Models/BackModel/CodeReviewApp/IOneProjectInListDataBack';
-import { IProjectUserDataBack } from '../../../../Models/BackModel/CodeReviewApp/IProjectUserDataBack';
 
-import { IAuthState } from "../../../../Models/Models/AuthState";
 import OneReviewTask from '../OneReviewTask/OneReviewTask';
 import cloneDeep from 'lodash/cloneDeep';
-import { ITaskFilter } from '../../../../Models/Models/CodeReviewApp/TasksFilter';
+import { ITaskFilter } from '../../../../Models/Models/CodeReviewApp/ITaskFilter';
 import Paggination from '../../Paggination/Paggination';
 import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
 import ProjectUsers from '../ProjectUsers/ProjectUsers';
@@ -16,6 +13,8 @@ import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Models/State/AppState';
 import { SetFilterTaskActionCreator, SetFilterTaskCreatorActionCreator, SetFilterTaskNameActionCreator, SetFilterTaskPageActionCreator, SetFilterTaskReviewerActionCreator, SetFilterTaskStatusActionCreator } from '../../../../Models/Actions/CodeReviewApp/TaskActions';
 import { CodeReviewLocalStorageHelper } from '../../../../Models/BL/PlaningPokerApp/PlaningPokerHelper';
+import { OneProjectInList } from '../../../../Models/Models/CodeReviewApp/State/OneProjectInList';
+import { ProjectUser } from '../../../../Models/Models/CodeReviewApp/State/ProjectUser';
 
 
 
@@ -24,13 +23,13 @@ require('./ProjectDetail.css');
 
 
 interface IProjectDetailOwnProps {
-    Project: IOneProjectInListDataBack;//todo временно так
+    Project: OneProjectInList;
     Tasks: OneTask[];
 }
 
 
 interface IProjectDetailStateToProps {
-    ProjectUsers: IProjectUserDataBack[];
+    ProjectUsers: ProjectUser[];
     TasksFilters: TasksFilter;
 
     CurrentProjectTasksAllCount: number;
@@ -191,27 +190,34 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         </div>
         <div className='review-project-tasks-filters-block'>
             <div>Фильтры</div>
-            <input className='form-control-b' type='text' value={props.TasksFilters.TaskName}
-                onChange={e => props.SetFilterTaskName(e.target.value)} placeholder='название'></input>
-            <span>Создатель</span>
-            <select className='form-control-b' value={props.TasksFilters.CreatorId} onChange={(e) => props.SetFilterTaskCreator(+e.target.value)}>
-                <option value={-1}>Не выбрано</option>
-                {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-            </select>
-            <span>Ревьювер</span>
-            <select className='form-control-b' value={props.TasksFilters.ReviewerId} onChange={(e) => props.SetFilterTaskReviewer(+e.target.value)}>
-                <option value={-1}>Не выбрано</option>
-                {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-            </select>
-            <span>Статус</span>
-            <select className='form-control-b' onChange={e => props.SetFilterTaskStatus(+e.target.value)} value={props.TasksFilters.Status}>
-                <option value={-1}>Любой</option>
-                <option value={0}>Необходимо код ревью</option>
-                <option value={1}>Необходимы правки</option>
-                <option value={3}>В процессе</option>
-                <option value={2}>Готово</option>
-            </select>
-            <button className='btn-b btn-border' onClick={() => clearFilters()}>Очистить</button>
+            <div className='review-project-tasks-filters-block-flex'>
+                <input className='form-control-b' type='text' value={props.TasksFilters.TaskName}
+                    onChange={e => props.SetFilterTaskName(e.target.value)} placeholder='название'></input>
+                <div>
+                    <span>Создатель</span>
+                    <select className='form-control-b' value={props.TasksFilters.CreatorId} onChange={(e) => props.SetFilterTaskCreator(+e.target.value)}>
+                        <option value={-1}>Не выбрано</option>
+                        {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                    </select>
+                </div>
+                <div>
+                    <span>Ревьювер</span>
+                    <select className='form-control-b' value={props.TasksFilters.ReviewerId} onChange={(e) => props.SetFilterTaskReviewer(+e.target.value)}>
+                        <option value={-1}>Не выбрано</option>
+                        {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                    </select>
+                </div>
+                <div>
+                    <span>Статус</span>
+                    <select className='form-control-b' onChange={e => props.SetFilterTaskStatus(+e.target.value)} value={props.TasksFilters.Status}>
+                        <option value={-1}>Любой</option>
+                        <option value={0}>Необходимо код ревью</option>
+                        <option value={1}>Необходимы правки</option>
+                        <option value={3}>В процессе</option>
+                        <option value={2}>Готово</option>
+                    </select>
+                </div>
+            </div>
             <div>
                 <Paggination
                     ElementsCount={props.CurrentProjectTasksAllCount}
@@ -219,6 +225,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                     ElementsOnPage={tasksOnPageCount}
                     SetPageNumber={props.SetFilterTaskPage}></Paggination>
             </div>
+            <button className='btn-b btn-border' onClick={() => clearFilters()}>Очистить</button>
         </div>
         <div>
             <h2>Задачи</h2>

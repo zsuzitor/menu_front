@@ -14,17 +14,9 @@ export interface IMenuMainProps {
 
 const MenuMain = (props: IMenuMainProps) => {
 
-
-    // return <MainAuth login={true}/>
-    // return <BodyCardsListMain />
-    //TODO попробовать достучаться незалогиненным по ссылкам и поправить то что вылезет
-    // return <BodyCardsListMain/> 
     return <AppList
         Apps={props.Apps} />
-    // <Switch>
-    //     <Route exact path="/menu" component={AppList} />
-
-    // </Switch>
+   
 }
 
 export default MenuMain;

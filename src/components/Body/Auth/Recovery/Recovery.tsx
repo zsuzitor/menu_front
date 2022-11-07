@@ -6,26 +6,16 @@ import { AppState } from '../../../../Models/Models/State/AppState';
 
 
 
-// require('./Recovery.css');
-
-
-
-
-
+require('./Recovery.css');
 
 
 interface IRecoveryOwnProps {
-
-
 }
 
-
 interface IRecoveryStateToProps {
-
 }
 
 interface IRecoveryDispatchToProps {
-
 }
 
 interface IRecoveryProps extends IRecoveryStateToProps, IRecoveryOwnProps, IRecoveryDispatchToProps {
@@ -42,7 +32,7 @@ const RecoveryProps = (props: IRecoveryProps) => {
     useEffect(() => {
         let url = new URL(location.href);
         // let urlParams = new URLSearchParams(location.href);
-        let args =  new URLSearchParams(url.search);
+        let args = new URLSearchParams(url.search);
         let code = args.get('code');
         if (code) {
             setCode(code);

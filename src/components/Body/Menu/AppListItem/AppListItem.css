@@ -25,8 +25,3 @@
     color: black;
     font-weight: bold;
 }
-
-.all-apps-wrapper {
-    background: rgb(2, 0, 39);
-    background: linear-gradient(360deg, rgba(2, 0, 39, 0.7150210425967262) 0%, rgba(255, 255, 255, 1) 100%);
-}

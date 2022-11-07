@@ -28,11 +28,9 @@ import { AppState } from './Models/Models/State/AppState';
 
 
 require('../style/main.css');
-require('../style/auth.css');
 require('../style/body.css');
 require('../style/alerts.css');
 
-require('../style/menu.css');
 
 require('../style/menu_app.css');
 require('../style/menu_app_one_card.css');

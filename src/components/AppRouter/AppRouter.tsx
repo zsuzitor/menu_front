@@ -1,22 +1,21 @@
 import * as React from "react";
-import { BodyCardsListMain } from './Body/MenuApp/CardsList/BodyCardsListMain';
-import { OneCardDetailMain } from './Body/MenuApp/OneCardDetail/OneCardDetailMain';
-import { MainAuth } from './Body/Auth/MainAuth';
+import MainAuth from '../Body/Auth/MainAuth/MainAuth';
 
 
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 // import { BodyMain } from "./Body/BodyMain";
-import MenuMain from "./Body/Menu/MenuMain";
-import { MenuAppMain } from "./Body/MenuApp/MenuAppMain";
-import { WordsCardsAppMain } from "./Body/WordsCardsApp/WordsCardsAppMain";
-import PlaningPokerMain from "./Body/PlaningPoker/PlaningPokerMain";
-import { IAuthState } from "../Models/Models/AuthState";
-import CodeReviewMain from "./Body/CodeReviewApp/CodeReviewMain/CodeReviewMain";
-import Recovery from "./Body/Auth/Recovery/Recovery";
-import { AppItem } from "../Models/Models/Poco/AppItem";
-import PersonSettings from "./Body/Person/PersonSettings/PersonSettings";
+import MenuMain from "../Body/Menu/MenuMain/MenuMain";
+import { MenuAppMain } from "../Body/MenuApp/MenuAppMain";
+import { WordsCardsAppMain } from "../Body/WordsCardsApp/WordsCardsAppMain";
+import PlaningPokerMain from "../Body/PlaningPoker/PlaningPokerMain";
+import { IAuthState } from "../../Models/Models/AuthState";
+import CodeReviewMain from "../Body/CodeReviewApp/CodeReviewMain/CodeReviewMain";
+import Recovery from "../Body/Auth/Recovery/Recovery";
+import { AppItem } from "../../Models/Models/Poco/AppItem";
+import PersonSettings from "../Body/Person/PersonSettings/PersonSettings";
 
-// 
+
+require('./AppRouter.css');
 
 class AppRouterProps {
     AuthInfo: IAuthState;

@@ -12,7 +12,7 @@ import { MainAlertAbsolute } from './Alerts/MainAlertAbsolute';
 
 import { BrowserRouter } from "react-router-dom";
 import { AlertData, AlertDataStored } from "../Models/Models/AlertData";
-import AppRouter from "./AppRouter";
+import AppRouter from "./AppRouter/AppRouter";
 import { MainErrorObjectBack } from "../Models/BackModel/ErrorBack";
 import { UserShortBack } from "../Models/BackModel/UserShort";
 import { AppItem } from "../Models/Models/Poco/AppItem";
@@ -46,7 +46,7 @@ export interface IMainComponentState {
 
 
 
-let MainComponent = (props: MainComponentProps) => {// extends React.Component<MainComponentProps, IMainComponentState> {
+let MainComponent = (props: MainComponentProps) => {
 
     let initState: IMainComponentState = {
         AbsoluteAlerts: [],
@@ -103,17 +103,17 @@ let MainComponent = (props: MainComponentProps) => {// extends React.Component<M
     }, [])
 
 
-    const LogOutHandler = () => {
-        let auth: IAuthState = {
-            AuthSuccess: false,
-            User: null,
-        };
+    // const LogOutHandler = () => {
+    //     let auth: IAuthState = {
+    //         AuthSuccess: false,
+    //         User: null,
+    //     };
 
-        // localStorage.setItem('header_auth', JSON.stringify(auth));
-        localStorage.removeItem("header_auth");
+    //     // localStorage.setItem('header_auth', JSON.stringify(auth));
+    //     localStorage.removeItem("header_auth");
 
-        props.SetAuth(auth);
-    }
+    //     props.SetAuth(auth);
+    // }
 
     const ReloadUserState = () => {
         let success = (error: MainErrorObjectBack, data: UserShortBack) => {

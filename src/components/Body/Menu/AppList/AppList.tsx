@@ -1,6 +1,11 @@
 import * as React from "react";
-import { AppItem } from "../../../Models/Models/Poco/AppItem";
-import { AppListItem } from "./AppListItem";
+import { AppItem } from "../../../../Models/Models/Poco/AppItem";
+import AppListItem from "../AppListItem/AppListItem";
+
+
+
+require('./AppList.css');
+
 
 export interface AppListState {
     Apps: AppItem[];

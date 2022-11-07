@@ -1,12 +1,9 @@
 import * as React from "react";
-import { AppItem } from "../../../Models/Models/Poco/AppItem";
+import { AppItem } from "../../../../Models/Models/Poco/AppItem";
 // import { Switch, Route } from "react-router-dom";
-import AppList from "./AppList";
+import AppList from "../AppList/AppList";
 
-// export interface IHelloProps {
-//     compiler: string;
-//     framework: string;
-// }
+
 
 export interface IMenuMainProps {
     Apps: AppItem[];

@@ -5,7 +5,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import ReactDOMClient from 'react-dom/client';
 import MainComponent from './components/MainComponent';
-import { AjaxHelper } from './Models/AjaxLogic';
+import { AjaxHelper, FetchHelper } from './Models/AjaxLogic';
 import { AuthenticateController } from "./Models/Controllers/AuthenticateController";
 import { CodeReviewCommentController } from "./Models/Controllers/CodeReviewApp/CodeReviewCommentController";
 import { CodeReviewProjectController } from "./Models/Controllers/CodeReviewApp/CodeReviewProjectController";
@@ -50,7 +50,9 @@ window.G_EmptyImagePath = G_PathToBaseImages + "user_empty_image.png";
 window.G_PreloaderPath = G_PathToBaseImages + "loading.gif";
 window.G_PathToServer = "/";//"http://localhost:8000/";
 window.G_PathToServerMenu = G_PathToServer + "menu/";
-window.G_AjaxHelper = new AjaxHelper();
+// window.G_AjaxHelper = new AjaxHelper();
+window.G_AjaxHelper = new FetchHelper();
+
 window.G_ErrorHandleLogic = new MainErrorHandler();
 
 //controllers

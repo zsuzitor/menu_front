@@ -29,8 +29,6 @@ const AppListItem = (props: AppListItemProps) => {
                 <img className="persent-100-width-height" src={imgLogo} />
                 {props.Data.Name}</a>
         </div>
-        AppList
-
     </div>
 }
 

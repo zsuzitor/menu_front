@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import HeaderLogo from '../HeaderLogo/HeaderLogo';
 import HeaderUserMenu from '../HeaderUserMenu/HeaderUserMenu';
-import { IAuthState } from '../../../Models/Models/AuthState';
 import { AppItem } from '../../../Models/Models/Poco/AppItem';
 import { AppState } from '../../../Models/Models/State/AppState';
 

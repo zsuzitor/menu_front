@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Login } from '../Login';
-import { Register } from '../Register';
+import Login from '../Login/Login';
+import Register from '../Register/Register';
 
 
 import {

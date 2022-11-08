@@ -1,6 +1,8 @@
 
 import cloneDeep from 'lodash/cloneDeep';
 import { AppAction } from '../../Actions/Actions';
+import { ClearCodeReviewStateActionName } from '../../Actions/CodeReviewApp/Actions';
+import { CodeReviewAppState } from '../../Models/CodeReviewApp/State/CodeReviewAppState';
 import { AppState } from '../../Models/State/AppState';
 import { CodeReviewCommentReducer } from './CommentReducer';
 import { CodeReviewProjectReducer } from './ProjectReducer';
@@ -17,7 +19,14 @@ export function CodeReviewAppReducer(state: AppState = new AppState(), action: A
     st = CodeReviewCommentReducer(st, action);
     st = CodeReviewTaskReducer(st, action);
 
-
+    switch (action.type) {
+        case ClearCodeReviewStateActionName:
+            {
+                let newState = cloneDeep(st);
+                newState.CodeReviewApp = new CodeReviewAppState();
+                return newState;
+            }
+    }
 
 
     //...

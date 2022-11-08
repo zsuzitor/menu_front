@@ -16,6 +16,7 @@ import { MainErrorObjectBack } from '../../../Models/BackModel/ErrorBack';
 import { connect } from 'react-redux';
 import { AppState } from '../../../Models/Models/State/AppState';
 import { EnteredInRoomActionCreator, SetUserConnectionIdActionCreator, SetUserNameActionCreator } from '../../../Models/Actions/PlaningPokerApp/UserActions';
+import { ClearPokerStateActionCreator } from '../../../Models/Actions/PlaningPokerApp/Actions';
 
 
 interface PlaningPokerMainOwnProps {
@@ -30,7 +31,8 @@ interface PlaningPokerMainDispatchToProps {
     // TryToRemoveUserFromRoom: (userId: string, roomname: string, currentUserIsAdmin: boolean) => void;
     EnteredInRoom: (roomUserId: string, loginnedInMainApp: boolean) => void;
     SetUserConnectionId: (userConnectionId: string) => void;
-    SetUserName: ((newName: string) => void);
+    SetUserName: (newName: string) => void;
+    ClearPokerState: () => void;
 }
 
 interface PlaningPokerMainProps extends PlaningPokerMainStateToProps, PlaningPokerMainOwnProps, PlaningPokerMainDispatchToProps {
@@ -78,7 +80,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
     //componentdidmount, должен вызваться уже когда childs отрендерятся
     useEffect(() => {
 
-        hubConnection.onclose(() => {
+        myHubConnection.onclose(() => {
             //todo тут сообщение об ошибке или что то еще мб перезагрузить страницу\редирект?
         });
 
@@ -90,7 +92,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
         window.addEventListener('beforeunload', (event) => {
             if (__planing_poker_hubConnected_ref__) {
-                hubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.OnWindowClosedAsync, __planing_poker_roomname_ref__);
+                myHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.OnWindowClosedAsync, __planing_poker_roomname_ref__);
             }
 
             // console.log(JSON.stringify(__planing_poker_main_state_ref__));
@@ -106,7 +108,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
 
 
-        hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.PlaningNotifyFromServer, function (data) {
+        myHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.PlaningNotifyFromServer, function (data) {
             let dataT = data as MainErrorObjectBack;
             if (!dataT?.errors) {
                 return;
@@ -122,7 +124,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
         });
 
-        hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.EnteredInRoom, function (roomUserId: string, loginnedInMainApp: boolean) {
+        myHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.EnteredInRoom, function (roomUserId: string, loginnedInMainApp: boolean) {
             props.EnteredInRoom(roomUserId, loginnedInMainApp);
 
             // document.cookie = "planing_poker_roomname=" + __planing_poker_main_state_ref__.RoomInfo.Name + "; path=/;";
@@ -141,7 +143,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
         });
 
 
-        hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.ConnectedToRoomError, function () {
+        myHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.ConnectedToRoomError, function () {
             let alertFactory = new AlertData();
             let alert = alertFactory.GetDefaultError("Подключение не удалось");
             window.G_AddAbsoluteAlertToState(alert);
@@ -153,7 +155,7 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
         });
 
 
-        hubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.NeedRefreshTokens, function () {
+        myHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.NeedRefreshTokens, function () {
             window.G_AuthenticateController.RefreshAccessToken(true, null);
         });
 
@@ -162,9 +164,9 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
         // возможно тут стоит выделить в child components методы которые вызвать до старта
         //Update, не стоит тк они актуальны только в самих компонентах
-        hubConnection.start()
+        myHubConnection.start()
             .then(function () {
-                hubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.GetConnectionId)
+                myHubConnection.invoke(G_PlaningPokerController.EndPoints.EndpointsBack.GetConnectionId)
                     .then(function (connectionId) {
                         // let newState = { ...localState };
                         // newState.User.UserId = connectionId;
@@ -184,16 +186,21 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
             });
 
 
+        myHubConnection.onclose((callback) => {
+            //todo
+            //надо проверить что произошла именно ошибка а не пользак с страницы ушел например
+        });
+
 
 
         return function cleanUp() {
-            hubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.ConnectedToRoomError);
-            hubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.EnteredInRoom);
-            hubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.PlaningNotifyFromServer);
-            hubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NeedRefreshTokens);
-
+            myHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.ConnectedToRoomError);
+            myHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.EnteredInRoom);
+            myHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.PlaningNotifyFromServer);
+            myHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NeedRefreshTokens);
+            myHubConnection.stop();
+            props.ClearPokerState();
         };
-
 
     }, []);
 
@@ -268,6 +275,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: PlaningPokerMainOwnProps) =
     res.SetUserName = (username: string) => {
         dispatch(SetUserNameActionCreator(username));
     };
+
+    res.ClearPokerState = () => {
+        dispatch(ClearPokerStateActionCreator());
+    }
 
 
     return res;

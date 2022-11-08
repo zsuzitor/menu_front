@@ -90,37 +90,6 @@ export class WordsCardsListWork extends React.Component<{}, IWordsCardsListWorkS
 
         G_WordsListController.Update(rec.EditModel, success);
 
-        // let data = new FormData();
-        // data.append('title', rec.EditModel.Title);
-        // data.append('id', rec.Record.Id + '');
-        // let refThis = this;
-
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "PATCH",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             let dataBack = xhr as IWordListBack;
-        //             if (dataBack.id < 1) {
-        //                 return;
-        //             }
-        //             let newState = { ...refThis.state };
-        //             let recActual = this.GetByIdFromState(newState, id);
-        //             recActual.Record.FillByBackModel(dataBack);
-
-        //             recActual.EditModel = null;
-        //             this.setState(newState);
-
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/wordslist/update',
-
-        // }, true);
     }
 
     StartEdit(id: number) {
@@ -159,43 +128,6 @@ export class WordsCardsListWork extends React.Component<{}, IWordsCardsListWorkS
 
         G_WordsListController.Create(this.state.EditModel.Title, success);
 
-
-        // let data = new FormData();
-        // data.append('title', this.state.EditModel.Title);
-        // let refThis = this;
-
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "PUT",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             let dataBack = xhr as IWordListBack;
-        //             if (dataBack.id < 1) {
-        //                 return;
-        //             }
-        //             let newState = { ...refThis.state };
-        //             let nd = new OneWordList();
-        //             nd.FillByBackModel(dataBack);
-        //             newState.WordLists.push(
-        //                 {
-        //                     Record: nd,
-        //                     EditModel: null,
-        //                 }
-        //             );
-
-        //             newState.EditModel = null;
-        //             this.setState(newState);
-
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/wordslist/create',
-
-        // }, true);
     }
 
 
@@ -218,38 +150,6 @@ export class WordsCardsListWork extends React.Component<{}, IWordsCardsListWorkS
 
         G_WordsListController.Delete(id, success);
 
-        // let data = new FormData();
-        // data.append('id', id + '');
-        // let refThis = this;
-
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: data,
-        //     Type: "DELETE",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
-        //         if (resp.errors) {
-        //             //TODO ошибка
-        //         }
-        //         else {
-        //             let dataBack = xhr as IWordListBack;
-        //             if (dataBack.id < 1) {
-        //                 return;
-        //             }
-        //             let newState = { ...refThis.state };
-        //             for (let i = 0; i < newState.WordLists.length; ++i) {
-        //                 if (newState.WordLists[i].Record.Id == id) {
-        //                     newState.WordLists.splice(i, 1);
-        //                     this.setState(newState);
-        //                     return;
-        //                 }
-        //             }
-
-        //         }
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/wordslist/delete',
-
-        // }, true);
     }
 
     CancelChange(id: number) {

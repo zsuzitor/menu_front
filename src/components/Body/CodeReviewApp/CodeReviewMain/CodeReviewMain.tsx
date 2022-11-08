@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import { OneTask } from '../../../../Models/Models/CodeReviewApp/State/OneTask';
 import { OneProjectInList } from '../../../../Models/Models/CodeReviewApp/State/OneProjectInList';
 import { ProjectUser } from '../../../../Models/Models/CodeReviewApp/State/ProjectUser';
+import { ClearCodeReviewStateActionCreator } from '../../../../Models/Actions/CodeReviewApp/Actions';
 
 
 require('./CodeReviewMain.css');
@@ -33,6 +34,7 @@ interface ICodeReviewMainDispatchToProps {
     SetCurrentProjectId: (id: number) => void;
     GetUserProjects: () => void;
     GetProjectInfo: (id: number) => void;
+    ClearCodeReviewState: () => void;
 }
 
 
@@ -45,6 +47,11 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
 
     useEffect(() => {
         props.GetUserProjects();
+
+        return function cleanUp() {
+            props.ClearCodeReviewState();
+        };
+
     }, []);
 
 
@@ -67,7 +74,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         </div>
         <div className='code-review-project-info'>
             <ProjectDetail Project={props.ProjectsList.find(x => x.Id == props.CurrentProjectId)}
-                
+
                 Tasks={props.Tasks}
             // UpdateTask={updateTaskProject}
             ></ProjectDetail>
@@ -101,6 +108,11 @@ const mapDispatchToProps = (dispatch: any, ownProps: ICodeReviewMainOwnProps) =>
     res.GetProjectInfo = (id: number) => {
         dispatch(window.G_CodeReviewProjectController.GetProjectInfoRedux(id));
     }
+
+    res.ClearCodeReviewState = () => {
+        dispatch(ClearCodeReviewStateActionCreator());
+    }
+
     return res;
 };
 

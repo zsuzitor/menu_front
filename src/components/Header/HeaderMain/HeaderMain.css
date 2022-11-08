@@ -40,6 +40,12 @@ div.main-header-row {
     background-color: #c4c1d6;
 }
 
+.main-header-menu-line a{
+    width: 100%;
+    display: block;
+    text-decoration: none;
+}
+
 .main-header-menu-hide {
     left: -210px;
 }
@@ -48,6 +54,5 @@ div.main-header-row {
     left: 5px;
 }
 
-.main-header-menu a {
-    text-decoration: none;
-}
+/* .main-header-menu a {
+} */

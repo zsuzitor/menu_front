@@ -19,6 +19,8 @@
 .stories-data-list {
     max-height: 500px;
     overflow: auto;
+    white-space: pre-wrap;
+    /* white-space: pre; */
 }
 
 .not-completed-story {
@@ -49,20 +51,25 @@
     cursor: pointer;
 }
 
-.stories-but-block{
+.stories-but-block {
     display: flex;
     justify-content: space-between;
     width: 90px;
 }
 
-.planing-current-story{
+.planing-current-story {
     padding-top: 15px;
 }
 
-.stories-current-buttons{
+.stories-current-buttons {
     display: flex;
     padding-bottom: 10px;
     padding-top: 10px;
     justify-content: space-between;
     width: 120px;
+}
+
+.planing-current-story-main {
+    white-space: pre-wrap;
+    /* white-space: pre; */
 }

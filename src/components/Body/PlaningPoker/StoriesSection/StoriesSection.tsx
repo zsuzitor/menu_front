@@ -188,12 +188,15 @@ const StoriesSection = (props: StoriesSectionProps) => {
                     type="text" onChange={(e) => {
                         setCurrentStoryNameChange(e.target.value);
                     }}></input>
-                    <input className="persent-100-width form-control"
+                    <textarea className="persent-100-width form-control"
                         placeholder="Описание"
                         value={currentStoryDescriptionChange}
-                        type="text" onChange={(e) => {
+                        onChange={(e) => {
                             setCurrentStoryDescriptionChange(e.target.value);
-                        }}></input></div>
+                        }}
+                    >
+                    </textarea>
+                </div>
             }
             else {
                 return <div>

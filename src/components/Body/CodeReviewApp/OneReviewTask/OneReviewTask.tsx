@@ -98,7 +98,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
             return;
         }
         setTaskName(props.Task.Name);
-        setTaskLink(props.Task.Link);
+        setTaskLink(props.Task.Link || '');
         setTaskStatus(props.Task.Status);
         setTaskreviewer(props.Task.ReviewerId || -1);
         setTaskCreator(props.Task.CreatorId);

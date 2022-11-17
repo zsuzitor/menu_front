@@ -1,5 +1,5 @@
 import { IStoryMappingReturn } from "../../BackModel/PlaningPoker/RoomWasSavedUpdateReturn";
-import { Story } from "../../Models/PlaningPoker/RoomInfo";
+import { Story } from "../../Models/PlaningPoker/State/Story";
 import { AppAction } from "../Actions";
 
 

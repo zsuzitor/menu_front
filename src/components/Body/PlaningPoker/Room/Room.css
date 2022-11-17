@@ -1,5 +1,9 @@
 .planing-room-header {
     display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    justify-content: space-between;
 
 }
 
@@ -18,6 +22,7 @@
     background: -o-linear-gradient(right, transparent, gray);
     background: linear-gradient(to left, transparent, gray); */
     min-height: 500px;
+    padding-top: 10px;
 }
 
 .planing-poker-left-one-section {
@@ -112,4 +117,15 @@
 
 .planing-name-block-input-block {
     flex-grow: 2;
+}
+
+.room-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.room-top-info {
+    padding-left: 20px;
 }

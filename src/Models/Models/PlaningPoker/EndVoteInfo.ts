@@ -20,7 +20,17 @@ export class EndVoteInfo implements MappedWithBack<IEndVoteInfoReturn>{
     MinVote: number;
     MaxVote: number;
 
+    constructor() {
+        this.UsersInfo = [];
+        this.AverageVote = 0;
+        this.MinVote = 0;
+        this.MaxVote = 0;
+    }
+
     FillByBackModel(newData: IEndVoteInfoReturn): void {
+        if (newData == null) {
+            return;
+        }
         this.AverageVote = newData.average_vote;
         this.MinVote = newData.max_vote;
         this.MaxVote = newData.min_vote;

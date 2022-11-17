@@ -1,4 +1,4 @@
-import { RoomStatus } from "../../Models/PlaningPoker/RoomInfo";
+import { RoomStatus } from "../../Models/PlaningPoker/State/RoomInfo";
 import { IStoryReturn } from "./StoryReturn";
 import { IUserInRoomReturn } from "./UserInRoomReturn";
 
@@ -7,6 +7,7 @@ import { IUserInRoomReturn } from "./UserInRoomReturn";
 
 export interface IOneRoomReturn {
     name: string;
+    image_path: string;
     die_date: string;
     users: IUserInRoomReturn[];
     status: RoomStatus;

@@ -98,7 +98,7 @@ const PersonSettings = (props: PersonSettingsProps) => {
     }
 
     const loadImage = () => {
-        var img = ($('#main_image_input')[0] as HTMLInputElement).files[0];//пример по этому же id есть
+        var img = ($('#main_image_input')[0] as HTMLInputElement).files[0];
         if (!img) {
             alert('Выберите изображение');
             return;

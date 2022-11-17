@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 import Index from "./Index";
 import Room from "./Room/Room";
 import { AlertData } from '../../../Models/Models/AlertData';
-import { RoomInfo } from '../../../Models/Models/PlaningPoker/RoomInfo';
+import { RoomInfo } from '../../../Models/Models/PlaningPoker/State/RoomInfo';
 
 // import { HubConnection } from '@microsoft/signalr';
 // import signalR, { HubConnection } from "@aspnet/signalr";

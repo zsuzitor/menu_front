@@ -1,6 +1,7 @@
 
 import { EndVoteInfo } from "../../Models/PlaningPoker/EndVoteInfo";
-import { RoomStatus } from "../../Models/PlaningPoker/RoomInfo";
+import { RoomStatus } from "../../Models/PlaningPoker/State/RoomInfo";
+import { RoomShortInfo } from "../../Models/PlaningPoker/State/RoomShortInfo";
 import { AppAction } from "../Actions";
 
 
@@ -57,6 +58,16 @@ export function SetEditRoomActionCreator(data: boolean): AppAction<boolean> {
 export const SetRoomCardsActionName: string = 'SetRoomCardsAction';
 export function SetRoomCardsActionCreator(data: string[]): AppAction<string[]> {
     return { type: SetRoomCardsActionName, payload: data };
+};
+
+export const SetRoomsListActionName: string = 'SetRoomsListAction';
+export function SetRoomsListActionCreator(data: RoomShortInfo[]): AppAction<RoomShortInfo[]> {
+    return { type: SetRoomsListActionName, payload: data };
+};
+
+export const SetRoomImageActionName: string = 'SetRoomImageAction';
+export function SetRoomImageActionCreator(data: string): AppAction<string> {
+    return { type: SetRoomImageActionName, payload: data };
 };
 
 

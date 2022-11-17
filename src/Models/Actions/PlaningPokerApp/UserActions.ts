@@ -1,4 +1,4 @@
-import { UserInRoom } from "../../Models/PlaningPoker/RoomInfo";
+import { UserInRoom } from "../../Models/PlaningPoker/State/UserInRoom";
 import { AppAction } from "../Actions";
 
 

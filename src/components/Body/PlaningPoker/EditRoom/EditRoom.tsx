@@ -3,11 +3,15 @@ import { connect } from 'react-redux';
 import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 import { AlertData } from '../../../../Models/Models/AlertData';
-import { PlaningPokerUserInfo, RoomStatus } from '../../../../Models/Models/PlaningPoker/RoomInfo';
+import { PlaningPokerUserInfo } from '../../../../Models/Models/PlaningPoker/State/PlaningPokerUserInfo';
+import { RoomStatus } from '../../../../Models/Models/PlaningPoker/State/RoomInfo';
 import { AppState } from '../../../../Models/Models/State/AppState';
 
 
 require('./EditRoom.css');
+
+export enum SettingsPage { Info = 0, Password, Marks };
+
 
 interface EditRoomOwnProps {
     MyHubConnection: signalR.HubConnection;
@@ -22,6 +26,7 @@ interface EditRoomStateToProps {
 }
 
 interface EditRoomDispatchToProps {
+    UpdateRoomImage: (roomname: string, img: File) => void;
 }
 
 interface EditRoomProps extends EditRoomStateToProps, EditRoomOwnProps, EditRoomDispatchToProps {
@@ -33,7 +38,7 @@ const EditRoom = (props: EditRoomProps) => {
     const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
     const stringCards = props.Cards.join(';');
     const [cards, setCards] = useState(stringCards);
-    const [showSection, setShowSection] = useState(0);
+    const [showSection, setShowSection] = useState(SettingsPage.Info);
 
 
     useEffect(() => {
@@ -110,9 +115,41 @@ const EditRoom = (props: EditRoomProps) => {
     }
 
 
-    let sectionContent = <></>
+    const loadImage = () => {
+        var img = ($('#main_image_input')[0] as HTMLInputElement).files[0];
+        if (!img) {
+            alert('Выберите изображение');
+            return;
+        }
 
-    if (showSection === 1) {
+        updateImage(img);
+    }
+
+    const removeImage = () => {
+        updateImage(null);
+    }
+
+    const updateImage = (img: File) => {
+        props.UpdateRoomImage(props.RoomName, img);
+    }
+
+
+
+
+    let sectionContent = <></>
+    if (showSection === SettingsPage.Info) {
+        sectionContent = <>
+            <label>Изображение группы</label>
+            <input className='form-control'
+                type='file' id='main_image_input'
+            ></input>
+            <button type="button" className='btn btn-b-light'
+                onClick={() => loadImage()}>Загрузить</button>
+            <button type="button" className='btn btn-b-light'
+                onClick={() => removeImage()}>Удалить</button>
+        </>
+    }
+    if (showSection === SettingsPage.Password) {
         sectionContent = <>
             <label>Старый пароль</label>
             <input type='password' className='persent-100-width form-control'
@@ -128,7 +165,7 @@ const EditRoom = (props: EditRoomProps) => {
                 placeholder='Новый пароль' value={newPasswordConfirm}></input>
             <button className='btn btn-b-light' onClick={() => changePassword()}>Изменить пароль</button></>
     }
-    else if (showSection === 2) {
+    else if (showSection === SettingsPage.Marks) {
         sectionContent = <>
             <label>Оценки через ;</label>
             <input type='text' className='persent-100-width form-control'
@@ -141,8 +178,9 @@ const EditRoom = (props: EditRoomProps) => {
 
     return <div>
         <div className='edit-room-sections-block'>
-            <div onClick={() => setShowSection(1)}>Пароль</div>
-            <div onClick={() => setShowSection(2)}>Оценки</div>
+            <div onClick={() => setShowSection(SettingsPage.Info)}>Инфо</div>
+            <div onClick={() => setShowSection(SettingsPage.Password)}>Пароль</div>
+            <div onClick={() => setShowSection(SettingsPage.Marks)}>Оценки</div>
         </div>
         <hr></hr>
         {sectionContent}
@@ -163,7 +201,9 @@ const mapStateToProps = (state: AppState, ownProps: EditRoomOwnProps) => {
 
 const mapDispatchToProps = (dispatch: any, ownProps: EditRoomOwnProps) => {
     let res = {} as EditRoomDispatchToProps;
-
+    res.UpdateRoomImage = (roomname: string, img: File) => {
+        dispatch(window.G_PlaningPokerController.UpdateRoomImageRedux(roomname, img));
+    };
     return res;
 };
 

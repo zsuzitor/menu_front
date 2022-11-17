@@ -1,11 +1,10 @@
-
 .planing-enter-main {
     padding-top: 30px;
     padding-bottom: 30px;
     /* https://cssgradient.io/ */
     /* background: rgb(2, 0, 39);
     background: linear-gradient(360deg, rgba(2, 0, 39, 0.7150210425967262) 0%, rgba(255, 255, 255, 1) 100%); */
-    
+
 }
 
 
@@ -13,4 +12,28 @@
 .planing-enter-inner {
     -webkit-box-shadow: 0 0 10px rgb(0 0 0 / 50%);
     box-shadow: 0 0 10px rgb(0 0 0 / 50%);
+}
+
+.planing-poker-rooms-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-top: 30px;
+}
+
+.planing-poker-rooms-list .one-room {
+    height: 90px;
+    width: 60px;
+    cursor: pointer;
+    overflow: hidden;
+    /* padding-left: 10px; */
+    text-align: center;
+}
+
+.planing-poker-rooms-list .one-room-img {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    /* margin-left: 10px; */
 }

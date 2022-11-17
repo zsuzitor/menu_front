@@ -6,11 +6,12 @@ import React, { useState, useEffect } from 'react';
 
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 import { AlertData } from "../../../../Models/Models/AlertData";
-import { RoomInfo } from "../../../../Models/Models/PlaningPoker/RoomInfo";
+import { RoomInfo } from "../../../../Models/Models/PlaningPoker/State/RoomInfo";
 import { connect } from 'react-redux';
 import { AppState } from "../../../../Models/Models/State/AppState";
 import { SetRoomNameActionCreator, SetRoomPasswordActionCreator } from "../../../../Models/Actions/PlaningPokerApp/RoomAction";
 import { SetUserNameActionCreator } from "../../../../Models/Actions/PlaningPokerApp/UserActions";
+import { RoomShortInfo } from "../../../../Models/Models/PlaningPoker/State/RoomShortInfo";
 
 
 require('./Index.css');
@@ -24,12 +25,16 @@ interface IndexOwnProps {
 interface IndexStateToProps {
     RoomInfo: RoomInfo;
     Username: string;
+    // LogginnedInMainApp: boolean;
+    AuthSuccess: boolean;
+    Rooms: RoomShortInfo[];
 }
 
 interface IndexDispatchToProps {
     SetUserName: ((newName: string) => void);
     SetRoomName: (name: string) => void;
     SetRoomPassword: (name: string) => void;
+    LoadRoomList: () => void;
 }
 
 interface IndexProps extends IndexStateToProps, IndexOwnProps, IndexDispatchToProps {
@@ -44,12 +49,23 @@ let Index = (props: IndexProps) => {
     const [roomPassword, setRoomPassword] = useState(props.RoomInfo.Password || '');
 
 
+    // let roomList: { RoomName: string, RoomImg: string }[] = [];
+    // roomList.push({ RoomName: 'room1', RoomImg: '' });
+    // roomList.push({ RoomName: 'room2', RoomImg: '' });
+    // roomList.push({ RoomName: 'room3', RoomImg: '' });
+    // roomList.push({ RoomName: 'room4', RoomImg: '' });
 
     useEffect(() => {
         let pathNameUrlSplit = document.location.pathname.split('/');
         if (pathNameUrlSplit && pathNameUrlSplit.length > 2) {
             props.SetRoomName(pathNameUrlSplit[2]);
         }
+
+        // if (props.AuthSuccess) {
+        //     //грузим список комнат
+
+        // }
+
 
         // console.log("Index");
         props.MyHubConnection.on(G_PlaningPokerController.EndPoints.EndpointsFront.RoomNotCreated, function () {
@@ -65,6 +81,13 @@ let Index = (props: IndexProps) => {
         };
     }, []);
 
+
+
+    useEffect(() => {
+        if (props.AuthSuccess && !props.RoomInfo.InRoom && !props.Rooms) {
+            props.LoadRoomList();
+        }
+    }, [props.AuthSuccess, props.RoomInfo.InRoom]);
 
     useEffect(() => {
         setRoomName(props.RoomInfo.Name || '');
@@ -144,13 +167,23 @@ let Index = (props: IndexProps) => {
                         onChange={(e) => { setRoomPassword(e.target.value) }}
                         placeholder='Пароль(необязательно)'></input>
                 </div>
-                <p>Если создать комнату без авторизации в основном приложении,
-                    создается одноразовая комната(будет удалена через некоторое время)</p>
+                {props.AuthSuccess ? <></> : <p>Если создать комнату без авторизации в основном приложении,
+                    создается одноразовая комната(будет удалена через некоторое время)</p>}
+
             </div>
             {actionsButton}
             <div className="display_none">
                 <Link id="move_to_room_link_react" to={"/planing-poker/room/" + roomName}>hidden</Link>
             </div>
+            {props.Rooms ? <div className="planing-poker-rooms-list">
+                {props.Rooms.map(x => <div key={x.Name} className='one-room'
+                    onClick={() => setRoomName(x.Name)}>
+                    <div className="one-room-img"><img className='persent-100-width-height'
+                        src={x.ImagePath || G_EmptyImagePath}
+                        alt="Аватар группы" title='Аватар группы' /></div>
+                    <div>{x.Name}</div>
+                </div>)}
+            </div> : <></>}
         </div>
     </div>
 }
@@ -163,7 +196,9 @@ const mapStateToProps = (state: AppState, ownProps: IndexOwnProps) => {
     let res = {} as IndexStateToProps;
     res.RoomInfo = state.PlaningPokerApp.RoomInfo;
     res.Username = state.PlaningPokerApp.User.UserName;
-
+    // res.LogginnedInMainApp = state.PlaningPokerApp.User.LoginnedInMainApp;
+    res.AuthSuccess = state.Auth.AuthSuccess;
+    res.Rooms = state.PlaningPokerApp.RoomsList;
     return res;
 }
 
@@ -180,6 +215,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: IndexOwnProps) => {
     res.SetRoomPassword = (roompass: string) => {
         dispatch(SetRoomPasswordActionCreator(roompass));
     }
+
+    res.LoadRoomList = () => {
+        dispatch(window.G_PlaningPokerController.GetRoomsListRedux());
+    };
 
     return res;
 };

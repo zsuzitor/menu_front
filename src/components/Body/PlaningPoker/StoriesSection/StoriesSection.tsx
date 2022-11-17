@@ -1,11 +1,13 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { PlaningPokerUserInfo, RoomStatus, Story } from '../../../../Models/Models/PlaningPoker/RoomInfo';
+import React, { useState, useEffect } from 'react';
+import { RoomStatus } from '../../../../Models/Models/PlaningPoker/State/RoomInfo';
 import cloneDeep from 'lodash/cloneDeep';
 import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
 import Paggination from '../../Paggination/Paggination';
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Models/State/AppState';
 import { StoriesHelper } from '../../../../Models/BL/PlaningPokerApp/PlaningPokerHelper';
+import { PlaningPokerUserInfo } from '../../../../Models/Models/PlaningPoker/State/PlaningPokerUserInfo';
+import { Story } from '../../../../Models/Models/PlaningPoker/State/Story';
 
 
 require('./StoriesSection.css');

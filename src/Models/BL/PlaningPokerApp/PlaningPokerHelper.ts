@@ -1,6 +1,8 @@
 //TODO временно, хелперы под выпил
 
-import { Story, UserInRoom } from "../../Models/PlaningPoker/RoomInfo";
+import { Story } from "../../Models/PlaningPoker/State/Story";
+import { UserInRoom } from "../../Models/PlaningPoker/State/UserInRoom";
+
 
 
 export class PlaningPokerHelper {

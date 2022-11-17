@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { PlaningPokerUserInfo, RoomStatus, UserInRoom, UserRoles } from '../../../../Models/Models/PlaningPoker/RoomInfo';
+import { RoomStatus, UserRoles } from '../../../../Models/Models/PlaningPoker/State/RoomInfo';
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Models/State/AppState';
 import { IAuthState } from '../../../../Models/Models/AuthState';
+import { UserInRoom } from '../../../../Models/Models/PlaningPoker/State/UserInRoom';
+import { PlaningPokerUserInfo } from '../../../../Models/Models/PlaningPoker/State/PlaningPokerUserInfo';
 
 
 

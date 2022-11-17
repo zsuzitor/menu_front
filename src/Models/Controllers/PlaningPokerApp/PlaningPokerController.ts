@@ -1,14 +1,17 @@
 
 
-import { SetRoomCardsActionCreator, SetInitialRoomDieTimeActionCreator, SetVoteInfoActionCreator, SetRoomStatusActionCreator } from "../../Actions/PlaningPokerApp/RoomAction";
+import { SetRoomCardsActionCreator, SetInitialRoomDieTimeActionCreator, SetVoteInfoActionCreator, SetRoomStatusActionCreator, SetRoomsListActionCreator, SetRoomImageActionCreator } from "../../Actions/PlaningPokerApp/RoomAction";
 import { SetNotActualStoriesActionCreator, SetTotalNotActualStoriesCountActionCreator, SetCurrentStoryIdActionCreator, SetStoriesActionCreator } from "../../Actions/PlaningPokerApp/StoryActions";
 import { SetRoomUsersActionCreator } from "../../Actions/PlaningPokerApp/UserActions";
-import { BoolResultBack } from "../../BackModel/BoolResultBack";
+import { BoolResultBack, StringResultBack } from "../../BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
+import { IRoomShortInfoWrapReturn } from "../../BackModel/PlaningPoker/IRoomShortInfoReturn";
 import { IRoomInfoReturn, INotActualStoriesReturn } from "../../BackModel/PlaningPoker/RoomInfoReturn";
 import { IUserInRoomReturn } from "../../BackModel/PlaningPoker/UserInRoomReturn";
 import { EndVoteInfo } from "../../Models/PlaningPoker/EndVoteInfo";
-import { Story, UserInRoom } from "../../Models/PlaningPoker/RoomInfo";
+import { RoomShortInfo } from "../../Models/PlaningPoker/State/RoomShortInfo";
+import { Story } from "../../Models/PlaningPoker/State/Story";
+import { UserInRoom } from "../../Models/PlaningPoker/State/UserInRoom";
 import { ControllerHelper } from "../ControllerHelper";
 
 
@@ -16,6 +19,10 @@ export type ListUserInRoomReturn = (error: MainErrorObjectBack, data: IUserInRoo
 export type GetRoomInfoReturn = (error: MainErrorObjectBack, data: IRoomInfoReturn) => void;
 export type GetNotActualStoriesReturn = (error: MainErrorObjectBack, data: INotActualStoriesReturn) => void;
 export type ChangeRoomPasswordReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type GetRoomsListReturn = (error: MainErrorObjectBack, data: IRoomShortInfoWrapReturn) => void;
+export type ImageChanged = (error: MainErrorObjectBack, data: StringResultBack) => void;
+
+
 
 
 export class HubEndpointsFront {
@@ -129,10 +136,14 @@ export interface IPlaningPokerController {
     GetUsersIsRoomRedux: (roomname: string, userId: string) => void;
     GetRoomInfoRedux: (roomname: string, userId: string) => void;
     // GetRoomInfoReduxCB: (roomname: string, userId: string, onSuccess: GetRoomInfoReturn) => void;
+    GetRoomsListRedux: () => void;
     GetNotActualStoriesRedux: (roomname: string, userId: string, page: number, countOnPage: number) => void;
     // ChangeRoomPasswordRedux: (roomname: string, userConnectionId: string, oldPassword: string, newPassword: string) => void;
     ChangeRoomPassword: (roomname: string, userConnectionId: string
         , oldPassword: string, newPassword: string, onSuccess: ChangeRoomPasswordReturn) => void;
+
+    UpdateRoomImageRedux: (roomname: string, mainImageSave: File) => void;
+
     EndPoints: HubEndpoints;
 }
 
@@ -144,6 +155,42 @@ export class PlaningPokerController implements IPlaningPokerController {
     constructor() {
         this.EndPoints = new HubEndpoints();
     }
+
+
+    GetRoomsListRedux() {
+        return (dispatch: any, getState: any) => {
+            this.GetRoomsList(
+                (error: MainErrorObjectBack, data: IRoomShortInfoWrapReturn) => {
+                    if (error) {
+                        return;
+                    }
+
+                    if (data) {
+                        var rooms = data.rooms.map(x => {
+                            let st = new RoomShortInfo();
+                            st.FillByBackModel(x);
+                            return st;
+                        });
+                        dispatch(SetRoomsListActionCreator(rooms));
+                    }
+                });
+        };
+
+    }
+
+    GetRoomsList(onSuccess: GetRoomsListReturn) {
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {},
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/PlanitPoker/get-my-rooms',
+
+        });
+    }
+
 
     GetNotActualStoriesRedux(roomname: string, userId: string, page: number, countOnPage: number) {
         return (dispatch: any, getState: any) => {
@@ -181,6 +228,41 @@ export class PlaningPokerController implements IPlaningPokerController {
             Url: G_PathToServer + 'api/PlanitPoker/get-not-actual-stories',
 
         });
+    }
+
+    UpdateRoomImageRedux(roomname: string, mainImageSave: File) {
+        return (dispatch: any, getState: any) => {
+            this.UpdateRoomImage(roomname, mainImageSave,
+                (error: MainErrorObjectBack, data: StringResultBack) => {
+                    if (error) {
+                        return;
+                    }
+
+                    if (data) {
+                        dispatch(SetRoomImageActionCreator(data.result || ''));
+                    }
+                });
+        };
+    }
+
+    UpdateRoomImage(roomname: string, mainImageSave: File, onSuccess: ImageChanged) {
+        let data = new FormData();
+        if (mainImageSave) {
+            data.append('image', mainImageSave);
+        }
+
+        data.append('roomname', roomname);
+
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: "PATCH",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/PlanitPoker/change-room-image',
+
+        }, true);
     }
 
     // ChangeRoomPasswordRedux(roomname: string, userConnectionId: string, oldPassword: string, newPassword: string) {
@@ -282,6 +364,7 @@ export class PlaningPokerController implements IPlaningPokerController {
                     dispatch(SetVoteInfoActionCreator(endVoteInfo));
                     dispatch(SetCurrentStoryIdActionCreator(data.room.current_story_id));
                     dispatch(SetRoomStatusActionCreator(data.room.status));
+                    dispatch(SetRoomImageActionCreator(data.room.image_path));
                     dispatch(SetStoriesActionCreator(data.room.actual_stories.map(x => {
                         let st = new Story();
                         st.FillByBackModel(x);

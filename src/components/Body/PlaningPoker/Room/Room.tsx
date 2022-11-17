@@ -1,6 +1,6 @@
 // import * as React from "react";
 import React, { useState, useEffect } from 'react';
-import { RoomInfo, UserInRoom, RoomStatus, PlaningPokerUserInfo, VoteInfo, Story } from '../../../../Models/Models/PlaningPoker/RoomInfo';
+import { RoomInfo, RoomStatus } from '../../../../Models/Models/PlaningPoker/State/RoomInfo';
 
 
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
@@ -25,6 +25,10 @@ import { SetRoomNameActionCreator, SetVoteInfoActionCreator, SetRoomStatusAction
 import { SetCurrentStoryIdActionCreator, SetStoriesActionCreator, AddNewStoryActionCreator, StoryChangeActionCreator, DeleteStoryActionCreator, MoveStoryToCompleteActionCreator, UpdateStoriesIdActionCreator } from '../../../../Models/Actions/PlaningPokerApp/StoryActions';
 import { SetRoomUserIdActionCreator, SetUserNameActionCreator, SetRoomUsersActionCreator, AddUserToRoomActionCreator, ChangeUserNameInRoomActionCreator, RemoveUserActionCreator, UserRoleChangedActionCreator } from '../../../../Models/Actions/PlaningPokerApp/UserActions';
 import { EndVoteInfo } from '../../../../Models/Models/PlaningPoker/EndVoteInfo';
+import { PlaningPokerUserInfo } from '../../../../Models/Models/PlaningPoker/State/PlaningPokerUserInfo';
+import { Story } from '../../../../Models/Models/PlaningPoker/State/Story';
+import { UserInRoom } from '../../../../Models/Models/PlaningPoker/State/UserInRoom';
+import { VoteInfo } from '../../../../Models/Models/PlaningPoker/State/VoteInfo';
 
 
 
@@ -547,7 +551,7 @@ const Room = (props: RoomProps) => {
 
 
         return <div>
-            <p>Пользователь</p>
+            {/* <p>Пользователь</p> */}
             <div className='planing-name-block'>
                 <div className='planing-name-block-input-block'>
                     <input type="text" className="persent-100-width form-control"
@@ -583,33 +587,41 @@ const Room = (props: RoomProps) => {
         </div>
     }
 
-    return <div className="container">
+    return <div className='container'>
         {/* что бы кратинки прогрузились и не пришлось из грузить при нажатии кнопки */}
-        <img className='visibility-hidden size-0' src="/images/eye5.png" />
-        <img className='visibility-hidden size-0' src="/images/eye1.png" />
+        <img className='visibility-hidden size-0' src='/images/eye5.png' />
+        <img className='visibility-hidden size-0' src='/images/eye1.png' />
         {props.EditRoom ? <AdditionalWindow CloseWindow={() => props.EndEditRoom()}
             IsHeightWindow={true}
             Title='Редактирование комнаты'
             InnerContent={() => <EditRoom
                 MyHubConnection={props.MyHubConnection}></EditRoom>}></AdditionalWindow> : <></>}
 
-        <div className="padding-10-top planing-room-header">
-            <h1>Комната: {props.RoomInfo.Name}</h1>
-            {renderNotAuthMessage()}
+        <div className='planing-room-header planing-poker-left-one-section'>
+
+            <div className='room-top-info'>
+                <h1>{props.RoomInfo.Name}</h1>
+                <RoomTimer
+                    DieDate={dieRoomTime}
+                    AliveRoom={aliveRoom}
+                    ForceLeaveFromRoom={forceLeaveFromRoom} />
+                {roomMainActionButton()}
+                {renderNotAuthMessage()}
+
+            </div>
+            <div className='room-image'>
+                <img className='persent-100-width-height'
+                    src={props.RoomInfo.ImagePath || G_EmptyImagePath}
+                    alt='Аватар группы' title='Аватар группы' />
+            </div>
         </div>
 
-        <div>
-            <RoomTimer
-                DieDate={dieRoomTime}
-                AliveRoom={aliveRoom}
-                ForceLeaveFromRoom={forceLeaveFromRoom} />
-        </div>
+
 
 
         <div className="row">
             <div className="planit-room-left-part col-12 col-md-9">
                 <div>
-                    {roomMainActionButton()}
                     {renderVotePlaceIfNeed()}
                     {renderVoteResultIfNeed()}
                 </div>

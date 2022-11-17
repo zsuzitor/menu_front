@@ -5,9 +5,9 @@ import { IStoryMappingReturn } from "../../BackModel/PlaningPoker/RoomWasSavedUp
 
 
 import cloneDeep from 'lodash/cloneDeep';
-import { Story } from "../../Models/PlaningPoker/RoomInfo";
 import { StoriesHelper } from "../../BL/PlaningPokerApp/PlaningPokerHelper";
 import { SetNotActualStoriesActionName, SetTotalNotActualStoriesCountActionName, SetCurrentStoryIdActionName, SetStoriesActionName, AddNewStoryActionName, StoryChangeActionName, DeleteStoryActionName, MoveStoryToCompleteActionName, MoveStoryToCompletePayload, UpdateStoriesIdActionName } from "../../Actions/PlaningPokerApp/StoryActions";
+import { Story } from "../../Models/PlaningPoker/State/Story";
 
 
 

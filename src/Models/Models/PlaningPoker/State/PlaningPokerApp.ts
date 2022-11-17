@@ -1,9 +1,15 @@
-import { PlaningPokerUserInfo, RoomInfo, RoomStatus, Story, UserInRoom, VoteInfo } from "../RoomInfo";
+import { RoomInfo, RoomStatus} from "./RoomInfo";
+import { PlaningPokerUserInfo } from "./PlaningPokerUserInfo";
+import { UserInRoom } from "./UserInRoom";
+import { Story } from "./Story";
+import { VoteInfo } from "./VoteInfo";
+import { RoomShortInfo } from "./RoomShortInfo";
 
 
 export class PlaningPokerAppState {
     NotActualStories: Story[];
     UsersList: UserInRoom[];
+    RoomsList: RoomShortInfo[];
     VoteInfo: VoteInfo;
     TotalNotActualStoriesCount: number;
     User: PlaningPokerUserInfo;

@@ -4,9 +4,9 @@ import { AppState } from "../../Models/State/AppState";
 
 
 import cloneDeep from 'lodash/cloneDeep';
-import { UserInRoom } from "../../Models/PlaningPoker/RoomInfo";
 import { PlaningPokerHelper } from "../../BL/PlaningPokerApp/PlaningPokerHelper";
 import { AddUserToRoomActionName, ChangeUserNameInRoomActionName, ChangeUserNameInRoomPayload, EnteredInRoomActionName, IEnteredInRoomActionPayload, RemoveUserActionName, SetRoomUserIdActionName, SetRoomUsersActionName, SetUserConnectionIdActionName, SetUserNameActionName, UserRoleChangedActionName, UserRoleChangedPayload } from "../../Actions/PlaningPokerApp/UserActions";
+import { UserInRoom } from "../../Models/PlaningPoker/State/UserInRoom";
 
 
 

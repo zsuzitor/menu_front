@@ -4,11 +4,13 @@ import { AppState } from "../../Models/State/AppState";
 
 
 import cloneDeep from 'lodash/cloneDeep';
-import { RoomStatus, VoteInfo } from "../../Models/PlaningPoker/RoomInfo";
+import { RoomStatus } from "../../Models/PlaningPoker/State/RoomInfo";
 import { PlaningPokerHelper } from "../../BL/PlaningPokerApp/PlaningPokerHelper";
 import { AlertData } from "../../Models/AlertData";
-import { SetRoomNameActionName, SetRoomPasswordActionName, SetVoteInfoActionName, SetRoomStatusActionName, VoteChangedActionName, VoteChangedPayload, SetSelectedCardActionName, ClearVoteActionName, SetInitialRoomDieTimeActionName, SetEditRoomActionName, SetRoomCardsActionName } from "../../Actions/PlaningPokerApp/RoomAction";
+import { SetRoomNameActionName, SetRoomPasswordActionName, SetVoteInfoActionName, SetRoomStatusActionName, VoteChangedActionName, VoteChangedPayload, SetSelectedCardActionName, ClearVoteActionName, SetInitialRoomDieTimeActionName, SetEditRoomActionName, SetRoomCardsActionName, SetRoomsListActionName, SetRoomImageActionName } from "../../Actions/PlaningPokerApp/RoomAction";
 import { EndVoteInfo } from "../../Models/PlaningPoker/EndVoteInfo";
+import { VoteInfo } from "../../Models/PlaningPoker/State/VoteInfo";
+import { RoomShortInfo } from "../../Models/PlaningPoker/State/RoomShortInfo";
 
 
 export function RoomReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
@@ -144,6 +146,24 @@ export function RoomReducer(state: AppState = new AppState(), action: AppAction<
                 newState.PlaningPokerApp.RoomCards = data;
                 return newState;
             }
+
+        case SetRoomsListActionName:
+            {
+                let newState = cloneDeep(state);
+                let data = action.payload as RoomShortInfo[];
+                newState.PlaningPokerApp.RoomsList = data;
+                return newState;
+            }
+
+        case SetRoomImageActionName:
+            {
+                let newState = cloneDeep(state);
+                let data = action.payload as string;
+                newState.PlaningPokerApp.RoomInfo.ImagePath = data;
+                return newState;
+            }
+
+
 
 
 

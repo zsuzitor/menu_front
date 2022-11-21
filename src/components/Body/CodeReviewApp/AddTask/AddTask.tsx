@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { AlertData } from '../../../../Models/Models/AlertData';
+import { IAuthState } from "../../../../Models/Models/AuthState";
 import { OneTask } from '../../../../Models/Models/CodeReviewApp/State/OneTask';
 import { ProjectUser } from '../../../../Models/Models/CodeReviewApp/State/ProjectUser';
 import { AppState } from '../../../../Models/Models/State/AppState';
@@ -22,6 +23,7 @@ interface IAddTaskOwnProps {
 
 
 interface IAddTaskStateToProps {
+    Auth: IAuthState;
 }
 
 interface IAddTaskDispatchToProps {
@@ -36,7 +38,8 @@ const AddTask = (props: IAddTaskProps) => {
 
     const [newTaskName, setNewTaskName] = useState('');
     const [newTaskLink, setNewTaskLink] = useState('');
-    const [newTaskCreator, setNewTaskCreator] = useState(-1);//firstUser?.Id || 
+    let currentUser = props.ProjectUsers.find(x => x.MainAppUserId === props.Auth.User?.Id);
+    const [newTaskCreator, setNewTaskCreator] = useState(currentUser?.Id || -1); 
     const [newTaskReviwer, setNewTaskReviwer] = useState(-1);
 
     useEffect(() => {
@@ -82,12 +85,12 @@ const AddTask = (props: IAddTaskProps) => {
             className='form-control-b persent-100-width'
             onChange={(e) => setNewTaskLink(e.target.value)}
             value={newTaskLink} placeholder='Ссылка'></input>
-        <label>creator:</label>
+        <label>Автор:</label>
         <select className='form-control-b' value={newTaskCreator} onChange={(e) => setNewTaskCreator(+e.target.value)}>
             {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
         </select>
         <br />
-        <label>reviewer:</label>
+        <label>Ревьювер:</label>
         <select className='form-control-b' value={newTaskReviwer} onChange={(e) => setNewTaskReviwer(+e.target.value)}>
             <option value={-1}>Не выбрано</option>
             {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
@@ -99,11 +102,9 @@ const AddTask = (props: IAddTaskProps) => {
 
 
 
-
-
 const mapStateToProps = (state: AppState, ownProps: IAddTaskOwnProps) => {
     let res = {} as IAddTaskStateToProps;
-
+    res.Auth = state.Auth;
     return res;
 }
 

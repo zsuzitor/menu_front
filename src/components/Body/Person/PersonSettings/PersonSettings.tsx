@@ -34,7 +34,7 @@ const PersonSettings = (props: PersonSettingsProps) => {
     const [name, setName] = useState('');
     // const [passwordsBlockShow, setPasswordsBlockShow] = useState(false);
 
-    const [showSection, setShowSection] = useState(0);
+    const [showSection, setShowSection] = useState(1);
 
 
     let alertFactory = new AlertData();

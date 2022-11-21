@@ -78,8 +78,8 @@ const StoriesSection = (props: StoriesSectionProps) => {
         // ResetCurrentStoryById();
         setCurrentStoryNameChange(currentStory?.Name || '');
         setCurrentStoryDescriptionChange(currentStory?.Description || '');
-        if (currentStory) {
-        }
+        // if (currentStory) {
+        // }
 
 
     }, [props.CurrentStoryId]);
@@ -154,30 +154,41 @@ const StoriesSection = (props: StoriesSectionProps) => {
             return <></>
         }
 
-        const story = storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
+        const story = currentStory;
+        //storiesHelper.GetStoryById(props.Stories, props.CurrentStoryId);
 
         if (!story) {
             return <></>
         }
 
         let adminButton = <></>
+
         if (props.IsAdmin) {
+            let adminButtonsWhenHasChange = <></>
+            if (currentStoryNameChange !== story.Name
+                || currentStoryDescriptionChange !== story.Description) {
+                adminButtonsWhenHasChange = <>
+                    <div className='stories-action-btn' onClick={() => changeCurrentStory()}
+                        title='Изменить'>
+                        <img className='persent-100-width-height' src="/images/save-icon.png" />
+                    </div>
+                    <div className='stories-action-btn' onClick={() => cancelChangeCurrentStory()}
+                        title='Отменить изменения'>
+                        <img className='persent-100-width-height' src="/images/cancel.png" />
+                    </div></>
+            }
             adminButton = <div className='stories-current-buttons'>
-                <div className='stories-action-btn' onClick={() => changeCurrentStory()}
-                    title='Изменить'>
-                    <img className='persent-100-width-height' src="/images/save-icon.png" />
-                </div>
-                <div className='stories-action-btn' onClick={() => cancelChangeCurrentStory()}
-                    title='Отменить изменения'>
-                    <img className='persent-100-width-height' src="/images/cancel.png" />
-                </div>
+                {adminButtonsWhenHasChange}
                 <div className='stories-action-btn' onClick={() => tryMakeStoryComplete()}
                     title='Отметить как выполненную'>
                     <img className='persent-100-width-height' src="/images/vote4.png" />
                 </div>
-                {/* <button className="btn btn-success" onClick={() => changeCurrentStory()}>Изменить</button> */}
-                {/* <button className="btn btn-success" onClick={() => cancelChangeCurrentStory()}>Отменить</button> */}
-                {/* <button className="btn btn-success" onClick={() => tryMakeStoryComplete()}>Отметить как выполненную</button> */}
+                <div className='stories-del-but'
+                    title='Удалить'
+                    onClick={() => deleteStory(story.Id)}>
+                    <img className='persent-100-width-height' src="/images/delete-icon.png" />
+
+                </div>
             </div>
         }
 

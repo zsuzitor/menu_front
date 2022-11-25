@@ -8,6 +8,7 @@ import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
 import { IRoomShortInfoWrapReturn } from "../../BackModel/PlaningPoker/IRoomShortInfoReturn";
 import { IRoomInfoReturn, INotActualStoriesReturn } from "../../BackModel/PlaningPoker/RoomInfoReturn";
 import { IUserInRoomReturn } from "../../BackModel/PlaningPoker/UserInRoomReturn";
+import { AlertData } from "../../Models/AlertData";
 import { EndVoteInfo } from "../../Models/PlaningPoker/EndVoteInfo";
 import { RoomShortInfo } from "../../Models/PlaningPoker/State/RoomShortInfo";
 import { Story } from "../../Models/PlaningPoker/State/Story";
@@ -240,6 +241,9 @@ export class PlaningPokerController implements IPlaningPokerController {
 
                     if (data) {
                         dispatch(SetRoomImageActionCreator(data.result || ''));
+                        let alertFactory = new AlertData();
+                        let alert = alertFactory.GetDefaultNotify("Изображение загружено");
+                        window.G_AddAbsoluteAlertToState(alert);
                     }
                 });
         };

@@ -16,9 +16,10 @@
 
 .planing-poker-rooms-list {
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     flex-wrap: wrap;
     padding-top: 30px;
+    column-gap: 15px;
 }
 
 .planing-poker-rooms-list .one-room {

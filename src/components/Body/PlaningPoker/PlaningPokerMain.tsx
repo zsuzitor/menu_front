@@ -194,11 +194,15 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
 
 
         return function cleanUp() {
-            myHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.ConnectedToRoomError);
-            myHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.EnteredInRoom);
-            myHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.PlaningNotifyFromServer);
-            myHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NeedRefreshTokens);
-            myHubConnection.stop();
+            try {
+                myHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.ConnectedToRoomError);
+                myHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.EnteredInRoom);
+                myHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.PlaningNotifyFromServer);
+                myHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NeedRefreshTokens);
+                myHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.OnWindowClosedAsync, __planing_poker_roomname_ref__);
+                myHubConnection.stop();
+            }
+            catch { }
             props.ClearPokerState();
         };
 

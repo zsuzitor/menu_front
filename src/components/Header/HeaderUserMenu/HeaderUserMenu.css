@@ -107,6 +107,12 @@ div.header-user-block-inner:hover {
 
 }
 
+.header-user-menu-line a {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+}
+
 .header-user-menu-line:hover {
     background-color: #c4c1d6;
 }

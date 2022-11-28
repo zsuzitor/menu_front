@@ -11,7 +11,7 @@
 .planing-room-time {
     width: 110px;
     overflow: hidden;
-    white-space: nowrap;
+    white-space: pre;
 }
 
 .planing-room-timer-block-alert {

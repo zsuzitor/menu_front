@@ -7,7 +7,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { RoomReducer } from "./RoomReducer";
 import { StoryReducer } from "./StoryReducer";
 import { UserReducer } from "./UserReducer";
-import { ClearPokerStateActionName } from "../../Actions/PlaningPokerApp/Actions";
+import { ClearPokerStateActionName, ClearRoomPokerStateActionName } from "../../Actions/PlaningPokerApp/Actions";
 import { PlaningPokerAppState } from "../../Models/PlaningPoker/State/PlaningPokerApp";
 
 
@@ -23,6 +23,17 @@ export function PlaningPokerReducer(state: AppState = new AppState(), action: Ap
             {
                 let newState = cloneDeep(st);
                 newState.PlaningPokerApp = new PlaningPokerAppState();
+                return newState;
+            }
+            case ClearRoomPokerStateActionName:
+            {
+                let newState = cloneDeep(st);
+                let tmp = newState.PlaningPokerApp;
+                //RoomsList
+                //User
+                newState.PlaningPokerApp = new PlaningPokerAppState();
+                newState.PlaningPokerApp.RoomsList = tmp.RoomsList;
+                newState.PlaningPokerApp.User = tmp.User;
                 return newState;
             }
     }

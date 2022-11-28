@@ -29,6 +29,7 @@ import { PlaningPokerUserInfo } from '../../../../Models/Models/PlaningPoker/Sta
 import { Story } from '../../../../Models/Models/PlaningPoker/State/Story';
 import { UserInRoom } from '../../../../Models/Models/PlaningPoker/State/UserInRoom';
 import { VoteInfo } from '../../../../Models/Models/PlaningPoker/State/VoteInfo';
+import { ClearRoomPokerStateActionCreator } from '../../../../Models/Actions/PlaningPokerApp/Actions';
 
 
 
@@ -87,6 +88,7 @@ interface RoomDispatchToProps {
     StartEditRoom: () => void;
     EndEditRoom: () => void;
     SetRoomCards: (cards: string[]) => void;
+    ClearPokerRoomState: () => void;
 }
 
 interface RoomProps extends RoomStateToProps, RoomOwnProps, RoomDispatchToProps {
@@ -311,22 +313,30 @@ const Room = (props: RoomProps) => {
         });
 
         return function cleanUp() {
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.MovedStoryToComplete);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.DeletedStory);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.CurrentStoryChanged);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewCurrentStory);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.AddedNewStory);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.VoteEnd);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.VoteStart);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.UserRoleChanged);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.VoteChanged);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.UserLeaved);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.UserNameChanged);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewUserInRoom);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewRoomAlive);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.RoomWasSaved);
-            props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.RoomCardsChanged);
+            try {
+                //try catch нужен на случай если произошло закрытие компонента PlaningPokerMain и подключение вообще закрылось
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.MovedStoryToComplete);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.DeletedStory);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.CurrentStoryChanged);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewCurrentStory);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.AddedNewStory);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.VoteEnd);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.VoteStart);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.UserRoleChanged);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.VoteChanged);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.UserLeaved);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.UserNameChanged);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewUserInRoom);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.NewRoomAlive);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.RoomWasSaved);
+                props.MyHubConnection.off(G_PlaningPokerController.EndPoints.EndpointsFront.RoomCardsChanged);
+                props.MyHubConnection.send(G_PlaningPokerController.EndPoints.EndpointsBack.OnWindowClosedAsync, __planing_room_props_ref__?.RoomInfo?.Name);
 
+            }
+            catch {
+            }
+            
+            props.ClearPokerRoomState();
         };
     }, []);
 
@@ -797,6 +807,11 @@ const mapDispatchToProps = (dispatch: any, ownProps: RoomOwnProps) => {
     res.SetRoomCards = (cards: string[]) => {
         dispatch(SetRoomCardsActionCreator(cards));
     };
+
+    res.ClearPokerRoomState = () => {
+        dispatch(ClearRoomPokerStateActionCreator());
+    }
+
 
     return res;
 };

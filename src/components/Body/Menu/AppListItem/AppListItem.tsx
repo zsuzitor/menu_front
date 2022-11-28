@@ -1,5 +1,10 @@
 import * as React from "react";
 import { AppItem } from "../../../../Models/Models/Poco/AppItem";
+import {
+    Link,
+    BrowserRouter
+} from "react-router-dom";
+
 
 
 require('./AppListItem.css');
@@ -25,9 +30,12 @@ const AppListItem = (props: AppListItemProps) => {
     return <div className="app-one-item col-sm-4 col-md-3 col-lg-2 col-6">
         <div className="app-one-item-inner">
 
-            <a href={props.Data.Path}>
+            <Link
+                to={props.Data.Path}><img className="persent-100-width-height" src={imgLogo} />
+                {props.Data.Name}</Link>
+            {/* <a href={props.Data.Path}>
                 <img className="persent-100-width-height" src={imgLogo} />
-                {props.Data.Name}</a>
+                {props.Data.Name}</a> */}
         </div>
     </div>
 }

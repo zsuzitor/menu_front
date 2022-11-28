@@ -90,12 +90,13 @@ const HeaderUserMenu = (props: HeaderUserMenuProps) => {
                 <div>
                     <a href="/menu/auth/register/">Зарегистрироваться</a>
                 </div> */}
-                <div onClick={() => location.href = '/menu/person-settings/'}
+                <div className='header-user-menu-line'
+                    onClick={() => setShowMenu(false)}>
+                    <Link to='/menu/person-settings/'>Настройки</Link></div>
+                {/* <div onClick={() => location.href = '/menu/person-settings/'}
                     className='header-user-menu-line'>
                     Настройки
-                    {/* <Link className="" to="/menu/person-settings/">Настройки</Link> */}
-                    {/* <a href="/menu/person-settings/">Настройки</a> */}
-                </div>
+                </div> */}
                 <div onClick={() => exitApp()}
                     className='header-user-menu-line'>
                     Выход
@@ -112,20 +113,22 @@ const HeaderUserMenu = (props: HeaderUserMenuProps) => {
                 Авторизация
             </div>
             <div className={menuClass}>
-                <div onClick={() => location.href = '/menu/auth/login/'}
+                <div className='header-user-menu-line'
+                    onClick={() => setShowMenu(false)}>
+                    <Link to='/menu/auth/login/'>Войти</Link></div>
+                {/* <div onClick={() => location.href = '/menu/auth/login/'}
                     className='header-user-menu-line'>
                     Войти
-                    {/* <Link className="" to="/menu/auth/login/">Войти</Link> */}
-                    {/* <a href="/menu/auth/login/">Войти</a> */}
 
-                </div>
-                <div onClick={() => location.href = '/menu/auth/register/'}
+                </div> */}
+                <div className='header-user-menu-line'
+                    onClick={() => setShowMenu(false)}>
+                    <Link to='/menu/auth/register/'>Зарегистрироваться</Link></div>
+                {/* <div onClick={() => location.href = '/menu/auth/register/'}
                     className='header-user-menu-line'>
                     Зарегистрироваться
-                    {/* <Link className="" to="/menu/auth/register/">Зарегистрироваться</Link> */}
-                    {/* <a href="/menu/auth/register/">Зарегистрироваться</a> */}
 
-                </div>
+                </div> */}
             </div>
         </>
     }

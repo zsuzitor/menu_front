@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import {
+    Link,
+    BrowserRouter
+} from "react-router-dom";
+
 
 import HeaderLogo from '../HeaderLogo/HeaderLogo';
 import HeaderUserMenu from '../HeaderUserMenu/HeaderUserMenu';
@@ -39,12 +44,19 @@ const HeaderMain = (props: IHeaderMainProps) => {
 
     return <div className='main-header'>
         <div className={'main-header-menu ' + menuClass}>
-            
-            <div key='menu-home' className='main-header-menu-line'>
-            <a href="/menu">Home</a></div>
+
+            <div key='menu-home' className='main-header-menu-line'
+                onClick={() => setShowMenu(false)}>
+                {/* <a href="/menu">Home</a> */}
+                <Link
+                    to="/menu">Home</Link>
+            </div>
             <hr />
-            {props.Apps.map(x => <div key={x.Name} className='main-header-menu-line'>
-                <a href={x.Path}>{x.Name}</a></div>)}
+            {props.Apps.map(x => <div key={x.Name} className='main-header-menu-line'
+                onClick={() => setShowMenu(false)}>
+                {/* <a href={x.Path}>{x.Name}</a> */}
+                <Link
+                    to={x.Path}>{x.Name}</Link></div>)}
         </div>
         <div className='main-header-inner'>
             <div className='main-header-row'>

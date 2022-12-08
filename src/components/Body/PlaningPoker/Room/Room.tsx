@@ -21,7 +21,7 @@ import _ from 'lodash';
 import { PlaningPokerHelper } from '../../../../Models/BL/PlaningPokerApp/PlaningPokerHelper';
 import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
 import EditRoom from '../EditRoom/EditRoom';
-import { SetRoomNameActionCreator, SetVoteInfoActionCreator, SetRoomStatusActionCreator, VoteChangedActionCreator, SetSelectedCardActionCreator, ClearVoteActionCreator, SetEditRoomActionCreator, SetRoomCardsActionCreator } from '../../../../Models/Actions/PlaningPokerApp/RoomAction';
+import { SetRoomNameActionCreator, SetVoteInfoActionCreator, SetRoomStatusActionCreator, VoteChangedActionCreator, SetSelectedCardActionCreator, ClearVoteActionCreator, SetEditRoomActionCreator, SetRoomCardsActionCreator, SetInitialRoomDieTimeActionCreator } from '../../../../Models/Actions/PlaningPokerApp/RoomAction';
 import { SetCurrentStoryIdActionCreator, SetStoriesActionCreator, AddNewStoryActionCreator, StoryChangeActionCreator, DeleteStoryActionCreator, MoveStoryToCompleteActionCreator, UpdateStoriesIdActionCreator } from '../../../../Models/Actions/PlaningPokerApp/StoryActions';
 import { SetRoomUserIdActionCreator, SetUserNameActionCreator, SetRoomUsersActionCreator, AddUserToRoomActionCreator, ChangeUserNameInRoomActionCreator, RemoveUserActionCreator, UserRoleChangedActionCreator } from '../../../../Models/Actions/PlaningPokerApp/UserActions';
 import { EndVoteInfo } from '../../../../Models/Models/PlaningPoker/EndVoteInfo';
@@ -89,6 +89,7 @@ interface RoomDispatchToProps {
     EndEditRoom: () => void;
     SetRoomCards: (cards: string[]) => void;
     ClearPokerRoomState: () => void;
+    SetInitialRoomDieTime: (date: Date) => void;
 }
 
 interface RoomProps extends RoomStateToProps, RoomOwnProps, RoomDispatchToProps {
@@ -114,7 +115,7 @@ const Room = (props: RoomProps) => {
 
 
     //#state
-    const [dieRoomTime, setDieRoomTime] = useState(null);
+    // const [dieRoomTime, setDieRoomTime] = useState(null);
     const [hideVoteState, setHideVoteState] = useState(false);
     const [userNameLocalState, setUserNameLocalState] = useState(props.UserInfo.UserName);//для редактирования
 
@@ -148,9 +149,9 @@ const Room = (props: RoomProps) => {
 
     }, [props.HubConnected]);
 
-    useEffect(() => {
-        setDieRoomTime(props.DieRoomTimeInitial);
-    }, [props.DieRoomTimeInitial]);
+    // useEffect(() => {
+    //     setDieRoomTime(props.DieRoomTimeInitial);
+    // }, [props.DieRoomTimeInitial]);
 
 
 
@@ -301,7 +302,7 @@ const Room = (props: RoomProps) => {
                 return;
             }
 
-            setDieRoomTime(new Date(newDieTime));
+            props.SetInitialRoomDieTime(new Date(newDieTime));
         });
 
 
@@ -335,7 +336,7 @@ const Room = (props: RoomProps) => {
             }
             catch {
             }
-            
+
             props.ClearPokerRoomState();
         };
     }, []);
@@ -612,7 +613,7 @@ const Room = (props: RoomProps) => {
             <div className='room-top-info'>
                 <h1>{props.RoomInfo.Name}</h1>
                 <RoomTimer
-                    DieDate={dieRoomTime}
+                    DieDate={props.DieRoomTimeInitial}
                     AliveRoom={aliveRoom}
                     ForceLeaveFromRoom={forceLeaveFromRoom} />
                 {roomMainActionButton()}
@@ -812,6 +813,9 @@ const mapDispatchToProps = (dispatch: any, ownProps: RoomOwnProps) => {
         dispatch(ClearRoomPokerStateActionCreator());
     }
 
+    res.SetInitialRoomDieTime = (date: Date) => {
+        dispatch(SetInitialRoomDieTimeActionCreator(date));
+    }
 
     return res;
 };

@@ -32,8 +32,8 @@ export class EndVoteInfo implements MappedWithBack<IEndVoteInfoReturn>{
             return;
         }
         this.AverageVote = newData.average_vote;
-        this.MinVote = newData.max_vote;
-        this.MaxVote = newData.min_vote;
+        this.MinVote = newData.min_vote;
+        this.MaxVote = newData.max_vote;
         this.UsersInfo = newData.users_info.map(x => {
             let y = new EndVoteUserInfo();
             y.FillByBackModel(x);

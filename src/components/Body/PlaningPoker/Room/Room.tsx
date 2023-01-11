@@ -445,13 +445,9 @@ const Room = (props: RoomProps) => {
             .map(x => x.Name).join(', ');
 
         const renderOneNonNumberMark = (vote: string) => {
-            return <>
-                <p key={'vote_res' + vote}>Оценка {vote}: {props.UsersList.filter(x => x.HasVote
-                    && x.Vote === vote)
-                    .map(x => x.Name).join(', ')}</p>
-
-            </>
-
+            return <p key={'vote_res' + vote}>Оценка {vote}: {props.UsersList.filter(x => x.HasVote
+                && x.Vote === vote)
+                .map(x => x.Name).join(', ')}</p>
         }
         return <div>
             <div className="padding-10-top"></div>

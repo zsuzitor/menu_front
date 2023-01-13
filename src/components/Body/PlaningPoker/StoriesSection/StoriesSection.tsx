@@ -12,6 +12,7 @@ import { Story } from '../../../../Models/Models/PlaningPoker/State/Story';
 
 require('./StoriesSection.css');
 
+enum ListStoryType { Actual = 1, ThisSession, Old };
 
 
 interface StoriesSectionOwnProps {
@@ -59,7 +60,7 @@ const StoriesSection = (props: StoriesSectionProps) => {
 
     const initStories = new StoriesSectionState();
     const [storiesState, setStoriesState] = useState(initStories);
-    const [listStoryTypeState, setListStoryTypeState] = useState(1);
+    const [listStoryTypeState, setListStoryTypeState] = useState(ListStoryType.Actual);
     const [showNewStoryForm, setShowNewStoryForm] = useState(false);
     const [storiesPageNumber, setstoriesPageNumber] = useState(1);
     let storyHelper = new StoriesHelper();
@@ -69,7 +70,7 @@ const StoriesSection = (props: StoriesSectionProps) => {
 
 
 
-    const countStoriesOnPage = 3;
+    const countStoriesOnPage = 15;
 
 
     const storiesHelper = new StoriesHelper();
@@ -252,7 +253,7 @@ const StoriesSection = (props: StoriesSectionProps) => {
             return <></>
         };
         let addNewForm = <></>
-        if (props.IsAdmin && listStoryTypeState === 1) {
+        if (props.IsAdmin && listStoryTypeState === ListStoryType.Actual) {
             adminButtonInList = (id: string) => {
                 return <div className='stories-but-block'>
                     <div className='stories-action-btn' onClick={() => makeCurrentStory(id)}
@@ -268,7 +269,7 @@ const StoriesSection = (props: StoriesSectionProps) => {
                 </div>
             };
 
-            addNewForm = listStoryTypeState !== 1 ? <></> : <div>
+            addNewForm = listStoryTypeState !== ListStoryType.Actual ? <></> : <div>
                 <button className='btn btn-b-light'
                     onClick={() => setShowNewStoryForm(!showNewStoryForm)}>Добавить историю</button>
             </div>
@@ -292,7 +293,7 @@ const StoriesSection = (props: StoriesSectionProps) => {
         let storiesForRender: Story[] = [];
 
         let paggination = <></>
-        if (listStoryTypeState === 3) {
+        if (listStoryTypeState === ListStoryType.Old) {
             if (props.TotalNotActualStoriesCount > countStoriesOnPage) {
                 paggination = <Paggination
                     ElementsCount={props.TotalNotActualStoriesCount}
@@ -306,8 +307,8 @@ const StoriesSection = (props: StoriesSectionProps) => {
         }
         else {
             storiesForRender = props.Stories
-                .filter(x => (!x.Completed && listStoryTypeState === 1)
-                    || (x.Completed && listStoryTypeState === 2 && x.ThisSession)
+                .filter(x => (!x.Completed && listStoryTypeState === ListStoryType.Actual)
+                    || (x.Completed && listStoryTypeState === ListStoryType.ThisSession && x.ThisSession)
                 )
                 .sort((x1, x2) => {
                     let x1Date = new Date(x1.Date || 0);
@@ -366,12 +367,12 @@ const StoriesSection = (props: StoriesSectionProps) => {
             }
 
             <div className='room-stories-type-selector'>
-                <div className={'type-section' + (listStoryTypeState === 1 ? ' type-section-select' : '')}
-                    onClick={() => setListStoryTypeState(1)}>Актуальные истории</div>
-                <div className={'type-section' + (listStoryTypeState === 2 ? ' type-section-select' : '')}
-                    onClick={() => setListStoryTypeState(2)}>Оцененные истории</div>
-                <div className={'type-section' + (listStoryTypeState === 3 ? ' type-section-select' : '')}
-                    onClick={() => setListStoryTypeState(3)}>Все истории</div>
+                <div className={'type-section' + (listStoryTypeState === ListStoryType.Actual ? ' type-section-select' : '')}
+                    onClick={() => setListStoryTypeState(ListStoryType.Actual)}>Актуальные истории</div>
+                <div className={'type-section' + (listStoryTypeState === ListStoryType.ThisSession ? ' type-section-select' : '')}
+                    onClick={() => setListStoryTypeState(ListStoryType.ThisSession)}>Оцененные истории</div>
+                <div className={'type-section' + (listStoryTypeState === ListStoryType.Old ? ' type-section-select' : '')}
+                    onClick={() => setListStoryTypeState(ListStoryType.Old)}>Все истории</div>
             </div>
             <div>
                 {addNewForm}

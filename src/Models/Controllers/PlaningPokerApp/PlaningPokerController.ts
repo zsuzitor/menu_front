@@ -1,6 +1,6 @@
 
 
-import { SetRoomCardsActionCreator, SetInitialRoomDieTimeActionCreator, SetVoteInfoActionCreator, SetRoomStatusActionCreator, SetRoomsListActionCreator, SetRoomImageActionCreator } from "../../Actions/PlaningPokerApp/RoomAction";
+import { SetRoomCardsActionCreator, SetInitialRoomDieTimeActionCreator, SetVoteInfoActionCreator, SetRoomStatusActionCreator, SetRoomsListActionCreator, SetRoomImageActionCreator, SetSelectedCardActionCreator } from "../../Actions/PlaningPokerApp/RoomAction";
 import { SetNotActualStoriesActionCreator, SetTotalNotActualStoriesCountActionCreator, SetCurrentStoryIdActionCreator, SetStoriesActionCreator } from "../../Actions/PlaningPokerApp/StoryActions";
 import { SetRoomUsersActionCreator } from "../../Actions/PlaningPokerApp/UserActions";
 import { BoolResultBack, StringResultBack } from "../../BackModel/BoolResultBack";
@@ -13,6 +13,7 @@ import { EndVoteInfo } from "../../Models/PlaningPoker/EndVoteInfo";
 import { RoomShortInfo } from "../../Models/PlaningPoker/State/RoomShortInfo";
 import { Story } from "../../Models/PlaningPoker/State/Story";
 import { UserInRoom } from "../../Models/PlaningPoker/State/UserInRoom";
+import { AppState } from "../../Models/State/AppState";
 import { ControllerHelper } from "../ControllerHelper";
 
 
@@ -374,7 +375,9 @@ export class PlaningPokerController implements IPlaningPokerController {
                         st.FillByBackModel(x);
                         return st;
                     })));
-
+                    let mainAppUserId = (getState() as AppState).PlaningPokerApp.User.UserId;
+                    let currentUser = newUsersData.find(x => x.Id == mainAppUserId);
+                    dispatch(SetSelectedCardActionCreator(currentUser?.Vote || '-1'));
 
                     if (onSuccess) {
                         onSuccess(error, data);

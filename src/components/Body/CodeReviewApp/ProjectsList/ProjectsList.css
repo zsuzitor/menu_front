@@ -1,42 +1,25 @@
 .review-project-new-block {
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
 }
 
 .code-review-projects-menu {
-    /* flex-grow: 1; */
     overflow: hidden;
-    /* border-right: 1px solid black; */
     position: sticky;
     top: 0;
-    row-gap: 5px;
     display: flex;
     flex-direction: column;
+    background-color: #fff;
 }
 
-.code-review-projects-menu-hide {
-    width: 0px;
-    /* min-width: 20px; */
+.code-review-projects-menu hr {
+    width: 100%;
 }
 
-.code-review-projects-menu-visible {
-    width: 215px;
-    min-width: 215px;
-    padding-left: 2px;
-    padding-right: 2px;
+.code-review-projects-menu .form-input {
+    margin-bottom: 1rem;
 }
 
-.hide-review-projects-list-button {
-    width: 20px;
-    height: 20px;
-    border: 1px solid black;
-    cursor: pointer;
-    text-align: center;
-    border-radius: 50%;
-    /* float: right; */
-    position: absolute;
-    background-color: darkkhaki;
-    line-height: 16px;
-    right: -12px;
-    /* margin-right: -14px; */
-    z-index: 2;
+.review-project-new-block .button {
+    margin-top: 0 !important;
+    min-width: max-content;
 }

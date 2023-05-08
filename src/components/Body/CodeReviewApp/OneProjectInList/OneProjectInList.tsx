@@ -32,6 +32,7 @@ interface IOneProjectInListProps extends IOneProjectInListStateToProps, IOneProj
 
 const OneProjectInList = (props: IOneProjectInListProps) => {
     let projectClassName = 'review-project';
+
     if (props.CurrentProject) {
         projectClassName += ' selected-review-project'
     }

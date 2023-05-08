@@ -137,41 +137,41 @@ let Index = (props: IndexProps) => {
     let actionsButton = <div>
 
     </div>
-    if (props.Username && props.HubConnected) {
-        actionsButton = <div>
-            <button className="btn btn-b-light" onClick={createRoom}>Создать</button>
-            <button className="btn btn-b-light" onClick={enterInRoom}>Подключиться</button>
-        </div>
-    }
+    (props.Username && props.HubConnected)
+        ? actionsButton =
+            <div className="actions-button">
+                <button className="button button-grey" onClick={createRoom}>Создать</button>
+                <button className="button button-grey" onClick={enterInRoom}>Подключиться</button>
+            </div>
+        : actionsButton = <></>
 
     return <div className="planing-enter-main">
         {/* <input type="hidden" value={test + ""}></input> */}
         {/* TODO из за того что сделано бутстрапом, сейчас криво, слева может быть отступ меньше чем справа, перписать*/}
-        <div className="planing-enter-inner col-sm-6 col-md-5 col-lg-4 offset-sm-3 offset-lg-4">
-            <div>
+        {/* TODO  посмотреть из-за чего в консоли вылезает ошибка с паролем*/}
+        <div className="planing-enter-inner">
+            <div className="form-input-wrapper">
                 <p>Имя пользователя: {props.Username}</p>
-                <input className="form-control persent-100-width"
+                <input className="form-input persent-100-width"
                     onChange={(e) => props.SetUserName(e.target.value)}
                     type="text" value={props.Username}
                     placeholder='Имя пользователя'></input>
             </div>
-            <div>
+            <div className="form-input-wrapper">
                 <p>Название комнаты</p>
-                <input className="form-control persent-100-width" type="text" value={roomName}
+                <input className="form-input persent-100-width" type="text" value={roomName}
                     onChange={(e) => { setRoomName(e.target.value) }}
                     placeholder='Название комнаты'></input>
-
-                <div>
-                    <p>Пароль(необязательно)</p>
-                    <input className="form-control persent-100-width" type="password" value={roomPassword}
-                        onChange={(e) => { setRoomPassword(e.target.value) }}
-                        placeholder='Пароль(необязательно)'></input>
-                </div>
-                {props.AuthSuccess ? <></> : <p>Если создать комнату без авторизации в основном приложении,
-                    создается одноразовая комната(будет удалена через некоторое время)</p>}
-
             </div>
+            <div className="form-input-wrapper">
+                <p>Пароль (необязательно)</p>
+                <input className="form-input persent-100-width" type="password" value={roomPassword}
+                    onChange={(e) => { setRoomPassword(e.target.value) }}
+                    placeholder='Пароль (необязательно)'></input>
+            </div>
+
             {actionsButton}
+
             <div className="display_none">
                 <Link id="move_to_room_link_react" to={"/planing-poker/room/" + roomName}>hidden</Link>
             </div>
@@ -185,6 +185,13 @@ let Index = (props: IndexProps) => {
                 </div>)}
             </div> : <></>}
         </div>
+        {props.AuthSuccess
+            ? <></>
+            : <div className="planing-enter-reminder">
+                  <img className="persent-100-width-height" src={G_PathToBaseImages + 'exclamation.png'} alt="" />
+                  <p>Если создать комнату без авторизации в основном приложении,
+                  создается одноразовая комната (будет удалена через некоторое время).</p>
+              </div>}
     </div>
 }
 

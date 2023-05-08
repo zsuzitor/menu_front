@@ -133,9 +133,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     }
 
 
-
-
-
     const deleteProject = () => {
         props.DeleteProject(props.Project.Id);
     };
@@ -147,8 +144,9 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
     if (!props.Project) {
-        return <div style={{ paddingTop: '20px' }}>
-            <p>выберите проект</p>
+        return <div className="review-project-no-project">
+            <img src={G_PathToBaseImages + 'exclamation.png'} alt="" />
+            <h2>Выберите проект</h2>
         </div>
     }
 
@@ -156,60 +154,54 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
     return <div className='review-project-detail-main'>
-        <div>
+        <div className='review-project-detail-main-header'>
             <h1>{props.Project.Name}</h1>
             <div className='review-project-delete-button' onClick={() => {
-                if (confirm('удалить проект?')) {
+                if (confirm('Удалить проект?')) {
                     deleteProject();
                 }
             }}>
-                <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='удалить задачу' />
+                <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='Удалить проект' />
             </div>
             <br />
-
-            <button className='btn-b btn-border' onClick={() => setShowUserList(e => true)}>Люди проекта</button>
-            {showUserList ? <AdditionalWindow CloseWindow={() => setShowUserList(false)}
-                IsHeightWindow={true}
-                Title='Люди проекта'
-                InnerContent={() => <ProjectUsers></ProjectUsers>}></AdditionalWindow> : <></>}
-
-
-            <br />
-
-            <div className='review-project-new-task-block'>
-                <button className='btn-b btn-border' onClick={() => setShowAddNewTaskForm(true)}>Добавить задачу</button>
+            <div className="review-project-detail-main-header-buttons">
+                <button className='button button-grey' onClick={() => setShowUserList(e => true)}>Люди проекта</button>
+                {showUserList ? <AdditionalWindow CloseWindow={() => setShowUserList(false)}
+                                                  IsHeightWindow={true}
+                                                  Title='Люди проекта'
+                                                  InnerContent={() => <ProjectUsers></ProjectUsers>}></AdditionalWindow> : <></>}
+                <button className='button button-blue' onClick={() => setShowAddNewTaskForm(true)}>Добавить задачу</button>
                 {showAddNewTaskForm ? <AdditionalWindow CloseWindow={() => setShowAddNewTaskForm(false)}
-                    IsHeightWindow={false}
-                    Title='Добавление задачи'
-                    InnerContent={() => <AddTask
-                        ProjectId={props.Project.Id}
-                        ProjectUsers={props.ProjectUsers.filter(us => !us.Deactivated)}
-                    ></AddTask>}></AdditionalWindow> : <></>}
-
+                                                        IsHeightWindow={false}
+                                                        Title='Добавление задачи'
+                                                        InnerContent={() => <AddTask
+                                                            ProjectId={props.Project.Id}
+                                                            ProjectUsers={props.ProjectUsers.filter(us => !us.Deactivated)}
+                                                        ></AddTask>}></AdditionalWindow> : <></>}
             </div>
         </div>
         <div className='review-project-tasks-filters-block'>
-            <div>Фильтры</div>
+            <h4 className='persent-100-width'>Фильтры</h4>
             <div className='review-project-tasks-filters-block-flex'>
-                <input className='form-control-b' type='text' value={props.TasksFilters.TaskName}
-                    onChange={e => props.SetFilterTaskName(e.target.value)} placeholder='название'></input>
+                <input className='form-input' type='text' value={props.TasksFilters.TaskName}
+                    onChange={e => props.SetFilterTaskName(e.target.value)} placeholder='Название'></input>
                 <div>
                     <span>Создатель</span>
-                    <select className='form-control-b' value={props.TasksFilters.CreatorId} onChange={(e) => props.SetFilterTaskCreator(+e.target.value)}>
+                    <select className='form-select' value={props.TasksFilters.CreatorId} onChange={(e) => props.SetFilterTaskCreator(+e.target.value)}>
                         <option value={-1}>Не выбрано</option>
                         {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                     </select>
                 </div>
                 <div>
                     <span>Ревьювер</span>
-                    <select className='form-control-b' value={props.TasksFilters.ReviewerId} onChange={(e) => props.SetFilterTaskReviewer(+e.target.value)}>
+                    <select className='form-select' value={props.TasksFilters.ReviewerId} onChange={(e) => props.SetFilterTaskReviewer(+e.target.value)}>
                         <option value={-1}>Не выбрано</option>
                         {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                     </select>
                 </div>
                 <div>
                     <span>Статус</span>
-                    <select className='form-control-b' onChange={e => props.SetFilterTaskStatus(+e.target.value)} value={props.TasksFilters.Status}>
+                    <select className='form-select' onChange={e => props.SetFilterTaskStatus(+e.target.value)} value={props.TasksFilters.Status}>
                         <option value={-1}>Любой</option>
                         <option value={0}>Необходимо код ревью</option>
                         <option value={1}>Необходимы правки</option>
@@ -218,22 +210,28 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                     </select>
                 </div>
             </div>
-            <div>
+            <div className="review-project-tasks-filters-buttons">
                 <Paggination
                     ElementsCount={props.CurrentProjectTasksAllCount}
                     PageNumber={props.TasksFilters.Page}
                     ElementsOnPage={tasksOnPageCount}
                     SetPageNumber={props.SetFilterTaskPage}></Paggination>
+                <button className='button button-grey' onClick={() => clearFilters()}>Очистить</button>
             </div>
-            <button className='btn-b btn-border' onClick={() => clearFilters()}>Очистить</button>
         </div>
-        <div>
-            <h2>Задачи</h2>
-            {props.Tasks.map(x => <OneReviewTask key={x.Id}
-                Task={x}
-                Comments={x.Comments}
-            ></OneReviewTask>)}
-
+        <div className="review-project-tasks">
+            <h3>Задачи</h3>
+            {props.Tasks.length
+                ? props.Tasks.map(x =>
+                    <OneReviewTask key={x.Id}
+                        Task={x}
+                        Comments={x.Comments}
+                    ></OneReviewTask>)
+                : <div className="review-project-tasks-no-tasks">
+                    <img src={G_PathToBaseImages + 'exclamation.png'} alt="" />
+                    <h2>Задачи не найдены!</h2>
+                </div>
+            }
         </div>
     </div>
 }

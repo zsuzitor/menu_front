@@ -1,20 +1,60 @@
 .code-review-main-container {
     display: flex;
     flex-wrap: nowrap;
+    width: 100%;
     /* background-color: #666262; */
-}
-
-
-
-.code-review-project-info {
-    flex-grow: 2;
-    padding-left: 15px;
-    padding-right: 15px;
 }
 
 .code-review-projects-menu-main {
     position: relative;
-    border-right: 1px solid black;
+    margin-right: 1rem;
+    padding: 0.75rem;
+    height: calc(100vh - 8.375rem);
+    background-color: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+    transition: 0.5s;
+}
+
+.code-review-projects-menu-main-visible {
+    width: 290px;
+    margin-right: 1rem;
+}
+
+.code-review-projects-menu-main-hide {
+    margin-right: -1.25rem;
+    width: 0;
+    transform: translateX(-250px);
+}
+
+.hide-review-projects-menu-button {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    text-align: center;
+    width: 2rem;
+    height: 2rem;
+    right: -2.5rem;
+    z-index: 2;
+    font-size: 20px;
+    color: #fff;
+    background-color: #99a2ad;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.hide-review-projects-menu-button:hover {
+    background-color: #6c757d;
+}
+
+.code-review-projects-menu-main-hide .hide-review-projects-menu-button {
+    right: -16rem;
+}
+
+.code-review-project-info {
+    width: 100%;
 }
 
 .code-review-main-container .preloader{
@@ -26,5 +66,5 @@
     /* filter: blur(300px); */
     opacity: 0.8;
     /* transition: 1s; */
-    margin-top: -60px;
+    margin: -4.5rem -0.75rem;
 }

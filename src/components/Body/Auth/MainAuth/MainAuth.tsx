@@ -30,22 +30,21 @@ const MainAuth = (props: IMainAuthProps) => {
     }
 
     const switcher = () => {
-
-        return <div className='row auth-switcher'>
-            <div className='col-sm-6'>
-                <Link className={('auth-switcher-link btn' + (props.LoginPage ? ' btn-primary' : ' btn-light'))}
+        return <div className='auth-switcher'>
+            <div>
+                <Link className={('auth-switcher-link' + ' button' + (props.LoginPage ? ' button-blue' : ' button-grey'))}
                     to="/menu/auth/login/">Вход</Link>
             </div>
-            <div className='col-sm-6'>
-                <Link className={('auth-switcher-link btn' + (!props.LoginPage ? ' btn-primary' : ' btn-light'))}
-                    to="/menu/auth/register/">Регистарция</Link>
+            <div>
+                <Link className={('auth-switcher-link' + ' button' + (!props.LoginPage ? ' button-blue' : ' button-grey'))}
+                    to="/menu/auth/register/">Регистрация</Link>
             </div>
         </div>
     }
 
 
     return <div className='main-auth-container'>
-        <div className='auth-container-inner col-sm-6 col-md-5 col-lg-4 offset-sm-3 offset-lg-4'>
+        <div className='auth-container-inner'>
             {switcher()}{swithLogic()}
         </div>
     </div>

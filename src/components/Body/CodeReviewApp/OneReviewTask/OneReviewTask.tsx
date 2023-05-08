@@ -141,13 +141,13 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
 
 
-
     const renderComments = () => {
         if (!showComments) {
             return <></>
         }
 
         return <div className='one-review-task-comments-block'>
+            <hr/>
             <div className='one-review-task-comments-block-inner'>
                 Комментарии:
                 {props.Comments.map(x => {
@@ -160,10 +160,10 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                 })}
 
                 <div>
-                    <textarea className='form-control-b persent-100-width' value={newCommentName}
+                    <textarea className='form-input' value={newCommentName}
                         onChange={e => setNewCommentName(e.target.value)}
                     ></textarea>
-                    <button className='btn-b btn-border' onClick={() => addComment()}>Добавить</button>
+                    <button className='button button-grey' onClick={() => addComment()}>Добавить</button>
                 </div>
             </div>
 
@@ -196,30 +196,30 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         <div className='one-review-task-block-flex'>
             <div className='one-review-task-content'>
                 {/* <p>{props.Task.Id}</p> */}
-                <textarea className='form-control-b review-task-name-input'
+                <textarea className='form-input review-task-name-input'
                     value={taskName} onChange={e => setTaskName(e.target.value)}
                 ></textarea>
                 <input type='text'
-                    className='form-control-b persent-100-width'
+                    className='form-input persent-100-width'
                     onChange={(e) => setTaskLink(e.target.value)}
                     value={taskLink} placeholder='Ссылка'></input>
                 {/* <input type='text' value={taskName} onChange={e => setTaskName(e.target.value)}></input> */}
                 <br />
-                <span>Создатеть</span>
-                <select className='form-control-b' value={taskCreator}
+                <span>Создатель</span>
+                <select className='form-select' value={taskCreator}
                     onChange={(e) => setTaskCreator(+e.target.value)}>
                     {creatorsList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                 </select>
                 <span>Ревьювер</span>
-                <select className='form-control-b' value={taskReviewer}
+                <select className='form-select' value={taskReviewer}
                     onChange={(e) => setTaskreviewer(+e.target.value)}>
                     <option value={-1}>Не выбрано</option>
                     {reviewerList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                 </select>
                 <span>Статус</span>
-                <select className='form-control-b'
+                <select className='form-select'
                     onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
-                    <option value={0}>Необходимо код ревью</option>
+                    <option value={0}>Необходимо код-ревью</option>
                     <option value={1}>Необходимы правки</option>
                     <option value={3}>В процессе</option>
                     <option value={2}>Готово</option>

@@ -44,6 +44,7 @@ interface CodeReviewMainProps extends ICodeReviewMainStateToProps, ICodeReviewMa
 
 
 const CodeReviewMain = (props: CodeReviewMainProps) => {
+    const [visibleList, setVisibleList] = useState(true);
 
     useEffect(() => {
         props.GetUserProjects();
@@ -51,7 +52,6 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         return function cleanUp() {
             props.ClearCodeReviewState();
         };
-
     }, []);
 
 
@@ -62,22 +62,25 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         }
     }, [props.CurrentProjectId]);
 
+    let mainClass = ' code-review-projects-menu-main-hide';
+    if (visibleList) {
+        mainClass = ' code-review-projects-menu-main-visible';
+    }
 
 
     return <div className='code-review-main-container'>
         <div className='preloader' id='code_review_preloader'></div>
-        <div className='code-review-projects-menu-main'>
-
+        <div className={'code-review-projects-menu-main' + mainClass}>
+            <div onClick={() => setVisibleList(v => !v)}
+                 className="hide-review-projects-menu-button">{visibleList ? '<' : '>'}</div>
             <ProjectsList Projects={props.ProjectsList}
-                CurrentProjectId={props.CurrentProjectId}
-            ></ProjectsList>
+                CurrentProjectId={props.CurrentProjectId} />
         </div>
         <div className='code-review-project-info'>
             <ProjectDetail Project={props.ProjectsList.find(x => x.Id == props.CurrentProjectId)}
-
                 Tasks={props.Tasks}
-            // UpdateTask={updateTaskProject}
-            ></ProjectDetail>
+                // UpdateTask={updateTaskProject}
+            />
         </div>
     </div>
 }

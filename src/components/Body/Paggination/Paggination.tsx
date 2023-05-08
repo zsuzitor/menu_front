@@ -55,13 +55,12 @@ const Paggination = (props: IPagginationProps) => {
     //     needLastBut = false;
     // }
 
-    return <div>
-        {needFirstBut ? <button onClick={() => props.SetPageNumber(1)} className='btn-b btn-border'>1</button> : <></>}
-        {needPrevBut ? <button onClick={() => props.SetPageNumber(props.PageNumber - 1)} className='btn-b btn-border'>{'<'}</button> : <></>}
-        <button onClick={() => props.SetPageNumber(props.PageNumber)} className='btn-b btn-border paggination-current'>{props.PageNumber}</button>
-        {needNextBut ? <button onClick={() => props.SetPageNumber(props.PageNumber + 1)} className='btn-b btn-border'>{'>'}</button> : <></>}
-        {needLastBut ? <button onClick={() => props.SetPageNumber(allPageCount)} className='btn-b btn-border'>{allPageCount}</button> : <></>}
-
+    return <div className="pagination-buttons">
+        {needFirstBut ? <button onClick={() => props.SetPageNumber(1)} className='one-pagination-button'>1</button> : <></>}
+        {needPrevBut ? <button onClick={() => props.SetPageNumber(props.PageNumber - 1)} className='one-pagination-button'>{'<'}</button> : <></>}
+        <button onClick={() => props.SetPageNumber(props.PageNumber)} className='one-pagination-button pagination-current'>{props.PageNumber}</button>
+        {needNextBut ? <button onClick={() => props.SetPageNumber(props.PageNumber + 1)} className='one-pagination-button'>{'>'}</button> : <></>}
+        {needLastBut ? <button onClick={() => props.SetPageNumber(allPageCount)} className='one-pagination-button'>{allPageCount}</button> : <></>}
     </div>
 
     // let allBut = [];

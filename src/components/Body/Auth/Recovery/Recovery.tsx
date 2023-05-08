@@ -68,21 +68,21 @@ const RecoveryProps = (props: IRecoveryProps) => {
 
 
     return <div className='main-recovery-container'>
-        <div className='recovery-container-inner col-sm-6 col-md-5 col-lg-4 offset-sm-3 offset-lg-4'>
-            <div className='persent-100-width padding-10-top'>
+        <div className='recovery-container-inner'>
+            <div className='persent-100-width'>
                 {tokenChecked ? <>
-                    <input className='form-control persent-100-width' type='password'
-                        placeholder='new password' onChange={e => setNewPassword(e.target.value)}
+                    <input className='form-input persent-100-width' type='password'
+                        placeholder='Новый пароль' onChange={e => setNewPassword(e.target.value)}
                         value={newPassword}></input>
-                    <input className='form-control persent-100-width' type='password'
-                        placeholder='confirm new password' onChange={e => setNewPasswordConfirm(e.target.value)}
+                    <input className='form-input persent-100-width' type='password'
+                        placeholder='Подтвердите новый пароль' onChange={e => setNewPasswordConfirm(e.target.value)}
                         value={newPasswordConfirm}></input>
-                    <button className='btn persent-100-width' onClick={ChangePassword}>Изменить</button>
+                    <button className='button button-grey persent-100-width' onClick={ChangePassword}>Изменить</button>
                 </> : <>
-                    <input className='form-control persent-100-width' type='text'
-                        placeholder='token' onChange={e => setCode(e.target.value)}
+                    <input className='form-input persent-100-width' type='text'
+                        placeholder='Токен' onChange={e => setCode(e.target.value)}
                         value={code}></input>
-                    <button className='btn persent-100-width' onClick={CheckCode}>Проверить</button>
+                    <button className='button button-grey persent-100-width' onClick={CheckCode}>Проверить</button>
                 </>}
             </div>
 

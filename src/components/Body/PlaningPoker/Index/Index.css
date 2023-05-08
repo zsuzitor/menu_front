@@ -1,18 +1,34 @@
 .planing-enter-main {
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-top: 120px;
     /* https://cssgradient.io/ */
     /* background: rgb(2, 0, 39);
     background: linear-gradient(360deg, rgba(2, 0, 39, 0.7150210425967262) 0%, rgba(255, 255, 255, 1) 100%); */
-
+    height: 100%;
 }
 
 
 
 .planing-enter-inner {
-    -webkit-box-shadow: 0 0 10px rgb(0 0 0 / 50%);
-    box-shadow: 0 0 10px rgb(0 0 0 / 50%);
-    border-radius: 5px;
+    -webkit-box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+    box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    background-color: #fff;
+    width: 450px;
+}
+
+.planing-enter-inner p {
+    margin-bottom: 0.25rem;
+}
+
+.planing-enter-inner .form-control {
+    margin-bottom: 1.5rem;
+    border: 1px solid transparent;
+    background-color: #edeef0;
+}
+
+.planing-enter-inner .form-control:hover {
+
 }
 
 .planing-poker-rooms-list {
@@ -25,11 +41,17 @@
 
 .planing-poker-rooms-list .one-room {
     height: 90px;
-    width: 60px;
+    width: 72px;
     cursor: pointer;
     overflow: hidden;
-    /* padding-left: 10px; */
     text-align: center;
+    padding: 5px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+}
+
+.planing-poker-rooms-list .one-room:hover {
+    border-color: #edeef0;
 }
 
 .planing-poker-rooms-list .one-room-img {
@@ -38,4 +60,38 @@
     border-radius: 50%;
     overflow: hidden;
     /* margin-left: 10px; */
+}
+
+
+.actions-button {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.planing-enter-reminder {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 10px 20px;
+    width: 450px;
+    border-radius: 10px;
+    background-color: #fff;
+    -webkit-box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+    box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+    font-size: 14px;
+}
+
+.planing-enter-reminder img {
+    width: 48px;
+}
+
+.planing-enter-reminder p {
+    margin: 0;
+}
+
+.form-input-wrapper + .form-input-wrapper{
+    margin-top: 1rem;
 }

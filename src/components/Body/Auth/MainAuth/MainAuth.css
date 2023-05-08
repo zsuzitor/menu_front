@@ -2,15 +2,19 @@
 
 
 div.main-auth-container {
-    padding-top: 30px;
+    padding-top: 120px;
     padding-bottom: 30px;
 }
 
 
 div.auth-container-inner {
     /* border:2px solid black; */
-    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    width: 450px;
+    padding: 1.25rem;
+    border-radius: .75rem;
+    background-color: #fff;
 }
 
 a.auth-switcher-link {
@@ -18,5 +22,7 @@ a.auth-switcher-link {
 }
 
 div.auth-switcher {
-    padding-bottom: 20px;
+    display: flex;
+    gap: 20px;
+    margin-bottom: 1.5rem;
 }

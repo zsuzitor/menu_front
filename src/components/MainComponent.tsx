@@ -61,8 +61,8 @@ let MainComponent = (props: MainComponentProps) => {
         // new AppItem({ Logo: G_EmptyImagePath, Name: "MenuApp", Path: "/menu-app" }),
         // new AppItem({ Logo: G_EmptyImagePath, Name: "Dict", Path: "/words-cards-app" }),
         // new AppItem({ Logo: G_EmptyImagePath, Name: "TimeBooking", Path: "/menu-app" }),
-        new AppItem({ Logo: "/images/poker_logo.jpg", Name: "PlaningPoker", Path: "/planing-poker" }),
-        new AppItem({ Logo: "/images/code_review_logo.png", Name: "Code review", Path: "/code-review/" }),
+        new AppItem({ Logo: "/images/poker_logo.jpg", Name: "Planning Poker", Path: "/planing-poker" }),
+        new AppItem({ Logo: "/images/code_review_logo.png", Name: "Code Review", Path: "/code-review/" }),
     ];
 
 
@@ -181,7 +181,7 @@ let MainComponent = (props: MainComponentProps) => {
     }
 
 
-    return <div>
+    return <div style={{display: "flex", minHeight: "100vh", flexDirection: "column", overflow: "hidden"}}>
         {/* <React.StrictMode> */}
         <BrowserRouter>
             <HeaderMain Apps={ApplacationsList} />

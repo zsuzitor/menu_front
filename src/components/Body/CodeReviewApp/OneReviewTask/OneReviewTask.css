@@ -1,31 +1,42 @@
 .one-review-task-block {
     position: relative;
-    padding-bottom: 10px;
-
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+    -webkit-box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+    box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+    overflow: hidden;
 }
 
 .one-review-task-buttons {
-    /* position: absolute; */
-    /* right: 0px; */
+    display: flex;
+    gap: 0.25rem;
     width: 35px;
     padding-left: 5px;
+    flex-direction: column;
 }
 
 .one-review-task-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     flex-grow: 2;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.one-review-task-content > span + .form-select {
+    margin-right: 1rem;
 }
 
 .review-task-name-input {
-    width: 100%;
+    height: 2.125rem;
 }
 
 .one-review-task-block-flex {
     display: flex;
-    padding: 10px;
-    /* border-radius: 10px; */
+    padding: 0.75rem;
+    gap: 0.5rem;
     background-color: white;
-    border-radius: 7px;
-    /* padding-left: 10px; */
     overflow: hidden;
 }
 
@@ -39,7 +50,6 @@
     width: 30px;
     height: 30px;
     cursor: pointer;
-
 }
 
 .review-task-comments-button {
@@ -55,25 +65,30 @@
 }
 
 .review-task-delete-button {
+    margin-bottom: 0.25rem;
     width: 30px;
     height: 30px;
     cursor: pointer;
 }
 
 .one-review-task-comments-block {
-    /* padding-left: 30px;
-    padding-right: 30px;
-     */
-    padding: 15px;
+    background-color: #fff;
+}
+
+.one-review-task-comments-block hr {
+    margin: 0 0.75rem 0.5rem 0.75rem;
 }
 
 .one-review-task-comments-block-inner {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    background-color: white;
-    border-radius: 7px;
-    padding: 10px;
+    gap: 0.5rem;
+    background-color: #fff;
     white-space: pre-wrap;
+    padding: 0 0.75rem 0.75rem 0.75rem;
     /* white-space: pre; */
+}
+
+.one-review-task-comments-block-inner > .form-input + .button {
+    margin-top: 0.5rem;
 }

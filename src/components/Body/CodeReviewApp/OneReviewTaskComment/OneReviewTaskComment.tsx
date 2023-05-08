@@ -107,9 +107,6 @@ const OneReviewTaskComment = (props: IOneReviewTaskCommentProps) => {
                         alt="Edit" title='Редактировать' />
                 </div></> : <></>}
         </div>
-
-
-
     </div>
 
 }

@@ -34,7 +34,6 @@ interface IProjectsListProps extends IProjectsListStateToProps, IProjectsListOwn
 const ProjectsList = (props: IProjectsListProps) => {
     const [newProjectName, setNewProjectName] = useState('');
     const [filterProjectName, setFilterProjectName] = useState('');
-    const [visibleList, setVisibleList] = useState(true);
 
 
     const renderList = () => {
@@ -51,21 +50,16 @@ const ProjectsList = (props: IProjectsListProps) => {
             });
     }
 
-    let mainListClass = ' code-review-projects-menu-hide';
-    if (visibleList) {
-        mainListClass = ' code-review-projects-menu-visible';
-    }
 
+    return <>
 
-    return <><div onClick={() => setVisibleList(v => !v)}
-        className="hide-review-projects-list-button">{visibleList ? '<' : '>'}</div>
-        <div className={'code-review-projects-menu' + mainListClass}>
+        <div className='code-review-projects-menu'>
             <div className='review-project-new-block'>
                 {/* <input type="test" onChange={e => props.ChangeTestString(e.target.value)} value={props.Test}></input>
                 <p>{props.Test}</p> */}
-                <input className='form-control-b' type='text' placeholder='название нового проекта'
+                <input className='form-input' type='text' placeholder='Название нового проекта'
                     onChange={(e => setNewProjectName(e.target.value))} value={newProjectName}></input>
-                <button className='btn-b btn-border' onClick={() => {
+                <button className='button button-grey' onClick={() => {
                     if (!newProjectName) {
                         let alertFactory = new AlertData();
                         let alert = alertFactory.GetDefaultError("Введите название проекта");
@@ -76,10 +70,9 @@ const ProjectsList = (props: IProjectsListProps) => {
                     setNewProjectName('');
                 }}>Создать проект</button>
             </div>
-            <div>
-                <input className='form-control-b' type="text" value={filterProjectName} placeholder='фильтр'
-                    onChange={e => setFilterProjectName(e.target.value)} />
-            </div>
+            <hr />
+            <input className='form-input' type="text" value={filterProjectName} placeholder='Фильтр'
+                onChange={e => setFilterProjectName(e.target.value)} />
             {renderList()}
         </div>
     </>

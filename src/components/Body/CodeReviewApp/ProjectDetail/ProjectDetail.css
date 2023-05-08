@@ -1,29 +1,126 @@
 .review-project-detail-main {
-    padding-top: 20px;
+
 }
 
-.review-project-new-task-block {
-    /* border: 1px solid black; */
-    padding-bottom: 15px;
+.review-project-detail-main-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 0.6875rem;
 }
+
+.review-project-detail-main-header-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-left: auto;
+}
+
+.review-project-detail-main h1 {
+    margin-bottom: 0;
+    margin-left: 2.5rem;
+}
+
+.review-project-detail-main h3 {
+    margin-top: 0.5rem;
+}
+
+/*.review-project-new-task-block {*/
+/*    !* border: 1px solid black; *!*/
+/*    padding-bottom: 15px;*/
+/*}*/
 
 .review-project-tasks-filters-block {
     position: relative;
-    background-color: white;
-    border-radius: 7px;
-    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
     overflow: hidden;
-    padding-bottom: 15px;
+    background-color: white;
+    border-radius: 0.75rem;
+    -webkit-box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+    box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+}
 
+.review-project-tasks-filters-block h4 {
+    margin-top: -0.5rem;
+    margin-bottom: 0;
 }
 
 .review-project-tasks-filters-block-flex {
     display: flex;
     flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+}
+
+.review-project-tasks-filters-block-flex .form-input {
+    width: 15rem;
+}
+
+.review-project-tasks-filters-block-flex span {
+    margin-right: 0.5rem;
+}
+
+.review-project-tasks-filters-buttons {
+    display: flex;
+    justify-content: space-between;
 }
 
 .review-project-delete-button {
     width: 30px;
     height: 30px;
     cursor: pointer;
+}
+
+.review-project-tasks {
+    margin-top: 0.5rem;
+}
+
+.review-project-no-project {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 120px auto 0 auto;
+    background-color: #fff;
+    border-radius: 0.75rem;
+    width: fit-content;
+    padding: 1rem;
+    -webkit-box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+    box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+}
+
+.review-project-no-project img {
+    width: 3rem;
+    height: 3rem;
+}
+
+.review-project-no-project h2 {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+}
+
+.review-project-tasks-no-tasks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 60px auto 0 auto;
+    background-color: #fff;
+    border-radius: 0.75rem;
+    width: fit-content;
+    padding: 1rem;
+    -webkit-box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+    box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+}
+
+.review-project-tasks-no-tasks img {
+    width: 3rem;
+    height: 3rem;
+}
+
+.review-project-tasks-no-tasks h2 {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
 }

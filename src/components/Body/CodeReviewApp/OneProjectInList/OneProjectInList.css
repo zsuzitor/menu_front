@@ -1,11 +1,23 @@
-.selected-review-project {
-    background-color: grey;
-}
-
 .review-project {
-    border-radius: 10px;
-    border: 1px solid black;
-    padding: 3px;
+    border-radius: 0.25rem;
+    padding: 5px 10px;
     cursor: pointer;
     overflow: hidden;
+}
+
+.review-project + .review-project {
+    margin-top: 0.5rem;
+}
+
+.review-project:hover {
+    background-color: #edeef0;
+}
+
+.selected-review-project {
+    color: #fff;
+    background-color: #337cca;
+}
+
+.selected-review-project:hover {
+    background-color: #0561c8;
 }

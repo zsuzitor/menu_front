@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { AlertData } from '../../../../Models/Models/AlertData';
+require('./Register.css');
 
 export interface IRegisterState {
     Login: string;
@@ -77,23 +78,23 @@ const Register = (props: IRegisterProps) => {
     }
 
     return <div className='persent-100-width'>
-        <div className='persent-100-width'>
-            <div className='persent-100-width padding-10-top'>
-                <input className='form-control persent-100-width'
+        <div className='register-form persent-100-width'>
+            <div className='persent-100-width'>
+                <input className='form-input persent-100-width'
                     value={state.Login}
-                    type='text' placeholder='email' onChange={loginOnChange}></input>
+                    type='text' placeholder='Email' onChange={loginOnChange}></input>
             </div>
-            <div className='persent-100-width padding-10-top'>
-                <input className='form-control persent-100-width'
+            <div className='persent-100-width'>
+                <input className='form-input persent-100-width'
                     value={state.Password}
-                    type='password' placeholder='password' onChange={passwordOnChange}></input>
+                    type='password' placeholder='Пароль' onChange={passwordOnChange}></input>
             </div>
-            <div className='persent-100-width padding-10-top'>
-                <input className='form-control persent-100-width'
+            <div className='persent-100-width'>
+                <input className='form-input persent-100-width'
                     value={state.ConfirmPassword}
-                    type='password' placeholder='confirm password' onChange={confirmPasswordOnChange}></input>
+                    type='password' placeholder='Подтвердите пароль' onChange={confirmPasswordOnChange}></input>
             </div>
-            <button className='btn persent-100-width' onClick={tryRegister}>Зарегистрироваться</button>
+            <button className='button button-blue persent-100-width' onClick={tryRegister}>Зарегистрироваться</button>
         </div>
     </div>
 

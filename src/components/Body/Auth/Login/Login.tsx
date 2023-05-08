@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 /// <reference path="../../../typings/globals.d.ts" />
+require('./Login.css');
 
 export interface ILoginState {
     Login: string;
@@ -80,27 +81,29 @@ const Login = (props: ILoginProps) => {
         window.G_AuthenticateController.SendMessageForgotPassword(state.Login, onSuccess);
     }
 
-    return <div className='persent-100-width'>
-        <div className='persent-100-width padding-10-top'>
-            <input className='form-control persent-100-width' type='text'
-                placeholder='email' onChange={loginOnChange}
+    return <div className='login-form persent-100-width'>
+        <div className='persent-100-width'>
+            <input className='form-input persent-100-width' type='text'
+                placeholder='Email' onChange={loginOnChange}
                 value={state.Login}></input>
         </div>
         {state.ShowForgetPassword ? <>
-            <button className='btn persent-100-width' onClick={setForgetPassword}>Войти</button>
-            <button className='btn persent-100-width'
-                onClick={sendMessageForgotPassword}>Отправить письмо на почту</button>
+            <button className='button button-blue persent-100-width'
+                    onClick={setForgetPassword}
+                    style={{marginTop: "0.25rem"}}>Войти</button>
+            <button className='button button-grey persent-100-width'
+                    onClick={sendMessageForgotPassword}>Отправить письмо на почту</button>
         </> : <>
-            <div className='persent-100-width padding-10-top'>
-                <input className='form-control persent-100-width'
-                    type='password' placeholder='password' onChange={passwordOnChange}
-                    value={state.Password}></input>
+            <div className='persent-100-width'>
+                <input className='form-input persent-100-width'
+                       type='password' placeholder='Пароль' onChange={passwordOnChange}
+                       value={state.Password}></input>
             </div>
-            <button className='btn persent-100-width' onClick={tryLogin}>Войти</button>
-            <button className='btn persent-100-width' onClick={setForgetPassword}>Восстановить пароль</button>
+            <button className='button button-blue persent-100-width'
+                    onClick={tryLogin}
+                    style={{marginTop: "0.25rem"}}>Войти</button>
+            <button className='button button-grey persent-100-width' onClick={setForgetPassword}>Восстановить пароль</button>
         </>}
-
-
     </div>
 
 }

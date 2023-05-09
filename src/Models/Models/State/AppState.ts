@@ -1,6 +1,7 @@
 import { IAuthState } from "../AuthState";
 import { CodeReviewAppState } from "../CodeReviewApp/State/CodeReviewAppState";
 import { PlaningPokerAppState } from "../PlaningPoker/State/PlaningPokerApp";
+import { VaultAppState } from "../VaultApp/State/VaultApp";
 
 
 export class AppState {
@@ -8,7 +9,7 @@ export class AppState {
 
     CodeReviewApp: CodeReviewAppState;
     PlaningPokerApp: PlaningPokerAppState;
-
+    VaultApp: VaultAppState;
     constructor() {
         this.Auth = {
             AuthSuccess: false,
@@ -17,5 +18,6 @@ export class AppState {
 
         this.CodeReviewApp = new CodeReviewAppState();
         this.PlaningPokerApp = new PlaningPokerAppState();
+        this.VaultApp = new VaultAppState();
     }
 }

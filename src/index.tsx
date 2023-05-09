@@ -25,6 +25,7 @@ import thunk from 'redux-thunk';
 // import { AppAction } from './Models/Actions/Actions';
 import { ReducerCombiner } from "./Models/Reducers/ReducerCombiner";
 import { AppState } from './Models/Models/State/AppState';
+import { VaultController } from "./Models/Controllers/VaultApp/VaultController";
 
 
 require('../style/main.css');
@@ -66,6 +67,8 @@ window.G_CodeReviewProjectController = new CodeReviewProjectController();
 window.G_CodeReviewTaskController = new CodeReviewTaskController();
 window.G_CodeReviewUserController = new CodeReviewUserController();
 window.G_CodeReviewCommentController = new CodeReviewCommentController();
+window.G_VaultController = new VaultController();
+
 
 
 

@@ -7,15 +7,15 @@ import cloneDeep from 'lodash/cloneDeep';
 import { PlaningPokerReducer } from "./PlaningPokerApp/Reducer";
 import { AppReducer } from "./Reducer";
 import { CodeReviewAppReducer } from "./CodeReviewApp/Reducer";
+import { VaultAppReducer } from "./VaultApp/Reducer";
 
 export function ReducerCombiner(state: AppState = new AppState(), action: AppAction<any>): AppState {
 
     let st = AppReducer(state, action);
 
     st = CodeReviewAppReducer(st, action);
-
     st = PlaningPokerReducer(st, action);
-
+    st = VaultAppReducer(st, action);
 
 
     //...

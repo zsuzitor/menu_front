@@ -25,6 +25,7 @@ declare var G_CodeReviewProjectController: import("../src/Models/Controllers/Cod
 declare var G_CodeReviewTaskController: import("../src/Models/Controllers/CodeReviewApp/CodeReviewTaskController").ICodeReviewTaskController;
 declare var G_CodeReviewUserController: import("../src/Models/Controllers/CodeReviewApp/CodeReviewUserController").ICodeReviewUserController;
 declare var G_CodeReviewCommentController: import("../src/Models/Controllers/CodeReviewApp/CodeReviewCommentController").ICodeReviewCommentController;
+declare var G_VaultController: import("../src/Models/Controllers/VaultApp/VaultController").IVaultController;
 
 declare var CodeReviewCounter: number;
 

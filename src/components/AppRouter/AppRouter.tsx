@@ -13,6 +13,7 @@ import CodeReviewMain from "../Body/CodeReviewApp/CodeReviewMain/CodeReviewMain"
 import Recovery from "../Body/Auth/Recovery/Recovery";
 import { AppItem } from "../../Models/Models/Poco/AppItem";
 import PersonSettings from "../Body/Person/PersonSettings/PersonSettings";
+import VaultMain from "../Body/Vault/VaultMain/VaultMain";
 
 
 require('./AppRouter.css');
@@ -36,6 +37,7 @@ const AppRouter = (props: AppRouterProps) => {
             <Route path="/menu/auth/register/*" element={<MainAuth LoginPage={false} />} />
             <Route path="/menu/auth/password-recovery/*" element={<Recovery />} />
             <Route path="/menu/person-settings/*" element={<PersonSettings />} />
+            <Route path="/vault-app/*" element={<VaultMain />} />
 
 
 

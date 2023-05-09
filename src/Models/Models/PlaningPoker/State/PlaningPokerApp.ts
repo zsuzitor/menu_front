@@ -4,6 +4,7 @@ import { UserInRoom } from "./UserInRoom";
 import { Story } from "./Story";
 import { VoteInfo } from "./VoteInfo";
 import { RoomShortInfo } from "./RoomShortInfo";
+import { StoriesInfo } from "./StoriesInfo";
 
 
 export class PlaningPokerAppState {
@@ -39,18 +40,3 @@ export class PlaningPokerAppState {
 }
 
 
-export class StoriesInfo {
-    Stories: Story[];
-
-    CurrentStoryId: string;
-    // CurrentStoryNameChange: string;
-    // CurrentStoryDescriptionChange: string;
-
-
-    constructor() {
-        this.Stories = [];
-        this.CurrentStoryId = "";
-        // this.CurrentStoryNameChange = "";
-        // this.CurrentStoryDescriptionChange = "";
-    }
-}

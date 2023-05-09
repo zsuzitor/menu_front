@@ -22,7 +22,7 @@ interface IRecoveryProps extends IRecoveryStateToProps, IRecoveryOwnProps, IReco
 }
 
 
-const RecoveryProps = (props: IRecoveryProps) => {
+const Recovery = (props: IRecoveryProps) => {
 
     const [code, setCode] = useState('');
     const [tokenChecked, setTokenChecked] = useState(false);
@@ -114,4 +114,4 @@ const mapDispatchToProps = (dispatch: any, ownProps: IRecoveryOwnProps) => {
 
 const connectToStore = connect(mapStateToProps, mapDispatchToProps);
 // and that function returns the connected, wrapper component:
-export default connectToStore(RecoveryProps);
+export default connectToStore(Recovery);

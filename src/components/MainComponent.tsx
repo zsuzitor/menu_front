@@ -63,6 +63,7 @@ let MainComponent = (props: MainComponentProps) => {
         // new AppItem({ Logo: G_EmptyImagePath, Name: "TimeBooking", Path: "/menu-app" }),
         new AppItem({ Logo: "/images/poker_logo.jpg", Name: "Planning Poker", Path: "/planing-poker" }),
         new AppItem({ Logo: "/images/code_review_logo.png", Name: "Code Review", Path: "/code-review/" }),
+        new AppItem({ Logo: G_EmptyImagePath, Name: "Vault", Path: "/vault-app/" }),
     ];
 
 

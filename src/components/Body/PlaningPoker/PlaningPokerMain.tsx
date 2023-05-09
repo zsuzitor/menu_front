@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 // import * as signalR from "@microsoft/signalr";
-import Index from "./Index";
 import Room from "./Room/Room";
 import { AlertData } from '../../../Models/Models/AlertData';
 import { RoomInfo } from '../../../Models/Models/PlaningPoker/State/RoomInfo';
@@ -17,6 +16,7 @@ import { connect } from 'react-redux';
 import { AppState } from '../../../Models/Models/State/AppState';
 import { EnteredInRoomActionCreator, SetUserConnectionIdActionCreator, SetUserNameActionCreator } from '../../../Models/Actions/PlaningPokerApp/UserActions';
 import { ClearPokerStateActionCreator } from '../../../Models/Actions/PlaningPokerApp/Actions';
+import Index from './Index/Index';
 
 
 interface PlaningPokerMainOwnProps {

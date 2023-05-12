@@ -30,6 +30,7 @@ const OneVaultInList = (props: IOneVaultInListProps) => {
                 to={'/vault-app/vault/' + props.Vault.Id}>
                 {/* <img className="persent-100-width-height" src={imgLogo} /> */}
                 Открыть</Link>
+
         </div>
         {/* <button>Список Vaults</button>
         <div>Список Vaults</div> */}

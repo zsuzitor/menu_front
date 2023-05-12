@@ -14,7 +14,7 @@ require('./VaultMain.css');
 
 const VaultMain = (props: IVaultMainProps) => {
 
-    const [code, setCode] = useState('');
+    // const [code, setCode] = useState('');
 
     useEffect(() => {
         props.LoadMyVaults();

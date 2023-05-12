@@ -13,7 +13,8 @@ require('./OneVault.css');
 
 const OneVault = (props: IOneVaultProps) => {
 
-    const [code, setCode] = useState('');
+    // const [code, setCode] = useState('');
+    const [filterSecretKey, setFilterSecretKey] = useState('');
 
     if (!props.VaultId) {
         //todo это полная копия из vaultMain, вынести в 1 место
@@ -28,7 +29,7 @@ const OneVault = (props: IOneVaultProps) => {
     let vault = props.Vaults.find(x => x.Id === props.VaultId);
 
     useEffect(() => {
-        
+
     }, []);
 
     useEffect(() => {
@@ -55,8 +56,18 @@ const OneVault = (props: IOneVaultProps) => {
         <div>
             <p>{vault.Id}</p>
             <p>{vault.Name}</p>
+            <button>Редактировать</button>
+            <button>Удалить</button>
         </div>
-        {vault.Secrets.map(s => <VaultSecret Secret={s}></VaultSecret>)}
+        <input type='text'
+            placeholder='поиск'
+            onChange={(e => setFilterSecretKey(e.target.value))}
+            value={filterSecretKey}></input>
+        <div className='vault-secrets-list'>
+            {vault.Secrets.filter(x => !filterSecretKey || (x.Key.indexOf(filterSecretKey) != -1))
+                .map(s => <VaultSecret key={s.Id} Secret={s}></VaultSecret>)}
+        </div>
+        <button>добавить</button>
     </div>
 }
 

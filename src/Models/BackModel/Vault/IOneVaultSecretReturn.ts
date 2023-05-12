@@ -4,4 +4,6 @@ export interface IOneVaultSecretReturn {
     key: string;
     value: string;
     isCoded: boolean;
+    isPublic: boolean;
+    dieDate: Date;
 }

@@ -92,11 +92,15 @@ export class VaultController implements IVaultController {
 
     GetVaultSecrets(vaultId: number, onSuccess: SetVaultSecretsReturn) {
         let resMoq = [];
-        resMoq.push({ id: 1, key: "11111", value: "val1", isCoded: false });
-        resMoq.push({ id: 2, key: "111112", value: "val12", isCoded: false });
-        resMoq.push({ id: 3, key: "111113", value: "val13", isCoded: false });
-        resMoq.push({ id: 4, key: "111114", value: "val14", isCoded: false });
-        resMoq.push({ id: 5, key: "111115", value: "val15", isCoded: true });
+
+        // isCoded: boolean;
+        // isPublic: boolean;
+        // dieDate: Date;
+        resMoq.push({ id: 1, key: "11111", value: "val1", isCoded: false, isPublic: true, dieDate: null });
+        resMoq.push({ id: 2, key: "111112", value: "val12", isCoded: false, isPublic: true, dieDate: null });
+        resMoq.push({ id: 3, key: "111113", value: "val13", isCoded: false, isPublic: false, dieDate: null });
+        resMoq.push({ id: 4, key: "111114", value: "val14", isCoded: false, isPublic: false, dieDate: null });
+        resMoq.push({ id: 5, key: "111115", value: "val15", isCoded: true, isPublic: true, dieDate: null });
         onSuccess(null, resMoq);
         // G_AjaxHelper.GoAjaxRequest({
         //     Data: {

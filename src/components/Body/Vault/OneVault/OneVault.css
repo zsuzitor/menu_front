@@ -1,0 +1,5 @@
+.vault-secrets-list {
+    display: flex;
+    row-gap: 10px;
+    flex-wrap: wrap;
+}

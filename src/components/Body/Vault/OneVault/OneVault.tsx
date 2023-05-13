@@ -3,6 +3,8 @@ import { AppState } from '../../../../Models/Models/State/AppState';
 import ConnectToStore, { IOneVaultProps } from './OneVaultSetup'
 import { Link } from 'react-router-dom';
 import VaultSecret from '../VaultSecret/VaultSecret';
+import AdditionalWindow from '../../AdditionalWindow/AdditionalWindow';
+import CreateVault from '../CreateVault/CreateVault';
 
 
 
@@ -15,6 +17,8 @@ const OneVault = (props: IOneVaultProps) => {
 
     // const [code, setCode] = useState('');
     const [filterSecretKey, setFilterSecretKey] = useState('');
+    const [showEditForm, setShowEditForm] = useState(false);
+
 
     if (!props.VaultId) {
         //todo это полная копия из vaultMain, вынести в 1 место
@@ -52,12 +56,19 @@ const OneVault = (props: IOneVaultProps) => {
 
 
     return <div className='one-vault-list'>
+        {showEditForm ? <AdditionalWindow CloseWindow={() => setShowEditForm(false)}
+            IsHeightWindow={false}
+            Title='Редактирование хранилища'
+            InnerContent={() => <CreateVault Vault={vault}
+            ></CreateVault>}></AdditionalWindow> : <></>}
         {backLink}
         <div>
             <p>{vault.Id}</p>
             <p>{vault.Name}</p>
-            <button>Редактировать</button>
-            <button>Удалить</button>
+            <button className='btn btn-primary'
+                onClick={() => setShowEditForm(true)}>Редактировать</button>
+            <button className='btn btn-primary'
+                onClick={() => alert('todo props.delete; linkredirect.click?')}>Удалить</button>
         </div>
         <input type='text'
             placeholder='поиск'
@@ -67,7 +78,7 @@ const OneVault = (props: IOneVaultProps) => {
             {vault.Secrets.filter(x => !filterSecretKey || (x.Key.indexOf(filterSecretKey) != -1))
                 .map(s => <VaultSecret key={s.Id} Secret={s}></VaultSecret>)}
         </div>
-        <button>добавить</button>
+        <button className='btn btn-primary'>добавить</button>
     </div>
 }
 

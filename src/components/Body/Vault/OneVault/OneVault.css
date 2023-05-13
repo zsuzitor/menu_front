@@ -2,4 +2,5 @@
     display: flex;
     row-gap: 10px;
     flex-wrap: wrap;
+    padding-top: 10px;
 }

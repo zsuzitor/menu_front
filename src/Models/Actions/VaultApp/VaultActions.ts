@@ -1,5 +1,6 @@
 import { OneVault } from "../../Models/VaultApp/State/OneVault";
 import { OneVaultSecret } from "../../Models/VaultApp/State/OneVaultSecret";
+import { VaultUser } from "../../Models/VaultApp/State/VaultUser";
 import { AppAction } from "../Actions";
 
 
@@ -24,4 +25,13 @@ export interface ISetVaultsSecretsActionPayload {
 export const SetVaultsSecretsActionName: string = 'SetVaultsSecretsAction';
 export function SetVaultsSecretsActionCreator(data: ISetVaultsSecretsActionPayload): AppAction<ISetVaultsSecretsActionPayload> {
     return { type: SetVaultsSecretsActionName, payload: data };
+};
+
+export interface ISetVaultsPeopleActionPayload {
+    VaultId: number;
+    People: VaultUser[];
+}
+export const SetVaultsPeopleActionName: string = 'SetVaultsPeopleAction';
+export function SetVaultsPeopleActionCreator(data: ISetVaultsPeopleActionPayload): AppAction<ISetVaultsPeopleActionPayload> {
+    return { type: SetVaultsPeopleActionName, payload: data };
 };

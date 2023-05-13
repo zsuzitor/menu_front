@@ -26,7 +26,8 @@ div.main-header-row {
     font-size: 18px;
     background-color: white;
     border-radius: 3px;
-    transition: 0.5s ease-in-out;
+    /* transition: 0.5s ease-in-out; */
+    transition: 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
 .main-header-menu-line {

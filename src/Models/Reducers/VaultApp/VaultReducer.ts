@@ -4,7 +4,7 @@ import { AppState } from "../../Models/State/AppState";
 
 
 import cloneDeep from 'lodash/cloneDeep';
-import { ChangeCurrentVaultIdActionName, ISetVaultsSecretsActionPayload, SetVaultsListActionName, SetVaultsSecretsActionName } from "../../Actions/VaultApp/VaultActions";
+import { ChangeCurrentVaultIdActionName, ISetVaultsPeopleActionPayload, ISetVaultsSecretsActionPayload, SetVaultsListActionName, SetVaultsPeopleActionName, SetVaultsSecretsActionName } from "../../Actions/VaultApp/VaultActions";
 import { OneVault } from "../../Models/VaultApp/State/OneVault";
 
 
@@ -31,6 +31,15 @@ export function VaultReducer(state: AppState = new AppState(), action: AppAction
                 vault.Secrets = typedAction.Secrets;
                 return newState;
             }
+            case SetVaultsPeopleActionName:
+                {
+                    let newState = cloneDeep(state);
+                    let typedAction = action.payload as ISetVaultsPeopleActionPayload;
+                    let vault = newState.VaultApp.VaultList.find(x => x.Id == typedAction.VaultId);
+                    vault.People = typedAction.People;
+                    return newState;
+                }
+            
 
     }
 

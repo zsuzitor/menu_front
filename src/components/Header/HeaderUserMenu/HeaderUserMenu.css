@@ -1,7 +1,8 @@
 .header-user-menu {
     position: absolute;
     background-color: white;
-    transition: 0.5s ease-in-out;
+    /* transition: 0.5s ease-in-out; */
+    transition: 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     border-radius: 0.75rem;
     z-index: 2;
     font-size: 18px;

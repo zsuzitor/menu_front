@@ -18,6 +18,7 @@ const VaultList = (props: IVaultListProps) => {
     const [showAddForm, setShowAddForm] = useState(false);
 
     useEffect(() => {
+        props.LoadMyVaults();
 
     }, []);
 

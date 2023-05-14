@@ -32,7 +32,7 @@ const mapStateToProps = (state: AppState, ownProps: ICreateVaultOwnProps) => {
 const mapDispatchToProps = (dispatch: any, ownProps: ICreateVaultOwnProps) => {
     let res = {} as ICreateVaultDispatchToProps;
     res.LoadVaultPeople = (vaultId) => {
-        dispatch(window.G_VaultController.GetVaultSecretsRedux(vaultId));
+        dispatch(window.G_VaultController.LoadVaultPeopleRedux(vaultId));
     };
     return res;
 };

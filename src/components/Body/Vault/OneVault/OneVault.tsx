@@ -20,20 +20,21 @@ const OneVault = (props: IOneVaultProps) => {
     const [showEditForm, setShowEditForm] = useState(false);
 
 
-    if (!props.VaultId) {
-        //todo это полная копия из vaultMain, вынести в 1 место
-        let pathNameUrlSplit = document.location.pathname.split('/');
-        if (pathNameUrlSplit && pathNameUrlSplit.length > 3 && pathNameUrlSplit[2] === 'vault') {
-            if (pathNameUrlSplit[3] != (props.VaultId + '')) {
-                props.SetCurrentVaultId(+pathNameUrlSplit[3]);
-            }
-        }
-    }
 
-    let vault = props.Vaults.find(x => x.Id === props.VaultId);
+
+    // let vault = props.Vaults.find(x => x.Id === props.VaultId);
+    const vault = props.Vault;
 
     useEffect(() => {
-
+        if (!props.VaultId) {
+            //todo это полная копия из vaultMain, вынести в 1 место
+            let pathNameUrlSplit = document.location.pathname.split('/');
+            if (pathNameUrlSplit && pathNameUrlSplit.length > 3 && pathNameUrlSplit[2] === 'vault') {
+                if (pathNameUrlSplit[3] != (props.VaultId + '')) {
+                    props.SetCurrentVaultId(+pathNameUrlSplit[3]);
+                }
+            }
+        }
     }, []);
 
     useEffect(() => {
@@ -41,7 +42,8 @@ const OneVault = (props: IOneVaultProps) => {
             return;
         }
 
-        props.LoadVaultSecrets(props.VaultId);
+        // props.LoadVaultSecrets(props.VaultId);
+        props.LoadVault(props.VaultId);
     }, [props.VaultId]);
 
     let backLink = <Link
@@ -57,7 +59,7 @@ const OneVault = (props: IOneVaultProps) => {
 
     return <div className='one-vault-list'>
         {showEditForm ? <AdditionalWindow CloseWindow={() => setShowEditForm(false)}
-            IsHeightWindow={false}
+            IsHeightWindow={true}
             Title='Редактирование хранилища'
             InnerContent={() => <CreateVault Vault={vault}
             ></CreateVault>}></AdditionalWindow> : <></>}
@@ -65,20 +67,21 @@ const OneVault = (props: IOneVaultProps) => {
         <div>
             <p>{vault.Id}</p>
             <p>{vault.Name}</p>
-            <button className='btn btn-primary'
+            <button className='btn btn-b-light'
                 onClick={() => setShowEditForm(true)}>Редактировать</button>
-            <button className='btn btn-primary'
+            <button className='btn btn-b-light'
                 onClick={() => alert('todo props.delete; linkredirect.click?')}>Удалить</button>
         </div>
         <input type='text'
-            placeholder='поиск'
+            className='form-control'
+            placeholder='Поиск'
             onChange={(e => setFilterSecretKey(e.target.value))}
             value={filterSecretKey}></input>
         <div className='vault-secrets-list'>
             {vault.Secrets.filter(x => !filterSecretKey || (x.Key.indexOf(filterSecretKey) != -1))
                 .map(s => <VaultSecret key={s.Id} Secret={s}></VaultSecret>)}
         </div>
-        <button className='btn btn-primary'>добавить</button>
+        <button className='btn btn-b-light'>Добавить</button>
     </div>
 }
 

@@ -161,13 +161,14 @@ export class FetchHelper implements IAjaxHelper {
 
         let responseResult = await response.json();//todo а если тут что то другое? например файл\xml
         let successFromInner = false;
+        let resultFromInner = null;
         if (response.status === 401) {
             if (obj.NeedTryRefreshToken) {
                 let successedRefresh = await this.TryRefreshToken(obj.NotRedirectWhenNotAuth, null) as boolean;
                 if (successedRefresh) {
                     let newObj = { ...obj };
                     newObj.NeedTryRefreshToken = false;
-                    await this.GoAjaxRequest(newObj);
+                    resultFromInner = await this.GoAjaxRequest(newObj);
                     successFromInner = true;
                 }
             }
@@ -187,9 +188,16 @@ export class FetchHelper implements IAjaxHelper {
             }
         }
 
-        if (response.ok && !successFromInner) {
-            obj.FuncSuccess(responseResult, null, null);
+        if (successFromInner) {
+            return resultFromInner;
         }
+        else if (response.ok) {
+            obj.FuncSuccess(responseResult, null, null);
+            return responseResult;//todo возможно надо отдавать всегда
+        }
+
+
+        return null;
 
     }
 

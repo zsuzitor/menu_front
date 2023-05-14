@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Models/State/AppState';
 import { OneVault } from '../../../../Models/Models/VaultApp/State/OneVault';
+import { OneVaultInList } from '../../../../Models/Models/VaultApp/State/OneVaultInList';
 
 
 
@@ -9,10 +10,11 @@ interface IVaultListOwnProps {
 }
 
 interface IVaultListStateToProps {
-    Vaults: OneVault[];
+    Vaults: OneVaultInList[];
 }
 
 interface IVaultListDispatchToProps {
+    LoadMyVaults: () => void;
 
 }
 
@@ -25,13 +27,17 @@ export interface IVaultListProps extends IVaultListStateToProps, IVaultListOwnPr
 const mapStateToProps = (state: AppState, ownProps: IVaultListOwnProps) => {
     let res = {} as IVaultListStateToProps;
     // console.log(state.VaultApp.VaultList);
-    res.Vaults = [...state.VaultApp.VaultList];
+     res.Vaults = [...state.VaultApp.VaultList];
 
     return res;
 }
 
 const mapDispatchToProps = (dispatch: any, ownProps: IVaultListOwnProps) => {
     let res = {} as IVaultListDispatchToProps;
+    res.LoadMyVaults = () => {
+        // dispatch(SetVaultsListActionCreator());
+        dispatch(window.G_VaultController.GetVaultsRedux());
+    };
 
     return res;
 };

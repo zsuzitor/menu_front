@@ -18,8 +18,8 @@ interface IVaultMainDispatchToProps {
     // CreatePaste: (key: string) => void;
     // CreateUpdate: (key: string) => void;
     // CreateDelete: (key: string) => void;
-    SetCurrentVaultId: (id: number) => void;
-    LoadMyVaults: () => void;
+    // SetCurrentVaultId: (id: number) => void;
+    // LoadMyVaults: () => void;
 }
 
 export interface IVaultMainProps extends IVaultMainStateToProps, IVaultMainOwnProps, IVaultMainDispatchToProps {
@@ -40,16 +40,14 @@ const mapDispatchToProps = (dispatch: any, ownProps: IVaultMainOwnProps) => {
     //     // dispatch(window.G_VaultController.GetUsersIsRoomRedux(roomname, userConnectionId));
     //  };
 
-    res.SetCurrentVaultId = (id: number) => {
-        dispatch(ChangeCurrentVaultIdActionCreator({ Id: id }));
-    };
+    // res.SetCurrentVaultId = (id: number) => {
+    //     dispatch(ChangeCurrentVaultIdActionCreator({ Id: id }));
+    // };
 
-    res.LoadMyVaults = () => {
-        // dispatch(SetVaultsListActionCreator());
-        dispatch(window.G_VaultController.GetVaultsRedux());
-
-
-    };
+    // res.LoadMyVaults = () => {
+    //     // dispatch(SetVaultsListActionCreator());
+    //     dispatch(window.G_VaultController.GetVaultsRedux());
+    // };
 
     return res;
 };

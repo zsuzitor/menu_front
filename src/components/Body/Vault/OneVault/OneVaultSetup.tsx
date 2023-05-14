@@ -11,12 +11,14 @@ interface IOneVaultOwnProps {
 }
 
 interface IOneVaultStateToProps {
-    Vaults: OneVault[];
+    Vault: OneVault;
 }
 
 interface IOneVaultDispatchToProps {
     SetCurrentVaultId: (id: number) => void;
     LoadVaultSecrets: (vaultId: number) => void;
+    LoadVault: (vaultId: number) => void;
+    CreateSecret: (id: number) => void;
 
 }
 
@@ -28,7 +30,7 @@ export interface IOneVaultProps extends IOneVaultStateToProps, IOneVaultOwnProps
 
 const mapStateToProps = (state: AppState, ownProps: IOneVaultOwnProps) => {
     let res = {} as IOneVaultStateToProps;
-    res.Vaults = state.VaultApp.VaultList;
+    res.Vault = state.VaultApp.CurrentVault;
 
     return res;
 }
@@ -41,6 +43,14 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneVaultOwnProps) => {
 
     res.LoadVaultSecrets = (vaultId: number) => {
         dispatch(window.G_VaultController.GetVaultSecretsRedux(vaultId));
+    };
+
+    res.LoadVault = (vaultId: number) => {
+        dispatch(window.G_VaultController.GetCurrentVaultRedux(vaultId));
+    };
+
+    res.CreateSecret = (vaultId: number) => {
+        dispatch(window.G_VaultController.CreateSecretRedux(vaultId));
     };
     return res;
 };

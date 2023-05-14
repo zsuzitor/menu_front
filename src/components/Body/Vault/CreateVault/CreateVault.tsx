@@ -36,14 +36,15 @@ const CreateVault = (props: ICreateVaultProps) => {
     return <div className='create-vault'>
         <label>Название</label>
         <input type='text' placeholder='Название' value={name}
+            className='form-control'
             onChange={(e) => setName(e.target.value)}></input>
         <label>Публичный</label>
         <input type='checkbox' placeholder='Публичный'
-            checked={vaultPublic}
+            checked={vaultPublic} className='form-control'
             onChange={(e) => setVaultPublic(e.target.checked)}></input>
         <p>Люди хранилища</p>
         {props.Vault?.Id ? <>
-            {people.map(u => <VaultUserUi User={u}
+            {people.map(u => <VaultUserUi key={u.Id} User={u}
                 MarkedAsDeleted={deletedUser.findIndex(x => x == u.Id) >= 0}
                 Delete={() => {
                     if (props.Vault.People.findIndex(x => x.Id == u.Id)) {
@@ -59,11 +60,11 @@ const CreateVault = (props: ICreateVaultProps) => {
                 }}
             ></VaultUserUi>)}
             <label>Почта</label>
-            <input type='text'></input>
-            <button className='btn btn-primary'>Добавить</button>
+            <input type='text' className='form-control' placeholder='Почта'></input>
+            <button className='btn btn-b-light'>Добавить</button>
         </> : <></>
         }
-        <button className='btn btn-primary'>Сохранить</button>
+        <button className='btn btn-b-light'>Сохранить</button>
     </div >
 }
 

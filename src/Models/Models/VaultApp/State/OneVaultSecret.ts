@@ -1,5 +1,4 @@
 import { MappedWithBack } from "../../../BL/Interfaces/MappedWithBack";
-import { IOneVaultReturn } from "../../../BackModel/Vault/IOneVaultReturn";
 import { IOneVaultSecretReturn } from "../../../BackModel/Vault/IOneVaultSecretReturn";
 
 
@@ -11,6 +10,7 @@ export class OneVaultSecret implements MappedWithBack<IOneVaultSecretReturn> {
     IsCoded: boolean;//значение должно храниться зашифрованным
     IsPublic: boolean;//можно получить по прямой ссылке без всяких прав
     DieDate?: Date;
+    VaultId: number;
 
     constructor() {
     }
@@ -22,5 +22,6 @@ export class OneVaultSecret implements MappedWithBack<IOneVaultSecretReturn> {
         this.IsCoded = newData.isCoded;
         this.IsPublic = newData.isPublic;
         this.DieDate = newData.dieDate;
+        this.VaultId = newData.vaultId;
     }
 }

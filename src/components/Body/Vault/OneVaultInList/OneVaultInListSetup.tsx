@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Models/State/AppState';
-import { OneVault } from '../../../../Models/Models/VaultApp/State/OneVault';
+import { OneVaultInList } from '../../../../Models/Models/VaultApp/State/OneVaultInList';
 
 
 
 
 interface IOneVaultInListOwnProps {
-    Vault: OneVault;
+    Vault: OneVaultInList;
 }
 
 interface IOneVaultInListStateToProps {

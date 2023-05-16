@@ -55,3 +55,17 @@ export const SetCurrentVaultActionName: string = 'SetCurrentVaultAction';
 export function SetCurrentVaultActionCreator(data: OneVault): AppAction<OneVault> {
     return { type: SetCurrentVaultActionName, payload: data };
 };
+
+export interface IUpdateVaultActionPayload {
+}
+export const UpdateVaultActionName: string = 'UpdateVaultAction';
+export function UpdateVaultActionCreator(data: IUpdateVaultActionPayload): AppAction<IUpdateVaultActionPayload> {
+    return { type: UpdateVaultActionName, payload: data };
+};
+
+export interface ICreateVaultActionPayload {
+}
+export const CreateVaultActionName: string = 'CreateVaultAction';
+export function CreateVaultActionCreator(data: ICreateVaultActionPayload): AppAction<ICreateVaultActionPayload> {
+    return { type: CreateVaultActionName, payload: data };
+};

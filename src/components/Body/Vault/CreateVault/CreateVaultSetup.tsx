@@ -15,6 +15,7 @@ interface ICreateVaultStateToProps {
 
 interface ICreateVaultDispatchToProps {
     LoadVaultPeople: (vaultId: number) => void;
+    CreateOrSaveVault: (vaultId: number) => void;
 }
 
 export interface ICreateVaultProps extends ICreateVaultStateToProps, ICreateVaultOwnProps, ICreateVaultDispatchToProps {
@@ -34,6 +35,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: ICreateVaultOwnProps) => {
     res.LoadVaultPeople = (vaultId) => {
         dispatch(window.G_VaultController.LoadVaultPeopleRedux(vaultId));
     };
+    res.CreateOrSaveVault = (vaultId) => {
+        dispatch(window.G_VaultController.LoadVaultPeopleRedux(vaultId));
+    };
+
     return res;
 };
 

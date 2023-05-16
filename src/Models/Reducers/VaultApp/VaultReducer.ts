@@ -4,7 +4,7 @@ import { AppState } from "../../Models/State/AppState";
 
 
 import cloneDeep from 'lodash/cloneDeep';
-import { ChangeCurrentVaultIdActionName, DeleteSecretActionName, IDeleteSecretActionPayload, ISetVaultsPeopleActionPayload, ISetVaultsSecretsActionPayload, SetCurrentVaultActionName, SetSingleSecretActionName, SetVaultsListActionName, SetVaultsPeopleActionName, SetVaultsSecretsActionName } from "../../Actions/VaultApp/VaultActions";
+import { ChangeCurrentVaultIdActionName, CreateVaultActionName, DeleteSecretActionName, ICreateVaultActionPayload, IDeleteSecretActionPayload, ISetVaultsPeopleActionPayload, ISetVaultsSecretsActionPayload, IUpdateVaultActionPayload, SetCurrentVaultActionName, SetSingleSecretActionName, SetVaultsListActionName, SetVaultsPeopleActionName, SetVaultsSecretsActionName, UpdateVaultActionName } from "../../Actions/VaultApp/VaultActions";
 import { OneVault } from "../../Models/VaultApp/State/OneVault";
 import { OneVaultSecret } from "../../Models/VaultApp/State/OneVaultSecret";
 
@@ -68,6 +68,23 @@ export function VaultReducer(state: AppState = new AppState(), action: AppAction
                 newState.VaultApp.CurrentVault = typedAction;
                 return newState;
             }
+
+        case UpdateVaultActionName:
+            {
+                let newState = cloneDeep(state);
+                let typedAction = action.payload as IUpdateVaultActionPayload;
+                // newState.VaultApp.CurrentVault = typedAction;
+                return newState;
+            }
+        case CreateVaultActionName:
+            {
+                let newState = cloneDeep(state);
+                let typedAction = action.payload as ICreateVaultActionPayload;
+                // newState.VaultApp.CurrentVault = typedAction;
+                return newState;
+            }
+
+        //
         //
 
     }

@@ -7,15 +7,11 @@ import ReactDOMClient from 'react-dom/client';
 import MainComponent from './components/MainComponent';
 import { AjaxHelper, FetchHelper } from './Models/AjaxLogic';
 import { AuthenticateController } from "./Models/Controllers/AuthenticateController";
-import { CodeReviewCommentController } from "./Models/Controllers/CodeReviewApp/CodeReviewCommentController";
-import { CodeReviewProjectController } from "./Models/Controllers/CodeReviewApp/CodeReviewProjectController";
-import { CodeReviewTaskController } from "./Models/Controllers/CodeReviewApp/CodeReviewTaskController";
-import { CodeReviewUserController } from "./Models/Controllers/CodeReviewApp/CodeReviewUserController";
-import { ArticleController } from "./Models/Controllers/MenuApp/ArticleController";
+import { CodeReviewCommentController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewCommentController";
+import { ArticleController } from "./Apps/MenuApp/Models/Controllers/ArticleController";
 import { PlaningPokerController } from "./Models/Controllers/PlaningPokerApp/PlaningPokerController";
 import { UsersController } from "./Models/Controllers/UsersController";
-import { WordsCardsController } from "./Models/Controllers/WordsCardsApp/WordsCardsController";
-import { WordsListController } from "./Models/Controllers/WordsCardsApp/WordsListController";
+import { WordsCardsController } from "./Apps/WordsCardsApp/Models/Controllers/WordsCardsController";
 import { MainErrorHandler } from './Models/Models/ErrorHandleLogic';
 
 
@@ -26,6 +22,10 @@ import thunk from 'redux-thunk';
 import { ReducerCombiner } from "./Models/Reducers/ReducerCombiner";
 import { AppState } from './Models/Models/State/AppState';
 import { VaultController } from "./Models/Controllers/VaultApp/VaultController";
+import { CodeReviewProjectController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewProjectController";
+import { CodeReviewTaskController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewTaskController";
+import { CodeReviewUserController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewUserController";
+import { WordsListController } from "./Apps/WordsCardsApp/Models/Controllers/WordsListController";
 
 
 require('../style/main.css');

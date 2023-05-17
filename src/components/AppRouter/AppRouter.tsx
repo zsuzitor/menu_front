@@ -5,15 +5,15 @@ import MainAuth from '../Body/Auth/MainAuth/MainAuth';
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 // import { BodyMain } from "./Body/BodyMain";
 import MenuMain from "../Body/Menu/MenuMain/MenuMain";
-import { MenuAppMain } from "../Body/MenuApp/MenuAppMain";
-import { WordsCardsAppMain } from "../Body/WordsCardsApp/WordsCardsAppMain";
 import PlaningPokerMain from "../Body/PlaningPoker/PlaningPokerMain";
 import { IAuthState } from "../../Models/Models/AuthState";
-import CodeReviewMain from "../Body/CodeReviewApp/CodeReviewMain/CodeReviewMain";
 import Recovery from "../Body/Auth/Recovery/Recovery";
 import { AppItem } from "../../Models/Models/Entity/AppItem";
 import PersonSettings from "../Body/Person/PersonSettings/PersonSettings";
 import VaultMain from "../Body/Vault/VaultMain/VaultMain";
+import CodeReviewMain from "../../Apps/CodeReviewApp/Components/CodeReviewMain/CodeReviewMain";
+import { MenuAppMain } from "../../Apps/MenuApp/Components/MenuAppMain";
+import { WordsCardsAppMain } from "../../Apps/WordsCardsApp/Components/WordsCardsAppMain";
 
 
 require('./AppRouter.css');

@@ -1,5 +1,5 @@
 import { IAuthState } from "../AuthState";
-import { CodeReviewAppState } from "../CodeReviewApp/State/CodeReviewAppState";
+import { CodeReviewAppState } from "../../../Apps/CodeReviewApp/Models/Entity/State/CodeReviewAppState";
 import { PlaningPokerAppState } from "../PlaningPoker/State/PlaningPokerApp";
 import { VaultAppState } from "../VaultApp/State/VaultApp";
 

@@ -11,7 +11,7 @@ import PlaningPokerMain from "../Body/PlaningPoker/PlaningPokerMain";
 import { IAuthState } from "../../Models/Models/AuthState";
 import CodeReviewMain from "../Body/CodeReviewApp/CodeReviewMain/CodeReviewMain";
 import Recovery from "../Body/Auth/Recovery/Recovery";
-import { AppItem } from "../../Models/Models/Poco/AppItem";
+import { AppItem } from "../../Models/Models/Entity/AppItem";
 import PersonSettings from "../Body/Person/PersonSettings/PersonSettings";
 import VaultMain from "../Body/Vault/VaultMain/VaultMain";
 

@@ -8,7 +8,7 @@ import {
 
 import HeaderLogo from '../HeaderLogo/HeaderLogo';
 import HeaderUserMenu from '../HeaderUserMenu/HeaderUserMenu';
-import { AppItem } from '../../../Models/Models/Poco/AppItem';
+import { AppItem } from '../../../Models/Models/Entity/AppItem';
 import { AppState } from '../../../Models/Models/State/AppState';
 
 require('./HeaderMain.css');

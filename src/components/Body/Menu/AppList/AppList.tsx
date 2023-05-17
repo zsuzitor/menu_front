@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AppItem } from "../../../../Models/Models/Poco/AppItem";
+import { AppItem } from "../../../../Models/Models/Entity/AppItem";
 import AppListItem from "../AppListItem/AppListItem";
 
 

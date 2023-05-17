@@ -15,7 +15,7 @@ import { AlertData, AlertDataStored } from "../Models/Models/AlertData";
 import AppRouter from "./AppRouter/AppRouter";
 import { MainErrorObjectBack } from "../Models/BackModel/ErrorBack";
 import { UserShortBack } from "../Models/BackModel/UserShort";
-import { AppItem } from "../Models/Models/Poco/AppItem";
+import { AppItem } from "../Models/Models/Entity/AppItem";
 import { AppState } from "../Models/Models/State/AppState";
 import { SetAuthActionCreator } from "../Models/Actions/App/Actions";
 

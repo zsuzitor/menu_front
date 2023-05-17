@@ -1,14 +1,16 @@
 
 
-import { CreateVaultActionCreator, DeleteSecretActionCreator, SetCurrentVaultActionCreator, SetSingleSecretActionCreator, SetVaultsListActionCreator, SetVaultsPeopleActionCreator, SetVaultsSecretsActionCreator, UpdateVaultActionCreator } from "../../Actions/VaultApp/VaultActions";
+import { CreateVaultActionCreator, DeleteSecretActionCreator, ICreateVaultActionPayload, SetCurrentVaultActionCreator, SetSingleSecretActionCreator, SetVaultsListActionCreator, SetVaultsPeopleActionCreator, SetVaultsSecretsActionCreator, UpdateVaultActionCreator } from "../../Actions/VaultApp/VaultActions";
 import { BoolResultBack, StringResultBack } from "../../BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../BackModel/ErrorBack";
+import { ICreateVaultReturn } from "../../BackModel/Vault/ICreateVaultReturn";
 import { IOneVaultListReturn } from "../../BackModel/Vault/IOneVaultListReturn";
 import { IOneVaultReturn } from "../../BackModel/Vault/IOneVaultReturn";
 import { IOneVaultSecretReturn } from "../../BackModel/Vault/IOneVaultSecretReturn";
 import { IVaultUserReturn } from "../../BackModel/Vault/IVaultUserReturn";
 import { AlertData } from "../../Models/AlertData";
 import { AppState } from "../../Models/State/AppState";
+import { UpdateVaultEntity } from "../../Models/VaultApp/Entity/UpdateVaultEntity";
 import { OneVault } from "../../Models/VaultApp/State/OneVault";
 import { OneVaultInList } from "../../Models/VaultApp/State/OneVaultInList";
 import { OneVaultSecret } from "../../Models/VaultApp/State/OneVaultSecret";
@@ -23,7 +25,8 @@ type SetVaultPeopleReturn = (error: MainErrorObjectBack, data: IVaultUserReturn[
 type DeleteSecretReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 type GetOneSecretReturn = (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => void;
 type GetOneVaultReturn = (error: MainErrorObjectBack, data: IOneVaultReturn) => void;
-type CreateOrUpdateVaultReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+type CreateVaultReturn = (error: MainErrorObjectBack, data: ICreateVaultReturn) => void;
+type UpdateVaultReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 
 
@@ -39,8 +42,8 @@ export interface IVaultController {
     UpdateSecretRedux: (secretId: number) => void;
 
     GetSingleSecretRedux: (secretId: number) => void;
-    UpdateVaultRedux: (vaultId: number) => void;
-    CreateVaultRedux: (vaultId: number) => void;
+    UpdateVaultRedux: (vault: UpdateVaultEntity) => void;
+    CreateVaultRedux: (vault: UpdateVaultEntity) => void;
     // GetOneSecretAsync: (secretId: number) => IOneVaultSecretReturn;
 }
 
@@ -310,9 +313,9 @@ export class VaultController implements IVaultController {
     }
 
 
-    UpdateVaultRedux(vaultId: number) {
+    UpdateVaultRedux(vault: UpdateVaultEntity) {
         return (dispatch: any, getState: any) => {
-            this.UpdateVault(vaultId,
+            this.UpdateVault(vault,
                 (error: MainErrorObjectBack, data: BoolResultBack) => {
                     if (data?.result) {
                         dispatch(UpdateVaultActionCreator({}));
@@ -321,8 +324,8 @@ export class VaultController implements IVaultController {
         };
     }
 
-    UpdateVault(secretId: number, onSuccess: CreateOrUpdateVaultReturn) {
-        
+    UpdateVault(vault: UpdateVaultEntity, onSuccess: UpdateVaultReturn) {
+
         onSuccess(null, BoolResultBack.GetTrue());
         //G_AjaxHelper.GoAjaxRequest({
         //     Data: {
@@ -339,20 +342,27 @@ export class VaultController implements IVaultController {
         // });
     }
 
-    CreateVaultRedux(vaultId: number) {
+    CreateVaultRedux(vault: UpdateVaultEntity) {
         return (dispatch: any, getState: any) => {
-            this.CreateVault(vaultId,
-                (error: MainErrorObjectBack, data: BoolResultBack) => {
-                    if (data?.result) {
-                        dispatch(CreateVaultActionCreator({}));
+            this.CreateVault(vault,
+                (error: MainErrorObjectBack, data: ICreateVaultReturn) => {
+                    if (data?.id) {
+                        let newdata = {} as ICreateVaultActionPayload;
+                        newdata.Id = data.id;
+                        newdata.IsPublic = data.isPublic;
+                        newdata.Name = data.name;
+                        dispatch(CreateVaultActionCreator(newdata));
                     }
                 });
         };
     }
 
-    CreateVault(secretId: number, onSuccess: CreateOrUpdateVaultReturn) {
-        
-        onSuccess(null, BoolResultBack.GetTrue());
+    CreateVault(vault: UpdateVaultEntity, onSuccess: CreateVaultReturn) {
+        let newData = {} as ICreateVaultReturn;
+        newData.id = vault.Id;
+        newData.name = vault.Name;
+        newData.isPublic = vault.IsPublic;
+        onSuccess(null, newData);
         //G_AjaxHelper.GoAjaxRequest({
         //     Data: {
         //         'roomname': roomname,

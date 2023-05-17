@@ -4,6 +4,7 @@ import ConnectToStore, { ICreateVaultProps } from './CreateVaultSetup'
 import { Link } from 'react-router-dom';
 import VaultUserUi from '../VaultUser/VaultUser';
 import { VaultUser } from '../../../../Models/Models/VaultApp/State/VaultUser';
+import { UpdateVaultEntity } from '../../../../Models/Models/VaultApp/Entity/UpdateVaultEntity';
 
 
 
@@ -14,7 +15,7 @@ require('./CreateVault.css');
 
 const CreateVault = (props: ICreateVaultProps) => {
 
-    const [name, setName] = useState(props.Vault?.Name || '');
+    const [vaultName, setVaultName] = useState(props.Vault?.Name || '');
     const [vaultPublic, setVaultPublic] = useState(props.Vault?.IsPublic || false);
     const [deletedUser, setDeletedUser] = useState([] as number[]);
     const [addedUser, setAddedUser] = useState([] as VaultUser[]);
@@ -40,9 +41,9 @@ const CreateVault = (props: ICreateVaultProps) => {
     }
     return <div className='create-vault'>
         <label>Название</label>
-        <input type='text' placeholder='Название' value={name}
+        <input type='text' placeholder='Название' value={vaultName}
             className='form-control'
-            onChange={(e) => setName(e.target.value)}></input>
+            onChange={(e) => setVaultName(e.target.value)}></input>
         <label>Публичный</label>
         <input type='checkbox' placeholder='Публичный'
             checked={vaultPublic} className='form-control'
@@ -84,7 +85,20 @@ const CreateVault = (props: ICreateVaultProps) => {
                 }}>Добавить</button>
         </> : <></>
         }
-        <button className='btn btn-b-light' onClick={() => props.CreateOrSaveVault(0)}>Сохранить</button>
+        <button className='btn btn-b-light' onClick={() => {
+            let newVault = new UpdateVaultEntity();
+            newVault.IsPublic = vaultPublic;
+            newVault.Name = vaultName;
+            if (props.Vault?.Id) {
+                newVault.Id = props.Vault.Id;
+                props.UpdateVault(newVault);
+            }
+            else {
+
+                props.CreateVault(newVault);
+            }
+
+        }}>Сохранить</button>
     </div >
 }
 

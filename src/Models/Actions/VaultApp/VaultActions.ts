@@ -64,6 +64,9 @@ export function UpdateVaultActionCreator(data: IUpdateVaultActionPayload): AppAc
 };
 
 export interface ICreateVaultActionPayload {
+    Id: number;
+    Name: string;
+    IsPublic: boolean;
 }
 export const CreateVaultActionName: string = 'CreateVaultAction';
 export function CreateVaultActionCreator(data: ICreateVaultActionPayload): AppAction<ICreateVaultActionPayload> {

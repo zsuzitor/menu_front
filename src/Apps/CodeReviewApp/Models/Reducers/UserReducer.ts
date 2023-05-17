@@ -3,7 +3,7 @@
 
 import cloneDeep from 'lodash/cloneDeep';
 import { AppAction } from '../../../../Models/Actions/Actions';
-import { AppState } from '../../../../Models/Models/State/AppState';
+import { AppState } from '../../../../Models/Entity/State/AppState';
 import { ProjectUser } from '../Entity/State/ProjectUser';
 import { DeleteProjectUserActionName, AddProjectUserActionName, ChangeProjectUserActionName, SetCurrentProjectUsersActionName } from '../Actions/UserActions';
 

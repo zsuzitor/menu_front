@@ -4,7 +4,7 @@ import { WordsCardsList } from "./WordsCardsList";
 import { OneWordCard as OneWordCardModel } from "../Models/Entity/OneWordCard";
 
 import { IEditCardState } from "../Models/Entity/IEditCardState";
-import { AlertData, AlertTypeEnum } from "../../../Models/Models/AlertData";
+import { AlertData, AlertTypeEnum } from "../../../Models/Entity/AlertData";
 import { MainErrorObjectBack } from "../../../Models/BackModel/ErrorBack";
 import { IOneWordCardBack, IWordCardWordList } from "../Models/BackModels/OneWordCardBack";
 import { BoolResultBack } from "../../../Models/BackModel/BoolResultBack";

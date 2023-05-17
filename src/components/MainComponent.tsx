@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 
-import { IAuthState, IAuthUserState } from '../Models/Models/AuthState';
 
 import HeaderMain from './Header/HeaderMain/HeaderMain';
 // import { BodyMain } from './Body/BodyMain';
@@ -11,13 +10,14 @@ import FooterMain from './Footer/FooterMain/FooterMain';
 import { MainAlertAbsolute } from './Alerts/MainAlertAbsolute';
 
 import { BrowserRouter } from "react-router-dom";
-import { AlertData, AlertDataStored } from "../Models/Models/AlertData";
+import { AlertData, AlertDataStored } from "../Models/Entity/AlertData";
 import AppRouter from "./AppRouter/AppRouter";
 import { MainErrorObjectBack } from "../Models/BackModel/ErrorBack";
 import { UserShortBack } from "../Models/BackModel/UserShort";
-import { AppItem } from "../Models/Models/Entity/AppItem";
-import { AppState } from "../Models/Models/State/AppState";
+import { AppItem } from "../Models/Entity/AppItem";
+import { AppState } from "../Models/Entity/State/AppState";
 import { SetAuthActionCreator } from "../Models/Actions/App/Actions";
+import { IAuthState, IAuthUserState } from "../Models/Entity/AuthState";
 
 
 

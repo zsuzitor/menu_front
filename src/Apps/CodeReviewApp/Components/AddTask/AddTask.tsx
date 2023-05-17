@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { AlertData } from '../../../../Models/Models/AlertData';
-import { IAuthState } from "../../../../Models/Models/AuthState";
-import { AppState } from '../../../../Models/Models/State/AppState';
+import { AlertData } from '../../../../Models/Entity/AlertData';
+import { AppState } from '../../../../Models/Entity/State/AppState';
 import { ProjectUser } from '../../Models/Entity/State/ProjectUser';
 import { OneTask } from '../../Models/Entity/State/OneTask';
+import { IAuthState } from '../../../../Models/Entity/AuthState';
 
 
 

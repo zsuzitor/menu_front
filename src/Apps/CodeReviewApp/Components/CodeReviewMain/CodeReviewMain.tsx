@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import ProjectDetail from '../ProjectDetail/ProjectDetail';
 import ProjectsList from '../ProjectsList/ProjectsList';
 import cloneDeep from 'lodash/cloneDeep';
-import { AppState } from '../../../../Models/Models/State/AppState';
+import { AppState } from '../../../../Models/Entity/State/AppState';
 
 import { connect } from "react-redux";
 import { ClearCodeReviewStateActionCreator } from '../../Models/Actions/Actions';

@@ -4,8 +4,8 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { AppAction } from '../Actions/Actions';
 import { SetAuthActionName } from '../Actions/App/Actions';
-import { IAuthState } from '../Models/AuthState';
-import { AppState } from '../Models/State/AppState';
+import { AppState } from '../Entity/State/AppState';
+import { IAuthState } from '../Entity/AuthState';
 
 
 export function AppReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {

@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { IOneWordCardBack } from "../../Models/BackModels/OneWordCardBack";
-import { AlertData, AlertTypeEnum } from "../../../../Models/Models/AlertData";
+import { AlertData, AlertTypeEnum } from "../../../../Models/Entity/AlertData";
 import { CreateCardEdit, OneCard } from "./OneCard";
 import { IWordListBack } from "../../Models/BackModels/WordListBack";
 import { OneWordList } from "../../Models/Entity/OneWordList";

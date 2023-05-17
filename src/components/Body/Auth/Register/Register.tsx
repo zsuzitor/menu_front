@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
-import { AlertData } from '../../../../Models/Models/AlertData';
+import { AlertData } from '../../../../Models/Entity/AlertData';
 require('./Register.css');
 
 export interface IRegisterState {

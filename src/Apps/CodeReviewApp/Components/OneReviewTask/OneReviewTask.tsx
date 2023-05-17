@@ -3,10 +3,10 @@
 import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { AlertData } from '../../../../Models/Models/AlertData';
+import { AlertData } from '../../../../Models/Entity/AlertData';
 import OneReviewTaskComment from '../OneReviewTaskComment/OneReviewTaskComment';
 import { OneTask } from '../../Models/Entity/State/OneTask';
-import { AppState } from '../../../../Models/Models/State/AppState';
+import { AppState } from '../../../../Models/Entity/State/AppState';
 import { SetCommentsActionCreator } from '../../Models/Actions/CommentActions';
 import { CommentSet } from '../../Models/Entity/CommentSet';
 import { OneTaskReviewComment } from '../../Models/Entity/OneTaskReviewComment';

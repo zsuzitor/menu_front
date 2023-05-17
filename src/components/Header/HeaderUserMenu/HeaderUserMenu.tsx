@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { connect } from 'react-redux';
 
-import { IAuthState } from '../../../Models/Models/AuthState';
 
 
 import {
     Link,
     BrowserRouter
 } from "react-router-dom";
-import { AppState } from "../../../Models/Models/State/AppState";
+import { AppState } from "../../../Models/Entity/State/AppState";
 import { MainErrorObjectBack } from "../../../Models/BackModel/ErrorBack";
 import { BoolResultBack } from "../../../Models/BackModel/BoolResultBack";
-import { AlertData } from "../../../Models/Models/AlertData";
+import { AlertData } from "../../../Models/Entity/AlertData";
+import { IAuthState } from "../../../Models/Entity/AuthState";
 
 
 require('./HeaderUserMenu.css');

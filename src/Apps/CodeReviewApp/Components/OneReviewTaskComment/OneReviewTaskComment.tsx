@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { IAuthState } from '../../../../Models/Models/AuthState';
-import { AppState } from '../../../../Models/Models/State/AppState';
+import { AppState } from '../../../../Models/Entity/State/AppState';
 import { CommentDelete } from '../../Models/Entity/CommentDelete';
 import { CommentUpdate } from '../../Models/Entity/CommentUpdate';
 import { OneTaskReviewComment } from '../../Models/Entity/OneTaskReviewComment';
 import { ProjectUser } from '../../Models/Entity/State/ProjectUser';
+import { IAuthState } from '../../../../Models/Entity/AuthState';
 
 
 require('./OneReviewTaskComment.css');

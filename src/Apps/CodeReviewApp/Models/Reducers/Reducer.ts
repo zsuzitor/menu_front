@@ -4,7 +4,7 @@ import { CodeReviewProjectReducer } from './ProjectReducer';
 import { CodeReviewTaskReducer } from './TaskReducer';
 import { CodeReviewUserReducer } from './UserReducer';
 import { AppAction } from '../../../../Models/Actions/Actions';
-import { AppState } from '../../../../Models/Models/State/AppState';
+import { AppState } from '../../../../Models/Entity/State/AppState';
 import { ClearCodeReviewStateActionName } from '../Actions/Actions';
 import { CodeReviewAppState } from '../Entity/State/CodeReviewAppState';
 import { CodeReviewCommentReducer } from './CommentReducer';

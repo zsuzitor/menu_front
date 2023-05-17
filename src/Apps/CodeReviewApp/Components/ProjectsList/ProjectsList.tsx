@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { AppState } from '../../../../Models/Models/State/AppState';
+import { AppState } from '../../../../Models/Entity/State/AppState';
 import OneProjectInList from '../OneProjectInList/OneProjectInList';
 
 import { connect } from "react-redux";
-import { AlertData } from '../../../../Models/Models/AlertData';
+import { AlertData } from '../../../../Models/Entity/AlertData';
 import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/State/OneProjectInList';
 // import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/State/State/OneProjectInList';
 

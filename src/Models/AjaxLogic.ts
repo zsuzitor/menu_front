@@ -3,7 +3,7 @@ import { BoolResultBack } from "./BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "./BackModel/ErrorBack";
 import { BoolWithError } from "./Controllers/BO/ControllersOutput";
 import { ControllerHelper, DataWithErrorBack } from "./Controllers/ControllerHelper";
-import { AlertData } from "./Models/AlertData";
+import { AlertData } from "./Entity/AlertData";
 
 
 

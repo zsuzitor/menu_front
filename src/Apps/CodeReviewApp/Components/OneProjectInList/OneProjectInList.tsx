@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { AppState } from '../../../../Models/Models/State/AppState';
+import { AppState } from '../../../../Models/Entity/State/AppState';
 import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/State/OneProjectInList';
 import { SetCurrentProjectIdActionCreator } from '../../Models/Actions/ProjectActions';
 

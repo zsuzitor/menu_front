@@ -9,10 +9,9 @@ import { AjaxHelper, FetchHelper } from './Models/AjaxLogic';
 import { AuthenticateController } from "./Models/Controllers/AuthenticateController";
 import { CodeReviewCommentController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewCommentController";
 import { ArticleController } from "./Apps/MenuApp/Models/Controllers/ArticleController";
-import { PlaningPokerController } from "./Models/Controllers/PlaningPokerApp/PlaningPokerController";
+import { PlaningPokerController } from "./Apps/PlaningPoker/Models/Controllers/PlaningPokerController";
 import { UsersController } from "./Models/Controllers/UsersController";
 import { WordsCardsController } from "./Apps/WordsCardsApp/Models/Controllers/WordsCardsController";
-import { MainErrorHandler } from './Models/Models/ErrorHandleLogic';
 
 
 import { Provider } from "react-redux";
@@ -20,12 +19,13 @@ import { createStore, applyMiddleware, Store } from 'redux';
 import thunk from 'redux-thunk';
 // import { AppAction } from './Models/Actions/Actions';
 import { ReducerCombiner } from "./Models/Reducers/ReducerCombiner";
-import { AppState } from './Models/Models/State/AppState';
-import { VaultController } from "./Models/Controllers/VaultApp/VaultController";
+import { AppState } from './Models/Entity/State/AppState';
+import { VaultController } from "./Apps/Vault/Models/Controllers/VaultController";
 import { CodeReviewProjectController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewProjectController";
 import { CodeReviewTaskController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewTaskController";
 import { CodeReviewUserController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewUserController";
 import { WordsListController } from "./Apps/WordsCardsApp/Models/Controllers/WordsListController";
+import { MainErrorHandler } from "./Models/Entity/ErrorHandleLogic";
 
 
 require('../style/main.css');

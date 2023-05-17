@@ -1,5 +1,5 @@
 import { MappedWithBack } from "../../../../Models/BL/Interfaces/MappedWithBack";
-import { CustomImage } from "../../../../Models/Models/CustomImage";
+import { CustomImage } from "../../../../Models/Entity/CustomImage";
 import { IOneCardFullDataBack } from "../BackModels/OneCardFullDataBack";
 
 

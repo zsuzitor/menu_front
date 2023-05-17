@@ -1,7 +1,7 @@
 
 import cloneDeep from 'lodash/cloneDeep';
 import { AppAction } from '../../../../Models/Actions/Actions';
-import { AppState } from '../../../../Models/Models/State/AppState';
+import { AppState } from '../../../../Models/Entity/State/AppState';
 import { ReducerCombiner } from '../../../../Models/Reducers/ReducerCombiner';
 import { DeleteProjectActionName, AddNewProjectActionName, SetCurrentProjectIdActionName, SetProjectsActionName } from '../Actions/ProjectActions';
 import { SetFilterTaskActionCreator, LoadTasksActionCreator } from '../Actions/TaskActions';

@@ -5,15 +5,15 @@ import MainAuth from '../Body/Auth/MainAuth/MainAuth';
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 // import { BodyMain } from "./Body/BodyMain";
 import MenuMain from "../Body/Menu/MenuMain/MenuMain";
-import PlaningPokerMain from "../Body/PlaningPoker/PlaningPokerMain";
-import { IAuthState } from "../../Models/Models/AuthState";
 import Recovery from "../Body/Auth/Recovery/Recovery";
-import { AppItem } from "../../Models/Models/Entity/AppItem";
+import { AppItem } from "../../Models/Entity/AppItem";
 import PersonSettings from "../Body/Person/PersonSettings/PersonSettings";
-import VaultMain from "../Body/Vault/VaultMain/VaultMain";
 import CodeReviewMain from "../../Apps/CodeReviewApp/Components/CodeReviewMain/CodeReviewMain";
 import { MenuAppMain } from "../../Apps/MenuApp/Components/MenuAppMain";
 import { WordsCardsAppMain } from "../../Apps/WordsCardsApp/Components/WordsCardsAppMain";
+import PlaningPokerMain from "../../Apps/PlaningPoker/Components/PlaningPokerMain";
+import VaultMain from "../../Apps/Vault/Components/VaultMain/VaultMain";
+import { IAuthState } from "../../Models/Entity/AuthState";
 
 
 require('./AppRouter.css');

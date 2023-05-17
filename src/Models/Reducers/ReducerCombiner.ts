@@ -1,12 +1,12 @@
 import { AppAction } from "../Actions/Actions";
-import { AppState } from "../Models/State/AppState";
+import { AppState } from "../Entity/State/AppState";
 
 
 
 import cloneDeep from 'lodash/cloneDeep';
-import { PlaningPokerReducer } from "./PlaningPokerApp/Reducer";
+import { PlaningPokerReducer } from "../../Apps/PlaningPoker/Models/Reducers/Reducer";
 import { AppReducer } from "./Reducer";
-import { VaultAppReducer } from "./VaultApp/Reducer";
+import { VaultAppReducer } from "../../Apps/Vault/Models/Reducers/Reducer";
 import { CodeReviewAppReducer } from "../../Apps/CodeReviewApp/Models/Reducers/Reducer";
 
 export function ReducerCombiner(state: AppState = new AppState(), action: AppAction<any>): AppState {

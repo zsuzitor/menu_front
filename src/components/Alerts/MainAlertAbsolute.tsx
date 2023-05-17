@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AlertDataStored } from "../../Models/Models/AlertData";
+import { AlertDataStored } from "../../Models/Entity/AlertData";
 import { OneAlert } from "./OneAlert";
 
 export interface IMainAlertProps {

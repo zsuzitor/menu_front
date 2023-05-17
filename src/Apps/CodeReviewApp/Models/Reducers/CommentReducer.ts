@@ -1,5 +1,5 @@
 import { AppAction } from "../../../../Models/Actions/Actions";
-import { AppState } from "../../../../Models/Models/State/AppState";
+import { AppState } from "../../../../Models/Entity/State/AppState";
 
 
 

@@ -8,8 +8,8 @@ import {
 
 import HeaderLogo from '../HeaderLogo/HeaderLogo';
 import HeaderUserMenu from '../HeaderUserMenu/HeaderUserMenu';
-import { AppItem } from '../../../Models/Models/Entity/AppItem';
-import { AppState } from '../../../Models/Models/State/AppState';
+import { AppItem } from '../../../Models/Entity/AppItem';
+import { AppState } from '../../../Models/Entity/State/AppState';
 
 require('./HeaderMain.css');
 

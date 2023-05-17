@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { SetAuthActionCreator } from '../../../../Models/Actions/App/Actions';
 import { BoolResultBack, StringResultBack } from '../../../../Models/BackModel/BoolResultBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
-import { AlertData } from '../../../../Models/Models/AlertData';
-import { IAuthState } from '../../../../Models/Models/AuthState';
-import { AppState } from '../../../../Models/Models/State/AppState';
+import { AlertData } from '../../../../Models/Entity/AlertData';
+import { AppState } from '../../../../Models/Entity/State/AppState';
 import cloneDeep from 'lodash/cloneDeep';
+import { IAuthState } from '../../../../Models/Entity/AuthState';
 
 
 require('./PersonSettings.css');

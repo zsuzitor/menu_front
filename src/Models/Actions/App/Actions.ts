@@ -1,4 +1,4 @@
-import { IAuthState } from "../../Models/AuthState";
+import { IAuthState } from "../../Entity/AuthState";
 import { AppAction } from "../Actions";
 
 

@@ -2,7 +2,7 @@
 
 import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
-import { AppState } from '../../../../Models/Models/State/AppState';
+import { AppState } from '../../../../Models/Entity/State/AppState';
 import OneProjectUser from '../OneProjectUser/OneProjectUser';
 
 import { connect } from "react-redux";

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AppState } from '../../../../Models/Entity/State/AppState';
 import ConnectToStore, { IVaultSecretProps } from './VaultSecretSetup'
 import { Link } from 'react-router-dom';
+import { IUpdateSecretEntity } from '../../Models/Entity/UpdateSecretEntity';
 
 
 
@@ -40,7 +41,7 @@ const VaultSecret = (props: IVaultSecretProps) => {
 
         }
         else {
-            setSecretKey(props.Secret?.Key || '');
+            setSecretKey(secret?.Key || '');
         }
 
         setSecretKey(secret?.Key || '');//todo тут надо сетнуть то что загрузили
@@ -120,13 +121,27 @@ const VaultSecret = (props: IVaultSecretProps) => {
             {/* <input type='text' className='form-control'
                 placeholder='Ключ для кастомной ссылки'></input> */}
             <div className='buttons'>
-                <div className='but' title='Удалить' onClick={() => alert('todo')}>
+                <div className='but' title='Удалить'
+                    onClick={() => props.DeleteSecret(props.Secret.Id, props.Secret.VaultId)}>
                     <img className='persent-100-width-height' src={"/images/" + 'delete-icon.png'} />
                 </div>
-                <div className='but' title='Сохранить' onClick={() => alert('todo')}>
+                <div className='but' title='Сохранить' onClick={() => {
+                    let newData = {} as IUpdateSecretEntity;
+                    newData.Id = props.Secret.Id;
+                    newData.Key = secretKey;
+                    newData.Value = secretValue;
+                    newData.VaultId = secret.VaultId;
+                    props.UpdateSecret(newData);
+                    alert('todo');
+                }}>
                     <img className='persent-100-width-height' src={"/images/" + 'save-icon.png'} />
                 </div>
-                <div className='but' title='Отменить изменения' onClick={() => alert('todo')}>
+                <div className='but' title='Отменить изменения' onClick={() => {
+                    setSecretValue(secret.Value);
+                    setSecretDieDate(secret?.DieDate || null);
+                    setSecretIsCoded(secret?.IsCoded == null ? true : secret.IsCoded);
+                    setShowSecretValue(false);
+                }}>
                     <img className='persent-100-width-height' src={"/images/" + 'cancel.png'} />
                 </div>
                 <div className='but' title='Ссылка на секрет'

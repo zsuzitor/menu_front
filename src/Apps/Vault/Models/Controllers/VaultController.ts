@@ -1,6 +1,6 @@
 
 
-import { CreateVaultActionCreator, DeleteSecretActionCreator, ICreateVaultActionPayload, SetCurrentVaultActionCreator, SetSingleSecretActionCreator, SetVaultsListActionCreator, SetVaultsPeopleActionCreator, SetVaultsSecretsActionCreator, UpdateVaultActionCreator } from "../Actions/VaultActions";
+import { CreateSecretActionCreator, CreateVaultActionCreator, DeleteSecretActionCreator, DeleteVaultActionCreator, ICreateVaultActionPayload, IUpdateVaultActionPayload, SetCurrentVaultActionCreator, SetSingleSecretActionCreator, SetVaultsListActionCreator, SetVaultsPeopleActionCreator, SetVaultsSecretsActionCreator, UpdateSecretActionCreator, UpdateVaultActionCreator } from "../Actions/VaultActions";
 import { BoolResultBack, StringResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ICreateVaultReturn } from "../BackModels/ICreateVaultReturn";
@@ -14,6 +14,8 @@ import { IVaultUserReturn } from "../BackModels/IVaultUserReturn";
 import { OneVaultInList } from "../Entity/State/OneVaultInList";
 import { OneVaultSecret } from "../Entity/State/OneVaultSecret";
 import { VaultUser } from "../Entity/State/VaultUser";
+import { IUpdateSecretEntity } from "../Entity/UpdateSecretEntity";
+import { IUpdateSecretReturn } from "../BackModels/IUpdateSecretReturn";
 
 
 
@@ -25,6 +27,8 @@ type GetOneSecretReturn = (error: MainErrorObjectBack, data: IOneVaultSecretRetu
 type GetOneVaultReturn = (error: MainErrorObjectBack, data: IOneVaultReturn) => void;
 type CreateVaultReturn = (error: MainErrorObjectBack, data: ICreateVaultReturn) => void;
 type UpdateVaultReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+type DeleteVaultReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+type UpdateSecretReturn = (error: MainErrorObjectBack, data: IUpdateSecretReturn) => void;
 
 
 
@@ -36,12 +40,13 @@ export interface IVaultController {
     GetCurrentVaultRedux: (vaultId: number) => void;
     LoadVaultPeopleRedux: (vaultId: number) => void;
     DeleteSecretRedux: (secretId: number, vaultId: number) => void;
-    CreateSecretRedux: (secretId: number) => void;
-    UpdateSecretRedux: (secretId: number) => void;
+    CreateSecretRedux: (secret: IUpdateSecretEntity) => void;
+    UpdateSecretRedux: (secret: IUpdateSecretEntity) => void;
 
     GetSingleSecretRedux: (secretId: number) => void;
     UpdateVaultRedux: (vault: UpdateVaultEntity) => void;
     CreateVaultRedux: (vault: UpdateVaultEntity) => void;
+    DeleteVaultRedux: (vaultId: number) => void;
     // GetOneSecretAsync: (secretId: number) => IOneVaultSecretReturn;
 }
 
@@ -250,26 +255,64 @@ export class VaultController implements IVaultController {
         // });
     }
 
-    CreateSecretRedux(secretId: number) {
+    CreateSecretRedux(secret: IUpdateSecretEntity) {
         return (dispatch: any, getState: any) => {
-            // this.DeleteSecret(secretId, vaultId,
-            //     (error: MainErrorObjectBack, data: BoolResultBack) => {
-            //         if (data?.result) {
-            //             dispatch(DeleteSecretActionCreator({ VaultId: vaultId, SecretId: secretId }));
-            //         }
-            //     });
+            this.CreateSecret(secret,
+                (error: MainErrorObjectBack, data: IUpdateSecretReturn) => {
+                    if (data) {
+                        dispatch(CreateSecretActionCreator(secret));
+                    }
+                });
         };
     }
 
-    UpdateSecretRedux(secretId: number) {
+    CreateSecret(secret: IUpdateSecretEntity, onSuccess: UpdateSecretReturn) {
+        let newData = {} as IUpdateSecretReturn;
+        newData.id = Math.floor(Math.random() * 9999);
+        onSuccess(null, newData);
+        //G_AjaxHelper.GoAjaxRequest({
+        //     Data: {
+        //         'roomname': roomname,
+        //         'userConnectionId': userId
+        //     },
+        //     Type: "GET",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
+
+        // });
+    }
+
+    UpdateSecretRedux(secret: IUpdateSecretEntity) {
         return (dispatch: any, getState: any) => {
-            // this.DeleteSecret(secretId, vaultId,
-            //     (error: MainErrorObjectBack, data: BoolResultBack) => {
-            //         if (data?.result) {
-            //             dispatch(DeleteSecretActionCreator({ VaultId: vaultId, SecretId: secretId }));
-            //         }
-            //     });
+            this.UpdateSecret(secret,
+                (error: MainErrorObjectBack, data: IUpdateSecretReturn) => {
+                    if (data) {//todo закидывать secret? тогде поменять на bool result
+                        dispatch(UpdateSecretActionCreator(secret));
+                    }
+                });
         };
+    }
+
+    UpdateSecret(secret: IUpdateSecretEntity, onSuccess: UpdateSecretReturn) {
+        let newData = {} as IUpdateSecretReturn;
+        // newData.id = Math.floor(Math.random() * 9999);
+        onSuccess(null, newData);
+        //G_AjaxHelper.GoAjaxRequest({
+        //     Data: {
+        //         'roomname': roomname,
+        //         'userConnectionId': userId
+        //     },
+        //     Type: "GET",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
+
+        // });
     }
 
     GetSingleSecretRedux(secretId: number) {
@@ -316,7 +359,11 @@ export class VaultController implements IVaultController {
             this.UpdateVault(vault,
                 (error: MainErrorObjectBack, data: BoolResultBack) => {
                     if (data?.result) {
-                        dispatch(UpdateVaultActionCreator({}));
+                        let newData = {} as IUpdateVaultActionPayload;
+                        newData.Id = vault.Id;
+                        newData.Name = vault.Name;
+                        newData.IsPublic = vault.IsPublic;
+                        dispatch(UpdateVaultActionCreator(newData));
                     }
                 });
         };
@@ -357,10 +404,40 @@ export class VaultController implements IVaultController {
 
     CreateVault(vault: UpdateVaultEntity, onSuccess: CreateVaultReturn) {
         let newData = {} as ICreateVaultReturn;
-        newData.id = vault.Id;
+        // newData.id = vault.Id;
+        newData.id = Math.floor(Math.random() * 9999);
         newData.name = vault.Name;
         newData.isPublic = vault.IsPublic;
         onSuccess(null, newData);
+        //G_AjaxHelper.GoAjaxRequest({
+        //     Data: {
+        //         'roomname': roomname,
+        //         'userConnectionId': userId
+        //     },
+        //     Type: "GET",
+        //     FuncSuccess: (xhr, status, jqXHR) => {
+        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+        //     },
+        //     FuncError: (xhr, status, error) => { },
+        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
+
+        // });
+    }
+
+    DeleteVaultRedux(vaultId: number) {
+        return (dispatch: any, getState: any) => {
+            this.DeleteVault(vaultId,
+                (error: MainErrorObjectBack, data: BoolResultBack) => {
+                    if (data?.result) {
+                        dispatch(DeleteVaultActionCreator(vaultId));
+                    }
+                });
+        };
+    }
+
+    DeleteVault(vaultId: number, onSuccess: DeleteVaultReturn) {
+
+        onSuccess(null, BoolResultBack.GetTrue());
         //G_AjaxHelper.GoAjaxRequest({
         //     Data: {
         //         'roomname': roomname,

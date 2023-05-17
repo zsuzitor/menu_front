@@ -46,7 +46,7 @@ const OneVault = (props: IOneVaultProps) => {
         props.LoadVault(props.VaultId);
     }, [props.VaultId]);
 
-    let backLink = <Link
+    let backLink = <Link id='list_vault_link_id'
         to={'/vault-app/'}>
         Список Vaults</Link>
 
@@ -70,7 +70,11 @@ const OneVault = (props: IOneVaultProps) => {
             <button className='btn btn-b-light'
                 onClick={() => setShowEditForm(true)}>Редактировать</button>
             <button className='btn btn-b-light'
-                onClick={() => alert('todo props.delete; linkredirect.click?')}>Удалить</button>
+                onClick={() => {
+                    props.DeleteVault(props.Vault.Id);
+                    document.getElementById('list_vault_link_id').click();
+                }
+                }>Удалить</button>
         </div>
         <input type='text'
             className='form-control'
@@ -81,7 +85,7 @@ const OneVault = (props: IOneVaultProps) => {
             {vault.Secrets.filter(x => !filterSecretKey || (x.Key.indexOf(filterSecretKey) != -1))
                 .map(s => <VaultSecret key={s.Id} Secret={s}></VaultSecret>)}
         </div>
-        <button className='btn btn-b-light'>Добавить</button>
+        <button className='btn btn-b-light' onClick={() => alert('todo')}>Добавить</button>
     </div>
 }
 

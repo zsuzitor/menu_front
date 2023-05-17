@@ -3,6 +3,7 @@ import { AppAction } from "../../../../Models/Actions/Actions";
 import { OneVaultInList } from "../Entity/State/OneVaultInList";
 import { OneVaultSecret } from "../Entity/State/OneVaultSecret";
 import { VaultUser } from "../Entity/State/VaultUser";
+import { IUpdateSecretEntity } from "../Entity/UpdateSecretEntity";
 
 
 export interface IChangeCurrentVaultIdActionPayload {
@@ -57,10 +58,30 @@ export function SetCurrentVaultActionCreator(data: OneVault): AppAction<OneVault
 };
 
 export interface IUpdateVaultActionPayload {
+    Id: number;
+    Name: string;
+    IsPublic: boolean;
 }
 export const UpdateVaultActionName: string = 'UpdateVaultAction';
 export function UpdateVaultActionCreator(data: IUpdateVaultActionPayload): AppAction<IUpdateVaultActionPayload> {
     return { type: UpdateVaultActionName, payload: data };
+};
+
+export interface IUpdateSecretActionPayload extends IUpdateSecretEntity {
+    Id: number;
+    VaultId: number;
+    Key: string;
+    Value: string;
+}
+
+export const UpdateSecretActionName: string = 'UpdateSecretAction';
+export function UpdateSecretActionCreator(data: IUpdateSecretActionPayload): AppAction<IUpdateSecretActionPayload> {
+    return { type: UpdateSecretActionName, payload: data };
+};
+
+export const CreateSecretActionName: string = 'CreateSecretAction';
+export function CreateSecretActionCreator(data: IUpdateSecretActionPayload): AppAction<IUpdateSecretActionPayload> {
+    return { type: CreateSecretActionName, payload: data };
 };
 
 export interface ICreateVaultActionPayload {
@@ -71,4 +92,9 @@ export interface ICreateVaultActionPayload {
 export const CreateVaultActionName: string = 'CreateVaultAction';
 export function CreateVaultActionCreator(data: ICreateVaultActionPayload): AppAction<ICreateVaultActionPayload> {
     return { type: CreateVaultActionName, payload: data };
+};
+
+export const DeleteVaultActionName: string = 'DeleteVaultAction';
+export function DeleteVaultActionCreator(data: number): AppAction<number> {
+    return { type: DeleteVaultActionName, payload: data };
 };

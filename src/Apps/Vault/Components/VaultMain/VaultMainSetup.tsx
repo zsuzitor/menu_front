@@ -9,7 +9,7 @@ interface IVaultMainOwnProps {
 }
 
 interface IVaultMainStateToProps {
-    VaultId: number;
+    VaultId?: number;
 }
 
 interface IVaultMainDispatchToProps {

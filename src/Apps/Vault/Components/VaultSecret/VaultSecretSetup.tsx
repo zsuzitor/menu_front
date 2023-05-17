@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Entity/State/AppState';
 import { OneVaultSecret } from '../../Models/Entity/State/OneVaultSecret';
+import { IUpdateSecretEntity } from '../../Models/Entity/UpdateSecretEntity';
 
 
 
@@ -15,7 +16,7 @@ interface IVaultSecretStateToProps {
 
 interface IVaultSecretDispatchToProps {
     DeleteSecret: (secretId: number, vaultId: number) => void;
-    UpdateSecret: (id: number) => void;
+    UpdateSecret: (secret: IUpdateSecretEntity) => void;
     GetSingleSecret: (id: number) => void;
 }
 
@@ -36,13 +37,14 @@ const mapDispatchToProps = (dispatch: any, ownProps: IVaultSecretOwnProps) => {
     res.DeleteSecret = (secretId, vaultId) => {
         dispatch(window.G_VaultController.DeleteSecretRedux(secretId, vaultId));
     };
-    res.UpdateSecret = (id) => {
-        dispatch(window.G_VaultController.UpdateSecretRedux(id));
+    res.UpdateSecret = (secret) => {
+        dispatch(window.G_VaultController.UpdateSecretRedux(secret));
     };
 
     res.GetSingleSecret = (id) => {
         dispatch(window.G_VaultController.GetSingleSecretRedux(id));
     }
+  
 
     return res;
 };

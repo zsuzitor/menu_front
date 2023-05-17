@@ -6,12 +6,12 @@ import { OneVaultSecret } from "./OneVaultSecret";
 export class VaultAppState {
     VaultList: OneVaultInList[];
     CurrentVault: OneVault;
-    CurrentVaultId: number;
+    CurrentVaultId?: number;
     OpenedSecret: OneVaultSecret;//для доступа по прямой ссылке
 
     constructor() {
         this.VaultList = [];
 
-        this.CurrentVaultId = 0;
+        this.CurrentVaultId = null;
     }
 }

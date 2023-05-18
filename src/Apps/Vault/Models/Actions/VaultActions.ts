@@ -67,20 +67,20 @@ export function UpdateVaultActionCreator(data: IUpdateVaultActionPayload): AppAc
     return { type: UpdateVaultActionName, payload: data };
 };
 
-export interface IUpdateSecretActionPayload extends IUpdateSecretEntity {
-    Id: number;
-    VaultId: number;
-    Key: string;
-    Value: string;
-}
+// export interface IUpdateSecretActionPayload extends IUpdateSecretEntity {
+//     Id: number;
+//     VaultId: number;
+//     Key: string;
+//     Value: string;
+// }
 
 export const UpdateSecretActionName: string = 'UpdateSecretAction';
-export function UpdateSecretActionCreator(data: IUpdateSecretActionPayload): AppAction<IUpdateSecretActionPayload> {
+export function UpdateSecretActionCreator(data: OneVaultSecret): AppAction<OneVaultSecret> {
     return { type: UpdateSecretActionName, payload: data };
 };
 
 export const CreateSecretActionName: string = 'CreateSecretAction';
-export function CreateSecretActionCreator(data: IUpdateSecretActionPayload): AppAction<IUpdateSecretActionPayload> {
+export function CreateSecretActionCreator(data: OneVaultSecret): AppAction<OneVaultSecret> {
     return { type: CreateSecretActionName, payload: data };
 };
 

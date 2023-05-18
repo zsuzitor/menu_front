@@ -8,6 +8,7 @@ import { IUpdateSecretEntity } from '../../Models/Entity/UpdateSecretEntity';
 
 interface IVaultSecretOwnProps {
     Secret?: OneVaultSecret;
+    IsNew?: boolean;
 }
 
 interface IVaultSecretStateToProps {
@@ -17,6 +18,7 @@ interface IVaultSecretStateToProps {
 interface IVaultSecretDispatchToProps {
     DeleteSecret: (secretId: number, vaultId: number) => void;
     UpdateSecret: (secret: IUpdateSecretEntity) => void;
+    CreateSecret: (secret: IUpdateSecretEntity) => void;
     GetSingleSecret: (id: number) => void;
 }
 
@@ -44,6 +46,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: IVaultSecretOwnProps) => {
     res.GetSingleSecret = (id) => {
         dispatch(window.G_VaultController.GetSingleSecretRedux(id));
     }
+
+    res.CreateSecret = (secret) => {
+        dispatch(window.G_VaultController.CreateSecretRedux(secret));
+    };
   
 
     return res;

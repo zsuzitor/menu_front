@@ -15,7 +15,7 @@ import { OneVaultInList } from "../Entity/State/OneVaultInList";
 import { OneVaultSecret } from "../Entity/State/OneVaultSecret";
 import { VaultUser } from "../Entity/State/VaultUser";
 import { IUpdateSecretEntity } from "../Entity/UpdateSecretEntity";
-import { IUpdateSecretReturn } from "../BackModels/IUpdateSecretReturn";
+// import { IUpdateSecretReturn } from "../BackModels/IUpdateSecretReturn";
 
 
 
@@ -28,7 +28,7 @@ type GetOneVaultReturn = (error: MainErrorObjectBack, data: IOneVaultReturn) => 
 type CreateVaultReturn = (error: MainErrorObjectBack, data: ICreateVaultReturn) => void;
 type UpdateVaultReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 type DeleteVaultReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
-type UpdateSecretReturn = (error: MainErrorObjectBack, data: IUpdateSecretReturn) => void;
+type UpdateSecretReturn = (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => void;
 
 
 
@@ -44,8 +44,8 @@ export interface IVaultController {
     UpdateSecretRedux: (secret: IUpdateSecretEntity) => void;
 
     GetSingleSecretRedux: (secretId: number) => void;
-    UpdateVaultRedux: (vault: UpdateVaultEntity) => void;
-    CreateVaultRedux: (vault: UpdateVaultEntity) => void;
+    UpdateVaultRedux: (vault: UpdateVaultEntity, successCallBack?: () => void) => void;
+    CreateVaultRedux: (vault: UpdateVaultEntity, successCallBack?: () => void) => void;
     DeleteVaultRedux: (vaultId: number) => void;
     // GetOneSecretAsync: (secretId: number) => IOneVaultSecretReturn;
 }
@@ -258,17 +258,25 @@ export class VaultController implements IVaultController {
     CreateSecretRedux(secret: IUpdateSecretEntity) {
         return (dispatch: any, getState: any) => {
             this.CreateSecret(secret,
-                (error: MainErrorObjectBack, data: IUpdateSecretReturn) => {
+                (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => {
                     if (data) {
-                        dispatch(CreateSecretActionCreator(secret));
+                        let newData = new OneVaultSecret();
+                        newData.FillByBackModel(data);
+                        dispatch(CreateSecretActionCreator(newData));
                     }
                 });
         };
     }
 
     CreateSecret(secret: IUpdateSecretEntity, onSuccess: UpdateSecretReturn) {
-        let newData = {} as IUpdateSecretReturn;
+        let newData = {} as IOneVaultSecretReturn;
         newData.id = Math.floor(Math.random() * 9999);
+        newData.dieDate = secret.DieDate;
+        newData.isCoded = secret.IsCoded;
+        newData.isPublic = secret.IsPublic;
+        newData.key = secret.Key;
+        newData.value = secret.Value;
+        newData.vaultId = secret.VaultId;
         onSuccess(null, newData);
         //G_AjaxHelper.GoAjaxRequest({
         //     Data: {
@@ -288,16 +296,25 @@ export class VaultController implements IVaultController {
     UpdateSecretRedux(secret: IUpdateSecretEntity) {
         return (dispatch: any, getState: any) => {
             this.UpdateSecret(secret,
-                (error: MainErrorObjectBack, data: IUpdateSecretReturn) => {
+                (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => {
                     if (data) {//todo закидывать secret? тогде поменять на bool result
-                        dispatch(UpdateSecretActionCreator(secret));
+                        let newData = new OneVaultSecret();
+                        newData.FillByBackModel(data);
+                        dispatch(UpdateSecretActionCreator(newData));
                     }
                 });
         };
     }
 
     UpdateSecret(secret: IUpdateSecretEntity, onSuccess: UpdateSecretReturn) {
-        let newData = {} as IUpdateSecretReturn;
+        let newData = {} as IOneVaultSecretReturn;
+        newData.id = secret.Id;
+        newData.dieDate = secret.DieDate;
+        newData.isCoded = secret.IsCoded;
+        newData.isPublic = secret.IsPublic;
+        newData.key = secret.Key;
+        newData.value = secret.Value;
+        newData.vaultId = secret.VaultId;
         // newData.id = Math.floor(Math.random() * 9999);
         onSuccess(null, newData);
         //G_AjaxHelper.GoAjaxRequest({
@@ -354,7 +371,7 @@ export class VaultController implements IVaultController {
     }
 
 
-    UpdateVaultRedux(vault: UpdateVaultEntity) {
+    UpdateVaultRedux(vault: UpdateVaultEntity, successCallBack?: () => void) {
         return (dispatch: any, getState: any) => {
             this.UpdateVault(vault,
                 (error: MainErrorObjectBack, data: BoolResultBack) => {
@@ -364,6 +381,7 @@ export class VaultController implements IVaultController {
                         newData.Name = vault.Name;
                         newData.IsPublic = vault.IsPublic;
                         dispatch(UpdateVaultActionCreator(newData));
+                        successCallBack();
                     }
                 });
         };
@@ -387,7 +405,7 @@ export class VaultController implements IVaultController {
         // });
     }
 
-    CreateVaultRedux(vault: UpdateVaultEntity) {
+    CreateVaultRedux(vault: UpdateVaultEntity, successCallBack?: () => void) {
         return (dispatch: any, getState: any) => {
             this.CreateVault(vault,
                 (error: MainErrorObjectBack, data: ICreateVaultReturn) => {
@@ -397,6 +415,7 @@ export class VaultController implements IVaultController {
                         newdata.IsPublic = data.isPublic;
                         newdata.Name = data.name;
                         dispatch(CreateVaultActionCreator(newdata));
+                        successCallBack();
                     }
                 });
         };

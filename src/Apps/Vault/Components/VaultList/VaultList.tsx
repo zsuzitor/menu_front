@@ -31,12 +31,12 @@ const VaultList = (props: IVaultListProps) => {
             {showAddForm ? <AdditionalWindow CloseWindow={() => setShowAddForm(false)}
                 IsHeightWindow={false}
                 Title='Добавление хранилища'
-                InnerContent={() => <CreateVault
+                InnerContent={() => <CreateVault WasCreated={() => setShowAddForm(false)}
                 ></CreateVault>}></AdditionalWindow> : <></>}
         </div>
         <div className='vault-list-container'>
             {props.Vaults.map(v => <OneVaultInList key={v.Id} Vault={v}></OneVaultInList>)}
-            <div className='create-vault-in-list' onClick={() => setShowAddForm(!showAddForm)}>+</div>
+            <div className='create-vault-in-list' onClick={() => setShowAddForm(true)}>+</div>
         </div>
 
     </div>

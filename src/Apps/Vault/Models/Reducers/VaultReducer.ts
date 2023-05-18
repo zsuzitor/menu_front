@@ -4,7 +4,7 @@ import { AppAction } from '../../../../Models/Actions/Actions';
 import { AppState } from '../../../../Models/Entity/State/AppState';
 import { OneVault } from '../Entity/State/OneVault';
 import { OneVaultSecret } from '../Entity/State/OneVaultSecret';
-import { ChangeCurrentVaultIdActionName, SetVaultsListActionName, SetVaultsSecretsActionName, ISetVaultsSecretsActionPayload, SetVaultsPeopleActionName, ISetVaultsPeopleActionPayload, DeleteSecretActionName, IDeleteSecretActionPayload, SetSingleSecretActionName, SetCurrentVaultActionName, UpdateVaultActionName, IUpdateVaultActionPayload, CreateVaultActionName, ICreateVaultActionPayload, DeleteVaultActionName, UpdateSecretActionName, IUpdateSecretActionPayload, CreateSecretActionName } from '../Actions/VaultActions';
+import { ChangeCurrentVaultIdActionName, SetVaultsListActionName, SetVaultsSecretsActionName, ISetVaultsSecretsActionPayload, SetVaultsPeopleActionName, ISetVaultsPeopleActionPayload, DeleteSecretActionName, IDeleteSecretActionPayload, SetSingleSecretActionName, SetCurrentVaultActionName, UpdateVaultActionName, IUpdateVaultActionPayload, CreateVaultActionName, ICreateVaultActionPayload, DeleteVaultActionName, UpdateSecretActionName, CreateSecretActionName } from '../Actions/VaultActions';
 import { OneVaultInList } from '../Entity/State/OneVaultInList';
 
 
@@ -115,13 +115,16 @@ export function VaultReducer(state: AppState = new AppState(), action: AppAction
         case UpdateSecretActionName:
             {
                 let newState = cloneDeep(state);
-                let typedAction = action.payload as IUpdateSecretActionPayload;
+                let typedAction = action.payload as OneVaultSecret;
                 if (newState.VaultApp.CurrentVault) {
                     let secret = newState.VaultApp.CurrentVault
                         .Secrets.find(x => x.Id == typedAction.Id);
                     if (secret) {
                         secret.Key = typedAction.Key;
                         secret.Value = typedAction.Value;
+                        secret.DieDate = typedAction.DieDate;
+                        secret.IsCoded = typedAction.IsCoded;
+                        secret.IsPublic = typedAction.IsPublic;
                     }
                 }
 
@@ -131,13 +134,16 @@ export function VaultReducer(state: AppState = new AppState(), action: AppAction
         case CreateSecretActionName:
             {
                 let newState = cloneDeep(state);
-                let typedAction = action.payload as IUpdateSecretActionPayload;
+                let typedAction = action.payload as OneVaultSecret;
                 if (newState.VaultApp.CurrentVault) {
                     let newSecret = new OneVaultSecret();
                     newSecret.Id = typedAction.Id;
                     newSecret.Key = typedAction.Key;
                     newSecret.Value = typedAction.Value;
                     newSecret.VaultId = typedAction.VaultId;
+                    newSecret.DieDate = typedAction.DieDate;
+                    newSecret.IsCoded = typedAction.IsCoded;
+                    newSecret.IsPublic = typedAction.IsPublic;
                     newState.VaultApp.CurrentVault.Secrets.push(newSecret);
                 }
 

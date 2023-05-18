@@ -91,11 +91,11 @@ const CreateVault = (props: ICreateVaultProps) => {
             newVault.Name = vaultName;
             if (props.Vault?.Id) {
                 newVault.Id = props.Vault.Id;
-                props.UpdateVault(newVault);
+                props.UpdateVault(newVault, () => props.WasCreated());
             }
             else {
 
-                props.CreateVault(newVault);
+                props.CreateVault(newVault, () => props.WasCreated());
             }
 
         }}>Сохранить</button>

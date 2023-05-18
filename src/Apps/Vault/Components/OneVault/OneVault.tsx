@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import VaultSecret from '../VaultSecret/VaultSecret';
 import CreateVault from '../CreateVault/CreateVault';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
+import { OneVaultSecret } from '../../Models/Entity/State/OneVaultSecret';
 
 
 
@@ -18,6 +19,7 @@ const OneVault = (props: IOneVaultProps) => {
     // const [code, setCode] = useState('');
     const [filterSecretKey, setFilterSecretKey] = useState('');
     const [showEditForm, setShowEditForm] = useState(false);
+    // const [shoNewSecretForm, setShoNewSecretForm] = useState(false);
 
 
 
@@ -56,12 +58,12 @@ const OneVault = (props: IOneVaultProps) => {
         </div>
     }
 
-
+    let secretForNewForm = new OneVaultSecret();
     return <div className='one-vault-list'>
         {showEditForm ? <AdditionalWindow CloseWindow={() => setShowEditForm(false)}
             IsHeightWindow={true}
             Title='Редактирование хранилища'
-            InnerContent={() => <CreateVault Vault={vault}
+            InnerContent={() => <CreateVault Vault={vault} WasCreated={() => setShowEditForm(false)}
             ></CreateVault>}></AdditionalWindow> : <></>}
         {backLink}
         <div>
@@ -81,11 +83,14 @@ const OneVault = (props: IOneVaultProps) => {
             placeholder='Поиск'
             onChange={(e => setFilterSecretKey(e.target.value))}
             value={filterSecretKey}></input>
+        {/* <button className='btn btn-b-light' onClick={() => setShoNewSecretForm(true)}>Добавить Secret</button> */}
+
         <div className='vault-secrets-list'>
+            <VaultSecret key="new_secret" IsNew={true}
+                Secret={secretForNewForm}></VaultSecret>
             {vault.Secrets.filter(x => !filterSecretKey || (x.Key.indexOf(filterSecretKey) != -1))
-                .map(s => <VaultSecret key={s.Id} Secret={s}></VaultSecret>)}
+                .map(s => <VaultSecret key={s.Id} Secret={s} IsNew={false}></VaultSecret>)}
         </div>
-        <button className='btn btn-b-light' onClick={() => alert('todo')}>Добавить</button>
     </div>
 }
 

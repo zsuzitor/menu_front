@@ -9,6 +9,8 @@ import { UpdateVaultEntity } from '../../Models/Entity/UpdateVaultEntity';
 
 interface ICreateVaultOwnProps {
     Vault?: OneVault;
+
+    WasCreated: () => void;
 }
 
 interface ICreateVaultStateToProps {
@@ -16,8 +18,8 @@ interface ICreateVaultStateToProps {
 
 interface ICreateVaultDispatchToProps {
     LoadVaultPeople: (vaultId: number) => void;
-    CreateVault: (vault: UpdateVaultEntity) => void;
-    UpdateVault: (vault: UpdateVaultEntity) => void;
+    CreateVault: (vault: UpdateVaultEntity, successCallBack?: () => void) => void;
+    UpdateVault: (vault: UpdateVaultEntity, successCallBack?: () => void) => void;
 }
 
 export interface ICreateVaultProps extends ICreateVaultStateToProps, ICreateVaultOwnProps, ICreateVaultDispatchToProps {
@@ -37,11 +39,11 @@ const mapDispatchToProps = (dispatch: any, ownProps: ICreateVaultOwnProps) => {
     res.LoadVaultPeople = (vaultId) => {
         dispatch(window.G_VaultController.LoadVaultPeopleRedux(vaultId));
     };
-    res.CreateVault = (vault) => {
-        dispatch(window.G_VaultController.CreateVaultRedux(vault));
+    res.CreateVault = (vault, successCallBack) => {
+        dispatch(window.G_VaultController.CreateVaultRedux(vault, successCallBack));
     };
-    res.UpdateVault = (vault) => {
-        dispatch(window.G_VaultController.UpdateVaultRedux(vault));
+    res.UpdateVault = (vault, successCallBack) => {
+        dispatch(window.G_VaultController.UpdateVaultRedux(vault, successCallBack));
     };
 
     return res;

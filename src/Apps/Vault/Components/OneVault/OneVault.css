@@ -4,3 +4,7 @@
     flex-wrap: wrap;
     padding-top: 10px;
 }
+
+.vault-secrets-list input.form-control {
+    height: 30px;
+}

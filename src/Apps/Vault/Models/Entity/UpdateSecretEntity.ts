@@ -4,4 +4,7 @@ export interface IUpdateSecretEntity {
     VaultId: number;
     Key: string;
     Value: string;
+    IsCoded: boolean;
+    IsPublic: boolean;
+    DieDate: Date;
 }

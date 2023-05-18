@@ -32,7 +32,6 @@ const VaultSecret = (props: IVaultSecretProps) => {
     useEffect(() => {
 
         if (!secret?.Key) {
-            //todo берем из урла, сетаем в стейт id, грузим запись из бд и сохраняем в стейт запись
             let pathNameUrlSplit = document.location.pathname.split('/');
             if (pathNameUrlSplit && pathNameUrlSplit.length > 3 && pathNameUrlSplit[2] === 'secret') {
                 props.GetSingleSecret(+pathNameUrlSplit[3]);
@@ -40,17 +39,21 @@ const VaultSecret = (props: IVaultSecretProps) => {
 
 
         }
-        else {
-            setSecretKey(secret?.Key || '');
-        }
+        // else {
+        //     setSecretKey(secret?.Key || '');
+        // }
 
-        setSecretKey(secret?.Key || '');//todo тут надо сетнуть то что загрузили
-        setSecretValue(secret?.Value || '');//todo тут надо сетнуть то что загрузили
-        setSecretDieDate(secret?.DieDate || null);
-        setSecretIsCoded(secret?.IsCoded == null ? true : secret.IsCoded);
+        setSecretKey(secret?.Key || '');
+
         setShowSecretValue(false);
 
     }, [secret?.Key]);
+
+    useEffect(() => {
+        setSecretValue(secret?.Value || '');
+        setSecretDieDate(secret?.DieDate || null);
+        setSecretIsCoded(secret?.IsCoded == null ? true : secret.IsCoded);
+    }, [secret?.Value, secret?.DieDate, secret?.IsCoded]);
 
 
 
@@ -64,6 +67,19 @@ const VaultSecret = (props: IVaultSecretProps) => {
         var y = date.getFullYear();
         return '' + y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
     }
+
+    function cancelChanges() {
+        setSecretValue(secret.Value);
+        setSecretDieDate(secret?.DieDate || null);
+        setSecretIsCoded(secret?.IsCoded == null ? true : secret.IsCoded);
+        setShowSecretValue(false);
+    }
+
+    let hasChanges = //secretKey != (secret?.Key || '')
+        //||
+        secretValue != secret?.Value
+        || secretDieDate != secret.DieDate
+        || secretIsCoded != (secret?.IsCoded == null ? true : secret.IsCoded);
 
 
     let showValueImage = 'eye5.png';
@@ -80,6 +96,10 @@ const VaultSecret = (props: IVaultSecretProps) => {
         showMoreButtonClass = ' but-opend';
     }
 
+    if (props.IsNew) {
+        vaultSecretClass += " vault-secret-new";
+    }
+
     // console.log('d1' + secretDieDate);
     if (!secret) {
         return <div>todo Не найдено</div>
@@ -87,21 +107,25 @@ const VaultSecret = (props: IVaultSecretProps) => {
 
     return <div className={'vault-secret ' + vaultSecretClass}>
         <div className='vault-secret-main'>
-            <div className='vault-secret-key' title={secretKey}>{secretKey}</div>
+            <div className='vault-secret-key' title={secretKey}>
+                <input type='text' className='form-control'
+                 value={secretKey} onChange={(e) => setSecretKey(e.target.value)}></input>
+            </div>
             <div className='vault-secret-val'>
-                <textarea value={showSecretValue ? secretValue : '***'} className='form-control'
+                <textarea value={(showSecretValue || props.IsNew) ? secretValue : '***'} className='form-control'
                     onChange={(e) => setSecretValue(e.target.value)}></textarea>
             </div>
             <div className='vault-secret-main-buttons'>
-                <div className='but vault-secret-show-val' title={showValueTitle}
+                {props.IsNew ? <></> : <><div className='but vault-secret-show-val' title={showValueTitle}
                     onClick={() => setShowSecretValue(!showSecretValue)}>
                     <img className='persent-100-width-height' src={"/images/" + showValueImage} />
                 </div>
-                <div className='but vault-secret-copy' title='Скопировать значение'
-                    onClick={() => navigator.clipboard.writeText(secretValue)}>
-                    {/* todo надо что бы при клике и успешном копировании временно менялось на галку vote4.png */}
-                    <img className='persent-100-width-height' src={"/images/" + 'copy.png'} />
-                </div>
+                    <div className='but vault-secret-copy' title='Скопировать значение'
+                        onClick={() => navigator.clipboard.writeText(secretValue)}>
+                        {/* todo надо что бы при клике и успешном копировании временно менялось на галку vote4.png */}
+                        <img className='persent-100-width-height' src={"/images/" + 'copy.png'} />
+                    </div></>}
+
                 <div className={'but vault-secret-more-but' + showMoreButtonClass}
                     title='Показать больше' onClick={() => setShowMoreInfo(!showMoreInfo)}>
                     <img className='persent-100-width-height' src={"/images/" + 'arrow2.png'} />
@@ -121,33 +145,42 @@ const VaultSecret = (props: IVaultSecretProps) => {
             {/* <input type='text' className='form-control'
                 placeholder='Ключ для кастомной ссылки'></input> */}
             <div className='buttons'>
-                <div className='but' title='Удалить'
-                    onClick={() => props.DeleteSecret(props.Secret.Id, props.Secret.VaultId)}>
-                    <img className='persent-100-width-height' src={"/images/" + 'delete-icon.png'} />
-                </div>
-                <div className='but' title='Сохранить' onClick={() => {
+                {hasChanges ? <><div className='but' title='Сохранить' onClick={() => {
                     let newData = {} as IUpdateSecretEntity;
                     newData.Id = props.Secret.Id;
                     newData.Key = secretKey;
                     newData.Value = secretValue;
                     newData.VaultId = secret.VaultId;
-                    props.UpdateSecret(newData);
-                    alert('todo');
+                    if (props.IsNew) {
+                        props.CreateSecret(newData);
+                        cancelChanges();
+                    }
+                    else {
+                        props.UpdateSecret(newData);
+                    }
                 }}>
                     <img className='persent-100-width-height' src={"/images/" + 'save-icon.png'} />
                 </div>
-                <div className='but' title='Отменить изменения' onClick={() => {
-                    setSecretValue(secret.Value);
-                    setSecretDieDate(secret?.DieDate || null);
-                    setSecretIsCoded(secret?.IsCoded == null ? true : secret.IsCoded);
-                    setShowSecretValue(false);
-                }}>
-                    <img className='persent-100-width-height' src={"/images/" + 'cancel.png'} />
+                    <div className='but' title='Отменить изменения' onClick={() => {
+                        cancelChanges();
+
+                    }}>
+                        <img className='persent-100-width-height' src={"/images/" + 'cancel.png'} />
+                    </div></> : <></>}
+
+                {props.IsNew ? <>
+                </> : <><div className='but' title='Удалить'
+                    onClick={() =>
+                        props.DeleteSecret(props.Secret.Id, props.Secret.VaultId)}>
+                    <img className='persent-100-width-height'
+                        src={"/images/" + 'delete-icon.png'} />
                 </div>
-                <div className='but' title='Ссылка на секрет'
-                    onClick={() => navigator.clipboard.writeText(document.location.origin + '/vault-app/secret/' + secret.Id)}>
-                    <img className='persent-100-width-height' src={"/images/" + 'share-icon.png'} />
-                </div>
+                    <div className='but' title='Ссылка на секрет'
+                        onClick={() => navigator.clipboard
+                            .writeText(document.location.origin + '/vault-app/secret/' + secret.Id)}>
+                        <img className='persent-100-width-height' src={"/images/" + 'share-icon.png'} />
+                    </div></>}
+
             </div>
 
         </div> : <></>}

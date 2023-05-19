@@ -25,7 +25,7 @@ import { CodeReviewProjectController } from "./Apps/CodeReviewApp/Models/Control
 import { CodeReviewTaskController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewTaskController";
 import { CodeReviewUserController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewUserController";
 import { WordsListController } from "./Apps/WordsCardsApp/Models/Controllers/WordsListController";
-import { MainErrorHandler } from "./Models/Entity/ErrorHandleLogic";
+import { MainErrorHandler } from "./Models/BL/ErrorHandleLogic";
 
 
 require('../style/main.css');

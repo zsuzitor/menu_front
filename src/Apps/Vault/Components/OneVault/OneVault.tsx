@@ -49,7 +49,7 @@ const OneVault = (props: IOneVaultProps) => {
     }, [props.VaultId]);
 
     let backLink = <Link id='list_vault_link_id'
-        to={'/vault-app/'}>
+        to={G_VaultController.RouteUrlVaultApp}>
         Список Vaults</Link>
 
     if (!vault) {

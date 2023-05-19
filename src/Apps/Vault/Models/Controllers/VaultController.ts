@@ -34,6 +34,11 @@ type UpdateSecretReturn = (error: MainErrorObjectBack, data: IOneVaultSecretRetu
 
 
 export interface IVaultController {
+    RouteUrlVaultApp: string;
+    RouteUrlVaultsList: string;
+    RouteUrlOneVault: string;
+    RouteUrlOneSecret: string;
+
 
     GetVaultsRedux: () => void;
     GetVaultSecretsRedux: (vaultId: number) => void;
@@ -53,6 +58,10 @@ export interface IVaultController {
 
 
 export class VaultController implements IVaultController {
+    RouteUrlVaultApp: string = "/vault-app";
+    RouteUrlVaultsList: string = "/";
+    RouteUrlOneVault: string = "/vault/";
+    RouteUrlOneSecret: string = "/secret/";
 
     constructor() {
     }

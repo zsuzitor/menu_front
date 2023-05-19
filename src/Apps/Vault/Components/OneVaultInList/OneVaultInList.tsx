@@ -27,7 +27,8 @@ const OneVaultInList = (props: IOneVaultInListProps) => {
             <p>{props.Vault.Id}</p>
             <p>{props.Vault.Name}</p>
             <Link
-                to={'/vault-app/vault/' + props.Vault.Id}>
+                to={G_VaultController.RouteUrlVaultApp
+                    + G_VaultController.RouteUrlOneVault + props.Vault.Id}>
                 {/* <img className="persent-100-width-height" src={imgLogo} /> */}
                 Открыть</Link>
 

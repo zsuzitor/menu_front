@@ -13,6 +13,11 @@ export class OneVaultSecret implements MappedWithBack<IOneVaultSecretReturn> {
     VaultId: number;
 
     constructor() {
+        this.Key = '';
+        this.Value = '';
+        this.IsCoded = false;
+        this.IsPublic = false;
+        this.DieDate = null;
     }
 
     FillByBackModel(newData: IOneVaultSecretReturn): void {

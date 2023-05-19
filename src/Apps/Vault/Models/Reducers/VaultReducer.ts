@@ -49,7 +49,7 @@ export function VaultReducer(state: AppState = new AppState(), action: AppAction
                 let typedAction = action.payload as IDeleteSecretActionPayload;
                 // let vault = newState.VaultApp.VaultList.find(x => x.Id == typedAction.VaultId);
                 let vault = newState.VaultApp.CurrentVault;
-                vault.Secrets = vault.Secrets
+                vault.Secrets
                     .splice(vault.Secrets.findIndex(x => x.Id == typedAction.SecretId), 1);
                 return newState;
             }

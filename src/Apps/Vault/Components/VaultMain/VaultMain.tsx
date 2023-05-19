@@ -33,9 +33,9 @@ const VaultMain = (props: IVaultMainProps) => {
     return <div className='main-vault-container'>
         <Routes>
             {/* /vault-app */}
-            <Route path="/" element={<VaultList />} />
-            <Route path="/vault/*" element={<OneVault VaultId={props.VaultId} />} />
-            <Route path="/secret/*" element={<VaultSecret />} />
+            <Route path={G_VaultController.RouteUrlVaultsList} element={<VaultList />} />
+            <Route path={G_VaultController.RouteUrlOneVault + '*'} element={<OneVault VaultId={props.VaultId} />} />
+            <Route path={G_VaultController.RouteUrlOneSecret + '*'} element={<VaultSecret />} />
 
 
             {/* <Route component={NotFound} /> */}

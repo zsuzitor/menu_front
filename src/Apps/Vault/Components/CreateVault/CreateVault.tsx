@@ -91,6 +91,8 @@ const CreateVault = (props: ICreateVaultProps) => {
             newVault.Name = vaultName;
             if (props.Vault?.Id) {
                 newVault.Id = props.Vault.Id;
+                newVault.UsersForDelete = [...deletedUser];
+                newVault.UsersForAdd = addedUser.map(x => x.Email);
                 props.UpdateVault(newVault, () => props.WasCreated());
             }
             else {

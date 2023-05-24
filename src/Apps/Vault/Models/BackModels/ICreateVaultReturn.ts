@@ -1,5 +1,5 @@
 export interface ICreateVaultReturn {
     id: number;
     name: string;
-    isPublic: boolean;
+    is_public: boolean;
 }

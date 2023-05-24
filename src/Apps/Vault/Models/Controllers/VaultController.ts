@@ -26,7 +26,7 @@ type DeleteSecretReturn = (error: MainErrorObjectBack, data: BoolResultBack) => 
 type GetOneSecretReturn = (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => void;
 type GetOneVaultReturn = (error: MainErrorObjectBack, data: IOneVaultReturn) => void;
 type CreateVaultReturn = (error: MainErrorObjectBack, data: ICreateVaultReturn) => void;
-type UpdateVaultReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+type UpdateVaultReturn = (error: MainErrorObjectBack, data: ICreateVaultReturn) => void;
 type DeleteVaultReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 type UpdateSecretReturn = (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => void;
 
@@ -79,32 +79,27 @@ export class VaultController implements IVaultController {
                         });
 
                         dispatch(SetVaultsListActionCreator(newData));
-
                     }
                 });
         };
     }
 
     GetVaults(onSuccess: SetVaultsReturn) {
-        let resMoq = [];
-        resMoq.push({ id: 1, name: "11111" });
-        resMoq.push({ id: 2, name: "22" });
-        resMoq.push({ id: 3, name: "33" });
-        resMoq.push({ id: 4, name: "44" });
-        onSuccess(null, resMoq);
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: {
-        //         'roomname': roomname,
-        //         'userConnectionId': userId
-        //     },
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
-
-        // });
+        // let resMoq = [];
+        // resMoq.push({ id: 1, name: "11111" });
+        // resMoq.push({ id: 2, name: "22" });
+        // resMoq.push({ id: 3, name: "33" });
+        // resMoq.push({ id: 4, name: "44" });
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+            },
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/vault/get-my-vaults',
+        });
     }
 
     GetVaultSecretsRedux(vaultId: number) {
@@ -125,35 +120,33 @@ export class VaultController implements IVaultController {
     }
 
     GetVaultSecrets(vaultId: number, onSuccess: SetVaultSecretsReturn) {
-        let resMoq = [];
+        // let resMoq = [];
 
-        // isCoded: boolean;
-        // isPublic: boolean;
-        // dieDate: Date;
-        resMoq.push({ vaultId: vaultId, id: 1, key: "111111", value: "val11", isCoded: false, isPublic: true, dieDate: null });
-        resMoq.push({ vaultId: vaultId, id: 2, key: "111112", value: "val12", isCoded: false, isPublic: true, dieDate: null });
-        resMoq.push({ vaultId: vaultId, id: 3, key: "111113", value: "val13", isCoded: false, isPublic: false, dieDate: null });
-        resMoq.push({ vaultId: vaultId, id: 4, key: "111114", value: "val14", isCoded: false, isPublic: false, dieDate: null });
-        resMoq.push({ vaultId: vaultId, id: 5, key: "111115", value: "val15", isCoded: true, isPublic: true, dieDate: null });
-        onSuccess(null, resMoq);
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: {
-        //         'roomname': roomname,
-        //         'userConnectionId': userId
-        //     },
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
-
-        // });
+        // // isCoded: boolean;
+        // // isPublic: boolean;
+        // // dieDate: Date;
+        // resMoq.push({ vaultId: vaultId, id: 1, key: "111111", value: "val11", isCoded: false, isPublic: true, dieDate: null });
+        // resMoq.push({ vaultId: vaultId, id: 2, key: "111112", value: "val12", isCoded: false, isPublic: true, dieDate: null });
+        // resMoq.push({ vaultId: vaultId, id: 3, key: "111113", value: "val13", isCoded: false, isPublic: false, dieDate: null });
+        // resMoq.push({ vaultId: vaultId, id: 4, key: "111114", value: "val14", isCoded: false, isPublic: false, dieDate: null });
+        // resMoq.push({ vaultId: vaultId, id: 5, key: "111115", value: "val15", isCoded: true, isPublic: true, dieDate: null });
+        // onSuccess(null, resMoq);
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'vaultId': vaultId
+            },
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/secret/get-vault-secrets',
+        });
     }
 
     GetCurrentVaultRedux(vaultId: number) {
         return (dispatch: any, getState: any) => {
-            this.GetCurrentVault(vaultId,
+            this.GetVault(vaultId,
                 (error: MainErrorObjectBack, data: IOneVaultReturn) => {
                     if (data) {
                         let newData = new OneVault();
@@ -164,29 +157,27 @@ export class VaultController implements IVaultController {
         };
     }
 
-    GetCurrentVault(vaultId: number, onSuccess: GetOneVaultReturn) {
-        let resMoq = {} as IOneVaultReturn;
-        resMoq.id = vaultId;
-        resMoq.isPublic = true;
-        resMoq.name = 'nametest';
-        resMoq.secrets
-        this.GetVaultSecrets(vaultId, (error: MainErrorObjectBack, data: IOneVaultSecretReturn[]) => {
-            resMoq.secrets = data;
-        });
-        onSuccess(null, resMoq);
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: {
-        //         'roomname': roomname,
-        //         'userConnectionId': userId
-        //     },
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
-
+    GetVault(vaultId: number, onSuccess: GetOneVaultReturn) {
+        // let resMoq = {} as IOneVaultReturn;
+        // resMoq.id = vaultId;
+        // resMoq.isPublic = true;
+        // resMoq.name = 'nametest';
+        // resMoq.secrets
+        // this.GetVaultSecrets(vaultId, (error: MainErrorObjectBack, data: IOneVaultSecretReturn[]) => {
+        //     resMoq.secrets = data;
         // });
+        // onSuccess(null, resMoq);
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'vaultId': vaultId
+            },
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/vault/get-vault',
+        });
     }
 
 
@@ -208,30 +199,28 @@ export class VaultController implements IVaultController {
     }
 
     LoadVaultPeople(vaultId: number, onSuccess: SetVaultPeopleReturn) {
-        let resMoq = [];
+        // let resMoq = [];
 
         // isCoded: boolean;
         // isPublic: boolean;
         // dieDate: Date;
-        resMoq.push({ id: 1, email: 'userMail1@vvv.vv' });
-        resMoq.push({ id: 2, email: 'userMail2@vvv.vv' });
-        resMoq.push({ id: 3, email: 'userMail3@vvv.vv' });
-        resMoq.push({ id: 4, email: 'userMail4@vvv.vv' });
-        resMoq.push({ id: 5, email: 'userMail5@vvv.vv' });
-        onSuccess(null, resMoq);
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: {
-        //         'roomname': roomname,
-        //         'userConnectionId': userId
-        //     },
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
-
-        // });
+        // resMoq.push({ id: 1, email: 'userMail1@vvv.vv' });
+        // resMoq.push({ id: 2, email: 'userMail2@vvv.vv' });
+        // resMoq.push({ id: 3, email: 'userMail3@vvv.vv' });
+        // resMoq.push({ id: 4, email: 'userMail4@vvv.vv' });
+        // resMoq.push({ id: 5, email: 'userMail5@vvv.vv' });
+        // onSuccess(null, resMoq);
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'vaultId': vaultId
+            },
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/vault/get-vault-people',
+        });
     }
 
 
@@ -248,20 +237,18 @@ export class VaultController implements IVaultController {
 
     DeleteSecret(secretId: number, vaultId: number, onSuccess: DeleteSecretReturn) {
 
-        onSuccess(null, { result: true });
-        // G_AjaxHelper.GoAjaxRequest({
-        //     Data: {
-        //         'roomname': roomname,
-        //         'userConnectionId': userId
-        //     },
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
-
-        // });
+        // onSuccess(null, { result: true });
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'vaultId': vaultId
+            },
+            Type: "DELETE",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/secret/delete-secret',
+        });
     }
 
     CreateSecretRedux(secret: IUpdateSecretEntity) {
@@ -278,28 +265,31 @@ export class VaultController implements IVaultController {
     }
 
     CreateSecret(secret: IUpdateSecretEntity, onSuccess: UpdateSecretReturn) {
-        let newData = {} as IOneVaultSecretReturn;
-        newData.id = Math.floor(Math.random() * 9999);
-        newData.dieDate = secret.DieDate;
-        newData.isCoded = secret.IsCoded;
-        newData.isPublic = secret.IsPublic;
-        newData.key = secret.Key;
-        newData.value = secret.Value;
-        newData.vaultId = secret.VaultId;
-        onSuccess(null, newData);
-        //G_AjaxHelper.GoAjaxRequest({
-        //     Data: {
-        //         'roomname': roomname,
-        //         'userConnectionId': userId
-        //     },
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
-
-        // });
+        // let newData = {} as IOneVaultSecretReturn;
+        // newData.id = Math.floor(Math.random() * 9999);
+        // newData.dieDate = secret.DieDate;
+        // newData.isCoded = secret.IsCoded;
+        // newData.isPublic = secret.IsPublic;
+        // newData.key = secret.Key;
+        // newData.value = secret.Value;
+        // newData.vaultId = secret.VaultId;
+        // onSuccess(null, newData);
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'VaultId': secret.VaultId,
+                'Key': secret.Key,
+                'Value': secret.Value,
+                'IsCoded': secret.IsCoded,
+                'IsPublic': secret.IsPublic,
+                'DieDate': secret.DieDate
+            },
+            Type: "PUT",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/secret/create-secret',
+        });
     }
 
     UpdateSecretRedux(secret: IUpdateSecretEntity) {
@@ -316,29 +306,33 @@ export class VaultController implements IVaultController {
     }
 
     UpdateSecret(secret: IUpdateSecretEntity, onSuccess: UpdateSecretReturn) {
-        let newData = {} as IOneVaultSecretReturn;
-        newData.id = secret.Id;
-        newData.dieDate = secret.DieDate;
-        newData.isCoded = secret.IsCoded;
-        newData.isPublic = secret.IsPublic;
-        newData.key = secret.Key;
-        newData.value = secret.Value;
-        newData.vaultId = secret.VaultId;
-        // newData.id = Math.floor(Math.random() * 9999);
-        onSuccess(null, newData);
-        //G_AjaxHelper.GoAjaxRequest({
-        //     Data: {
-        //         'roomname': roomname,
-        //         'userConnectionId': userId
-        //     },
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
-
-        // });
+        // let newData = {} as IOneVaultSecretReturn;
+        // newData.id = secret.Id;
+        // newData.dieDate = secret.DieDate;
+        // newData.isCoded = secret.IsCoded;
+        // newData.isPublic = secret.IsPublic;
+        // newData.key = secret.Key;
+        // newData.value = secret.Value;
+        // newData.vaultId = secret.VaultId;
+        // // newData.id = Math.floor(Math.random() * 9999);
+        // onSuccess(null, newData);
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'Id': secret.Id,
+                'VaultId': secret.VaultId,
+                'Key': secret.Key,
+                'Value': secret.Value,
+                'IsCoded': secret.IsCoded,
+                'IsPublic': secret.IsPublic,
+                'DieDate': secret.DieDate
+            },
+            Type: "PATCH",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/secret/update-secret',
+        });
     }
 
     GetSingleSecretRedux(secretId: number) {
@@ -356,39 +350,37 @@ export class VaultController implements IVaultController {
     }
 
     GetOneSecret(secretId: number, onSuccess: GetOneSecretReturn) {
-        let rs = {} as IOneVaultSecretReturn;
-        rs.id = secretId;
-        rs.isCoded = true;
-        rs.isPublic = true;
-        rs.key = 'test1';
-        rs.value = 'val1';
-        rs.vaultId = 1;
-        onSuccess(null, rs);
-        //G_AjaxHelper.GoAjaxRequest({
-        //     Data: {
-        //         'roomname': roomname,
-        //         'userConnectionId': userId
-        //     },
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
-
-        // });
+        // let rs = {} as IOneVaultSecretReturn;
+        // rs.id = secretId;
+        // rs.isCoded = true;
+        // rs.isPublic = true;
+        // rs.key = 'test1';
+        // rs.value = 'val1';
+        // rs.vaultId = 1;
+        // onSuccess(null, rs);
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'secretId': secretId
+            },
+            Type: "GET",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/secret/get-secret',
+        });
     }
 
 
     UpdateVaultRedux(vault: UpdateVaultEntity, successCallBack?: () => void) {
         return (dispatch: any, getState: any) => {
             this.UpdateVault(vault,
-                (error: MainErrorObjectBack, data: BoolResultBack) => {
-                    if (data?.result) {
+                (error: MainErrorObjectBack, data: ICreateVaultReturn) => {
+                    if (data) {
                         let newData = {} as IUpdateVaultActionPayload;
-                        newData.Id = vault.Id;
-                        newData.Name = vault.Name;
-                        newData.IsPublic = vault.IsPublic;
+                        newData.Id = data.id;
+                        newData.Name = data.name;
+                        newData.IsPublic = data.is_public;
                         dispatch(UpdateVaultActionCreator(newData));
                         successCallBack();
                     }
@@ -398,20 +390,22 @@ export class VaultController implements IVaultController {
 
     UpdateVault(vault: UpdateVaultEntity, onSuccess: UpdateVaultReturn) {
 
-        onSuccess(null, BoolResultBack.GetTrue());
-        //G_AjaxHelper.GoAjaxRequest({
-        //     Data: {
-        //         'roomname': roomname,
-        //         'userConnectionId': userId
-        //     },
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
-
-        // });
+        // onSuccess(null, BoolResultBack.GetTrue());
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'Id': vault.Id,
+                'Name': vault.Name,
+                'IsPublic': vault.IsPublic,
+                'UsersForDelete': vault.UsersForDelete,
+                'UsersForAdd': vault.UsersForAdd
+            },
+            Type: "PATCH",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/vault/update-vault',
+        });
     }
 
     CreateVaultRedux(vault: UpdateVaultEntity, successCallBack?: () => void) {
@@ -421,7 +415,7 @@ export class VaultController implements IVaultController {
                     if (data?.id) {
                         let newdata = {} as ICreateVaultActionPayload;
                         newdata.Id = data.id;
-                        newdata.IsPublic = data.isPublic;
+                        newdata.IsPublic = data.is_public;
                         newdata.Name = data.name;
                         dispatch(CreateVaultActionCreator(newdata));
                         successCallBack();
@@ -431,25 +425,24 @@ export class VaultController implements IVaultController {
     }
 
     CreateVault(vault: UpdateVaultEntity, onSuccess: CreateVaultReturn) {
-        let newData = {} as ICreateVaultReturn;
-        // newData.id = vault.Id;
-        newData.id = Math.floor(Math.random() * 9999);
-        newData.name = vault.Name;
-        newData.isPublic = vault.IsPublic;
-        onSuccess(null, newData);
-        //G_AjaxHelper.GoAjaxRequest({
-        //     Data: {
-        //         'roomname': roomname,
-        //         'userConnectionId': userId
-        //     },
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
-
-        // });
+        // let newData = {} as ICreateVaultReturn;
+        // // newData.id = vault.Id;
+        // newData.id = Math.floor(Math.random() * 9999);
+        // newData.name = vault.Name;
+        // newData.isPublic = vault.IsPublic;
+        // onSuccess(null, newData);
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'Name': vault.Name,
+                'IsPublic': vault.IsPublic,
+            },
+            Type: "PUT",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/vault/create-vault',
+        });
     }
 
     DeleteVaultRedux(vaultId: number) {
@@ -465,20 +458,18 @@ export class VaultController implements IVaultController {
 
     DeleteVault(vaultId: number, onSuccess: DeleteVaultReturn) {
 
-        onSuccess(null, BoolResultBack.GetTrue());
-        //G_AjaxHelper.GoAjaxRequest({
-        //     Data: {
-        //         'roomname': roomname,
-        //         'userConnectionId': userId
-        //     },
-        //     Type: "GET",
-        //     FuncSuccess: (xhr, status, jqXHR) => {
-        //         this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-        //     },
-        //     FuncError: (xhr, status, error) => { },
-        //     Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
-
-        // });
+        // onSuccess(null, BoolResultBack.GetTrue());
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'vaultId': vaultId
+            },
+            Type: "DELETE",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/vault/delete-vault',
+        });
     }
 
     //

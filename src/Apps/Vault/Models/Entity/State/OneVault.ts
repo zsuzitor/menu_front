@@ -25,6 +25,6 @@ export class OneVault implements MappedWithBack<IOneVaultReturn> {
             return rs;
         });
         // this.People = ;
-        this.IsPublic = newData.isPublic;
+        this.IsPublic = newData.is_public;
     }
 }

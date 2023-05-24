@@ -4,6 +4,6 @@ export interface IOneVaultReturn {
     id: number;
     name: string;
     secrets: IOneVaultSecretReturn[];
-    isPublic: boolean;
+    is_public: boolean;
 
 }

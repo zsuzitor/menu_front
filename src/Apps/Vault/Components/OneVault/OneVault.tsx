@@ -87,7 +87,7 @@ const OneVault = (props: IOneVaultProps) => {
 
         <div className='vault-secrets-list'>
             <VaultSecret key="new_secret" IsNew={true}
-                Secret={secretForNewForm}></VaultSecret>
+                Secret={secretForNewForm} VaultId={vault.Id}></VaultSecret>
             {vault.Secrets.filter(x => !filterSecretKey || (x.Key.indexOf(filterSecretKey) != -1))
                 .map(s => <VaultSecret key={s.Id} Secret={s} IsNew={false}></VaultSecret>)}
         </div>

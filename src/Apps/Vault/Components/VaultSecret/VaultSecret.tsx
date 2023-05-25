@@ -58,10 +58,11 @@ const VaultSecret = (props: IVaultSecretProps) => {
     }, [secret?.Value, secret?.DieDate, secret?.IsCoded]);
 
 
+    const defaultDieDate = '3000-01-01';
 
     function dateToYMD(date: Date) {
         if (!date) {
-            return '3000-01-01';
+            return defaultDieDate;
         }
 
         var d = date.getDate();
@@ -72,6 +73,7 @@ const VaultSecret = (props: IVaultSecretProps) => {
 
     function cancelChanges() {
         setSecretValue(secret.Value);
+        setSecretKey(secret.Key);
         setSecretDieDate(secret?.DieDate || null);
         setSecretIsCoded(secret?.IsCoded == null ? true : secret.IsCoded);
         setShowSecretValue(false);
@@ -175,9 +177,10 @@ const VaultSecret = (props: IVaultSecretProps) => {
                         newData.Id = props.Secret.Id;
                         newData.Key = secretKey;
                         newData.Value = secretValue;
-                        newData.VaultId = secret.VaultId;
+                        newData.VaultId = secret?.VaultId || props.VaultId;
                         newData.IsPublic = secretIsPublic;
                         newData.IsCoded = secretIsCoded;
+                        newData.DieDate = secretDieDate || null;//</>new Date(defaultDieDate);
                         if (props.IsNew) {
                             props.CreateSecret(newData);
                             cancelChanges();

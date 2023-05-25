@@ -31,6 +31,7 @@ const VaultMain = (props: IVaultMainProps) => {
 
 
     return <div className='main-vault-container'>
+        <div className='preloader' id='vault_preloader'></div>
         <Routes>
             {/* /vault-app */}
             <Route path={G_VaultController.RouteUrlVaultsList} element={<VaultList />} />

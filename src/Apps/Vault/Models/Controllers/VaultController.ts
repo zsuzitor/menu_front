@@ -69,8 +69,10 @@ export class VaultController implements IVaultController {
 
     GetVaultsRedux() {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.GetVaults(
                 (error: MainErrorObjectBack, data: IOneVaultListReturn[]) => {
+                    this.preloader(false);
                     if (data) {
                         let newData = data.map(x => {
                             let us = new OneVaultInList();
@@ -85,11 +87,6 @@ export class VaultController implements IVaultController {
     }
 
     GetVaults(onSuccess: SetVaultsReturn) {
-        // let resMoq = [];
-        // resMoq.push({ id: 1, name: "11111" });
-        // resMoq.push({ id: 2, name: "22" });
-        // resMoq.push({ id: 3, name: "33" });
-        // resMoq.push({ id: 4, name: "44" });
         G_AjaxHelper.GoAjaxRequest({
             Data: {
             },
@@ -104,8 +101,10 @@ export class VaultController implements IVaultController {
 
     GetVaultSecretsRedux(vaultId: number) {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.GetVaultSecrets(vaultId,
                 (error: MainErrorObjectBack, data: IOneVaultSecretReturn[]) => {
+                    this.preloader(false);
                     if (data) {
                         let newData = data.map(x => {
                             let us = new OneVaultSecret();
@@ -120,17 +119,7 @@ export class VaultController implements IVaultController {
     }
 
     GetVaultSecrets(vaultId: number, onSuccess: SetVaultSecretsReturn) {
-        // let resMoq = [];
 
-        // // isCoded: boolean;
-        // // isPublic: boolean;
-        // // dieDate: Date;
-        // resMoq.push({ vaultId: vaultId, id: 1, key: "111111", value: "val11", isCoded: false, isPublic: true, dieDate: null });
-        // resMoq.push({ vaultId: vaultId, id: 2, key: "111112", value: "val12", isCoded: false, isPublic: true, dieDate: null });
-        // resMoq.push({ vaultId: vaultId, id: 3, key: "111113", value: "val13", isCoded: false, isPublic: false, dieDate: null });
-        // resMoq.push({ vaultId: vaultId, id: 4, key: "111114", value: "val14", isCoded: false, isPublic: false, dieDate: null });
-        // resMoq.push({ vaultId: vaultId, id: 5, key: "111115", value: "val15", isCoded: true, isPublic: true, dieDate: null });
-        // onSuccess(null, resMoq);
         G_AjaxHelper.GoAjaxRequest({
             Data: {
                 'vaultId': vaultId
@@ -140,14 +129,16 @@ export class VaultController implements IVaultController {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/secret/get-vault-secrets',
+            Url: G_PathToServer + 'api/VaultSecret/get-vault-secrets',
         });
     }
 
     GetCurrentVaultRedux(vaultId: number) {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.GetVault(vaultId,
                 (error: MainErrorObjectBack, data: IOneVaultReturn) => {
+                    this.preloader(false);
                     if (data) {
                         let newData = new OneVault();
                         newData.FillByBackModel(data);
@@ -158,15 +149,6 @@ export class VaultController implements IVaultController {
     }
 
     GetVault(vaultId: number, onSuccess: GetOneVaultReturn) {
-        // let resMoq = {} as IOneVaultReturn;
-        // resMoq.id = vaultId;
-        // resMoq.isPublic = true;
-        // resMoq.name = 'nametest';
-        // resMoq.secrets
-        // this.GetVaultSecrets(vaultId, (error: MainErrorObjectBack, data: IOneVaultSecretReturn[]) => {
-        //     resMoq.secrets = data;
-        // });
-        // onSuccess(null, resMoq);
         G_AjaxHelper.GoAjaxRequest({
             Data: {
                 'vaultId': vaultId
@@ -183,8 +165,10 @@ export class VaultController implements IVaultController {
 
     LoadVaultPeopleRedux(vaultId: number) {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.LoadVaultPeople(vaultId,
                 (error: MainErrorObjectBack, data: IVaultUserReturn[]) => {
+                    this.preloader(false);
                     if (data) {
                         let newData = data.map(x => {
                             let us = new VaultUser();
@@ -199,17 +183,7 @@ export class VaultController implements IVaultController {
     }
 
     LoadVaultPeople(vaultId: number, onSuccess: SetVaultPeopleReturn) {
-        // let resMoq = [];
 
-        // isCoded: boolean;
-        // isPublic: boolean;
-        // dieDate: Date;
-        // resMoq.push({ id: 1, email: 'userMail1@vvv.vv' });
-        // resMoq.push({ id: 2, email: 'userMail2@vvv.vv' });
-        // resMoq.push({ id: 3, email: 'userMail3@vvv.vv' });
-        // resMoq.push({ id: 4, email: 'userMail4@vvv.vv' });
-        // resMoq.push({ id: 5, email: 'userMail5@vvv.vv' });
-        // onSuccess(null, resMoq);
         G_AjaxHelper.GoAjaxRequest({
             Data: {
                 'vaultId': vaultId
@@ -226,8 +200,10 @@ export class VaultController implements IVaultController {
 
     DeleteSecretRedux(secretId: number, vaultId: number) {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.DeleteSecret(secretId, vaultId,
                 (error: MainErrorObjectBack, data: BoolResultBack) => {
+                    this.preloader(false);
                     if (data?.result) {
                         dispatch(DeleteSecretActionCreator({ VaultId: vaultId, SecretId: secretId }));
                     }
@@ -247,14 +223,16 @@ export class VaultController implements IVaultController {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/secret/delete-secret',
+            Url: G_PathToServer + 'api/VaultSecret/delete-secret',
         });
     }
 
     CreateSecretRedux(secret: IUpdateSecretEntity) {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.CreateSecret(secret,
                 (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => {
+                    this.preloader(false);
                     if (data) {
                         let newData = new OneVaultSecret();
                         newData.FillByBackModel(data);
@@ -265,38 +243,35 @@ export class VaultController implements IVaultController {
     }
 
     CreateSecret(secret: IUpdateSecretEntity, onSuccess: UpdateSecretReturn) {
-        // let newData = {} as IOneVaultSecretReturn;
-        // newData.id = Math.floor(Math.random() * 9999);
-        // newData.dieDate = secret.DieDate;
-        // newData.isCoded = secret.IsCoded;
-        // newData.isPublic = secret.IsPublic;
-        // newData.key = secret.Key;
-        // newData.value = secret.Value;
-        // newData.vaultId = secret.VaultId;
-        // onSuccess(null, newData);
+        let data = {
+            'VaultId': secret.VaultId,
+            'Key': secret.Key,
+            'Value': secret.Value,
+            'IsCoded': secret.IsCoded,
+            'IsPublic': secret.IsPublic,
+        } as any;
+        if (secret.DieDate) {
+            data.DieDate = secret.DieDate.toJSON();
+        }
+
         G_AjaxHelper.GoAjaxRequest({
-            Data: {
-                'VaultId': secret.VaultId,
-                'Key': secret.Key,
-                'Value': secret.Value,
-                'IsCoded': secret.IsCoded,
-                'IsPublic': secret.IsPublic,
-                'DieDate': secret.DieDate
-            },
+            Data: data,
             Type: "PUT",
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/secret/create-secret',
+            Url: G_PathToServer + 'api/VaultSecret/create-secret',
         });
     }
 
     UpdateSecretRedux(secret: IUpdateSecretEntity) {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.UpdateSecret(secret,
                 (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => {
-                    if (data) {//todo закидывать secret? тогде поменять на bool result
+                    this.preloader(false);
+                    if (data) {
                         let newData = new OneVaultSecret();
                         newData.FillByBackModel(data);
                         dispatch(UpdateSecretActionCreator(newData));
@@ -306,39 +281,35 @@ export class VaultController implements IVaultController {
     }
 
     UpdateSecret(secret: IUpdateSecretEntity, onSuccess: UpdateSecretReturn) {
-        // let newData = {} as IOneVaultSecretReturn;
-        // newData.id = secret.Id;
-        // newData.dieDate = secret.DieDate;
-        // newData.isCoded = secret.IsCoded;
-        // newData.isPublic = secret.IsPublic;
-        // newData.key = secret.Key;
-        // newData.value = secret.Value;
-        // newData.vaultId = secret.VaultId;
-        // // newData.id = Math.floor(Math.random() * 9999);
-        // onSuccess(null, newData);
+        let data = {
+            'Id': secret.Id,
+            'VaultId': secret.VaultId,
+            'Key': secret.Key,
+            'Value': secret.Value,
+            'IsCoded': secret.IsCoded,
+            'IsPublic': secret.IsPublic,
+        } as any;
+        if (secret.DieDate) {
+            data.DieDate = secret.DieDate.toJSON();
+        }
+
         G_AjaxHelper.GoAjaxRequest({
-            Data: {
-                'Id': secret.Id,
-                'VaultId': secret.VaultId,
-                'Key': secret.Key,
-                'Value': secret.Value,
-                'IsCoded': secret.IsCoded,
-                'IsPublic': secret.IsPublic,
-                'DieDate': secret.DieDate
-            },
+            Data: data,
             Type: "PATCH",
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/secret/update-secret',
+            Url: G_PathToServer + 'api/VaultSecret/update-secret',
         });
     }
 
     GetSingleSecretRedux(secretId: number) {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.GetOneSecret(secretId,
                 (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => {
+                    this.preloader(false);
                     if (data) {
                         let newData = new OneVaultSecret();
                         newData.FillByBackModel(data);
@@ -350,14 +321,7 @@ export class VaultController implements IVaultController {
     }
 
     GetOneSecret(secretId: number, onSuccess: GetOneSecretReturn) {
-        // let rs = {} as IOneVaultSecretReturn;
-        // rs.id = secretId;
-        // rs.isCoded = true;
-        // rs.isPublic = true;
-        // rs.key = 'test1';
-        // rs.value = 'val1';
-        // rs.vaultId = 1;
-        // onSuccess(null, rs);
+
         G_AjaxHelper.GoAjaxRequest({
             Data: {
                 'secretId': secretId
@@ -367,15 +331,17 @@ export class VaultController implements IVaultController {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/secret/get-secret',
+            Url: G_PathToServer + 'api/VaultSecret/get-secret',
         });
     }
 
 
     UpdateVaultRedux(vault: UpdateVaultEntity, successCallBack?: () => void) {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.UpdateVault(vault,
                 (error: MainErrorObjectBack, data: ICreateVaultReturn) => {
+                    this.preloader(false);
                     if (data) {
                         let newData = {} as IUpdateVaultActionPayload;
                         newData.Id = data.id;
@@ -389,16 +355,33 @@ export class VaultController implements IVaultController {
     }
 
     UpdateVault(vault: UpdateVaultEntity, onSuccess: UpdateVaultReturn) {
+        let data = new FormData();
+        data.append('Id', vault.Id + '');
+        data.append('Name', vault.Name);
+        data.append('IsPublic', vault.IsPublic + '');
+
+        if (vault.UsersForDelete) {
+            vault.UsersForDelete.forEach((item, index) => {
+                data.append('UsersForDelete', item + '');
+            });
+        }
+
+        if (vault.UsersForAdd) {
+            vault.UsersForAdd.forEach((item, index) => {
+                data.append('UsersForAdd', item + '');
+            });
+        }
 
         // onSuccess(null, BoolResultBack.GetTrue());
         G_AjaxHelper.GoAjaxRequest({
-            Data: {
-                'Id': vault.Id,
-                'Name': vault.Name,
-                'IsPublic': vault.IsPublic,
-                'UsersForDelete': vault.UsersForDelete,
-                'UsersForAdd': vault.UsersForAdd
-            },
+            // Data: {
+            //     'Id': vault.Id,
+            //     'Name': vault.Name,
+            //     'IsPublic': vault.IsPublic,
+            //     'UsersForDelete': vault.UsersForDelete,
+            //     'UsersForAdd': vault.UsersForAdd
+            // },
+            Data: data,
             Type: "PATCH",
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
@@ -410,8 +393,10 @@ export class VaultController implements IVaultController {
 
     CreateVaultRedux(vault: UpdateVaultEntity, successCallBack?: () => void) {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.CreateVault(vault,
                 (error: MainErrorObjectBack, data: ICreateVaultReturn) => {
+                    this.preloader(false);
                     if (data?.id) {
                         let newdata = {} as ICreateVaultActionPayload;
                         newdata.Id = data.id;
@@ -425,16 +410,11 @@ export class VaultController implements IVaultController {
     }
 
     CreateVault(vault: UpdateVaultEntity, onSuccess: CreateVaultReturn) {
-        // let newData = {} as ICreateVaultReturn;
-        // // newData.id = vault.Id;
-        // newData.id = Math.floor(Math.random() * 9999);
-        // newData.name = vault.Name;
-        // newData.isPublic = vault.IsPublic;
-        // onSuccess(null, newData);
+
         G_AjaxHelper.GoAjaxRequest({
             Data: {
                 'Name': vault.Name,
-                'IsPublic': vault.IsPublic,
+                'IsPublic': vault.IsPublic
             },
             Type: "PUT",
             FuncSuccess: (xhr, status, jqXHR) => {
@@ -447,8 +427,10 @@ export class VaultController implements IVaultController {
 
     DeleteVaultRedux(vaultId: number) {
         return (dispatch: any, getState: any) => {
+            this.preloader(true);
             this.DeleteVault(vaultId,
                 (error: MainErrorObjectBack, data: BoolResultBack) => {
+                    this.preloader(false);
                     if (data?.result) {
                         dispatch(DeleteVaultActionCreator(vaultId));
                     }
@@ -475,6 +457,29 @@ export class VaultController implements IVaultController {
     //
     mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
         return new ControllerHelper().MapWithResult(onSuccess);
+    }
+
+
+    preloader(show: boolean) {
+        if (!window.CodeReviewCounter) {
+            window.CodeReviewCounter = 0;
+        }
+
+        var preloader = document.getElementById('vault_preloader');
+        if (!preloader) {
+            return;
+        }
+
+        if (show) {
+            window.CodeReviewCounter++;
+            preloader.style.display = 'block';
+        }
+        else {
+            window.CodeReviewCounter--;
+            if (!window.CodeReviewCounter) {
+                preloader.style.display = 'none';
+            }
+        }
     }
 
 }

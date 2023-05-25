@@ -5,6 +5,6 @@ export interface IOneVaultSecretReturn {
     value: string;
     is_coded: boolean;
     is_public: boolean;
-    die_date: Date;
+    die_date: string;
     vault_id: number;
 }

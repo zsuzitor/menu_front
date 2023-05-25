@@ -9,6 +9,7 @@ import { IUpdateSecretEntity } from '../../Models/Entity/UpdateSecretEntity';
 interface IVaultSecretOwnProps {
     Secret?: OneVaultSecret;
     IsNew?: boolean;
+    VaultId?: number;// это нужно только для IsNew
 }
 
 interface IVaultSecretStateToProps {
@@ -50,7 +51,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: IVaultSecretOwnProps) => {
     res.CreateSecret = (secret) => {
         dispatch(window.G_VaultController.CreateSecretRedux(secret));
     };
-  
+
 
     return res;
 };

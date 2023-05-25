@@ -26,7 +26,7 @@ export class OneVaultSecret implements MappedWithBack<IOneVaultSecretReturn> {
         this.Value = newData.value;
         this.IsCoded = newData.is_coded;
         this.IsPublic = newData.is_public;
-        this.DieDate = newData.die_date;
+        this.DieDate = newData.die_date ? new Date(newData.die_date) : null;
         this.VaultId = newData.vault_id;
     }
 }

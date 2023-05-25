@@ -75,7 +75,7 @@ const CreateVault = (props: ICreateVaultProps) => {
                 onChange={(e) => setUserEmailForAdd(e.target.value)}></input>
             <button className='btn btn-b-light'
                 onClick={() => {
-                    if (people.find(x => x.Email == userEmailForAdd)) {
+                    if (!userEmailForAdd || people.find(x => x.Email == userEmailForAdd)) {
                         return;
                     }
                     let forAdd = new VaultUser();

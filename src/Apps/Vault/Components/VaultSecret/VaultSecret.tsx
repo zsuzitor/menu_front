@@ -156,6 +156,7 @@ const VaultSecret = (props: IVaultSecretProps) => {
                     <label>Публичный</label>
                     <input type='checkbox' checked={secretIsPublic}
                         onChange={() => setSecretIsPublic(!secretIsPublic)}></input>
+                    <label>Существует до:</label>
                     <input type='date' value={dateToYMD(secretDieDate)}
                         className='form-control' style={{ width: '140px' }}
                         onChange={(e) => {

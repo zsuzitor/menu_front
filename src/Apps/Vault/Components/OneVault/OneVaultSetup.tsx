@@ -21,7 +21,7 @@ interface IOneVaultDispatchToProps {
     LoadVault: (vaultId: number) => void;
     CreateSecret: (secret: IUpdateSecretEntity) => void;
     DeleteVault: (id: number) => void;
-
+    VaultAuth: (password: string) => void;
 }
 
 export interface IOneVaultProps extends IOneVaultStateToProps, IOneVaultOwnProps, IOneVaultDispatchToProps {
@@ -57,6 +57,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneVaultOwnProps) => {
 
     res.DeleteVault = (vaultId: number) => {
         dispatch(window.G_VaultController.DeleteVaultRedux(vaultId));
+    };
+
+    res.VaultAuth = (password: string) => {
+        dispatch(window.G_VaultController.VaultAuthorizeRedux(password));
     };
     return res;
 };

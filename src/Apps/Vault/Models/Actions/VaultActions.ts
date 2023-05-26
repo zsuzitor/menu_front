@@ -39,7 +39,6 @@ export function SetVaultsPeopleActionCreator(data: ISetVaultsPeopleActionPayload
 };
 
 export interface IDeleteSecretActionPayload {
-    VaultId: number;
     SecretId: number;
 }
 export const DeleteSecretActionName: string = 'DeleteSecretAction';
@@ -98,3 +97,9 @@ export const DeleteVaultActionName: string = 'DeleteVaultAction';
 export function DeleteVaultActionCreator(data: number): AppAction<number> {
     return { type: DeleteVaultActionName, payload: data };
 };
+
+export const VaultAuthorizeActionName: string = 'VaultAuthorizeAction';
+export function VaultAuthorizeActionCreator(data: boolean): AppAction<boolean> {
+    return { type: VaultAuthorizeActionName, payload: data };
+};
+

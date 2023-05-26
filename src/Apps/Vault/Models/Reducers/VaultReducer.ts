@@ -4,7 +4,7 @@ import { AppAction } from '../../../../Models/Actions/Actions';
 import { AppState } from '../../../../Models/Entity/State/AppState';
 import { OneVault } from '../Entity/State/OneVault';
 import { OneVaultSecret } from '../Entity/State/OneVaultSecret';
-import { ChangeCurrentVaultIdActionName, SetVaultsListActionName, SetVaultsSecretsActionName, ISetVaultsSecretsActionPayload, SetVaultsPeopleActionName, ISetVaultsPeopleActionPayload, DeleteSecretActionName, IDeleteSecretActionPayload, SetSingleSecretActionName, SetCurrentVaultActionName, UpdateVaultActionName, IUpdateVaultActionPayload, CreateVaultActionName, ICreateVaultActionPayload, DeleteVaultActionName, UpdateSecretActionName, CreateSecretActionName } from '../Actions/VaultActions';
+import { ChangeCurrentVaultIdActionName, SetVaultsListActionName, SetVaultsSecretsActionName, ISetVaultsSecretsActionPayload, SetVaultsPeopleActionName, ISetVaultsPeopleActionPayload, DeleteSecretActionName, IDeleteSecretActionPayload, SetSingleSecretActionName, SetCurrentVaultActionName, UpdateVaultActionName, IUpdateVaultActionPayload, CreateVaultActionName, ICreateVaultActionPayload, DeleteVaultActionName, UpdateSecretActionName, CreateSecretActionName, VaultAuthorizeActionName } from '../Actions/VaultActions';
 import { OneVaultInList } from '../Entity/State/OneVaultInList';
 
 
@@ -149,9 +149,18 @@ export function VaultReducer(state: AppState = new AppState(), action: AppAction
 
                 return newState;
             }
+        case VaultAuthorizeActionName:
+            {
+                let newState = cloneDeep(state);
+                let typedAction = action.payload as boolean;
+                if (newState.VaultApp.CurrentVault) {
+                    newState.VaultApp.CurrentVault.IsAuthorized = typedAction;
+                }
 
+                return newState;
+            }
 
-
+        //
         //
         //
 

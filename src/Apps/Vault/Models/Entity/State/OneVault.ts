@@ -10,10 +10,12 @@ export class OneVault implements MappedWithBack<IOneVaultReturn> {
     Secrets: OneVaultSecret[];
     People: VaultUser[];
     IsPublic: boolean;
+    IsAuthorized: boolean;
 
     constructor() {
         this.Secrets = [];
         this.People = [];
+        this.IsAuthorized = false;
     }
 
     FillByBackModel(newData: IOneVaultReturn): void {

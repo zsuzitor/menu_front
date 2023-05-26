@@ -20,6 +20,7 @@ const CreateVault = (props: ICreateVaultProps) => {
     const [deletedUser, setDeletedUser] = useState([] as number[]);
     const [addedUser, setAddedUser] = useState([] as VaultUser[]);
     const [userEmailForAdd, setUserEmailForAdd] = useState('');
+    const [vaultPassword, setVaultPassword] = useState('');
 
 
 
@@ -48,6 +49,10 @@ const CreateVault = (props: ICreateVaultProps) => {
         <input type='checkbox' placeholder='Публичный'
             checked={vaultPublic} className='form-control'
             onChange={(e) => setVaultPublic(e.target.checked)}></input>
+        {props.Vault?.Id ? <></> : <>
+            <input type='password' value={vaultPassword} onChange={(e) =>
+                setVaultPassword(e.target.value)}></input>
+        </>}
         {props.Vault?.Id ? <>
             <p>Люди хранилища</p>
             {people.map(u => <VaultUserUi key={u.Email} User={u}
@@ -96,7 +101,7 @@ const CreateVault = (props: ICreateVaultProps) => {
                 props.UpdateVault(newVault, () => props.WasCreated());
             }
             else {
-
+                newVault.Password = vaultPassword;
                 props.CreateVault(newVault, () => props.WasCreated());
             }
 

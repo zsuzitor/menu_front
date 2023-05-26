@@ -19,6 +19,8 @@ const OneVault = (props: IOneVaultProps) => {
     // const [code, setCode] = useState('');
     const [filterSecretKey, setFilterSecretKey] = useState('');
     const [showEditForm, setShowEditForm] = useState(false);
+    const [vaultPassword, setVaultPassword] = useState('');
+
     // const [shoNewSecretForm, setShoNewSecretForm] = useState(false);
 
 
@@ -68,6 +70,10 @@ const OneVault = (props: IOneVaultProps) => {
         {backLink}
         <div>
             <p>{vault.Id}</p>
+            <input type='password' value={vaultPassword} onChange={(e) =>
+                setVaultPassword(e.target.value)}></input>
+            <button className='btn btn-b-light'
+                onClick={() => props.VaultAuth(vaultPassword)}>Авторизовать Vault</button>
             <p>{vault.Name}</p>
             <button className='btn btn-b-light'
                 onClick={() => setShowEditForm(true)}>Редактировать</button>

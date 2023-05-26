@@ -1,6 +1,6 @@
 
 
-import { CreateSecretActionCreator, CreateVaultActionCreator, DeleteSecretActionCreator, DeleteVaultActionCreator, ICreateVaultActionPayload, IUpdateVaultActionPayload, SetCurrentVaultActionCreator, SetSingleSecretActionCreator, SetVaultsListActionCreator, SetVaultsPeopleActionCreator, SetVaultsSecretsActionCreator, UpdateSecretActionCreator, UpdateVaultActionCreator } from "../Actions/VaultActions";
+import { CreateSecretActionCreator, CreateVaultActionCreator, DeleteSecretActionCreator, DeleteVaultActionCreator, ICreateVaultActionPayload, IUpdateVaultActionPayload, SetCurrentVaultActionCreator, SetSingleSecretActionCreator, SetVaultsListActionCreator, SetVaultsPeopleActionCreator, SetVaultsSecretsActionCreator, UpdateSecretActionCreator, UpdateVaultActionCreator, VaultAuthorizeActionCreator } from "../Actions/VaultActions";
 import { BoolResultBack, StringResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ICreateVaultReturn } from "../BackModels/ICreateVaultReturn";
@@ -29,6 +29,7 @@ type CreateVaultReturn = (error: MainErrorObjectBack, data: ICreateVaultReturn) 
 type UpdateVaultReturn = (error: MainErrorObjectBack, data: ICreateVaultReturn) => void;
 type DeleteVaultReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 type UpdateSecretReturn = (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => void;
+type VaultAuthorizeReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 
 
@@ -47,6 +48,8 @@ export interface IVaultController {
     DeleteSecretRedux: (secretId: number, vaultId: number) => void;
     CreateSecretRedux: (secret: IUpdateSecretEntity) => void;
     UpdateSecretRedux: (secret: IUpdateSecretEntity) => void;
+    VaultAuthorizeRedux: (password: string) => void;
+
 
     GetSingleSecretRedux: (secretId: number) => void;
     UpdateVaultRedux: (vault: UpdateVaultEntity, successCallBack?: () => void) => void;
@@ -198,25 +201,25 @@ export class VaultController implements IVaultController {
     }
 
 
-    DeleteSecretRedux(secretId: number, vaultId: number) {
+    DeleteSecretRedux(secretId: number) {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteSecret(secretId, vaultId,
+            this.DeleteSecret(secretId,
                 (error: MainErrorObjectBack, data: BoolResultBack) => {
                     this.preloader(false);
                     if (data?.result) {
-                        dispatch(DeleteSecretActionCreator({ VaultId: vaultId, SecretId: secretId }));
+                        dispatch(DeleteSecretActionCreator({ SecretId: secretId }));
                     }
                 });
         };
     }
 
-    DeleteSecret(secretId: number, vaultId: number, onSuccess: DeleteSecretReturn) {
+    DeleteSecret(secretId: number, onSuccess: DeleteSecretReturn) {
 
         // onSuccess(null, { result: true });
         G_AjaxHelper.GoAjaxRequest({
             Data: {
-                'vaultId': vaultId
+                'secretId': secretId
             },
             Type: "DELETE",
             FuncSuccess: (xhr, status, jqXHR) => {
@@ -414,7 +417,8 @@ export class VaultController implements IVaultController {
         G_AjaxHelper.GoAjaxRequest({
             Data: {
                 'Name': vault.Name,
-                'IsPublic': vault.IsPublic
+                'IsPublic': vault.IsPublic,
+                'Password': vault.Password
             },
             Type: "PUT",
             FuncSuccess: (xhr, status, jqXHR) => {
@@ -451,6 +455,35 @@ export class VaultController implements IVaultController {
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/vault/delete-vault',
+        });
+    }
+
+    VaultAuthorizeRedux(password: string) {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.VaultAuthorize(password,
+                (error: MainErrorObjectBack, data: BoolResultBack) => {
+                    this.preloader(false);
+                    if (data?.result) {
+                        dispatch(VaultAuthorizeActionCreator(true));
+                    }
+                });
+        };
+    }
+
+    VaultAuthorize(password: string, onSuccess: VaultAuthorizeReturn) {
+
+        // onSuccess(null, BoolResultBack.GetTrue());
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'password': password
+            },
+            Type: "POST",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/vault/authorize',
         });
     }
 

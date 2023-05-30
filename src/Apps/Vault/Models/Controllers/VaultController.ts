@@ -15,6 +15,7 @@ import { OneVaultInList } from "../Entity/State/OneVaultInList";
 import { OneVaultSecret } from "../Entity/State/OneVaultSecret";
 import { VaultUser } from "../Entity/State/VaultUser";
 import { IUpdateSecretEntity } from "../Entity/UpdateSecretEntity";
+import { AlertData } from "../../../../Models/Entity/AlertData";
 // import { IUpdateSecretReturn } from "../BackModels/IUpdateSecretReturn";
 
 
@@ -48,7 +49,7 @@ export interface IVaultController {
     DeleteSecretRedux: (secretId: number, vaultId: number) => void;
     CreateSecretRedux: (secret: IUpdateSecretEntity) => void;
     UpdateSecretRedux: (secret: IUpdateSecretEntity) => void;
-    VaultAuthorizeRedux: (password: string) => void;
+    VaultAuthorizeRedux: (vaultId: number, password: string) => void;
 
 
     GetSingleSecretRedux: (secretId: number) => void;
@@ -375,15 +376,7 @@ export class VaultController implements IVaultController {
             });
         }
 
-        // onSuccess(null, BoolResultBack.GetTrue());
         G_AjaxHelper.GoAjaxRequest({
-            // Data: {
-            //     'Id': vault.Id,
-            //     'Name': vault.Name,
-            //     'IsPublic': vault.IsPublic,
-            //     'UsersForDelete': vault.UsersForDelete,
-            //     'UsersForAdd': vault.UsersForAdd
-            // },
             Data: data,
             Type: "PATCH",
             FuncSuccess: (xhr, status, jqXHR) => {
@@ -458,25 +451,31 @@ export class VaultController implements IVaultController {
         });
     }
 
-    VaultAuthorizeRedux(password: string) {
+    VaultAuthorizeRedux(vaultId: number, password: string) {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.VaultAuthorize(password,
+            this.VaultAuthorize(vaultId, password,
                 (error: MainErrorObjectBack, data: BoolResultBack) => {
                     this.preloader(false);
                     if (data?.result) {
                         dispatch(VaultAuthorizeActionCreator(true));
                     }
+                    else {
+                        let alertFactory = new AlertData();
+                        let alert = alertFactory.GetDefaultError("Не удалось, проверьте пароль");
+                        window.G_AddAbsoluteAlertToState(alert);
+                    }
                 });
         };
     }
 
-    VaultAuthorize(password: string, onSuccess: VaultAuthorizeReturn) {
+    VaultAuthorize(vaultId: number, password: string, onSuccess: VaultAuthorizeReturn) {
 
         // onSuccess(null, BoolResultBack.GetTrue());
         G_AjaxHelper.GoAjaxRequest({
             Data: {
-                'password': password
+                'password': password,
+                'vaultId': vaultId
             },
             Type: "POST",
             FuncSuccess: (xhr, status, jqXHR) => {

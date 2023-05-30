@@ -5,5 +5,6 @@ export interface IOneVaultReturn {
     name: string;
     secrets: IOneVaultSecretReturn[];
     is_public: boolean;
+    is_auth?: boolean;
 
 }

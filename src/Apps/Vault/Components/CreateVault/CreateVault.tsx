@@ -47,7 +47,7 @@ const CreateVault = (props: ICreateVaultProps) => {
             onChange={(e) => setVaultName(e.target.value)}></input>
         <label>Публичный</label>
         <input type='checkbox' placeholder='Публичный'
-            checked={vaultPublic} className='form-control'
+            checked={vaultPublic} className='form-control m-checkbox'
             onChange={(e) => setVaultPublic(e.target.checked)}></input>
         {props.Vault?.Id ? <></> : <>
             <input type='password' value={vaultPassword} onChange={(e) =>

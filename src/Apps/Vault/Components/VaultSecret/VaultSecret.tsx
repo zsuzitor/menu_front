@@ -84,6 +84,7 @@ const VaultSecret = (props: IVaultSecretProps) => {
         secretKey != secret?.Key
         || secretValue != secret?.Value
         || secretDieDate != secret.DieDate
+        || secretIsPublic != (secret?.IsPublic ?? false)
         || secretIsCoded != (secret?.IsCoded == null ? true : secret.IsCoded);
 
 
@@ -115,6 +116,7 @@ const VaultSecret = (props: IVaultSecretProps) => {
             <Link
                 to={G_VaultController.RouteUrlVaultApp}>
                 Список Vaults</Link>
+            <label>&rArr;</label>
             <Link
                 to={G_VaultController.RouteUrlVaultApp + G_VaultController.RouteUrlOneVault + secret?.VaultId}>
                 Vault</Link>
@@ -137,8 +139,11 @@ const VaultSecret = (props: IVaultSecretProps) => {
                         <img className='persent-100-width-height' src={"/images/" + showValueImage} />
                     </div>
                         <div className='but vault-secret-copy' title='Скопировать значение'
-                            onClick={() => navigator.clipboard.writeText(secretValue)}>
-                            {/* todo надо что бы при клике и успешном копировании временно менялось на галку vote4.png */}
+                            onClick={() => {
+                                navigator.clipboard.writeText(secretValue);
+                                G_AddAbsoluteAlertToState(
+                                    new AlertData().GetDefaultNotify("Скопировано"));
+                            }}>
                             <img className='persent-100-width-height' src={"/images/" + 'copy.png'} />
                         </div></>}
 
@@ -174,6 +179,19 @@ const VaultSecret = (props: IVaultSecretProps) => {
                                 new AlertData().GetDefaultError("Ключ обязателен для заполнения"));
                             return;
                         }
+
+                        if (!secretValue) {
+                            G_AddAbsoluteAlertToState(
+                                new AlertData().GetDefaultError("Значение обязательно для заполнения"));
+                            return;
+                        }
+
+                        if (secretIsCoded && !props.VaultIsAuthorized) {
+                            G_AddAbsoluteAlertToState(
+                                new AlertData().GetDefaultError("Для работы с  зашифрованным secret необходимо авторизовать Vault"));
+                            return;
+                        }
+
                         let newData = {} as IUpdateSecretEntity;
                         newData.Id = props.Secret.Id;
                         newData.Key = secretKey;
@@ -207,9 +225,14 @@ const VaultSecret = (props: IVaultSecretProps) => {
                             src={"/images/" + 'delete-icon.png'} />
                     </div>
                         <div className='but' title='Ссылка на секрет'
-                            onClick={() => navigator.clipboard
-                                .writeText(document.location.origin + G_VaultController.RouteUrlVaultApp
-                                    + G_VaultController.RouteUrlOneSecret + secret.Id)}>
+                            onClick={() => {
+                                navigator.clipboard
+                                    .writeText(document.location.origin + G_VaultController.RouteUrlVaultApp
+                                        + G_VaultController.RouteUrlOneSecret + secret.Id);
+                                G_AddAbsoluteAlertToState(
+                                    new AlertData().GetDefaultNotify("Ссылка Скопирована"));
+
+                            }}>
                             <img className='persent-100-width-height' src={"/images/" + 'share-icon.png'} />
                         </div></>}
 

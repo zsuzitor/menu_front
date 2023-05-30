@@ -28,5 +28,6 @@ export class OneVault implements MappedWithBack<IOneVaultReturn> {
         });
         // this.People = ;
         this.IsPublic = newData.is_public;
+        this.IsAuthorized = newData.is_auth ?? false;
     }
 }

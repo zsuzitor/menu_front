@@ -6,6 +6,7 @@ import VaultSecret from '../VaultSecret/VaultSecret';
 import CreateVault from '../CreateVault/CreateVault';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
 import { OneVaultSecret } from '../../Models/Entity/State/OneVaultSecret';
+import { AlertData } from '../../../../Models/Entity/AlertData';
 
 
 
@@ -50,9 +51,32 @@ const OneVault = (props: IOneVaultProps) => {
         props.LoadVault(props.VaultId);
     }, [props.VaultId]);
 
+    useEffect(() => {
+        if (!props.VaultIsAuthorized) {
+            return;
+        }
+
+        // props.LoadVaultSecrets(props.VaultId);
+        props.LoadVaultSecrets(props.VaultId);
+    }, [props.VaultIsAuthorized]);
+
+
+    function passwordGenerate(len: number) {
+        var password = "";
+        var symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!№;%:?*()_+=";
+        for (var i = 0; i < len; i++) {
+            password += symbols.charAt(Math.floor(Math.random() * symbols.length));
+        }
+        return password;
+    }
+
+
+
+
     let backLink = <Link id='list_vault_link_id'
         to={G_VaultController.RouteUrlVaultApp}>
         Список Vaults</Link>
+
 
     if (!vault) {
         return <div>{backLink}
@@ -69,20 +93,39 @@ const OneVault = (props: IOneVaultProps) => {
             ></CreateVault>}></AdditionalWindow> : <></>}
         {backLink}
         <div>
-            <p>{vault.Id}</p>
-            <input type='password' value={vaultPassword} onChange={(e) =>
-                setVaultPassword(e.target.value)}></input>
-            <button className='btn btn-b-light'
-                onClick={() => props.VaultAuth(vaultPassword)}>Авторизовать Vault</button>
-            <p>{vault.Name}</p>
-            <button className='btn btn-b-light'
-                onClick={() => setShowEditForm(true)}>Редактировать</button>
-            <button className='btn btn-b-light'
-                onClick={() => {
-                    props.DeleteVault(props.Vault.Id);
-                    document.getElementById('list_vault_link_id').click();
-                }
-                }>Удалить</button>
+            <div className='vault-header'>
+                {/* <label>{vault.Id}</label> */}
+                <label className='vault-name'>{vault.Name}</label>
+                <div className='buttons-block'>
+                    <button className='btn btn-b-light'
+                        onClick={() => setShowEditForm(true)}>Редактировать</button>
+                    <button className='btn btn-b-light'
+                        onClick={() => {
+                            props.DeleteVault(props.Vault.Id);
+                            document.getElementById('list_vault_link_id').click();
+                        }
+                        }>Удалить</button>
+                </div>
+            </div>
+            <div>
+                <button
+                    className='btn btn-b-light'
+                    onClick={() => {
+                        let passLen = Math.floor(Math.random() * 5) + 9;//генерим от 0 до 4, и прибавляем 9, получаем от 9 до 13
+                        navigator.clipboard.writeText(passwordGenerate(10));
+                        G_AddAbsoluteAlertToState(
+                            new AlertData().GetDefaultNotify("Скопировано"));
+
+                    }}>Сгенерировать новый пароль</button>
+            </div>
+
+            {props.VaultIsAuthorized ? <></> : <div className='vault-auth'>
+                <input type='password' className='form-control'
+                    value={vaultPassword} onChange={(e) =>
+                        setVaultPassword(e.target.value)}></input>
+                <button className='btn btn-b-light'
+                    onClick={() =>
+                        props.VaultAuth(props.VaultId, vaultPassword)}>Авторизовать Vault</button></div>}
         </div>
         <input type='text'
             className='form-control'

@@ -13,6 +13,7 @@ interface IOneVaultOwnProps {
 
 interface IOneVaultStateToProps {
     Vault: OneVault;
+    VaultIsAuthorized: boolean;
 }
 
 interface IOneVaultDispatchToProps {
@@ -21,7 +22,7 @@ interface IOneVaultDispatchToProps {
     LoadVault: (vaultId: number) => void;
     CreateSecret: (secret: IUpdateSecretEntity) => void;
     DeleteVault: (id: number) => void;
-    VaultAuth: (password: string) => void;
+    VaultAuth: (vaultId: number, password: string) => void;
 }
 
 export interface IOneVaultProps extends IOneVaultStateToProps, IOneVaultOwnProps, IOneVaultDispatchToProps {
@@ -33,7 +34,7 @@ export interface IOneVaultProps extends IOneVaultStateToProps, IOneVaultOwnProps
 const mapStateToProps = (state: AppState, ownProps: IOneVaultOwnProps) => {
     let res = {} as IOneVaultStateToProps;
     res.Vault = state.VaultApp.CurrentVault;
-
+    res.VaultIsAuthorized = state.VaultApp.CurrentVault?.IsAuthorized ?? false;
     return res;
 }
 
@@ -59,8 +60,8 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneVaultOwnProps) => {
         dispatch(window.G_VaultController.DeleteVaultRedux(vaultId));
     };
 
-    res.VaultAuth = (password: string) => {
-        dispatch(window.G_VaultController.VaultAuthorizeRedux(password));
+    res.VaultAuth = (vaultId: number, password: string) => {
+        dispatch(window.G_VaultController.VaultAuthorizeRedux(vaultId, password));
     };
     return res;
 };

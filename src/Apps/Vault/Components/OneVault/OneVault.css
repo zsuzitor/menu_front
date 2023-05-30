@@ -8,3 +8,26 @@
 .vault-secrets-list input.form-control {
     height: 30px;
 }
+
+.vault-auth {
+    display: flex;
+}
+
+.vault-auth input {
+    width: 200px;
+}
+
+.vault-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.vault-header .buttons-block {
+    display: flex;
+    row-gap: 20px;
+}
+
+.vault-header .vault-name {
+    font-size: x-large;
+    font-weight: bold;
+}

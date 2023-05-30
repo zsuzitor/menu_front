@@ -14,6 +14,8 @@ interface IVaultSecretOwnProps {
 
 interface IVaultSecretStateToProps {
     SingleSecret?: OneVaultSecret;
+    VaultIsAuthorized: boolean;
+
 }
 
 interface IVaultSecretDispatchToProps {
@@ -32,6 +34,7 @@ export interface IVaultSecretProps extends IVaultSecretStateToProps, IVaultSecre
 const mapStateToProps = (state: AppState, ownProps: IVaultSecretOwnProps) => {
     let res = {} as IVaultSecretStateToProps;
     res.SingleSecret = state.VaultApp.OpenedSecret;
+    res.VaultIsAuthorized = state.VaultApp.CurrentVault?.IsAuthorized ?? false;
     return res;
 }
 

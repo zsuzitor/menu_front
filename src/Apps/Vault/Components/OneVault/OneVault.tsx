@@ -31,7 +31,8 @@ const OneVault = (props: IOneVaultProps) => {
     const vault = props.Vault;
 
     useEffect(() => {
-        if (!props.VaultId) {
+        //if (!props.VaultId)
+        {
             //todo это полная копия из vaultMain, вынести в 1 место
             let pathNameUrlSplit = document.location.pathname.split('/');
             if (pathNameUrlSplit && pathNameUrlSplit.length > 3 && pathNameUrlSplit[2] === 'vault') {

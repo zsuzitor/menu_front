@@ -7,6 +7,7 @@ import CreateVault from '../CreateVault/CreateVault';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
 import { OneVaultSecret } from '../../Models/Entity/State/OneVaultSecret';
 import { AlertData } from '../../../../Models/Entity/AlertData';
+import CreateSecret from '../CreateSecret/CreateSecret';
 
 
 
@@ -41,6 +42,7 @@ const OneVault = (props: IOneVaultProps) => {
                 }
             }
         }
+        return () => { props.CloseCurrentVault(); };
     }, []);
 
     useEffect(() => {
@@ -85,7 +87,9 @@ const OneVault = (props: IOneVaultProps) => {
         </div>
     }
 
-    let secretForNewForm = new OneVaultSecret();
+    let secretsForView = vault.Secrets.filter(x => !filterSecretKey
+        || (x.Key.indexOf(filterSecretKey) != -1));
+
     return <div className='one-vault-list'>
         {showEditForm ? <AdditionalWindow CloseWindow={() => setShowEditForm(false)}
             IsHeightWindow={true}
@@ -98,26 +102,27 @@ const OneVault = (props: IOneVaultProps) => {
                 {/* <label>{vault.Id}</label> */}
                 <label className='vault-name'>{vault.Name}</label>
                 <div className='buttons-block'>
-                    <button className='btn btn-b-light'
-                        onClick={() => setShowEditForm(true)}>Редактировать</button>
-                    <button className='btn btn-b-light'
+                    <div className='but' title='Редактировать'
+                        onClick={() => setShowEditForm(true)}>
+                        <img className='persent-100-width-height' src={"/images/" + 'pencil-edit.png'} />
+                    </div>
+                    <div className='but' title='Удалить'
                         onClick={() => {
                             props.DeleteVault(props.Vault.Id);
                             document.getElementById('list_vault_link_id').click();
-                        }
-                        }>Удалить</button>
+                        }}>
+                        <img className='persent-100-width-height' src={"/images/" + 'delete-icon.png'} />
+                    </div>
+                    <div className='but' title='Сгенерировать новый пароль'
+                        onClick={() => {
+                            let passLen = Math.floor(Math.random() * 5) + 13;//генерим от 0 до y-1, и прибавляем x, получаем от 0+x до y-1+x
+                            navigator.clipboard.writeText(passwordGenerate(10));
+                            G_AddAbsoluteAlertToState(
+                                new AlertData().GetDefaultNotify("Скопировано"));
+                        }}>
+                        <img className='persent-100-width-height' src={"/images/" + 'key.png'} />
+                    </div>
                 </div>
-            </div>
-            <div>
-                <button
-                    className='btn btn-b-light'
-                    onClick={() => {
-                        let passLen = Math.floor(Math.random() * 5) + 9;//генерим от 0 до 4, и прибавляем 9, получаем от 9 до 13
-                        navigator.clipboard.writeText(passwordGenerate(10));
-                        G_AddAbsoluteAlertToState(
-                            new AlertData().GetDefaultNotify("Скопировано"));
-
-                    }}>Сгенерировать новый пароль</button>
             </div>
 
             {props.VaultIsAuthorized ? <></> : <div className='vault-auth'>
@@ -128,18 +133,20 @@ const OneVault = (props: IOneVaultProps) => {
                     onClick={() =>
                         props.VaultAuth(props.VaultId, vaultPassword)}>Авторизовать Vault</button></div>}
         </div>
-        <input type='text'
-            className='form-control'
-            placeholder='Поиск'
-            onChange={(e => setFilterSecretKey(e.target.value))}
-            value={filterSecretKey}></input>
-        {/* <button className='btn btn-b-light' onClick={() => setShoNewSecretForm(true)}>Добавить Secret</button> */}
+
 
         <div className='vault-secrets-list'>
-            <VaultSecret key="new_secret" IsNew={true}
-                Secret={secretForNewForm} VaultId={vault.Id}></VaultSecret>
-            {vault.Secrets.filter(x => !filterSecretKey || (x.Key.indexOf(filterSecretKey) != -1))
-                .map(s => <VaultSecret key={s.Id} Secret={s} IsNew={false}></VaultSecret>)}
+            <CreateSecret VaultId={vault.Id}></CreateSecret>
+            <div>
+                <input type='text'
+                    className='form-control'
+                    placeholder='Поиск'
+                    onChange={(e => setFilterSecretKey(e.target.value))}
+                    value={filterSecretKey}></input>
+            </div>
+            {secretsForView.length > 0 ? <>
+                {secretsForView.map(s => <VaultSecret key={s.Id} Secret={s} ></VaultSecret>)}</> : <>
+                Здесь пока ничего нет</>}
         </div>
     </div>
 }

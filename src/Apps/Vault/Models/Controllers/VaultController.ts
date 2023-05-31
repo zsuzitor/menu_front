@@ -29,6 +29,7 @@ type GetOneVaultReturn = (error: MainErrorObjectBack, data: IOneVaultReturn) => 
 type CreateVaultReturn = (error: MainErrorObjectBack, data: ICreateVaultReturn) => void;
 type UpdateVaultReturn = (error: MainErrorObjectBack, data: ICreateVaultReturn) => void;
 type DeleteVaultReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+type UpdateVaultPasswordReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 type UpdateSecretReturn = (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => void;
 type VaultAuthorizeReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
@@ -56,6 +57,7 @@ export interface IVaultController {
     UpdateVaultRedux: (vault: UpdateVaultEntity, successCallBack?: () => void) => void;
     CreateVaultRedux: (vault: UpdateVaultEntity, successCallBack?: () => void) => void;
     DeleteVaultRedux: (vaultId: number) => void;
+    UpdateVaultPasswordRedux: (vaultId: number, password: string) => void;
     // GetOneSecretAsync: (secretId: number) => IOneVaultSecretReturn;
 }
 
@@ -448,6 +450,36 @@ export class VaultController implements IVaultController {
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/vault/delete-vault',
+        });
+    }
+
+    UpdateVaultPasswordRedux(vaultId: number, pwd: string) {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.UpdateVaultPassword(vaultId, pwd,
+                (error: MainErrorObjectBack, data: BoolResultBack) => {
+                    this.preloader(false);
+                    // if (data?.result) {
+                    //     dispatch(DeleteVaultActionCreator(vaultId));
+                    // }
+                });
+        };
+    }
+
+    UpdateVaultPassword(vaultId: number, pwd: string, onSuccess: UpdateVaultPasswordReturn) {
+
+        // onSuccess(null, BoolResultBack.GetTrue());
+        G_AjaxHelper.GoAjaxRequest({
+            Data: {
+                'vaultId': vaultId,
+                'password': pwd
+            },
+            Type: "PATCH",
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/vault/change-password',
         });
     }
 

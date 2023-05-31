@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { AppState } from '../../../../Models/Entity/State/AppState';
 import { OneVault } from '../../Models/Entity/State/OneVault';
-import { ChangeCurrentVaultIdActionCreator } from '../../Models/Actions/VaultActions';
+import { ChangeCurrentVaultIdActionCreator, SetCurrentVaultActionCreator } from '../../Models/Actions/VaultActions';
 import { IUpdateSecretEntity } from '../../Models/Entity/UpdateSecretEntity';
 
 
@@ -18,6 +18,7 @@ interface IOneVaultStateToProps {
 
 interface IOneVaultDispatchToProps {
     SetCurrentVaultId: (id: number) => void;
+    CloseCurrentVault: () => void;
     LoadVaultSecrets: (vaultId: number) => void;
     LoadVault: (vaultId: number) => void;
     CreateSecret: (secret: IUpdateSecretEntity) => void;
@@ -62,6 +63,11 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneVaultOwnProps) => {
 
     res.VaultAuth = (vaultId: number, password: string) => {
         dispatch(window.G_VaultController.VaultAuthorizeRedux(vaultId, password));
+    };
+
+    res.CloseCurrentVault = () => {
+        dispatch(ChangeCurrentVaultIdActionCreator({ Id: 0 }));
+        dispatch(SetCurrentVaultActionCreator(null))
     };
     return res;
 };

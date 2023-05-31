@@ -4,6 +4,7 @@ import ConnectToStore, { IVaultSecretProps } from './VaultSecretSetup'
 import { Link } from 'react-router-dom';
 import { IUpdateSecretEntity } from '../../Models/Entity/UpdateSecretEntity';
 import { AlertData } from '../../../../Models/Entity/AlertData';
+import { Helper } from '../../../../Models/BL/Helper';
 
 
 
@@ -59,17 +60,7 @@ const VaultSecret = (props: IVaultSecretProps) => {
 
 
     const defaultDieDate = '3000-01-01';
-
-    function dateToYMD(date: Date) {
-        if (!date) {
-            return defaultDieDate;
-        }
-
-        var d = date.getDate();
-        var m = date.getMonth() + 1; //Month from 0 to 11
-        var y = date.getFullYear();
-        return '' + y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
-    }
+    let helper = new Helper();
 
     function cancelChanges() {
         setSecretValue(secret.Value);
@@ -77,6 +68,7 @@ const VaultSecret = (props: IVaultSecretProps) => {
         setSecretDieDate(secret?.DieDate || null);
         setSecretIsCoded(secret?.IsCoded == null ? true : secret.IsCoded);
         setShowSecretValue(false);
+        setSecretIsPublic(secret?.IsPublic ?? false);
     }
 
     let hasChanges = //secretKey != (secret?.Key || '')
@@ -102,9 +94,6 @@ const VaultSecret = (props: IVaultSecretProps) => {
         showMoreButtonClass = ' but-opend';
     }
 
-    if (props.IsNew) {
-        vaultSecretClass += " vault-secret-new";
-    }
 
     // console.log('d1' + secretDieDate);
     if (!secret) {
@@ -123,29 +112,28 @@ const VaultSecret = (props: IVaultSecretProps) => {
         </> : <></>}
 
         <div className={'vault-secret ' + vaultSecretClass}>
-
             <div className='vault-secret-main'>
                 <div className='vault-secret-key' title={secretKey}>
                     <input type='text' className='form-control'
                         value={secretKey} onChange={(e) => setSecretKey(e.target.value)}></input>
                 </div>
                 <div className='vault-secret-val'>
-                    <textarea value={(showSecretValue || props.IsNew) ? secretValue : '***'} className='form-control'
+                    <textarea value={(showSecretValue) ? secretValue : '***'} className='form-control'
                         onChange={(e) => setSecretValue(e.target.value)}></textarea>
                 </div>
                 <div className='vault-secret-main-buttons'>
-                    {props.IsNew ? <></> : <><div className='but vault-secret-show-val' title={showValueTitle}
+                    <div className='but vault-secret-show-val' title={showValueTitle}
                         onClick={() => setShowSecretValue(!showSecretValue)}>
                         <img className='persent-100-width-height' src={"/images/" + showValueImage} />
                     </div>
-                        <div className='but vault-secret-copy' title='Скопировать значение'
-                            onClick={() => {
-                                navigator.clipboard.writeText(secretValue);
-                                G_AddAbsoluteAlertToState(
-                                    new AlertData().GetDefaultNotify("Скопировано"));
-                            }}>
-                            <img className='persent-100-width-height' src={"/images/" + 'copy.png'} />
-                        </div></>}
+                    <div className='but vault-secret-copy' title='Скопировать значение'
+                        onClick={() => {
+                            navigator.clipboard.writeText(secretValue);
+                            G_AddAbsoluteAlertToState(
+                                new AlertData().GetDefaultNotify("Скопировано"));
+                        }}>
+                        <img className='persent-100-width-height' src={"/images/" + 'copy.png'} />
+                    </div>
 
                     <div className={'but vault-secret-more-but' + showMoreButtonClass}
                         title='Показать больше' onClick={() => setShowMoreInfo(!showMoreInfo)}>
@@ -162,7 +150,7 @@ const VaultSecret = (props: IVaultSecretProps) => {
                     <input type='checkbox' checked={secretIsPublic}
                         onChange={() => setSecretIsPublic(!secretIsPublic)}></input>
                     <label>Существует до:</label>
-                    <input type='date' value={dateToYMD(secretDieDate)}
+                    <input type='date' value={helper.DateToYMD(secretDieDate) ?? defaultDieDate}
                         className='form-control' style={{ width: '140px' }}
                         onChange={(e) => {
                             setSecretDieDate(e.target.valueAsDate);
@@ -196,17 +184,11 @@ const VaultSecret = (props: IVaultSecretProps) => {
                         newData.Id = props.Secret.Id;
                         newData.Key = secretKey;
                         newData.Value = secretValue;
-                        newData.VaultId = secret?.VaultId || props.VaultId;
+                        newData.VaultId = secret?.VaultId;
                         newData.IsPublic = secretIsPublic;
                         newData.IsCoded = secretIsCoded;
                         newData.DieDate = secretDieDate || null;//</>new Date(defaultDieDate);
-                        if (props.IsNew) {
-                            props.CreateSecret(newData);
-                            cancelChanges();
-                        }
-                        else {
-                            props.UpdateSecret(newData);
-                        }
+                        props.UpdateSecret(newData);
                     }}>
                         <img className='persent-100-width-height' src={"/images/" + 'save-icon.png'} />
                     </div>
@@ -217,24 +199,23 @@ const VaultSecret = (props: IVaultSecretProps) => {
                             <img className='persent-100-width-height' src={"/images/" + 'cancel.png'} />
                         </div></> : <></>}
 
-                    {props.IsNew ? <>
-                    </> : <><div className='but' title='Удалить'
+                    <div className='but' title='Удалить'
                         onClick={() =>
                             props.DeleteSecret(props.Secret.Id, props.Secret.VaultId)}>
                         <img className='persent-100-width-height'
                             src={"/images/" + 'delete-icon.png'} />
                     </div>
-                        <div className='but' title='Ссылка на секрет'
-                            onClick={() => {
-                                navigator.clipboard
-                                    .writeText(document.location.origin + G_VaultController.RouteUrlVaultApp
-                                        + G_VaultController.RouteUrlOneSecret + secret.Id);
-                                G_AddAbsoluteAlertToState(
-                                    new AlertData().GetDefaultNotify("Ссылка Скопирована"));
+                    <div className='but' title='Ссылка на секрет'
+                        onClick={() => {
+                            navigator.clipboard
+                                .writeText(document.location.origin + G_VaultController.RouteUrlVaultApp
+                                    + G_VaultController.RouteUrlOneSecret + secret.Id);
+                            G_AddAbsoluteAlertToState(
+                                new AlertData().GetDefaultNotify("Ссылка Скопирована"));
 
-                            }}>
-                            <img className='persent-100-width-height' src={"/images/" + 'share-icon.png'} />
-                        </div></>}
+                        }}>
+                        <img className='persent-100-width-height' src={"/images/" + 'share-icon.png'} />
+                    </div>
 
                 </div>
 

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import VaultUserUi from '../VaultUser/VaultUser';
 import { UpdateVaultEntity } from '../../Models/Entity/UpdateVaultEntity';
 import { VaultUser } from '../../Models/Entity/State/VaultUser';
+import { AlertData } from '../../../../Models/Entity/AlertData';
 
 
 
@@ -49,10 +50,21 @@ const CreateVault = (props: ICreateVaultProps) => {
         <input type='checkbox' placeholder='Публичный'
             checked={vaultPublic} className='form-control m-checkbox'
             onChange={(e) => setVaultPublic(e.target.checked)}></input>
-        {props.Vault?.Id ? <></> : <>
-            <input type='password' value={vaultPassword} onChange={(e) =>
+        <input type='password' value={vaultPassword}
+            className='form-control' onChange={(e) =>
                 setVaultPassword(e.target.value)}></input>
-        </>}
+        {props.Vault?.Id ? <>
+            <button className='btn btn-b-light'
+                onClick={() => {
+                    if (!vaultPassword) {
+                        G_AddAbsoluteAlertToState(
+                            new AlertData().GetDefaultError("Пароль обязателен для заполнения"));
+                        return;
+                    }
+
+                    props.UpdateVaultPassword(props.Vault.Id, vaultPassword);
+                }}>Изменить пароль</button>
+        </> : <></>}
         {props.Vault?.Id ? <>
             <p>Люди хранилища</p>
             {people.map(u => <VaultUserUi key={u.Email} User={u}

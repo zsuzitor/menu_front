@@ -20,6 +20,7 @@ interface ICreateVaultDispatchToProps {
     LoadVaultPeople: (vaultId: number) => void;
     CreateVault: (vault: UpdateVaultEntity, successCallBack?: () => void) => void;
     UpdateVault: (vault: UpdateVaultEntity, successCallBack?: () => void) => void;
+    UpdateVaultPassword: (vaultId: number, password: string) => void;
 }
 
 export interface ICreateVaultProps extends ICreateVaultStateToProps, ICreateVaultOwnProps, ICreateVaultDispatchToProps {
@@ -44,6 +45,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: ICreateVaultOwnProps) => {
     };
     res.UpdateVault = (vault, successCallBack) => {
         dispatch(window.G_VaultController.UpdateVaultRedux(vault, successCallBack));
+    };
+
+    res.UpdateVaultPassword = (vaultId, pwd) => {
+        dispatch(window.G_VaultController.UpdateVaultPasswordRedux(vaultId, pwd));
     };
 
     return res;

@@ -108,8 +108,11 @@ const OneVault = (props: IOneVaultProps) => {
                     </div>
                     <div className='but' title='Удалить'
                         onClick={() => {
-                            props.DeleteVault(props.Vault.Id);
-                            document.getElementById('list_vault_link_id').click();
+                            if (confirm('Удалить?')) {
+                                props.DeleteVault(props.Vault.Id);
+                                document.getElementById('list_vault_link_id').click();
+                            }
+
                         }}>
                         <img className='persent-100-width-height' src={"/images/" + 'delete-icon.png'} />
                     </div>
@@ -144,6 +147,7 @@ const OneVault = (props: IOneVaultProps) => {
                     onChange={(e => setFilterSecretKey(e.target.value))}
                     value={filterSecretKey}></input>
             </div>
+            <br></br>
             {secretsForView.length > 0 ? <>
                 {secretsForView.map(s => <VaultSecret key={s.Id} Secret={s} ></VaultSecret>)}</> : <>
                 Здесь пока ничего нет</>}

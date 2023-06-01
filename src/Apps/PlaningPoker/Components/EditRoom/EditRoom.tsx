@@ -1,36 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { BoolResultBack } from '../../../../Models/BackModel/BoolResultBack';
 import { MainErrorObjectBack } from '../../../../Models/BackModel/ErrorBack';
 import { AlertData } from '../../../../Models/Entity/AlertData';
-import { PlaningPokerUserInfo } from '../../Models/Entity/State/PlaningPokerUserInfo';
 import { RoomStatus } from '../../Models/Entity/State/RoomInfo';
-import { AppState } from '../../../../Models/Entity/State/AppState';
+import connectToStore, { EditRoomProps, SettingsPage } from './EditRoomSetup';
 
 
 require('./EditRoom.css');
-
-export enum SettingsPage { Info = 0, Password, Marks };
-
-
-interface EditRoomOwnProps {
-    MyHubConnection: signalR.HubConnection;
-
-}
-
-interface EditRoomStateToProps {
-    RoomName: string;
-    UserInfo: PlaningPokerUserInfo;
-    RoomStatus: RoomStatus;
-    Cards: (string | number)[];
-}
-
-interface EditRoomDispatchToProps {
-    UpdateRoomImage: (roomname: string, img: File) => void;
-}
-
-interface EditRoomProps extends EditRoomStateToProps, EditRoomOwnProps, EditRoomDispatchToProps {
-}
 
 const EditRoom = (props: EditRoomProps) => {
     const [oldPassword, setOldPassword] = useState('');
@@ -190,24 +166,7 @@ const EditRoom = (props: EditRoomProps) => {
 
 
 
-const mapStateToProps = (state: AppState, ownProps: EditRoomOwnProps) => {
-    let res = {} as EditRoomStateToProps;
-    res.RoomName = state.PlaningPokerApp.RoomInfo?.Name;
-    res.UserInfo = state.PlaningPokerApp.User;
-    res.RoomStatus = state.PlaningPokerApp.RoomStatus;
-    res.Cards = state.PlaningPokerApp.RoomCards;
-    return res;
-}
-
-const mapDispatchToProps = (dispatch: any, ownProps: EditRoomOwnProps) => {
-    let res = {} as EditRoomDispatchToProps;
-    res.UpdateRoomImage = (roomname: string, img: File) => {
-        dispatch(window.G_PlaningPokerController.UpdateRoomImageRedux(roomname, img));
-    };
-    return res;
-};
 
 
-const connectToStore = connect(mapStateToProps, mapDispatchToProps);
 // and that function returns the connected, wrapper component:
 export default connectToStore(EditRoom);

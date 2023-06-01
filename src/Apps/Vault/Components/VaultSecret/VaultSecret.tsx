@@ -34,6 +34,15 @@ const VaultSecret = (props: IVaultSecretProps) => {
 
     useEffect(() => {
 
+        return () => {
+            if (props.SingleSecret) {
+                props.ClearSingleSecret();
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+
         if (!secret?.Key) {
             let pathNameUrlSplit = document.location.pathname.split('/');
             if (pathNameUrlSplit && pathNameUrlSplit.length > 3 && pathNameUrlSplit[2] === 'secret') {
@@ -181,7 +190,7 @@ const VaultSecret = (props: IVaultSecretProps) => {
                         }
 
                         let newData = {} as IUpdateSecretEntity;
-                        newData.Id = props.Secret.Id;
+                        newData.Id = secret.Id;
                         newData.Key = secretKey;
                         newData.Value = secretValue;
                         newData.VaultId = secret?.VaultId;
@@ -201,7 +210,7 @@ const VaultSecret = (props: IVaultSecretProps) => {
 
                     <div className='but' title='Удалить'
                         onClick={() =>
-                            props.DeleteSecret(props.Secret.Id, props.Secret.VaultId)}>
+                            props.DeleteSecret(secret.Id, secret.VaultId)}>
                         <img className='persent-100-width-height'
                             src={"/images/" + 'delete-icon.png'} />
                     </div>

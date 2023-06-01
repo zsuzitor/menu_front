@@ -1,37 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { AlertData } from '../../../../Models/Entity/AlertData';
-import { AppState } from '../../../../Models/Entity/State/AppState';
-import { ProjectUser } from '../../Models/Entity/State/ProjectUser';
 import { OneTask } from '../../Models/Entity/State/OneTask';
-import { IAuthState } from '../../../../Models/Entity/AuthState';
+import connectToStore, { IAddTaskProps } from './AddTaskSetup';
 
 
 
 require('./AddTask.css');
 
 
-
-
-
-
-
-interface IAddTaskOwnProps {
-    ProjectUsers: ProjectUser[];
-    ProjectId: number;
-}
-
-
-interface IAddTaskStateToProps {
-    Auth: IAuthState;
-}
-
-interface IAddTaskDispatchToProps {
-    AddTaskToProject: (task: OneTask, projectId: number) => void;
-}
-
-interface IAddTaskProps extends IAddTaskStateToProps, IAddTaskOwnProps, IAddTaskDispatchToProps {
-}
 
 
 const AddTask = (props: IAddTaskProps) => {
@@ -102,22 +78,5 @@ const AddTask = (props: IAddTaskProps) => {
 
 
 
-const mapStateToProps = (state: AppState, ownProps: IAddTaskOwnProps) => {
-    let res = {} as IAddTaskStateToProps;
-    res.Auth = state.Auth;
-    return res;
-}
-
-const mapDispatchToProps = (dispatch: any, ownProps: IAddTaskOwnProps) => {
-    let res = {} as IAddTaskDispatchToProps;
-    res.AddTaskToProject = (task: OneTask, projectId: number) => {
-        dispatch(window.G_CodeReviewTaskController.AddTaskToProjectRedux(task, projectId));
-    };
-
-    return res;
-};
-
-
-const connectToStore = connect(mapStateToProps, mapDispatchToProps);
 // and that function returns the connected, wrapper component:
 export default connectToStore(AddTask);

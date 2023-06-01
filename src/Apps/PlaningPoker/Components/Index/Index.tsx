@@ -6,39 +6,10 @@ import React, { useState, useEffect } from 'react';
 
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
 import { AlertData } from "../../../../Models/Entity/AlertData";
-import { RoomInfo } from "../../Models/Entity/State/RoomInfo";
-import { connect } from 'react-redux';
-import { AppState } from "../../../../Models/Entity/State/AppState";
-import { RoomShortInfo } from "../../Models/Entity/State/RoomShortInfo";
-import { SetRoomNameActionCreator, SetRoomPasswordActionCreator } from "../../Models/Actions/RoomAction";
-import { SetUserNameActionCreator } from "../../Models/Actions/UserActions";
+import connectToStore, { IndexProps } from "./IndexSetup";
 
 
 require('./Index.css');
-
-
-
-interface IndexOwnProps {
-    MyHubConnection: signalR.HubConnection;
-    HubConnected: boolean;
-}
-interface IndexStateToProps {
-    RoomInfo: RoomInfo;
-    Username: string;
-    // LogginnedInMainApp: boolean;
-    AuthSuccess: boolean;
-    Rooms: RoomShortInfo[];
-}
-
-interface IndexDispatchToProps {
-    SetUserName: ((newName: string) => void);
-    SetRoomName: (name: string) => void;
-    SetRoomPassword: (name: string) => void;
-    LoadRoomList: () => void;
-}
-
-interface IndexProps extends IndexStateToProps, IndexOwnProps, IndexDispatchToProps {
-}
 
 
 
@@ -48,12 +19,6 @@ let Index = (props: IndexProps) => {
     const [roomName, setRoomName] = useState(props.RoomInfo.Name || '');
     const [roomPassword, setRoomPassword] = useState(props.RoomInfo.Password || '');
 
-
-    // let roomList: { RoomName: string, RoomImg: string }[] = [];
-    // roomList.push({ RoomName: 'room1', RoomImg: '' });
-    // roomList.push({ RoomName: 'room2', RoomImg: '' });
-    // roomList.push({ RoomName: 'room3', RoomImg: '' });
-    // roomList.push({ RoomName: 'room4', RoomImg: '' });
 
     useEffect(() => {
         let pathNameUrlSplit = document.location.pathname.split('/');
@@ -199,38 +164,5 @@ let Index = (props: IndexProps) => {
 
 
 
-const mapStateToProps = (state: AppState, ownProps: IndexOwnProps) => {
-    let res = {} as IndexStateToProps;
-    res.RoomInfo = state.PlaningPokerApp.RoomInfo;
-    res.Username = state.PlaningPokerApp.User.UserName;
-    // res.LogginnedInMainApp = state.PlaningPokerApp.User.LoginnedInMainApp;
-    res.AuthSuccess = state.Auth.AuthSuccess;
-    res.Rooms = state.PlaningPokerApp.RoomsList;
-    return res;
-}
-
-const mapDispatchToProps = (dispatch: any, ownProps: IndexOwnProps) => {
-    let res = {} as IndexDispatchToProps;
-    res.SetUserName = (username: string) => {
-        dispatch(SetUserNameActionCreator(username));
-    };
-
-    res.SetRoomName = (roomname: string) => {
-        dispatch(SetRoomNameActionCreator(roomname));
-    }
-
-    res.SetRoomPassword = (roompass: string) => {
-        dispatch(SetRoomPasswordActionCreator(roompass));
-    }
-
-    res.LoadRoomList = () => {
-        dispatch(window.G_PlaningPokerController.GetRoomsListRedux());
-    };
-
-    return res;
-};
-
-
-const connectToStore = connect(mapStateToProps, mapDispatchToProps);
 // and that function returns the connected, wrapper component:
 export default connectToStore(Index);

@@ -36,7 +36,7 @@ export class AuthenticateController implements IAuthenticateController {
 
         let data = {
             'email': model.Email,
-            'password': model.Password,
+            'password': model.Password
         };
 
         // let ajx: AjaxHelper.IAjaxHelper = new AjaxHelper.AjaxHelper();
@@ -60,7 +60,7 @@ export class AuthenticateController implements IAuthenticateController {
         let data = {
             'email': model.Email,
             'password': model.Password,
-            "password_confirm": model.ConfirmPassword,
+            "password_confirm": model.ConfirmPassword
         };
 
         G_AjaxHelper.GoAjaxRequest({
@@ -78,7 +78,7 @@ export class AuthenticateController implements IAuthenticateController {
     SendMessageForgotPassword(login: string, onSuccess: OnlyError): void {
 
         let data = {
-            'email': login,
+            'email': login
         };
 
         G_AjaxHelper.GoAjaxRequest({
@@ -98,7 +98,7 @@ export class AuthenticateController implements IAuthenticateController {
     CheckRecoverPasswordCode(code: string, onSuccess: OnlyError): void {
 
         let data = {
-            'code': code,
+            'code': code
         };
 
         G_AjaxHelper.GoAjaxRequest({
@@ -117,7 +117,7 @@ export class AuthenticateController implements IAuthenticateController {
 
         let data = {
             'code': code,
-            'password': password,
+            'password': password
         };
 
         G_AjaxHelper.GoAjaxRequest({

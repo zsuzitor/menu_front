@@ -3,27 +3,13 @@ import { connect } from 'react-redux';
 import { AlertData } from '../../../../Models/Entity/AlertData';
 import { AppState } from '../../../../Models/Entity/State/AppState';
 import { ProjectUser } from '../../Models/Entity/State/ProjectUser';
+import connectToStore, { IOneProjectOneProjectUserProps } from './OneProjectUserSetup';
 
 
 require('./OneProjectUser.css');
 
 
 
-interface IOneProjectOneProjectUserOwnProps {
-    User: ProjectUser;
-
-}
-
-
-interface IOneProjectOneProjectUserStateToProps {
-}
-
-interface IOneProjectOneProjectUserDispatchToProps {
-    ChangeUser: (user: ProjectUser) => void;
-}
-
-interface IOneProjectOneProjectUserProps extends IOneProjectOneProjectUserStateToProps, IOneProjectOneProjectUserOwnProps, IOneProjectOneProjectUserDispatchToProps {
-}
 
 
 
@@ -113,20 +99,6 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
 
 
 
-const mapStateToProps = (state: AppState, ownProps: IOneProjectOneProjectUserOwnProps) => {
-    let res = {} as IOneProjectOneProjectUserStateToProps;
-
-    return res;
-}
-
-const mapDispatchToProps = (dispatch: any, ownProps: IOneProjectOneProjectUserOwnProps) => {
-    let res = {} as IOneProjectOneProjectUserDispatchToProps;
-    res.ChangeUser = (user) => { dispatch(window.G_CodeReviewUserController.ChangeProjectUserRedux(user)) };
-    return res;
-};
-
-
-const connectToStore = connect(mapStateToProps, mapDispatchToProps);
 // and that function returns the connected, wrapper component:
 export default connectToStore(OneProjectUser);
 

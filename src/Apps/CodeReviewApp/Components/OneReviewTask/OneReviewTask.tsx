@@ -2,15 +2,10 @@
 
 import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { AlertData } from '../../../../Models/Entity/AlertData';
 import OneReviewTaskComment from '../OneReviewTaskComment/OneReviewTaskComment';
 import { OneTask } from '../../Models/Entity/State/OneTask';
-import { AppState } from '../../../../Models/Entity/State/AppState';
-import { SetCommentsActionCreator } from '../../Models/Actions/CommentActions';
-import { CommentSet } from '../../Models/Entity/CommentSet';
-import { OneTaskReviewComment } from '../../Models/Entity/OneTaskReviewComment';
-import { ProjectUser } from '../../Models/Entity/State/ProjectUser';
+import connectToStore, { IOneReviewTaskProps } from './OneReviewTaskSetup';
 
 
 
@@ -18,30 +13,6 @@ require('./OneReviewTask.css');
 
 
 
-
-
-interface IOneReviewTaskOwnProps {
-    Task: OneTask;
-    Comments: OneTaskReviewComment[];
-
-}
-
-
-interface IOneReviewTaskStateToProps {
-    ProjectUsers: ProjectUser[];
-
-}
-
-interface IOneReviewTaskDispatchToProps {
-    UpdateTask: (task: OneTask) => void;
-    DeleteTask: (id: number) => void;
-    AddComment: (taskId: number, newCommentText: string) => void;
-    SetEmptyTaskComments: (taskId: number) => void;
-    LoadTaskComments: (taskId: number) => void;
-}
-
-interface IOneReviewTaskProps extends IOneReviewTaskStateToProps, IOneReviewTaskOwnProps, IOneReviewTaskDispatchToProps {
-}
 
 
 const OneReviewTask = (props: IOneReviewTaskProps) => {
@@ -259,42 +230,5 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
 
 
-
-const mapStateToProps = (state: AppState, ownProps: IOneReviewTaskOwnProps) => {
-    let res = {} as IOneReviewTaskStateToProps;
-    res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
-
-    return res;
-}
-
-const mapDispatchToProps = (dispatch: any, ownProps: IOneReviewTaskOwnProps) => {
-    let res = {} as IOneReviewTaskDispatchToProps;
-    res.UpdateTask = (forAdd: OneTask) => {
-        dispatch(window.G_CodeReviewTaskController.UpdateTaskRedux(forAdd));
-    };
-
-    res.DeleteTask = (taskId: number) => {
-        dispatch(window.G_CodeReviewTaskController.DeleteTaskRedux(taskId));
-    };
-
-    res.AddComment = (taskId: number, text: string) => {
-        dispatch(window.G_CodeReviewCommentController.AddCommentRedux(taskId, text));
-    };
-
-    res.SetEmptyTaskComments = (taskId: number) => {
-        let dt = new CommentSet();
-        dt.Comments = [];
-        dt.TaskId = taskId;
-        dispatch(SetCommentsActionCreator(dt))
-    }
-
-    res.LoadTaskComments = (taskId: number) => {
-        dispatch(window.G_CodeReviewCommentController.LoadCommentsRedux(taskId))
-    };
-    return res;
-};
-
-
-const connectToStore = connect(mapStateToProps, mapDispatchToProps);
 // and that function returns the connected, wrapper component:
 export default connectToStore(OneReviewTask);

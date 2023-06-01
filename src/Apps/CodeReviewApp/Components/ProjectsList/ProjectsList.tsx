@@ -1,33 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { AppState } from '../../../../Models/Entity/State/AppState';
 import OneProjectInList from '../OneProjectInList/OneProjectInList';
 
-import { connect } from "react-redux";
 import { AlertData } from '../../../../Models/Entity/AlertData';
-import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/State/OneProjectInList';
-// import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/State/State/OneProjectInList';
+
+import connectToStore, { IProjectsListProps } from './ProjectsListSetup';
 
 require('./ProjectsList.css');
 
-
-
-
-export interface IProjectsListOwnProps {
-    Projects: OneProjectInListModel[];
-    CurrentProjectId: number;
-}
-
-interface IProjectsListStateToProps {
-}
-
-interface IProjectsListDispatchToProps {
-    AddNewProject: (projectName: string) => void;
-
-}
-
-
-interface IProjectsListProps extends IProjectsListStateToProps, IProjectsListOwnProps, IProjectsListDispatchToProps {
-}
 
 
 
@@ -80,21 +59,5 @@ const ProjectsList = (props: IProjectsListProps) => {
 }
 
 
-const mapStateToProps = (state: AppState, ownProps: IProjectsListOwnProps) => {
-    let res = {} as IProjectsListStateToProps;
-    return res;
-}
-
-const mapDispatchToProps = (dispatch: any, ownProps: IProjectsListOwnProps) => {
-    let res = {} as IProjectsListDispatchToProps;
-    res.AddNewProject = (projectName: string) => {
-        dispatch(window.G_CodeReviewProjectController.CreateNewProjectRedux(projectName));
-    };
-
-    return res;
-};
-
-
-const connectToStore = connect(mapStateToProps, mapDispatchToProps);
 // and that function returns the connected, wrapper component:
 export default connectToStore(ProjectsList);

@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { OneVoteCardProp } from './OneVoteCardSetup';
 
 
 require('./OneVoteCard.css');
-
-class OneVoteCardProp {
-    Val: string;
-    NeedSelect: boolean;
-}
 
 
 const OneVoteCard = (props: OneVoteCardProp) => {

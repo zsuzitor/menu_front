@@ -3,18 +3,12 @@ import React, { useState, useEffect } from 'react';
 import OneReviewTask from '../OneReviewTask/OneReviewTask';
 import cloneDeep from 'lodash/cloneDeep';
 import AddTask from '../AddTask/AddTask';
-import { connect } from 'react-redux';
-import { AppState } from '../../../../Models/Entity/State/AppState';
 import { CodeReviewLocalStorageHelper } from '../../../PlaningPoker/Models/PlaningPokerHelper';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
 import Paggination from '../../../../components/Body/Paggination/Paggination';
 import { ITaskFilter } from '../../Models/Entity/ITaskFilter';
-import { OneTask } from '../../Models/Entity/State/OneTask';
-import { ProjectUser } from '../../Models/Entity/State/ProjectUser';
-import { TasksFilter } from '../../Models/Entity/State/TasksFilter';
 import ProjectUsers from '../ProjectUsers/ProjectUsers';
-import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/State/OneProjectInList';
-import { SetFilterTaskCreatorActionCreator, SetFilterTaskReviewerActionCreator, SetFilterTaskNameActionCreator, SetFilterTaskPageActionCreator, SetFilterTaskStatusActionCreator, SetFilterTaskActionCreator } from '../../Models/Actions/TaskActions';
+import connectToStore, { IProjectDetailProps } from './ProjectDetailSetup';
 
 
 
@@ -22,34 +16,6 @@ require('./ProjectDetail.css');
 
 
 
-interface IProjectDetailOwnProps {
-    Project: OneProjectInListModel;
-    Tasks: OneTask[];
-}
-
-
-interface IProjectDetailStateToProps {
-    ProjectUsers: ProjectUser[];
-    TasksFilters: TasksFilter;
-
-    CurrentProjectTasksAllCount: number;
-}
-
-interface IProjectDetailDispatchToProps {
-    SetFilterTaskCreator: (id: number) => void;
-    SetFilterTaskReviewer: (id: number) => void;
-    SetFilterTaskName: (name: string) => void;
-    SetFilterTaskPage: (num: number) => void;
-    SetFilterTaskStatus: (status: number) => void;
-    ClearFilterTask: () => void;
-
-    ReloadTasks: (filters: ITaskFilter) => void;
-
-    DeleteProject: (id: number) => void;
-}
-
-interface IProjectDetailProps extends IProjectDetailStateToProps, IProjectDetailOwnProps, IProjectDetailDispatchToProps {
-}
 
 
 
@@ -238,49 +204,5 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
 
-const mapStateToProps = (state: AppState, ownProps: IProjectDetailOwnProps) => {
-    let res = {} as IProjectDetailStateToProps;
-    res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
-    res.TasksFilters = state.CodeReviewApp.CurrentProjectTasksFilters;
-    res.CurrentProjectTasksAllCount = state.CodeReviewApp.CurrentProjectTasksAllCount;
-    return res;
-}
-
-const mapDispatchToProps = (dispatch: any, ownProps: IProjectDetailOwnProps) => {
-    let res = {} as IProjectDetailDispatchToProps;
-
-    res.SetFilterTaskCreator = (id: number) => {
-        dispatch(SetFilterTaskCreatorActionCreator(id));
-    };
-    res.SetFilterTaskReviewer = (id: number) => {
-        dispatch(SetFilterTaskReviewerActionCreator(id));
-    };
-    res.SetFilterTaskName = (name: string) => {
-        dispatch(SetFilterTaskNameActionCreator(name));
-    };
-    res.SetFilterTaskPage = (num: number) => {
-        dispatch(SetFilterTaskPageActionCreator(num));
-    };
-    res.SetFilterTaskStatus = (status: number) => {
-        dispatch(SetFilterTaskStatusActionCreator(status));
-    };
-
-    res.ReloadTasks = (filter: ITaskFilter) => {
-        dispatch(window.G_CodeReviewTaskController.LoadTasksRedux(filter));
-    };
-
-    res.DeleteProject = (id: number) => {
-        dispatch(window.G_CodeReviewProjectController.DeleteProjectRedux(id));
-    };
-
-    res.ClearFilterTask = () => {
-        dispatch(SetFilterTaskActionCreator(new TasksFilter()));
-    }
-
-    return res;
-};
-
-
-const connectToStore = connect(mapStateToProps, mapDispatchToProps);
 // and that function returns the connected, wrapper component:
 export default connectToStore(ProjectDetail);

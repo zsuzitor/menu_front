@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { IRoomTimerProps } from './RoomTimerSetup';
 
 
 require('./RoomTimer.css');
 
-interface IRoomTimerProps {
-    DieDate: Date;
-    AliveRoom: () => void;
-    ForceLeaveFromRoom: () => void;
-}
+
 
 let __planing_room_iterator__: number = 0;
 

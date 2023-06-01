@@ -23,19 +23,14 @@ const OneVaultInList = (props: IOneVaultInListProps) => {
 
 
     return <div className='one-vault-in-list'>
-        <div>
-            <p>{props.Vault.Id}</p>
-            <p>{props.Vault.Name}</p>
-            <Link
-                to={G_VaultController.RouteUrlVaultApp
-                    + G_VaultController.RouteUrlOneVault + props.Vault.Id}>
-                {/* <img className="persent-100-width-height" src={imgLogo} /> */}
-                Открыть</Link>
-
-        </div>
-        {/* <button>Список Vaults</button>
-        <div>Список Vaults</div> */}
-
+        <Link
+            to={G_VaultController.RouteUrlVaultApp
+                + G_VaultController.RouteUrlOneVault + props.Vault.Id}>
+            {/* <img className="persent-100-width-height" src={imgLogo} /> */}
+            <div className='one-vault-in-list-inner'>
+                {props.Vault.Name}
+            </div>
+        </Link>
     </div>
 }
 

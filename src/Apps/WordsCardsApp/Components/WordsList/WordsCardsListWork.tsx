@@ -217,7 +217,7 @@ export class WordsCardsListWork extends React.Component<{}, IWordsCardsListWorkS
         // let refThis = this;
         // G_AjaxHelper.GoAjaxRequest({
         //     Data: {},
-        //     Type: "GET",
+        //     Type: ControllerHelper.GetHttp,
         //     FuncSuccess: (xhr, status, jqXHR) => {
         //         let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
         //         if (resp.errors) {

@@ -183,7 +183,7 @@ export class PlaningPokerController implements IPlaningPokerController {
     GetRoomsList(onSuccess: GetRoomsListReturn) {
         G_AjaxHelper.GoAjaxRequest({
             Data: {},
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -222,7 +222,7 @@ export class PlaningPokerController implements IPlaningPokerController {
                 'pageNumber': page,
                 'pageSize': countOnPage,
             },
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -260,7 +260,7 @@ export class PlaningPokerController implements IPlaningPokerController {
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "PATCH",
+            Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -299,7 +299,7 @@ export class PlaningPokerController implements IPlaningPokerController {
                 'oldPassword': oldPassword,
                 'newPassword': newPassword,
             },
-            Type: "PATCH",
+            Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -335,7 +335,7 @@ export class PlaningPokerController implements IPlaningPokerController {
                 'roomname': roomname,
                 'userConnectionId': userId
             },
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -393,7 +393,7 @@ export class PlaningPokerController implements IPlaningPokerController {
                 'roomname': roomname,
                 'userConnectionId': userId
             },
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 

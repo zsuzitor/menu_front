@@ -234,7 +234,7 @@ export class AjaxHelper implements IAjaxHelper {
     public TryRefreshToken(notRedirectWhenNotAuth: boolean, callBack?: () => void): Promise<any> {
         return this.GoAjaxRequest({
             Data: {},
-            Type: "POST",
+            Type: ControllerHelper.PostHttp,
             NeedTryRefreshToken: false,
             NotRedirectWhenNotAuth: notRedirectWhenNotAuth,//по сути просто возвращаем обратно, это поле нужно только в TryRefreshToken, и она не вызовется внутри
             FuncSuccess: (xhr, status, jqXHR) => {
@@ -282,7 +282,7 @@ export class AjaxHelper implements IAjaxHelper {
     public CheckAuth(onSuccess: BoolWithError): void {
         this.GoAjaxRequest({
             Data: {},
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             NeedTryRefreshToken: false,
             NotRedirectWhenNotAuth: true,
             FuncSuccess: (xhr, status, jqXHR) => {

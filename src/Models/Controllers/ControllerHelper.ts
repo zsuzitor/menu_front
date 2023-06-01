@@ -1,6 +1,11 @@
 import { MainErrorObjectBack } from "../BackModel/ErrorBack";
 
 export class ControllerHelper {
+    static GetHttp = 'GET';
+    static PostHttp = 'POST';
+    static PatchHttp = 'PATCH';
+    static DeleteHttp = 'DELETE';
+
     MapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
         return (xhr: any, status: any, jqXHR: any) => {
             let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;

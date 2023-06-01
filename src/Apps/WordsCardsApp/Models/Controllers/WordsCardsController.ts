@@ -4,6 +4,7 @@ import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { IOneWordCardBack } from "../BackModels/OneWordCardBack";
 import { IEditCardState } from "../Entity/IEditCardState";
 import { BoolWithError } from "../../../../Models/Controllers/BO/ControllersOutput";
+import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 
 
 
@@ -27,7 +28,7 @@ export class WordsCardsController implements IWordsCardsController {
     GetAllForUser(onSuccess: WordsCardsListOnReturn) {
         G_AjaxHelper.GoAjaxRequest({
             Data: {},
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
@@ -118,7 +119,7 @@ export class WordsCardsController implements IWordsCardsController {
         data.append('id', cardId + '');
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "DELETE",
+            Type: ControllerHelper.DeleteHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
@@ -155,7 +156,7 @@ export class WordsCardsController implements IWordsCardsController {
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "PATCH",
+            Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
@@ -185,7 +186,7 @@ export class WordsCardsController implements IWordsCardsController {
         let refThis = this;
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "PATCH",
+            Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {

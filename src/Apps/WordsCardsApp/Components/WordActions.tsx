@@ -57,7 +57,7 @@ export class WordActions extends React.Component<IWordActionsProps, IWordActions
     DosnloadFile() {
         // G_AjaxHelper.GoAjaxRequest({
         //     Data: {},
-        //     Type: "GET",
+        //     Type: ControllerHelper.GetHttp,
         //     FuncSuccess: (xhr, status, jqXHR) => {
 
         //     },

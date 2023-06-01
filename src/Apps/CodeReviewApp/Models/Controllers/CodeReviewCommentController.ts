@@ -53,7 +53,7 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "PATCH",
+            Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -86,7 +86,7 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "DELETE",
+            Type: ControllerHelper.DeleteHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -159,7 +159,7 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },

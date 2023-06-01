@@ -1,6 +1,7 @@
 import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { BoolWithError } from "../../../../Models/Controllers/BO/ControllersOutput";
+import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { OneWordListEdit } from "../../Components/WordsList/WordsCardsListWork";
 import { IWordCardWordList } from "../BackModels/OneWordCardBack";
 import { IWordListBack } from "../BackModels/WordListBack";
@@ -31,7 +32,7 @@ export class WordsListController implements IWordsListController {
         let refThis = this;
         G_AjaxHelper.GoAjaxRequest({
             Data: {},
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
@@ -87,7 +88,7 @@ export class WordsListController implements IWordsListController {
         let refThis = this;
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "DELETE",
+            Type: ControllerHelper.DeleteHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
@@ -147,7 +148,7 @@ export class WordsListController implements IWordsListController {
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "DELETE",
+            Type: ControllerHelper.DeleteHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
@@ -175,7 +176,7 @@ export class WordsListController implements IWordsListController {
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "PATCH",
+            Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {

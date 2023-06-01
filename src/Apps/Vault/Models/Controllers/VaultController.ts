@@ -96,7 +96,7 @@ export class VaultController implements IVaultController {
         G_AjaxHelper.GoAjaxRequest({
             Data: {
             },
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -130,7 +130,7 @@ export class VaultController implements IVaultController {
             Data: {
                 'vaultId': vaultId
             },
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -159,7 +159,7 @@ export class VaultController implements IVaultController {
             Data: {
                 'vaultId': vaultId
             },
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -194,7 +194,7 @@ export class VaultController implements IVaultController {
             Data: {
                 'vaultId': vaultId
             },
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -224,7 +224,7 @@ export class VaultController implements IVaultController {
             Data: {
                 'secretId': secretId
             },
-            Type: "DELETE",
+            Type: ControllerHelper.DeleteHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -301,7 +301,7 @@ export class VaultController implements IVaultController {
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "PATCH",
+            Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -332,7 +332,7 @@ export class VaultController implements IVaultController {
             Data: {
                 'secretId': secretId
             },
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -380,7 +380,7 @@ export class VaultController implements IVaultController {
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "PATCH",
+            Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -444,7 +444,7 @@ export class VaultController implements IVaultController {
             Data: {
                 'vaultId': vaultId
             },
-            Type: "DELETE",
+            Type: ControllerHelper.DeleteHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -474,7 +474,7 @@ export class VaultController implements IVaultController {
                 'vaultId': vaultId,
                 'password': pwd
             },
-            Type: "PATCH",
+            Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
@@ -509,7 +509,7 @@ export class VaultController implements IVaultController {
                 'password': password,
                 'vaultId': vaultId
             },
-            Type: "POST",
+            Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },

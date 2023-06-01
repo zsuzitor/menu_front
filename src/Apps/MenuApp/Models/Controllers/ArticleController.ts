@@ -5,6 +5,7 @@ import { IOneCardFullDataEdit } from "../Entity/IOneCardFullDataEdit";
 import { BoolWithError, OnlyError } from "../../../../Models/Controllers/BO/ControllersOutput";
 import { IOneCardInListDataBack } from "../BackModels/OneCardInListDataBack";
 import { IOneCardInListData } from "../Entity/OneCardInListData";
+import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 
 
 export type ListOfCardOnReturn = (error: MainErrorObjectBack, data: IOneCardInListDataBack[]) => void;
@@ -33,7 +34,7 @@ export class ArticleController implements IArticleController {
     GetAllShortForUser(onSuccess: ListOfCardOnReturn) {
         G_AjaxHelper.GoAjaxRequest({
             Data: {},
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
@@ -63,7 +64,7 @@ export class ArticleController implements IArticleController {
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
@@ -94,7 +95,7 @@ export class ArticleController implements IArticleController {
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "PATCH",
+            Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {
@@ -168,7 +169,7 @@ export class ArticleController implements IArticleController {
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "PATCH",
+            Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 let resp: MainErrorObjectBack = xhr as MainErrorObjectBack;
                 if (resp.errors) {

@@ -42,7 +42,7 @@ export class AuthenticateController implements IAuthenticateController {
         // let ajx: AjaxHelper.IAjaxHelper = new AjaxHelper.AjaxHelper();
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "POST",
+            Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
@@ -83,7 +83,7 @@ export class AuthenticateController implements IAuthenticateController {
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "POST",
+            Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
@@ -103,7 +103,7 @@ export class AuthenticateController implements IAuthenticateController {
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "POST",
+            Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
@@ -122,7 +122,7 @@ export class AuthenticateController implements IAuthenticateController {
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "POST",
+            Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
@@ -140,7 +140,7 @@ export class AuthenticateController implements IAuthenticateController {
 
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "POST",
+            Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
@@ -159,7 +159,7 @@ export class AuthenticateController implements IAuthenticateController {
         // let ajx: AjaxHelper.IAjaxHelper = new AjaxHelper.AjaxHelper();
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 

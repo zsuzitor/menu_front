@@ -62,7 +62,7 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "DELETE",
+            Type: ControllerHelper.DeleteHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
@@ -101,7 +101,7 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
@@ -177,7 +177,7 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
     GetUserProjects = (onSuccess: ListOfCardOnReturn) => {
         G_AjaxHelper.GoAjaxRequest({
             Data: {},
-            Type: "GET",
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 

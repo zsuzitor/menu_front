@@ -63,7 +63,7 @@ let MainComponent = (props: MainComponentProps) => {
         // new AppItem({ Logo: G_EmptyImagePath, Name: "TimeBooking", Path: "/menu-app" }),
         new AppItem({ Logo: "/images/poker_logo.jpg", Name: "Planning Poker", Path: "/planing-poker" }),
         new AppItem({ Logo: "/images/code_review_logo.png", Name: "Code Review", Path: "/code-review/" }),
-        new AppItem({ Logo: G_EmptyImagePath, Name: "Vault", Path: "/vault-app/" }),
+        new AppItem({ Logo: "/images/vaultapp.png", Name: "Vault", Path: (G_VaultController.RouteUrlVaultApp + '/') }),
     ];
 
 
@@ -182,7 +182,7 @@ let MainComponent = (props: MainComponentProps) => {
     }
 
 
-    return <div style={{display: "flex", minHeight: "100vh", flexDirection: "column", overflow: "hidden"}}>
+    return <div style={{ display: "flex", minHeight: "100vh", flexDirection: "column", overflow: "hidden" }}>
         {/* <React.StrictMode> */}
         <BrowserRouter>
             <HeaderMain Apps={ApplacationsList} />

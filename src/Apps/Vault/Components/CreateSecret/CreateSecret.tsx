@@ -43,10 +43,12 @@ const CreateSecret = (props: ICreateSecretProps) => {
         <div className='vault-secret-main'>
             <div className='vault-secret-key' title={secretKey}>
                 <input type='text' className='form-control'
+                placeholder='Ключ'
                     value={secretKey} onChange={(e) => setSecretKey(e.target.value)}></input>
             </div>
             <div className='vault-secret-val'>
                 <textarea value={secretValue} className='form-control'
+                placeholder='Значение'
                     onChange={(e) => setSecretValue(e.target.value)}></textarea>
             </div>
             <div className='vault-secret-main-buttons'>
@@ -76,8 +78,9 @@ const CreateSecret = (props: ICreateSecretProps) => {
                     newData.IsPublic = secretIsPublic;
                     newData.IsCoded = secretIsCoded;
                     newData.DieDate = secretDieDate || null;//</>new Date(defaultDieDate);
-                    props.CreateSecret(newData);
-                    cancelChanges();
+                    props.CreateSecret(newData, () => cancelChanges());
+
+
 
                 }}>
                     <img className='persent-100-width-height' src={"/images/" + 'save-icon.png'} />

@@ -80,9 +80,13 @@ const PlaningPokerMain = (props: PlaningPokerMainProps) => {
     //componentdidmount, должен вызваться уже когда childs отрендерятся
     useEffect(() => {
 
-        myHubConnection.onclose(() => {
+        myHubConnection.onclose((error) => {
+            if(error){
+                alert('Ошибка соединения с сервером, обновите страницу');
+            }
             //todo тут сообщение об ошибке или что то еще мб перезагрузить страницу\редирект?
         });
+
 
         // window.onbeforeunload = function(e) {
         //     var dialogText = 'Dialog text here';

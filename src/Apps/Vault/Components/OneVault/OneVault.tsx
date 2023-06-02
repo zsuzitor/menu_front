@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import VaultSecret from '../VaultSecret/VaultSecret';
 import CreateVault from '../CreateVault/CreateVault';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
-import { OneVaultSecret } from '../../Models/Entity/State/OneVaultSecret';
 import { AlertData } from '../../../../Models/Entity/AlertData';
 import CreateSecret from '../CreateSecret/CreateSecret';
 

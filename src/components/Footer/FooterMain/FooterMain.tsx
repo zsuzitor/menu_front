@@ -30,9 +30,7 @@ const FooterMain = (props: IFooterMainProps) => {
                 }
                 <img className='persent-100-width-height' src="/images/red_cloud.png" />
             </div>
-            {!showDefaultFooter ? <div className="footer-eye">
-                <img className='persent-100-width-height footer-eye-img' src="/images/eye3.png" />
-            </div>
+            {!showDefaultFooter ? <></>
                 :
                 <div className='main-footer-inner container'>
                     <div className='row'>

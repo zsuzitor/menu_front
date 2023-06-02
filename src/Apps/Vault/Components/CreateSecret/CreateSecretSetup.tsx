@@ -17,7 +17,7 @@ interface ICreateSecretStateToProps {
 }
 
 interface ICreateSecretDispatchToProps {
-    CreateSecret: (secret: IUpdateSecretEntity) => void;
+    CreateSecret: (secret: IUpdateSecretEntity, successCallBack: () => void) => void;
 
 }
 
@@ -36,8 +36,8 @@ const mapStateToProps = (state: AppState, ownProps: ICreateSecretOwnProps) => {
 
 const mapDispatchToProps = (dispatch: any, ownProps: ICreateSecretOwnProps) => {
     let res = {} as ICreateSecretDispatchToProps;
-    res.CreateSecret = (secret) => {
-        dispatch(window.G_VaultController.CreateSecretRedux(secret));
+    res.CreateSecret = (secret, cb) => {
+        dispatch(window.G_VaultController.CreateSecretRedux(secret, cb));
     };
 
     return res;

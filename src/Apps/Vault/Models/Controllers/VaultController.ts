@@ -48,7 +48,7 @@ export interface IVaultController {
     GetCurrentVaultRedux: (vaultId: number) => void;
     LoadVaultPeopleRedux: (vaultId: number) => void;
     DeleteSecretRedux: (secretId: number, vaultId: number) => void;
-    CreateSecretRedux: (secret: IUpdateSecretEntity) => void;
+    CreateSecretRedux: (secret: IUpdateSecretEntity, successCallBack: () => void) => void;
     UpdateSecretRedux: (secret: IUpdateSecretEntity) => void;
     VaultAuthorizeRedux: (vaultId: number, password: string) => void;
 
@@ -233,7 +233,7 @@ export class VaultController implements IVaultController {
         });
     }
 
-    CreateSecretRedux(secret: IUpdateSecretEntity) {
+    CreateSecretRedux(secret: IUpdateSecretEntity, successCallBack: () => void) {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
             this.CreateSecret(secret,
@@ -243,6 +243,9 @@ export class VaultController implements IVaultController {
                         let newData = new OneVaultSecret();
                         newData.FillByBackModel(data);
                         dispatch(CreateSecretActionCreator(newData));
+                        if (successCallBack) {
+                            successCallBack();
+                        }
                     }
                 });
         };

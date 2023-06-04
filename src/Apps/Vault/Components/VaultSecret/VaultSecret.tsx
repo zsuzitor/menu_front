@@ -138,8 +138,8 @@ const VaultSecret = (props: IVaultSecretProps) => {
                         <img className='persent-100-width-height' src={"/images/" + showValueImage} />
                     </div>
                     <div className='but vault-secret-copy' title='Скопировать значение'
-                        onClick={() => {
-                            navigator.clipboard.writeText(secretValue);
+                        onClick={async () => {
+                            await helper.CopyText(secretValue);
                             G_AddAbsoluteAlertToState(
                                 new AlertData().GetDefaultNotify("Скопировано"));
                         }}>
@@ -217,10 +217,10 @@ const VaultSecret = (props: IVaultSecretProps) => {
                             src={"/images/" + 'delete-icon.png'} />
                     </div>
                     <div className='but' title='Ссылка на секрет'
-                        onClick={() => {
-                            navigator.clipboard
-                                .writeText(document.location.origin + G_VaultController.RouteUrlVaultApp
-                                    + G_VaultController.RouteUrlOneSecret + secret.Id);
+                        onClick={async () => {
+                            await helper.CopyText(document.location.origin + G_VaultController.RouteUrlVaultApp
+                                + G_VaultController.RouteUrlOneSecret + secret.Id);
+
                             G_AddAbsoluteAlertToState(
                                 new AlertData().GetDefaultNotify("Ссылка Скопирована"));
 

@@ -21,4 +21,45 @@ export class Helper {
 
         return '0' + numStr;
     }
+
+    async CopyText(text: string) {
+        if (!navigator.clipboard) {
+            // if (true) {
+            this.fallbackCopyTextToClipboard(text);
+            return;
+        }
+
+        await navigator.clipboard.writeText(text);
+        // navigator.clipboard.writeText(text).then(function () {
+        //     console.log('Async: Copying to clipboard was successful!');
+        // }, function (err) {
+        //     console.error('Async: Could not copy text: ', err);
+        // });
+    }
+
+    private fallbackCopyTextToClipboard(text: string): boolean {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+
+        // Avoid scrolling to bottom
+        textArea.style.top = "-100";
+        textArea.style.left = "-100";
+        textArea.style.position = "absolute";
+        textArea.style.opacity = '0';
+
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        let retult = false;
+        try {
+            var successful = document.execCommand('copy');
+            retult = true;
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
+        return retult;
+    }
 }

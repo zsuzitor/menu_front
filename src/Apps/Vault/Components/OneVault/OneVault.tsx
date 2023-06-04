@@ -7,6 +7,7 @@ import CreateVault from '../CreateVault/CreateVault';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
 import { AlertData } from '../../../../Models/Entity/AlertData';
 import CreateSecret from '../CreateSecret/CreateSecret';
+import { Helper } from '../../../../Models/BL/Helper';
 
 
 
@@ -29,6 +30,8 @@ const OneVault = (props: IOneVaultProps) => {
 
     // let vault = props.Vaults.find(x => x.Id === props.VaultId);
     const vault = props.Vault;
+
+    const helper = new Helper();
 
     useEffect(() => {
         //if (!props.VaultId)
@@ -116,9 +119,9 @@ const OneVault = (props: IOneVaultProps) => {
                         <img className='persent-100-width-height' src={"/images/" + 'delete-icon.png'} />
                     </div>
                     <div className='but' title='Сгенерировать новый пароль'
-                        onClick={() => {
+                        onClick={async () => {
                             let passLen = Math.floor(Math.random() * 5) + 13;//генерим от 0 до y-1, и прибавляем x, получаем от 0+x до y-1+x
-                            navigator.clipboard.writeText(passwordGenerate(10));
+                            await helper.CopyText(passwordGenerate(passLen));
                             G_AddAbsoluteAlertToState(
                                 new AlertData().GetDefaultNotify("Скопировано"));
                         }}>

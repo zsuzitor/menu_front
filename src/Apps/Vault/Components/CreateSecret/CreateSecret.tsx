@@ -26,8 +26,11 @@ const CreateSecret = (props: ICreateSecretProps) => {
 
     }, []);
 
-    const defaultDieDate = '3000-01-01';
     let helper = new Helper();
+    let currentDate = new Date();
+    const defaultDieDate = ((currentDate.getUTCFullYear() + 500)
+        + '-' + helper.addZeroIfNumShort((currentDate.getUTCMonth() + 1)))
+        + '-' + helper.addZeroIfNumShort(currentDate.getUTCDate());
 
 
     function cancelChanges() {
@@ -43,12 +46,12 @@ const CreateSecret = (props: ICreateSecretProps) => {
         <div className='vault-secret-main'>
             <div className='vault-secret-key' title={secretKey}>
                 <input type='text' className='form-control'
-                placeholder='Ключ'
+                    placeholder='Ключ'
                     value={secretKey} onChange={(e) => setSecretKey(e.target.value)}></input>
             </div>
             <div className='vault-secret-val'>
                 <textarea value={secretValue} className='form-control'
-                placeholder='Значение'
+                    placeholder='Значение'
                     onChange={(e) => setSecretValue(e.target.value)}></textarea>
             </div>
             <div className='vault-secret-main-buttons'>

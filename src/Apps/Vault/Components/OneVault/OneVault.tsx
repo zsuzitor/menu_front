@@ -139,14 +139,13 @@ const OneVault = (props: IOneVaultProps) => {
 
         <div className='vault-secrets-list'>
             <CreateSecret VaultId={vault.Id}></CreateSecret>
-            <div>
+            <div className='search-area'>
                 <input type='text'
                     className='form-control'
                     placeholder='Поиск'
                     onChange={(e => setFilterSecretKey(e.target.value))}
                     value={filterSecretKey}></input>
             </div>
-            <br></br>
             {secretsForView.length > 0 ? <>
                 {secretsForView.map(s => <VaultSecret key={s.Id} Secret={s} ></VaultSecret>)}</> : <>
                 Здесь пока ничего нет</>}

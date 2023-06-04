@@ -67,9 +67,11 @@ const VaultSecret = (props: IVaultSecretProps) => {
         setSecretIsCoded(secret?.IsCoded == null ? true : secret.IsCoded);
     }, [secret?.Value, secret?.DieDate, secret?.IsCoded]);
 
-
-    const defaultDieDate = '3000-01-01';
     let helper = new Helper();
+    let currentDate = new Date();
+    const defaultDieDate = ((currentDate.getUTCFullYear() + 500)
+        + '-' + helper.addZeroIfNumShort((currentDate.getUTCMonth() + 1)))
+        + '-' + helper.addZeroIfNumShort(currentDate.getUTCDate());
 
     function cancelChanges() {
         setSecretValue(secret.Value);

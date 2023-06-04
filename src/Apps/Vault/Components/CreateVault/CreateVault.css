@@ -2,3 +2,12 @@
     width: 20px;
     height: 20px;
 }
+
+
+.vault-new-user-form input {
+    max-width: 300px;
+}
+
+.vault-change-password-block input {
+    max-width: 300px;
+}

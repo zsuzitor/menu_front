@@ -132,7 +132,7 @@ a.button:focus {
     outline: none;
 }
 
-.form-input + .button {
+.form-input+.button {
     margin-top: 1.5rem;
 }
 
@@ -144,6 +144,10 @@ a.button:focus {
     border-radius: 0.25rem;
     cursor: pointer;
     outline: none;
+}
+
+.c-flex {
+    display: flex;
 }
 
 /* 

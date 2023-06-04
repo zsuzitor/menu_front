@@ -46,25 +46,33 @@ const CreateVault = (props: ICreateVaultProps) => {
         <input type='text' placeholder='Название' value={vaultName}
             className='form-control'
             onChange={(e) => setVaultName(e.target.value)}></input>
-        <label>Публичный</label>
-        <input type='checkbox' placeholder='Публичный'
-            checked={vaultPublic} className='form-control m-checkbox'
-            onChange={(e) => setVaultPublic(e.target.checked)}></input>
-        <input type='password' value={vaultPassword}
-            className='form-control' onChange={(e) =>
-                setVaultPassword(e.target.value)}></input>
-        {props.Vault?.Id ? <>
-            <button className='btn btn-b-light'
-                onClick={() => {
-                    if (!vaultPassword) {
-                        G_AddAbsoluteAlertToState(
-                            new AlertData().GetDefaultError("Пароль обязателен для заполнения"));
-                        return;
-                    }
+        <div className='c-flex'>
+            <label>Публичный</label>
+            <input type='checkbox' placeholder='Публичный'
+                checked={vaultPublic} className='form-control m-checkbox'
+                onChange={(e) => setVaultPublic(e.target.checked)}></input>
+        </div>
 
-                    props.UpdateVaultPassword(props.Vault.Id, vaultPassword);
-                }}>Изменить пароль</button>
-        </> : <></>}
+        <label>Пароль</label>
+        <div className='vault-change-password-block c-flex'>
+            <input type='password' value={vaultPassword}
+                className='form-control' onChange={(e) =>
+                    setVaultPassword(e.target.value)}></input>
+            {props.Vault?.Id ? <>
+                <button className='btn btn-b-light'
+                    onClick={() => {
+                        if (!vaultPassword) {
+                            G_AddAbsoluteAlertToState(
+                                new AlertData().GetDefaultError("Пароль обязателен для заполнения"));
+                            return;
+                        }
+
+                        props.UpdateVaultPassword(props.Vault.Id, vaultPassword);
+                    }}>Изменить пароль</button>
+            </> : <></>}
+        </div>
+
+        <br></br>
         {props.Vault?.Id ? <>
             <p>Люди хранилища</p>
             {people.map(u => <VaultUserUi key={u.Email} User={u}
@@ -86,20 +94,23 @@ const CreateVault = (props: ICreateVaultProps) => {
                     setDeletedUser(newArr);
                 }}
             ></VaultUserUi>)}
-            <label>Почта</label>
-            <input type='text' className='form-control'
-                placeholder='Почта' value={userEmailForAdd}
-                onChange={(e) => setUserEmailForAdd(e.target.value)}></input>
-            <button className='btn btn-b-light'
-                onClick={() => {
-                    if (!userEmailForAdd || people.find(x => x.Email == userEmailForAdd)) {
-                        return;
-                    }
-                    let forAdd = new VaultUser();
-                    forAdd.Email = userEmailForAdd;
-                    setAddedUser([...addedUser, forAdd]);
-                    setUserEmailForAdd('');
-                }}>Добавить</button>
+            <label>Добавление нового человека</label>
+            <div className='vault-new-user-form c-flex'>
+                <input type='text' className='form-control'
+                    placeholder='Почта' value={userEmailForAdd}
+                    onChange={(e) => setUserEmailForAdd(e.target.value)}></input>
+                <button className='btn btn-b-light'
+                    onClick={() => {
+                        if (!userEmailForAdd || people.find(x => x.Email == userEmailForAdd)) {
+                            return;
+                        }
+                        let forAdd = new VaultUser();
+                        forAdd.Email = userEmailForAdd;
+                        setAddedUser([...addedUser, forAdd]);
+                        setUserEmailForAdd('');
+                    }}>Добавить</button>
+            </div>
+
         </> : <></>
         }
         <button className='btn btn-b-light' onClick={() => {
@@ -117,7 +128,7 @@ const CreateVault = (props: ICreateVaultProps) => {
                 props.CreateVault(newVault, () => props.WasCreated());
             }
 
-        }}>Сохранить</button>
+        }}>{props.Vault?.Id ? 'Сохранить изменения' : 'Создать Vault'}</button>
     </div >
 }
 

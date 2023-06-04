@@ -140,7 +140,7 @@ const OneVault = (props: IOneVaultProps) => {
         </div>
 
 
-        <div className='vault-secrets-list'>
+        <div className='vault-secrets'>
             <CreateSecret VaultId={vault.Id}></CreateSecret>
             <div className='search-area'>
                 <input type='text'
@@ -149,9 +149,11 @@ const OneVault = (props: IOneVaultProps) => {
                     onChange={(e => setFilterSecretKey(e.target.value))}
                     value={filterSecretKey}></input>
             </div>
-            {secretsForView.length > 0 ? <>
-                {secretsForView.map(s => <VaultSecret key={s.Id} Secret={s} ></VaultSecret>)}</> : <>
-                Здесь пока ничего нет</>}
+            <div className='vault-secrets-list'>
+                {secretsForView.length > 0 ? <>
+                    {secretsForView.map(s => <VaultSecret key={s.Id} Secret={s} ></VaultSecret>)}</> : <>
+                    Здесь пока ничего нет</>}
+            </div>
         </div>
     </div>
 }

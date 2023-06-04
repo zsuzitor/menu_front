@@ -69,7 +69,7 @@ const VaultSecret = (props: IVaultSecretProps) => {
 
     let helper = new Helper();
     let currentDate = new Date();
-    const defaultDieDate = ((currentDate.getUTCFullYear() + 500)
+    const defaultDieDate = ((currentDate.getUTCFullYear() + 10)
         + '-' + helper.addZeroIfNumShort((currentDate.getUTCMonth() + 1)))
         + '-' + helper.addZeroIfNumShort(currentDate.getUTCDate());
 

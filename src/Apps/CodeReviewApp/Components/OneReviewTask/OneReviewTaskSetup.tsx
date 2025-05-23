@@ -5,6 +5,7 @@ import { CommentSet } from "../../Models/Entity/CommentSet";
 import { OneTaskReviewComment } from "../../Models/Entity/OneTaskReviewComment";
 import { OneTask } from "../../Models/Entity/State/OneTask";
 import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
+import { TaskReviewStatus } from "../../Models/Entity/State/TaskReviewStatus";
 
 
 interface IOneReviewTaskOwnProps {
@@ -16,6 +17,7 @@ interface IOneReviewTaskOwnProps {
 
 interface IOneReviewTaskStateToProps {
     ProjectUsers: ProjectUser[];
+    Statuses: TaskReviewStatus[];
 
 }
 
@@ -36,7 +38,7 @@ export interface IOneReviewTaskProps extends IOneReviewTaskStateToProps, IOneRev
 const mapStateToProps = (state: AppState, ownProps: IOneReviewTaskOwnProps) => {
     let res = {} as IOneReviewTaskStateToProps;
     res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
-
+    res.Statuses = state.CodeReviewApp.CurrentProjectStatuses;
     return res;
 }
 

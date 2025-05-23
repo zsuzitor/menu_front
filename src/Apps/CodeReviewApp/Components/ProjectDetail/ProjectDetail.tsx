@@ -24,6 +24,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
     const [loadTasksTimerId, setLoadTasksTimerId] = useState(null);
     const [showUserList, setShowUserList] = useState(false);
+    const [showEditProject, setShowEditProject] = useState(false);
     const [showAddNewTaskForm, setShowAddNewTaskForm] = useState(false);
 
 
@@ -92,7 +93,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             Name: props.TasksFilters.TaskName, CreatorId: props.TasksFilters.CreatorId
             , PageNumber: props.TasksFilters.Page, PageSize: tasksOnPageCount
             , ProjectId: props.Project.Id, ReviewerId: props.TasksFilters.ReviewerId
-            , Status: props.TasksFilters.Status
+            , StatusId: props.TasksFilters.Status
         } as ITaskFilter;
 
         props.ReloadTasks(filter);
@@ -129,6 +130,10 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             }}>
                 <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='Удалить проект' />
             </div>
+            {showEditProject ? <AdditionalWindow CloseWindow={() => setShowEditProject(false)}
+                                                  IsHeightWindow={true}
+                                                  Title='Редакторивание проекта'
+                                                  InnerContent={() => <ProjectUsers></ProjectUsers>}></AdditionalWindow> : <></>}
             <br />
             <div className="review-project-detail-main-header-buttons">
                 <button className='button button-grey' onClick={() => setShowUserList(e => true)}>Люди проекта</button>

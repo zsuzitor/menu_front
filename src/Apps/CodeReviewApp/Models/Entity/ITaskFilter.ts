@@ -4,7 +4,7 @@ export interface ITaskFilter {
     Name: string;
     CreatorId: number;
     ReviewerId: number;
-    Status: number;
+    StatusId: number;
     PageNumber: number;
     PageSize: number;
 }

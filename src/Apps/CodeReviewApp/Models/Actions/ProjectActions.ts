@@ -1,5 +1,6 @@
 import { AppAction } from "../../../../Models/Actions/Actions";
 import { OneProjectInList } from "../Entity/State/OneProjectInList";
+import { TaskReviewStatus } from "../Entity/State/TaskReviewStatus";
 
 export const DeleteProjectActionName: string = 'DeleteProjectAction';
 export function DeleteProjectActionCreator(projectId: number): AppAction<number> {
@@ -24,3 +25,4 @@ export const SetProjectsActionName: string = 'SetProjectsAction';
 export function SetProjectsActionCreator(projects: OneProjectInList[]): AppAction<OneProjectInList[]> {
     return { type: SetProjectsActionName, payload: projects };
 };
+

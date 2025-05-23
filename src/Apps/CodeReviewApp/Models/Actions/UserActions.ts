@@ -7,6 +7,9 @@ export function SetCurrentProjectUsersActionCreator(users: ProjectUser[]): AppAc
     return { type: SetCurrentProjectUsersActionName, payload: users };
 };
 
+
+
+
 export const DeleteProjectUserActionName: string = 'DeleteProjectUserAction';
 export function DeleteProjectUserActionCreator(id: number): AppAction<number> {
     return { type: DeleteProjectUserActionName, payload: id };

@@ -26,6 +26,7 @@ import { CodeReviewTaskController } from "./Apps/CodeReviewApp/Models/Controller
 import { CodeReviewUserController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewUserController";
 import { WordsListController } from "./Apps/WordsCardsApp/Models/Controllers/WordsListController";
 import { MainErrorHandler } from "./Models/BL/ErrorHandleLogic";
+import { CodeReviewTaskStatusController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewTaskStatusController";
 
 
 require('../style/main.css');
@@ -66,6 +67,7 @@ window.G_PlaningPokerController = new PlaningPokerController();
 window.G_CodeReviewProjectController = new CodeReviewProjectController();
 window.G_CodeReviewTaskController = new CodeReviewTaskController();
 window.G_CodeReviewUserController = new CodeReviewUserController();
+window.G_CodeReviewTaskStatusController = new CodeReviewTaskStatusController();
 window.G_CodeReviewCommentController = new CodeReviewCommentController();
 window.G_VaultController = new VaultController();
 

@@ -86,4 +86,6 @@ export function CodeReviewCommentReducer(state: AppState = new AppState(), actio
         default:
             return state;
     }
+    
+    return state;
 }

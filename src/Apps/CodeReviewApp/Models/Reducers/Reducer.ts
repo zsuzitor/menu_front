@@ -8,6 +8,7 @@ import { AppState } from '../../../../Models/Entity/State/AppState';
 import { ClearCodeReviewStateActionName } from '../Actions/Actions';
 import { CodeReviewAppState } from '../Entity/State/CodeReviewAppState';
 import { CodeReviewCommentReducer } from './CommentReducer';
+import { CodeReviewTaskStatusReducer } from './TaskStatusReducer';
 
 
 
@@ -18,6 +19,7 @@ export function CodeReviewAppReducer(state: AppState = new AppState(), action: A
     st = CodeReviewUserReducer(st, action);
     st = CodeReviewCommentReducer(st, action);
     st = CodeReviewTaskReducer(st, action);
+    st = CodeReviewTaskStatusReducer(st, action);
 
     switch (action.type) {
         case ClearCodeReviewStateActionName:

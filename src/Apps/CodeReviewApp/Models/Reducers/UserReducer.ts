@@ -57,4 +57,5 @@ export function CodeReviewUserReducer(state: AppState = new AppState(), action: 
         default:
             return state;
     }
+    return state;
 }

@@ -33,7 +33,7 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
                 let payload = action.payload as OneTask;
                 var tsk = newState.CodeReviewApp.CurrentProjectTasks.find(x => x.Id == payload.Id);
                 tsk.Name = payload.Name;
-                tsk.Status = payload.Status;
+                tsk.StatusId = payload.StatusId;
                 tsk.ReviewerId = payload.ReviewerId;
                 tsk.CreatorId = payload.CreatorId;
                 tsk.Link = payload.Link;
@@ -109,4 +109,5 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
         default:
             return state;
     }
+    return state;
 }

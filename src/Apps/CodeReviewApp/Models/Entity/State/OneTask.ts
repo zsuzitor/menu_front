@@ -9,7 +9,7 @@ export class OneTask {
     Name: string;
     CreatorId: number;
     ReviewerId?: number;
-    Status: number;
+    StatusId: number;
     Link: string;
     Comments: OneTaskReviewComment[];
 
@@ -22,7 +22,7 @@ export class OneTask {
         this.Name = data.Name;
         this.CreatorId = data.CreatorId;
         this.ReviewerId = data.ReviewerId;
-        this.Status = data.Status;
+        this.StatusId = data.StatusId;
         this.Link = data.Link;
     }
     
@@ -32,7 +32,7 @@ export class OneTask {
         this.Name = data.Name;
         this.CreatorId = data.CreatorId;
         this.ReviewerId = data.ReviewerId;
-        this.Status = data.Status;
+        this.StatusId = data.StatusId;
         this.Link = data.Link;
     }
 }

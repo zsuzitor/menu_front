@@ -10,7 +10,7 @@ export class ProjectTaskData implements MappedWithBack<IProjectTaskDataBack>{
     Name: string;
     CreatorId: number;
     ReviewerId?: number;
-    Status: number;
+    StatusId: number;
     Link: string;
 
     FillByBackModel(newData: IProjectTaskDataBack): void {
@@ -18,7 +18,7 @@ export class ProjectTaskData implements MappedWithBack<IProjectTaskDataBack>{
         this.Name = newData.Name;
         this.CreatorId = newData.CreatorId;
         this.ReviewerId = newData.ReviewerId;
-        this.Status = newData.Status;
+        this.StatusId = newData.StatusId;
         this.Link = newData.Link;
     }
 

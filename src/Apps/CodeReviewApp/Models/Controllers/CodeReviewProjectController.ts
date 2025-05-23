@@ -2,11 +2,13 @@ import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { DeleteProjectActionCreator, AddNewProjectActionCreator, SetCurrentProjectIdActionCreator, SetProjectsActionCreator } from "../Actions/ProjectActions";
+import { SetCurrentProjectStatusesActionCreator } from "../Actions/TaskStatusActions";
 import { SetCurrentProjectUsersActionCreator } from "../Actions/UserActions";
 import { IOneProjectInListDataBack } from "../BackModels/IOneProjectInListDataBack";
 import { IOneProjectInfoDataBack } from "../BackModels/IOneProjectInfoDataBack";
 import { OneProjectInList } from "../Entity/State/OneProjectInList";
 import { ProjectUser } from "../Entity/State/ProjectUser";
+import { TaskReviewStatus } from "../Entity/State/TaskReviewStatus";
 
 
 
@@ -89,7 +91,15 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
                         u.FillByBackModel(x);
                         return u;
                     });
+
+                    let dtStatuses = data.Statuses.map(x => {
+                        let u = new TaskReviewStatus();
+                        u.FillByBackModel(x);
+                        return u;
+
+                    });
                     dispatch(SetCurrentProjectUsersActionCreator(dtUsers));
+                    dispatch(SetCurrentProjectStatusesActionCreator(dtStatuses));
                 }
             });
         };

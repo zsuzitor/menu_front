@@ -86,7 +86,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
         let data = {
             "taskId": task.Id,
             "name": task.Name,
-            "status": task.Status,
+            "statusId": task.StatusId,
             "creatorId": task.CreatorId,
             "reviewerId": task.ReviewerId,
             "taskLink": task.Link,
@@ -128,7 +128,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
             "nameLike": taskFilter.Name,
             "creatorId": taskFilter.CreatorId,
             "reviewerId": taskFilter.ReviewerId,
-            "status": taskFilter.Status,
+            "statusId": taskFilter.StatusId,
             "pageNumber": taskFilter.PageNumber,
             "pageSize": taskFilter.PageSize,
         };

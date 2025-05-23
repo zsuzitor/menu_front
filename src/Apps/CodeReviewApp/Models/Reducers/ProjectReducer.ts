@@ -9,6 +9,7 @@ import { SetCurrentProjectUsersActionCreator } from '../Actions/UserActions';
 import { LoadReviewTasksResult } from '../Entity/LoadReviewTasksResult';
 import { OneProjectInList } from '../Entity/State/OneProjectInList';
 import { TasksFilter } from '../Entity/State/TasksFilter';
+import { SetCurrentProjectStatusesActionCreator } from '../Actions/TaskStatusActions';
 
 // return Object.assign({}, state, { TestMessage: str });
 
@@ -28,6 +29,7 @@ export function CodeReviewProjectReducer(state: AppState = new AppState(), actio
                 if (newState.CodeReviewApp.CurrentProjectId === projectId) {
                     //todo тут куча копирований стейта
                     newState = ReducerCombiner(newState, SetCurrentProjectUsersActionCreator([]));
+                    newState = ReducerCombiner(newState, SetCurrentProjectStatusesActionCreator([]));
                     let tasks = {} as LoadReviewTasksResult;
                     tasks.Tasks = [];
                     tasks.TasksCount = 0;
@@ -53,6 +55,7 @@ export function CodeReviewProjectReducer(state: AppState = new AppState(), actio
                 newState.CodeReviewApp.CurrentProjectId = projectId;
                 //todo тут куча копирований стейта
                 newState = ReducerCombiner(newState, SetCurrentProjectUsersActionCreator([]));
+                newState = ReducerCombiner(newState, SetCurrentProjectStatusesActionCreator([]));
                 let tasks = {} as LoadReviewTasksResult;
                 tasks.Tasks = [];
                 tasks.TasksCount = 0;
@@ -73,4 +76,5 @@ export function CodeReviewProjectReducer(state: AppState = new AppState(), actio
         default:
             return state;
     }
+    return state;
 }

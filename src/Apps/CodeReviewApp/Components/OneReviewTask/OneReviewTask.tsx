@@ -21,7 +21,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
     const [taskName, setTaskName] = useState(props.Task.Name);
     const [taskLink, setTaskLink] = useState(props.Task.Link || '');
 
-    const [taskStatus, setTaskStatus] = useState(props.Task.Status);
+    const [taskStatus, setTaskStatus] = useState(props.Task.StatusId);
     const [taskReviewer, setTaskreviewer] = useState(props.Task.ReviewerId || -1);
     const [taskCreator, setTaskCreator] = useState(props.Task.CreatorId);
     const [newCommentName, setNewCommentName] = useState('');
@@ -40,8 +40,8 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
     }, [props.Task.Link]);
 
     useEffect(() => {
-        setTaskStatus(props.Task.Status);
-    }, [props.Task.Status]);
+        setTaskStatus(props.Task.StatusId);
+    }, [props.Task.StatusId]);
 
     useEffect(() => {
         setTaskreviewer(props.Task.ReviewerId || -1);
@@ -70,7 +70,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         }
         setTaskName(props.Task.Name);
         setTaskLink(props.Task.Link || '');
-        setTaskStatus(props.Task.Status);
+        setTaskStatus(props.Task.StatusId);
         setTaskreviewer(props.Task.ReviewerId || -1);
         setTaskCreator(props.Task.CreatorId);
     };
@@ -86,7 +86,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         let forAdd = { ...props.Task } as OneTask;
         forAdd.Name = taskName;
         forAdd.Link = taskLink;
-        forAdd.Status = taskStatus;
+        forAdd.StatusId = taskStatus;
         forAdd.ReviewerId = taskReviewer;
         forAdd.CreatorId = taskCreator;
 
@@ -118,7 +118,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         }
 
         return <div className='one-review-task-comments-block'>
-            <hr/>
+            <hr />
             <div className='one-review-task-comments-block-inner'>
                 Комментарии:
                 {props.Comments.map(x => {
@@ -145,7 +145,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
     let taskHasChanges = taskName !== props.Task.Name ||
         (taskLink !== props.Task.Link && (taskLink || props.Task.Link)) ||
-        taskStatus !== props.Task.Status ||
+        taskStatus !== props.Task.StatusId ||
         ((props.Task.ReviewerId || taskReviewer != -1) && taskReviewer !== props.Task.ReviewerId) ||
         taskCreator !== props.Task.CreatorId;
 
@@ -190,10 +190,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                 <span>Статус</span>
                 <select className='form-select'
                     onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
-                    <option value={0}>Необходимо код-ревью</option>
-                    <option value={1}>Необходимы правки</option>
-                    <option value={3}>В процессе</option>
-                    <option value={2}>Готово</option>
+                    {props.Statuses.map(status => <option value={status.Id}>{status.Name}</option>)}
                 </select>
             </div>
             <div className='one-review-task-buttons'>

@@ -9,6 +9,8 @@ import Paggination from '../../../../components/Body/Paggination/Paggination';
 import { ITaskFilter } from '../../Models/Entity/ITaskFilter';
 import ProjectUsers from '../ProjectUsers/ProjectUsers';
 import connectToStore, { IProjectDetailProps } from './ProjectDetailSetup';
+import EditProject from '../EditProject/EditProject';
+
 
 
 
@@ -30,6 +32,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
     useEffect(() => {
         if (props.Project?.Id) {
+
             let filterSaveHelper = new CodeReviewLocalStorageHelper();
             let statusFromLocalStorage = filterSaveHelper.GetFilterStatus(props.Project.Id);
             if (!statusFromLocalStorage && statusFromLocalStorage !== '0') {
@@ -110,6 +113,8 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     }
 
 
+
+
     if (!props.Project) {
         return <div className="review-project-no-project">
             <img src={G_PathToBaseImages + 'exclamation.png'} alt="" />
@@ -123,32 +128,39 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     return <div className='review-project-detail-main'>
         <div className='review-project-detail-main-header'>
             <h1>{props.Project.Name}</h1>
+            <div className='review-project-edit-button' onClick={() => {
+                setShowEditProject(true);
+            }}>
+                <img className='persent-100-width-height' src={G_PathToBaseImages + 'edit-1.svg'}
+                    alt="Edit" title='Редактировать проект' />
+            </div>
             <div className='review-project-delete-button' onClick={() => {
                 if (confirm('Удалить проект?')) {
                     deleteProject();
                 }
             }}>
-                <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='Удалить проект' />
+                <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
+                    alt="Delete" title='Удалить проект' />
             </div>
             {showEditProject ? <AdditionalWindow CloseWindow={() => setShowEditProject(false)}
-                                                  IsHeightWindow={true}
-                                                  Title='Редакторивание проекта'
-                                                  InnerContent={() => <ProjectUsers></ProjectUsers>}></AdditionalWindow> : <></>}
+                IsHeightWindow={true}
+                Title='Редакторивание проекта'
+                InnerContent={() => <EditProject></EditProject>}></AdditionalWindow> : <></>}
             <br />
             <div className="review-project-detail-main-header-buttons">
                 <button className='button button-grey' onClick={() => setShowUserList(e => true)}>Люди проекта</button>
                 {showUserList ? <AdditionalWindow CloseWindow={() => setShowUserList(false)}
-                                                  IsHeightWindow={true}
-                                                  Title='Люди проекта'
-                                                  InnerContent={() => <ProjectUsers></ProjectUsers>}></AdditionalWindow> : <></>}
+                    IsHeightWindow={true}
+                    Title='Люди проекта'
+                    InnerContent={() => <ProjectUsers></ProjectUsers>}></AdditionalWindow> : <></>}
                 <button className='button button-blue' onClick={() => setShowAddNewTaskForm(true)}>Добавить задачу</button>
                 {showAddNewTaskForm ? <AdditionalWindow CloseWindow={() => setShowAddNewTaskForm(false)}
-                                                        IsHeightWindow={false}
-                                                        Title='Добавление задачи'
-                                                        InnerContent={() => <AddTask
-                                                            ProjectId={props.Project.Id}
-                                                            ProjectUsers={props.ProjectUsers.filter(us => !us.Deactivated)}
-                                                        ></AddTask>}></AdditionalWindow> : <></>}
+                    IsHeightWindow={false}
+                    Title='Добавление задачи'
+                    InnerContent={() => <AddTask
+                        ProjectId={props.Project.Id}
+                        ProjectUsers={props.ProjectUsers.filter(us => !us.Deactivated)}
+                    ></AddTask>}></AdditionalWindow> : <></>}
             </div>
         </div>
         <div className='review-project-tasks-filters-block'>
@@ -174,10 +186,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                     <span>Статус</span>
                     <select className='form-select' onChange={e => props.SetFilterTaskStatus(+e.target.value)} value={props.TasksFilters.Status}>
                         <option value={-1}>Любой</option>
-                        <option value={0}>Необходимо код ревью</option>
-                        <option value={1}>Необходимы правки</option>
-                        <option value={3}>В процессе</option>
-                        <option value={2}>Готово</option>
+                        {props.Statuses.map(status => <option value={status.Id} key={status.Id}>{status.Name}</option>)}
                     </select>
                 </div>
             </div>

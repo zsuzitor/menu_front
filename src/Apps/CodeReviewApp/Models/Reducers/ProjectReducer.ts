@@ -50,8 +50,12 @@ export function CodeReviewProjectReducer(state: AppState = new AppState(), actio
 
         case SetCurrentProjectIdActionName:
             {
-                let newState = cloneDeep(state);
                 let projectId = action.payload as number;
+                if (state.CodeReviewApp.CurrentProjectId == projectId) {
+                    return state;
+                }
+                
+                let newState = cloneDeep(state);
                 newState.CodeReviewApp.CurrentProjectId = projectId;
                 //todo тут куча копирований стейта
                 newState = ReducerCombiner(newState, SetCurrentProjectUsersActionCreator([]));

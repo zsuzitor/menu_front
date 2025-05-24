@@ -5,6 +5,7 @@ export class ControllerHelper {
     static PostHttp = 'POST';
     static PatchHttp = 'PATCH';
     static DeleteHttp = 'DELETE';
+    static PutHttp = 'PUT';
 
     MapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
         return (xhr: any, status: any, jqXHR: any) => {

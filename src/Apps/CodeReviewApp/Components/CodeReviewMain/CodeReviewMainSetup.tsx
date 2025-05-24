@@ -4,6 +4,7 @@ import { ClearCodeReviewStateActionCreator } from "../../Models/Actions/Actions"
 import { OneTask } from "../../Models/Entity/State/OneTask";
 import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
 import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/State/OneProjectInList';
+import { SetCurrentProjectIdActionCreator } from "../../Models/Actions/ProjectActions";
 
 
 interface ICodeReviewMainOwnProps {
@@ -23,6 +24,7 @@ interface ICodeReviewMainDispatchToProps {
     GetUserProjects: () => void;
     GetProjectInfo: (id: number) => void;
     ClearCodeReviewState: () => void;
+    SetCurrentProject: (projectId: number) => void;
 }
 
 
@@ -56,6 +58,11 @@ const mapDispatchToProps = (dispatch: any, ownProps: ICodeReviewMainOwnProps) =>
         dispatch(ClearCodeReviewStateActionCreator());
     }
 
+    
+    res.SetCurrentProject = (projectId: number) => {
+        dispatch(SetCurrentProjectIdActionCreator(projectId));
+    };
+    
     return res;
 };
 

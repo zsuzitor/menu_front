@@ -45,7 +45,8 @@ const EditProject = (props: IEditProjectProps) => {
             })}
             <input className='form-input' value={newStatusName} placeholder='название нового статуса'
                 onChange={e => setNewStatusName(e.target.value)}></input>
-            <button onClick={() => props.CreateStatus(newStatusName, props.ProjectId)}>Создать статус</button>
+            <button className='btn-b btn-border create-new-task-btn'
+                onClick={() => props.CreateStatus(newStatusName, props.ProjectId)}>Создать статус</button>
         </div>
 
     </div>

@@ -15,8 +15,9 @@ const AddTask = (props: IAddTaskProps) => {
     const [newTaskName, setNewTaskName] = useState('');
     const [newTaskLink, setNewTaskLink] = useState('');
     let currentUser = props.ProjectUsers.find(x => x.MainAppUserId === props.Auth.User?.Id);
-    const [newTaskCreator, setNewTaskCreator] = useState(currentUser?.Id || -1); 
+    const [newTaskCreator, setNewTaskCreator] = useState(currentUser?.Id || -1);
     const [newTaskReviwer, setNewTaskReviwer] = useState(-1);
+    const [taskStatus, setTaskStatus] = useState(-1);
 
     useEffect(() => {
         if (newTaskCreator === -1) {
@@ -43,11 +44,20 @@ const AddTask = (props: IAddTaskProps) => {
             return;
         }
 
+        if (!taskStatus || taskStatus == -1) {
+
+            let alertFactory = new AlertData();
+            let alert = alertFactory.GetDefaultError("Введите статус");
+            window.G_AddAbsoluteAlertToState(alert);
+            return;
+        }
+
         let tsk = new OneTask()
         tsk.Name = newTaskName;
         tsk.CreatorId = newTaskCreator;
         tsk.ReviewerId = newTaskReviwer;
         tsk.Link = newTaskLink;
+        tsk.StatusId = taskStatus;
         props.AddTaskToProject(tsk, props.ProjectId);
         setNewTaskName('');
         setNewTaskLink('');
@@ -70,6 +80,14 @@ const AddTask = (props: IAddTaskProps) => {
         <select className='form-control-b' value={newTaskReviwer} onChange={(e) => setNewTaskReviwer(+e.target.value)}>
             <option value={-1}>Не выбрано</option>
             {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+        </select>
+        <br />
+
+        <span>Статус</span>
+        <select className='form-select'
+            onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
+            <option value={-1}>Не выбрано</option>
+            {props.Statuses.map(status => <option value={status.Id} key={status.Id}>{status.Name}</option>)}
         </select>
         <br />
         <button className='btn-b btn-border create-new-task-btn' onClick={() => createNewTask()}>Создать</button>

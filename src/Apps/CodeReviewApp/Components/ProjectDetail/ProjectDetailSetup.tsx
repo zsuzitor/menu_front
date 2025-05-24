@@ -6,6 +6,7 @@ import { OneTask } from "../../Models/Entity/State/OneTask";
 import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
 import { TasksFilter } from "../../Models/Entity/State/TasksFilter";
 import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/State/OneProjectInList';
+import { TaskReviewStatus } from "../../Models/Entity/State/TaskReviewStatus";
 
 
 interface IProjectDetailOwnProps {
@@ -17,6 +18,7 @@ interface IProjectDetailOwnProps {
 interface IProjectDetailStateToProps {
     ProjectUsers: ProjectUser[];
     TasksFilters: TasksFilter;
+    Statuses: TaskReviewStatus[];
 
     CurrentProjectTasksAllCount: number;
 }
@@ -32,6 +34,7 @@ interface IProjectDetailDispatchToProps {
     ReloadTasks: (filters: ITaskFilter) => void;
 
     DeleteProject: (id: number) => void;
+
 }
 
 export interface IProjectDetailProps extends IProjectDetailStateToProps, IProjectDetailOwnProps, IProjectDetailDispatchToProps {
@@ -43,6 +46,7 @@ const mapStateToProps = (state: AppState, ownProps: IProjectDetailOwnProps) => {
     res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
     res.TasksFilters = state.CodeReviewApp.CurrentProjectTasksFilters;
     res.CurrentProjectTasksAllCount = state.CodeReviewApp.CurrentProjectTasksAllCount;
+    res.Statuses = state.CodeReviewApp.CurrentProjectStatuses;
     return res;
 }
 
@@ -76,6 +80,8 @@ const mapDispatchToProps = (dispatch: any, ownProps: IProjectDetailOwnProps) => 
     res.ClearFilterTask = () => {
         dispatch(SetFilterTaskActionCreator(new TasksFilter()));
     }
+
+
 
     return res;
 };

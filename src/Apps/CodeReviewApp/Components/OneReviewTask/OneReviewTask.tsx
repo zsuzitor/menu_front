@@ -21,7 +21,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
     const [taskName, setTaskName] = useState(props.Task.Name);
     const [taskLink, setTaskLink] = useState(props.Task.Link || '');
 
-    const [taskStatus, setTaskStatus] = useState(props.Task.StatusId);
+    const [taskStatus, setTaskStatus] = useState(props.Task.StatusId || -1);
     const [taskReviewer, setTaskreviewer] = useState(props.Task.ReviewerId || -1);
     const [taskCreator, setTaskCreator] = useState(props.Task.CreatorId);
     const [newCommentName, setNewCommentName] = useState('');
@@ -40,7 +40,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
     }, [props.Task.Link]);
 
     useEffect(() => {
-        setTaskStatus(props.Task.StatusId);
+        setTaskStatus(props.Task.StatusId || -1);
     }, [props.Task.StatusId]);
 
     useEffect(() => {
@@ -190,7 +190,8 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                 <span>Статус</span>
                 <select className='form-select'
                     onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
-                    {props.Statuses.map(status => <option value={status.Id}>{status.Name}</option>)}
+                    <option value={-1}>Не выбрано</option>
+                    {props.Statuses.map(status => <option value={status.Id} key={status.Id}>{status.Name}</option>)}
                 </select>
             </div>
             <div className='one-review-task-buttons'>

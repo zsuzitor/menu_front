@@ -82,7 +82,7 @@ export class CodeReviewTaskStatusController implements ICodeReviewTaskStatusCont
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: ControllerHelper.DeleteHttp,
+            Type: ControllerHelper.PutHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 

@@ -3,6 +3,7 @@ import { IAuthState } from "../../../../Models/Entity/AuthState";
 import { AppState } from "../../../../Models/Entity/State/AppState";
 import { OneTask } from "../../Models/Entity/State/OneTask";
 import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
+import { TaskReviewStatus } from "../../Models/Entity/State/TaskReviewStatus";
 
 
 
@@ -14,6 +15,7 @@ interface IAddTaskOwnProps {
 
 interface IAddTaskStateToProps {
     Auth: IAuthState;
+    Statuses: TaskReviewStatus[];
 }
 
 interface IAddTaskDispatchToProps {
@@ -27,6 +29,7 @@ export interface IAddTaskProps extends IAddTaskStateToProps, IAddTaskOwnProps, I
 const mapStateToProps = (state: AppState, ownProps: IAddTaskOwnProps) => {
     let res = {} as IAddTaskStateToProps;
     res.Auth = state.Auth;
+    res.Statuses = state.CodeReviewApp.CurrentProjectStatuses;
     return res;
 }
 

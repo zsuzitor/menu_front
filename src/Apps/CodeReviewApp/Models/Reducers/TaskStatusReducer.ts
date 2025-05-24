@@ -6,7 +6,7 @@ import { AppAction } from '../../../../Models/Actions/Actions';
 import { AppState } from '../../../../Models/Entity/State/AppState';
 import { ProjectUser } from '../Entity/State/ProjectUser';
 import { DeleteProjectUserActionName, AddProjectUserActionName, ChangeProjectUserActionName, SetCurrentProjectUsersActionName } from '../Actions/UserActions';
-import { CreateCurrentProjectTaskStatusActionName, DeleteCurrentProjectTaskStatusActionName, SetCurrentProjectStatusesActionName } from '../Actions/TaskStatusActions';
+import { CreateCurrentProjectTaskStatusActionName, DeleteCurrentProjectTaskStatusActionName, SetCurrentProjectStatusesActionName, UpdateCurrentProjectTaskStatusActionName } from '../Actions/TaskStatusActions';
 import { TaskReviewStatus } from '../Entity/State/TaskReviewStatus';
 
 // return Object.assign({}, state, { TestMessage: str });
@@ -42,6 +42,16 @@ export function CodeReviewTaskStatusReducer(state: AppState = new AppState(), ac
             return newState;
         }
 
+        case UpdateCurrentProjectTaskStatusActionName: {
+
+            let newState = cloneDeep(state);
+            let status = action.payload as TaskReviewStatus;
+            var old = newState.CodeReviewApp.CurrentProjectStatuses.find(x => x.Id == status.Id);
+            if (old) {
+                old.Name = status.Name;
+            }
+            return newState;
+        }
 
 
 

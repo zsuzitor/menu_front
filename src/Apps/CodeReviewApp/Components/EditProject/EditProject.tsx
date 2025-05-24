@@ -4,6 +4,7 @@ import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
 
 import connectToStore, { IEditProjectProps } from './EditProjectSetup';
+import EditTaskStatus from '../EditTaskStatus/EditTaskStatus';
 
 
 require('./EditProject.css');
@@ -15,41 +16,29 @@ const EditProject = (props: IEditProjectProps) => {
 
 
     const [newStatusName, setNewStatusName] = useState('');
-
-
-    // useEffect(() => {
-    //     setTaskName(props.Task.Name);
-    // }, [props.Task.Name]);
-
-
-    const deleteStatus = (statusId: number) => {
-        props.DeleteStatus(statusId);
-    };
+   
 
 
     return <div className={'edit-project'}>
 
 
         <div className='task-statuses'>
-            {props.Statuses.map(status => {
-                return <div key={status.Id}>
-                    <span>{status.Name}</span>
-                    <div className='task-status-delete-button' onClick={() => {
-                        if (confirm('Удалить статус?')) {
-                            deleteStatus(status.Id);
-                        }
-                    }}>
-                        <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'} alt="Delete" title='Удалить статус' />
-                    </div>
+            {props.Statuses.map(status => <EditTaskStatus key={status.Id} Status={status}></EditTaskStatus>)}
+            <div className='task-review-status-create'>
+                <div className='status-input'>
+                    <input className='form-input' value={newStatusName} placeholder='Название нового статуса'
+                        onChange={e => setNewStatusName(e.target.value)}></input>
                 </div>
-            })}
-            <input className='form-input' value={newStatusName} placeholder='название нового статуса'
-                onChange={e => setNewStatusName(e.target.value)}></input>
-            <button className='btn-b btn-border create-new-task-btn'
-                onClick={() => props.CreateStatus(newStatusName, props.ProjectId)}>Создать статус</button>
+                <div className='status-create'>
+                    <button className='btn-b btn-border create-new-task-btn'
+                        onClick={() => props.CreateStatus(newStatusName, props.ProjectId)}>Создать статус</button>
+                </div>
+
+            </div>
+
         </div>
 
-    </div>
+    </div >
 }
 
 

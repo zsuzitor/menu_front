@@ -12,7 +12,6 @@ interface IEditProjectStateToProps {
 }
 
 interface IEditProjectDispatchToProps {
-    DeleteStatus: (statusId: number) => void;
     CreateStatus: (name: string, projectId: number) => void;
 }
 
@@ -30,13 +29,11 @@ const mapStateToProps = (state: AppState, ownProps: IEditProjectOwnProps) => {
 const mapDispatchToProps = (dispatch: any, ownProps: IEditProjectOwnProps) => {
     let res = {} as IEditProjectDispatchToProps;
 
-    res.DeleteStatus = (id: number) => {
-        dispatch(window.G_CodeReviewTaskStatusController.DeleteStatusRedux(id));
-    };
 
     res.CreateStatus = (name: string, projectId: number) => {
         dispatch(window.G_CodeReviewTaskStatusController.CreateStatusRedux(name, projectId));
     };
+
     return res;
 };
 

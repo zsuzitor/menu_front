@@ -1,7 +1,7 @@
 import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
-import { CreateCurrentProjectTaskStatusActionCreator, DeleteCurrentProjectTaskStatusActionCreator } from "../Actions/TaskStatusActions";
+import { CreateCurrentProjectTaskStatusActionCreator, DeleteCurrentProjectTaskStatusActionCreator, UpdateCurrentProjectTaskStatusActionCreator } from "../Actions/TaskStatusActions";
 import { ITaskReviewStatusDataBack } from "../BackModels/ITaskReviewStatusDataBack";
 import { TaskReviewStatus } from "../Entity/State/TaskReviewStatus";
 
@@ -14,6 +14,7 @@ export type CreateStatus = (error: MainErrorObjectBack, data: ITaskReviewStatusD
 export interface ICodeReviewTaskStatusController {
     DeleteStatusRedux: (statusId: number) => void;
     CreateStatusRedux: (name: string, projectId: number) => void;
+    UpdateStatusRedux: (statusId: number, status: string) => void;
 }
 
 
@@ -89,6 +90,44 @@ export class CodeReviewTaskStatusController implements ICodeReviewTaskStatusCont
             },
             FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/codereview/status/create-status'
+
+        });
+    }
+
+
+    UpdateStatusRedux = (statusId: number, status: string) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.UpdateStatus(statusId, status, (error: MainErrorObjectBack, data: ITaskReviewStatusDataBack) => {
+                this.preloader(false);
+                if (error) {
+                    return;
+                }
+
+                if (data?.Id) {
+                    let st = new TaskReviewStatus();
+                    st.FillByBackModel(data);
+                    dispatch(UpdateCurrentProjectTaskStatusActionCreator(st));
+                }
+            });
+        };
+
+    };
+
+    UpdateStatus = (statusId: number, status: string, onSuccess: CreateStatus) => {
+        let data = {
+            "status": status,
+            "statusId": statusId,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.PatchHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/status/update-status'
 
         });
     }

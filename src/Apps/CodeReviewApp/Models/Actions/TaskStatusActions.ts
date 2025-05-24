@@ -17,3 +17,8 @@ export const CreateCurrentProjectTaskStatusActionName: string = 'CreateCurrentPr
 export function CreateCurrentProjectTaskStatusActionCreator(status: TaskReviewStatus): AppAction<TaskReviewStatus> {
     return { type: CreateCurrentProjectTaskStatusActionName, payload: status };
 };
+
+export const UpdateCurrentProjectTaskStatusActionName: string = 'UpdateCurrentProjectTaskStatusAction';
+export function UpdateCurrentProjectTaskStatusActionCreator(status: TaskReviewStatus): AppAction<TaskReviewStatus> {
+    return { type: UpdateCurrentProjectTaskStatusActionName, payload: status };
+};

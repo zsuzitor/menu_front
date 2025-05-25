@@ -26,3 +26,7 @@ export function SetProjectsActionCreator(projects: OneProjectInList[]): AppActio
     return { type: SetProjectsActionName, payload: projects };
 };
 
+export const ClearProjectStateActionName: string = 'ClearProjectStateAction';
+export function ClearProjectStateActionCreator(): AppAction<void> {
+    return { type: ClearProjectStateActionName, payload: null };
+};

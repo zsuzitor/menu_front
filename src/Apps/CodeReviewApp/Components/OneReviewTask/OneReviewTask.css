@@ -24,7 +24,7 @@
     gap: 0.5rem;
 }
 
-.one-review-task-content > span + .form-select {
+.one-review-task-content>span+.form-select {
     margin-right: 1rem;
 }
 
@@ -89,6 +89,10 @@
     /* white-space: pre; */
 }
 
-.one-review-task-comments-block-inner > .form-input + .button {
+.one-review-task-comments-block-inner>.form-input+.button {
     margin-top: 0.5rem;
+}
+
+.review-task-show-full-button .task-rotate {
+    rotate: 180deg;
 }

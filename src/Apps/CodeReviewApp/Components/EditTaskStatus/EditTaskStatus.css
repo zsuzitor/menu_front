@@ -2,6 +2,10 @@
     display: flex;
     justify-content: flex-start;
     gap: 10px;
+    
+    background-color: dimgray;
+    border-radius: 3px;
+    padding: 2px;
 }
 
 .task-status-elem .status-btn {

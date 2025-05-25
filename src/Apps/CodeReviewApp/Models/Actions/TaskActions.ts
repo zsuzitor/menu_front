@@ -60,3 +60,18 @@ export function SetFilterTaskActionCreator(data: TasksFilter): AppAction<TasksFi
     return { type: SetFilterTaskActionName, payload: data };
 };
 
+
+export const SetCurrentTaskIdActionName: string = 'SetCurrentTaskIdAction';
+export function SetCurrentTaskIdActionCreator(data: number): AppAction<number> {
+    return { type: SetCurrentTaskIdActionName, payload: data };
+};
+
+export const LoadTaskActionName: string = 'LoadTaskAction';
+export function LoadTaskActionCreator(data: ProjectTaskData): AppAction<ProjectTaskData> {
+    return { type: LoadTaskActionName, payload: data };
+};
+
+export const ClearCurrentTaskStateActionName: string = 'ClearCurrentTaskStateAction';
+export function ClearCurrentTaskStateActionCreator(): AppAction<void> {
+    return { type: ClearCurrentTaskStateActionName, payload: null };
+};

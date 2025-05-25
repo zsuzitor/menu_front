@@ -1,54 +1,53 @@
 import { connect } from "react-redux";
 import { AppState } from "../../../../Models/Entity/State/AppState";
-import { SetCommentsActionCreator } from "../../Models/Actions/CommentActions";
-import { CommentSet } from "../../Models/Entity/CommentSet";
-import { OneTaskReviewComment } from "../../Models/Entity/OneTaskReviewComment";
 import { OneTask } from "../../Models/Entity/State/OneTask";
 import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
 import { TaskReviewStatus } from "../../Models/Entity/State/TaskReviewStatus";
-import { SetCurrentTaskIdActionCreator } from "../../Models/Actions/TaskActions";
+import { ClearCurrentTaskStateActionCreator, SetCurrentTaskIdActionCreator } from "../../Models/Actions/TaskActions";
 
 
-interface IOneReviewTaskOwnProps {
+interface IOneReviewTaskDetailOwnProps {
+
+}
+
+
+interface IOneReviewTaskDetailStateToProps {
+    ProjectUsers: ProjectUser[];
+    Statuses: TaskReviewStatus[];
     Task: OneTask;
-    Comments: OneTaskReviewComment[];
+    //Comments: OneTaskReviewComment[];
     CurrentProjectId: number;
 
 }
 
-
-interface IOneReviewTaskStateToProps {
-    ProjectUsers: ProjectUser[];
-    Statuses: TaskReviewStatus[];
-
-}
-
-interface IOneReviewTaskDispatchToProps {
+interface IOneReviewTaskDetailDispatchToProps {
     UpdateTask: (task: OneTask) => void;
     DeleteTask: (id: number) => void;
     AddComment: (taskId: number, newCommentText: string) => void;
-    SetEmptyTaskComments: (taskId: number) => void;
+    // SetEmptyTaskComments: (taskId: number) => void;
     LoadTaskComments: (taskId: number) => void;
     SetCurrentTask: (taskId: number) => void;
-
+    ClearCurrentTaskState: () => void;
 
 }
 
-export interface IOneReviewTaskProps extends IOneReviewTaskStateToProps, IOneReviewTaskOwnProps, IOneReviewTaskDispatchToProps {
+export interface IOneReviewTaskDetailProps extends IOneReviewTaskDetailStateToProps, IOneReviewTaskDetailOwnProps, IOneReviewTaskDetailDispatchToProps {
 }
 
 
 
 
-const mapStateToProps = (state: AppState, ownProps: IOneReviewTaskOwnProps) => {
-    let res = {} as IOneReviewTaskStateToProps;
+const mapStateToProps = (state: AppState, ownProps: IOneReviewTaskDetailOwnProps) => {
+    let res = {} as IOneReviewTaskDetailStateToProps;
     res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
     res.Statuses = state.CodeReviewApp.CurrentProjectStatuses;
+    res.Task = state.CodeReviewApp.CurrentTask;
+    res.CurrentProjectId = state.CodeReviewApp.CurrentProjectId;
     return res;
 }
 
-const mapDispatchToProps = (dispatch: any, ownProps: IOneReviewTaskOwnProps) => {
-    let res = {} as IOneReviewTaskDispatchToProps;
+const mapDispatchToProps = (dispatch: any, ownProps: IOneReviewTaskDetailOwnProps) => {
+    let res = {} as IOneReviewTaskDetailDispatchToProps;
     res.UpdateTask = (forAdd: OneTask) => {
         dispatch(window.G_CodeReviewTaskController.UpdateTaskRedux(forAdd));
     };
@@ -61,12 +60,6 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneReviewTaskOwnProps) => 
         dispatch(window.G_CodeReviewCommentController.AddCommentRedux(taskId, text));
     };
 
-    res.SetEmptyTaskComments = (taskId: number) => {
-        let dt = new CommentSet();
-        dt.Comments = [];
-        dt.TaskId = taskId;
-        dispatch(SetCommentsActionCreator(dt))
-    }
 
     res.LoadTaskComments = (taskId: number) => {
         dispatch(window.G_CodeReviewCommentController.LoadCommentsRedux(taskId))
@@ -74,6 +67,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneReviewTaskOwnProps) => 
 
     res.SetCurrentTask = (taskId: number) => {
         dispatch(SetCurrentTaskIdActionCreator(taskId))
+    };
+
+    res.ClearCurrentTaskState = () => {
+        dispatch(ClearCurrentTaskStateActionCreator())
     };
 
     return res;

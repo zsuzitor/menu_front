@@ -34,6 +34,7 @@ interface IProjectDetailDispatchToProps {
     ReloadTasks: (filters: ITaskFilter) => void;
 
     DeleteProject: (id: number) => void;
+    ClearProjectState: () => void;
 
 }
 
@@ -81,6 +82,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: IProjectDetailOwnProps) => 
         dispatch(SetFilterTaskActionCreator(new TasksFilter()));
     }
 
+    res.ClearProjectState = ()=>{
+        dispatch(SetFilterTaskActionCreator(new TasksFilter()));
+
+    }
 
 
     return res;

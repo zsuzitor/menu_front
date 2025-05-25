@@ -1,4 +1,4 @@
-import { ITaskReviewStatusDataBack } from "./ITaskReviewStatusDataBack";
+import { IOneTaskReviewCommentDataBack } from "./IOneTaskReviewCommentDataBack";
 
 export interface IProjectTaskDataBack {
     Id: number;
@@ -8,4 +8,7 @@ export interface IProjectTaskDataBack {
     // Status: ITaskReviewStatusDataBack;
     StatusId: number;
     Link: string;
+    Description: string;
+    Comments: IOneTaskReviewCommentDataBack[];
+
 }

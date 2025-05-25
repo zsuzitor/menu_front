@@ -31,34 +31,50 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
 
 
     useEffect(() => {
-        if (props.CurrentProjectId > 0) {
+        if (props.CurrentProjectId && props.CurrentProjectId > 0) {
 
             props.GetProjectInfo(props.CurrentProjectId);
         }
     }, [props.CurrentProjectId]);
 
+    useEffect(() => {
+        if (props.CurrentTaskId && props.CurrentTaskId > 0) {
+            props.GetTaskInfo(props.CurrentTaskId);
+        }
+    }, [props.CurrentTaskId]);
 
     useEffect(() => {
         if (props.ProjectsList.length > 0//страница загружена уже, список проектов есть
         ) {
             if (props.CurrentProjectId && props.CurrentProjectId > 0) {
+                if (props.CurrentTaskId && props.CurrentTaskId > 0) {
 
-                navigate("/code-review/proj-" + props.CurrentProjectId);
+                    navigate("/code-review/proj-" + props.CurrentProjectId + '/task-' + props.CurrentTaskId);
+                }
+                else {
+                    navigate("/code-review/proj-" + props.CurrentProjectId);
+                }
             }
             else {
                 //никакой проект не выбран
-                const match = window.location.href.match(/proj-(\d+)/);
-                if (match) {
-                    const projId = match[1];
-                    const projIdInt = parseInt(match[1], 10);
+                const matchProj = window.location.href.match(/proj-(\d+)/);
+                if (matchProj) {
+                    const projIdInt = parseInt(matchProj[1], 10);
                     props.SetCurrentProject(projIdInt);
+                    // console.log("SetCurrentProject" + projIdInt);
+                }
+
+                const matchTask = window.location.href.match(/task-(\d+)/);
+                if (matchTask) {
+                    const taskIdInt = parseInt(matchTask[1], 10);
+                    props.SetCurrentTask(taskIdInt);
                     // console.log("SetCurrentProject" + projIdInt);
                 }
             }
 
         }
 
-    }, [props.ProjectsList.length, props.CurrentProjectId]);
+    }, [props.ProjectsList.length, props.CurrentProjectId, props.CurrentTaskId]);
 
     let mainClass = ' code-review-projects-menu-main-hide';
     if (visibleList) {

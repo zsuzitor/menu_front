@@ -5,6 +5,7 @@ import { OneTask } from "../../Models/Entity/State/OneTask";
 import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
 import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/State/OneProjectInList';
 import { SetCurrentProjectIdActionCreator } from "../../Models/Actions/ProjectActions";
+import { SetCurrentTaskIdActionCreator } from "../../Models/Actions/TaskActions";
 
 
 interface ICodeReviewMainOwnProps {
@@ -14,17 +15,19 @@ interface ICodeReviewMainOwnProps {
 interface ICodeReviewMainStateToProps {
     // Test: string;
     CurrentProjectId: number;
+    CurrentTaskId: number;
     ProjectsList: OneProjectInListModel[];
     CurrentProjectUsers: ProjectUser[];
     Tasks: OneTask[];
 }
 
 interface ICodeReviewMainDispatchToProps {
-    SetCurrentProjectId: (id: number) => void;
     GetUserProjects: () => void;
     GetProjectInfo: (id: number) => void;
     ClearCodeReviewState: () => void;
     SetCurrentProject: (projectId: number) => void;
+    SetCurrentTask: (taskId: number) => void;
+    GetTaskInfo: (taskId: number) => void;
 }
 
 
@@ -36,6 +39,7 @@ export interface CodeReviewMainProps extends ICodeReviewMainStateToProps, ICodeR
 const mapStateToProps = (state: AppState, ownProps: ICodeReviewMainOwnProps) => {
     let res = {} as ICodeReviewMainStateToProps;
     res.CurrentProjectId = state.CodeReviewApp.CurrentProjectId;
+    res.CurrentTaskId = state.CodeReviewApp.CurrentTaskId;
     res.CurrentProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
     res.ProjectsList = state.CodeReviewApp.ProjectsList;
     res.Tasks = state.CodeReviewApp.CurrentProjectTasks;
@@ -61,6 +65,14 @@ const mapDispatchToProps = (dispatch: any, ownProps: ICodeReviewMainOwnProps) =>
     
     res.SetCurrentProject = (projectId: number) => {
         dispatch(SetCurrentProjectIdActionCreator(projectId));
+    };
+
+    res.SetCurrentTask = (taskId: number) => {
+        dispatch(SetCurrentTaskIdActionCreator(taskId));
+    };
+
+    res.GetTaskInfo =  (taskId: number) => {
+        dispatch(window.G_CodeReviewTaskController.LoadTaskRedux(taskId));
     };
     
     return res;

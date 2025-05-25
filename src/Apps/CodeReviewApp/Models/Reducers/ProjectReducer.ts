@@ -3,7 +3,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { AppAction } from '../../../../Models/Actions/Actions';
 import { AppState } from '../../../../Models/Entity/State/AppState';
 import { ReducerCombiner } from '../../../../Models/Reducers/ReducerCombiner';
-import { DeleteProjectActionName, AddNewProjectActionName, SetCurrentProjectIdActionName, SetProjectsActionName } from '../Actions/ProjectActions';
+import { DeleteProjectActionName, AddNewProjectActionName, SetCurrentProjectIdActionName, SetProjectsActionName, ClearProjectStateActionName } from '../Actions/ProjectActions';
 import { SetFilterTaskActionCreator, LoadTasksActionCreator } from '../Actions/TaskActions';
 import { SetCurrentProjectUsersActionCreator } from '../Actions/UserActions';
 import { LoadReviewTasksResult } from '../Entity/LoadReviewTasksResult';
@@ -75,6 +75,17 @@ export function CodeReviewProjectReducer(state: AppState = new AppState(), actio
                 return newState;
             }
 
+            case ClearProjectStateActionName:
+            {
+                let newState = cloneDeep(state);
+                newState.CodeReviewApp.CurrentProjectId = -1;
+                newState.CodeReviewApp.CurrentProjectUsers = [];
+                newState.CodeReviewApp.CurrentProjectTasksFilters = new TasksFilter();
+                newState.CodeReviewApp.CurrentProjectTasksAllCount = 0;
+                newState.CodeReviewApp.CurrentProjectTasks = [];
+                newState.CodeReviewApp.CurrentProjectStatuses = [];
+                return newState;
+            }
 
 
         default:

@@ -4,8 +4,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { AppAction } from '../../../../Models/Actions/Actions';
 import { AppState } from '../../../../Models/Entity/State/AppState';
-import { ProjectUser } from '../Entity/State/ProjectUser';
-import { DeleteProjectUserActionName, AddProjectUserActionName, ChangeProjectUserActionName, SetCurrentProjectUsersActionName } from '../Actions/UserActions';
 import { CreateCurrentProjectTaskStatusActionName, DeleteCurrentProjectTaskStatusActionName, SetCurrentProjectStatusesActionName, UpdateCurrentProjectTaskStatusActionName } from '../Actions/TaskStatusActions';
 import { TaskReviewStatus } from '../Entity/State/TaskReviewStatus';
 

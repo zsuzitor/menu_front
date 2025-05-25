@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { AlertData } from '../../../../Models/Entity/AlertData';
 import OneReviewTaskComment from '../OneReviewTaskComment/OneReviewTaskComment';
 import { OneTask } from '../../Models/Entity/State/OneTask';
-import connectToStore, { IOneReviewTaskProps } from './OneReviewTaskSetup';
+import connectToStore, { IOneReviewTaskDetailProps } from './OneReviewTaskDetailSetup';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ require('./OneReviewTask.css');
 
 
 
-const OneReviewTask = (props: IOneReviewTaskProps) => {
+const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
 
 
     const [taskName, setTaskName] = useState(props.Task.Name);
@@ -27,12 +27,17 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
     const [taskCreator, setTaskCreator] = useState(props.Task.CreatorId);
     const [newCommentName, setNewCommentName] = useState('');
 
-    // const [comments, setComments] = useState([] as IOneTaskReviewCommentDataBack[]);
-    const [showComments, setShowComments] = useState(false);
-    const [showFullTask, setShowFullTask] = useState(false);
+
 
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+
+        return function cleanUp() {
+            props.ClearCurrentTaskState();
+        };
+    }, []);
 
     useEffect(() => {
         setTaskName(props.Task.Name);
@@ -54,15 +59,6 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         setTaskCreator(props.Task.CreatorId);
     }, [props.Task.CreatorId]);
 
-    useEffect(() => {
-        if (!showComments) {
-            // setComments([]);
-            props.SetEmptyTaskComments(props.Task.Id);
-            return;
-        }
-
-        props.LoadTaskComments(props.Task.Id);
-    }, [showComments]);
 
 
 
@@ -116,15 +112,12 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
 
     const renderComments = () => {
-        if (!showComments) {
-            return <></>
-        }
 
         return <div className='one-review-task-comments-block'>
             <hr />
             <div className='one-review-task-comments-block-inner'>
                 Комментарии:
-                {props.Comments.map(x => {
+                {props.Task.Comments.map(x => {
                     return <OneReviewTaskComment
                         Comment={x}
                         TaskId={props.Task.Id}
@@ -166,26 +159,6 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
     }
 
 
-    if (!showFullTask) {
-        return <div className='one-review-task-block'>
-            <div className='one-review-task-block-flex'>
-                <div className='one-review-task-short-content'>
-                    {/* <a href="/" target="_blank">{props.Task.Name}</a> */}
-                    <a href={''} onClick={(e) => {
-                        e.preventDefault();
-                        // navigate("/code-review/proj-" + props.CurrentProjectId+'/task-'+props.Task.Id);
-                        props.SetCurrentTask(props.Task.Id);
-                    }}>{props.Task.Name}</a>
-                </div>
-                <div className='one-review-task-buttons'>
-                    <div className='review-task-show-full-button' onClick={() => setShowFullTask(true)}>
-                        <img className='persent-100-width-height' src={G_PathToBaseImages + 'arrow2.png'}
-                            alt="Показать полностью" title='Показать полностью' />
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
 
     return <div className='one-review-task-block'>
         <div className='one-review-task-block-flex'>
@@ -233,17 +206,9 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
                         alt="Delete" title='Удалить задачу' />
                 </div>
-                <div className='review-task-comments-button' onClick={() => setShowComments(oldState => !oldState)}>
-                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'comments.png'}
-                        alt="Comments" title='Комментарии' />
-                </div>
                 <div className='review-task-link-button' onClick={() => taskLink && window.open(taskLink)}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'external-link.png'}
-                        alt="Link" title='Открыть ссылку' />
-                </div>
-                <div className='review-task-show-full-button' onClick={() => setShowFullTask(false)}>
-                    <img className='persent-100-width-height task-rotate' src={G_PathToBaseImages + 'arrow2.png'}
-                        alt="Скрыть" title='Скрыть' />
+                        alt="Comments" title='Открыть ссылку' />
                 </div>
             </div>
         </div>
@@ -257,4 +222,4 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
 
 // and that function returns the connected, wrapper component:
-export default connectToStore(OneReviewTask);
+export default connectToStore(OneReviewTaskDetail);

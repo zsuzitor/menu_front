@@ -4,7 +4,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { AppAction } from '../../../../Models/Actions/Actions';
 import { AppState } from '../../../../Models/Entity/State/AppState';
-import { AddTaskToProjectActionName, AddLoadTriggerActionName, UpdateTaskActionName, LoadTasksActionName, DeleteTaskActionName, SetFilterTaskCreatorActionName, SetFilterTaskReviewerName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskStatusActionName, SetFilterTaskActionName } from '../Actions/TaskActions';
+import { AddTaskToProjectActionName, AddLoadTriggerActionName, UpdateTaskActionName, LoadTasksActionName, DeleteTaskActionName, SetFilterTaskCreatorActionName, SetFilterTaskReviewerName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskStatusActionName, SetFilterTaskActionName, SetCurrentTaskIdActionName, LoadTaskActionName, ClearCurrentTaskStateActionName } from '../Actions/TaskActions';
 import { ProjectTaskData, LoadReviewTasksResult } from '../Entity/LoadReviewTasksResult';
 import { OneTask } from '../Entity/State/OneTask';
 import { TasksFilter } from '../Entity/State/TasksFilter';
@@ -104,7 +104,33 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
                 return newState;
             }
 
+        case SetCurrentTaskIdActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as number;
+                newState.CodeReviewApp.CurrentTaskId = payload;
 
+                return newState;
+            }
+
+        case LoadTaskActionName: {
+
+            let newState = cloneDeep(state);
+            let payload = action.payload as ProjectTaskData;
+            newState.CodeReviewApp.CurrentTask = new OneTask().FillByProjectTaskData(payload);
+
+            return newState;
+        }
+
+
+        case ClearCurrentTaskStateActionName: {
+
+            let newState = cloneDeep(state);
+            newState.CodeReviewApp.CurrentTaskId = -1;
+            newState.CodeReviewApp.CurrentTask = null;
+
+            return newState;
+        }
 
         default:
             return state;

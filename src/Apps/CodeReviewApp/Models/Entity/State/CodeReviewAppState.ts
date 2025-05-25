@@ -14,14 +14,20 @@ export class CodeReviewAppState {
     CurrentProjectTasksAllCount: number;
     CurrentProjectTasksFilters: TasksFilter;
 
+    
+    CurrentTaskId: number;
+    CurrentTask: OneTask;
+
 
     constructor() {
         this.CurrentProjectId = -1;
+        this.CurrentTaskId = -1;
         this.ProjectsList = [];
         this.CurrentProjectUsers = [];
         this.CurrentProjectTasks = [];
         this.CurrentProjectTasksAllCount = 0;
         this.CurrentProjectTasksFilters = new TasksFilter();
         this.CurrentProjectStatuses = [];
+        this.CurrentTask = null;
     }
 }

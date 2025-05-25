@@ -29,6 +29,13 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     const [showEditProject, setShowEditProject] = useState(false);
     const [showAddNewTaskForm, setShowAddNewTaskForm] = useState(false);
 
+    useEffect(() => {
+
+        return () => {
+            props.ClearProjectState();
+
+        };
+    }, []);
 
     useEffect(() => {
         if (props.Project?.Id) {
@@ -206,6 +213,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                     <OneReviewTask key={x.Id}
                         Task={x}
                         Comments={x.Comments}
+                        CurrentProjectId={props.Project.Id}
                     ></OneReviewTask>)
                 : <div className="review-project-tasks-no-tasks">
                     <img src={G_PathToBaseImages + 'exclamation.png'} alt="" />

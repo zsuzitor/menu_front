@@ -1,17 +1,18 @@
 import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
-import { AddLoadTriggerActionCreator, UpdateTaskActionCreator, LoadTasksActionCreator, DeleteTaskActionCreator } from "../Actions/TaskActions";
+import { AddLoadTriggerActionCreator, UpdateTaskActionCreator, LoadTasksActionCreator, DeleteTaskActionCreator, LoadTaskActionCreator } from "../Actions/TaskActions";
 import { ILoadReviewTasksResultDataBack } from "../BackModels/ILoadReviewTasksResultDataBack";
 import { IProjectTaskDataBack } from "../BackModels/IProjectTaskDataBack";
 import { ITaskFilter } from "../Entity/ITaskFilter";
-import { LoadReviewTasksResult } from "../Entity/LoadReviewTasksResult";
+import { LoadReviewTasksResult, ProjectTaskData } from "../Entity/LoadReviewTasksResult";
 import { OneTask } from "../Entity/State/OneTask";
 
 
 export type AddNewProjectTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => void;
 export type UpdateTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 export type LoadTasks = (error: MainErrorObjectBack, data: ILoadReviewTasksResultDataBack) => void;
+export type LoadTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => void;
 export type DeleteTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 
@@ -19,6 +20,7 @@ export interface ICodeReviewTaskController {
     AddTaskToProjectRedux: (task: OneTask, projectId: number) => void;
     UpdateTaskRedux: (task: OneTask) => void;
     LoadTasksRedux: (taskFilter: ITaskFilter) => void;
+    LoadTaskRedux: (taskId: number) => void;
     DeleteTaskRedux: (id: number) => void;
 }
 
@@ -50,6 +52,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
             "taskReviwerId": task.ReviewerId,
             "taskLink": task.Link,
             "projectId": projectId,
+            "statusId": task.StatusId,
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
@@ -143,6 +146,41 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
 
         });
     };
+
+    LoadTaskRedux = (taskId: number) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.LoadTask(taskId, (error: MainErrorObjectBack, data: IProjectTaskDataBack) => {
+                this.preloader(false);
+                if (error) {
+                    return;
+                }
+
+                if (data) {
+                    let dt = new ProjectTaskData();
+                    dt.FillByBackModel(data);
+                    dispatch(LoadTaskActionCreator(dt));
+                }
+            });
+        };
+    }
+
+    LoadTask = (taskId: number, onSuccess: LoadTask) => {
+        let data = {
+            "id": taskId,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.GetHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/task/get-project-task'
+
+        });
+    };
+
 
     DeleteTaskRedux = (id: number) => {
         return (dispatch: any, getState: any) => {

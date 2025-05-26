@@ -5,12 +5,12 @@ import React, { useState, useEffect } from 'react';
 import { AlertData } from '../../../../Models/Entity/AlertData';
 import OneReviewTaskComment from '../OneReviewTaskComment/OneReviewTaskComment';
 import { OneTask } from '../../Models/Entity/State/OneTask';
-import connectToStore, { IOneReviewTaskDetailProps } from './OneReviewTaskDetailSetup';
 
 import { useNavigate } from 'react-router-dom';
+import connectToStore, { IOneReviewTaskDetailProps } from './OneReviewTaskDetailSetup';
 
 
-require('./OneReviewTask.css');
+require('./OneReviewTaskDetail.css');
 
 
 
@@ -18,13 +18,17 @@ require('./OneReviewTask.css');
 
 const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
 
+    //   console.log(new Error().stack); // Check where this is being called from
 
-    const [taskName, setTaskName] = useState(props.Task.Name);
-    const [taskLink, setTaskLink] = useState(props.Task.Link || '');
+    //         return <div>стоп для теста</div>
 
-    const [taskStatus, setTaskStatus] = useState(props.Task.StatusId || -1);
-    const [taskReviewer, setTaskreviewer] = useState(props.Task.ReviewerId || -1);
-    const [taskCreator, setTaskCreator] = useState(props.Task.CreatorId);
+    // console.log(props);
+    const [taskName, setTaskName] = useState(props.Task?.Name || '');
+    const [taskLink, setTaskLink] = useState(props.Task?.Link || '');
+
+    const [taskStatus, setTaskStatus] = useState(props.Task?.StatusId || -1);
+    const [taskReviewer, setTaskreviewer] = useState(props.Task?.ReviewerId || -1);
+    const [taskCreator, setTaskCreator] = useState(props.Task?.CreatorId || -1);
     const [newCommentName, setNewCommentName] = useState('');
 
 
@@ -40,24 +44,24 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
     }, []);
 
     useEffect(() => {
-        setTaskName(props.Task.Name);
-    }, [props.Task.Name]);
+        setTaskName(props.Task?.Name || '');
+    }, [props.Task?.Name]);
 
     useEffect(() => {
-        setTaskLink(props.Task.Link || '');
-    }, [props.Task.Link]);
+        setTaskLink(props.Task?.Link || '');
+    }, [props.Task?.Link]);
 
     useEffect(() => {
-        setTaskStatus(props.Task.StatusId || -1);
-    }, [props.Task.StatusId]);
+        setTaskStatus(props.Task?.StatusId || -1);
+    }, [props.Task?.StatusId]);
 
     useEffect(() => {
-        setTaskreviewer(props.Task.ReviewerId || -1);
-    }, [props.Task.ReviewerId]);
+        setTaskreviewer(props.Task?.ReviewerId || -1);
+    }, [props.Task?.ReviewerId]);
 
     useEffect(() => {
-        setTaskCreator(props.Task.CreatorId);
-    }, [props.Task.CreatorId]);
+        setTaskCreator(props.Task?.CreatorId);
+    }, [props.Task?.CreatorId]);
 
 
 
@@ -67,7 +71,7 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
         if (!confirm('Отменить изменения?')) {
             return;
         }
-        setTaskName(props.Task.Name);
+        setTaskName(props.Task.Name || '');
         setTaskLink(props.Task.Link || '');
         setTaskStatus(props.Task.StatusId);
         setTaskreviewer(props.Task.ReviewerId || -1);
@@ -137,6 +141,10 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
         </div>
     }
 
+
+    if (!props.Task) {
+        return <div>Загружаем данные</div>
+    }
 
 
     let taskHasChanges = taskName !== props.Task.Name ||

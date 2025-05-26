@@ -7,6 +7,7 @@ import ProjectsList from '../ProjectsList/ProjectsList';
 import cloneDeep from 'lodash/cloneDeep';
 import connectToStore, { CodeReviewMainProps } from './CodeReviewMainSetup';
 import { useNavigate } from 'react-router-dom';
+import OneReviewTaskDetail from '../OneReviewTaskDetail/OneReviewTaskDetail';
 
 
 
@@ -93,12 +94,18 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
             <ProjectsList Projects={props.ProjectsList}
                 CurrentProjectId={props.CurrentProjectId} />
         </div>
-        <div className='code-review-project-info'>
-            <ProjectDetail Project={props.ProjectsList.find(x => x.Id == props.CurrentProjectId)}
-                Tasks={props.Tasks}
-            // UpdateTask={updateTaskProject}
-            />
-        </div>
+        {props.CurrentTaskId && props.CurrentTaskId > 0 ?
+            <OneReviewTaskDetail></OneReviewTaskDetail>
+            // <></>
+            :
+            <div className='code-review-project-info'>
+                <ProjectDetail Project={props.ProjectsList.find(x => x.Id == props.CurrentProjectId)}
+                    Tasks={props.Tasks}
+                // UpdateTask={updateTaskProject}
+                />
+            </div>
+        }
+
     </div>
 }
 

@@ -71,6 +71,13 @@
     cursor: pointer;
 }
 
+.review-task-show-full-button {
+
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
 .one-review-task-comments-block {
     background-color: #fff;
 }
@@ -95,4 +102,8 @@
 
 .review-task-show-full-button .task-rotate {
     rotate: 180deg;
+}
+
+.one-review-task-short-content {
+    flex-grow: 2;
 }

@@ -47,7 +47,7 @@ export function CodeReviewUserReducer(state: AppState = new AppState(), action: 
             {
                 let newState = cloneDeep(state);
                 let users = action.payload as ProjectUser[];
-                newState.CodeReviewApp.CurrentProjectUsers = users;
+                newState.CodeReviewApp.CurrentProjectUsers = users || [];
                 return newState;
             }
 

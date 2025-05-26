@@ -171,7 +171,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
             <div className='one-review-task-block-flex'>
                 <div className='one-review-task-short-content'>
                     {/* <a href="/" target="_blank">{props.Task.Name}</a> */}
-                    <a href={''} onClick={(e) => {
+                    <a href={'/proj-' + props.CurrentProjectId + '/task-' + props.Task.Id} onClick={(e) => {
                         e.preventDefault();
                         // navigate("/code-review/proj-" + props.CurrentProjectId+'/task-'+props.Task.Id);
                         props.SetCurrentTask(props.Task.Id);

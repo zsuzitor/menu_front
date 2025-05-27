@@ -36,7 +36,9 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
                 tsk.StatusId = payload.StatusId;
                 tsk.ReviewerId = payload.ReviewerId;
                 tsk.CreatorId = payload.CreatorId;
-                tsk.Link = payload.Link;
+                tsk.CreateDate = payload.CreateDate;
+                tsk.LastUpdateDate = payload.LastUpdateDate;
+                tsk.Description = payload.Description;
                 return newState;
             }
         case LoadTasksActionName:

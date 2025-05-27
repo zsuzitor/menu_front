@@ -10,7 +10,9 @@ export class OneTask {
     CreatorId: number;
     ReviewerId?: number;
     StatusId: number;
-    Link: string;
+    CreateDate: string;
+    LastUpdateDate: string;
+
     Description: string;
     Comments: OneTaskReviewComment[];
 
@@ -24,7 +26,8 @@ export class OneTask {
         this.CreatorId = data.CreatorId;
         this.ReviewerId = data.ReviewerId;
         this.StatusId = data.StatusId;
-        this.Link = data.Link;
+        this.CreateDate = data.CreateDate;
+        this.LastUpdateDate = data.LastUpdateDate;
         this.Description = data.Description;
         this.Comments = data.Comments
             .map(x => new OneTaskReviewComment().FillByOneTaskReviewComment(x));
@@ -38,7 +41,8 @@ export class OneTask {
         this.CreatorId = data.CreatorId;
         this.ReviewerId = data.ReviewerId;
         this.StatusId = data.StatusId;
-        this.Link = data.Link;
+        this.CreateDate = data.CreateDate;
+        this.LastUpdateDate = data.LastUpdateDate;
         this.Description = data.Description;
         this.Comments = data.Comments.
             map(x => new OneTaskReviewComment().FillByBackModel(x));

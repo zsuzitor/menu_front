@@ -50,7 +50,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
             "taskName": task.Name,
             "taskCreatorId": task.CreatorId,
             "taskReviwerId": task.ReviewerId,
-            "taskLink": task.Link,
+            "description": task.Description,
             "projectId": projectId,
             "statusId": task.StatusId,
         };
@@ -92,7 +92,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
             "statusId": task.StatusId,
             "creatorId": task.CreatorId,
             "reviewerId": task.ReviewerId,
-            "taskLink": task.Link,
+            "description": task.Description,
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,

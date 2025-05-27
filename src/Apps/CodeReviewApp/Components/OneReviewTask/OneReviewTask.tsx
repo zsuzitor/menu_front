@@ -20,7 +20,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
 
     const [taskName, setTaskName] = useState(props.Task.Name);
-    const [taskLink, setTaskLink] = useState(props.Task.Link || '');
+    // const [taskLink, setTaskLink] = useState(props.Task.Link || '');
 
     const [taskStatus, setTaskStatus] = useState(props.Task.StatusId || -1);
     const [taskReviewer, setTaskreviewer] = useState(props.Task.ReviewerId || -1);
@@ -38,9 +38,9 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         setTaskName(props.Task.Name);
     }, [props.Task.Name]);
 
-    useEffect(() => {
-        setTaskLink(props.Task.Link || '');
-    }, [props.Task.Link]);
+    // useEffect(() => {
+    //     setTaskLink(props.Task.Link || '');
+    // }, [props.Task.Link]);
 
     useEffect(() => {
         setTaskStatus(props.Task.StatusId || -1);
@@ -72,7 +72,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
             return;
         }
         setTaskName(props.Task.Name);
-        setTaskLink(props.Task.Link || '');
+        // setTaskLink(props.Task.Link || '');
         setTaskStatus(props.Task.StatusId);
         setTaskreviewer(props.Task.ReviewerId || -1);
         setTaskCreator(props.Task.CreatorId);
@@ -88,7 +88,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
         let forAdd = { ...props.Task } as OneTask;
         forAdd.Name = taskName;
-        forAdd.Link = taskLink;
+        // forAdd.Link = taskLink;
         forAdd.StatusId = taskStatus;
         forAdd.ReviewerId = taskReviewer;
         forAdd.CreatorId = taskCreator;
@@ -115,39 +115,39 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
 
 
-    const renderComments = () => {
-        if (!showComments) {
-            return <></>
-        }
+    // const renderComments = () => {
+    //     if (!showComments) {
+    //         return <></>
+    //     }
 
-        return <div className='one-review-task-comments-block'>
-            <hr />
-            <div className='one-review-task-comments-block-inner'>
-                Комментарии:
-                {props.Comments.map(x => {
-                    return <OneReviewTaskComment
-                        Comment={x}
-                        TaskId={props.Task.Id}
-                        key={x.Id}
-                    ></OneReviewTaskComment>
+    //     return <div className='one-review-task-comments-block'>
+    //         <hr />
+    //         <div className='one-review-task-comments-block-inner'>
+    //             Комментарии:
+    //             {props.Comments.map(x => {
+    //                 return <OneReviewTaskComment
+    //                     Comment={x}
+    //                     TaskId={props.Task.Id}
+    //                     key={x.Id}
+    //                 ></OneReviewTaskComment>
 
-                })}
+    //             })}
 
-                <div>
-                    <textarea className='form-input' value={newCommentName}
-                        onChange={e => setNewCommentName(e.target.value)}
-                    ></textarea>
-                    <button className='button button-grey' onClick={() => addComment()}>Добавить</button>
-                </div>
-            </div>
+    //             <div>
+    //                 <textarea className='form-input' value={newCommentName}
+    //                     onChange={e => setNewCommentName(e.target.value)}
+    //                 ></textarea>
+    //                 <button className='button button-grey' onClick={() => addComment()}>Добавить</button>
+    //             </div>
+    //         </div>
 
-        </div>
-    }
+    //     </div>
+    // }
 
 
 
     let taskHasChanges = taskName !== props.Task.Name ||
-        (taskLink !== props.Task.Link && (taskLink || props.Task.Link)) ||
+        // (taskLink !== props.Task.Link && (taskLink || props.Task.Link)) ||
         taskStatus !== props.Task.StatusId ||
         ((props.Task.ReviewerId || taskReviewer != -1) && taskReviewer !== props.Task.ReviewerId) ||
         taskCreator !== props.Task.CreatorId;
@@ -178,7 +178,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                     }}>{props.Task.Name}</a>
                 </div>
                 <div className='one-review-task-buttons'>
-                    <div className='review-task-show-full-button' onClick={() => setShowFullTask(true)}>
+                    <div className='task-button' onClick={() => setShowFullTask(true)}>
                         <img className='persent-100-width-height' src={G_PathToBaseImages + 'arrow2.png'}
                             alt="Показать полностью" title='Показать полностью' />
                     </div>
@@ -194,24 +194,24 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                 <textarea className='form-input review-task-name-input'
                     value={taskName} onChange={e => setTaskName(e.target.value)}
                 ></textarea>
-                <input type='text'
+                {/* <input type='text'
                     className='form-input persent-100-width'
                     onChange={(e) => setTaskLink(e.target.value)}
-                    value={taskLink} placeholder='Ссылка'></input>
+                    value={taskLink} placeholder='Ссылка'></input> */}
                 {/* <input type='text' value={taskName} onChange={e => setTaskName(e.target.value)}></input> */}
                 <br />
-                <span>Создатель</span>
-                <select className='form-select' value={taskCreator}
+                <span>Создатель: {creatorsList.find(x => x.Id == taskCreator).Name}</span>
+                {/* <select className='form-select' value={taskCreator}
                     onChange={(e) => setTaskCreator(+e.target.value)}>
                     {creatorsList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-                </select>
-                <span>Ревьювер</span>
+                </select> */}
+                <span>Ревьювер:</span>
                 <select className='form-select' value={taskReviewer}
                     onChange={(e) => setTaskreviewer(+e.target.value)}>
                     <option value={-1}>Не выбрано</option>
                     {reviewerList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                 </select>
-                <span>Статус</span>
+                <span>Статус:</span>
                 <select className='form-select'
                     onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
                     <option value={-1}>Не выбрано</option>
@@ -221,34 +221,42 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
             <div className='one-review-task-buttons'>
                 {taskHasChanges ?
                     <>
-                        <div className='review-task-save-button' onClick={() => updateTask()}>
+                        <div className='task-button' onClick={() => updateTask()}>
                             <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'}
                                 alt="Save" title='Сохранить' />
                         </div>
-                        <div className='review-task-cancel-button' onClick={() => cancelTask()}>
+                        <div className='task-button' onClick={() => cancelTask()}>
                             <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
                                 alt="Cancel" title='Отменить изменения' />
                         </div></> : <></>}
-                <div className='review-task-delete-button' onClick={() => deleteTask()}>
+                <div className='task-button' onClick={() => deleteTask()}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
                         alt="Delete" title='Удалить задачу' />
                 </div>
-                <div className='review-task-comments-button' onClick={() => setShowComments(oldState => !oldState)}>
+                {/* <div className='review-task-comments-button' onClick={() => setShowComments(oldState => !oldState)}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'comments.png'}
                         alt="Comments" title='Комментарии' />
-                </div>
-                <div className='review-task-link-button' onClick={() => taskLink && window.open(taskLink)}>
+                </div> */}
+                <div className='task-button' onClick={() =>
+                    // <a href={'/proj-' + props.CurrentProjectId + '/task-' + props.Task.Id} onClick={(e) => {
+                    //     e.preventDefault();
+                    //     // navigate("/code-review/proj-" + props.CurrentProjectId+'/task-'+props.Task.Id);
+                    //     props.SetCurrentTask(props.Task.Id);
+                    // }}>{props.Task.Name}</a>
+                    props.SetCurrentTask(props.Task.Id)
+
+                }>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'external-link.png'}
                         alt="Link" title='Открыть ссылку' />
                 </div>
-                <div className='review-task-show-full-button' onClick={() => setShowFullTask(false)}>
+                <div className='task-button' onClick={() => setShowFullTask(false)}>
                     <img className='persent-100-width-height task-rotate' src={G_PathToBaseImages + 'arrow2.png'}
                         alt="Скрыть" title='Скрыть' />
                 </div>
             </div>
         </div>
-        {renderComments()}
-    </div>
+        {/* {renderComments()} */}
+    </div >
 }
 
 

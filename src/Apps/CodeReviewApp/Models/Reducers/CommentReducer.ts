@@ -12,13 +12,29 @@ import { CommentUpdate } from "../Entity/CommentUpdate";
 import { OneTaskReviewComment } from "../Entity/OneTaskReviewComment";
 
 
+const GetTaskForCommentFromState = (state: AppState, taskId: number) => {
+    // console.log(state);
+    // console.log(taskId);
+    let taskfromProject = state.CodeReviewApp.CurrentProjectTasks.find(x => x.Id === taskId);
+    if (taskfromProject) {
+        return taskfromProject;
+    }
+
+    if (state.CodeReviewApp.CurrentTask.Id == taskId) {
+        return state.CodeReviewApp.CurrentTask;
+    }
+
+    return null;
+}
+
 export function CodeReviewCommentReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
     switch (action.type) {
         case UpdateCommentActionName:
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as CommentUpdate;
-                let task = newState.CodeReviewApp.CurrentProjectTasks.find(x => x.Id === payload.TaskId);
+                let task = GetTaskForCommentFromState(newState, payload.TaskId);
+
                 if (!task) {
                     return newState;
                 }
@@ -35,12 +51,12 @@ export function CodeReviewCommentReducer(state: AppState = new AppState(), actio
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as CommentDelete;
-                let task = newState.CodeReviewApp.CurrentProjectTasks.find(x => x.Id === payload.TaskId);
-                if (!task) {
+                let task = GetTaskForCommentFromState(newState, payload.TaskId);
+                if (task) {
+                    task.Comments = task.Comments.filter(x => x.Id !== payload.Id);
                     return newState;
                 }
 
-                task.Comments = task.Comments.filter(x => x.Id !== payload.Id);
 
                 return newState;
             }
@@ -49,17 +65,18 @@ export function CodeReviewCommentReducer(state: AppState = new AppState(), actio
                 let newState = cloneDeep(state);
                 let payload = action.payload as CommentAdd;
 
-                let task = newState.CodeReviewApp.CurrentProjectTasks.find(x => x.Id === payload.TaskId);
-                if (!task) {
-                    return newState;
-                }
 
                 let comment = new OneTaskReviewComment();
                 comment.Id = payload.Id;
                 comment.Text = payload.Text;
                 comment.CreateDate = payload.CreateDate;
                 comment.CreatorId = payload.CreatorId;
-                task.Comments.push(comment);
+
+                let task = GetTaskForCommentFromState(newState, payload.TaskId);
+                if (task) {
+                    task.Comments.push(comment);
+                    return newState;
+                }
 
                 return newState;
             }
@@ -67,12 +84,11 @@ export function CodeReviewCommentReducer(state: AppState = new AppState(), actio
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as CommentSet;
-                let task = newState.CodeReviewApp.CurrentProjectTasks.find(x => x.Id === payload.TaskId);
-                if (!task) {
+                let task = GetTaskForCommentFromState(newState, payload.TaskId);
+                if (task) {
+                    task.Comments = payload.Comments
                     return newState;
                 }
-
-                task.Comments = payload.Comments
 
                 return newState;
             }
@@ -86,6 +102,6 @@ export function CodeReviewCommentReducer(state: AppState = new AppState(), actio
         default:
             return state;
     }
-    
+
     return state;
 }

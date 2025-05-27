@@ -6,8 +6,9 @@ export interface IProjectTaskDataBack {
     CreatorId: number;
     ReviewerId?: number;
     // Status: ITaskReviewStatusDataBack;
+    CreateDate: string;
+    LastUpdateDate: string;
     StatusId: number;
-    Link: string;
     Description: string;
     Comments: IOneTaskReviewCommentDataBack[];
 

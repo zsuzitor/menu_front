@@ -13,7 +13,7 @@ require('./AddTask.css');
 const AddTask = (props: IAddTaskProps) => {
 
     const [newTaskName, setNewTaskName] = useState('');
-    const [newTaskLink, setNewTaskLink] = useState('');
+    const [newTaskDescription, setNewTaskDescription] = useState('');
     let currentUser = props.ProjectUsers.find(x => x.MainAppUserId === props.Auth.User?.Id);
     const [newTaskCreator, setNewTaskCreator] = useState(currentUser?.Id || -1);
     const [newTaskReviwer, setNewTaskReviwer] = useState(-1);
@@ -56,11 +56,11 @@ const AddTask = (props: IAddTaskProps) => {
         tsk.Name = newTaskName;
         tsk.CreatorId = newTaskCreator;
         tsk.ReviewerId = newTaskReviwer;
-        tsk.Link = newTaskLink;
+        tsk.Description = newTaskDescription;
         tsk.StatusId = taskStatus;
         props.AddTaskToProject(tsk, props.ProjectId);
         setNewTaskName('');
-        setNewTaskLink('');
+        setNewTaskDescription('');
     };
 
 
@@ -69,8 +69,8 @@ const AddTask = (props: IAddTaskProps) => {
             value={newTaskName} placeholder='Название'></textarea>
         <input type='text'
             className='form-control-b persent-100-width'
-            onChange={(e) => setNewTaskLink(e.target.value)}
-            value={newTaskLink} placeholder='Ссылка'></input>
+            onChange={(e) => setNewTaskDescription(e.target.value)}
+            value={newTaskDescription} placeholder='Описание'></input>
         <label>Автор:</label>
         <select className='form-control-b' value={newTaskCreator} onChange={(e) => setNewTaskCreator(+e.target.value)}>
             {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}

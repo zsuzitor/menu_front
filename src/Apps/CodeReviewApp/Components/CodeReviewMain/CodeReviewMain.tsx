@@ -77,6 +77,11 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
 
     }, [props.ProjectsList.length, props.CurrentProjectId, props.CurrentTaskId]);
 
+    useEffect(() => {
+        console.log('changed' + window.location.href);
+    }, [window.location.href]);
+    //
+
     let mainClass = ' code-review-projects-menu-main-hide';
     if (visibleList) {
         mainClass = ' code-review-projects-menu-main-visible';

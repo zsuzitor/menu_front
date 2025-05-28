@@ -31,6 +31,20 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
     }, []);
 
 
+
+    useEffect(() => {
+        const matchProj = window.location.href.match(/proj-(\d+)/);
+        if (props.ProjectsLoaded &&
+            !props.ProjectsList.find(x => x.Id == props.CurrentProjectId)//выбранного проекта нет, удален?
+            && matchProj//при этом в урле он есть
+        ) {
+
+            navigate("/code-review/");
+        }
+
+    }, [props.ProjectsList.length, props.ProjectsLoaded]);
+
+
     useEffect(() => {
         if (props.CurrentProjectId && props.CurrentProjectId > 0) {
 

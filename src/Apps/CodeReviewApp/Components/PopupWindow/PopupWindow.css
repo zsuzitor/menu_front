@@ -1,0 +1,23 @@
+.popup-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.popup-content {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    min-width: 200px;
+    z-index: 1000;
+    /* Решение для плавного появления */
+    /* opacity: 0; */
+    /* transform: translateY(-10px); */
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+/* .popup-content.visible {
+    opacity: 1;
+    transform: translateY(0);
+} */

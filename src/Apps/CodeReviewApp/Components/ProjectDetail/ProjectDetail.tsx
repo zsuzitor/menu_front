@@ -10,6 +10,7 @@ import { ITaskFilter } from '../../Models/Entity/ITaskFilter';
 import ProjectUsers from '../ProjectUsers/ProjectUsers';
 import connectToStore, { IProjectDetailProps } from './ProjectDetailSetup';
 import EditProject from '../EditProject/EditProject';
+import PopupWindow from '../PopupWindow/PopupWindow';
 
 
 
@@ -28,6 +29,13 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     const [showUserList, setShowUserList] = useState(false);
     const [showEditProject, setShowEditProject] = useState(false);
     const [showAddNewTaskForm, setShowAddNewTaskForm] = useState(false);
+
+    const [filterVisibilityName, setFilterVisibilityName] = useState(false);
+    const [filterVisibilityCreator, setFilterVisibilityCreator] = useState(false);
+    const [filterVisibilityStatus, setFilterVisibilityStatus] = useState(false);
+    const [filterVisibilityReviwer, setFilterVisibilityReviwer] = useState(false);
+
+
 
     useEffect(() => {
 
@@ -53,6 +61,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         }
 
     }, [props.Project?.Id]);
+
 
 
     useEffect(() => {
@@ -173,28 +182,72 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         <div className='review-project-tasks-filters-block'>
             <h4 className='persent-100-width'>Фильтры</h4>
             <div className='review-project-tasks-filters-block-flex'>
-                <input className='form-input' type='text' value={props.TasksFilters.TaskName}
-                    onChange={e => props.SetFilterTaskName(e.target.value)} placeholder='Название'></input>
-                <div>
+                {filterVisibilityName && <div>
+                    <input className='form-input' type='text' value={props.TasksFilters.TaskName}
+                        onChange={e => props.SetFilterTaskName(e.target.value)} placeholder='Название'></input>
+                    <div className='filter-cancel-button' onClick={() => {
+                        props.SetFilterTaskName('');
+                        setFilterVisibilityName(false);
+                    }}>
+                        <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
+                            alt="Удалить" title='Удалить' />
+                    </div>
+                </div>}
+                {filterVisibilityCreator && <div>
                     <span>Создатель</span>
+                    <div className='filter-cancel-button' onClick={() => {
+                        props.SetFilterTaskCreator(-1);
+                        setFilterVisibilityCreator(false);
+                    }}>
+                        <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
+                            alt="Удалить" title='Удалить' />
+                    </div>
                     <select className='form-select' value={props.TasksFilters.CreatorId} onChange={(e) => props.SetFilterTaskCreator(+e.target.value)}>
                         <option value={-1}>Не выбрано</option>
                         {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                     </select>
-                </div>
-                <div>
+                </div>}
+                {filterVisibilityReviwer && <div>
                     <span>Ревьювер</span>
+                    <div className='filter-cancel-button' onClick={() => {
+                        props.SetFilterTaskReviewer(-1);
+                        setFilterVisibilityReviwer(false);
+                    }}>
+                        <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
+                            alt="Удалить" title='Удалить' />
+                    </div>
                     <select className='form-select' value={props.TasksFilters.ReviewerId} onChange={(e) => props.SetFilterTaskReviewer(+e.target.value)}>
                         <option value={-1}>Не выбрано</option>
                         {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                     </select>
-                </div>
-                <div>
+                </div>}
+
+                {filterVisibilityStatus && <div>
                     <span>Статус</span>
+                    <div className='filter-cancel-button' onClick={() => {
+                        props.SetFilterTaskStatus(-1);
+                        setFilterVisibilityStatus(false);
+                    }}>
+                        <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
+                            alt="Удалить" title='Удалить' />
+                    </div>
                     <select className='form-select' onChange={e => props.SetFilterTaskStatus(+e.target.value)} value={props.TasksFilters.Status}>
                         <option value={-1}>Любой</option>
                         {props.Statuses.map(status => <option value={status.Id} key={status.Id}>{status.Name}</option>)}
                     </select>
+                </div>}
+
+                <div className='filters-window-full'>
+                    <PopupWindow
+                        ButtonContent='+'
+                        PopupContent={<div className='filters-window'>
+                            <button onClick={() => setFilterVisibilityName(true)}>Название</button>
+                            <button onClick={() => setFilterVisibilityCreator(true)}>Создатель</button>
+                            <button onClick={() => setFilterVisibilityReviwer(true)}>Ревьювер</button>
+                            <button onClick={() => setFilterVisibilityStatus(true)}>Статус</button>
+
+                        </div>}
+                    ></PopupWindow>
                 </div>
             </div>
             <div className="review-project-tasks-filters-buttons">

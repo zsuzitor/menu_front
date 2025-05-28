@@ -7,14 +7,17 @@ import { TaskReviewStatus } from "./TaskReviewStatus";
 
 export class CodeReviewAppState {
     CurrentProjectId: number;
+
     ProjectsList: OneProjectInList[];
+    ProjectsLoaded: boolean;
+
     CurrentProjectUsers: ProjectUser[];
     CurrentProjectStatuses: TaskReviewStatus[];
     CurrentProjectTasks: OneTask[];
     CurrentProjectTasksAllCount: number;
     CurrentProjectTasksFilters: TasksFilter;
 
-    
+
     CurrentTaskId: number;
     CurrentTask: OneTask;
 
@@ -29,5 +32,6 @@ export class CodeReviewAppState {
         this.CurrentProjectTasksFilters = new TasksFilter();
         this.CurrentProjectStatuses = [];
         this.CurrentTask = null;
+        this.ProjectsLoaded = false;
     }
 }

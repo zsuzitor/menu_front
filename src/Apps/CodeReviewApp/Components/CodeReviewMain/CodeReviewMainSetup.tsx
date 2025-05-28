@@ -17,6 +17,7 @@ interface ICodeReviewMainStateToProps {
     CurrentProjectId: number;
     CurrentTaskId: number;
     ProjectsList: OneProjectInListModel[];
+    ProjectsLoaded: boolean;
     CurrentProjectUsers: ProjectUser[];
     Tasks: OneTask[];
 }
@@ -43,6 +44,7 @@ const mapStateToProps = (state: AppState, ownProps: ICodeReviewMainOwnProps) => 
     res.CurrentProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
     res.ProjectsList = state.CodeReviewApp.ProjectsList;
     res.Tasks = state.CodeReviewApp.CurrentProjectTasks;
+    res.ProjectsLoaded = state.CodeReviewApp.ProjectsLoaded;
     // res.Test = state.TestMessage;
     // res.FilmData = state.Films.find(x => x.Id === ownProps.FilmId);
     return res;
@@ -62,7 +64,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: ICodeReviewMainOwnProps) =>
         dispatch(ClearCodeReviewStateActionCreator());
     }
 
-    
+
     res.SetCurrentProject = (projectId: number) => {
         dispatch(SetCurrentProjectIdActionCreator(projectId));
     };
@@ -71,10 +73,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: ICodeReviewMainOwnProps) =>
         dispatch(SetCurrentTaskIdActionCreator(taskId));
     };
 
-    res.GetTaskInfo =  (taskId: number) => {
+    res.GetTaskInfo = (taskId: number) => {
         dispatch(window.G_CodeReviewTaskController.LoadTaskRedux(taskId));
     };
-    
+
     return res;
 };
 

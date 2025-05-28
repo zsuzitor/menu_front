@@ -72,6 +72,7 @@ export function CodeReviewProjectReducer(state: AppState = new AppState(), actio
                 let newState = cloneDeep(state);
                 let projects = action.payload as OneProjectInList[];
                 newState.CodeReviewApp.ProjectsList = projects;
+                newState.CodeReviewApp.ProjectsLoaded = true;
                 return newState;
             }
 
@@ -84,6 +85,7 @@ export function CodeReviewProjectReducer(state: AppState = new AppState(), actio
                 newState.CodeReviewApp.CurrentProjectTasksAllCount = 0;
                 newState.CodeReviewApp.CurrentProjectTasks = [];
                 newState.CodeReviewApp.CurrentProjectStatuses = [];
+                newState.CodeReviewApp.ProjectsLoaded = false;
                 return newState;
             }
 

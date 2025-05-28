@@ -171,7 +171,7 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
                 }
 
                 if (data) {
-                    dispatch(SetCurrentProjectIdActionCreator(-1));
+                    // dispatch(SetCurrentProjectIdActionCreator(-1));
                     let dt = data.map(x => {
                         let pr = new OneProjectInList();
                         pr.FillByBackModel(x);

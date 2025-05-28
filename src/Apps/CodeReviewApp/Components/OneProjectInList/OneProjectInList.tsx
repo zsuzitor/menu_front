@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import connectToStore, { IOneProjectInListProps } from './OneProjectInListSetup';
 
+import { useNavigate } from 'react-router-dom';
 
 require('./OneProjectInList.css');
 
 
 
 const OneProjectInList = (props: IOneProjectInListProps) => {
+
+
+    const navigate = useNavigate();
+
+
     let projectClassName = 'review-project';
 
     if (props.CurrentProject) {
@@ -18,7 +24,8 @@ const OneProjectInList = (props: IOneProjectInListProps) => {
         className={projectClassName}
         onClick={() => {
             if (!props.CurrentProject) {
-                props.SetCurrentProject(props.Project.Id)
+                // props.SetCurrentProject(props.Project.Id)
+                navigate("/code-review/proj-" + props.Project.Id);
             }
         }}>
         {props.Project.Name}

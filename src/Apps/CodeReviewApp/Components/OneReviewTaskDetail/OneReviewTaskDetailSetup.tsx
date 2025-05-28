@@ -26,7 +26,7 @@ interface IOneReviewTaskDetailDispatchToProps {
     AddComment: (taskId: number, newCommentText: string) => void;
     // SetEmptyTaskComments: (taskId: number) => void;
     LoadTaskComments: (taskId: number) => void;
-    SetCurrentTask: (taskId: number) => void;
+    // SetCurrentTask: (taskId: number) => void;
     ClearCurrentTaskState: () => void;
 
 }
@@ -65,9 +65,9 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneReviewTaskDetailOwnProp
         dispatch(window.G_CodeReviewCommentController.LoadCommentsRedux(taskId))
     };
 
-    res.SetCurrentTask = (taskId: number) => {
-        dispatch(SetCurrentTaskIdActionCreator(taskId))
-    };
+    // res.SetCurrentTask = (taskId: number) => {
+    //     dispatch(SetCurrentTaskIdActionCreator(taskId))
+    // };
 
     res.ClearCurrentTaskState = () => {
         dispatch(ClearCurrentTaskStateActionCreator())

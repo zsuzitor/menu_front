@@ -44,41 +44,64 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
         }
     }, [props.CurrentTaskId]);
 
+    // useEffect(() => {
+    //     if (props.ProjectsList.length > 0//страница загружена уже, список проектов есть
+    //     ) {
+    //         if (props.CurrentProjectId && props.CurrentProjectId > 0) {
+    //             if (props.CurrentTaskId && props.CurrentTaskId > 0) {
+
+    //                 navigate("/code-review/proj-" + props.CurrentProjectId + '/task-' + props.CurrentTaskId);
+    //             }
+    //             else {
+    //                 navigate("/code-review/proj-" + props.CurrentProjectId);
+    //             }
+    //         }
+    //         else {
+    //             //никакой проект не выбран
+    //             const matchProj = window.location.href.match(/proj-(\d+)/);
+    //             if (matchProj) {
+    //                 const projIdInt = parseInt(matchProj[1], 10);
+    //                 props.SetCurrentProject(projIdInt);
+    //                 // console.log("SetCurrentProject" + projIdInt);
+    //             }
+
+    //             const matchTask = window.location.href.match(/task-(\d+)/);
+    //             if (matchTask) {
+    //                 const taskIdInt = parseInt(matchTask[1], 10);
+    //                 props.SetCurrentTask(taskIdInt);
+    //                 // console.log("SetCurrentProject" + projIdInt);
+    //             }
+    //         }
+
+    //     }
+
+    // }, [props.ProjectsList.length, props.CurrentProjectId, props.CurrentTaskId]);
+
     useEffect(() => {
-        if (props.ProjectsList.length > 0//страница загружена уже, список проектов есть
-        ) {
-            if (props.CurrentProjectId && props.CurrentProjectId > 0) {
-                if (props.CurrentTaskId && props.CurrentTaskId > 0) {
 
-                    navigate("/code-review/proj-" + props.CurrentProjectId + '/task-' + props.CurrentTaskId);
-                }
-                else {
-                    navigate("/code-review/proj-" + props.CurrentProjectId);
-                }
-            }
-            else {
-                //никакой проект не выбран
-                const matchProj = window.location.href.match(/proj-(\d+)/);
-                if (matchProj) {
-                    const projIdInt = parseInt(matchProj[1], 10);
-                    props.SetCurrentProject(projIdInt);
-                    // console.log("SetCurrentProject" + projIdInt);
-                }
+        const matchProj = window.location.href.match(/proj-(\d+)/);
+        if (matchProj) {
+            const projIdInt = parseInt(matchProj[1], 10);
+            props.SetCurrentProject(projIdInt);
+            // console.log("SetCurrentProject-" + projIdInt);
+        }
+        else {
 
-                const matchTask = window.location.href.match(/task-(\d+)/);
-                if (matchTask) {
-                    const taskIdInt = parseInt(matchTask[1], 10);
-                    props.SetCurrentTask(taskIdInt);
-                    // console.log("SetCurrentProject" + projIdInt);
-                }
-            }
-
+            props.SetCurrentProject(-1);
         }
 
-    }, [props.ProjectsList.length, props.CurrentProjectId, props.CurrentTaskId]);
+        const matchTask = window.location.href.match(/task-(\d+)/);
+        if (matchTask) {
+            const taskIdInt = parseInt(matchTask[1], 10);
+            props.SetCurrentTask(taskIdInt);
+            // console.log("SetCurrentProject" + projIdInt);
+        }
+        else {
 
-    useEffect(() => {
-        console.log('changed' + window.location.href);
+            props.SetCurrentTask(-1);
+        }
+
+
     }, [window.location.href]);
     //
 

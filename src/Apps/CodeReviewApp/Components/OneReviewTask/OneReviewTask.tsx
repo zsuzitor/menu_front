@@ -174,7 +174,8 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                     <a href={'/proj-' + props.CurrentProjectId + '/task-' + props.Task.Id} onClick={(e) => {
                         e.preventDefault();
                         // navigate("/code-review/proj-" + props.CurrentProjectId+'/task-'+props.Task.Id);
-                        props.SetCurrentTask(props.Task.Id);
+                        // props.SetCurrentTask(props.Task.Id);
+                        navigate("/code-review/proj-" + props.CurrentProjectId + '/task-' + props.Task.Id);
                     }}>{props.Task.Name}</a>
                 </div>
                 <div className='one-review-task-buttons'>
@@ -243,8 +244,8 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                     //     // navigate("/code-review/proj-" + props.CurrentProjectId+'/task-'+props.Task.Id);
                     //     props.SetCurrentTask(props.Task.Id);
                     // }}>{props.Task.Name}</a>
-                    props.SetCurrentTask(props.Task.Id)
-
+                    // props.SetCurrentTask(props.Task.Id)
+                    navigate("/code-review/proj-" + props.CurrentProjectId + '/task-' + props.Task.Id)
                 }>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'external-link.png'}
                         alt="Link" title='Открыть ссылку' />

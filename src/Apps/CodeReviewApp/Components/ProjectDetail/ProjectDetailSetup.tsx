@@ -82,7 +82,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: IProjectDetailOwnProps) => 
         dispatch(SetFilterTaskActionCreator(new TasksFilter()));
     }
 
-    res.ClearProjectState = ()=>{
+    res.ClearProjectState = () => {
         dispatch(SetFilterTaskActionCreator(new TasksFilter()));
 
     }

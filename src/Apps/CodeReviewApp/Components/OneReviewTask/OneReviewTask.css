@@ -69,7 +69,7 @@
     margin-top: 0.5rem;
 }
 
-.review-task-show-full-button .task-rotate {
+.task-button .task-rotate {
     rotate: 180deg;
 }
 

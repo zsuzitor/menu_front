@@ -126,14 +126,19 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
     const clearFilters = () => {
         props.ClearFilterTask();
+        setFilterVisibilityName(false);
+        setFilterVisibilityCreator(false);
+        setFilterVisibilityStatus(false);
+        setFilterVisibilityReviwer(false);
+
     }
 
 
 
 
     if (!props.Project) {
-        return <div className="review-project-no-project">
-            <img src={G_PathToBaseImages + 'exclamation.png'} alt="" />
+        return <div className='review-project-no-project'>
+            <img src={G_PathToBaseImages + 'exclamation.png'} alt='' />
             <h2>Выберите проект</h2>
         </div>
     }
@@ -148,7 +153,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 setShowEditProject(true);
             }}>
                 <img className='persent-100-width-height' src={G_PathToBaseImages + 'edit-1.svg'}
-                    alt="Edit" title='Редактировать проект' />
+                    alt='Edit' title='Редактировать проект' />
             </div>
             <div className='review-project-delete-button' onClick={() => {
                 if (confirm('Удалить проект?')) {
@@ -156,14 +161,14 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 }
             }}>
                 <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
-                    alt="Delete" title='Удалить проект' />
+                    alt='Delete' title='Удалить проект' />
             </div>
             {showEditProject ? <AdditionalWindow CloseWindow={() => setShowEditProject(false)}
                 IsHeightWindow={true}
                 Title='Редакторивание проекта'
                 InnerContent={() => <EditProject></EditProject>}></AdditionalWindow> : <></>}
             <br />
-            <div className="review-project-detail-main-header-buttons">
+            <div className='review-project-detail-main-header-buttons'>
                 <button className='button button-grey' onClick={() => setShowUserList(e => true)}>Люди проекта</button>
                 {showUserList ? <AdditionalWindow CloseWindow={() => setShowUserList(false)}
                     IsHeightWindow={true}
@@ -181,85 +186,101 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         </div>
         <div className='review-project-tasks-filters-block'>
             <h4 className='persent-100-width'>Фильтры</h4>
-            <div className='review-project-tasks-filters-block-flex'>
-                {filterVisibilityName && <div>
-                    <input className='form-input' type='text' value={props.TasksFilters.TaskName}
-                        onChange={e => props.SetFilterTaskName(e.target.value)} placeholder='Название'></input>
-                    <div className='filter-cancel-button' onClick={() => {
-                        props.SetFilterTaskName('');
-                        setFilterVisibilityName(false);
-                    }}>
-                        <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
-                            alt="Удалить" title='Удалить' />
-                    </div>
-                </div>}
-                {filterVisibilityCreator && <div>
-                    <span>Создатель</span>
-                    <div className='filter-cancel-button' onClick={() => {
-                        props.SetFilterTaskCreator(-1);
-                        setFilterVisibilityCreator(false);
-                    }}>
-                        <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
-                            alt="Удалить" title='Удалить' />
-                    </div>
-                    <select className='form-select' value={props.TasksFilters.CreatorId} onChange={(e) => props.SetFilterTaskCreator(+e.target.value)}>
-                        <option value={-1}>Не выбрано</option>
-                        {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-                    </select>
-                </div>}
-                {filterVisibilityReviwer && <div>
-                    <span>Ревьювер</span>
-                    <div className='filter-cancel-button' onClick={() => {
-                        props.SetFilterTaskReviewer(-1);
-                        setFilterVisibilityReviwer(false);
-                    }}>
-                        <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
-                            alt="Удалить" title='Удалить' />
-                    </div>
-                    <select className='form-select' value={props.TasksFilters.ReviewerId} onChange={(e) => props.SetFilterTaskReviewer(+e.target.value)}>
-                        <option value={-1}>Не выбрано</option>
-                        {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-                    </select>
-                </div>}
 
-                {filterVisibilityStatus && <div>
-                    <span>Статус</span>
-                    <div className='filter-cancel-button' onClick={() => {
-                        props.SetFilterTaskStatus(-1);
-                        setFilterVisibilityStatus(false);
-                    }}>
-                        <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
-                            alt="Удалить" title='Удалить' />
+            <div className='review-project-tasks-filters-buttons'>
+                <div className='review-project-tasks-filters-block-flex'>
+                    {filterVisibilityName && <div className='filter-container'>
+                        <div className='filter-tag'>
+                            <span className='filter-name'>Название:</span>
+                            <input type='text' className='filter-input'
+                                placeholder='Введите название'
+                                value={props.TasksFilters.TaskName}
+                                onChange={e => props.SetFilterTaskName(e.target.value)}></input>
+                            <button className='remove-filter' title='Удалить фильтр'
+                                onClick={() => {
+                                    props.SetFilterTaskName('');
+                                    setFilterVisibilityName(false);
+                                }}>×</button>
+                        </div>
+                    </div>}
+                    {filterVisibilityCreator && <div className='filter-container'>
+                        <div className='filter-tag'>
+                            <span className='filter-name'>Создатель:</span>
+                            <select className='filter-input' value={props.TasksFilters.CreatorId}
+                                onChange={(e) => props.SetFilterTaskCreator(+e.target.value)}>
+                                <option value={-1}>Не выбрано</option>
+                                {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                            </select>
+                            <button className='remove-filter' title='Удалить фильтр'
+                                onClick={() => {
+                                    props.SetFilterTaskCreator(-1);
+                                    setFilterVisibilityCreator(false);
+                                }}>×</button>
+                        </div>
+                    </div>}
+                    {filterVisibilityReviwer && <div className='filter-tag'>
+                        <span className='filter-name'>Ревьювер:</span>
+                        <select className='filter-input' value={props.TasksFilters.ReviewerId}
+                            onChange={(e) => props.SetFilterTaskReviewer(+e.target.value)}>
+                            <option value={-1}>Не выбрано</option>
+                            {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                        </select>
+                        <button className='remove-filter' title='Удалить фильтр'
+                            onClick={() => {
+                                props.SetFilterTaskReviewer(-1);
+                                setFilterVisibilityReviwer(false);
+                            }}>×</button>
+                    </div>}
+
+                    {filterVisibilityStatus && <div className='filter-tag'>
+                        <span className='filter-name'>Статус:</span>
+
+                        <select className='filter-input'
+                            onChange={e => props.SetFilterTaskStatus(+e.target.value)}
+                            value={props.TasksFilters.Status}>
+                            <option value={-1}>Любой</option>
+                            {props.Statuses.map(status => <option value={status.Id} key={status.Id}>{status.Name}</option>)}
+                        </select>
+
+                        <button className='remove-filter' title='Удалить фильтр'
+                            onClick={() => {
+                                props.SetFilterTaskStatus(-1);
+                                setFilterVisibilityStatus(false);
+                            }}>×</button>
+                    </div>}
+
+                    <div className='filters-window-full'>
+                        <PopupWindow
+                            ButtonContent={<button className='add-filter-btn'>
+                                <span className='plus-icon'>+</span>
+                                <span>Добавить фильтр</span>
+                            </button>
+                            }
+                            PopupContent={<div className='filters-window'>
+                                <div className='add-one-filter' onClick={() => setFilterVisibilityName(true)}>Название</div>
+                                <div className='add-one-filter' onClick={() => setFilterVisibilityCreator(true)}>Создатель</div>
+                                <div className='add-one-filter' onClick={() => setFilterVisibilityReviwer(true)}>Ревьювер</div>
+                                <div className='add-one-filter' onClick={() => setFilterVisibilityStatus(true)}>Статус</div>
+                            </div>}
+                        ></PopupWindow>
+
+                        <button className='del-filter-btn'
+                            onClick={() => clearFilters()}>
+                            <span className='cross-icon'>×</span>
+                            <span>Очистить фильтры</span>
+                        </button>
+                        <Paggination
+                            ElementsCount={props.CurrentProjectTasksAllCount}
+                            PageNumber={props.TasksFilters.Page}
+                            ElementsOnPage={tasksOnPageCount}
+                            SetPageNumber={props.SetFilterTaskPage}></Paggination>
                     </div>
-                    <select className='form-select' onChange={e => props.SetFilterTaskStatus(+e.target.value)} value={props.TasksFilters.Status}>
-                        <option value={-1}>Любой</option>
-                        {props.Statuses.map(status => <option value={status.Id} key={status.Id}>{status.Name}</option>)}
-                    </select>
-                </div>}
-
-                <div className='filters-window-full'>
-                    <PopupWindow
-                        ButtonContent='+'
-                        PopupContent={<div className='filters-window'>
-                            <button onClick={() => setFilterVisibilityName(true)}>Название</button>
-                            <button onClick={() => setFilterVisibilityCreator(true)}>Создатель</button>
-                            <button onClick={() => setFilterVisibilityReviwer(true)}>Ревьювер</button>
-                            <button onClick={() => setFilterVisibilityStatus(true)}>Статус</button>
-
-                        </div>}
-                    ></PopupWindow>
                 </div>
-            </div>
-            <div className="review-project-tasks-filters-buttons">
-                <Paggination
-                    ElementsCount={props.CurrentProjectTasksAllCount}
-                    PageNumber={props.TasksFilters.Page}
-                    ElementsOnPage={tasksOnPageCount}
-                    SetPageNumber={props.SetFilterTaskPage}></Paggination>
-                <button className='button button-grey' onClick={() => clearFilters()}>Очистить</button>
+
+                {/* <button className='button button-grey' onClick={() => clearFilters()}>Очистить</button> */}
             </div>
         </div>
-        <div className="review-project-tasks">
+        <div className='review-project-tasks'>
             <h3>Задачи</h3>
             {props.Tasks.length
                 ? props.Tasks.map(x =>
@@ -268,8 +289,8 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                         Comments={x.Comments}
                         CurrentProjectId={props.Project.Id}
                     ></OneReviewTask>)
-                : <div className="review-project-tasks-no-tasks">
-                    <img src={G_PathToBaseImages + 'exclamation.png'} alt="" />
+                : <div className='review-project-tasks-no-tasks'>
+                    <img src={G_PathToBaseImages + 'exclamation.png'} alt='' />
                     <h2>Задачи не найдены!</h2>
                 </div>
             }

@@ -115,36 +115,6 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
 
 
-    // const renderComments = () => {
-    //     if (!showComments) {
-    //         return <></>
-    //     }
-
-    //     return <div className='one-review-task-comments-block'>
-    //         <hr />
-    //         <div className='one-review-task-comments-block-inner'>
-    //             Комментарии:
-    //             {props.Comments.map(x => {
-    //                 return <OneReviewTaskComment
-    //                     Comment={x}
-    //                     TaskId={props.Task.Id}
-    //                     key={x.Id}
-    //                 ></OneReviewTaskComment>
-
-    //             })}
-
-    //             <div>
-    //                 <textarea className='form-input' value={newCommentName}
-    //                     onChange={e => setNewCommentName(e.target.value)}
-    //                 ></textarea>
-    //                 <button className='button button-grey' onClick={() => addComment()}>Добавить</button>
-    //             </div>
-    //         </div>
-
-    //     </div>
-    // }
-
-
 
     let taskHasChanges = taskName !== props.Task.Name ||
         // (taskLink !== props.Task.Link && (taskLink || props.Task.Link)) ||
@@ -195,17 +165,8 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                 <textarea className='form-input review-task-name-input'
                     value={taskName} onChange={e => setTaskName(e.target.value)}
                 ></textarea>
-                {/* <input type='text'
-                    className='form-input persent-100-width'
-                    onChange={(e) => setTaskLink(e.target.value)}
-                    value={taskLink} placeholder='Ссылка'></input> */}
-                {/* <input type='text' value={taskName} onChange={e => setTaskName(e.target.value)}></input> */}
                 <br />
                 <span>Создатель: {creatorsList.find(x => x.Id == taskCreator).Name}</span>
-                {/* <select className='form-select' value={taskCreator}
-                    onChange={(e) => setTaskCreator(+e.target.value)}>
-                    {creatorsList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-                </select> */}
                 <span>Ревьювер:</span>
                 <select className='form-select' value={taskReviewer}
                     onChange={(e) => setTaskreviewer(+e.target.value)}>
@@ -220,6 +181,11 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                 </select>
             </div>
             <div className='one-review-task-buttons'>
+
+                <div className='task-button' onClick={() => setShowFullTask(false)}>
+                    <img className='persent-100-width-height task-rotate' src={G_PathToBaseImages + 'arrow2.png'}
+                        alt="Скрыть" title='Скрыть' />
+                </div>
                 {taskHasChanges ?
                     <>
                         <div className='task-button' onClick={() => updateTask()}>
@@ -234,29 +200,14 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
                         alt="Delete" title='Удалить задачу' />
                 </div>
-                {/* <div className='review-task-comments-button' onClick={() => setShowComments(oldState => !oldState)}>
-                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'comments.png'}
-                        alt="Comments" title='Комментарии' />
-                </div> */}
                 <div className='task-button' onClick={() =>
-                    // <a href={'/proj-' + props.CurrentProjectId + '/task-' + props.Task.Id} onClick={(e) => {
-                    //     e.preventDefault();
-                    //     // navigate("/code-review/proj-" + props.CurrentProjectId+'/task-'+props.Task.Id);
-                    //     props.SetCurrentTask(props.Task.Id);
-                    // }}>{props.Task.Name}</a>
-                    // props.SetCurrentTask(props.Task.Id)
                     navigate("/code-review/proj-" + props.CurrentProjectId + '/task-' + props.Task.Id)
                 }>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'external-link.png'}
                         alt="Link" title='Открыть ссылку' />
                 </div>
-                <div className='task-button' onClick={() => setShowFullTask(false)}>
-                    <img className='persent-100-width-height task-rotate' src={G_PathToBaseImages + 'arrow2.png'}
-                        alt="Скрыть" title='Скрыть' />
-                </div>
             </div>
         </div>
-        {/* {renderComments()} */}
     </div >
 }
 

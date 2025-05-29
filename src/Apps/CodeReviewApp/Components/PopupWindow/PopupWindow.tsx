@@ -17,7 +17,7 @@ const PopupWindow = (props: IPopupWindowProps) => {
     const calculatePosition = () => {
         if (!buttonRef.current || !popupRef.current) return;
 
-        const buttonRect = buttonRef.current.getBoundingClientRect();
+        // const buttonRect = buttonRef.current.getBoundingClientRect();
         const popupRect = popupRef.current.getBoundingClientRect();
         // console.log(buttonRect);
         // console.log(popupRect);
@@ -67,13 +67,13 @@ const PopupWindow = (props: IPopupWindowProps) => {
 
     return (
         <div className="popup-wrapper">
-            <button
+            <div
                 ref={buttonRef}
                 onClick={() => setIsOpen(!isOpen)}
                 className="popup-button"
             >
                 {props.ButtonContent}
-            </button>
+            </div>
 
             {isOpen && (
                 <div

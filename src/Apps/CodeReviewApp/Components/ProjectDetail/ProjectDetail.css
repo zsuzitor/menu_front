@@ -1,6 +1,4 @@
-.review-project-detail-main {
-
-}
+.review-project-detail-main {}
 
 .review-project-detail-main-header {
     display: flex;
@@ -36,7 +34,7 @@
     flex-direction: column;
     gap: 0.5rem;
     padding: 1rem;
-    overflow: hidden;
+    /* overflow: hidden; */
     background-color: white;
     border-radius: 0.75rem;
     -webkit-box-shadow: 0 0 5px rgb(0 0 0 / 25%);
@@ -64,7 +62,9 @@
 
 .review-project-tasks-filters-buttons {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 .review-project-delete-button {
@@ -135,4 +135,129 @@
 .review-project-tasks-no-tasks h2 {
     font-size: 2rem;
     margin-bottom: 0.25rem;
+}
+
+.filters-window-full {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.filters-window {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.filters-window .add-one-filter {
+    color: #4a6b8b;
+    font-weight: 500;
+    border: 1px solid #e1e5eb;
+    cursor: pointer;
+
+    padding: 2px;
+}
+
+.filter-container {
+    display: flex;
+    align-items: center;
+    /* gap: 10px; */
+    /* margin-bottom: 20px; */
+    flex-wrap: wrap;
+}
+
+.filter-tag {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 18px;
+    padding: 3px 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e1e5eb;
+    font-size: 13px;
+}
+
+.filter-name {
+    margin-right: 8px;
+    color: #4a6b8b;
+    font-weight: 500;
+}
+
+.filter-input {
+    border: 1px solid #e1e5eb;
+    border-radius: 18px;
+    padding: 2px 9px;
+    font-size: 13px;
+    outline: none;
+    transition: border 0.3s;
+    background-color: white;
+}
+
+.filter-input:focus {
+    border-color: #a0c1e4;
+}
+
+.remove-filter {
+    background: none;
+    border: none;
+    color: #9ab0c7;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.remove-filter:hover {
+    color: #6d8cb0;
+}
+
+
+.add-filter-btn {
+    background-color: #e1f0ff;
+    color: #3a7bc8;
+    border: none;
+    border-radius: 18px;
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s;
+}
+
+.del-filter-btn {
+    background-color: #ed7a8d;
+    color: #ffffff;
+    border: none;
+    border-radius: 18px;
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s;
+}
+
+
+.del-filter-btn:hover {
+    background-color: #dc4861;
+}
+
+.cross-icon {
+    font-weight: bold;
+    font-size: 14px;
+
+}
+
+.add-filter-btn:hover {
+    background-color: #d0e4fa;
+}
+
+.plus-icon {
+    font-weight: bold;
+    font-size: 14px;
 }

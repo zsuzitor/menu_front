@@ -178,51 +178,62 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
             </div>
         </div>
-        <div className='review-project-tasks-filters-block'>
+        <div className='review-project-description'>
+            описание
+        </div>
+        {/* <div className='review-project-tasks-filters-block'>
             <h4 className='persent-100-width'>Фильтры</h4>
+
+        </div> */}
+        <div className='review-project-tasks'>
+            <div className='tasks-header'>
+                <div><h3>Задачи</h3></div>
+                <div><button className='add-task-btn'
+                    onClick={() => setShowAddNewTaskForm(true)}>
+                    <span className='plus-icon'>+</span>
+                    <span>Добавить задачу</span>
+                </button></div>
+                <div><PopupWindow
+                    ButtonContent={<button className='add-filter-btn'>
+                        <span className='plus-icon'>+</span>
+                        <span>Добавить фильтр</span>
+                    </button>
+                    }
+                    PopupContent={<div className='filters-window'>
+                        <div className='add-one-filter' onClick={() => setFilterVisibilityName(true)}>Название</div>
+                        <div className='add-one-filter' onClick={() => setFilterVisibilityCreator(true)}>Создатель</div>
+                        <div className='add-one-filter' onClick={() => setFilterVisibilityReviwer(true)}>Ревьювер</div>
+                        <div className='add-one-filter' onClick={() => setFilterVisibilityStatus(true)}>Статус</div>
+                    </div>}
+                ></PopupWindow></div>
+
+                {((filterVisibilityName
+                    || filterVisibilityCreator
+                    || filterVisibilityReviwer
+                    || filterVisibilityStatus)
+                    || (props.TasksFilters.CreatorId != -1
+                        || props.TasksFilters.ReviewerId != -1
+                        || props.TasksFilters.Status != -1
+                        || props.TasksFilters.TaskName != ''
+                        || props.TasksFilters.Page != 1))
+                    &&
+                    <div><button className='del-filter-btn'
+                        onClick={() => clearFilters()}>
+                        <span className='cross-icon'>×</span>
+                        <span>Очистить фильтры</span>
+                    </button></div>}
+            </div>
+            {showAddNewTaskForm ? <AdditionalWindow CloseWindow={() => setShowAddNewTaskForm(false)}
+                IsHeightWindow={false}
+                Title='Добавление задачи'
+                InnerContent={() => <AddTask
+                    ProjectId={props.Project.Id}
+                    ProjectUsers={props.ProjectUsers.filter(us => !us.Deactivated)}
+                ></AddTask>}></AdditionalWindow> : <></>}
+
 
             <div className='review-project-tasks-filters-buttons'>
                 <div className='review-project-tasks-filters-block-flex'>
-
-
-                    <div className='filters-window-full'>
-                        <PopupWindow
-                            ButtonContent={<button className='add-filter-btn'>
-                                <span className='plus-icon'>+</span>
-                                <span>Добавить фильтр</span>
-                            </button>
-                            }
-                            PopupContent={<div className='filters-window'>
-                                <div className='add-one-filter' onClick={() => setFilterVisibilityName(true)}>Название</div>
-                                <div className='add-one-filter' onClick={() => setFilterVisibilityCreator(true)}>Создатель</div>
-                                <div className='add-one-filter' onClick={() => setFilterVisibilityReviwer(true)}>Ревьювер</div>
-                                <div className='add-one-filter' onClick={() => setFilterVisibilityStatus(true)}>Статус</div>
-                            </div>}
-                        ></PopupWindow>
-
-                        {((filterVisibilityName
-                            || filterVisibilityCreator
-                            || filterVisibilityReviwer
-                            || filterVisibilityStatus)
-                            || (props.TasksFilters.CreatorId != -1
-                                || props.TasksFilters.ReviewerId != -1
-                                || props.TasksFilters.Status != -1
-                                || props.TasksFilters.TaskName != ''
-                                || props.TasksFilters.Page != 1))
-                            &&
-                            <button className='del-filter-btn'
-                                onClick={() => clearFilters()}>
-                                <span className='cross-icon'>×</span>
-                                <span>Очистить фильтры</span>
-                            </button>}
-
-                        {props.CurrentProjectTasksAllCount > tasksOnPageCount && <Paggination
-                            ElementsCount={props.CurrentProjectTasksAllCount}
-                            PageNumber={props.TasksFilters.Page}
-                            ElementsOnPage={tasksOnPageCount}
-                            SetPageNumber={props.SetFilterTaskPage}></Paggination>}
-
-                    </div>
 
                     {filterVisibilityName && <div className='filter-container'>
                         <div className='filter-tag'>
@@ -287,24 +298,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
                 {/* <button className='button button-grey' onClick={() => clearFilters()}>Очистить</button> */}
             </div>
-        </div>
-        <div className='review-project-tasks'>
-            <div className='tasks-header'>
-                <h3>Задачи</h3>
-                <button className='add-task-btn'
-                    onClick={() => setShowAddNewTaskForm(true)}>
-                    <span className='plus-icon'>+</span>
-                    <span>Добавить задачу</span>
-                </button>
-
-            </div>
-            {showAddNewTaskForm ? <AdditionalWindow CloseWindow={() => setShowAddNewTaskForm(false)}
-                IsHeightWindow={false}
-                Title='Добавление задачи'
-                InnerContent={() => <AddTask
-                    ProjectId={props.Project.Id}
-                    ProjectUsers={props.ProjectUsers.filter(us => !us.Deactivated)}
-                ></AddTask>}></AdditionalWindow> : <></>}
             {props.Tasks.length
                 ? props.Tasks.map(x =>
                     <OneReviewTask key={x.Id}
@@ -317,6 +310,16 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                     <h2>Задачи не найдены!</h2>
                 </div>
             }
+            <div>
+                <div className='project-paggination-block'>
+                    {props.CurrentProjectTasksAllCount > tasksOnPageCount && <Paggination
+                        ElementsCount={props.CurrentProjectTasksAllCount}
+                        PageNumber={props.TasksFilters.Page}
+                        ElementsOnPage={tasksOnPageCount}
+                        SetPageNumber={props.SetFilterTaskPage}></Paggination>}
+
+                </div>
+            </div>
         </div>
     </div>
 }

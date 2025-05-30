@@ -168,7 +168,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                 <br />
                 <span>Создатель: {creatorsList.find(x => x.Id == taskCreator).Name}</span>
                 <div>
-                    <span>Ревьювер:</span>
+                    <span>Исполнитель:</span>
                     <select className='form-select-v2' value={taskReviewer}
                         onChange={(e) => setTaskreviewer(+e.target.value)}>
                         <option value={-1}>Не выбрано</option>

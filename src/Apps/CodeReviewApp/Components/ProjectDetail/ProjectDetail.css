@@ -28,13 +28,12 @@
 /*    padding-bottom: 15px;*/
 /*}*/
 
-.review-project-tasks-filters-block {
+/* .review-project-tasks-filters-block {
     position: relative;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     padding: 1rem;
-    /* overflow: hidden; */
     background-color: white;
     border-radius: 0.75rem;
     -webkit-box-shadow: 0 0 5px rgb(0 0 0 / 25%);
@@ -44,12 +43,13 @@
 .review-project-tasks-filters-block h4 {
     margin-top: -0.5rem;
     margin-bottom: 0;
-}
+} */
 
 .review-project-tasks-filters-block-flex {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
+    gap: 3px 7px;
+    padding-bottom: 10px;
 }
 
 .review-project-tasks-filters-block-flex .form-input {
@@ -137,10 +137,24 @@
     margin-bottom: 0.25rem;
 }
 
-.filters-window-full {
+.review-project-description {
+    height: 200px;
+    background-color: white;
+    border-radius: 0.75rem;
+    -webkit-box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+    box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+}
+
+/* .filters-window-full {
     display: flex;
     gap: 30px;
     flex-wrap: wrap;
+} */
+
+.project-paggination-block {
+
+    justify-content: center;
+    display: flex;
 }
 
 .filters-window {
@@ -227,7 +241,6 @@
     align-items: center;
     gap: 6px;
     transition: background-color 0.2s;
-    margin-left: 10px;
 }
 
 
@@ -288,6 +301,13 @@
 
 .review-project-tasks .tasks-header {
     display: flex;
-    
+    gap: 10px;
     padding-bottom: 10px;
+
+    align-items: baseline;
+}
+
+.review-project-tasks .tasks-header div {
+    flex: 1 1 100px;
+    max-width: 160px;
 }

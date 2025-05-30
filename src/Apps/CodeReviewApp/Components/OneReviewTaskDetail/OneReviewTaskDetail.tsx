@@ -24,7 +24,10 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
 
     // console.log(props);
     const [taskName, setTaskName] = useState(props.Task?.Name || '');
+
     const [taskDescription, setTaskDescription] = useState(props.Task?.Description || '');
+    const [taskDescriptionEditable, setTaskDescriptionEditable] = useState(false);
+
     // const [taskLink, setTaskLink] = useState(props.Task?.Link || '');
 
     const [taskStatus, setTaskStatus] = useState(props.Task?.StatusId || -1);
@@ -195,7 +198,7 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
                 </div>
             </div>
             <div className='one-review-task-detail-name'>
-                <input type='text' className='form-input review-task-name-input'
+                <input type='text' className='form-input-v2'
                     value={taskName} onChange={e => setTaskName(e.target.value)}
                 ></input>
             </div>
@@ -203,10 +206,31 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
         <div className='one-review-task-detail-body'>
             <div className='one-review-task-detail-content'>
                 {/* <p>{props.Task.Id}</p> */}
+                {taskDescriptionEditable ? <div className='review-task-detail-description'
+                    onClick={() => setTaskDescriptionEditable(true)}
+                >
+                    {taskDescription}
+                </div>
+                    : <div className="editable-textarea-container">
+                        <textarea
+                            value={taskDescription} onChange={e => setTaskDescription(e.target.value)}
+                            className="editable-textarea"></textarea>
 
-                <textarea className='form-input review-task-detail-description-input'
-                    value={taskDescription} onChange={e => setTaskDescription(e.target.value)}
-                ></textarea>
+                        <div className="input-editable-controls">
+                            <button type="button"
+                                className="editable-button cancel-button"
+                                onClick={() => setTaskDescriptionEditable(false)}
+                            >Отмена</button>
+                            <button type="button"
+                                className="editable-button save-button"
+                                onClick={() => alert('todo')}
+                            >Сохранить</button>
+                        </div>
+                    </div>
+                }
+
+
+
                 {/* <input type='text'
                     className='form-input persent-100-width'
                     onChange={(e) => setTaskLink(e.target.value)}
@@ -218,14 +242,14 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
             <div className='one-review-task-detail-right-content'>
 
                 <span>Статус:</span>
-                <select className='form-select'
+                <select className='form-select-v2'
                     onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
                     <option value={-1}>Не выбрано</option>
                     {props.Statuses.map(status => <option value={status.Id} key={status.Id}>{status.Name}</option>)}
                 </select>
                 <div>
-                    <span>Ревьювер:</span>
-                    <select className='form-select' value={taskReviewer}
+                    <span>Исполнитель:</span>
+                    <select className='form-select-v2' value={taskReviewer}
                         onChange={(e) => setTaskreviewer(+e.target.value)}>
                         <option value={-1}>Не выбрано</option>
                         {reviewerList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
@@ -233,10 +257,7 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
                 </div>
                 <div>
                     <span>Создатель: {creatorsList.find(x => x.Id == taskCreator)?.Name || ''}</span>
-                    {/* <select className='form-select' value={taskCreator}
-                        onChange={(e) => setTaskCreator(+e.target.value)}>
-                        {creatorsList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-                    </select> */}
+                   
                 </div>
 
                 <div>

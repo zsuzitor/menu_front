@@ -162,23 +162,27 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         <div className='one-review-task-block-flex'>
             <div className='one-review-task-content'>
                 {/* <p>{props.Task.Id}</p> */}
-                <textarea className='form-input review-task-name-input'
+                <input type='text' className='form-input-v2'
                     value={taskName} onChange={e => setTaskName(e.target.value)}
-                ></textarea>
+                ></input>
                 <br />
                 <span>Создатель: {creatorsList.find(x => x.Id == taskCreator).Name}</span>
-                <span>Ревьювер:</span>
-                <select className='form-select' value={taskReviewer}
-                    onChange={(e) => setTaskreviewer(+e.target.value)}>
-                    <option value={-1}>Не выбрано</option>
-                    {reviewerList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-                </select>
-                <span>Статус:</span>
-                <select className='form-select'
-                    onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
-                    <option value={-1}>Не выбрано</option>
-                    {props.Statuses.map(status => <option value={status.Id} key={status.Id}>{status.Name}</option>)}
-                </select>
+                <div>
+                    <span>Ревьювер:</span>
+                    <select className='form-select-v2' value={taskReviewer}
+                        onChange={(e) => setTaskreviewer(+e.target.value)}>
+                        <option value={-1}>Не выбрано</option>
+                        {reviewerList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                    </select>
+                </div>
+                <div>
+                    <span>Статус:</span>
+                    <select className='form-select-v2'
+                        onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
+                        <option value={-1}>Не выбрано</option>
+                        {props.Statuses.map(status => <option value={status.Id} key={status.Id}>{status.Name}</option>)}
+                    </select>
+                </div>
             </div>
             <div className='one-review-task-buttons'>
 

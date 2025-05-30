@@ -1,6 +1,3 @@
-
-
-
 .task-review-status-create {
     display: flex;
     justify-content: flex-start;
@@ -12,4 +9,8 @@
 
 .task-review-status-create .status-input {
     width: 200px;
+}
+
+.edit-project .task-statuses {
+    background-color: white;
 }

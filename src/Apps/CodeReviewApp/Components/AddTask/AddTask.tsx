@@ -65,12 +65,12 @@ const AddTask = (props: IAddTaskProps) => {
 
 
     return <div>
-        <textarea className='form-control-b persent-100-width' onChange={(e) => setNewTaskName(e.target.value)}
-            value={newTaskName} placeholder='Название'></textarea>
-        <input type='text'
+        <input type='text' className='form-control-b persent-100-width' onChange={(e) => setNewTaskName(e.target.value)}
+            value={newTaskName} placeholder='Название'></input>
+        <textarea
             className='form-control-b persent-100-width'
             onChange={(e) => setNewTaskDescription(e.target.value)}
-            value={newTaskDescription} placeholder='Описание'></input>
+            value={newTaskDescription} placeholder='Описание'></textarea>
         <label>Автор:</label>
         <select className='form-control-b' value={newTaskCreator} onChange={(e) => setNewTaskCreator(+e.target.value)}>
             {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}

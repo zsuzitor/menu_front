@@ -16,22 +16,25 @@ const EditProject = (props: IEditProjectProps) => {
 
 
     const [newStatusName, setNewStatusName] = useState('');
-   
 
 
-    return <div className={'edit-project'}>
 
+    return <div className='edit-project'>
 
         <div className='task-statuses'>
-            {props.Statuses.map(status => <EditTaskStatus key={status.Id} Status={status}></EditTaskStatus>)}
+            <span>Статусы проекта</span>
+            {props.Statuses.map(status =>
+                <EditTaskStatus key={status.Id} Status={status}></EditTaskStatus>)}
             <div className='task-review-status-create'>
                 <div className='status-input'>
-                    <input className='form-input' value={newStatusName} placeholder='Название нового статуса'
+                    <input className='form-input' value={newStatusName}
+                        placeholder='Название нового статуса'
                         onChange={e => setNewStatusName(e.target.value)}></input>
                 </div>
                 <div className='status-create'>
                     <button className='btn-b btn-border create-new-task-btn'
-                        onClick={() => props.CreateStatus(newStatusName, props.ProjectId)}>Создать статус</button>
+                        onClick={() => props.CreateStatus(newStatusName, props.ProjectId)}
+                    >Создать статус</button>
                 </div>
 
             </div>

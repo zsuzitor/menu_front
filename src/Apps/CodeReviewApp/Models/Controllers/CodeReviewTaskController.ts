@@ -1,7 +1,7 @@
 import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
-import { AddLoadTriggerActionCreator, UpdateTaskActionCreator, LoadTasksActionCreator, DeleteTaskActionCreator, LoadTaskActionCreator } from "../Actions/TaskActions";
+import { AddLoadTriggerActionCreator, UpdateTaskActionCreator, LoadTasksActionCreator, DeleteTaskActionCreator, LoadTaskActionCreator, UpdateTaskNameActionCreator, UpdateTaskDescriptionActionCreator, UpdateTaskStatusActionCreator, UpdateTaskExecutorActionCreator } from "../Actions/TaskActions";
 import { ILoadReviewTasksResultDataBack } from "../BackModels/ILoadReviewTasksResultDataBack";
 import { IProjectTaskDataBack } from "../BackModels/IProjectTaskDataBack";
 import { ITaskFilter } from "../Entity/ITaskFilter";
@@ -14,6 +14,7 @@ export type UpdateTask = (error: MainErrorObjectBack, data: BoolResultBack) => v
 export type LoadTasks = (error: MainErrorObjectBack, data: ILoadReviewTasksResultDataBack) => void;
 export type LoadTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => void;
 export type DeleteTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type UpdatePartTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 
 export interface ICodeReviewTaskController {
@@ -22,11 +23,160 @@ export interface ICodeReviewTaskController {
     LoadTasksRedux: (taskFilter: ITaskFilter) => void;
     LoadTaskRedux: (taskId: number) => void;
     DeleteTaskRedux: (id: number) => void;
+
+
+    UpdateTaskNameRedux: (id: number, text: string) => void;
+    UpdateTaskDescriptionRedux: (id: number, text: string) => void;
+    UpdateTaskStatusRedux: (id: number, idStatus: number) => void;
+    UpdateTaskExecutorRedux: (id: number, personId: number) => void;
 }
 
 
 
 export class CodeReviewTaskController implements ICodeReviewTaskController {
+
+
+    UpdateTaskNameRedux = (id: number, text: string) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.UpdateTaskName(id, text, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                this.preloader(false);
+                if (error) {
+                    return;
+                }
+
+                if (data?.result) {
+                    dispatch(UpdateTaskNameActionCreator({ Id: id, Text: text }));
+
+                }
+            });
+        };
+    }
+
+    UpdateTaskName = (id: number, text: string, onSuccess: UpdatePartTask) => {
+        let data = {
+            "name": text,
+            "id": id,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.PatchHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/task/update-name'
+
+        });
+    }
+
+
+    UpdateTaskDescriptionRedux = (id: number, text: string) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.UpdateTaskDescription(id, text, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                this.preloader(false);
+                if (error) {
+                    return;
+                }
+
+                if (data?.result) {
+                    dispatch(UpdateTaskDescriptionActionCreator({ Id: id, Text: text }));
+
+                }
+            });
+        };
+    }
+
+    UpdateTaskDescription = (id: number, text: string, onSuccess: UpdatePartTask) => {
+        let data = {
+            "description": text,
+            "id": id,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.PatchHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/task/update-description'
+
+        });
+    }
+
+    UpdateTaskStatusRedux = (id: number, idStatus: number) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.UpdateTaskStatus(id, idStatus, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                this.preloader(false);
+                if (error) {
+                    return;
+                }
+
+                if (data?.result) {
+                    dispatch(UpdateTaskStatusActionCreator({ Id: id, IdStatus: idStatus }));
+
+                }
+            });
+        };
+    }
+
+    UpdateTaskStatus = (id: number, idStatus: number, onSuccess: UpdatePartTask) => {
+        let data = {
+            "statusId": idStatus,
+            "id": id,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.PatchHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/task/update-status'
+
+        });
+    }
+
+    UpdateTaskExecutorRedux = (id: number, personId: number) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.UpdateTaskExecutor(id, personId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                this.preloader(false);
+                if (error) {
+                    return;
+                }
+
+                if (data?.result) {
+                    dispatch(UpdateTaskExecutorActionCreator({ Id: id, PersonId: personId }));
+
+                }
+            });
+        };
+    }
+
+    UpdateTaskExecutor = (id: number, personId: number, onSuccess: UpdatePartTask) => {
+        let data = {
+            "personId": personId,
+            "id": id,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.PatchHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/codereview/task/update-executor'
+
+        });
+    }
+
 
     AddTaskToProjectRedux = (task: OneTask, projectId: number) => {
         return (dispatch: any, getState: any) => {
@@ -56,7 +206,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "PUT",
+            Type: ControllerHelper.PutHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 

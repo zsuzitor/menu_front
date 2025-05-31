@@ -4,10 +4,11 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { AppAction } from '../../../../Models/Actions/Actions';
 import { AppState } from '../../../../Models/Entity/State/AppState';
-import { AddTaskToProjectActionName, AddLoadTriggerActionName, UpdateTaskActionName, LoadTasksActionName, DeleteTaskActionName, SetFilterTaskCreatorActionName, SetFilterTaskReviewerName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskStatusActionName, SetFilterTaskActionName, SetCurrentTaskIdActionName, LoadTaskActionName, ClearCurrentTaskStateActionName } from '../Actions/TaskActions';
+import { AddTaskToProjectActionName, AddLoadTriggerActionName, UpdateTaskActionName, LoadTasksActionName, DeleteTaskActionName, SetFilterTaskCreatorActionName, SetFilterTaskReviewerName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskStatusActionName, SetFilterTaskActionName, SetCurrentTaskIdActionName, LoadTaskActionName, ClearCurrentTaskStateActionName, UpdateTaskNameActionName, UpdateTaskNameActionParam, UpdateTaskDescriptionActionName, UpdateTaskDescriptionActionParam, UpdateTaskStatusActionName, UpdateTaskStatusActionParam, UpdateTaskExecutorActionName, UpdateTaskExecutorActionParam } from '../Actions/TaskActions';
 import { ProjectTaskData, LoadReviewTasksResult } from '../Entity/LoadReviewTasksResult';
 import { OneTask } from '../Entity/State/OneTask';
 import { TasksFilter } from '../Entity/State/TasksFilter';
+import { Helper } from '../../../../Models/BL/Helper';
 
 
 export function CodeReviewTaskReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
@@ -31,14 +32,19 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as OneTask;
-                var tsk = newState.CodeReviewApp.CurrentProjectTasks.find(x => x.Id == payload.Id);
-                tsk.Name = payload.Name;
-                tsk.StatusId = payload.StatusId;
-                tsk.ReviewerId = payload.ReviewerId;
-                tsk.CreatorId = payload.CreatorId;
-                tsk.CreateDate = payload.CreateDate;
-                tsk.LastUpdateDate = payload.LastUpdateDate;
-                tsk.Description = payload.Description;
+                let helper = new Helper();
+                var tasks = helper.GetTaskFromState(newState, payload.Id);
+                tasks.forEach(tsk => {
+                    tsk.Name = payload.Name;
+                    tsk.StatusId = payload.StatusId;
+                    tsk.ReviewerId = payload.ReviewerId;
+                    tsk.CreatorId = payload.CreatorId;
+                    tsk.CreateDate = payload.CreateDate;
+                    tsk.LastUpdateDate = payload.LastUpdateDate;
+                    tsk.Description = payload.Description;
+                })
+
+
                 return newState;
             }
         case LoadTasksActionName:
@@ -133,6 +139,59 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
 
             return newState;
         }
+
+
+        case UpdateTaskNameActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as UpdateTaskNameActionParam;
+                let helper = new Helper();
+                var tasks = helper.GetTaskFromState(newState, payload.Id);
+                tasks.forEach(tsk => {
+                    tsk.Name = payload.Text;
+                })
+
+                return newState;
+            }
+
+        case UpdateTaskDescriptionActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as UpdateTaskDescriptionActionParam;
+                let helper = new Helper();
+                var tasks = helper.GetTaskFromState(newState, payload.Id);
+                tasks.forEach(tsk => {
+                    tsk.Description = payload.Text;
+                })
+
+                return newState;
+            }
+
+        case UpdateTaskStatusActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as UpdateTaskStatusActionParam;
+                let helper = new Helper();
+                var tasks = helper.GetTaskFromState(newState, payload.Id);
+                tasks.forEach(tsk => {
+                    tsk.StatusId = payload.IdStatus;
+                })
+
+                return newState;
+            }
+
+        case UpdateTaskExecutorActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as UpdateTaskExecutorActionParam;
+                let helper = new Helper();
+                var tasks = helper.GetTaskFromState(newState, payload.Id);
+                tasks.forEach(tsk => {
+                    tsk.ReviewerId = payload.PersonId;
+                })
+
+                return newState;
+            }
 
         default:
             return state;

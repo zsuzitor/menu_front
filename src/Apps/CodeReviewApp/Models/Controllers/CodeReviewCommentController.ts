@@ -22,11 +22,14 @@ export interface ICodeReviewCommentController {
     AddCommentRedux: (taskId: number, text: string) => void;
     DeleteCommentRedux: (data: CommentDelete) => void;
     UpdateCommentRedux: (comment: CommentUpdate) => void;
+
+
 }
 
 
 
 export class CodeReviewCommentController implements ICodeReviewCommentController {
+
 
 
     UpdateCommentRedux = (comment: CommentUpdate) => {

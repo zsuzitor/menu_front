@@ -1,3 +1,5 @@
+import { OneTask } from "../../Apps/CodeReviewApp/Models/Entity/State/OneTask";
+import { AppState } from "../Entity/State/AppState";
 
 
 export class Helper {
@@ -61,5 +63,20 @@ export class Helper {
 
         document.body.removeChild(textArea);
         return retult;
+    }
+
+
+    GetTaskFromState (state: AppState, taskId: number): OneTask[]  {
+        let res: OneTask[];
+        let taskfromProject = state.CodeReviewApp.CurrentProjectTasks.find(x => x.Id === taskId);
+        if (taskfromProject) {
+            res.push(taskfromProject);
+        }
+    
+        if (state.CodeReviewApp.CurrentTask.Id == taskId) {
+            res.push(state.CodeReviewApp.CurrentTask);
+        }
+    
+        return [];
     }
 }

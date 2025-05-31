@@ -26,7 +26,7 @@ const SaveCancelInputSelect = (props: ISaveCancelInputSelectProps) => {
 
 
     return <div className="editable-input-container">
-        <select className='editable-input'
+        <select className='editable-input' value={selected}
 
             onChange={e => setSelected(+e.target.value)} >
             <option value={-1}>Не выбрано</option>

@@ -10,50 +10,47 @@ import { CommentDelete } from "../Entity/CommentDelete";
 import { CommentSet } from "../Entity/CommentSet";
 import { CommentUpdate } from "../Entity/CommentUpdate";
 import { OneTaskReviewComment } from "../Entity/OneTaskReviewComment";
+import { OneTask } from "../Entity/State/OneTask";
+import { Helper } from "../../../../Models/BL/Helper";
 
 
-const GetTaskForCommentFromState = (state: AppState, taskId: number) => {
-    // console.log(state);
-    // console.log(taskId);
-    let taskfromProject = state.CodeReviewApp.CurrentProjectTasks.find(x => x.Id === taskId);
-    if (taskfromProject) {
-        return taskfromProject;
-    }
 
-    if (state.CodeReviewApp.CurrentTask.Id == taskId) {
-        return state.CodeReviewApp.CurrentTask;
-    }
-
-    return null;
-}
 
 export function CodeReviewCommentReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
     switch (action.type) {
         case UpdateCommentActionName:
             {
+
+                let helper = new Helper();
                 let newState = cloneDeep(state);
                 let payload = action.payload as CommentUpdate;
-                let task = GetTaskForCommentFromState(newState, payload.TaskId);
+                let task = helper.GetTaskFromState(newState, payload.TaskId);
 
-                if (!task) {
+                if (task.length == 0) {
                     return newState;
                 }
 
-                var comm = task.Comments.find(x => x.Id === payload.Id);
-                if (!comm) {
-                    return newState;
-                }
+                task.forEach(tsk => {
+                    var comm = tsk.Comments.find(x => x.Id === payload.Id);
+                    if (!comm) {
+                        return newState;
+                    }
 
-                comm.Text = payload.Text;
+                    comm.Text = payload.Text;
+                });
+
                 return newState;
             }
         case DeleteCommentActionName:
             {
+                let helper = new Helper();
                 let newState = cloneDeep(state);
                 let payload = action.payload as CommentDelete;
-                let task = GetTaskForCommentFromState(newState, payload.TaskId);
-                if (task) {
-                    task.Comments = task.Comments.filter(x => x.Id !== payload.Id);
+                let task = helper.GetTaskFromState(newState, payload.TaskId);
+                if (task.length > 0) {
+                    task.forEach(tsk => {
+                        tsk.Comments = tsk.Comments.filter(x => x.Id !== payload.Id);
+                    });
                     return newState;
                 }
 
@@ -62,9 +59,9 @@ export function CodeReviewCommentReducer(state: AppState = new AppState(), actio
             }
         case AddCommentActionName:
             {
+                let helper = new Helper();
                 let newState = cloneDeep(state);
                 let payload = action.payload as CommentAdd;
-
 
                 let comment = new OneTaskReviewComment();
                 comment.Id = payload.Id;
@@ -72,9 +69,11 @@ export function CodeReviewCommentReducer(state: AppState = new AppState(), actio
                 comment.CreateDate = payload.CreateDate;
                 comment.CreatorId = payload.CreatorId;
 
-                let task = GetTaskForCommentFromState(newState, payload.TaskId);
-                if (task) {
-                    task.Comments.push(comment);
+                let task = helper.GetTaskFromState(newState, payload.TaskId);
+                if (task.length > 0) {
+                    task.forEach(tsk => {
+                        tsk.Comments.push(comment);
+                    });
                     return newState;
                 }
 
@@ -82,11 +81,14 @@ export function CodeReviewCommentReducer(state: AppState = new AppState(), actio
             }
         case SetCommentsActionName:
             {
+                let helper = new Helper();
                 let newState = cloneDeep(state);
                 let payload = action.payload as CommentSet;
-                let task = GetTaskForCommentFromState(newState, payload.TaskId);
-                if (task) {
-                    task.Comments = payload.Comments
+                let task = helper.GetTaskFromState(newState, payload.TaskId);
+                if (task.length > 0) {
+                    task.forEach(tsk => {
+                        tsk.Comments = payload.Comments
+                    });
                     return newState;
                 }
 

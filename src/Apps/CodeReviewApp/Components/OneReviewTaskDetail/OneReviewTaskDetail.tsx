@@ -82,17 +82,17 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
 
 
 
-    const cancelTask = () => {
-        if (!confirm('Отменить изменения?')) {
-            return;
-        }
-        // setTaskName(props.Task.Name || '');
-        // setTaskDescription(props.Task.Description || '');
-        // setTaskLink(props.Task.Link || '');
-        setTaskStatus(props.Task.StatusId || -1);
-        setTaskreviewer(props.Task.ReviewerId || -1);
-        setTaskCreator(props.Task.CreatorId);
-    };
+    // const cancelTask = () => {
+    //     if (!confirm('Отменить изменения?')) {
+    //         return;
+    //     }
+    //     // setTaskName(props.Task.Name || '');
+    //     // setTaskDescription(props.Task.Description || '');
+    //     // setTaskLink(props.Task.Link || '');
+    //     setTaskStatus(props.Task.StatusId || -1);
+    //     setTaskreviewer(props.Task.ReviewerId || -1);
+    //     setTaskCreator(props.Task.CreatorId);
+    // };
 
     const updateTask = () => {
         // if (!taskName) {
@@ -134,7 +134,7 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
     const renderComments = () => {
 
         return <div className='one-review-task-detail-comments-block'>
-            <hr />
+            {/* <hr /> */}
             <div className='one-review-task-detail-comments-block-inner'>
                 Комментарии:
                 {props.Task.Comments.map(x => {
@@ -146,7 +146,9 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
 
                 })}
 
-                {!taskNewCommentEditable ? <div onClick={() => setTaskNewCommentEditable(true)}>
+                {!taskNewCommentEditable ? <div
+                    className='task-comments-add'
+                    onClick={() => setTaskNewCommentEditable(true)}>
                     Добавить комментарий
                 </div>
                     :
@@ -171,13 +173,13 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
     }
 
 
-    let taskHasChanges =
-        // taskName !== props.Task.Name ||
-        // (taskLink !== props.Task.Link && (taskLink || props.Task.Link)) ||
-        taskStatus !== props.Task.StatusId ||
-        // (taskDescription !== props.Task.Description && (taskDescription || props.Task.Description)) ||
-        (taskReviewer !== props.Task.ReviewerId && (props.Task.ReviewerId || taskReviewer != -1)) ||
-        taskCreator !== props.Task.CreatorId;
+    // let taskHasChanges =
+    //     // taskName !== props.Task.Name ||
+    //     // (taskLink !== props.Task.Link && (taskLink || props.Task.Link)) ||
+    //     taskStatus !== props.Task.StatusId ||
+    //     // (taskDescription !== props.Task.Description && (taskDescription || props.Task.Description)) ||
+    //     (taskReviewer !== props.Task.ReviewerId && (props.Task.ReviewerId || taskReviewer != -1)) ||
+    //     taskCreator !== props.Task.CreatorId;
 
 
     let creator = props.ProjectUsers.find(x => x.Id === taskCreator);
@@ -196,24 +198,9 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
 
     return <div className='one-review-task-detail-block'>
         <div className='one-review-task-detail-header'>
-            <div className='one-review-task-detail-buttons'>
-                {taskHasChanges ?
-                    <>
-                        <div className='task-button' onClick={() => updateTask()}>
-                            <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'}
-                                alt="Save" title='Сохранить' />
-                        </div>
-                        <div className='task-button' onClick={() => cancelTask()}>
-                            <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
-                                alt="Cancel" title='Отменить изменения' />
-                        </div></> : <></>}
-                <div className='task-button' onClick={() => deleteTask()}>
-                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
-                        alt="Delete" title='Удалить задачу' />
-                </div>
-            </div>
+
             <div className='one-review-task-detail-name'>
-                {!taskNameEditable ? <span
+                {!taskNameEditable ? <span className='editable-by-click'
                     onClick={() => setTaskNameEditable(true)}
                 >{props.Task.Name || ''}</span>
                     :
@@ -234,6 +221,22 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
                     />
                 }
 
+            </div>
+            <div className='one-review-task-detail-buttons'>
+                {/* {taskHasChanges ?
+                    <>
+                        <div className='task-button' onClick={() => updateTask()}>
+                            <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'}
+                                alt="Save" title='Сохранить' />
+                        </div>
+                        <div className='task-button' onClick={() => cancelTask()}>
+                            <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
+                                alt="Cancel" title='Отменить изменения' />
+                        </div></> : <></>} */}
+                <div className='task-button' onClick={() => deleteTask()}>
+                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
+                        alt="Delete" title='Удалить задачу' />
+                </div>
             </div>
         </div>
         <div className='one-review-task-detail-body'>

@@ -21,8 +21,12 @@ interface IOneReviewTaskDetailStateToProps {
 }
 
 interface IOneReviewTaskDetailDispatchToProps {
-    UpdateTask: (task: OneTask) => void;
+    // UpdateTask: (task: OneTask) => void;
     DeleteTask: (id: number) => void;
+    UpdateTaskName: (id: number, text: string) => void;
+    UpdateTaskDescription: (id: number, text: string) => void;
+    UpdateTaskStatus: (id: number, idStatus: number) => void;
+    UpdateTaskExecutor: (id: number, personId: number) => void;
     AddComment: (taskId: number, newCommentText: string) => void;
     // SetEmptyTaskComments: (taskId: number) => void;
     LoadTaskComments: (taskId: number) => void;
@@ -48,9 +52,9 @@ const mapStateToProps = (state: AppState, ownProps: IOneReviewTaskDetailOwnProps
 
 const mapDispatchToProps = (dispatch: any, ownProps: IOneReviewTaskDetailOwnProps) => {
     let res = {} as IOneReviewTaskDetailDispatchToProps;
-    res.UpdateTask = (forAdd: OneTask) => {
-        dispatch(window.G_CodeReviewTaskController.UpdateTaskRedux(forAdd));
-    };
+    // res.UpdateTask = (forAdd: OneTask) => {
+    //     dispatch(window.G_CodeReviewTaskController.UpdateTaskRedux(forAdd));
+    // };
 
     res.DeleteTask = (taskId: number) => {
         dispatch(window.G_CodeReviewTaskController.DeleteTaskRedux(taskId));
@@ -71,6 +75,23 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneReviewTaskDetailOwnProp
 
     res.ClearCurrentTaskState = () => {
         dispatch(ClearCurrentTaskStateActionCreator())
+    };
+
+
+    res.UpdateTaskName = (id: number, text: string) => {
+        dispatch(window.G_CodeReviewTaskController.UpdateTaskNameRedux(id, text))
+    };
+
+    res.UpdateTaskDescription = (id: number, text: string) => {
+        dispatch(window.G_CodeReviewTaskController.UpdateTaskDescriptionRedux(id, text))
+    };
+
+    res.UpdateTaskStatus = (id: number, idStatus: number) => {
+        dispatch(window.G_CodeReviewTaskController.UpdateTaskStatusRedux(id, idStatus))
+    };
+
+    res.UpdateTaskExecutor = (id: number, personId: number) => {
+        dispatch(window.G_CodeReviewTaskController.UpdateTaskExecutorRedux(id, personId))
     };
 
     return res;

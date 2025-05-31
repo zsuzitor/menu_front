@@ -75,3 +75,28 @@ export const ClearCurrentTaskStateActionName: string = 'ClearCurrentTaskStateAct
 export function ClearCurrentTaskStateActionCreator(): AppAction<void> {
     return { type: ClearCurrentTaskStateActionName, payload: null };
 };
+
+
+export class UpdateTaskNameActionParam { Id: number; Text: string }
+export const UpdateTaskNameActionName: string = 'UpdateTaskNameAction';
+export function UpdateTaskNameActionCreator(param: UpdateTaskNameActionParam): AppAction<UpdateTaskNameActionParam> {
+    return { type: UpdateTaskNameActionName, payload: param };
+};
+
+export class UpdateTaskDescriptionActionParam { Id: number; Text: string }
+export const UpdateTaskDescriptionActionName: string = 'UpdateTaskDescriptionAction';
+export function UpdateTaskDescriptionActionCreator(param: UpdateTaskDescriptionActionParam): AppAction<UpdateTaskDescriptionActionParam> {
+    return { type: UpdateTaskDescriptionActionName, payload: param };
+};
+
+export class UpdateTaskStatusActionParam { Id: number; IdStatus: number }
+export const UpdateTaskStatusActionName: string = 'UpdateTaskStatusAction';
+export function UpdateTaskStatusActionCreator(param: UpdateTaskStatusActionParam): AppAction<UpdateTaskStatusActionParam> {
+    return { type: UpdateTaskStatusActionName, payload: param };
+};
+
+export class UpdateTaskExecutorActionParam { Id: number; PersonId: number }
+export const UpdateTaskExecutorActionName: string = 'UpdateTaskExecutorAction';
+export function UpdateTaskExecutorActionCreator(param: UpdateTaskExecutorActionParam): AppAction<UpdateTaskExecutorActionParam> {
+    return { type: UpdateTaskExecutorActionName, payload: param };
+};

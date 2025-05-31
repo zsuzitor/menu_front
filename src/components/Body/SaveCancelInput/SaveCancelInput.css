@@ -1,0 +1,94 @@
+.editable-input-container .editable-input {
+    border: none;
+    padding: 6px 10px;
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+    /* min-width: 200px; */
+    outline: none;
+    flex-grow: 1;
+}
+
+.editable-input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #DFE1E6;
+    border-radius: 3px;
+    padding-right: 5px;
+}
+
+.editable-input-container .action-buttons {
+    display: flex;
+    gap: 2px;
+}
+
+/* Общие стили для кнопок */
+.editable-input-container .action-buttons .save-button,
+.editable-input-container .action-buttons .cancel-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 3px;
+    color: #5E6C84;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.editable-input-container .action-buttons .save-button:hover {
+    background-color: #EBECF0;
+    color: #1B8559;
+}
+
+.editable-input-container .action-buttons .cancel-button:hover {
+    background-color: #EBECF0;
+    color: #DE350B;
+}
+
+/* Иконка галочки */
+.editable-input-container .action-buttons .save-button .save-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    position: relative;
+}
+
+.editable-input-container .action-buttons .save-button .save-icon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 5px;
+    border-left: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translate(-50%, -60%) rotate(-45deg);
+}
+
+/* Иконка крестика */
+.editable-input-container .action-buttons .cancel-button .cancel-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    position: relative;
+}
+
+.editable-input-container .action-buttons .cancel-button .cancel-icon::before,
+.editable-input-container .action-buttons .cancel-button .cancel-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 2px;
+    background-color: currentColor;
+}
+
+.editable-input-container .action-buttons .cancel-button .cancel-icon::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.editable-input-container .action-buttons .cancel-button .cancel-icon::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}

@@ -8,6 +8,9 @@ import { OneTask } from '../../Models/Entity/State/OneTask';
 
 import { useNavigate } from 'react-router-dom';
 import connectToStore, { IOneReviewTaskDetailProps } from './OneReviewTaskDetailSetup';
+import SaveCancelTextarea from '../../../../components/Body/SaveCancelTextarea/SaveCancelTextarea';
+import SaveCancelInputText from '../../../../components/Body/SaveCancelInput/SaveCancelInputText';
+import SaveCancelInputSelect from '../../../../components/Body/SaveCancelInput/SaveCancelInputSelect';
 
 
 require('./OneReviewTaskDetail.css');
@@ -23,17 +26,20 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
     //         return <div>стоп для теста</div>
 
     // console.log(props);
-    const [taskName, setTaskName] = useState(props.Task?.Name || '');
+    // const [taskName, setTaskName] = useState(props.Task?.Name || '');
 
-    const [taskDescription, setTaskDescription] = useState(props.Task?.Description || '');
     const [taskDescriptionEditable, setTaskDescriptionEditable] = useState(false);
+    const [taskNewCommentEditable, setTaskNewCommentEditable] = useState(false);
+    const [taskNameEditable, setTaskNameEditable] = useState(false);
+    const [taskStatusEditable, setTaskStatusEditable] = useState(false);
+    const [taskExecutorEditable, setTaskExecutorEditable] = useState(false);
 
     // const [taskLink, setTaskLink] = useState(props.Task?.Link || '');
 
     const [taskStatus, setTaskStatus] = useState(props.Task?.StatusId || -1);
     const [taskReviewer, setTaskreviewer] = useState(props.Task?.ReviewerId || -1);
     const [taskCreator, setTaskCreator] = useState(props.Task?.CreatorId || -1);
-    const [newCommentName, setNewCommentName] = useState('');
+    // const [newCommentName, setNewCommentName] = useState('');
 
 
 
@@ -47,13 +53,13 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
         };
     }, []);
 
-    useEffect(() => {
-        setTaskName(props.Task?.Name || '');
-    }, [props.Task?.Name]);
+    // useEffect(() => {
+    //     setTaskName(props.Task?.Name || '');
+    // }, [props.Task?.Name]);
 
-    useEffect(() => {
-        setTaskDescription(props.Task?.Description || '');
-    }, [props.Task?.Description]);
+    // useEffect(() => {
+    //     setTaskDescription(props.Task?.Description || '');
+    // }, [props.Task?.Description]);
 
 
     // useEffect(() => {
@@ -80,8 +86,8 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
         if (!confirm('Отменить изменения?')) {
             return;
         }
-        setTaskName(props.Task.Name || '');
-        setTaskDescription(props.Task.Description || '');
+        // setTaskName(props.Task.Name || '');
+        // setTaskDescription(props.Task.Description || '');
         // setTaskLink(props.Task.Link || '');
         setTaskStatus(props.Task.StatusId || -1);
         setTaskreviewer(props.Task.ReviewerId || -1);
@@ -89,21 +95,21 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
     };
 
     const updateTask = () => {
-        if (!taskName) {
-            let alertFactory = new AlertData();
-            let alert = alertFactory.GetDefaultError("Необходимо заполнить название задачи");
-            window.G_AddAbsoluteAlertToState(alert);
-            return;
-        }
+        // if (!taskName) {
+        //     let alertFactory = new AlertData();
+        //     let alert = alertFactory.GetDefaultError("Необходимо заполнить название задачи");
+        //     window.G_AddAbsoluteAlertToState(alert);
+        //     return;
+        // }
 
-        let forAdd = { ...props.Task } as OneTask;
-        forAdd.Name = taskName;
-        // forAdd.Link = taskLink;
-        forAdd.StatusId = taskStatus;
-        forAdd.ReviewerId = taskReviewer;
-        forAdd.CreatorId = taskCreator;
+        // let forAdd = { ...props.Task } as OneTask;
+        // forAdd.Name = taskName;
+        // // forAdd.Link = taskLink;
+        // forAdd.StatusId = taskStatus;
+        // forAdd.ReviewerId = taskReviewer;
+        // forAdd.CreatorId = taskCreator;
 
-        props.UpdateTask(forAdd);
+        // props.UpdateTask(forAdd);
     };
 
 
@@ -115,11 +121,11 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
         props.DeleteTask(props.Task.Id);
     };
 
-    const addComment = () => {
+    const addComment = (val: string) => {
 
 
         // window.G_CodeReviewCommentController.AddComment(props.Task.Id, newCommentName, addComment);
-        props.AddComment(props.Task.Id, newCommentName);
+        props.AddComment(props.Task.Id, val);
     };
 
 
@@ -140,12 +146,20 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
 
                 })}
 
-                <div>
-                    <textarea className='form-input' value={newCommentName}
-                        onChange={e => setNewCommentName(e.target.value)}
-                    ></textarea>
-                    <button className='button button-grey' onClick={() => addComment()}>Добавить</button>
+                {!taskNewCommentEditable ? <div onClick={() => setTaskNewCommentEditable(true)}>
+                    Добавить комментарий
                 </div>
+                    :
+                    <SaveCancelTextarea
+                        CancelEvent={() => setTaskNewCommentEditable(false)}
+                        SaveEvent={(val) => {
+                            addComment(val);
+                            return true;
+                        }}
+                        Text=''
+                    ></SaveCancelTextarea>
+                }
+
             </div>
 
         </div>
@@ -157,10 +171,11 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
     }
 
 
-    let taskHasChanges = taskName !== props.Task.Name ||
+    let taskHasChanges =
+        // taskName !== props.Task.Name ||
         // (taskLink !== props.Task.Link && (taskLink || props.Task.Link)) ||
         taskStatus !== props.Task.StatusId ||
-        (taskDescription !== props.Task.Description && (taskDescription || props.Task.Description)) ||
+        // (taskDescription !== props.Task.Description && (taskDescription || props.Task.Description)) ||
         (taskReviewer !== props.Task.ReviewerId && (props.Task.ReviewerId || taskReviewer != -1)) ||
         taskCreator !== props.Task.CreatorId;
 
@@ -198,36 +213,63 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
                 </div>
             </div>
             <div className='one-review-task-detail-name'>
-                <input type='text' className='form-input-v2'
-                    value={taskName} onChange={e => setTaskName(e.target.value)}
-                ></input>
+                {!taskNameEditable ? <span
+                    onClick={() => setTaskNameEditable(true)}
+                >{props.Task.Name || ''}</span>
+                    :
+                    <SaveCancelInputText
+                        CancelEvent={() => setTaskNameEditable(false)}
+                        SaveEvent={(val) => {
+                            if (!val) {
+                                let alertFactory = new AlertData();
+                                let alert = alertFactory.GetDefaultError("Необходимо заполнить название задачи");
+                                window.G_AddAbsoluteAlertToState(alert);
+                                return false;
+                            }
+
+                            alert('todo' + val)
+
+                        }}
+                        Text={props.Task.Name}
+                    />
+                }
+
             </div>
         </div>
         <div className='one-review-task-detail-body'>
             <div className='one-review-task-detail-content'>
                 {/* <p>{props.Task.Id}</p> */}
-                {taskDescriptionEditable ? <div className='review-task-detail-description'
+                {!taskDescriptionEditable ? <div className='review-task-detail-description'
                     onClick={() => setTaskDescriptionEditable(true)}
                 >
-                    {taskDescription}
+                    {props.Task.Description}
                 </div>
-                    : <div className="editable-textarea-container">
-                        <textarea
-                            value={taskDescription} onChange={e => setTaskDescription(e.target.value)}
-                            className="editable-textarea"></textarea>
+                    : <SaveCancelTextarea
+                        CancelEvent={() => setTaskDescriptionEditable(false)}
+                        SaveEvent={(val) => {
+                            alert('todo' + val);
+                            return true;
+                        }}
+                        Text={props.Task.Description}
+                    />
+                    // <div className="editable-textarea-container">
+                    //     <textarea
+                    //         value={taskDescription} onChange={e => setTaskDescription(e.target.value)}
+                    //         className="editable-textarea"></textarea>
 
-                        <div className="input-editable-controls">
-                            <button type="button"
-                                className="editable-button cancel-button"
-                                onClick={() => setTaskDescriptionEditable(false)}
-                            >Отмена</button>
-                            <button type="button"
-                                className="editable-button save-button"
-                                onClick={() => alert('todo')}
-                            >Сохранить</button>
-                        </div>
-                    </div>
+                    //     <div className="input-editable-controls">
+                    //         <button type="button"
+                    //             className="editable-button cancel-button"
+                    //             onClick={() => setTaskDescriptionEditable(false)}
+                    //         >Отмена</button>
+                    //         <button type="button"
+                    //             className="editable-button save-button"
+                    //             onClick={() => alert('todo')}
+                    //         >Сохранить</button>
+                    //     </div>
+                    // </div>
                 }
+
 
 
 
@@ -241,23 +283,62 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
             </div>
             <div className='one-review-task-detail-right-content'>
 
-                <span>Статус:</span>
-                <select className='form-select-v2'
+                <div>
+                    <span onClick={() => setTaskStatusEditable(true)}
+                        className='editable-by-click'>Статус: </span>
+                    {!taskStatusEditable ? <span
+                        className='editable-by-click'
+                        onClick={() => setTaskStatusEditable(true)}
+                    >{props.Statuses.find(x => x.Id == taskStatus)?.Name || ''}</span>
+                        :
+                        <SaveCancelInputSelect
+                            CancelEvent={() => setTaskStatusEditable(false)}
+                            SaveEvent={(id) => {
+                                alert(id);
+                                return true;
+                            }}
+                            Selected={taskStatus}
+                            ValuesWithId={props.Statuses.map(x => {
+                                return { Id: x.Id, Text: x.Name };
+                            })}
+                        />
+
+                    }
+                </div>
+                {/* <select className='form-select-v2'
                     onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
                     <option value={-1}>Не выбрано</option>
                     {props.Statuses.map(status => <option value={status.Id} key={status.Id}>{status.Name}</option>)}
-                </select>
+                </select> */}
                 <div>
-                    <span>Исполнитель:</span>
-                    <select className='form-select-v2' value={taskReviewer}
+                    <span onClick={() => setTaskExecutorEditable(true)}
+                        className='editable-by-click'>Исполнитель: </span>
+                    {!taskExecutorEditable ? <span
+                        className='editable-by-click'
+                        onClick={() => setTaskExecutorEditable(true)}
+                    >{reviewerList.find(x => x.Id == taskReviewer)?.Name || ''}</span>
+                        :
+                        <SaveCancelInputSelect
+                            CancelEvent={() => setTaskExecutorEditable(false)}
+                            SaveEvent={(id) => {
+                                alert(id);
+                                return true;
+                            }}
+                            Selected={taskReviewer}
+                            ValuesWithId={reviewerList.map(x => ({
+                                Id: x.Id,
+                                Text: x.Name
+                            }))}
+                        />}
+                    {/* <select className='form-select-v2' value={taskReviewer}
                         onChange={(e) => setTaskreviewer(+e.target.value)}>
                         <option value={-1}>Не выбрано</option>
                         {reviewerList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-                    </select>
+                    </select> */}
                 </div>
                 <div>
                     <span>Создатель: {creatorsList.find(x => x.Id == taskCreator)?.Name || ''}</span>
-                   
+
                 </div>
 
                 <div>

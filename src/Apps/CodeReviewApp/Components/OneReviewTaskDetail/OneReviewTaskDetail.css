@@ -24,11 +24,6 @@
     justify-content: space-between;
 }
 
-.one-review-task-detail-right-content {
-    width: 300px;
-
-    background-color: white;
-}
 
 .one-review-task-detail-content {
     flex-grow: 2;
@@ -43,11 +38,17 @@
     flex-basis: 300px;
     max-width: 300px;
     border-radius: 5px;
+    width: 300px;
+    display: flex;
+    background-color: white;
+    flex-direction: column;
 }
 
 .one-review-task-detail-name {
     padding-left: 15px;
     padding-right: 15px;
+    padding-bottom: 15px;
+    
 }
 
 .one-review-task-detail-buttons {
@@ -73,83 +74,15 @@
 .review-task-detail-description {
     border-radius: 3px;
     cursor: pointer;
+
+    width: 100%;
+    height: 100%;
 }
 
 .review-task-detail-description:hover {
     background-color: #f5f5f5;
 }
 
-.input-editable-controls {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    padding: 8px;
-    background: #F4F5F7;
-    border-top: 1px solid #DFE1E6;
-}
-
-.input-editable-controls {
-    padding: 6px 12px;
-    border-radius: 3px;
-    font-weight: 500;
-    font-size: 14px;
+.one-review-task-detail-right-content .editable-by-click {
     cursor: pointer;
-    border: none;
-    transition: background-color 0.2s;
-}
-
-.input-editable-controls .editable-button {
-    padding: 6px 12px;
-    border-radius: 3px;
-    font-weight: 500;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-    transition: background-color 0.2s;
-}
-
-
-.input-editable-controls .cancel-button {
-    background: none;
-    color: #42526E;
-}
-
-
-.input-editable-controls .cancel-button:hover {
-    background-color: #EBECF0;
-}
-
-.input-editable-controls .save-button {
-    background-color: #0052CC;
-    color: white;
-}
-
-.input-editable-controls .save-button:hover {
-    background-color: #0065FF;
-}
-
-.editable-textarea-container .editable-textarea {
-    width: 100%;
-    border: none;
-    padding: 12px;
-    font-size: inherit;
-    font-family: inherit;
-    color: inherit;
-    min-height: 100px;
-    resize: vertical;
-    outline: none;
-    line-height: inherit;
-}
-
-.editable-textarea-container {
-
-    border: none;
-    padding: 12px;
-    font-size: inherit;
-    font-family: inherit;
-    color: inherit;
-    min-height: 100px;
-    resize: vertical;
-    outline: none;
-    line-height: inherit;
 }

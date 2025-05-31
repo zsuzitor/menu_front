@@ -1,0 +1,76 @@
+.editable-textarea-container .editable-textarea {
+    width: 100%;
+    border: none;
+    padding: 12px;
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+    min-height: 100px;
+    resize: vertical;
+    outline: none;
+    line-height: inherit;
+}
+
+.editable-textarea-container {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 2px solid #4C9AFF;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(9, 30, 66, 0.15);
+    overflow: hidden;
+}
+
+.editable-textarea-container .editable-textarea {
+
+    border: none;
+    padding: 12px;
+    font-size: inherit;
+    font-family: inherit;
+    color: inherit;
+    min-height: 100px;
+    resize: vertical;
+    outline: none;
+    line-height: inherit;
+}
+
+.editable-textarea-container .input-editable-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 8px;
+    background: #F4F5F7;
+    border-top: 1px solid #DFE1E6;
+}
+
+
+
+.editable-textarea-container .input-editable-controls .editable-button {
+    padding: 6px 12px;
+    border-radius: 3px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+
+.editable-textarea-container .input-editable-controls .cancel-button {
+    background: none;
+    color: #42526E;
+}
+
+
+.editable-textarea-container .input-editable-controls .cancel-button:hover {
+    background-color: #EBECF0;
+}
+
+.editable-textarea-container .input-editable-controls .save-button {
+    background-color: #0052CC;
+    color: white;
+}
+
+.editable-textarea-container .input-editable-controls .save-button:hover {
+    background-color: #0065FF;
+}

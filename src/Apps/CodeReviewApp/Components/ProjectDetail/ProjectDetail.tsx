@@ -10,7 +10,7 @@ import { ITaskFilter } from '../../Models/Entity/ITaskFilter';
 import ProjectUsers from '../ProjectUsers/ProjectUsers';
 import connectToStore, { IProjectDetailProps } from './ProjectDetailSetup';
 import EditProject from '../EditProject/EditProject';
-import PopupWindow from '../PopupWindow/PopupWindow';
+import PopupWindow from '../../../../components/Body/PopupWindow/PopupWindow';
 
 
 

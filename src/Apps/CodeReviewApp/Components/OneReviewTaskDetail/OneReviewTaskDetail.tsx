@@ -36,9 +36,9 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
 
     // const [taskLink, setTaskLink] = useState(props.Task?.Link || '');
 
-    const [taskStatus, setTaskStatus] = useState(props.Task?.StatusId || -1);
-    const [taskReviewer, setTaskreviewer] = useState(props.Task?.ReviewerId || -1);
-    const [taskCreator, setTaskCreator] = useState(props.Task?.CreatorId || -1);
+    // const [taskStatus, setTaskStatus] = useState(props.Task?.StatusId || -1);
+    // const [taskReviewer, setTaskreviewer] = useState(props.Task?.ReviewerId || -1);
+    // const [taskCreator, setTaskCreator] = useState(props.Task?.CreatorId || -1);
     // const [newCommentName, setNewCommentName] = useState('');
 
 
@@ -53,13 +53,15 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
         };
     }, []);
 
-    // useEffect(() => {
-    //     setTaskName(props.Task?.Name || '');
-    // }, [props.Task?.Name]);
+    useEffect(() => {
+        // setTaskName(props.Task?.Name || '');
+        setTaskNameEditable(false);
+    }, [props.Task?.Name]);
 
-    // useEffect(() => {
-    //     setTaskDescription(props.Task?.Description || '');
-    // }, [props.Task?.Description]);
+    useEffect(() => {
+        // setTaskDescription(props.Task?.Description || '');
+        setTaskDescriptionEditable(false);
+    }, [props.Task?.Description]);
 
 
     // useEffect(() => {
@@ -67,17 +69,24 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
     // }, [props.Task?.Link]);
 
     useEffect(() => {
-        setTaskStatus(props.Task?.StatusId || -1);
+        // setTaskStatus(props.Task?.StatusId || -1);
+        setTaskStatusEditable(false);
     }, [props.Task?.StatusId]);
 
     useEffect(() => {
-        setTaskreviewer(props.Task?.ReviewerId || -1);
+        // setTaskreviewer(props.Task?.ReviewerId || -1);
+        setTaskExecutorEditable(false);
+        // console.log("setTaskExecutorEditable(false);");
     }, [props.Task?.ReviewerId]);
 
-    useEffect(() => {
-        setTaskCreator(props.Task?.CreatorId);
-    }, [props.Task?.CreatorId]);
+    // useEffect(() => {
+    //     setTaskCreator(props.Task?.CreatorId);
+    // }, [props.Task?.CreatorId]);
 
+
+    useEffect(() => {
+        setTaskNewCommentEditable(false);
+    }, [props.Task?.Comments?.length]);
 
 
 
@@ -182,13 +191,13 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
     //     taskCreator !== props.Task.CreatorId;
 
 
-    let creator = props.ProjectUsers.find(x => x.Id === taskCreator);
+    let creator = props.ProjectUsers.find(x => x.Id === props.Task.CreatorId);
     let creatorsList = props.ProjectUsers.filter(us => !us.Deactivated);
     if (creator && creator.Deactivated) {
         creatorsList.push(creator);
     }
 
-    let reviewer = props.ProjectUsers.find(x => x.Id === taskReviewer);
+    let reviewer = props.ProjectUsers.find(x => x.Id === props.Task.ReviewerId);
     let reviewerList = props.ProjectUsers.filter(us => !us.Deactivated);
     if (reviewer && reviewer.Deactivated) {
         reviewerList.push(reviewer);
@@ -199,9 +208,10 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
     return <div className='one-review-task-detail-block'>
         <div className='one-review-task-detail-header'>
 
-            <div className='one-review-task-detail-name'>
+            <div className='one-review-task-detail-name'
+                onClick={() => setTaskNameEditable(true)}>
                 {!taskNameEditable ? <span className='editable-by-click'
-                    onClick={() => setTaskNameEditable(true)}
+
                 >{props.Task.Name || ''}</span>
                     :
                     <SaveCancelInputText
@@ -214,7 +224,7 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
                                 return false;
                             }
 
-                            alert('todo' + val)
+                            props.UpdateTaskName(props.Task.Id, val);
 
                         }}
                         Text={props.Task.Name}
@@ -250,7 +260,7 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
                     : <SaveCancelTextarea
                         CancelEvent={() => setTaskDescriptionEditable(false)}
                         SaveEvent={(val) => {
-                            alert('todo' + val);
+                            props.UpdateTaskDescription(props.Task.Id, val);
                             return true;
                         }}
                         Text={props.Task.Description}
@@ -292,15 +302,15 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
                     {!taskStatusEditable ? <span
                         className='editable-by-click'
                         onClick={() => setTaskStatusEditable(true)}
-                    >{props.Statuses.find(x => x.Id == taskStatus)?.Name || ''}</span>
+                    >{props.Statuses.find(x => x.Id == props.Task.StatusId)?.Name || ''}</span>
                         :
                         <SaveCancelInputSelect
                             CancelEvent={() => setTaskStatusEditable(false)}
                             SaveEvent={(id) => {
-                                alert(id);
+                                props.UpdateTaskStatus(props.Task.Id, id);
                                 return true;
                             }}
-                            Selected={taskStatus}
+                            Selected={props.Task.StatusId}
                             ValuesWithId={props.Statuses.map(x => {
                                 return { Id: x.Id, Text: x.Name };
                             })}
@@ -319,15 +329,22 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
                     {!taskExecutorEditable ? <span
                         className='editable-by-click'
                         onClick={() => setTaskExecutorEditable(true)}
-                    >{reviewerList.find(x => x.Id == taskReviewer)?.Name || ''}</span>
+                    >{reviewerList.find(x => x.Id == props.Task.ReviewerId)?.Name || ''}</span>
                         :
                         <SaveCancelInputSelect
                             CancelEvent={() => setTaskExecutorEditable(false)}
                             SaveEvent={(id) => {
-                                alert(id);
+
+                                if (!id || id == -1) {
+                                    let alertFactory = new AlertData();
+                                    let alert = alertFactory.GetDefaultError("Необходимо выбрать исполнителя");
+                                    window.G_AddAbsoluteAlertToState(alert);
+                                    return false;
+                                }
+                                props.UpdateTaskExecutor(props.Task.Id, id);
                                 return true;
                             }}
-                            Selected={taskReviewer}
+                            Selected={props.Task.ReviewerId}
                             ValuesWithId={reviewerList.map(x => ({
                                 Id: x.Id,
                                 Text: x.Name
@@ -340,7 +357,8 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
                     </select> */}
                 </div>
                 <div>
-                    <span>Создатель: {creatorsList.find(x => x.Id == taskCreator)?.Name || ''}</span>
+                    <span>Создатель: {creatorsList
+                        .find(x => x.Id == props.Task.CreatorId)?.Name || ''}</span>
 
                 </div>
 

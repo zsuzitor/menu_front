@@ -66,17 +66,20 @@ export class Helper {
     }
 
 
-    GetTaskFromState (state: AppState, taskId: number): OneTask[]  {
-        let res: OneTask[];
+    GetTaskFromState(state: AppState, taskId: number): OneTask[] {
+        let res: OneTask[] = [];
+        if (taskId < 1) {
+            return res;
+        }
         let taskfromProject = state.CodeReviewApp.CurrentProjectTasks.find(x => x.Id === taskId);
         if (taskfromProject) {
             res.push(taskfromProject);
         }
-    
-        if (state.CodeReviewApp.CurrentTask.Id == taskId) {
+
+        if (state.CodeReviewApp.CurrentTask?.Id == taskId) {
             res.push(state.CodeReviewApp.CurrentTask);
         }
-    
-        return [];
+
+        return res;
     }
 }

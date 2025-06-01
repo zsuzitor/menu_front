@@ -30,7 +30,7 @@ export class OneTask {
         this.LastUpdateDate = data.LastUpdateDate;
         this.Description = data.Description;
         this.Comments = data.Comments
-            .map(x => new OneWorkTaskComment().FillByOneTaskReviewComment(x));
+            .map(x => new OneWorkTaskComment().FillByOneWorkTaskComment(x));
         return this;
     }
 

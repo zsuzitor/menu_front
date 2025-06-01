@@ -10,13 +10,13 @@ import { DeleteProjectUserActionName, AddProjectUserActionName, ChangeProjectUse
 // return Object.assign({}, state, { TestMessage: str });
 
 
-export function CodeReviewUserReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
+export function TaskManagementUserReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
     switch (action.type) {
         case DeleteProjectUserActionName:
             {
                 let newState = cloneDeep(state);
                 let userId = action.payload as number;
-                newState.CodeReviewApp.CurrentProjectUsers = newState.CodeReviewApp.CurrentProjectUsers
+                newState.TaskManagementApp.CurrentProjectUsers = newState.TaskManagementApp.CurrentProjectUsers
                     .filter(x => x.Id != userId);
                 return newState;
             }
@@ -25,7 +25,7 @@ export function CodeReviewUserReducer(state: AppState = new AppState(), action: 
             {
                 let newState = cloneDeep(state);
                 let user = action.payload as ProjectUser;
-                newState.CodeReviewApp.CurrentProjectUsers.push(user);
+                newState.TaskManagementApp.CurrentProjectUsers.push(user);
                 return newState;
             }
 
@@ -33,7 +33,7 @@ export function CodeReviewUserReducer(state: AppState = new AppState(), action: 
             {
                 let newState = cloneDeep(state);
                 let user = action.payload as ProjectUser;
-                let userState = newState.CodeReviewApp.CurrentProjectUsers.find(x => x.Id === user.Id);
+                let userState = newState.TaskManagementApp.CurrentProjectUsers.find(x => x.Id === user.Id);
                 if (userState) {
                     userState.Email = user.Email;
                     userState.Name = user.Name;
@@ -47,7 +47,7 @@ export function CodeReviewUserReducer(state: AppState = new AppState(), action: 
             {
                 let newState = cloneDeep(state);
                 let users = action.payload as ProjectUser[];
-                newState.CodeReviewApp.CurrentProjectUsers = users || [];
+                newState.TaskManagementApp.CurrentProjectUsers = users || [];
                 return newState;
             }
 

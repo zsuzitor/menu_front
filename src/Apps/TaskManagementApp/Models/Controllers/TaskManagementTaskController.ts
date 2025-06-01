@@ -4,6 +4,7 @@ import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelpe
 import { AddLoadTriggerActionCreator, UpdateTaskActionCreator, LoadTasksActionCreator, DeleteTaskActionCreator, LoadTaskActionCreator, UpdateTaskNameActionCreator, UpdateTaskDescriptionActionCreator, UpdateTaskStatusActionCreator, UpdateTaskExecutorActionCreator } from "../Actions/TaskActions";
 import { ILoadWorkTasksResultDataBack } from "../BackModels/ILoadWorkTasksResultDataBack";
 import { IProjectTaskDataBack } from "../BackModels/IProjectTaskDataBack";
+import { TaskManagementPreloader } from "../Consts";
 import { ITaskFilter } from "../Entity/ITaskFilter";
 import { LoadWorkTasksResult, ProjectTaskData } from "../Entity/LoadWorkTasksResult";
 import { OneTask } from "../Entity/State/OneTask";
@@ -280,7 +281,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
             "projectId": taskFilter.ProjectId,
             "nameLike": taskFilter.Name,
             "creatorId": taskFilter.CreatorId,
-            "executorId": taskFilter.ReviewerId,
+            "executorId": taskFilter.ExecutorId,
             "statusId": taskFilter.StatusId,
             "pageNumber": taskFilter.PageNumber,
             "pageSize": taskFilter.PageSize,
@@ -370,22 +371,22 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
     }
 
     preloader(show: boolean) {
-        if (!window.CodeReviewCounter) {
-            window.CodeReviewCounter = 0;
+        if (!window.TaskManagementCounter) {
+            window.TaskManagementCounter = 0;
         }
 
-        var preloader = document.getElementById('code_review_preloader');
+        var preloader = document.getElementById(TaskManagementPreloader);
         if (!preloader) {
             return;
         }
 
         if (show) {
-            window.CodeReviewCounter++;
+            window.TaskManagementCounter++;
             preloader.style.display = 'block';
         }
         else {
-            window.CodeReviewCounter--;
-            if (!window.CodeReviewCounter) {
+            window.TaskManagementCounter--;
+            if (!window.TaskManagementCounter) {
                 preloader.style.display = 'none';
             }
         }

@@ -528,8 +528,8 @@ export class VaultController implements IVaultController {
 
 
     preloader(show: boolean) {
-        if (!window.CodeReviewCounter) {
-            window.CodeReviewCounter = 0;
+        if (!window.TaskManagementCounter) {
+            window.TaskManagementCounter = 0;
         }
 
         var preloader = document.getElementById('vault_preloader');
@@ -538,12 +538,12 @@ export class VaultController implements IVaultController {
         }
 
         if (show) {
-            window.CodeReviewCounter++;
+            window.TaskManagementCounter++;
             preloader.style.display = 'block';
         }
         else {
-            window.CodeReviewCounter--;
-            if (!window.CodeReviewCounter) {
+            window.TaskManagementCounter--;
+            if (!window.TaskManagementCounter) {
                 preloader.style.display = 'none';
             }
         }

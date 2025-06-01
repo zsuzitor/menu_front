@@ -3,6 +3,7 @@ import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { DeleteProjectUserActionCreator, AddProjectUserActionCreator, ChangeProjectUserActionCreator } from "../Actions/UserActions";
 import { IProjectUserDataBack } from "../BackModels/IProjectUserDataBack";
+import { TaskManagementPreloader } from "../Consts";
 import { ProjectUser } from "../Entity/State/ProjectUser";
 
 export type AddNewUserToProject = (error: MainErrorObjectBack, data: IProjectUserDataBack) => void;
@@ -137,22 +138,22 @@ export class TaskManagementUserController implements ITaskManagementUserControll
     }
 
     preloader(show: boolean) {
-        if (!window.CodeReviewCounter) {
-            window.CodeReviewCounter = 0;
+        if (!window.TaskManagementCounter) {
+            window.TaskManagementCounter = 0;
         }
 
-        var preloader = document.getElementById('code_review_preloader');
+        var preloader = document.getElementById(TaskManagementPreloader);
         if (!preloader) {
             return;
         }
 
         if (show) {
-            window.CodeReviewCounter++;
+            window.TaskManagementCounter++;
             preloader.style.display = 'block';
         }
         else {
-            window.CodeReviewCounter--;
-            if (!window.CodeReviewCounter) {
+            window.TaskManagementCounter--;
+            if (!window.TaskManagementCounter) {
                 preloader.style.display = 'none';
             }
         }

@@ -4,14 +4,14 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { AppAction } from '../../../../Models/Actions/Actions';
 import { AppState } from '../../../../Models/Entity/State/AppState';
-import { AddTaskToProjectActionName, AddLoadTriggerActionName, UpdateTaskActionName, LoadTasksActionName, DeleteTaskActionName, SetFilterTaskCreatorActionName, SetFilterTaskReviewerName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskStatusActionName, SetFilterTaskActionName, SetCurrentTaskIdActionName, LoadTaskActionName, ClearCurrentTaskStateActionName, UpdateTaskNameActionName, UpdateTaskNameActionParam, UpdateTaskDescriptionActionName, UpdateTaskDescriptionActionParam, UpdateTaskStatusActionName, UpdateTaskStatusActionParam, UpdateTaskExecutorActionName, UpdateTaskExecutorActionParam } from '../Actions/TaskActions';
+import { AddTaskToProjectActionName, AddLoadTriggerActionName, UpdateTaskActionName, LoadTasksActionName, DeleteTaskActionName, SetFilterTaskCreatorActionName, SetFilterTaskExecutorActionName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskStatusActionName, SetFilterTaskActionName, SetCurrentTaskIdActionName, LoadTaskActionName, ClearCurrentTaskStateActionName, UpdateTaskNameActionName, UpdateTaskNameActionParam, UpdateTaskDescriptionActionName, UpdateTaskDescriptionActionParam, UpdateTaskStatusActionName, UpdateTaskStatusActionParam, UpdateTaskExecutorActionName, UpdateTaskExecutorActionParam } from '../Actions/TaskActions';
 import { ProjectTaskData, LoadWorkTasksResult } from '../Entity/LoadWorkTasksResult';
 import { OneTask } from '../Entity/State/OneTask';
 import { TasksFilter } from '../Entity/State/TasksFilter';
 import { Helper } from '../../../../Models/BL/Helper';
 
 
-export function CodeReviewTaskReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
+export function TaskManagementTaskReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
     switch (action.type) {
         case AddTaskToProjectActionName:
             {
@@ -19,13 +19,13 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
                 let payload = action.payload as ProjectTaskData;
                 let tsk = new OneTask();
                 tsk.FillByIProjectTaskDataBack(payload);
-                newState.CodeReviewApp.CurrentProjectTasks.push(tsk);
+                newState.TaskManagementApp.CurrentProjectTasks.push(tsk);
                 return newState;
             }
         case AddLoadTriggerActionName:
             {
                 let newState = cloneDeep(state);
-                newState.CodeReviewApp.CurrentProjectTasksFilters.Retrigger++;
+                newState.TaskManagementApp.CurrentProjectTasksFilters.Retrigger++;
                 return newState;
             }
         case UpdateTaskActionName:
@@ -51,20 +51,20 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as LoadWorkTasksResult;
-                newState.CodeReviewApp.CurrentProjectTasks = payload.Tasks.map(x => {
+                newState.TaskManagementApp.CurrentProjectTasks = payload.Tasks.map(x => {
                     let tsk = new OneTask();
                     tsk.FillByIProjectTaskDataBack(x);
                     return tsk;
                 });
-                newState.CodeReviewApp.CurrentProjectTasksAllCount = payload.TasksCount;
+                newState.TaskManagementApp.CurrentProjectTasksAllCount = payload.TasksCount;
                 return newState;
             }
         case DeleteTaskActionName:
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as number;
-                newState.CodeReviewApp.CurrentProjectTasks
-                    = newState.CodeReviewApp.CurrentProjectTasks.filter(x => x.Id !== payload);
+                newState.TaskManagementApp.CurrentProjectTasks
+                    = newState.TaskManagementApp.CurrentProjectTasks.filter(x => x.Id !== payload);
 
                 return newState;
             }
@@ -72,42 +72,42 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as number;
-                newState.CodeReviewApp.CurrentProjectTasksFilters.CreatorId = payload;
+                newState.TaskManagementApp.CurrentProjectTasksFilters.CreatorId = payload;
                 return newState;
             }
-        case SetFilterTaskReviewerName:
+        case SetFilterTaskExecutorActionName:
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as number;
-                newState.CodeReviewApp.CurrentProjectTasksFilters.ReviewerId = payload;
+                newState.TaskManagementApp.CurrentProjectTasksFilters.ExecutorId = payload;
                 return newState;
             }
         case SetFilterTaskNameActionName:
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as string;
-                newState.CodeReviewApp.CurrentProjectTasksFilters.TaskName = payload;
+                newState.TaskManagementApp.CurrentProjectTasksFilters.TaskName = payload;
                 return newState;
             }
         case SetFilterTaskPageActionName:
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as number;
-                newState.CodeReviewApp.CurrentProjectTasksFilters.Page = payload;
+                newState.TaskManagementApp.CurrentProjectTasksFilters.Page = payload;
                 return newState;
             }
         case SetFilterTaskStatusActionName:
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as number;
-                newState.CodeReviewApp.CurrentProjectTasksFilters.Status = payload;
+                newState.TaskManagementApp.CurrentProjectTasksFilters.Status = payload;
                 return newState;
             }
         case SetFilterTaskActionName:
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as TasksFilter;
-                newState.CodeReviewApp.CurrentProjectTasksFilters = payload;
+                newState.TaskManagementApp.CurrentProjectTasksFilters = payload;
 
                 return newState;
             }
@@ -116,7 +116,7 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as number;
-                newState.CodeReviewApp.CurrentTaskId = payload;
+                newState.TaskManagementApp.CurrentTaskId = payload;
 
                 return newState;
             }
@@ -125,7 +125,7 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
 
             let newState = cloneDeep(state);
             let payload = action.payload as ProjectTaskData;
-            newState.CodeReviewApp.CurrentTask = new OneTask().FillByProjectTaskData(payload);
+            newState.TaskManagementApp.CurrentTask = new OneTask().FillByProjectTaskData(payload);
 
             return newState;
         }
@@ -134,8 +134,8 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
         case ClearCurrentTaskStateActionName: {
 
             let newState = cloneDeep(state);
-            newState.CodeReviewApp.CurrentTaskId = -1;
-            newState.CodeReviewApp.CurrentTask = null;
+            newState.TaskManagementApp.CurrentTaskId = -1;
+            newState.TaskManagementApp.CurrentTask = null;
 
             return newState;
         }

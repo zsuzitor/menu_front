@@ -21,8 +21,8 @@ export interface IEditProjectProps extends IEditProjectStateToProps, IEditProjec
 
 const mapStateToProps = (state: AppState, ownProps: IEditProjectOwnProps) => {
     let res = {} as IEditProjectStateToProps;
-    res.ProjectId = state.CodeReviewApp.CurrentProjectId;
-    res.Statuses = state.CodeReviewApp.CurrentProjectStatuses;
+    res.ProjectId = state.TaskManagementApp.CurrentProjectId;
+    res.Statuses = state.TaskManagementApp.CurrentProjectStatuses;
     return res;
 }
 
@@ -31,7 +31,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: IEditProjectOwnProps) => {
 
 
     res.CreateStatus = (name: string, projectId: number) => {
-        dispatch(window.G_CodeReviewTaskStatusController.CreateStatusRedux(name, projectId));
+        dispatch(window.G_TaskManagementTaskStatusController.CreateStatusRedux(name, projectId));
     };
 
     return res;

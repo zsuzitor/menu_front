@@ -71,13 +71,13 @@ export class Helper {
         if (taskId < 1) {
             return res;
         }
-        let taskfromProject = state.CodeReviewApp.CurrentProjectTasks.find(x => x.Id === taskId);
+        let taskfromProject = state.TaskManagementApp.CurrentProjectTasks.find(x => x.Id === taskId);
         if (taskfromProject) {
             res.push(taskfromProject);
         }
 
-        if (state.CodeReviewApp.CurrentTask?.Id == taskId) {
-            res.push(state.CodeReviewApp.CurrentTask);
+        if (state.TaskManagementApp.CurrentTask?.Id == taskId) {
+            res.push(state.TaskManagementApp.CurrentTask);
         }
 
         return res;

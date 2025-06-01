@@ -7,7 +7,8 @@ import ProjectsList from '../ProjectsList/ProjectsList';
 import cloneDeep from 'lodash/cloneDeep';
 import connectToStore, { TaskManagementMainProps } from './TaskManagementMainSetup';
 import { useNavigate } from 'react-router-dom';
-import OneReviewTaskDetail from '../OneWorkTaskDetail/OneWorkTaskDetail';
+import OneWorkTaskDetail from '../OneWorkTaskDetail/OneWorkTaskDetail';
+import { TaskManagementPreloader } from '../../Models/Consts';
 
 
 
@@ -16,7 +17,7 @@ require('./TaskManagementMain.css');
 
 
 
-const CodeReviewMain = (props: TaskManagementMainProps) => {
+const TaskManagementMain = (props: TaskManagementMainProps) => {
     const [visibleList, setVisibleList] = useState(true);
 
 
@@ -26,7 +27,7 @@ const CodeReviewMain = (props: TaskManagementMainProps) => {
         props.GetUserProjects();
 
         return function cleanUp() {
-            props.ClearCodeReviewState();
+            props.ClearClearTaskManagementStateState();
         };
     }, []);
 
@@ -129,7 +130,7 @@ const CodeReviewMain = (props: TaskManagementMainProps) => {
 
 
     return <div className='code-review-main-container'>
-        <div className='preloader' id='code_review_preloader'></div>
+        <div className='preloader' id={TaskManagementPreloader}></div>
         <div className={'code-review-projects-menu-main' + mainClass}>
             <div onClick={() => setVisibleList(v => !v)}
                 className="hide-review-projects-menu-button">{visibleList ? '<' : '>'}</div>
@@ -137,7 +138,7 @@ const CodeReviewMain = (props: TaskManagementMainProps) => {
                 CurrentProjectId={props.CurrentProjectId} />
         </div>
         {props.CurrentTaskId && props.CurrentTaskId > 0 ?
-            <OneReviewTaskDetail></OneReviewTaskDetail>
+            <OneWorkTaskDetail></OneWorkTaskDetail>
             // <></>
             :
             <div className='code-review-project-info'>
@@ -158,4 +159,4 @@ const CodeReviewMain = (props: TaskManagementMainProps) => {
 
 
 // and that function returns the connected, wrapper component:
-export default connectToStore(CodeReviewMain);
+export default connectToStore(TaskManagementMain);

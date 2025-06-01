@@ -7,7 +7,7 @@ import { IAuthState } from "../AuthState";
 export class AppState {
     Auth: IAuthState;
 
-    CodeReviewApp: TaskManagementAppState;
+    TaskManagementApp: TaskManagementAppState;
     PlaningPokerApp: PlaningPokerAppState;
     VaultApp: VaultAppState;
     constructor() {
@@ -16,7 +16,7 @@ export class AppState {
             User: null,
         };
 
-        this.CodeReviewApp = new TaskManagementAppState();
+        this.TaskManagementApp = new TaskManagementAppState();
         this.PlaningPokerApp = new PlaningPokerAppState();
         this.VaultApp = new VaultAppState();
     }

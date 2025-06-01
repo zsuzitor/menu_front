@@ -1,7 +1,7 @@
 
 export class TasksFilter {
     CreatorId: number;
-    ReviewerId: number;
+    ExecutorId: number;
     Status: number;
     TaskName: string;
     Page: number;
@@ -9,7 +9,7 @@ export class TasksFilter {
 
     constructor() {
         this.CreatorId = -1;
-        this.ReviewerId = -1;
+        this.ExecutorId = -1;
         this.Status = -1;
         this.TaskName = '';
         this.Page = 1;

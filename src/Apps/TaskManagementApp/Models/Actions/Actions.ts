@@ -1,7 +1,7 @@
 import { AppAction } from "../../../../Models/Actions/Actions";
 
 
-export const ClearCodeReviewStateActionName: string = 'ClearCodeReviewStateAction';
-export function ClearCodeReviewStateActionCreator(): AppAction<null> {
-    return { type: ClearCodeReviewStateActionName, payload: null };
+export const ClearTaskManagementStateActionName: string = 'ClearTaskManagementStateAction';
+export function ClearTaskManagementStateActionCreator(): AppAction<null> {
+    return { type: ClearTaskManagementStateActionName, payload: null };
 };

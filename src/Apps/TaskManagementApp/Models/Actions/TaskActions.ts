@@ -30,14 +30,14 @@ export function DeleteTaskActionCreator(id: number): AppAction<number> {
     return { type: DeleteTaskActionName, payload: id };
 };
 
-export const SetFilterTaskCreatorActionName: string = 'SetFilterTaskCreator';
+export const SetFilterTaskCreatorActionName: string = 'SetFilterTaskCreatorAction';
 export function SetFilterTaskCreatorActionCreator(id: number): AppAction<number> {
     return { type: SetFilterTaskCreatorActionName, payload: id };
 };
 
-export const SetFilterTaskReviewerName: string = 'SetFilterTaskReviewer';
-export function SetFilterTaskReviewerActionCreator(id: number): AppAction<number> {
-    return { type: SetFilterTaskReviewerName, payload: id };
+export const SetFilterTaskExecutorActionName: string = 'SetFilterTaskExecutorAction';
+export function SetFilterTaskExecutorActionCreator(id: number): AppAction<number> {
+    return { type: SetFilterTaskExecutorActionName, payload: id };
 };
 
 export const SetFilterTaskNameActionName: string = 'SetFilterTaskNameAction';

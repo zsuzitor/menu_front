@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { AppState } from "../../../../Models/Entity/State/AppState";
-import { SetFilterTaskCreatorActionCreator, SetFilterTaskReviewerActionCreator, SetFilterTaskNameActionCreator, SetFilterTaskPageActionCreator, SetFilterTaskStatusActionCreator, SetFilterTaskActionCreator } from "../../Models/Actions/TaskActions";
+import { SetFilterTaskCreatorActionCreator, SetFilterTaskExecutorActionCreator, SetFilterTaskNameActionCreator, SetFilterTaskPageActionCreator, SetFilterTaskStatusActionCreator, SetFilterTaskActionCreator } from "../../Models/Actions/TaskActions";
 import { ITaskFilter } from "../../Models/Entity/ITaskFilter";
 import { OneTask } from "../../Models/Entity/State/OneTask";
 import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
@@ -25,7 +25,7 @@ interface IProjectDetailStateToProps {
 
 interface IProjectDetailDispatchToProps {
     SetFilterTaskCreator: (id: number) => void;
-    SetFilterTaskReviewer: (id: number) => void;
+    SetFilterTaskExecutor: (id: number) => void;
     SetFilterTaskName: (name: string) => void;
     SetFilterTaskPage: (num: number) => void;
     SetFilterTaskStatus: (status: number) => void;
@@ -44,10 +44,10 @@ export interface IProjectDetailProps extends IProjectDetailStateToProps, IProjec
 
 const mapStateToProps = (state: AppState, ownProps: IProjectDetailOwnProps) => {
     let res = {} as IProjectDetailStateToProps;
-    res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
-    res.TasksFilters = state.CodeReviewApp.CurrentProjectTasksFilters;
-    res.CurrentProjectTasksAllCount = state.CodeReviewApp.CurrentProjectTasksAllCount;
-    res.Statuses = state.CodeReviewApp.CurrentProjectStatuses;
+    res.ProjectUsers = state.TaskManagementApp.CurrentProjectUsers;
+    res.TasksFilters = state.TaskManagementApp.CurrentProjectTasksFilters;
+    res.CurrentProjectTasksAllCount = state.TaskManagementApp.CurrentProjectTasksAllCount;
+    res.Statuses = state.TaskManagementApp.CurrentProjectStatuses;
     return res;
 }
 
@@ -57,8 +57,8 @@ const mapDispatchToProps = (dispatch: any, ownProps: IProjectDetailOwnProps) => 
     res.SetFilterTaskCreator = (id: number) => {
         dispatch(SetFilterTaskCreatorActionCreator(id));
     };
-    res.SetFilterTaskReviewer = (id: number) => {
-        dispatch(SetFilterTaskReviewerActionCreator(id));
+    res.SetFilterTaskExecutor = (id: number) => {
+        dispatch(SetFilterTaskExecutorActionCreator(id));
     };
     res.SetFilterTaskName = (name: string) => {
         dispatch(SetFilterTaskNameActionCreator(name));
@@ -71,11 +71,11 @@ const mapDispatchToProps = (dispatch: any, ownProps: IProjectDetailOwnProps) => 
     };
 
     res.ReloadTasks = (filter: ITaskFilter) => {
-        dispatch(window.G_CodeReviewTaskController.LoadTasksRedux(filter));
+        dispatch(window.G_TaskManagementTaskController.LoadTasksRedux(filter));
     };
 
     res.DeleteProject = (id: number) => {
-        dispatch(window.G_CodeReviewProjectController.DeleteProjectRedux(id));
+        dispatch(window.G_TaskManagementProjectController.DeleteProjectRedux(id));
     };
 
     res.ClearFilterTask = () => {

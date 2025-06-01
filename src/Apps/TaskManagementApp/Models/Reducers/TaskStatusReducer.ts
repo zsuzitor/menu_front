@@ -10,7 +10,7 @@ import { WorkTaskStatus } from '../Entity/State/WorkTaskStatus';
 // return Object.assign({}, state, { TestMessage: str });
 
 
-export function CodeReviewTaskStatusReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
+export function TaskManagementTaskStatusReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
     switch (action.type) {
 
 
@@ -18,7 +18,7 @@ export function CodeReviewTaskStatusReducer(state: AppState = new AppState(), ac
 
             let newState = cloneDeep(state);
             let statuses = action.payload as WorkTaskStatus[];
-            newState.CodeReviewApp.CurrentProjectStatuses = [...statuses];
+            newState.TaskManagementApp.CurrentProjectStatuses = [...statuses];
 
             return newState;
         }
@@ -26,7 +26,7 @@ export function CodeReviewTaskStatusReducer(state: AppState = new AppState(), ac
 
             let newState = cloneDeep(state);
             let statusId = action.payload as number;
-            newState.CodeReviewApp.CurrentProjectStatuses = newState.CodeReviewApp.CurrentProjectStatuses
+            newState.TaskManagementApp.CurrentProjectStatuses = newState.TaskManagementApp.CurrentProjectStatuses
                 .filter(x => x.Id != statusId);
 
             return newState;
@@ -35,7 +35,7 @@ export function CodeReviewTaskStatusReducer(state: AppState = new AppState(), ac
 
             let newState = cloneDeep(state);
             let status = action.payload as WorkTaskStatus;
-            newState.CodeReviewApp.CurrentProjectStatuses.push(status);
+            newState.TaskManagementApp.CurrentProjectStatuses.push(status);
 
             return newState;
         }
@@ -44,7 +44,7 @@ export function CodeReviewTaskStatusReducer(state: AppState = new AppState(), ac
 
             let newState = cloneDeep(state);
             let status = action.payload as WorkTaskStatus;
-            var old = newState.CodeReviewApp.CurrentProjectStatuses.find(x => x.Id == status.Id);
+            var old = newState.TaskManagementApp.CurrentProjectStatuses.find(x => x.Id == status.Id);
             if (old) {
                 old.Name = status.Name;
             }

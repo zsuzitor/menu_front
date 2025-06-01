@@ -16,7 +16,7 @@ import { Helper } from "../../../../Models/BL/Helper";
 
 
 
-export function CodeReviewCommentReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
+export function TaskManagementCommentReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
     switch (action.type) {
         case UpdateCommentActionName:
             {

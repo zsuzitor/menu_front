@@ -29,7 +29,7 @@ const mapStateToProps = (state: AppState, ownProps: IProjectsListOwnProps) => {
 const mapDispatchToProps = (dispatch: any, ownProps: IProjectsListOwnProps) => {
     let res = {} as IProjectsListDispatchToProps;
     res.AddNewProject = (projectName: string) => {
-        dispatch(window.G_CodeReviewProjectController.CreateNewProjectRedux(projectName));
+        dispatch(window.G_TaskManagementProjectController.CreateNewProjectRedux(projectName));
     };
 
     return res;

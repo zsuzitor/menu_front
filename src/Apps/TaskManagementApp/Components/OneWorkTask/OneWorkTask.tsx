@@ -123,10 +123,10 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
         creatorsList.push(creator);
     }
 
-    let reviewer = props.ProjectUsers.find(x => x.Id === taskExecutorId);
-    let reviewerList = props.ProjectUsers.filter(us => !us.Deactivated);
-    if (reviewer && reviewer.Deactivated) {
-        reviewerList.push(reviewer);
+    let executor = props.ProjectUsers.find(x => x.Id === taskExecutorId);
+    let executorList = props.ProjectUsers.filter(us => !us.Deactivated);
+    if (executor && executor.Deactivated) {
+        executorList.push(executor);
     }
 
 
@@ -166,7 +166,7 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
                     <select className='form-select-v2' value={taskExecutorId}
                         onChange={(e) => setTaskExecutorId(+e.target.value)}>
                         <option value={-1}>Не выбрано</option>
-                        {reviewerList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                        {executorList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                     </select>
                 </div>
                 <div>

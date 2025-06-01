@@ -42,23 +42,23 @@ export interface IOneWorkTaskProps extends IOneWorkTaskStateToProps, IOneWorkTas
 
 const mapStateToProps = (state: AppState, ownProps: IOneWorkTaskOwnProps) => {
     let res = {} as IOneWorkTaskStateToProps;
-    res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
-    res.Statuses = state.CodeReviewApp.CurrentProjectStatuses;
+    res.ProjectUsers = state.TaskManagementApp.CurrentProjectUsers;
+    res.Statuses = state.TaskManagementApp.CurrentProjectStatuses;
     return res;
 }
 
 const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskOwnProps) => {
     let res = {} as IOneWorkTaskDispatchToProps;
     res.UpdateTask = (forAdd: OneTask) => {
-        dispatch(window.G_CodeReviewTaskController.UpdateTaskRedux(forAdd));
+        dispatch(window.G_TaskManagementTaskController.UpdateTaskRedux(forAdd));
     };
 
     res.DeleteTask = (taskId: number) => {
-        dispatch(window.G_CodeReviewTaskController.DeleteTaskRedux(taskId));
+        dispatch(window.G_TaskManagementTaskController.DeleteTaskRedux(taskId));
     };
 
     res.AddComment = (taskId: number, text: string) => {
-        dispatch(window.G_CodeReviewCommentController.AddCommentRedux(taskId, text));
+        dispatch(window.G_TaskManagementCommentController.AddCommentRedux(taskId, text));
     };
 
     res.SetEmptyTaskComments = (taskId: number) => {
@@ -69,7 +69,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskOwnProps) => {
     }
 
     res.LoadTaskComments = (taskId: number) => {
-        dispatch(window.G_CodeReviewCommentController.LoadCommentsRedux(taskId))
+        dispatch(window.G_TaskManagementCommentController.LoadCommentsRedux(taskId))
     };
 
     res.SetCurrentTask = (taskId: number) => {

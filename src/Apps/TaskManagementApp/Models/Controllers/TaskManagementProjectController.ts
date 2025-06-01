@@ -6,6 +6,7 @@ import { SetCurrentProjectStatusesActionCreator } from "../Actions/TaskStatusAct
 import { SetCurrentProjectUsersActionCreator } from "../Actions/UserActions";
 import { IOneProjectInListDataBack } from "../BackModels/IOneProjectInListDataBack";
 import { IOneProjectInfoDataBack } from "../BackModels/IOneProjectInfoDataBack";
+import { TaskManagementPreloader } from "../Consts";
 import { OneProjectInList } from "../Entity/State/OneProjectInList";
 import { ProjectUser } from "../Entity/State/ProjectUser";
 import { WorkTaskStatus } from "../Entity/State/WorkTaskStatus";
@@ -39,16 +40,6 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
                 }
 
                 if (data?.result) {
-                    //let state = getState() as AppState;
-                    // if (state.CodeReviewApp.CurrentProjectId === projectId) {
-                    //     dispatch(SetCurrentProjectUsersActionCreator([]));
-                    //     let tasks = {} as ILoadReviewTasksResultDataBack;
-                    //     tasks.Tasks = [];
-                    //     tasks.TasksCount = 0;
-                    //     dispatch(SetFilterTaskActionCreator(new TasksFilter()));
-                    //     dispatch(LoadTasksActionCreator(tasks));
-                    // }
-
                     dispatch(DeleteProjectActionCreator(projectId));
 
 
@@ -206,22 +197,22 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
     }
 
     preloader(show: boolean) {
-        if (!window.CodeReviewCounter) {
-            window.CodeReviewCounter = 0;
+        if (!window.TaskManagementCounter) {
+            window.TaskManagementCounter = 0;
         }
 
-        var preloader = document.getElementById('code_review_preloader');
+        var preloader = document.getElementById(TaskManagementPreloader);
         if (!preloader) {
             return;
         }
 
         if (show) {
-            window.CodeReviewCounter++;
+            window.TaskManagementCounter++;
             preloader.style.display = 'block';
         }
         else {
-            window.CodeReviewCounter--;
-            if (!window.CodeReviewCounter) {
+            window.TaskManagementCounter--;
+            if (!window.TaskManagementCounter) {
                 preloader.style.display = 'none';
             }
         }

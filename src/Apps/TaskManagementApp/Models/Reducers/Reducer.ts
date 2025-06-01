@@ -1,31 +1,31 @@
 
 import cloneDeep from 'lodash/cloneDeep';
-import { CodeReviewProjectReducer } from './ProjectReducer';
-import { CodeReviewTaskReducer } from './TaskReducer';
-import { CodeReviewUserReducer } from './UserReducer';
+import { TaskManagementProjectReducer } from './ProjectReducer';
+import { TaskManagementTaskReducer } from './TaskReducer';
+import { TaskManagementUserReducer } from './UserReducer';
 import { AppAction } from '../../../../Models/Actions/Actions';
 import { AppState } from '../../../../Models/Entity/State/AppState';
-import { ClearCodeReviewStateActionName } from '../Actions/Actions';
+import { ClearTaskManagementStateActionName } from '../Actions/Actions';
 import { TaskManagementAppState } from '../Entity/State/TaskManagementAppState';
-import { CodeReviewCommentReducer } from './CommentReducer';
-import { CodeReviewTaskStatusReducer } from './TaskStatusReducer';
+import { TaskManagementCommentReducer } from './CommentReducer';
+import { TaskManagementTaskStatusReducer } from './TaskStatusReducer';
 
 
 
-export function CodeReviewAppReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
+export function TaskManagementAppReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
 
-    let st = CodeReviewProjectReducer(state, action);
+    let st = TaskManagementProjectReducer(state, action);
 
-    st = CodeReviewUserReducer(st, action);
-    st = CodeReviewCommentReducer(st, action);
-    st = CodeReviewTaskReducer(st, action);
-    st = CodeReviewTaskStatusReducer(st, action);
+    st = TaskManagementUserReducer(st, action);
+    st = TaskManagementCommentReducer(st, action);
+    st = TaskManagementTaskReducer(st, action);
+    st = TaskManagementTaskStatusReducer(st, action);
 
     switch (action.type) {
-        case ClearCodeReviewStateActionName:
+        case ClearTaskManagementStateActionName:
             {
                 let newState = cloneDeep(st);
-                newState.CodeReviewApp = new TaskManagementAppState();
+                newState.TaskManagementApp = new TaskManagementAppState();
                 return newState;
             }
     }

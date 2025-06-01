@@ -3,6 +3,7 @@ import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { CreateCurrentProjectTaskStatusActionCreator, DeleteCurrentProjectTaskStatusActionCreator, UpdateCurrentProjectTaskStatusActionCreator } from "../Actions/TaskStatusActions";
 import { IWorkTaskStatusDataBack } from "../BackModels/IWorkTaskStatusDataBack";
+import { TaskManagementPreloader } from "../Consts";
 import { WorkTaskStatus } from "../Entity/State/WorkTaskStatus";
 
 
@@ -139,22 +140,22 @@ export class TaskManagementTaskStatusController implements ITaskManagementTaskSt
     }
 
     preloader(show: boolean) {
-        if (!window.CodeReviewCounter) {
-            window.CodeReviewCounter = 0;
+        if (!window.TaskManagementCounter) {
+            window.TaskManagementCounter = 0;
         }
 
-        var preloader = document.getElementById('code_review_preloader');
+        var preloader = document.getElementById(TaskManagementPreloader);
         if (!preloader) {
             return;
         }
 
         if (show) {
-            window.CodeReviewCounter++;
+            window.TaskManagementCounter++;
             preloader.style.display = 'block';
         }
         else {
-            window.CodeReviewCounter--;
-            if (!window.CodeReviewCounter) {
+            window.TaskManagementCounter--;
+            if (!window.TaskManagementCounter) {
                 preloader.style.display = 'none';
             }
         }

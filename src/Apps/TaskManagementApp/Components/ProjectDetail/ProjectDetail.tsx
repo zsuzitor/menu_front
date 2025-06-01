@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import OneReviewTask from '../OneWorkTask/OneWorkTask';
+import OneWorkTask from '../OneWorkTask/OneWorkTask';
 import cloneDeep from 'lodash/cloneDeep';
 import AddTask from '../AddTask/AddTask';
-import { CodeReviewLocalStorageHelper } from '../../../PlaningPoker/Models/PlaningPokerHelper';
+import { TaskManagementLocalStorageHelper } from '../../../PlaningPoker/Models/PlaningPokerHelper';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
 import Paggination from '../../../../components/Body/Paggination/Paggination';
 import { ITaskFilter } from '../../Models/Entity/ITaskFilter';
@@ -48,7 +48,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     useEffect(() => {
         if (props.Project?.Id) {
 
-            let filterSaveHelper = new CodeReviewLocalStorageHelper();
+            let filterSaveHelper = new TaskManagementLocalStorageHelper();
             let statusFromLocalStorage = filterSaveHelper.GetFilterStatus(props.Project.Id);
             if (!statusFromLocalStorage && statusFromLocalStorage !== '0') {
                 filterSaveHelper.SetFilterStatus(props.Project.Id, props.TasksFilters.Status + '');
@@ -71,9 +71,9 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             props.SetFilterTaskCreator(-1);
         }
 
-        let filterReviewerExist = props.ProjectUsers.some((x) => x.Id === props.TasksFilters.ReviewerId);
-        if (!filterReviewerExist) {
-            props.SetFilterTaskReviewer(-1);
+        let filterExecutorExist = props.ProjectUsers.some((x) => x.Id === props.TasksFilters.ExecutorId);
+        if (!filterExecutorExist) {
+            props.SetFilterTaskExecutor(-1);
         }
 
     }, [props.ProjectUsers.length]);
@@ -88,7 +88,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             clearTimeout(loadTasksTimerId);
         }
 
-        let filterSaveHelper = new CodeReviewLocalStorageHelper();
+        let filterSaveHelper = new TaskManagementLocalStorageHelper();
         let statusFromLocalStorage = filterSaveHelper.GetFilterStatus(props.Project.Id);
         if ((props.TasksFilters.Status + '') !== statusFromLocalStorage) {
             filterSaveHelper.SetFilterStatus(props.Project.Id, props.TasksFilters.Status + '');
@@ -101,7 +101,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
         setLoadTasksTimerId(timerId);
 
-    }, [props.Project?.Id, props.TasksFilters.CreatorId, props.TasksFilters.ReviewerId
+    }, [props.Project?.Id, props.TasksFilters.CreatorId, props.TasksFilters.ExecutorId
         , props.TasksFilters.Status, props.TasksFilters.TaskName
         , props.TasksFilters.Page, props.TasksFilters.Retrigger]);
 
@@ -112,7 +112,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         let filter = {
             Name: props.TasksFilters.TaskName, CreatorId: props.TasksFilters.CreatorId
             , PageNumber: props.TasksFilters.Page, PageSize: tasksOnPageCount
-            , ProjectId: props.Project.Id, ReviewerId: props.TasksFilters.ReviewerId
+            , ProjectId: props.Project.Id, ExecutorId: props.TasksFilters.ExecutorId
             , StatusId: props.TasksFilters.Status
         } as ITaskFilter;
 
@@ -212,7 +212,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                     || filterVisibilityReviwer
                     || filterVisibilityStatus)
                     || (props.TasksFilters.CreatorId != -1
-                        || props.TasksFilters.ReviewerId != -1
+                        || props.TasksFilters.ExecutorId != -1
                         || props.TasksFilters.Status != -1
                         || props.TasksFilters.TaskName != ''
                         || props.TasksFilters.Page != 1))
@@ -266,14 +266,14 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                     </div>}
                     {filterVisibilityReviwer && <div className='filter-tag'>
                         <span className='filter-name'>Ревьювер:</span>
-                        <select className='filter-input' value={props.TasksFilters.ReviewerId}
-                            onChange={(e) => props.SetFilterTaskReviewer(+e.target.value)}>
+                        <select className='filter-input' value={props.TasksFilters.ExecutorId}
+                            onChange={(e) => props.SetFilterTaskExecutor(+e.target.value)}>
                             <option value={-1}>Не выбрано</option>
                             {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                         </select>
                         <button className='remove-filter' title='Удалить фильтр'
                             onClick={() => {
-                                props.SetFilterTaskReviewer(-1);
+                                props.SetFilterTaskExecutor(-1);
                                 setFilterVisibilityReviwer(false);
                             }}>×</button>
                     </div>}
@@ -300,11 +300,11 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             </div>
             {props.Tasks.length
                 ? props.Tasks.map(x =>
-                    <OneReviewTask key={x.Id}
+                    <OneWorkTask key={x.Id}
                         Task={x}
                         Comments={x.Comments}
                         CurrentProjectId={props.Project.Id}
-                    ></OneReviewTask>)
+                    ></OneWorkTask>)
                 : <div className='review-project-tasks-no-tasks'>
                     <img src={G_PathToBaseImages + 'exclamation.png'} alt='' />
                     <h2>Задачи не найдены!</h2>

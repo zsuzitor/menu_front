@@ -29,14 +29,14 @@ export interface IAddTaskProps extends IAddTaskStateToProps, IAddTaskOwnProps, I
 const mapStateToProps = (state: AppState, ownProps: IAddTaskOwnProps) => {
     let res = {} as IAddTaskStateToProps;
     res.Auth = state.Auth;
-    res.Statuses = state.CodeReviewApp.CurrentProjectStatuses;
+    res.Statuses = state.TaskManagementApp.CurrentProjectStatuses;
     return res;
 }
 
 const mapDispatchToProps = (dispatch: any, ownProps: IAddTaskOwnProps) => {
     let res = {} as IAddTaskDispatchToProps;
     res.AddTaskToProject = (task: OneTask, projectId: number) => {
-        dispatch(window.G_CodeReviewTaskController.AddTaskToProjectRedux(task, projectId));
+        dispatch(window.G_TaskManagementTaskController.AddTaskToProjectRedux(task, projectId));
     };
 
     return res;

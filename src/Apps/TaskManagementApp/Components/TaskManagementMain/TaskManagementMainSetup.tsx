@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { AppState } from "../../../../Models/Entity/State/AppState";
-import { ClearCodeReviewStateActionCreator } from "../../Models/Actions/Actions";
+import { ClearTaskManagementStateActionCreator } from "../../Models/Actions/Actions";
 import { OneTask } from "../../Models/Entity/State/OneTask";
 import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
 import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/State/OneProjectInList';
@@ -25,7 +25,7 @@ interface ITaskManagementMainStateToProps {
 interface ITaskManagementMainDispatchToProps {
     GetUserProjects: () => void;
     GetProjectInfo: (id: number) => void;
-    ClearCodeReviewState: () => void;
+    ClearClearTaskManagementStateState: () => void;
     SetCurrentProject: (projectId: number) => void;
     SetCurrentTask: (taskId: number) => void;
     GetTaskInfo: (taskId: number) => void;
@@ -39,12 +39,12 @@ export interface TaskManagementMainProps extends ITaskManagementMainStateToProps
 
 const mapStateToProps = (state: AppState, ownProps: ITaskManagementMainOwnProps) => {
     let res = {} as ITaskManagementMainStateToProps;
-    res.CurrentProjectId = state.CodeReviewApp.CurrentProjectId;
-    res.CurrentTaskId = state.CodeReviewApp.CurrentTaskId;
-    res.CurrentProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
-    res.ProjectsList = state.CodeReviewApp.ProjectsList;
-    res.Tasks = state.CodeReviewApp.CurrentProjectTasks;
-    res.ProjectsLoaded = state.CodeReviewApp.ProjectsLoaded;
+    res.CurrentProjectId = state.TaskManagementApp.CurrentProjectId;
+    res.CurrentTaskId = state.TaskManagementApp.CurrentTaskId;
+    res.CurrentProjectUsers = state.TaskManagementApp.CurrentProjectUsers;
+    res.ProjectsList = state.TaskManagementApp.ProjectsList;
+    res.Tasks = state.TaskManagementApp.CurrentProjectTasks;
+    res.ProjectsLoaded = state.TaskManagementApp.ProjectsLoaded;
     // res.Test = state.TestMessage;
     // res.FilmData = state.Films.find(x => x.Id === ownProps.FilmId);
     return res;
@@ -53,15 +53,15 @@ const mapStateToProps = (state: AppState, ownProps: ITaskManagementMainOwnProps)
 const mapDispatchToProps = (dispatch: any, ownProps: ITaskManagementMainOwnProps) => {
     let res = {} as ITaskManagementMainDispatchToProps;
     res.GetUserProjects = () => {
-        dispatch(window.G_CodeReviewProjectController.GetUserProjectsRedux());
+        dispatch(window.G_TaskManagementProjectController.GetUserProjectsRedux());
     };
 
     res.GetProjectInfo = (id: number) => {
-        dispatch(window.G_CodeReviewProjectController.GetProjectInfoRedux(id));
+        dispatch(window.G_TaskManagementProjectController.GetProjectInfoRedux(id));
     }
 
-    res.ClearCodeReviewState = () => {
-        dispatch(ClearCodeReviewStateActionCreator());
+    res.ClearClearTaskManagementStateState = () => {
+        dispatch(ClearTaskManagementStateActionCreator());
     }
 
 
@@ -74,7 +74,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: ITaskManagementMainOwnProps
     };
 
     res.GetTaskInfo = (taskId: number) => {
-        dispatch(window.G_CodeReviewTaskController.LoadTaskRedux(taskId));
+        dispatch(window.G_TaskManagementTaskController.LoadTaskRedux(taskId));
     };
 
     return res;

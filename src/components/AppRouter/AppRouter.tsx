@@ -8,7 +8,7 @@ import MenuMain from "../Body/Menu/MenuMain/MenuMain";
 import Recovery from "../Body/Auth/Recovery/Recovery";
 import { AppItem } from "../../Models/Entity/AppItem";
 import PersonSettings from "../Body/Person/PersonSettings/PersonSettings";
-import CodeReviewMain from "../../Apps/TaskManagementApp/Components/TaskManagementMain/TaskManagementMain";
+import TaskManagementMain from "../../Apps/TaskManagementApp/Components/TaskManagementMain/TaskManagementMain";
 import { MenuAppMain } from "../../Apps/MenuApp/Components/MenuAppMain";
 import { WordsCardsAppMain } from "../../Apps/WordsCardsApp/Components/WordsCardsAppMain";
 import PlaningPokerMain from "../../Apps/PlaningPoker/Components/PlaningPokerMain";
@@ -31,7 +31,7 @@ const AppRouter = (props: AppRouterProps) => {
             <Route path="/menu-app/*" element={<MenuAppMain />} />
             <Route path="/words-cards-app/*" element={<WordsCardsAppMain />} />
             <Route path="/planing-poker/*" element={<PlaningPokerMain />} />
-            <Route path="/task-management/*" element={<CodeReviewMain />} />
+            <Route path="/task-management/*" element={<TaskManagementMain />} />
 
             <Route path="/menu/auth/login/*" element={<MainAuth LoginPage={true} />} />
             <Route path="/menu/auth/register/*" element={<MainAuth LoginPage={false} />} />

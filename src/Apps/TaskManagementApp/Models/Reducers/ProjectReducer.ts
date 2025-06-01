@@ -14,19 +14,19 @@ import { SetCurrentProjectStatusesActionCreator } from '../Actions/TaskStatusAct
 // return Object.assign({}, state, { TestMessage: str });
 
 
-export function CodeReviewProjectReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
+export function TaskManagementProjectReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
     switch (action.type) {
         case DeleteProjectActionName:
             {
                 let newState = cloneDeep(state);
                 let projectId = action.payload as number;
-                newState.CodeReviewApp.ProjectsList = newState.CodeReviewApp.ProjectsList
+                newState.TaskManagementApp.ProjectsList = newState.TaskManagementApp.ProjectsList
                     .filter(x => x.Id != projectId);
-                if (newState.CodeReviewApp.CurrentProjectId === projectId) {
-                    newState.CodeReviewApp.CurrentProjectId = -1;
+                if (newState.TaskManagementApp.CurrentProjectId === projectId) {
+                    newState.TaskManagementApp.CurrentProjectId = -1;
                 }
 
-                if (newState.CodeReviewApp.CurrentProjectId === projectId) {
+                if (newState.TaskManagementApp.CurrentProjectId === projectId) {
                     //todo тут куча копирований стейта
                     newState = ReducerCombiner(newState, SetCurrentProjectUsersActionCreator([]));
                     newState = ReducerCombiner(newState, SetCurrentProjectStatusesActionCreator([]));
@@ -44,19 +44,19 @@ export function CodeReviewProjectReducer(state: AppState = new AppState(), actio
             {
                 let newState = cloneDeep(state);
                 let proj = action.payload as OneProjectInList;
-                newState.CodeReviewApp.ProjectsList.push(proj);
+                newState.TaskManagementApp.ProjectsList.push(proj);
                 return newState;
             }
 
         case SetCurrentProjectIdActionName:
             {
                 let projectId = action.payload as number;
-                if (state.CodeReviewApp.CurrentProjectId == projectId) {
+                if (state.TaskManagementApp.CurrentProjectId == projectId) {
                     return state;
                 }
                 
                 let newState = cloneDeep(state);
-                newState.CodeReviewApp.CurrentProjectId = projectId;
+                newState.TaskManagementApp.CurrentProjectId = projectId;
                 //todo тут куча копирований стейта
                 newState = ReducerCombiner(newState, SetCurrentProjectUsersActionCreator([]));
                 newState = ReducerCombiner(newState, SetCurrentProjectStatusesActionCreator([]));
@@ -71,21 +71,21 @@ export function CodeReviewProjectReducer(state: AppState = new AppState(), actio
             {
                 let newState = cloneDeep(state);
                 let projects = action.payload as OneProjectInList[];
-                newState.CodeReviewApp.ProjectsList = projects;
-                newState.CodeReviewApp.ProjectsLoaded = true;
+                newState.TaskManagementApp.ProjectsList = projects;
+                newState.TaskManagementApp.ProjectsLoaded = true;
                 return newState;
             }
 
             case ClearProjectStateActionName:
             {
                 let newState = cloneDeep(state);
-                newState.CodeReviewApp.CurrentProjectId = -1;
-                newState.CodeReviewApp.CurrentProjectUsers = [];
-                newState.CodeReviewApp.CurrentProjectTasksFilters = new TasksFilter();
-                newState.CodeReviewApp.CurrentProjectTasksAllCount = 0;
-                newState.CodeReviewApp.CurrentProjectTasks = [];
-                newState.CodeReviewApp.CurrentProjectStatuses = [];
-                newState.CodeReviewApp.ProjectsLoaded = false;
+                newState.TaskManagementApp.CurrentProjectId = -1;
+                newState.TaskManagementApp.CurrentProjectUsers = [];
+                newState.TaskManagementApp.CurrentProjectTasksFilters = new TasksFilter();
+                newState.TaskManagementApp.CurrentProjectTasksAllCount = 0;
+                newState.TaskManagementApp.CurrentProjectTasks = [];
+                newState.TaskManagementApp.CurrentProjectStatuses = [];
+                newState.TaskManagementApp.ProjectsLoaded = false;
                 return newState;
             }
 

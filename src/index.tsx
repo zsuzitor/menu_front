@@ -64,11 +64,11 @@ window.G_ArticleController = new ArticleController();
 window.G_WordsCardsController = new WordsCardsController();
 window.G_WordsListController = new WordsListController();
 window.G_PlaningPokerController = new PlaningPokerController();
-window.G_CodeReviewProjectController = new TaskManagementProjectController();
-window.G_CodeReviewTaskController = new TaskManagementTaskController();
-window.G_CodeReviewUserController = new TaskManagementUserController();
-window.G_CodeReviewTaskStatusController = new TaskManagementTaskStatusController();
-window.G_CodeReviewCommentController = new TaskManagementCommentController();
+window.G_TaskManagementProjectController = new TaskManagementProjectController();
+window.G_TaskManagementTaskController = new TaskManagementTaskController();
+window.G_TaskManagementUserController = new TaskManagementUserController();
+window.G_TaskManagementTaskStatusController = new TaskManagementTaskStatusController();
+window.G_TaskManagementCommentController = new TaskManagementCommentController();
 window.G_VaultController = new VaultController();
 
 

@@ -3,7 +3,7 @@
 import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { AlertData } from '../../../../Models/Entity/AlertData';
-import OneReviewTaskComment from '../OneWorkTaskComment/OneWorkTaskComment';
+import OneWorkTaskComment from '../OneWorkTaskComment/OneWorkTaskComment';
 import { OneTask } from '../../Models/Entity/State/OneTask';
 
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,7 @@ require('./OneWorkTaskDetail.css');
 
 
 
-const OneReviewTaskDetail = (props: IOneWorkTaskDetailProps) => {
+const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
 
     const [taskDescriptionEditable, setTaskDescriptionEditable] = useState(false);
     const [taskNewCommentEditable, setTaskNewCommentEditable] = useState(false);
@@ -95,11 +95,11 @@ const OneReviewTaskDetail = (props: IOneWorkTaskDetailProps) => {
             <div className='one-review-task-detail-comments-block-inner'>
                 Комментарии:
                 {props.Task.Comments.map(x => {
-                    return <OneReviewTaskComment
+                    return <OneWorkTaskComment
                         Comment={x}
                         TaskId={props.Task.Id}
                         key={x.Id}
-                    ></OneReviewTaskComment>
+                    ></OneWorkTaskComment>
 
                 })}
 
@@ -137,10 +137,10 @@ const OneReviewTaskDetail = (props: IOneWorkTaskDetailProps) => {
         creatorsList.push(creator);
     }
 
-    let reviewer = props.ProjectUsers.find(x => x.Id === props.Task.ExecutorId);
-    let reviewerList = props.ProjectUsers.filter(us => !us.Deactivated);
-    if (reviewer && reviewer.Deactivated) {
-        reviewerList.push(reviewer);
+    let executor = props.ProjectUsers.find(x => x.Id === props.Task.ExecutorId);
+    let executorList = props.ProjectUsers.filter(us => !us.Deactivated);
+    if (executor && executor.Deactivated) {
+        executorList.push(executor);
     }
 
 
@@ -227,7 +227,7 @@ const OneReviewTaskDetail = (props: IOneWorkTaskDetailProps) => {
                     {!taskExecutorEditable ? <span
                         className='editable-by-click'
                         onClick={() => setTaskExecutorEditable(true)}
-                    >{reviewerList.find(x => x.Id == props.Task.ExecutorId)?.Name || ''}</span>
+                    >{executorList.find(x => x.Id == props.Task.ExecutorId)?.Name || ''}</span>
                         :
                         <SaveCancelInputSelect
                             CancelEvent={() => setTaskExecutorEditable(false)}
@@ -243,7 +243,7 @@ const OneReviewTaskDetail = (props: IOneWorkTaskDetailProps) => {
                                 return true;
                             }}
                             Selected={props.Task.ExecutorId}
-                            ValuesWithId={reviewerList.map(x => ({
+                            ValuesWithId={executorList.map(x => ({
                                 Id: x.Id,
                                 Text: x.Name
                             }))}
@@ -271,4 +271,4 @@ const OneReviewTaskDetail = (props: IOneWorkTaskDetailProps) => {
 
 
 // and that function returns the connected, wrapper component:
-export default connectToStore(OneReviewTaskDetail);
+export default connectToStore(OneWorkTaskDetail);

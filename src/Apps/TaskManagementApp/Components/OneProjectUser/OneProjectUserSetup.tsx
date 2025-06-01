@@ -28,7 +28,7 @@ const mapStateToProps = (state: AppState, ownProps: IOneProjectOneProjectUserOwn
 
 const mapDispatchToProps = (dispatch: any, ownProps: IOneProjectOneProjectUserOwnProps) => {
     let res = {} as IOneProjectOneProjectUserDispatchToProps;
-    res.ChangeUser = (user) => { dispatch(window.G_CodeReviewUserController.ChangeProjectUserRedux(user)) };
+    res.ChangeUser = (user) => { dispatch(window.G_TaskManagementUserController.ChangeProjectUserRedux(user)) };
     return res;
 };
 

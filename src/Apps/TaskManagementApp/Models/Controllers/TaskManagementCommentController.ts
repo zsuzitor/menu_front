@@ -8,6 +8,7 @@ import { CommentAdd } from "../Entity/CommentAdd";
 import { CommentSet } from "../Entity/CommentSet";
 import { OneWorkTaskComment } from "../Entity/OneTaskWorkComment";
 import { UpdateCommentActionCreator, DeleteCommentActionCreator, AddCommentActionCreator, SetCommentsActionCreator } from "../Actions/CommentActions";
+import { TaskManagementPreloader } from "../Consts";
 
 
 
@@ -178,22 +179,22 @@ export class TaskManagementCommentController implements ITaskManagementCommentCo
     }
 
     preloader(show: boolean) {
-        if (!window.CodeReviewCounter) {
-            window.CodeReviewCounter = 0;
+        if (!window.TaskManagementCounter) {
+            window.TaskManagementCounter = 0;
         }
 
-        var preloader = document.getElementById('code_review_preloader');
+        var preloader = document.getElementById(TaskManagementPreloader);
         if (!preloader) {
             return;
         }
 
         if (show) {
-            window.CodeReviewCounter++;
+            window.TaskManagementCounter++;
             preloader.style.display = 'block';
         }
         else {
-            window.CodeReviewCounter--;
-            if (!window.CodeReviewCounter) {
+            window.TaskManagementCounter--;
+            if (!window.TaskManagementCounter) {
                 preloader.style.display = 'none';
             }
         }

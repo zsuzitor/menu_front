@@ -16,7 +16,7 @@ export class OneWorkTaskComment implements MappedWithBack<IOneWorkTaskCommentDat
         return this;
     }
 
-    FillByOneTaskReviewComment(newData: OneWorkTaskComment): OneWorkTaskComment {
+    FillByOneWorkTaskComment(newData: OneWorkTaskComment): OneWorkTaskComment {
         this.Id = newData.Id;
         this.CreatorId = newData.CreatorId;
         this.Text = newData.Text;

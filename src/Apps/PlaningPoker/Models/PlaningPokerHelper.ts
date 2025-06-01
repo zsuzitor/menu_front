@@ -71,36 +71,36 @@ export class StoriesHelper {
     }
 }
 
-export class CodeReviewLocalStorageHelper {
-    static CodeReviewFilterPrefix: string = 'code_review_filter_';
+export class TaskManagementLocalStorageHelper {
+    static TaskManagementFilterPrefix: string = 'task_management_filter_';
     GetFilterCreatorId = (projectId: number): string => {
-        return localStorage.getItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_creator_id');
+        return localStorage.getItem(TaskManagementLocalStorageHelper.TaskManagementFilterPrefix + projectId + '_creator_id');
     }
     SetFilterCreatorId = (projectId: number, value: string): void => {
-        localStorage.setItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_creator_id', value);
+        localStorage.setItem(TaskManagementLocalStorageHelper.TaskManagementFilterPrefix + projectId + '_creator_id', value);
     }
-    GetFilterReviewerId = (projectId: number): string => {
-        return localStorage.getItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_reviewer_id');
+    GetFilterExecutorId = (projectId: number): string => {
+        return localStorage.getItem(TaskManagementLocalStorageHelper.TaskManagementFilterPrefix + projectId + '_executor_id');
     }
-    SetFilterReviewerId = (projectId: number, value: string): void => {
-        localStorage.setItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_reviewer_id', value);
+    SetFilterExecutorId = (projectId: number, value: string): void => {
+        localStorage.setItem(TaskManagementLocalStorageHelper.TaskManagementFilterPrefix + projectId + '_executor_id', value);
     }
     GetFilterStatus = (projectId: number): string => {
-        return localStorage.getItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_status');
+        return localStorage.getItem(TaskManagementLocalStorageHelper.TaskManagementFilterPrefix + projectId + '_status');
     }
     SetFilterStatus = (projectId: number, value: string): void => {
-        localStorage.setItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_status', value);
+        localStorage.setItem(TaskManagementLocalStorageHelper.TaskManagementFilterPrefix + projectId + '_status', value);
     }
     GetFilterTaskname = (projectId: number): string => {
-        return localStorage.getItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_taskname');
+        return localStorage.getItem(TaskManagementLocalStorageHelper.TaskManagementFilterPrefix + projectId + '_taskname');
     }
     SetFilterTaskname = (projectId: number, value: string): void => {
-        localStorage.setItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_taskname', value);
+        localStorage.setItem(TaskManagementLocalStorageHelper.TaskManagementFilterPrefix + projectId + '_taskname', value);
     }
     GetFilterPage = (projectId: number): string => {
-        return localStorage.getItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_page');
+        return localStorage.getItem(TaskManagementLocalStorageHelper.TaskManagementFilterPrefix + projectId + '_page');
     }
     SetFilterPage = (projectId: number, value: string): void => {
-        localStorage.setItem(CodeReviewLocalStorageHelper.CodeReviewFilterPrefix + projectId + '_page', value);
+        localStorage.setItem(TaskManagementLocalStorageHelper.TaskManagementFilterPrefix + projectId + '_page', value);
     }
 }

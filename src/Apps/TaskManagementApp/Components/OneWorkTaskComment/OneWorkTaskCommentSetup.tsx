@@ -32,7 +32,7 @@ export interface IOneWorkTaskCommentProps extends IOneWorkTaskCommentStateToProp
 
 const mapStateToProps = (state: AppState, ownProps: IOneWorkTaskCommentOwnProps) => {
     let res = {} as IOneWorkTaskCommentStateToProps;
-    res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
+    res.ProjectUsers = state.TaskManagementApp.CurrentProjectUsers;
     res.AuthInfo = state.Auth;
     return res;
 }
@@ -43,7 +43,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskCommentOwnProps
         let forDel = new CommentDelete();
         forDel.Id = id;
         forDel.TaskId = ownProps.TaskId;
-        dispatch(window.G_CodeReviewCommentController.DeleteCommentRedux(forDel));
+        dispatch(window.G_TaskManagementCommentController.DeleteCommentRedux(forDel));
     };
 
     res.UpdateComment = (id: number, text: string) => {
@@ -51,7 +51,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskCommentOwnProps
         comm.TaskId = ownProps.TaskId;
         comm.Id = id;
         comm.Text = text;
-        dispatch(window.G_CodeReviewCommentController.UpdateCommentRedux(comm));
+        dispatch(window.G_TaskManagementCommentController.UpdateCommentRedux(comm));
     };
 
     return res;

@@ -43,10 +43,10 @@ export interface IOneWorkTaskDetailProps extends IOneWorkTaskDetailStateToProps,
 
 const mapStateToProps = (state: AppState, ownProps: IOneWorkTaskDetailOwnProps) => {
     let res = {} as IOneWorkTaskDetailStateToProps;
-    res.ProjectUsers = state.CodeReviewApp.CurrentProjectUsers;
-    res.Statuses = state.CodeReviewApp.CurrentProjectStatuses;
-    res.Task = state.CodeReviewApp.CurrentTask;
-    res.CurrentProjectId = state.CodeReviewApp.CurrentProjectId;
+    res.ProjectUsers = state.TaskManagementApp.CurrentProjectUsers;
+    res.Statuses = state.TaskManagementApp.CurrentProjectStatuses;
+    res.Task = state.TaskManagementApp.CurrentTask;
+    res.CurrentProjectId = state.TaskManagementApp.CurrentProjectId;
     return res;
 }
 
@@ -57,16 +57,16 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps)
     // };
 
     res.DeleteTask = (taskId: number) => {
-        dispatch(window.G_CodeReviewTaskController.DeleteTaskRedux(taskId));
+        dispatch(window.G_TaskManagementTaskController.DeleteTaskRedux(taskId));
     };
 
     res.AddComment = (taskId: number, text: string) => {
-        dispatch(window.G_CodeReviewCommentController.AddCommentRedux(taskId, text));
+        dispatch(window.G_TaskManagementCommentController.AddCommentRedux(taskId, text));
     };
 
 
     res.LoadTaskComments = (taskId: number) => {
-        dispatch(window.G_CodeReviewCommentController.LoadCommentsRedux(taskId))
+        dispatch(window.G_TaskManagementCommentController.LoadCommentsRedux(taskId))
     };
 
     // res.SetCurrentTask = (taskId: number) => {
@@ -79,19 +79,19 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps)
 
 
     res.UpdateTaskName = (id: number, text: string) => {
-        dispatch(window.G_CodeReviewTaskController.UpdateTaskNameRedux(id, text))
+        dispatch(window.G_TaskManagementTaskController.UpdateTaskNameRedux(id, text))
     };
 
     res.UpdateTaskDescription = (id: number, text: string) => {
-        dispatch(window.G_CodeReviewTaskController.UpdateTaskDescriptionRedux(id, text))
+        dispatch(window.G_TaskManagementTaskController.UpdateTaskDescriptionRedux(id, text))
     };
 
     res.UpdateTaskStatus = (id: number, idStatus: number) => {
-        dispatch(window.G_CodeReviewTaskController.UpdateTaskStatusRedux(id, idStatus))
+        dispatch(window.G_TaskManagementTaskController.UpdateTaskStatusRedux(id, idStatus))
     };
 
     res.UpdateTaskExecutor = (id: number, personId: number) => {
-        dispatch(window.G_CodeReviewTaskController.UpdateTaskExecutorRedux(id, personId))
+        dispatch(window.G_TaskManagementTaskController.UpdateTaskExecutorRedux(id, personId))
     };
 
     return res;

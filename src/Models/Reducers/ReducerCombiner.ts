@@ -7,7 +7,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { PlaningPokerReducer } from "../../Apps/PlaningPoker/Models/Reducers/Reducer";
 import { AppReducer } from "./Reducer";
 import { VaultAppReducer } from "../../Apps/Vault/Models/Reducers/Reducer";
-import { CodeReviewAppReducer } from "../../Apps/CodeReviewApp/Models/Reducers/Reducer";
+import { CodeReviewAppReducer } from "../../Apps/TaskManagementApp/Models/Reducers/Reducer";
 
 export function ReducerCombiner(state: AppState = new AppState(), action: AppAction<any>): AppState {
 

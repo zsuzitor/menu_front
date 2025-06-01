@@ -1,4 +1,4 @@
-import { CodeReviewAppState } from "../../../Apps/CodeReviewApp/Models/Entity/State/CodeReviewAppState";
+import { TaskManagementAppState } from "../../../Apps/TaskManagementApp/Models/Entity/State/TaskManagementAppState";
 import { PlaningPokerAppState } from "../../../Apps/PlaningPoker/Models/Entity/State/PlaningPokerApp";
 import { VaultAppState } from "../../../Apps/Vault/Models/Entity/State/VaultApp";
 import { IAuthState } from "../AuthState";
@@ -7,7 +7,7 @@ import { IAuthState } from "../AuthState";
 export class AppState {
     Auth: IAuthState;
 
-    CodeReviewApp: CodeReviewAppState;
+    CodeReviewApp: TaskManagementAppState;
     PlaningPokerApp: PlaningPokerAppState;
     VaultApp: VaultAppState;
     constructor() {
@@ -16,7 +16,7 @@ export class AppState {
             User: null,
         };
 
-        this.CodeReviewApp = new CodeReviewAppState();
+        this.CodeReviewApp = new TaskManagementAppState();
         this.PlaningPokerApp = new PlaningPokerAppState();
         this.VaultApp = new VaultAppState();
     }

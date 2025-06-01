@@ -7,7 +7,7 @@ import ReactDOMClient from 'react-dom/client';
 import MainComponent from './components/MainComponent';
 import { AjaxHelper, FetchHelper } from './Models/AjaxLogic';
 import { AuthenticateController } from "./Models/Controllers/AuthenticateController";
-import { CodeReviewCommentController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewCommentController";
+import { TaskManagementCommentController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementCommentController";
 import { ArticleController } from "./Apps/MenuApp/Models/Controllers/ArticleController";
 import { PlaningPokerController } from "./Apps/PlaningPoker/Models/Controllers/PlaningPokerController";
 import { UsersController } from "./Models/Controllers/UsersController";
@@ -21,12 +21,12 @@ import thunk from 'redux-thunk';
 import { ReducerCombiner } from "./Models/Reducers/ReducerCombiner";
 import { AppState } from './Models/Entity/State/AppState';
 import { VaultController } from "./Apps/Vault/Models/Controllers/VaultController";
-import { CodeReviewProjectController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewProjectController";
-import { CodeReviewTaskController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewTaskController";
-import { CodeReviewUserController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewUserController";
+import { TaskManagementProjectController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementProjectController";
+import { TaskManagementTaskController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementTaskController";
+import { TaskManagementUserController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementUserController";
 import { WordsListController } from "./Apps/WordsCardsApp/Models/Controllers/WordsListController";
 import { MainErrorHandler } from "./Models/BL/ErrorHandleLogic";
-import { CodeReviewTaskStatusController } from "./Apps/CodeReviewApp/Models/Controllers/CodeReviewTaskStatusController";
+import { TaskManagementTaskStatusController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementTaskStatusController";
 
 
 require('../style/main.css');
@@ -64,11 +64,11 @@ window.G_ArticleController = new ArticleController();
 window.G_WordsCardsController = new WordsCardsController();
 window.G_WordsListController = new WordsListController();
 window.G_PlaningPokerController = new PlaningPokerController();
-window.G_CodeReviewProjectController = new CodeReviewProjectController();
-window.G_CodeReviewTaskController = new CodeReviewTaskController();
-window.G_CodeReviewUserController = new CodeReviewUserController();
-window.G_CodeReviewTaskStatusController = new CodeReviewTaskStatusController();
-window.G_CodeReviewCommentController = new CodeReviewCommentController();
+window.G_CodeReviewProjectController = new TaskManagementProjectController();
+window.G_CodeReviewTaskController = new TaskManagementTaskController();
+window.G_CodeReviewUserController = new TaskManagementUserController();
+window.G_CodeReviewTaskStatusController = new TaskManagementTaskStatusController();
+window.G_CodeReviewCommentController = new TaskManagementCommentController();
 window.G_VaultController = new VaultController();
 
 

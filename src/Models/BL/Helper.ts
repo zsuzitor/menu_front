@@ -1,4 +1,4 @@
-import { OneTask } from "../../Apps/CodeReviewApp/Models/Entity/State/OneTask";
+import { OneTask } from "../../Apps/TaskManagementApp/Models/Entity/State/OneTask";
 import { AppState } from "../Entity/State/AppState";
 
 

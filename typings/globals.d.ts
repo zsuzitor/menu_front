@@ -21,11 +21,11 @@ declare var G_WordsCardsController: import("../src/Apps/WordsCardsApp/Models/Con
 declare var G_WordsListController: import("../src/Apps/WordsCardsApp/Models/Controllers/WordsListController").IWordsListController;
 declare var G_UsersController: import("../src/Models/Controllers/UsersController").IUsersController;
 declare var G_PlaningPokerController: import("../src/Apps/PlaningPoker/Models/Controllers/PlaningPokerController").IPlaningPokerController;
-declare var G_CodeReviewProjectController: import("../src/Apps/CodeReviewApp/Models/Controllers/CodeReviewProjectController").ICodeReviewProjectController;
-declare var G_CodeReviewTaskController: import("../src/Apps/CodeReviewApp/Models/Controllers/CodeReviewTaskController").ICodeReviewTaskController;
-declare var G_CodeReviewTaskStatusController: import("../src/Apps/CodeReviewApp/Models/Controllers/CodeReviewTaskStatusController").ICodeReviewTaskStatusController;
-declare var G_CodeReviewUserController: import("../src/Apps/CodeReviewApp/Models/Controllers/CodeReviewUserController").ICodeReviewUserController;
-declare var G_CodeReviewCommentController: import("../src/Apps/CodeReviewApp/Models/Controllers/CodeReviewCommentController").ICodeReviewCommentController;
+declare var G_CodeReviewProjectController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementProjectController").ITaskManagementProjectController;
+declare var G_CodeReviewTaskController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementTaskController").ITaskManagementTaskController;
+declare var G_CodeReviewTaskStatusController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementTaskStatusController").ITaskManagementTaskStatusController;
+declare var G_CodeReviewUserController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementUserController").ITaskManagementUserController;
+declare var G_CodeReviewCommentController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementCommentController").ITaskManagementCommentController;
 declare var G_VaultController: import("../src/Apps/Vault/Models/Controllers/VaultController").IVaultController;
 
 declare var CodeReviewCounter: number;

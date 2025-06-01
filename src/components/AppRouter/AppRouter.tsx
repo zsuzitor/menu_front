@@ -8,7 +8,7 @@ import MenuMain from "../Body/Menu/MenuMain/MenuMain";
 import Recovery from "../Body/Auth/Recovery/Recovery";
 import { AppItem } from "../../Models/Entity/AppItem";
 import PersonSettings from "../Body/Person/PersonSettings/PersonSettings";
-import CodeReviewMain from "../../Apps/CodeReviewApp/Components/CodeReviewMain/CodeReviewMain";
+import CodeReviewMain from "../../Apps/TaskManagementApp/Components/TaskManagementMain/TaskManagementMain";
 import { MenuAppMain } from "../../Apps/MenuApp/Components/MenuAppMain";
 import { WordsCardsAppMain } from "../../Apps/WordsCardsApp/Components/WordsCardsAppMain";
 import PlaningPokerMain from "../../Apps/PlaningPoker/Components/PlaningPokerMain";

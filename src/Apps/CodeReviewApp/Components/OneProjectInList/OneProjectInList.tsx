@@ -27,7 +27,7 @@ const OneProjectInList = (props: IOneProjectInListProps) => {
             //     // props.SetCurrentProject(props.Project.Id)
 
             // }
-            navigate("/code-review/proj-" + props.Project.Id);
+            navigate("/task-management/proj-" + props.Project.Id);
         }}>
         {props.Project.Name}
 

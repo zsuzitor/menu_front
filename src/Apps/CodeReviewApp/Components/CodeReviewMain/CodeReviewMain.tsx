@@ -39,7 +39,7 @@ const CodeReviewMain = (props: CodeReviewMainProps) => {
             && matchProj//при этом в урле он есть
         ) {
 
-            navigate("/code-review/");
+            navigate("/task-management/");
         }
 
     }, [props.ProjectsList.length, props.ProjectsLoaded]);

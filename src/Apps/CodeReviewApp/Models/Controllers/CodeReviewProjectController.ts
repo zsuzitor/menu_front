@@ -70,7 +70,7 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/project/delete-project'
+            Url: G_PathToServer + 'api/taskmanagement/project/delete-project'
 
         });
     }
@@ -117,7 +117,7 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/project/get-project-info'
+            Url: G_PathToServer + 'api/taskmanagement/project/get-project-info'
 
         });
     };
@@ -155,7 +155,7 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/project/add-new-project'
+            Url: G_PathToServer + 'api/taskmanagement/project/add-new-project'
 
         });
     };
@@ -193,7 +193,7 @@ export class CodeReviewProjectController implements ICodeReviewProjectController
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/project/get-projects',
+            Url: G_PathToServer + 'api/taskmanagement/project/get-projects',
 
         });
     };

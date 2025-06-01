@@ -61,7 +61,7 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/comment/edit-comment'
+            Url: G_PathToServer + 'api/taskmanagement/comment/edit-comment'
 
         });
     };
@@ -94,7 +94,7 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/comment/delete-comment'
+            Url: G_PathToServer + 'api/taskmanagement/comment/delete-comment'
 
         });
     };
@@ -128,7 +128,7 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/comment/create-comment'
+            Url: G_PathToServer + 'api/taskmanagement/comment/create-comment'
 
         });
     };
@@ -167,7 +167,7 @@ export class CodeReviewCommentController implements ICodeReviewCommentController
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/comment/get-comments'
+            Url: G_PathToServer + 'api/taskmanagement/comment/get-comments'
 
         });
     };

@@ -145,7 +145,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                         e.preventDefault();
                         // navigate("/code-review/proj-" + props.CurrentProjectId+'/task-'+props.Task.Id);
                         // props.SetCurrentTask(props.Task.Id);
-                        navigate("/code-review/proj-" + props.CurrentProjectId + '/task-' + props.Task.Id);
+                        navigate("/task-management/proj-" + props.CurrentProjectId + '/task-' + props.Task.Id);
                     }}>{props.Task.Name}</a>
                 </div>
                 <div className='one-review-task-buttons'>
@@ -205,7 +205,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                         alt="Delete" title='Удалить задачу' />
                 </div>
                 <div className='task-button' onClick={() =>
-                    navigate("/code-review/proj-" + props.CurrentProjectId + '/task-' + props.Task.Id)
+                    navigate("/task-management/proj-" + props.CurrentProjectId + '/task-' + props.Task.Id)
                 }>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'external-link.png'}
                         alt="Link" title='Открыть ссылку' />

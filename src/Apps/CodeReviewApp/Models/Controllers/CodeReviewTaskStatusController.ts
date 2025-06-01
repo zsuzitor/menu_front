@@ -48,7 +48,7 @@ export class CodeReviewTaskStatusController implements ICodeReviewTaskStatusCont
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/status/delete-status'
+            Url: G_PathToServer + 'api/taskmanagement/status/delete-status'
 
         });
     }
@@ -89,7 +89,7 @@ export class CodeReviewTaskStatusController implements ICodeReviewTaskStatusCont
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/status/create-status'
+            Url: G_PathToServer + 'api/taskmanagement/status/create-status'
 
         });
     }
@@ -127,7 +127,7 @@ export class CodeReviewTaskStatusController implements ICodeReviewTaskStatusCont
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/codereview/status/update-status'
+            Url: G_PathToServer + 'api/taskmanagement/status/update-status'
 
         });
     }

@@ -4,7 +4,7 @@ export interface IProjectTaskDataBack {
     Id: number;
     Name: string;
     CreatorId: number;
-    ReviewerId?: number;
+    ExecutorId?: number;
     // Status: ITaskReviewStatusDataBack;
     CreateDate: string;
     LastUpdateDate: string;

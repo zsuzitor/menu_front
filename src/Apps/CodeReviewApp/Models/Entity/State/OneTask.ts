@@ -8,7 +8,7 @@ export class OneTask {
     Id: number;
     Name: string;
     CreatorId: number;
-    ReviewerId?: number;
+    ExecutorId?: number;
     StatusId: number;
     CreateDate: string;
     LastUpdateDate: string;
@@ -24,7 +24,7 @@ export class OneTask {
         this.Id = data.Id;
         this.Name = data.Name;
         this.CreatorId = data.CreatorId;
-        this.ReviewerId = data.ReviewerId;
+        this.ExecutorId = data.ExecutorId;
         this.StatusId = data.StatusId;
         this.CreateDate = data.CreateDate;
         this.LastUpdateDate = data.LastUpdateDate;
@@ -39,7 +39,7 @@ export class OneTask {
         this.Id = data.Id;
         this.Name = data.Name;
         this.CreatorId = data.CreatorId;
-        this.ReviewerId = data.ReviewerId;
+        this.ExecutorId = data.ExecutorId;
         this.StatusId = data.StatusId;
         this.CreateDate = data.CreateDate;
         this.LastUpdateDate = data.LastUpdateDate;

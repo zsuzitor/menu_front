@@ -37,7 +37,7 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
                 tasks.forEach(tsk => {
                     tsk.Name = payload.Name;
                     tsk.StatusId = payload.StatusId;
-                    tsk.ReviewerId = payload.ReviewerId;
+                    tsk.ExecutorId = payload.ExecutorId;
                     tsk.CreatorId = payload.CreatorId;
                     tsk.CreateDate = payload.CreateDate;
                     tsk.LastUpdateDate = payload.LastUpdateDate;
@@ -187,7 +187,7 @@ export function CodeReviewTaskReducer(state: AppState = new AppState(), action: 
                 let helper = new Helper();
                 var tasks = helper.GetTaskFromState(newState, payload.Id);
                 tasks.forEach(tsk => {
-                    tsk.ReviewerId = payload.PersonId;
+                    tsk.ExecutorId = payload.PersonId;
                 })
 
                 return newState;

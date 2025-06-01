@@ -21,26 +21,11 @@ require('./OneReviewTaskDetail.css');
 
 const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
 
-    //   console.log(new Error().stack); // Check where this is being called from
-
-    //         return <div>стоп для теста</div>
-
-    // console.log(props);
-    // const [taskName, setTaskName] = useState(props.Task?.Name || '');
-
     const [taskDescriptionEditable, setTaskDescriptionEditable] = useState(false);
     const [taskNewCommentEditable, setTaskNewCommentEditable] = useState(false);
     const [taskNameEditable, setTaskNameEditable] = useState(false);
     const [taskStatusEditable, setTaskStatusEditable] = useState(false);
     const [taskExecutorEditable, setTaskExecutorEditable] = useState(false);
-
-    // const [taskLink, setTaskLink] = useState(props.Task?.Link || '');
-
-    // const [taskStatus, setTaskStatus] = useState(props.Task?.StatusId || -1);
-    // const [taskReviewer, setTaskreviewer] = useState(props.Task?.ReviewerId || -1);
-    // const [taskCreator, setTaskCreator] = useState(props.Task?.CreatorId || -1);
-    // const [newCommentName, setNewCommentName] = useState('');
-
 
 
 
@@ -64,10 +49,7 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
     }, [props.Task?.Description]);
 
 
-    // useEffect(() => {
-    //     setTaskLink(props.Task?.Link || '');
-    // }, [props.Task?.Link]);
-
+    
     useEffect(() => {
         // setTaskStatus(props.Task?.StatusId || -1);
         setTaskStatusEditable(false);
@@ -77,11 +59,8 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
         // setTaskreviewer(props.Task?.ReviewerId || -1);
         setTaskExecutorEditable(false);
         // console.log("setTaskExecutorEditable(false);");
-    }, [props.Task?.ReviewerId]);
+    }, [props.Task?.ExecutorId]);
 
-    // useEffect(() => {
-    //     setTaskCreator(props.Task?.CreatorId);
-    // }, [props.Task?.CreatorId]);
 
 
     useEffect(() => {
@@ -89,37 +68,6 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
     }, [props.Task?.Comments?.length]);
 
 
-
-
-    // const cancelTask = () => {
-    //     if (!confirm('Отменить изменения?')) {
-    //         return;
-    //     }
-    //     // setTaskName(props.Task.Name || '');
-    //     // setTaskDescription(props.Task.Description || '');
-    //     // setTaskLink(props.Task.Link || '');
-    //     setTaskStatus(props.Task.StatusId || -1);
-    //     setTaskreviewer(props.Task.ReviewerId || -1);
-    //     setTaskCreator(props.Task.CreatorId);
-    // };
-
-    const updateTask = () => {
-        // if (!taskName) {
-        //     let alertFactory = new AlertData();
-        //     let alert = alertFactory.GetDefaultError("Необходимо заполнить название задачи");
-        //     window.G_AddAbsoluteAlertToState(alert);
-        //     return;
-        // }
-
-        // let forAdd = { ...props.Task } as OneTask;
-        // forAdd.Name = taskName;
-        // // forAdd.Link = taskLink;
-        // forAdd.StatusId = taskStatus;
-        // forAdd.ReviewerId = taskReviewer;
-        // forAdd.CreatorId = taskCreator;
-
-        // props.UpdateTask(forAdd);
-    };
 
 
     const deleteTask = () => {
@@ -181,15 +129,7 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
         return <div>Загружаем данные</div>
     }
 
-
-    // let taskHasChanges =
-    //     // taskName !== props.Task.Name ||
-    //     // (taskLink !== props.Task.Link && (taskLink || props.Task.Link)) ||
-    //     taskStatus !== props.Task.StatusId ||
-    //     // (taskDescription !== props.Task.Description && (taskDescription || props.Task.Description)) ||
-    //     (taskReviewer !== props.Task.ReviewerId && (props.Task.ReviewerId || taskReviewer != -1)) ||
-    //     taskCreator !== props.Task.CreatorId;
-
+    
 
     let creator = props.ProjectUsers.find(x => x.Id === props.Task.CreatorId);
     let creatorsList = props.ProjectUsers.filter(us => !us.Deactivated);
@@ -197,7 +137,7 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
         creatorsList.push(creator);
     }
 
-    let reviewer = props.ProjectUsers.find(x => x.Id === props.Task.ReviewerId);
+    let reviewer = props.ProjectUsers.find(x => x.Id === props.Task.ExecutorId);
     let reviewerList = props.ProjectUsers.filter(us => !us.Deactivated);
     if (reviewer && reviewer.Deactivated) {
         reviewerList.push(reviewer);
@@ -233,16 +173,6 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
 
             </div>
             <div className='one-review-task-detail-buttons'>
-                {/* {taskHasChanges ?
-                    <>
-                        <div className='task-button' onClick={() => updateTask()}>
-                            <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'}
-                                alt="Save" title='Сохранить' />
-                        </div>
-                        <div className='task-button' onClick={() => cancelTask()}>
-                            <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
-                                alt="Cancel" title='Отменить изменения' />
-                        </div></> : <></>} */}
                 <div className='task-button' onClick={() => deleteTask()}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
                         alt="Delete" title='Удалить задачу' />
@@ -251,7 +181,6 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
         </div>
         <div className='one-review-task-detail-body'>
             <div className='one-review-task-detail-content'>
-                {/* <p>{props.Task.Id}</p> */}
                 {!taskDescriptionEditable ? <div className='review-task-detail-description'
                     onClick={() => setTaskDescriptionEditable(true)}
                 >
@@ -265,33 +194,7 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
                         }}
                         Text={props.Task.Description}
                     />
-                    // <div className="editable-textarea-container">
-                    //     <textarea
-                    //         value={taskDescription} onChange={e => setTaskDescription(e.target.value)}
-                    //         className="editable-textarea"></textarea>
-
-                    //     <div className="input-editable-controls">
-                    //         <button type="button"
-                    //             className="editable-button cancel-button"
-                    //             onClick={() => setTaskDescriptionEditable(false)}
-                    //         >Отмена</button>
-                    //         <button type="button"
-                    //             className="editable-button save-button"
-                    //             onClick={() => alert('todo')}
-                    //         >Сохранить</button>
-                    //     </div>
-                    // </div>
                 }
-
-
-
-
-                {/* <input type='text'
-                    className='form-input persent-100-width'
-                    onChange={(e) => setTaskLink(e.target.value)}
-                    value={taskLink} placeholder='Ссылка'></input>
-                <br /> */}
-
 
             </div>
             <div className='one-review-task-detail-right-content'>
@@ -318,18 +221,13 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
 
                     }
                 </div>
-                {/* <select className='form-select-v2'
-                    onChange={e => setTaskStatus(+e.target.value)} value={taskStatus}>
-                    <option value={-1}>Не выбрано</option>
-                    {props.Statuses.map(status => <option value={status.Id} key={status.Id}>{status.Name}</option>)}
-                </select> */}
                 <div>
                     <span onClick={() => setTaskExecutorEditable(true)}
                         className='editable-by-click'>Исполнитель: </span>
                     {!taskExecutorEditable ? <span
                         className='editable-by-click'
                         onClick={() => setTaskExecutorEditable(true)}
-                    >{reviewerList.find(x => x.Id == props.Task.ReviewerId)?.Name || ''}</span>
+                    >{reviewerList.find(x => x.Id == props.Task.ExecutorId)?.Name || ''}</span>
                         :
                         <SaveCancelInputSelect
                             CancelEvent={() => setTaskExecutorEditable(false)}
@@ -344,17 +242,12 @@ const OneReviewTaskDetail = (props: IOneReviewTaskDetailProps) => {
                                 props.UpdateTaskExecutor(props.Task.Id, id);
                                 return true;
                             }}
-                            Selected={props.Task.ReviewerId}
+                            Selected={props.Task.ExecutorId}
                             ValuesWithId={reviewerList.map(x => ({
                                 Id: x.Id,
                                 Text: x.Name
                             }))}
                         />}
-                    {/* <select className='form-select-v2' value={taskReviewer}
-                        onChange={(e) => setTaskreviewer(+e.target.value)}>
-                        <option value={-1}>Не выбрано</option>
-                        {reviewerList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-                    </select> */}
                 </div>
                 <div>
                     <span>Создатель: {creatorsList

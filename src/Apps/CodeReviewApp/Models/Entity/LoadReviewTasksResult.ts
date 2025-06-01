@@ -10,7 +10,7 @@ export class ProjectTaskData implements MappedWithBack<IProjectTaskDataBack> {
     Id: number;
     Name: string;
     CreatorId: number;
-    ReviewerId?: number;
+    ExecutorId?: number;
     StatusId: number;
     Description: string;
     Comments: OneTaskReviewComment[];
@@ -21,7 +21,7 @@ export class ProjectTaskData implements MappedWithBack<IProjectTaskDataBack> {
         this.Id = newData.Id;
         this.Name = newData.Name;
         this.CreatorId = newData.CreatorId;
-        this.ReviewerId = newData.ReviewerId;
+        this.ExecutorId = newData.ExecutorId;
         this.StatusId = newData.StatusId;
         this.LastUpdateDate = newData.LastUpdateDate;
         this.CreateDate = newData.CreateDate;

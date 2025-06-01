@@ -20,14 +20,11 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
 
 
     const [taskName, setTaskName] = useState(props.Task.Name);
-    // const [taskLink, setTaskLink] = useState(props.Task.Link || '');
-
     const [taskStatus, setTaskStatus] = useState(props.Task.StatusId || -1);
-    const [taskReviewer, setTaskreviewer] = useState(props.Task.ReviewerId || -1);
+    const [taskExecutorId, setTaskExecutorId] = useState(props.Task.ExecutorId || -1);
     const [taskCreator, setTaskCreator] = useState(props.Task.CreatorId);
     const [newCommentName, setNewCommentName] = useState('');
 
-    // const [comments, setComments] = useState([] as IOneTaskReviewCommentDataBack[]);
     const [showComments, setShowComments] = useState(false);
     const [showFullTask, setShowFullTask] = useState(false);
 
@@ -38,17 +35,14 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         setTaskName(props.Task.Name);
     }, [props.Task.Name]);
 
-    // useEffect(() => {
-    //     setTaskLink(props.Task.Link || '');
-    // }, [props.Task.Link]);
 
     useEffect(() => {
         setTaskStatus(props.Task.StatusId || -1);
     }, [props.Task.StatusId]);
 
     useEffect(() => {
-        setTaskreviewer(props.Task.ReviewerId || -1);
-    }, [props.Task.ReviewerId]);
+        setTaskExecutorId(props.Task.ExecutorId || -1);
+    }, [props.Task.ExecutorId]);
 
     useEffect(() => {
         setTaskCreator(props.Task.CreatorId);
@@ -74,7 +68,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         setTaskName(props.Task.Name);
         // setTaskLink(props.Task.Link || '');
         setTaskStatus(props.Task.StatusId);
-        setTaskreviewer(props.Task.ReviewerId || -1);
+        setTaskExecutorId(props.Task.ExecutorId || -1);
         setTaskCreator(props.Task.CreatorId);
     };
 
@@ -90,7 +84,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         forAdd.Name = taskName;
         // forAdd.Link = taskLink;
         forAdd.StatusId = taskStatus;
-        forAdd.ReviewerId = taskReviewer;
+        forAdd.ExecutorId = taskExecutorId;
         forAdd.CreatorId = taskCreator;
 
         props.UpdateTask(forAdd);
@@ -119,7 +113,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
     let taskHasChanges = taskName !== props.Task.Name ||
         // (taskLink !== props.Task.Link && (taskLink || props.Task.Link)) ||
         taskStatus !== props.Task.StatusId ||
-        ((props.Task.ReviewerId || taskReviewer != -1) && taskReviewer !== props.Task.ReviewerId) ||
+        ((props.Task.ExecutorId || taskExecutorId != -1) && taskExecutorId !== props.Task.ExecutorId) ||
         taskCreator !== props.Task.CreatorId;
 
 
@@ -129,7 +123,7 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
         creatorsList.push(creator);
     }
 
-    let reviewer = props.ProjectUsers.find(x => x.Id === taskReviewer);
+    let reviewer = props.ProjectUsers.find(x => x.Id === taskExecutorId);
     let reviewerList = props.ProjectUsers.filter(us => !us.Deactivated);
     if (reviewer && reviewer.Deactivated) {
         reviewerList.push(reviewer);
@@ -169,8 +163,8 @@ const OneReviewTask = (props: IOneReviewTaskProps) => {
                 <span>Создатель: {creatorsList.find(x => x.Id == taskCreator).Name}</span>
                 <div>
                     <span>Исполнитель:</span>
-                    <select className='form-select-v2' value={taskReviewer}
-                        onChange={(e) => setTaskreviewer(+e.target.value)}>
+                    <select className='form-select-v2' value={taskExecutorId}
+                        onChange={(e) => setTaskExecutorId(+e.target.value)}>
                         <option value={-1}>Не выбрано</option>
                         {reviewerList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
                     </select>

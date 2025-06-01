@@ -55,7 +55,7 @@ const AddTask = (props: IAddTaskProps) => {
         let tsk = new OneTask()
         tsk.Name = newTaskName;
         tsk.CreatorId = newTaskCreator;
-        tsk.ReviewerId = newTaskReviwer;
+        tsk.ExecutorId = newTaskReviwer;
         tsk.Description = newTaskDescription;
         tsk.StatusId = taskStatus;
         props.AddTaskToProject(tsk, props.ProjectId);

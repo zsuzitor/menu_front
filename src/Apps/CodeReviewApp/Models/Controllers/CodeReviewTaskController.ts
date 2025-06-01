@@ -199,7 +199,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
         let data = {
             "taskName": task.Name,
             "taskCreatorId": task.CreatorId,
-            "taskReviwerId": task.ReviewerId,
+            "taskReviwerId": task.ExecutorId,
             "description": task.Description,
             "projectId": projectId,
             "statusId": task.StatusId,
@@ -241,7 +241,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
             "name": task.Name,
             "statusId": task.StatusId,
             "creatorId": task.CreatorId,
-            "reviewerId": task.ReviewerId,
+            "executorId": task.ExecutorId,
             "description": task.Description,
         };
         G_AjaxHelper.GoAjaxRequest({
@@ -280,7 +280,7 @@ export class CodeReviewTaskController implements ICodeReviewTaskController {
             "projectId": taskFilter.ProjectId,
             "nameLike": taskFilter.Name,
             "creatorId": taskFilter.CreatorId,
-            "reviewerId": taskFilter.ReviewerId,
+            "executorId": taskFilter.ReviewerId,
             "statusId": taskFilter.StatusId,
             "pageNumber": taskFilter.PageNumber,
             "pageSize": taskFilter.PageSize,

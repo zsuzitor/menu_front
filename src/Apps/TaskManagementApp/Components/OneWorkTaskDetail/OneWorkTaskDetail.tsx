@@ -49,7 +49,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     }, [props.Task?.Description]);
 
 
-    
+
     useEffect(() => {
         // setTaskStatus(props.Task?.StatusId || -1);
         setTaskStatusEditable(false);
@@ -94,25 +94,31 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                         Comment={x}
                         TaskId={props.Task.Id}
                         key={x.Id}
-                    ></OneWorkTaskComment>
+                    />
 
                 })}
-
-                {!taskNewCommentEditable ? <div
-                    className='task-comments-add'
-                    onClick={() => setTaskNewCommentEditable(true)}>
-                    Добавить комментарий
+                <div className='task-comments-add'>
+                    {!taskNewCommentEditable ? <div
+                        className='task-comments-add-btn'
+                        onClick={() => setTaskNewCommentEditable(true)}>
+                        <div className='task-comments-add-btn-img'>
+                            <img className='persent-100-width-height' src={G_PathToBaseImages + 'comments.png'}
+                                alt="Комментарии" title='Комментарии' />
+                        </div>
+                        Добавить комментарий
+                    </div>
+                        :
+                        <SaveCancelTextarea
+                            CancelEvent={() => setTaskNewCommentEditable(false)}
+                            SaveEvent={(val) => {
+                                addComment(val);
+                                return true;
+                            }}
+                            Text=''
+                        ></SaveCancelTextarea>
+                    }
                 </div>
-                    :
-                    <SaveCancelTextarea
-                        CancelEvent={() => setTaskNewCommentEditable(false)}
-                        SaveEvent={(val) => {
-                            addComment(val);
-                            return true;
-                        }}
-                        Text=''
-                    ></SaveCancelTextarea>
-                }
+
 
             </div>
 
@@ -124,7 +130,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
         return <div>Загружаем данные</div>
     }
 
-    
+
 
     let creator = props.ProjectUsers.find(x => x.Id === props.Task.CreatorId);
     let creatorsList = props.ProjectUsers.filter(us => !us.Deactivated);
@@ -139,18 +145,20 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     }
 
 
-
+    
     return <div className='one-work-task-detail-block'>
         <div className='one-work-task-detail-header'>
 
-            <div className='one-work-task-detail-name'
-                onClick={() => setTaskNameEditable(true)}>
-                {!taskNameEditable ? <span className='editable-by-click'
-
-                >{props.Task.Name || ''}</span>
+            <div className='one-work-task-detail-name-full'>
+                {!taskNameEditable ? <div className='one-work-task-detail-name'
+                    onClick={() => setTaskNameEditable(true)}
+                ><span className='editable-by-click'
+                >{props.Task.Name || ''}</span></div>
                     :
                     <SaveCancelInputText
-                        CancelEvent={() => setTaskNameEditable(false)}
+                        CancelEvent={() => {
+                            setTaskNameEditable(false);
+                        }}
                         SaveEvent={(val) => {
                             if (!val) {
                                 let alertFactory = new AlertData();

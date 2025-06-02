@@ -6,12 +6,12 @@
     border: 1px solid #e5e5e5;
 }
 
-.one-work-task-comment-block-buttons {
+/* .one-work-task-comment-block-buttons {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
     margin-left: auto;
-}
+} */
 
 .work-task-comment-delete-button {
     width: 30px;

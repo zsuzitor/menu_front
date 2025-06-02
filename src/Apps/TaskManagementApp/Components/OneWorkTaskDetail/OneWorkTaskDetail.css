@@ -46,7 +46,7 @@
     padding: 5px;
 }
 
-.one-work-task-detail-name {
+.one-work-task-detail-name-full {
     padding-left: 30px;
     padding-right: 15px;
     padding-bottom: 15px;
@@ -54,6 +54,11 @@
     font-size: 25px;
 
 }
+
+.one-work-task-detail-name {
+    border-radius: 5px;
+}
+
 
 .one-work-task-detail-name:hover {
     border: 1px solid #DFE1E6;
@@ -99,7 +104,33 @@
     cursor: pointer;
 }
 
-.one-work-task-detail-comments-block-inner .task-comments-add:hover {
-    cursor: pointer;
+.task-comments-add {
+    padding-top: 15px;
+}
+
+.task-comments-add-btn .task-comments-add-btn-img {
+    width: 25px;
+    height: 25px;
+}
+
+.task-comments-add-btn .task-comments-add-btn-img img {
+    /* красит в салатовый */
+    filter: brightness(0) saturate(100%) invert(50%) sepia(100%) hue-rotate(30deg);
+}
+
+
+.one-work-task-detail-comments-block-inner .task-comments-add-btn {
+    width: 255px;
+    display: flex;
+    gap: 10px;
     border: 1px solid #DFE1E6;
+    border-radius: 5px;
+    padding-left: 10px;
+    height: 35px;
+    padding-top: 3px;
+}
+
+.one-work-task-detail-comments-block-inner .task-comments-add-btn:hover {
+    cursor: pointer;
+    border: 1px solid black;
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import connectToStore, { IOneWorkTaskCommentProps } from './OneWorkTaskCommentSetup';
+import SaveCancelTextarea from '../../../../components/Body/SaveCancelTextarea/SaveCancelTextarea';
 
 
 require('./OneWorkTaskComment.css');
@@ -10,11 +11,12 @@ require('./OneWorkTaskComment.css');
 
 const OneWorkTaskComment = (props: IOneWorkTaskCommentProps) => {
     const [editMode, setEditMode] = useState(false);
-    const [changedText, setChangedText] = useState(props.Comment.Text);
+    // const [changedText, setChangedText] = useState(props.Comment.Text);
 
     useEffect(() => {
         // setChangedText(props.Comment.Text);
-        cancelEditMode();
+        // cancelEditMode();
+        setEditMode(false);
     }, [props.Comment.Text]);
 
     const deleteComment = () => {
@@ -26,30 +28,36 @@ const OneWorkTaskComment = (props: IOneWorkTaskCommentProps) => {
     }
 
 
-    const updateComment = () => {
-        props.UpdateComment(props.Comment.Id, changedText);
+    // const updateComment = () => {
+    //     props.UpdateComment(props.Comment.Id, changedText);
 
-    }
+    // }
 
-    const cancelEditMode = () => {
-        setEditMode(false);
-        setChangedText(props.Comment.Text);
-    }
+    // const cancelEditMode = () => {
+    //     setEditMode(false);
+    //     setChangedText(props.Comment.Text);
+    // }
 
     let user = props.ProjectUsers.find(x => x.Id == props.Comment.CreatorId);
     // let userCurrent = props.ProjectUsers.find(x => x.MainAppUserId == props.AuthInfo?.User?.Id);
     let commentOwner = user && user.MainAppUserId === props.AuthInfo?.User?.Id;
 
-    let haveChenges = changedText !== props.Comment.Text;
+    // let haveChenges = changedText !== props.Comment.Text;
 
     if (editMode) {
         return <div className='one-work-task-comment-block'>
             <div className='one-work-task-comment-block-data'>
                 <span>{user?.Name || "id:" + props.Comment.CreatorId}</span>
-                <textarea className='form-control-b persent-100-width' value={changedText}
-                    onChange={e => setChangedText(e.target.value)}></textarea>
+                <SaveCancelTextarea
+                    CancelEvent={() => setEditMode(false)}
+                    SaveEvent={(val) => {
+                        props.UpdateComment(props.Comment.Id, val);
+                        return true;
+                    }}
+                    Text={props.Comment.Text}
+                />
             </div>
-            <div className='one-work-task-comment-block-buttons'>
+            {/* <div className='one-work-task-comment-block-buttons'>
                 <div className='work-task-comment-cancel-button' onClick={() => cancelEditMode()}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
                         alt="Cancel" title='отменить изменения' />
@@ -59,7 +67,7 @@ const OneWorkTaskComment = (props: IOneWorkTaskCommentProps) => {
                         <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'}
                             alt="Save" title='сохранить' />
                     </div></> : <></>}
-            </div>
+            </div> */}
         </div>
     }
 

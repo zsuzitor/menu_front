@@ -15,7 +15,6 @@ interface IOneWorkTaskDetailStateToProps {
     ProjectUsers: ProjectUser[];
     Statuses: WorkTaskStatus[];
     Task: OneTask;
-    //Comments: OneTaskReviewComment[];
     CurrentProjectId: number;
 
 }
@@ -52,9 +51,6 @@ const mapStateToProps = (state: AppState, ownProps: IOneWorkTaskDetailOwnProps) 
 
 const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps) => {
     let res = {} as IOneWorkTaskDetailDispatchToProps;
-    // res.UpdateTask = (forAdd: OneTask) => {
-    //     dispatch(window.G_CodeReviewTaskController.UpdateTaskRedux(forAdd));
-    // };
 
     res.DeleteTask = (taskId: number) => {
         dispatch(window.G_TaskManagementTaskController.DeleteTaskRedux(taskId));

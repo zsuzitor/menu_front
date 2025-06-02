@@ -1,4 +1,4 @@
-.project-review-user-list {
+.project-management-user-list {
     transition: 1s;
     overflow: hidden;
     /* border: 1px solid black; */
@@ -9,11 +9,7 @@
     /* box-shadow: 0px 0px 5px 1px black; */
 }
 
-/* .project-review-user-list-show {
-    max-height: 300px;
-    overflow: auto;
-} */
 
-.add-new-review-person-btn {
+.add-new-management-user-btn {
     background-color: white !important;
 }

@@ -56,9 +56,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     }, [props.Task?.StatusId]);
 
     useEffect(() => {
-        // setTaskreviewer(props.Task?.ReviewerId || -1);
         setTaskExecutorEditable(false);
-        // console.log("setTaskExecutorEditable(false);");
     }, [props.Task?.ExecutorId]);
 
 
@@ -79,9 +77,6 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     };
 
     const addComment = (val: string) => {
-
-
-        // window.G_CodeReviewCommentController.AddComment(props.Task.Id, newCommentName, addComment);
         props.AddComment(props.Task.Id, val);
     };
 
@@ -90,9 +85,9 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
 
     const renderComments = () => {
 
-        return <div className='one-review-task-detail-comments-block'>
+        return <div className='one-work-task-detail-comments-block'>
             {/* <hr /> */}
-            <div className='one-review-task-detail-comments-block-inner'>
+            <div className='one-work-task-detail-comments-block-inner'>
                 Комментарии:
                 {props.Task.Comments.map(x => {
                     return <OneWorkTaskComment
@@ -145,10 +140,10 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
 
 
 
-    return <div className='one-review-task-detail-block'>
-        <div className='one-review-task-detail-header'>
+    return <div className='one-work-task-detail-block'>
+        <div className='one-work-task-detail-header'>
 
-            <div className='one-review-task-detail-name'
+            <div className='one-work-task-detail-name'
                 onClick={() => setTaskNameEditable(true)}>
                 {!taskNameEditable ? <span className='editable-by-click'
 
@@ -172,16 +167,16 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                 }
 
             </div>
-            <div className='one-review-task-detail-buttons'>
+            <div className='one-work-task-detail-buttons'>
                 <div className='task-button' onClick={() => deleteTask()}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
                         alt="Delete" title='Удалить задачу' />
                 </div>
             </div>
         </div>
-        <div className='one-review-task-detail-body'>
-            <div className='one-review-task-detail-content'>
-                {!taskDescriptionEditable ? <div className='review-task-detail-description'
+        <div className='one-work-task-detail-body'>
+            <div className='one-work-task-detail-content'>
+                {!taskDescriptionEditable ? <div className='work-task-detail-description'
                     onClick={() => setTaskDescriptionEditable(true)}
                 >
                     {props.Task.Description}
@@ -197,7 +192,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                 }
 
             </div>
-            <div className='one-review-task-detail-right-content'>
+            <div className='one-work-task-detail-right-content'>
 
                 <div>
                     <span onClick={() => setTaskStatusEditable(true)}

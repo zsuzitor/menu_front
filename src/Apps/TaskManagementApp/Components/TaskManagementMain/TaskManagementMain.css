@@ -1,11 +1,11 @@
-.code-review-main-container {
+.task-management-main-container {
     display: flex;
     flex-wrap: nowrap;
     width: 100%;
     /* background-color: #666262; */
 }
 
-.code-review-projects-menu-main {
+.code-management-projects-menu-main {
     position: relative;
     margin-right: 1rem;
     padding: 0.75rem;
@@ -16,18 +16,18 @@
     transition: 0.5s;
 }
 
-.code-review-projects-menu-main-visible {
+.code-management-projects-menu-main-visible {
     width: 290px;
     margin-right: 1rem;
 }
 
-.code-review-projects-menu-main-hide {
+.code-management-projects-menu-main-hide {
     margin-right: -1.25rem;
     width: 0;
     transform: translateX(-250px);
 }
 
-.hide-review-projects-menu-button {
+.hide-management-projects-menu-button {
     position: absolute;
     display: flex;
     justify-content: center;
@@ -45,19 +45,19 @@
     transition: 0.5s;
 }
 
-.hide-review-projects-menu-button:hover {
+.hide-management-projects-menu-button:hover {
     background-color: #6c757d;
 }
 
-.code-review-projects-menu-main-hide .hide-review-projects-menu-button {
+.code-management-projects-menu-main-hide .hide-management-projects-menu-button {
     right: -16rem;
 }
 
-.code-review-project-info {
+.code-management-project-info {
     width: 100%;
 }
 
-.code-review-main-container .preloader{
+.task-management-main-container .preloader{
     position: fixed;
     width: 100%;
     height: 100%;

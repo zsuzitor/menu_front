@@ -25,7 +25,7 @@ const EditProject = (props: IEditProjectProps) => {
             <span>Статусы проекта</span>
             {props.Statuses.map(status =>
                 <EditTaskStatus key={status.Id} Status={status}></EditTaskStatus>)}
-            <div className='task-review-status-create'>
+            <div className='work-task-status-create'>
                 <div className='status-input'>
                     <input className='form-input' value={newStatusName}
                         placeholder='Название нового статуса'

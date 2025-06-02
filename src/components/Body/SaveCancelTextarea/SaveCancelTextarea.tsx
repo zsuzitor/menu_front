@@ -39,7 +39,15 @@ const SaveCancelTextarea = (props: ISaveCancelTextareaProps) => {
             >Отмена</button>
             <button type="button"
                 className="editable-button save-button"
-                onClick={() => props.SaveEvent(text)}
+                onClick={() => {
+                    if (text != props.Text) {
+                        props.SaveEvent(text);
+                    }
+                    else {
+                        setText(props.Text || '');
+                        props.CancelEvent()
+                    }
+                }}
             >Сохранить</button>
         </div>
     </div>

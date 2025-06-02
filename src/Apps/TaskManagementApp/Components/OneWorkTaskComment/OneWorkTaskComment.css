@@ -1,4 +1,4 @@
-.one-review-comment-block {
+.one-work-task-comment-block {
     display: flex;
     padding: 0.75rem;
     background-color: #fff;
@@ -6,42 +6,42 @@
     border: 1px solid #e5e5e5;
 }
 
-.one-review-comment-block-buttons {
+.one-work-task-comment-block-buttons {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
     margin-left: auto;
 }
 
-.review-task-comment-delete-button {
+.work-task-comment-delete-button {
     width: 30px;
     height: 30px;
     cursor: pointer;
 }
 
-.review-task-comment-save-button {
+.work-task-comment-save-button {
     width: 30px;
     height: 30px;
     cursor: pointer;
 }
 
-.review-task-comment-cancel-button {
+.work-task-comment-cancel-button {
     width: 30px;
     height: 30px;
     cursor: pointer;
 }
 
-.review-task-comment-edit-button {
+.work-task-comment-edit-button {
     width: 24px;
     height: 24px;
     cursor: pointer;
 }
 
-.one-review-comment-block-data {
+.one-work-task-comment-block-data {
     flex-grow: 1;
     margin-right: 0.5rem;
 }
 
-.one-review-comment-block-data span {
+.one-work-task-comment-block-data span {
     word-wrap: anywhere;
 }

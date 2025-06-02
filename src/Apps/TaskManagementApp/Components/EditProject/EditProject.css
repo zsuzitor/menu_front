@@ -1,13 +1,13 @@
-.task-review-status-create {
+.work-task-status-create {
     display: flex;
     justify-content: flex-start;
     gap: 10px;
 
 }
 
-.task-review-status-create .status-create {}
+.work-task-status-create .status-create {}
 
-.task-review-status-create .status-input {
+.work-task-status-create .status-input {
     width: 200px;
 }
 

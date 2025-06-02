@@ -13,10 +13,10 @@ const OneProjectInList = (props: IOneProjectInListProps) => {
     const navigate = useNavigate();
 
 
-    let projectClassName = 'review-project';
+    let projectClassName = 'management-project';
 
     if (props.CurrentProject) {
-        projectClassName += ' selected-review-project'
+        projectClassName += ' selected-management-project'
     }
 
 

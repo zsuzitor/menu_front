@@ -1,23 +1,23 @@
-.review-project {
+.management-project {
     border-radius: 0.25rem;
     padding: 5px 10px;
     cursor: pointer;
     overflow: hidden;
 }
 
-.review-project + .review-project {
+.management-project + .management-project {
     margin-top: 0.5rem;
 }
 
-.review-project:hover {
+.management-project:hover {
     background-color: #edeef0;
 }
 
-.selected-review-project {
+.selected-management-project {
     color: #fff;
     background-color: #337cca;
 }
 
-.selected-review-project:hover {
+.selected-management-project:hover {
     background-color: #0561c8;
 }

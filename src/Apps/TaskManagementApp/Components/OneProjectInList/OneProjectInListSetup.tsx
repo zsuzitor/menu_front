@@ -29,7 +29,6 @@ export interface IOneProjectInListProps extends IOneProjectInListStateToProps, I
 
 const mapStateToProps = (state: AppState, ownProps: IOneProjectInListOwnProps) => {
     let res = {} as IOneProjectInListStateToProps;
-    // res.CurrentProjectId = state.CodeReviewApp.CurrentProjectId;
     return res;
 }
 

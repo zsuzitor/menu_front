@@ -43,19 +43,19 @@ const OneWorkTaskComment = (props: IOneWorkTaskCommentProps) => {
     let haveChenges = changedText !== props.Comment.Text;
 
     if (editMode) {
-        return <div className='one-review-comment-block'>
-            <div className='one-review-comment-block-data'>
+        return <div className='one-work-task-comment-block'>
+            <div className='one-work-task-comment-block-data'>
                 <span>{user?.Name || "id:" + props.Comment.CreatorId}</span>
                 <textarea className='form-control-b persent-100-width' value={changedText}
                     onChange={e => setChangedText(e.target.value)}></textarea>
             </div>
-            <div className='one-review-comment-block-buttons'>
-                <div className='review-task-comment-cancel-button' onClick={() => cancelEditMode()}>
+            <div className='one-work-task-comment-block-buttons'>
+                <div className='work-task-comment-cancel-button' onClick={() => cancelEditMode()}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'cancel.png'}
                         alt="Cancel" title='отменить изменения' />
                 </div>
                 {haveChenges ? <>
-                    <div className='review-task-comment-save-button' onClick={() => updateComment()}>
+                    <div className='work-task-comment-save-button' onClick={() => updateComment()}>
                         <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'}
                             alt="Save" title='сохранить' />
                     </div></> : <></>}
@@ -63,19 +63,19 @@ const OneWorkTaskComment = (props: IOneWorkTaskCommentProps) => {
         </div>
     }
 
-    return <div className='one-review-comment-block'>
-        <div className='one-review-comment-block-data'>
+    return <div className='one-work-task-comment-block'>
+        <div className='one-work-task-comment-block-data'>
             <span>{user?.Name || "id:" + props.Comment.CreatorId}</span>
             <br />
             <span>{props.Comment.Text}</span>
         </div>
-        <div className='one-review-comment-block-buttons'>
+        <div className='one-work-task-comment-block-buttons'>
             {commentOwner ? <>
-                <div className='review-task-comment-delete-button' onClick={() => deleteComment()}>
+                <div className='work-task-comment-delete-button' onClick={() => deleteComment()}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
                         alt="Delete" title='удалить задачу' />
                 </div>
-                <div className='review-task-comment-edit-button' onClick={() => setEditMode(st => true)}>
+                <div className='work-task-comment-edit-button' onClick={() => setEditMode(st => true)}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'edit-1.svg'}
                         alt="Edit" title='Редактировать' />
                 </div></> : <></>}

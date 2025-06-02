@@ -25,11 +25,10 @@ const ProjectUsers = (props: IProjectUsersProps) => {
         }
 
         props.AddUserToProject(newUserName, userMainAppEmail, props.ProjectId);
-        // window.G_CodeReviewUserController.AddUserToProjectRedux(newUserName, userMainAppEmail, props.ProjectId);
         setNewUserName('');
     };
 
-    return <div className={'project-review-user-list'}>
+    return <div className={'project-management-user-list'}>
         <span>Имя человека</span>
         <input className='form-control-b' type='text' placeholder='Имя человека'
             onChange={(e) => setNewUserName(e.target.value)} value={newUserName}></input>
@@ -37,7 +36,7 @@ const ProjectUsers = (props: IProjectUsersProps) => {
         <span>Почта из основного приложения</span>
         <input className='form-control-b' type='text' value={userMainAppEmail} placeholder="Почта  из основного приложения" onChange={e => setUserMainAppEmail(e.target.value)}></input>
         <br />
-        <button className='btn-b btn-border add-new-review-person-btn' onClick={() => addNewUser()}>Добавить человека</button>
+        <button className='btn-b btn-border add-new-management-user-btn' onClick={() => addNewUser()}>Добавить человека</button>
         <br />
         <label>Скрывать неактивных пользователей</label>
         <input type="checkbox" checked={hideDeactivated} onChange={e => setHideDeactivated(e.target.checked)} />

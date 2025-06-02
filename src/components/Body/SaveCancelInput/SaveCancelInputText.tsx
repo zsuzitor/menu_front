@@ -30,7 +30,15 @@ const SaveCancelInputText = (props: ISaveCancelInputTextProps) => {
             onChange={(e) => setText(e.target.value)}></input>
         <div className="action-buttons">
             <button type="button" className="save-button" title="Сохранить"
-                onClick={() => props.SaveEvent(text)}>
+                onClick={() => {
+                    if (text != props.Text) {
+                        props.SaveEvent(text);
+                    }
+                    else {
+                        setText(props.Text || '');
+                        props.CancelEvent()
+                    }
+                }}>
                 <span className="save-icon"></span>
             </button>
             <button type="button" className="cancel-button" title="Отменить"

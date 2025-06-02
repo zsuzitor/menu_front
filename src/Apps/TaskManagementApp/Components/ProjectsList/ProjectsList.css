@@ -1,8 +1,8 @@
-.review-project-new-block {
+.management-project-new-block {
     /*padding-bottom: 10px;*/
 }
 
-.code-review-projects-menu {
+.code-management-projects-menu {
     overflow: hidden;
     position: sticky;
     top: 0;
@@ -11,15 +11,15 @@
     background-color: #fff;
 }
 
-.code-review-projects-menu hr {
+.code-management-projects-menu hr {
     width: 100%;
 }
 
-.code-review-projects-menu .form-input {
+.code-management-projects-menu .form-input {
     margin-bottom: 1rem;
 }
 
-.review-project-new-block .button {
+.management-project-new-block .button {
     margin-top: 0 !important;
     min-width: max-content;
 }

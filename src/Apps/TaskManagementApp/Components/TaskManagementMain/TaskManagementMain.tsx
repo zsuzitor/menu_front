@@ -120,20 +120,20 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
     }, [window.location.href]);
     //
 
-    let mainClass = ' code-review-projects-menu-main-hide';
+    let mainClass = ' code-management-projects-menu-main-hide';
     if (visibleList) {
-        mainClass = ' code-review-projects-menu-main-visible';
+        mainClass = ' code-management-projects-menu-main-visible';
     }
 
 
 
 
 
-    return <div className='code-review-main-container'>
+    return <div className='task-management-main-container'>
         <div className='preloader' id={TaskManagementPreloader}></div>
-        <div className={'code-review-projects-menu-main' + mainClass}>
+        <div className={'code-management-projects-menu-main' + mainClass}>
             <div onClick={() => setVisibleList(v => !v)}
-                className="hide-review-projects-menu-button">{visibleList ? '<' : '>'}</div>
+                className="hide-management-projects-menu-button">{visibleList ? '<' : '>'}</div>
             <ProjectsList Projects={props.ProjectsList}
                 CurrentProjectId={props.CurrentProjectId} />
         </div>
@@ -141,7 +141,7 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
             <OneWorkTaskDetail></OneWorkTaskDetail>
             // <></>
             :
-            <div className='code-review-project-info'>
+            <div className='code-management-project-info'>
                 <ProjectDetail Project={props.ProjectsList.find(x => x.Id == props.CurrentProjectId)}
                     Tasks={props.Tasks}
                 // UpdateTask={updateTaskProject}

@@ -26,7 +26,6 @@ interface IOneWorkTaskStateToProps {
 interface IOneWorkTaskDispatchToProps {
     UpdateTask: (task: OneTask) => void;
     DeleteTask: (id: number) => void;
-    AddComment: (taskId: number, newCommentText: string) => void;
     SetEmptyTaskComments: (taskId: number) => void;
     LoadTaskComments: (taskId: number) => void;
     SetCurrentTask: (taskId: number) => void;
@@ -57,9 +56,6 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskOwnProps) => {
         dispatch(window.G_TaskManagementTaskController.DeleteTaskRedux(taskId));
     };
 
-    res.AddComment = (taskId: number, text: string) => {
-        dispatch(window.G_TaskManagementCommentController.AddCommentRedux(taskId, text));
-    };
 
     res.SetEmptyTaskComments = (taskId: number) => {
         let dt = new CommentSet();

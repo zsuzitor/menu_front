@@ -34,7 +34,15 @@ const SaveCancelInputSelect = (props: ISaveCancelInputSelectProps) => {
         </select>
         <div className="action-buttons">
             <button type="button" className="save-button" title="Сохранить"
-                onClick={() => props.SaveEvent(selected)}>
+                onClick={() => {
+                    if (selected != props.Selected) {
+                        props.SaveEvent(selected);
+                    }
+                    else {
+                        setSelected(props.Selected || -1);
+                        props.CancelEvent()
+                    }
+                }}>
                 <span className="save-icon"></span>
             </button>
             <button type="button" className="cancel-button" title="Отменить"

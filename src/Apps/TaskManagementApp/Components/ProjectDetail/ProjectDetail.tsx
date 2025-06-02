@@ -138,7 +138,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
     if (!props.Project) {
-        return <div className='review-project-no-project'>
+        return <div className='management-project-no-project'>
             <img src={G_PathToBaseImages + 'exclamation.png'} alt='' />
             <h2>Выберите проект</h2>
         </div>
@@ -147,16 +147,16 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
 
 
-    return <div className='review-project-detail-main'>
-        <div className='review-project-detail-main-header'>
+    return <div className='management-project-detail-main'>
+        <div className='management-project-detail-main-header'>
             <h1>{props.Project.Name}</h1>
-            <div className='review-project-edit-button' onClick={() => {
+            <div className='management-project-edit-button' onClick={() => {
                 setShowEditProject(true);
             }}>
                 <img className='persent-100-width-height' src={G_PathToBaseImages + 'edit-1.svg'}
                     alt='Edit' title='Редактировать проект' />
             </div>
-            <div className='review-project-delete-button' onClick={() => {
+            <div className='management-project-delete-button' onClick={() => {
                 if (confirm('Удалить проект?')) {
                     deleteProject();
                 }
@@ -169,7 +169,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 Title='Редакторивание проекта'
                 InnerContent={() => <EditProject></EditProject>}></AdditionalWindow> : <></>}
             <br />
-            <div className='review-project-detail-main-header-buttons'>
+            <div className='management-project-detail-main-header-buttons'>
                 <button className='button button-grey' onClick={() => setShowUserList(e => true)}>Люди проекта</button>
                 {showUserList ? <AdditionalWindow CloseWindow={() => setShowUserList(false)}
                     IsHeightWindow={true}
@@ -178,14 +178,14 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
             </div>
         </div>
-        <div className='review-project-description'>
+        <div className='management-project-description'>
             описание
         </div>
-        {/* <div className='review-project-tasks-filters-block'>
+        {/* <div className='management-project-tasks-filters-block'>
             <h4 className='persent-100-width'>Фильтры</h4>
 
         </div> */}
-        <div className='review-project-tasks'>
+        <div className='management-project-tasks'>
             <div className='tasks-header'>
                 <div><h3>Задачи</h3></div>
                 <div><button className='add-task-btn'
@@ -232,8 +232,8 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 ></AddTask>}></AdditionalWindow> : <></>}
 
 
-            <div className='review-project-tasks-filters-buttons'>
-                <div className='review-project-tasks-filters-block-flex'>
+            <div className='management-project-tasks-filters-buttons'>
+                <div className='management-project-tasks-filters-block-flex'>
 
                     {filterVisibilityName && <div className='filter-container'>
                         <div className='filter-tag'>
@@ -305,7 +305,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                         Comments={x.Comments}
                         CurrentProjectId={props.Project.Id}
                     ></OneWorkTask>)
-                : <div className='review-project-tasks-no-tasks'>
+                : <div className='management-project-tasks-no-tasks'>
                     <img src={G_PathToBaseImages + 'exclamation.png'} alt='' />
                     <h2>Задачи не найдены!</h2>
                 </div>

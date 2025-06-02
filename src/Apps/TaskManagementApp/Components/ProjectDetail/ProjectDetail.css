@@ -1,6 +1,6 @@
-.review-project-detail-main {}
+.management-project-detail-main {}
 
-.review-project-detail-main-header {
+.management-project-detail-main-header {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -8,27 +8,27 @@
     margin-bottom: 0.6875rem;
 }
 
-.review-project-detail-main-header-buttons {
+.management-project-detail-main-header-buttons {
     display: flex;
     gap: 1rem;
     margin-left: auto;
 }
 
-.review-project-detail-main h1 {
+.management-project-detail-main h1 {
     margin-bottom: 0;
     margin-left: 2.5rem;
 }
 
-.review-project-detail-main h3 {
+.management-project-detail-main h3 {
     margin-top: 0.5rem;
 }
 
-/*.review-project-new-task-block {*/
+/*.management-project-new-task-block {*/
 /*    !* border: 1px solid black; *!*/
 /*    padding-bottom: 15px;*/
 /*}*/
 
-/* .review-project-tasks-filters-block {
+/* .management-project-tasks-filters-block {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -40,34 +40,34 @@
     box-shadow: 0 0 5px rgb(0 0 0 / 25%);
 }
 
-.review-project-tasks-filters-block h4 {
+.management-project-tasks-filters-block h4 {
     margin-top: -0.5rem;
     margin-bottom: 0;
 } */
 
-.review-project-tasks-filters-block-flex {
+.management-project-tasks-filters-block-flex {
     display: flex;
     flex-wrap: wrap;
     gap: 3px 7px;
     padding-bottom: 10px;
 }
 
-.review-project-tasks-filters-block-flex .form-input {
+.management-project-tasks-filters-block-flex .form-input {
     width: 15rem;
 }
 
-.review-project-tasks-filters-block-flex span {
+.management-project-tasks-filters-block-flex span {
     margin-right: 0.5rem;
 }
 
-.review-project-tasks-filters-buttons {
+.management-project-tasks-filters-buttons {
     display: flex;
     /* justify-content: space-between; */
     gap: 20px;
     flex-wrap: wrap;
 }
 
-.review-project-delete-button {
+.management-project-delete-button {
     width: 30px;
     height: 30px;
     cursor: pointer;
@@ -79,17 +79,17 @@
     cursor: pointer;
 }
 
-.review-project-edit-button {
+.management-project-edit-button {
     width: 30px;
     height: 30px;
     cursor: pointer;
 }
 
-.review-project-tasks {
+.management-project-tasks {
     margin-top: 0.5rem;
 }
 
-.review-project-no-project {
+.management-project-no-project {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -103,17 +103,17 @@
     box-shadow: 0 0 5px rgb(0 0 0 / 25%);
 }
 
-.review-project-no-project img {
+.management-project-no-project img {
     width: 3rem;
     height: 3rem;
 }
 
-.review-project-no-project h2 {
+.management-project-no-project h2 {
     font-size: 2rem;
     margin-bottom: 0.25rem;
 }
 
-.review-project-tasks-no-tasks {
+.management-project-tasks-no-tasks {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -127,17 +127,17 @@
     box-shadow: 0 0 5px rgb(0 0 0 / 25%);
 }
 
-.review-project-tasks-no-tasks img {
+.management-project-tasks-no-tasks img {
     width: 3rem;
     height: 3rem;
 }
 
-.review-project-tasks-no-tasks h2 {
+.management-project-tasks-no-tasks h2 {
     font-size: 2rem;
     margin-bottom: 0.25rem;
 }
 
-.review-project-description {
+.management-project-description {
     height: 200px;
     background-color: white;
     border-radius: 0.75rem;
@@ -299,7 +299,7 @@
 }
 
 
-.review-project-tasks .tasks-header {
+.management-project-tasks .tasks-header {
     display: flex;
     gap: 10px;
     padding-bottom: 10px;
@@ -307,7 +307,7 @@
     align-items: baseline;
 }
 
-.review-project-tasks .tasks-header div {
+.management-project-tasks .tasks-header div {
     flex: 1 1 100px;
     max-width: 160px;
 }

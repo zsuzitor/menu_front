@@ -99,12 +99,6 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
         props.DeleteTask(props.Task.Id);
     };
 
-    const addComment = () => {
-
-
-        // window.G_CodeReviewCommentController.AddComment(props.Task.Id, newCommentName, addComment);
-        props.AddComment(props.Task.Id, newCommentName);
-    };
 
 
 
@@ -131,18 +125,16 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
 
 
     if (!showFullTask) {
-        return <div className='one-review-task-block'>
-            <div className='one-review-task-block-flex'>
-                <div className='one-review-task-short-content'>
+        return <div className='one-work-task-block'>
+            <div className='one-work-task-block-flex'>
+                <div className='one-work-task-short-content'>
                     {/* <a href="/" target="_blank">{props.Task.Name}</a> */}
                     <a href={'/proj-' + props.CurrentProjectId + '/task-' + props.Task.Id} onClick={(e) => {
                         e.preventDefault();
-                        // navigate("/code-review/proj-" + props.CurrentProjectId+'/task-'+props.Task.Id);
-                        // props.SetCurrentTask(props.Task.Id);
                         navigate("/task-management/proj-" + props.CurrentProjectId + '/task-' + props.Task.Id);
                     }}>{props.Task.Name}</a>
                 </div>
-                <div className='one-review-task-buttons'>
+                <div className='one-work-task-buttons'>
                     <div className='task-button' onClick={() => setShowFullTask(true)}>
                         <img className='persent-100-width-height' src={G_PathToBaseImages + 'arrow2.png'}
                             alt="Показать полностью" title='Показать полностью' />
@@ -152,9 +144,9 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
         </div>
     }
 
-    return <div className='one-review-task-block'>
-        <div className='one-review-task-block-flex'>
-            <div className='one-review-task-content'>
+    return <div className='one-work-task-block'>
+        <div className='one-work-task-block-flex'>
+            <div className='one-work-task-content'>
                 {/* <p>{props.Task.Id}</p> */}
                 <input type='text' className='form-input-v2'
                     value={taskName} onChange={e => setTaskName(e.target.value)}
@@ -178,7 +170,7 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
                     </select>
                 </div>
             </div>
-            <div className='one-review-task-buttons'>
+            <div className='one-work-task-buttons'>
 
                 <div className='task-button' onClick={() => setShowFullTask(false)}>
                     <img className='persent-100-width-height task-rotate' src={G_PathToBaseImages + 'arrow2.png'}

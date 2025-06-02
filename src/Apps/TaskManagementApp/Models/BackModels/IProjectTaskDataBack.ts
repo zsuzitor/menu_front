@@ -5,7 +5,6 @@ export interface IProjectTaskDataBack {
     Name: string;
     CreatorId: number;
     ExecutorId?: number;
-    // Status: ITaskReviewStatusDataBack;
     CreateDate: string;
     LastUpdateDate: string;
     StatusId: number;

@@ -33,8 +33,8 @@ const ProjectsList = (props: IProjectsListProps) => {
 
     return <>
 
-        <div className='code-review-projects-menu'>
-            <div className='review-project-new-block'>
+        <div className='code-management-projects-menu'>
+            <div className='management-project-new-block'>
                 {/* <input type="test" onChange={e => props.ChangeTestString(e.target.value)} value={props.Test}></input>
                 <p>{props.Test}</p> */}
                 <input className='form-input' type='text' placeholder='Название нового проекта'

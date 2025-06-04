@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { RoomStatus } from '../../Models/Entity/State/RoomInfo';
 import cloneDeep from 'lodash/cloneDeep';
-import { StoriesHelper } from '../../Models/PlaningPokerHelper';
 import { Story } from '../../Models/Entity/State/Story';
 import Paggination from '../../../../components/Body/Paggination/Paggination';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
 import connectToStore, { StoriesSectionProps, StoriesSectionState, ListStoryType } from './StoriesSectionSetup';
+import { Helper } from '../../../../Models/BL/Helper';
 
 
 require('./StoriesSection.css');
@@ -19,8 +19,8 @@ const StoriesSection = (props: StoriesSectionProps) => {
     const [listStoryTypeState, setListStoryTypeState] = useState(ListStoryType.Actual);
     const [showNewStoryForm, setShowNewStoryForm] = useState(false);
     const [storiesPageNumber, setstoriesPageNumber] = useState(1);
-    let storyHelper = new StoriesHelper();
-    let currentStory = storyHelper.GetStoryById(props.Stories, props.CurrentStoryId);
+    let storyHelper = new Helper();
+    let currentStory = storyHelper.GetElemById(props.Stories, props.CurrentStoryId);
     const [currentStoryNameChange, setCurrentStoryNameChange] = useState(currentStory?.Name || '');
     const [currentStoryDescriptionChange, setCurrentStoryDescriptionChange] = useState(currentStory?.Description || '');
 
@@ -29,7 +29,6 @@ const StoriesSection = (props: StoriesSectionProps) => {
     const countStoriesOnPage = 15;
 
 
-    const storiesHelper = new StoriesHelper();
 
     useEffect(() => {
         // ResetCurrentStoryById();

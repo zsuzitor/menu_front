@@ -67,6 +67,7 @@ export class Helper {
 
 
     GetTaskFromState(state: AppState, taskId: number): OneTask[] {
+        //todo куда то вынести
         let res: OneTask[] = [];
         if (taskId < 1) {
             return res;
@@ -81,5 +82,28 @@ export class Helper {
         }
 
         return res;
+    }
+
+
+    GetIndexById<t extends { Id: tId },tId>(arr: t[], id: tId): number {
+        if (!id) {
+            return -1;
+        }
+
+        let index = arr.findIndex(x => x.Id === id);
+        if (index < 0 || index >= arr.length) {
+            return -1;
+        }
+
+        return index;
+    }
+
+    GetElemById<t extends { Id: tId },tId>(arr: t[], id: tId): t{
+        let index = this.GetIndexById(arr, id);
+        if (index < 0) {
+            return;
+        }
+
+        return arr[index];
     }
 }

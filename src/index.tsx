@@ -27,6 +27,7 @@ import { TaskManagementUserController } from "./Apps/TaskManagementApp/Models/Co
 import { WordsListController } from "./Apps/WordsCardsApp/Models/Controllers/WordsListController";
 import { MainErrorHandler } from "./Models/BL/ErrorHandleLogic";
 import { TaskManagementTaskStatusController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementTaskStatusController";
+import { TaskManagementWorkTimeController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementWorkTimeController";
 
 
 require('../style/main.css');
@@ -66,6 +67,8 @@ window.G_WordsListController = new WordsListController();
 window.G_PlaningPokerController = new PlaningPokerController();
 window.G_TaskManagementProjectController = new TaskManagementProjectController();
 window.G_TaskManagementTaskController = new TaskManagementTaskController();
+window.G_TaskManagementWorkTimeController = new TaskManagementWorkTimeController();
+
 window.G_TaskManagementUserController = new TaskManagementUserController();
 window.G_TaskManagementTaskStatusController = new TaskManagementTaskStatusController();
 window.G_TaskManagementCommentController = new TaskManagementCommentController();

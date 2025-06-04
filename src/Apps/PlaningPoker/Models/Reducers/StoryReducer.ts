@@ -5,7 +5,7 @@ import { AppAction } from '../../../../Models/Actions/Actions';
 import { SetNotActualStoriesActionName, SetTotalNotActualStoriesCountActionName, SetCurrentStoryIdActionName, SetStoriesActionName, AddNewStoryActionName, StoryChangeActionName, DeleteStoryActionName, MoveStoryToCompleteActionName, MoveStoryToCompletePayload, UpdateStoriesIdActionName } from '../Actions/StoryActions';
 import { IStoryMappingReturn } from '../BackModels/RoomWasSavedUpdateReturn';
 import { Story } from '../Entity/State/Story';
-import { StoriesHelper } from '../PlaningPokerHelper';
+import { Helper } from '../../../../Models/BL/Helper';
 
 
 
@@ -55,10 +55,10 @@ export function StoryReducer(state: AppState = new AppState(), action: AppAction
         case StoryChangeActionName:
             {
                 //todo меняет не полностью, определенный поля только, как то это обозначит?
-                const storiesHelper = new StoriesHelper();
+                const storiesHelper = new Helper();
                 let newState = cloneDeep(state);
                 let data = action.payload as Story;
-                let story = storiesHelper.GetStoryById(newState.PlaningPokerApp.StoriesInfo.Stories, data.Id);
+                let story = storiesHelper.GetElemById(newState.PlaningPokerApp.StoriesInfo.Stories, data.Id);
                 if (!story) {
                     return newState;
                 }
@@ -79,8 +79,8 @@ export function StoryReducer(state: AppState = new AppState(), action: AppAction
             {
                 let newState = cloneDeep(state);
                 let data = action.payload as string;
-                const storiesHelper = new StoriesHelper();
-                let storyIndex = storiesHelper.GetStoryIndexById(newState.PlaningPokerApp.StoriesInfo.Stories, data);
+                const storiesHelper = new Helper();
+                let storyIndex = storiesHelper.GetIndexById(newState.PlaningPokerApp.StoriesInfo.Stories, data);
                 if (storyIndex < 0) {
                     return newState;
                 }
@@ -97,9 +97,9 @@ export function StoryReducer(state: AppState = new AppState(), action: AppAction
         case MoveStoryToCompleteActionName:
             {
                 let newState = cloneDeep(state);
-                const storiesHelper = new StoriesHelper();
+                const storiesHelper = new Helper();
                 let data = action.payload as MoveStoryToCompletePayload;
-                let story = storiesHelper.GetStoryById(newState.PlaningPokerApp.StoriesInfo.Stories, data.OldId);
+                let story = storiesHelper.GetElemById(newState.PlaningPokerApp.StoriesInfo.Stories, data.OldId);
 
                 if (story) {
                     story.Id = data.Story.Id;

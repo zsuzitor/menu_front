@@ -22,6 +22,7 @@ declare var G_WordsListController: import("../src/Apps/WordsCardsApp/Models/Cont
 declare var G_UsersController: import("../src/Models/Controllers/UsersController").IUsersController;
 declare var G_PlaningPokerController: import("../src/Apps/PlaningPoker/Models/Controllers/PlaningPokerController").IPlaningPokerController;
 declare var G_TaskManagementProjectController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementProjectController").ITaskManagementProjectController;
+declare var G_TaskManagementWorkTimeController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementWorkTimeController").ITaskManagementWorkTimeController;
 declare var G_TaskManagementTaskController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementTaskController").ITaskManagementTaskController;
 declare var G_TaskManagementTaskStatusController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementTaskStatusController").ITaskManagementTaskStatusController;
 declare var G_TaskManagementUserController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementUserController").ITaskManagementUserController;

@@ -19,6 +19,7 @@ export class TaskManagementAppState {
 
 
     CurrentTaskId: number;
+    //это не таже ссылка что в CurrentProjectTasks[]
     CurrentTask: OneTask;
 
 

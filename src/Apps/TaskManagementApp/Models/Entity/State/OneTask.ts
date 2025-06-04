@@ -2,6 +2,7 @@
 import { IProjectTaskDataBack } from "../../BackModels/IProjectTaskDataBack";
 import { ProjectTaskData } from "../LoadWorkTasksResult";
 import { OneWorkTaskComment } from "../OneTaskWorkComment";
+import { TimeLog } from "./TimeLog";
 
 
 export class OneTask {
@@ -15,9 +16,11 @@ export class OneTask {
 
     Description: string;
     Comments: OneWorkTaskComment[];
+    TimeLogs: TimeLog[];
 
     constructor() {
         this.Comments = [];
+        this.TimeLogs = [];
     }
 
     FillByProjectTaskData(data: ProjectTaskData): OneTask {

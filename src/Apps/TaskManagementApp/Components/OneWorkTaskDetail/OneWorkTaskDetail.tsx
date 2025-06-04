@@ -28,8 +28,20 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     const [taskExecutorEditable, setTaskExecutorEditable] = useState(false);
 
 
+    const [timeLogText, setTimeLogText] = useState('');
+    const [timeLogMin, setTimeLogMin] = useState(0);
+    const [timeLogDate, setTimeLogDate] = useState<Date>(new Date());
+
+
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (props.Task?.Id) {
+            props.LoadTaskTimeLogs(props.Task.Id);
+        }
+
+    }, [props.Task?.Id]);
 
     useEffect(() => {
 
@@ -81,6 +93,37 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     };
 
 
+    const renderTime = () => {
+        return <div>
+            <input className='form-control-b' type='text' value={timeLogText} placeholder="Имя" onChange={e => setTimeLogText(e.target.value)}></input>
+            <input className='form-control-b' type='number' value={timeLogMin} placeholder="Имя" onChange={e => setTimeLogMin(+e.target.value)}></input>
+            <input
+                // type="datetime-local"
+                type="date"
+                // value={timeLogDate.toISOString().slice(0, 16)}
+                value={timeLogDate.toISOString().split('T')[0]}
+                onChange={(e) => {
+                    if (e.target.value) {
+                        setTimeLogDate(new Date(e.target.value));
+                    }
+                    else {
+                        setTimeLogDate(new Date());
+                    }
+
+                }}></input>
+            <button onClick={() => props.CreateTimeLog(props.Task.Id, timeLogText, timeLogMin, timeLogDate)}>добавить</button>
+            <p>списания:</p>
+            {props.Task.TimeLogs.map(x => {
+                return <div key={x.Id}>
+                    <p>{props.ProjectUsers.find(u => u.Id === x.ProjectUserId)?.Email || ''}</p>
+                    <p>{x.Comment}</p>
+                    <p>{x.DayOfLog.toDateString()}</p>
+                    <p>{x.TimeMinutes}minut</p>
+                </div>
+            })}
+
+        </div>
+    }
 
 
     const renderComments = () => {
@@ -145,7 +188,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     }
 
 
-    
+
     return <div className='one-work-task-detail-block'>
         <div className='one-work-task-detail-header'>
 
@@ -263,6 +306,9 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                     <p>Дата редактирования: {props.Task.LastUpdateDate}</p>
                 </div>
             </div>
+        </div>
+        <div>
+            {renderTime()}
         </div>
         {renderComments()}
     </div>

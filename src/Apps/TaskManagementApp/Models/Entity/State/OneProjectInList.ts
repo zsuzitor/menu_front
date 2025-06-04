@@ -7,9 +7,10 @@ export class OneProjectInList implements MappedWithBack<IOneProjectInListDataBac
     Name: string;
 
 
-    FillByBackModel(newData: IOneProjectInListDataBack): void {
+    FillByBackModel(newData: IOneProjectInListDataBack): OneProjectInList {
         this.Id = newData.Id;
         this.Name = newData.Name;
+        return this;
     }
 
 }

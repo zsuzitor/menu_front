@@ -42,7 +42,7 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
                     tsk.CreateDate = payload.CreateDate;
                     tsk.LastUpdateDate = payload.LastUpdateDate;
                     tsk.Description = payload.Description;
-                })
+                });
 
 
                 return newState;
@@ -149,7 +149,7 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
                 var tasks = helper.GetTaskFromState(newState, payload.Id);
                 tasks.forEach(tsk => {
                     tsk.Name = payload.Text;
-                })
+                });
 
                 return newState;
             }
@@ -162,7 +162,7 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
                 var tasks = helper.GetTaskFromState(newState, payload.Id);
                 tasks.forEach(tsk => {
                     tsk.Description = payload.Text;
-                })
+                });
 
                 return newState;
             }
@@ -175,7 +175,7 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
                 var tasks = helper.GetTaskFromState(newState, payload.Id);
                 tasks.forEach(tsk => {
                     tsk.StatusId = payload.IdStatus;
-                })
+                });
 
                 return newState;
             }
@@ -188,7 +188,7 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
                 var tasks = helper.GetTaskFromState(newState, payload.Id);
                 tasks.forEach(tsk => {
                     tsk.ExecutorId = payload.PersonId;
-                })
+                });
 
                 return newState;
             }

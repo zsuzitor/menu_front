@@ -22,15 +22,17 @@ interface IOneWorkTaskDetailStateToProps {
 interface IOneWorkTaskDetailDispatchToProps {
     // UpdateTask: (task: OneTask) => void;
     DeleteTask: (id: number) => void;
+    LoadTaskTimeLogs: (id: number) => void;
     UpdateTaskName: (id: number, text: string) => void;
     UpdateTaskDescription: (id: number, text: string) => void;
     UpdateTaskStatus: (id: number, idStatus: number) => void;
     UpdateTaskExecutor: (id: number, personId: number) => void;
     AddComment: (taskId: number, newCommentText: string) => void;
     // SetEmptyTaskComments: (taskId: number) => void;
-    LoadTaskComments: (taskId: number) => void;
+    // LoadTaskComments: (taskId: number) => void;
     // SetCurrentTask: (taskId: number) => void;
     ClearCurrentTaskState: () => void;
+    CreateTimeLog: (taskId: number, text: string, minutes: number, dayOfLog: Date) => void;
 
 }
 
@@ -61,9 +63,9 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps)
     };
 
 
-    res.LoadTaskComments = (taskId: number) => {
-        dispatch(window.G_TaskManagementCommentController.LoadCommentsRedux(taskId))
-    };
+    // res.LoadTaskComments = (taskId: number) => {
+    //     dispatch(window.G_TaskManagementCommentController.LoadCommentsRedux(taskId))
+    // };
 
     // res.SetCurrentTask = (taskId: number) => {
     //     dispatch(SetCurrentTaskIdActionCreator(taskId))
@@ -88,6 +90,15 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps)
 
     res.UpdateTaskExecutor = (id: number, personId: number) => {
         dispatch(window.G_TaskManagementTaskController.UpdateTaskExecutorRedux(id, personId))
+    };
+
+    res.LoadTaskTimeLogs = (id: number) => {
+        dispatch(window.G_TaskManagementWorkTimeController.LoadTimeLogsForTaskRedux(id))
+    };
+
+
+    res.CreateTimeLog = (taskId: number, text: string, minutes: number, dayOfLog: Date) => {
+        dispatch(window.G_TaskManagementWorkTimeController.CreateTimeLogRedux(taskId, text, minutes, dayOfLog))
     };
 
     return res;

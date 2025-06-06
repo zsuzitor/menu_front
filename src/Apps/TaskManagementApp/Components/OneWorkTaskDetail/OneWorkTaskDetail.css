@@ -134,3 +134,60 @@
     cursor: pointer;
     border: 1px solid black;
 }
+
+.work-time-block .one-work-time-block {
+    display: flex;
+}
+
+.one-work-time-block .time-block-left {
+    border-radius: 10px 0px 0px 10px;
+    padding: 3px;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 250px;
+}
+
+.one-work-time-block .time-block-center {
+    padding: 3px;
+    border: 1px solid black;
+    width: 160px;
+
+}
+
+.one-work-time-block .time-block-right {
+    border-radius: 0px 10px 10px 0px;
+    padding: 3px;
+    border-right: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 90px;
+
+}
+
+
+.add-time-log-btn {
+
+    background-color: #6e98cc;
+    color: white;
+    border: none;
+    border-radius: 18px;
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s;
+}
+
+
+.add-time-log-btn:hover {
+    background-color: #5b8cca;
+}
+
+
+.add-time-log-plus-icon {
+    font-weight: bold;
+    font-size: 14px;
+}

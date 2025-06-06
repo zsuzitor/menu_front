@@ -11,6 +11,9 @@ import connectToStore, { IOneWorkTaskDetailProps } from './OneWorkTaskDetailSetu
 import SaveCancelTextarea from '../../../../components/Body/SaveCancelTextarea/SaveCancelTextarea';
 import SaveCancelInputText from '../../../../components/Body/SaveCancelInput/SaveCancelInputText';
 import SaveCancelInputSelect from '../../../../components/Body/SaveCancelInput/SaveCancelInputSelect';
+import { Helper } from '../../../../Models/BL/Helper';
+import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
+import AddWorkTimeLog from '../AddWorkTimeLog/AddWorkTimeLog';
 
 
 require('./OneWorkTaskDetail.css');
@@ -27,10 +30,8 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     const [taskStatusEditable, setTaskStatusEditable] = useState(false);
     const [taskExecutorEditable, setTaskExecutorEditable] = useState(false);
 
+    const [showAddWorkTime, setShowAddWorkTime] = useState(false);
 
-    const [timeLogText, setTimeLogText] = useState('');
-    const [timeLogMin, setTimeLogMin] = useState(0);
-    const [timeLogDate, setTimeLogDate] = useState<Date>(new Date());
 
 
 
@@ -92,10 +93,13 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
         props.AddComment(props.Task.Id, val);
     };
 
+    const renderWorkNum = (m: number): string => {
+        return new Helper().MinutesToHours(m);
+    }
 
     const renderTime = () => {
-        return <div>
-            <input className='form-control-b' type='text' value={timeLogText} placeholder="Имя" onChange={e => setTimeLogText(e.target.value)}></input>
+        return <div className='work-time-block'>
+            {/* <input className='form-control-b' type='text' value={timeLogText} placeholder="Имя" onChange={e => setTimeLogText(e.target.value)}></input>
             <input className='form-control-b' type='number' value={timeLogMin} placeholder="Имя" onChange={e => setTimeLogMin(+e.target.value)}></input>
             <input
                 // type="datetime-local"
@@ -110,15 +114,26 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                         setTimeLogDate(new Date());
                     }
 
-                }}></input>
-            <button onClick={() => props.CreateTimeLog(props.Task.Id, timeLogText, timeLogMin, timeLogDate)}>добавить</button>
-            <p>списания:</p>
+                }}></input> */}
+            {/* <button onClick={() => props.CreateTimeLog(props.Task.Id, timeLogText, timeLogMin, timeLogDate)}>добавить</button> */}
+            {showAddWorkTime ? <AdditionalWindow CloseWindow={() => setShowAddWorkTime(false)}
+                IsHeightWindow={false}
+                Title='Работа'
+                InnerContent={() => <AddWorkTimeLog
+                    Close={() => setShowAddWorkTime(false)}
+                    TaskId={props.Task.Id}
+                />}></AdditionalWindow> : <></>}
+            <span>списания:</span>
+            <div><button className='add-time-log-btn'
+                onClick={() => setShowAddWorkTime(true)}>
+                <span className='add-time-log-plus-icon'>+</span>
+                <span>Добавить списание</span>
+            </button></div>
             {props.Task.TimeLogs.map(x => {
-                return <div key={x.Id}>
-                    <p>{props.ProjectUsers.find(u => u.Id === x.ProjectUserId)?.Email || ''}</p>
-                    <p>{x.Comment}</p>
-                    <p>{x.DayOfLog.toDateString()}</p>
-                    <p>{x.TimeMinutes}minut</p>
+                return <div key={x.Id} className='one-work-time-block'>
+                    <div className='time-block-left'>{props.ProjectUsers.find(u => u.Id === x.ProjectUserId)?.Email || ''}</div>
+                    <div className='time-block-center'>{x.DayOfLog.toDateString()}</div>
+                    <div className='time-block-right'>{renderWorkNum(x.TimeMinutes)}</div>
                 </div>
             })}
 

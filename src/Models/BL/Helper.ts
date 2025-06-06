@@ -4,6 +4,25 @@ import { AppState } from "../Entity/State/AppState";
 
 export class Helper {
 
+    MinutesToHours(minutes: number) {
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+
+        let result = '';
+
+        if (hours > 0) {
+            result += `${hours}:h`;
+        }
+
+        if (remainingMinutes > 0) {
+            if (result) 
+                result += ' ';
+            result += `${remainingMinutes}:m`;
+        }
+
+        return result || '0';
+    }
+
     DateToYMD(date: Date) {
         if (!date) {
             return null;
@@ -85,7 +104,7 @@ export class Helper {
     }
 
 
-    GetIndexById<t extends { Id: tId },tId>(arr: t[], id: tId): number {
+    GetIndexById<t extends { Id: tId }, tId>(arr: t[], id: tId): number {
         if (!id) {
             return -1;
         }
@@ -98,7 +117,7 @@ export class Helper {
         return index;
     }
 
-    GetElemById<t extends { Id: tId },tId>(arr: t[], id: tId): t{
+    GetElemById<t extends { Id: tId }, tId>(arr: t[], id: tId): t {
         let index = this.GetIndexById(arr, id);
         if (index < 0) {
             return;

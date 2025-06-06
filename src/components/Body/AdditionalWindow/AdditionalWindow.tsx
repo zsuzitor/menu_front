@@ -20,16 +20,25 @@ const AdditionalWindow = (props: IAdditionalWindowProps) => {
         additionClassMain += ' additional-window-main-height';
     }
 
-    return <div className={"additional-window-main" + additionClassMain}>
-        <label className='title'>{props.Title}</label>
-        <div className="additional-window-close" onClick={() => props.CloseWindow()}>+</div>
-        {/* <div className="cirle-logo-confirm">
+    return <div className="additional-window-main-full" onClick={(event) => {
+        if (event.target === event.currentTarget) {
+            props.CloseWindow();
+        }
+
+    }}>
+        <div className={"additional-window-main" + additionClassMain}>
+            <div>
+                <label className='title'>{props.Title}</label>
+                <div className="additional-window-close" onClick={() => props.CloseWindow()}>+</div>
+            </div>
+            {/* <div className="cirle-logo-confirm">
             L
         </div> */}
-        <div className="additional-window-inner">
-            {props.InnerContent()}
+            <div className="additional-window-inner">
+                {props.InnerContent()}
+            </div>
         </div>
-    </div>;
+    </div>
 
 
 }

@@ -1,0 +1,10 @@
+.add-work-time-window {
+    width: 300px;
+}
+
+
+.add-work-time-window .buttons-block {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+}

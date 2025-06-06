@@ -32,7 +32,6 @@ interface IOneWorkTaskDetailDispatchToProps {
     // LoadTaskComments: (taskId: number) => void;
     // SetCurrentTask: (taskId: number) => void;
     ClearCurrentTaskState: () => void;
-    CreateTimeLog: (taskId: number, text: string, minutes: number, dayOfLog: Date) => void;
 
 }
 
@@ -97,9 +96,6 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps)
     };
 
 
-    res.CreateTimeLog = (taskId: number, text: string, minutes: number, dayOfLog: Date) => {
-        dispatch(window.G_TaskManagementWorkTimeController.CreateTimeLogRedux(taskId, text, minutes, dayOfLog))
-    };
 
     return res;
 };

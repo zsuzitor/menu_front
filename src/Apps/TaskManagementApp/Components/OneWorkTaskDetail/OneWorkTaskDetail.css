@@ -135,8 +135,38 @@
     border: 1px solid black;
 }
 
+.add-time-log-header {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    padding-bottom: 5px;
+}
+
+.work-time-block {
+    padding: 10px;
+}
+
 .work-time-block .one-work-time-block {
     display: flex;
+}
+
+.add-time-log-show-btn {
+    border-radius: 3px;
+    padding: 2px;
+}
+
+.add-time-log-show-btn:hover {
+
+    cursor: pointer;
+    border: 1px solid #DFE1E6;
+}
+
+.work-time-block-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 .one-work-time-block .time-block-left {

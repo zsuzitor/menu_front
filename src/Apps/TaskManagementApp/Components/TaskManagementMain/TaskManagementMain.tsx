@@ -6,9 +6,10 @@ import ProjectDetail from '../ProjectDetail/ProjectDetail';
 import ProjectsList from '../ProjectsList/ProjectsList';
 import cloneDeep from 'lodash/cloneDeep';
 import connectToStore, { TaskManagementMainProps } from './TaskManagementMainSetup';
-import { useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import OneWorkTaskDetail from '../OneWorkTaskDetail/OneWorkTaskDetail';
 import { TaskManagementPreloader } from '../../Models/Consts';
+import ProjectTimePage from '../ProjectTimePage/ProjectTimePage';
 
 
 
@@ -94,6 +95,7 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
 
     useEffect(() => {
 
+        //   const { projectId, taskId } = useParams();
         const matchProj = window.location.href.match(/proj-(\d+)/);
         if (matchProj) {
             const projIdInt = parseInt(matchProj[1], 10);
@@ -137,7 +139,17 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
             <ProjectsList Projects={props.ProjectsList}
                 CurrentProjectId={props.CurrentProjectId} />
         </div>
-        {props.CurrentTaskId && props.CurrentTaskId > 0 ?
+        <Routes>
+
+
+            <Route path="proj-:projectId" element={<ProjectDetail
+                Project={props.ProjectsList.find(x => x.Id == props.CurrentProjectId)}
+                Tasks={props.Tasks} />} />
+            <Route path="proj-:projectId/task-:taskId" element={<OneWorkTaskDetail />} />
+            <Route path="proj-:projectId/time-log" element={<ProjectTimePage />} />
+        </Routes>
+
+        {/* {props.CurrentTaskId && props.CurrentTaskId > 0 ?
             <OneWorkTaskDetail></OneWorkTaskDetail>
             // <></>
             :
@@ -147,7 +159,7 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
                 // UpdateTask={updateTaskProject}
                 />
             </div>
-        }
+        } */}
 
     </div>
 }

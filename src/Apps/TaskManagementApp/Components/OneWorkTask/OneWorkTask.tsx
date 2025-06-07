@@ -129,7 +129,7 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
             <div className='one-work-task-block-flex'>
                 <div className='one-work-task-short-content'>
                     {/* <a href="/" target="_blank">{props.Task.Name}</a> */}
-                    <a href={'/proj-' + props.CurrentProjectId + '/task-' + props.Task.Id} onClick={(e) => {
+                    <a href={'/task-management/proj-' + props.CurrentProjectId + '/task-' + props.Task.Id} onClick={(e) => {
                         e.preventDefault();
                         navigate("/task-management/proj-" + props.CurrentProjectId + '/task-' + props.Task.Id);
                     }}>{props.Task.Name}</a>

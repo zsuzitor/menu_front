@@ -30,7 +30,8 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     const [taskStatusEditable, setTaskStatusEditable] = useState(false);
     const [taskExecutorEditable, setTaskExecutorEditable] = useState(false);
 
-    const [showAddWorkTime, setShowAddWorkTime] = useState(false);
+    const [showAddWorkTimeNew, setShowAddWorkTimeNew] = useState(false);
+    const [showAddWorkTimeBlock, setShowAddWorkTimeBlock] = useState(false);
 
 
 
@@ -38,11 +39,11 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (props.Task?.Id) {
+        if (props.Task?.Id && showAddWorkTimeBlock) {
             props.LoadTaskTimeLogs(props.Task.Id);
         }
 
-    }, [props.Task?.Id]);
+    }, [props.Task?.Id, showAddWorkTimeBlock]);
 
     useEffect(() => {
 
@@ -97,6 +98,18 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
         return new Helper().MinutesToHours(m);
     }
 
+    const formatDate = (date: Date) => {
+        //x.DayOfLog.toDateString()
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}.${month}.${year}`;
+    }
+
+
+    
+
+
     const renderTime = () => {
         return <div className='work-time-block'>
             {/* <input className='form-control-b' type='text' value={timeLogText} placeholder="Имя" onChange={e => setTimeLogText(e.target.value)}></input>
@@ -116,26 +129,32 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
 
                 }}></input> */}
             {/* <button onClick={() => props.CreateTimeLog(props.Task.Id, timeLogText, timeLogMin, timeLogDate)}>добавить</button> */}
-            {showAddWorkTime ? <AdditionalWindow CloseWindow={() => setShowAddWorkTime(false)}
+            {showAddWorkTimeNew ? <AdditionalWindow CloseWindow={() => setShowAddWorkTimeNew(false)}
                 IsHeightWindow={false}
                 Title='Работа'
                 InnerContent={() => <AddWorkTimeLog
-                    Close={() => setShowAddWorkTime(false)}
+                    Close={() => setShowAddWorkTimeNew(false)}
                     TaskId={props.Task.Id}
                 />}></AdditionalWindow> : <></>}
-            <span>списания:</span>
-            <div><button className='add-time-log-btn'
-                onClick={() => setShowAddWorkTime(true)}>
-                <span className='add-time-log-plus-icon'>+</span>
-                <span>Добавить списание</span>
-            </button></div>
-            {props.Task.TimeLogs.map(x => {
-                return <div key={x.Id} className='one-work-time-block'>
-                    <div className='time-block-left'>{props.ProjectUsers.find(u => u.Id === x.ProjectUserId)?.Email || ''}</div>
-                    <div className='time-block-center'>{x.DayOfLog.toDateString()}</div>
-                    <div className='time-block-right'>{renderWorkNum(x.TimeMinutes)}</div>
-                </div>
-            })}
+            <div className='add-time-log-header'>
+                <div className='add-time-log-show-btn'
+                    onClick={() => setShowAddWorkTimeBlock(!showAddWorkTimeBlock)}>Списания:</div>
+                <div><button className='add-time-log-btn'
+                    onClick={() => setShowAddWorkTimeNew(true)}>
+                    <span className='add-time-log-plus-icon'>+</span>
+                    <span>Добавить списание</span>
+                </button></div>
+            </div>
+            {showAddWorkTimeBlock && <div className='work-time-block-list'>
+                {props.Task.TimeLogs.map(x => {
+                    return <div key={x.Id} className='one-work-time-block'>
+                        <div className='time-block-left'>{props.ProjectUsers.find(u => u.Id === x.ProjectUserId)?.Email || ''}</div>
+                        <div className='time-block-center'>{formatDate(x.DayOfLog)}</div>
+                        <div className='time-block-right'>{renderWorkNum(x.TimeMinutes)}</div>
+                    </div>
+                })}</div>}
+
+
 
         </div>
     }

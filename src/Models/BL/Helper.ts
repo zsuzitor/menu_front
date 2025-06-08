@@ -15,7 +15,7 @@ export class Helper {
         }
 
         if (remainingMinutes > 0) {
-            if (result) 
+            if (result)
                 result += ' ';
             result += `${remainingMinutes}:m`;
         }
@@ -33,6 +33,23 @@ export class Helper {
         var y = date.getFullYear();
         return '' + y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
     }
+
+    FormatDateToInput(date: Date): string {
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    FormatDateToDM(date: Date): string {
+
+        // const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${day}-${month}`;
+    }
+
 
     addZeroIfNumShort(num: number) {
         let numStr = (num + '');
@@ -102,6 +119,9 @@ export class Helper {
 
         return res;
     }
+
+
+
 
 
     GetIndexById<t extends { Id: tId }, tId>(arr: t[], id: tId): number {

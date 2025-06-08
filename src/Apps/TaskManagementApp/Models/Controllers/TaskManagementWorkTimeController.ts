@@ -1,7 +1,7 @@
 import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
-import { AddNewTimeLogActionCreator, SetTaskTimeLogActionCreator } from "../Actions/TimeLogAction";
+import { AddNewTimeLogActionCreator, SetTaskTimeLogActionCreator, SetTimeLogDataActionCreator, SetTimeLogDataActionName } from "../Actions/TimeLogAction";
 import { DeleteProjectUserActionCreator, AddProjectUserActionCreator, ChangeProjectUserActionCreator } from "../Actions/UserActions";
 import { IProjectUserDataBack } from "../BackModels/IProjectUserDataBack";
 import { IWorkTimeLogDataBack } from "../BackModels/IWorkTimeLogDataBack";
@@ -16,6 +16,7 @@ export type CreateTime = (error: MainErrorObjectBack, data: IWorkTimeLogDataBack
 export interface ITaskManagementWorkTimeController {
     CreateTimeLogRedux: (taskId: number, text: string, minutes: number, dayOfLog: Date) => void;
     LoadTimeLogsForTaskRedux: (taskId: number) => void;
+    LoadTimeLogsForProjectRedux: (projectId: number, dateFrom: Date, dateTo: Date) => void;
 }
 
 
@@ -91,6 +92,44 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
         });
     }
 
+
+    LoadTimeLogsForProjectRedux = (projectId: number, dateFrom: Date, dateTo: Date) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.LoadTimeLogsForProject(projectId, dateFrom, dateTo
+                , (error: MainErrorObjectBack, data: IWorkTimeLogDataBack[]) => {
+                    this.preloader(false);
+                    if (error) {
+                        return;
+                    }
+
+                    if (data) {
+                        let mapped = data.map(x => new TimeLog().FillByBackModel(x));
+                        dispatch(SetTimeLogDataActionCreator(mapped));
+                    }
+                });
+        };
+    }
+
+
+    LoadTimeLogsForProject = (projectId: number, dateFrom: Date, dateTo: Date
+        , onSuccess: (error: MainErrorObjectBack, data: IWorkTimeLogDataBack[]) => void) => {
+        let data = {
+            "id": projectId,
+            "dateFrom": dateFrom.toISOString(),
+            "dateTo": dateTo.toISOString(),
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.GetHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/taskmanagement/worktimelog/project-time'
+
+        });
+    }
 
 
     mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {

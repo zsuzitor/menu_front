@@ -3,6 +3,7 @@ import { ProjectUser } from "./ProjectUser";
 import { OneTask } from "./OneTask";
 import { TasksFilter } from "./TasksFilter";
 import { WorkTaskStatus } from "./WorkTaskStatus";
+import { ProjectTimes } from "./ProjectTimes";
 
 
 export class TaskManagementAppState {
@@ -13,6 +14,8 @@ export class TaskManagementAppState {
 
     CurrentProjectUsers: ProjectUser[];
     CurrentProjectStatuses: WorkTaskStatus[];
+    CurrentProjectTimes: ProjectTimes;
+
     CurrentProjectTasks: OneTask[];
     CurrentProjectTasksAllCount: number;
     CurrentProjectTasksFilters: TasksFilter;
@@ -34,5 +37,6 @@ export class TaskManagementAppState {
         this.CurrentProjectStatuses = [];
         this.CurrentTask = null;
         this.ProjectsLoaded = false;
+        this.CurrentProjectTimes = new ProjectTimes();
     }
 }

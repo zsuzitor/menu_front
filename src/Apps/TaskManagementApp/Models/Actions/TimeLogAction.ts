@@ -38,3 +38,18 @@ export function SetTimeLogDataActionCreator(data: TimeLog[]): AppAction<TimeLog[
     return { type: SetTimeLogDataActionName, payload: data };
 };
 
+
+export const SetProjectTimeLogDateFromActionName: string = 'SetProjectTimeLogDateFromAction';
+export function SetProjectTimeLogDateFromActionCreator(date: Date): AppAction<Date> {
+    return { type: SetProjectTimeLogDateFromActionName, payload: date };
+};
+
+export const SetProjectTimeLogDateToActionName: string = 'SetProjectTimeLogDateToAction';
+export function SetProjectTimeLogDateToActionCreator(date: Date): AppAction<Date> {
+    return { type: SetProjectTimeLogDateToActionName, payload: date };
+};
+
+export const ClearProjectTimeLogActionName: string = 'ClearProjectTimeLogAction';
+export function ClearProjectTimeLogActionCreator(): AppAction<null> {
+    return { type: ClearProjectTimeLogActionName, payload: null };
+};

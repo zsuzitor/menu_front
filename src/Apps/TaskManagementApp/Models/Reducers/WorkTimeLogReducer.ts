@@ -2,9 +2,10 @@ import { cloneDeep } from "lodash";
 import { AppAction } from "../../../../Models/Actions/Actions";
 import { Helper } from "../../../../Models/BL/Helper";
 import { AppState } from "../../../../Models/Entity/State/AppState";
-import { AddNewTimeLogActionName, DeleteTimeLogActionName, DeleteTimeLogActionParam, SetTaskTimeLogActionName, SetTaskTimeLogActionParam, SetTimeLogDataActionName, UpdateTimeLogActionName } from "../Actions/TimeLogAction";
+import { AddNewTimeLogActionName, ClearProjectTimeLogActionName, DeleteTimeLogActionName, DeleteTimeLogActionParam, SetProjectTimeLogDateFromActionName, SetProjectTimeLogDateToActionName, SetTaskTimeLogActionName, SetTaskTimeLogActionParam, SetTimeLogDataActionName, UpdateTimeLogActionName } from "../Actions/TimeLogAction";
 import { IWorkTimeLogDataBack } from "../BackModels/IWorkTimeLogDataBack";
 import { TimeLog } from "../Entity/State/TimeLog";
+import { ProjectTimes } from "../Entity/State/ProjectTimes";
 
 
 export function WorkTimeLogReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
@@ -69,21 +70,44 @@ export function WorkTimeLogReducer(state: AppState = new AppState(), action: App
                 });
                 return newState;
             }
-            case SetTimeLogDataActionName:
-                {
-                    let helper = new Helper();
-                    let newState = cloneDeep(state);
-    
-                    let payload = action.payload as TimeLog[];
-                    alert("todo asdjalksdjlkasdj");
-                    // let tasks = helper.GetTaskFromState(newState, payload.TaskId);
-                    // tasks.forEach(tsk => {
-                    //     tsk.TimeLogs = [...payload.Time].map(x => new TimeLog().Copy(x));
-                    // });
-                    return newState;
-                }
+        case SetTimeLogDataActionName:
+            {
+                let newState = cloneDeep(state);
 
-            
+                let payload = action.payload as TimeLog[];
+                newState.TaskManagementApp.CurrentProjectTimes.TimeLogs = payload;
+
+                return newState;
+            }
+        case SetProjectTimeLogDateFromActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as Date;
+
+                newState.TaskManagementApp.CurrentProjectTimes.DateFrom = payload;
+                return newState;
+            }
+
+        case SetProjectTimeLogDateToActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as Date;
+
+                newState.TaskManagementApp.CurrentProjectTimes.DateTo = payload;
+                return newState;
+            }
+
+        case ClearProjectTimeLogActionName:
+            {
+                let helper = new Helper();
+                let newState = cloneDeep(state);
+                newState.TaskManagementApp.CurrentProjectTimes = new ProjectTimes();
+
+                return newState;
+            }
+
+
+
 
         default:
             return state;

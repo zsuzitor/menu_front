@@ -33,9 +33,9 @@ export function DeleteTimeLogActionCreator(data: DeleteTimeLogActionParam): AppA
 };
 
 
-export const SetTimeLogDataActionName: string = 'SetTimeLogDataAction';
-export function SetTimeLogDataActionCreator(data: TimeLog[]): AppAction<TimeLog[]> {
-    return { type: SetTimeLogDataActionName, payload: data };
+export const SetProjectTimeLogDataActionName: string = 'SetProjectTimeLogDataAction';
+export function SetProjectTimeLogDataActionCreator(data: TimeLog[]): AppAction<TimeLog[]> {
+    return { type: SetProjectTimeLogDataActionName, payload: data };
 };
 
 
@@ -52,4 +52,28 @@ export function SetProjectTimeLogDateToActionCreator(date: Date): AppAction<Date
 export const ClearProjectTimeLogActionName: string = 'ClearProjectTimeLogAction';
 export function ClearProjectTimeLogActionCreator(): AppAction<null> {
     return { type: ClearProjectTimeLogActionName, payload: null };
+};
+
+
+
+
+export const SetUserTimeLogDataActionName: string = 'SetUserTimeLogDataAction';
+export function SetUserTimeLogDataActionCreator(data: TimeLog[]): AppAction<TimeLog[]> {
+    return { type: SetUserTimeLogDataActionName, payload: data };
+};
+
+
+export const SetUserTimeLogDateFromActionName: string = 'SetUserTimeLogDateFromAction';
+export function SetUserTimeLogDateFromActionCreator(date: Date): AppAction<Date> {
+    return { type: SetUserTimeLogDateFromActionName, payload: date };
+};
+
+export const SetUserTimeLogDateToActionName: string = 'SetUserTimeLogDateToAction';
+export function SetUserTimeLogDateToActionCreator(date: Date): AppAction<Date> {
+    return { type: SetUserTimeLogDateToActionName, payload: date };
+};
+
+export const ClearUserTimeLogActionName: string = 'ClearUserTimeLogAction';
+export function ClearUserTimeLogActionCreator(): AppAction<null> {
+    return { type: ClearUserTimeLogActionName, payload: null };
 };

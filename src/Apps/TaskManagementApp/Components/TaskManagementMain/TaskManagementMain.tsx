@@ -10,6 +10,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import OneWorkTaskDetail from '../OneWorkTaskDetail/OneWorkTaskDetail';
 import { TaskManagementPreloader } from '../../Models/Consts';
 import ProjectTimePage from '../ProjectTimePage/ProjectTimePage';
+import PersonTimePage from '../PersonTimePage/PersonTimePage';
 
 
 
@@ -118,6 +119,17 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
             props.SetCurrentTask(-1);
         }
 
+        const matchUser = window.location.href.match(/user-(\d+)/);
+        if (matchUser) {
+            const userIdInt = parseInt(matchUser[1], 10);
+            props.SetCurrentUser(userIdInt);
+            // console.log("SetCurrentProject" + projIdInt);
+        }
+        else {
+
+            props.SetCurrentUser(-1);
+        }
+
 
     }, [window.location.href]);
     //
@@ -147,6 +159,7 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
                 Tasks={props.Tasks} />} />
             <Route path="proj-:projectId/task-:taskId" element={<OneWorkTaskDetail />} />
             <Route path="proj-:projectId/time-log" element={<ProjectTimePage />} />
+            <Route path="proj-:projectId/user-:userId/time-log" element={<PersonTimePage />} />
         </Routes>
 
         {/* {props.CurrentTaskId && props.CurrentTaskId > 0 ?

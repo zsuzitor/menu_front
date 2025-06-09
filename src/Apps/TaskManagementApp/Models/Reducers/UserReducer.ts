@@ -5,7 +5,8 @@ import cloneDeep from 'lodash/cloneDeep';
 import { AppAction } from '../../../../Models/Actions/Actions';
 import { AppState } from '../../../../Models/Entity/State/AppState';
 import { ProjectUser } from '../Entity/State/ProjectUser';
-import { DeleteProjectUserActionName, AddProjectUserActionName, ChangeProjectUserActionName, SetCurrentProjectUsersActionName } from '../Actions/UserActions';
+import { DeleteProjectUserActionName, AddProjectUserActionName, ChangeProjectUserActionName, SetCurrentProjectUsersActionName, SetCurrentUserIdActionName } from '../Actions/UserActions';
+import { ProjectTimes } from '../Entity/State/ProjectTimes';
 
 // return Object.assign({}, state, { TestMessage: str });
 
@@ -48,6 +49,15 @@ export function TaskManagementUserReducer(state: AppState = new AppState(), acti
                 let newState = cloneDeep(state);
                 let users = action.payload as ProjectUser[];
                 newState.TaskManagementApp.CurrentProjectUsers = users || [];
+                return newState;
+            }
+
+        case SetCurrentUserIdActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as number;
+                newState.TaskManagementApp.CurrentUserId = payload;
+                newState.TaskManagementApp.PersonTimes = new ProjectTimes();
                 return newState;
             }
 

@@ -6,6 +6,7 @@ import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
 import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/State/OneProjectInList';
 import { SetCurrentProjectIdActionCreator } from "../../Models/Actions/ProjectActions";
 import { SetCurrentTaskIdActionCreator } from "../../Models/Actions/TaskActions";
+import { SetCurrentUserIdActionCreator } from "../../Models/Actions/UserActions";
 
 
 interface ITaskManagementMainOwnProps {
@@ -28,6 +29,7 @@ interface ITaskManagementMainDispatchToProps {
     ClearClearTaskManagementStateState: () => void;
     SetCurrentProject: (projectId: number) => void;
     SetCurrentTask: (taskId: number) => void;
+    SetCurrentUser: (userId: number) => void;
     GetTaskInfo: (taskId: number) => void;
 }
 
@@ -67,6 +69,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: ITaskManagementMainOwnProps
 
     res.SetCurrentProject = (projectId: number) => {
         dispatch(SetCurrentProjectIdActionCreator(projectId));
+    };
+
+    res.SetCurrentUser = (userId: number) => {
+        dispatch(SetCurrentUserIdActionCreator(userId));
     };
 
     res.SetCurrentTask = (taskId: number) => {

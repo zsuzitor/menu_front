@@ -26,3 +26,8 @@ export const ChangeProjectUserActionName: string = 'ChangeProjectUserAction';
 export function ChangeProjectUserActionCreator(user: ProjectUser): AppAction<ProjectUser> {
     return { type: ChangeProjectUserActionName, payload: user };
 };
+
+export const SetCurrentUserIdActionName: string = 'SetCurrentUserIdAction';
+export function SetCurrentUserIdActionCreator(userId: number): AppAction<number> {
+    return { type: SetCurrentUserIdActionName, payload: userId };
+};

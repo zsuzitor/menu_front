@@ -1,0 +1,36 @@
+.user-time-page-main{
+
+    padding-top: 20px;
+    overflow-x: auto;
+}
+
+.user-time-time-block{
+padding-top: 20px;
+}
+
+.user-time-one-line{
+display: flex;
+
+}
+
+.user-time-one-cell{
+
+    height: 45px;
+    width: 55px;
+    min-width: 55px;
+    border: 1px solid black;
+    /* padding: 5px; */
+    text-align: center;
+    overflow: hidden;
+    font-size: small;
+}
+
+.user-time-one-line .one-line-times{
+    display: flex;
+}
+
+.user-time-line-header{
+    
+    width: 150px;
+    min-width: 150px;
+}

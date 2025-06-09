@@ -4,20 +4,21 @@ import { cloneDeep } from 'lodash';
 import React, { useState, useEffect, ReactNode } from 'react';
 import OneProjectUser from '../OneProjectUser/OneProjectUser';
 
-import connectToStore, { IProjectTimePageProps } from './ProjectTimePageSetup';
+import connectToStore, { IPersonTimePageProps } from './PersonTimePageSetup';
 import { Helper } from '../../../../Models/BL/Helper';
 import { useNavigate } from 'react-router-dom';
 
 
-require('./ProjectTimePage.css');
+require('./PersonTimePage.css');
 
 
 
 
-const ProjectTimePage = (props: IProjectTimePageProps) => {
+const PersonTimePage = (props: IPersonTimePageProps) => {
 
 
     const navigate = useNavigate();
+
 
     useEffect(() => {
 
@@ -28,15 +29,15 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
     }, []);
 
     useEffect(() => {
-        if (props.ProjectId > 0)
-            props.LoadTime(props.ProjectId, props.DateFrom, props.DateTo);
+        if (props.UserId > 0)
+            props.LoadTime(null, props.UserId, props.DateFrom, props.DateTo);
 
-    }, [props.DateFrom.getTime(), props.DateTo.getTime(), props.ProjectId]);
-
-
+    }, [props.DateFrom.getTime(), props.DateTo.getTime(), props.UserId]);
 
 
-    if (!props.ProjectUsers) {
+
+
+    if (!props.WorkTimeLog) {
         return <div></div>
     }
 
@@ -56,24 +57,21 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
     }
 
 
-    const renderOneLine = (userId: number): ReactNode => {
+    const renderOneLine = (taskId: number): ReactNode => {
 
         return <div className='one-line-times'>
             {datesForTable.map(x => {
-                let works = props.WorkTimeLog.filter(w => w.ProjectUserId == userId
+                let works = props.WorkTimeLog.filter(w => w.WorkTaskId == taskId
                     && setClearDate(w.DayOfLog).getTime() == setClearDate(x).getTime()
                 );
                 let minuteTotal = 0;
-                let worksId = 'ids-';
                 works.forEach(element => {
-                    worksId += element.Id + ','
                     minuteTotal += element.TimeMinutes;
                 });
                 const helper = new Helper();
                 let val = helper.MinutesToHours(minuteTotal);
-                const workId = works.length > 0 ? works[0].Id : '';
-                return <div className='project-time-one-cell' title={`${val}=${worksId}`}
-                    key={`${userId}_${workId}_${x.getTime()}`}
+                return <div className='project-time-one-cell'
+                    key={`${taskId}_${x.getTime()}`}
                 >{val}</div>
             })}
         </div>
@@ -84,13 +82,13 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
 
     const renderHeadLine = (): ReactNode => {
 
-        return <div className='project-time-one-line'>
-            <div className='one-line-person'></div>
+        return <div className='user-time-one-line'>
+            <div className='user-time-line-header'></div>
             {datesForTable.map(x => {
 
                 const helper = new Helper();
                 let val = helper.FormatDateToDM(x);
-                return <div className='project-time-one-cell'
+                return <div className='user-time-one-cell'
                     title={val}
                     key={`${x.getTime()}`}
                 >{val}</div>
@@ -111,7 +109,8 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
 
     // console.log('to2-' + props.DateFrom);
 
-    return <div className='project-time-page-main'>
+    const uniqueTaskIds = [...new Set(props.WorkTimeLog.map(x => x.WorkTaskId))];
+    return <div className='user-time-page-main'>
         <div>
             <span>Дата С</span>
             <input
@@ -160,23 +159,26 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
 
                 }}></input>
         </div>
-        <div className='project-time-time-block'>
-            {renderHeadLine()}
-            {props.ProjectUsers.map(x => {
+        <div className='user-time-time-block'>
+            {uniqueTaskIds.length == 0 ? <><h1>Выберите другой периуд</h1></>
+                : <>
+                    {renderHeadLine()}
+                    {uniqueTaskIds.map(x => {
 
-                return <div className='project-time-one-line'
-                    key={x.Id}>
-                    <div className='one-line-person'>
-                        <a href={"/task-management/proj-" + props.ProjectId + "/user-" + x.Id + "/time-log"} onClick={(e) => {
-                            e.preventDefault();
-                            navigate("/task-management/proj-" + props.ProjectId + "/user-" + x.Id + "/time-log");
-                        }}>{x.Email}</a>
+                        return <div className='user-time-one-line'
+                            key={x}>
+                            <div className='user-time-line-header'>
+                                <a href={'/task-management/proj-' + props.CurrentProjectId + '/task-' + x} onClick={(e) => {
+                                    e.preventDefault();
+                                    navigate("/task-management/proj-" + props.CurrentProjectId + '/task-' + x);
+                                }}>{'Task-' + x}</a>
+                            </div>
+                            {renderOneLine(x)}
 
-                    </div>
-                    {renderOneLine(x.Id)}
+                        </div>
+                    })}
+                </>}
 
-                </div>
-            })}
         </div>
 
 
@@ -191,4 +193,4 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
 
 
 // and that function returns the connected, wrapper component:
-export default connectToStore(ProjectTimePage);
+export default connectToStore(PersonTimePage);

@@ -7,21 +7,22 @@ import { ProjectTimes } from "./ProjectTimes";
 
 
 export class TaskManagementAppState {
-    CurrentProjectId: number;
-
     ProjectsList: OneProjectInList[];
     ProjectsLoaded: boolean;
 
+    CurrentProjectId: number;//проект на странице которого находимся, в рамках которого работаем
     CurrentProjectUsers: ProjectUser[];
     CurrentProjectStatuses: WorkTaskStatus[];
     CurrentProjectTimes: ProjectTimes;
-
     CurrentProjectTasks: OneTask[];
     CurrentProjectTasksAllCount: number;
     CurrentProjectTasksFilters: TasksFilter;
 
+    CurrentUserId: number;//на страницах относящехся к пользователю
+    PersonTimes: ProjectTimes;
 
-    CurrentTaskId: number;
+
+    CurrentTaskId: number;//на страницах относящихся к задаче
     //это не таже ссылка что в CurrentProjectTasks[]
     CurrentTask: OneTask;
 
@@ -29,6 +30,7 @@ export class TaskManagementAppState {
     constructor() {
         this.CurrentProjectId = -1;
         this.CurrentTaskId = -1;
+        this.CurrentUserId = -1;
         this.ProjectsList = [];
         this.CurrentProjectUsers = [];
         this.CurrentProjectTasks = [];
@@ -38,5 +40,6 @@ export class TaskManagementAppState {
         this.CurrentTask = null;
         this.ProjectsLoaded = false;
         this.CurrentProjectTimes = new ProjectTimes();
+        this.PersonTimes = new ProjectTimes();
     }
 }

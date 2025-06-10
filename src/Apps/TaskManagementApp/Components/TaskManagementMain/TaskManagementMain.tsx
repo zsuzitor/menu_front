@@ -11,6 +11,7 @@ import OneWorkTaskDetail from '../OneWorkTaskDetail/OneWorkTaskDetail';
 import { TaskManagementPreloader } from '../../Models/Consts';
 import ProjectTimePage from '../ProjectTimePage/ProjectTimePage';
 import PersonTimePage from '../PersonTimePage/PersonTimePage';
+import TempoPage from '../TempoPage/TempoPage';
 
 
 
@@ -160,6 +161,7 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
             <Route path="proj-:projectId/task-:taskId" element={<OneWorkTaskDetail />} />
             <Route path="proj-:projectId/time-log" element={<ProjectTimePage />} />
             <Route path="proj-:projectId/user-:userId/time-log" element={<PersonTimePage />} />
+            <Route path="proj-:projectId/tempo" element={<TempoPage />} />
         </Routes>
 
         {/* {props.CurrentTaskId && props.CurrentTaskId > 0 ?

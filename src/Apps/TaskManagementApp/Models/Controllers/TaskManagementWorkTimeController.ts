@@ -1,7 +1,7 @@
 import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
-import { AddNewTimeLogActionCreator, SetTaskTimeLogActionCreator, SetProjectTimeLogDataActionCreator, SetUserTimeLogDataActionCreator } from "../Actions/TimeLogAction";
+import { SetTaskTimeLogActionCreator, SetProjectTimeLogDataActionCreator, SetUserTimeLogDataActionCreator, SetUserTempoTimeLogDataActionCreator, AddNewTimeLogTaskActionCreator, AddNewTimeLogTempoActionCreator, DelTimeLogTempoActionCreator } from "../Actions/TimeLogAction";
 import { IProjectUserDataBack } from "../BackModels/IProjectUserDataBack";
 import { IWorkTimeLogDataBack } from "../BackModels/IWorkTimeLogDataBack";
 import { TaskManagementPreloader } from "../Consts";
@@ -14,9 +14,12 @@ export type CreateTime = (error: MainErrorObjectBack, data: IWorkTimeLogDataBack
 
 export interface ITaskManagementWorkTimeController {
     CreateTimeLogRedux: (taskId: number, text: string, minutes: number, dayOfLog: Date) => void;
+    CreateTimeTempoLogRedux: (taskId: number, text: string, minutes: number, dayOfLog: Date) => void;
+    DeleteTimeTempoLogRedux: (timeId: number) => void;
     LoadTimeLogsForTaskRedux: (taskId: number) => void;
     LoadTimeLogsForProjectRedux: (projectId: number, dateFrom: Date, dateTo: Date) => void;
     LoadTimeLogsForUserRedux: (projectId: number, userId: number, dateFrom: Date, dateTo: Date) => void;
+    LoadTimeLogsForUserTempoRedux: (projectId: number, userId: number, dateFrom: Date, dateTo: Date) => void;
 }
 
 
@@ -34,7 +37,24 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
 
                 if (data?.Id) {
                     let dt = new TimeLog().FillByBackModel(data);
-                    dispatch(AddNewTimeLogActionCreator(dt));
+                    dispatch(AddNewTimeLogTaskActionCreator(dt));
+                }
+            });
+        };
+    }
+
+    CreateTimeTempoLogRedux = (taskId: number, text: string, minutes: number, dayOfLog: Date) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.CreateTimeLog(taskId, text, minutes, dayOfLog, (error: MainErrorObjectBack, data: IWorkTimeLogDataBack) => {
+                this.preloader(false);
+                if (error) {
+                    return;
+                }
+
+                if (data?.Id) {
+                    let dt = new TimeLog().FillByBackModel(data);
+                    dispatch(AddNewTimeLogTempoActionCreator(dt));
                 }
             });
         };
@@ -59,6 +79,37 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
         });
     }
 
+    DeleteTimeTempoLogRedux = (timeId: number) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.DeleteTimeLog(timeId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                this.preloader(false);
+                if (error) {
+                    return;
+                }
+
+                if (data?.result) {
+                    dispatch(DelTimeLogTempoActionCreator(timeId));
+                }
+            });
+        };
+    }
+
+    DeleteTimeLog = (timeId: number, onSuccess: (error: MainErrorObjectBack, data: BoolResultBack) => void) => {
+        let data = {
+            "id": timeId,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.DeleteHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/taskmanagement/worktimelog/delete'
+
+        });
+    }
     LoadTimeLogsForTaskRedux = (taskId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
@@ -143,6 +194,24 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
                     if (data) {
                         let mapped = data.map(x => new TimeLog().FillByBackModel(x));
                         dispatch(SetUserTimeLogDataActionCreator(mapped));
+                    }
+                });
+        };
+    }
+
+    LoadTimeLogsForUserTempoRedux = (projectId: number, userId: number, dateFrom: Date, dateTo: Date) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.LoadTimeLogsForUser(projectId, userId, dateFrom, dateTo
+                , (error: MainErrorObjectBack, data: IWorkTimeLogDataBack[]) => {
+                    this.preloader(false);
+                    if (error) {
+                        return;
+                    }
+
+                    if (data) {
+                        let mapped = data.map(x => new TimeLog().FillByBackModel(x));
+                        dispatch(SetUserTempoTimeLogDataActionCreator(mapped));
                     }
                 });
         };

@@ -2,9 +2,19 @@ import { AppAction } from "../../../../Models/Actions/Actions";
 import { TimeLog } from "../Entity/State/TimeLog";
 
 
-export const AddNewTimeLogActionName: string = 'AddNewTimeLogAction';
-export function AddNewTimeLogActionCreator(time: TimeLog): AppAction<TimeLog> {
-    return { type: AddNewTimeLogActionName, payload: time };
+export const AddNewTimeLogTaskActionName: string = 'AddNewTimeLogTaskAction';
+export function AddNewTimeLogTaskActionCreator(time: TimeLog): AppAction<TimeLog> {
+    return { type: AddNewTimeLogTaskActionName, payload: time };
+};
+
+export const AddNewTimeLogTempoActionName: string = 'AddNewTimeLogTempoAction';
+export function AddNewTimeLogTempoActionCreator(time: TimeLog): AppAction<TimeLog> {
+    return { type: AddNewTimeLogTempoActionName, payload: time };
+};
+
+export const DelTimeLogTempoActionName: string = 'DelTimeLogTempoAction';
+export function DelTimeLogTempoActionCreator(timeId: number): AppAction<number> {
+    return { type: DelTimeLogTempoActionName, payload: timeId };
 };
 
 export const UpdateTimeLogActionName: string = 'UpdateTimeLogLogAction';
@@ -76,4 +86,27 @@ export function SetUserTimeLogDateToActionCreator(date: Date): AppAction<Date> {
 export const ClearUserTimeLogActionName: string = 'ClearUserTimeLogAction';
 export function ClearUserTimeLogActionCreator(): AppAction<null> {
     return { type: ClearUserTimeLogActionName, payload: null };
+};
+
+
+
+export const SetUserTempoTimeLogDataActionName: string = 'SetUserTempoTimeLogDataAction';
+export function SetUserTempoTimeLogDataActionCreator(data: TimeLog[]): AppAction<TimeLog[]> {
+    return { type: SetUserTempoTimeLogDataActionName, payload: data };
+};
+
+
+export const SetUserTempoTimeLogDateFromActionName: string = 'SetUserTempoTimeLogDateFromAction';
+export function SetUserTempoTimeLogDateFromActionCreator(date: Date): AppAction<Date> {
+    return { type: SetUserTempoTimeLogDateFromActionName, payload: date };
+};
+
+export const SetUserTempoTimeLogDateToActionName: string = 'SetUserTempoTimeLogDateToAction';
+export function SetUserTempoTimeLogDateToActionCreator(date: Date): AppAction<Date> {
+    return { type: SetUserTempoTimeLogDateToActionName, payload: date };
+};
+
+export const ClearUserTempoTimeLogActionName: string = 'ClearUserTempoTimeLogAction';
+export function ClearUserTempoTimeLogActionCreator(): AppAction<null> {
+    return { type: ClearUserTempoTimeLogActionName, payload: null };
 };

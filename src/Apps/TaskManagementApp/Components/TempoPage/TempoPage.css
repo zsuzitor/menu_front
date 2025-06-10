@@ -1,0 +1,38 @@
+.tempo-time-column {
+    display: flex;
+    flex-direction: column;
+    width: 110px;
+    gap: 5px;
+
+}
+
+.tempo-time-column-header {
+    width: 110px;
+    text-align: center;
+}
+
+.tempo-time-column-one-content {
+    width: 110px;
+    height: 110px;
+    border: 1px solid black;
+    padding: 3px;
+
+}
+
+.tempo-time-column-one-content div {
+    overflow: hidden;
+}
+
+.tempo-time-page-main {
+    padding-top: 20px;
+    overflow-x: auto;
+}
+
+
+.tempo-time-block {
+    display: flex;
+}
+
+.tempo-time-column-add-btn {
+    text-align: center;
+}

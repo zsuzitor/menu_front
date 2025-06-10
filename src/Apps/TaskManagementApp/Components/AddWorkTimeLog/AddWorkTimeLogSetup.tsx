@@ -8,9 +8,11 @@ import { WorkTaskStatus } from "../../Models/Entity/State/WorkTaskStatus";
 
 
 interface IAddWorkTimeLogOwnProps {
-    TaskId: number;
+    TaskId: number | null;
+    DefaultDate: Date | null;
 
     Close: () => void;
+    CreateTimeLog: (taskId: number, text: string, minutes: number, dayOfLog: Date) => void;
 }
 
 
@@ -18,7 +20,6 @@ interface IAddWorkTimeLogStateToProps {
 }
 
 interface IAddWorkTimeLogDispatchToProps {
-    CreateTimeLog: (taskId: number, text: string, minutes: number, dayOfLog: Date) => void;
 }
 
 export interface IAddWorkTimeLogProps extends IAddWorkTimeLogStateToProps, IAddWorkTimeLogOwnProps, IAddWorkTimeLogDispatchToProps {
@@ -33,9 +34,6 @@ const mapStateToProps = (state: AppState, ownProps: IAddWorkTimeLogOwnProps) => 
 const mapDispatchToProps = (dispatch: any, ownProps: IAddWorkTimeLogOwnProps) => {
     let res = {} as IAddWorkTimeLogDispatchToProps;
 
-    res.CreateTimeLog = (taskId: number, text: string, minutes: number, dayOfLog: Date) => {
-        dispatch(window.G_TaskManagementWorkTimeController.CreateTimeLogRedux(taskId, text, minutes, dayOfLog))
-    };
     return res;
 };
 

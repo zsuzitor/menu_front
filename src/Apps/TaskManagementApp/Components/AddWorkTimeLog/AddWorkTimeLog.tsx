@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import connectToStore, { IAddWorkTimeLogProps } from './AddWorkTimeLogSetup';
 import { AlertData } from '../../../../Models/Entity/AlertData';
+import { Helper } from '../../../../Models/BL/Helper';
 
 
 
@@ -11,16 +12,20 @@ require('./AddWorkTimeLog.css');
 
 const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
 
-    // const [taskId, setTaskId] = useState(props.TaskId || 0);
+    const [taskId, setTaskId] = useState(props.TaskId || 0);
 
     const [timeLogText, setTimeLogText] = useState('');
     const [timeLogMin, setTimeLogMin] = useState('');
-    const [timeLogDate, setTimeLogDate] = useState<Date>(new Date());
+    const [timeLogDate, setTimeLogDate] = useState<Date>(props.DefaultDate || new Date());
     // const [timeLogValide, setTimeLogValide] = useState(false);
 
-    // useEffect(() => {
-    //     setTaskId(props.TaskId);
-    // }, [props.TaskId]);
+    useEffect(() => {
+        setTaskId(props.TaskId || 0);
+    }, [props.TaskId]);
+
+    useEffect(() => {
+        setTimeLogDate(props.DefaultDate || new Date());
+    }, [props.DefaultDate]);
 
     function parseTime(input: string): { hours: number, minutes: number } {
         const regex = /^(?:(\d+)h\s*)?(?:(\d+)m\s*)?$/i;
@@ -35,13 +40,22 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
         return { hours, minutes };
     }
 
+    function formatDateToInput(date: Date): string {
+        const help = new Helper();
+        return help.FormatDateToInput(date);
+    }
+
     const parsedDate = parseTime(timeLogMin);
     const valideTime = parsedDate.hours > 0 || parsedDate.minutes > 0;
 
     return <div className='add-work-time-window'>
-        {/* <input className='form-input-v2' type='number'
-            onChange={(e) => setTaskId(+e.target.value)}
-            placeholder='Задача' value={taskId}></input> */}
+        {props.TaskId || <div>
+            <span>Задача</span>
+            <input className='form-input-v2' type='number'
+                onChange={(e) => setTaskId(+e.target.value)}
+                placeholder='Задача' value={taskId}></input>
+        </div>}
+
         <div>
             <span>Комментарий</span>
             <input className='form-input-v2' type='text' value={timeLogText}
@@ -59,7 +73,7 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
                 // type="datetime-local"
                 type="date"
                 // value={timeLogDate.toISOString().slice(0, 16)}
-                value={timeLogDate.toISOString().split('T')[0]}
+                value={formatDateToInput(timeLogDate)}
                 onChange={(e) => {
                     if (e.target.value) {
                         setTimeLogDate(new Date(e.target.value));
@@ -83,7 +97,7 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
                         window.G_AddAbsoluteAlertToState(alert);
                         return false;
                     }
-                    props.CreateTimeLog(props.TaskId, timeLogText, minutes, timeLogDate);
+                    props.CreateTimeLog(taskId, timeLogText, minutes, timeLogDate);
                 }}>Работа</button>
             <button
                 className='button button-grey'

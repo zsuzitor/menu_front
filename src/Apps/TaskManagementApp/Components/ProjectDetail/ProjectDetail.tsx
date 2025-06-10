@@ -180,6 +180,10 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                         e.preventDefault();
                         navigate("/task-management/proj-" + props.Project.Id + '/time-log');
                     }}>Работа</a>
+                    <a href={'/task-management/proj-' + props.Project.Id + '/tempo'} onClick={(e) => {
+                        e.preventDefault();
+                        navigate("/task-management/proj-" + props.Project.Id + '/tempo');
+                    }}>Темпо</a>
 
                     {showUserList ? <AdditionalWindow CloseWindow={() => setShowUserList(false)}
                         IsHeightWindow={true}

@@ -107,7 +107,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     }
 
 
-    
+
 
 
     const renderTime = () => {
@@ -135,6 +135,8 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                 InnerContent={() => <AddWorkTimeLog
                     Close={() => setShowAddWorkTimeNew(false)}
                     TaskId={props.Task.Id}
+                    DefaultDate={null}
+                    CreateTimeLog={props.CreateTimeLog}
                 />}></AdditionalWindow> : <></>}
             <div className='add-time-log-header'>
                 <div className='add-time-log-show-btn'

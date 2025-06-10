@@ -21,6 +21,8 @@ export class TaskManagementAppState {
     CurrentUserId: number;//на страницах относящехся к пользователю
     PersonTimes: ProjectTimes;
 
+    TempoState: ProjectTimes;//страница списаний текущего пользака
+
 
     CurrentTaskId: number;//на страницах относящихся к задаче
     //это не таже ссылка что в CurrentProjectTasks[]
@@ -41,5 +43,6 @@ export class TaskManagementAppState {
         this.ProjectsLoaded = false;
         this.CurrentProjectTimes = new ProjectTimes();
         this.PersonTimes = new ProjectTimes();
+        this.TempoState = new ProjectTimes();
     }
 }

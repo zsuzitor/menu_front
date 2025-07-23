@@ -1,4 +1,5 @@
 import { MainErrorObjectBack } from "../BackModel/ErrorBack";
+// import { TaskManagementPreloader } from "../Consts";
 
 export class ControllerHelper {
     static GetHttp = 'GET';
@@ -6,6 +7,30 @@ export class ControllerHelper {
     static PatchHttp = 'PATCH';
     static DeleteHttp = 'DELETE';
     static PutHttp = 'PUT';
+
+    Preloader(show: boolean, preloaderElementId: string, counter: number): number {
+        if (!counter) {
+            counter = 0;
+        }
+
+        var preloader = document.getElementById(preloaderElementId);
+        if (!preloader) {
+            return counter;
+        }
+
+        if (show) {
+            counter++;
+            preloader.style.display = 'block';
+        }
+        else {
+            counter--;
+            if (!counter) {
+                preloader.style.display = 'none';
+            }
+        }
+
+        return counter;
+    }
 
     MapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
         return (xhr: any, status: any, jqXHR: any) => {
@@ -73,7 +98,7 @@ export class ControllerHelper {
     // }
 }
 
-export class DataWithErrorBack<T>{
+export class DataWithErrorBack<T> {
     Errors: MainErrorObjectBack;
     Data: T;
 }

@@ -197,24 +197,6 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
     }
 
     preloader(show: boolean) {
-        if (!window.TaskManagementCounter) {
-            window.TaskManagementCounter = 0;
-        }
-
-        var preloader = document.getElementById(TaskManagementPreloader);
-        if (!preloader) {
-            return;
-        }
-
-        if (show) {
-            window.TaskManagementCounter++;
-            preloader.style.display = 'block';
-        }
-        else {
-            window.TaskManagementCounter--;
-            if (!window.TaskManagementCounter) {
-                preloader.style.display = 'none';
-            }
-        }
+        new ControllerHelper().Preloader(show, TaskManagementPreloader);
     }
 }

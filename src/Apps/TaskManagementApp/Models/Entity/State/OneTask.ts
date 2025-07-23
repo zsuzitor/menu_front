@@ -13,6 +13,7 @@ export class OneTask {
     StatusId: number;
     CreateDate: string;
     LastUpdateDate: string;
+    SprintId: number;
 
     Description: string;
     Comments: OneWorkTaskComment[];
@@ -34,6 +35,7 @@ export class OneTask {
         this.Description = data.Description;
         this.Comments = data.Comments
             .map(x => new OneWorkTaskComment().FillByOneWorkTaskComment(x));
+        this.SprintId = data.SprintId;
         return this;
     }
 
@@ -49,6 +51,7 @@ export class OneTask {
         this.Description = data.Description;
         this.Comments = data.Comments.
             map(x => new OneWorkTaskComment().FillByBackModel(x));
+        this.SprintId = data.SprintId;
 
         return this;
     }

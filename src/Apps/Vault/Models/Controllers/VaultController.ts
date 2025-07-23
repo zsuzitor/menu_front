@@ -16,6 +16,7 @@ import { OneVaultSecret } from "../Entity/State/OneVaultSecret";
 import { VaultUser } from "../Entity/State/VaultUser";
 import { IUpdateSecretEntity } from "../Entity/UpdateSecretEntity";
 import { AlertData } from "../../../../Models/Entity/AlertData";
+import { VaultPreloader } from "../Consts";
 // import { IUpdateSecretReturn } from "../BackModels/IUpdateSecretReturn";
 
 
@@ -528,25 +529,8 @@ export class VaultController implements IVaultController {
 
 
     preloader(show: boolean) {
-        if (!window.TaskManagementCounter) {
-            window.TaskManagementCounter = 0;
-        }
-
-        var preloader = document.getElementById('vault_preloader');
-        if (!preloader) {
-            return;
-        }
-
-        if (show) {
-            window.TaskManagementCounter++;
-            preloader.style.display = 'block';
-        }
-        else {
-            window.TaskManagementCounter--;
-            if (!window.TaskManagementCounter) {
-                preloader.style.display = 'none';
-            }
-        }
+            window.VaultCounter = new ControllerHelper()
+                .Preloader(show, VaultPreloader, window.VaultCounter);
     }
 
 }

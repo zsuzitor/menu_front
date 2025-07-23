@@ -179,25 +179,9 @@ export class TaskManagementCommentController implements ITaskManagementCommentCo
     }
 
     preloader(show: boolean) {
-        if (!window.TaskManagementCounter) {
-            window.TaskManagementCounter = 0;
-        }
+        window.TaskManagementCounter = new ControllerHelper()
+            .Preloader(show, TaskManagementPreloader, window.TaskManagementCounter);
 
-        var preloader = document.getElementById(TaskManagementPreloader);
-        if (!preloader) {
-            return;
-        }
-
-        if (show) {
-            window.TaskManagementCounter++;
-            preloader.style.display = 'block';
-        }
-        else {
-            window.TaskManagementCounter--;
-            if (!window.TaskManagementCounter) {
-                preloader.style.display = 'none';
-            }
-        }
     }
 
 }

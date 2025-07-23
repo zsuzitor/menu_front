@@ -10,5 +10,6 @@ export interface IProjectTaskDataBack {
     StatusId: number;
     Description: string;
     Comments: IOneWorkTaskCommentDataBack[];
+    SprintId: number;
 
 }

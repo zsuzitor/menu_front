@@ -1,6 +1,5 @@
 import { AppAction } from "../../../../Models/Actions/Actions";
 import { OneProjectInList } from "../Entity/State/OneProjectInList";
-import { WorkTaskStatus } from "../Entity/State/WorkTaskStatus";
 
 export const DeleteProjectActionName: string = 'DeleteProjectAction';
 export function DeleteProjectActionCreator(projectId: number): AppAction<number> {

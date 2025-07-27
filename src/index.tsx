@@ -28,6 +28,7 @@ import { WordsListController } from "./Apps/WordsCardsApp/Models/Controllers/Wor
 import { MainErrorHandler } from "./Models/BL/ErrorHandleLogic";
 import { TaskManagementTaskStatusController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementTaskStatusController";
 import { TaskManagementWorkTimeController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementWorkTimeController";
+import { TaskManagementSprintController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementSprintController";
 
 
 require('../style/main.css');
@@ -72,6 +73,7 @@ window.G_TaskManagementWorkTimeController = new TaskManagementWorkTimeController
 window.G_TaskManagementUserController = new TaskManagementUserController();
 window.G_TaskManagementTaskStatusController = new TaskManagementTaskStatusController();
 window.G_TaskManagementCommentController = new TaskManagementCommentController();
+window.G_TaskManagementSprintController = new TaskManagementSprintController();
 window.G_VaultController = new VaultController();
 
 

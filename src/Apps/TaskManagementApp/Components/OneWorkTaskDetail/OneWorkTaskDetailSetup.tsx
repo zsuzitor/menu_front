@@ -4,6 +4,7 @@ import { OneTask } from "../../Models/Entity/State/OneTask";
 import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
 import { WorkTaskStatus } from "../../Models/Entity/State/WorkTaskStatus";
 import { ClearCurrentTaskStateActionCreator, SetCurrentTaskIdActionCreator } from "../../Models/Actions/TaskActions";
+import { ProjectSprint } from "../../Models/Entity/State/ProjectSprint";
 
 
 interface IOneWorkTaskDetailOwnProps {
@@ -14,6 +15,7 @@ interface IOneWorkTaskDetailOwnProps {
 interface IOneWorkTaskDetailStateToProps {
     ProjectUsers: ProjectUser[];
     Statuses: WorkTaskStatus[];
+    Sprints: ProjectSprint[];
     Task: OneTask;
     CurrentProjectId: number;
 
@@ -26,6 +28,7 @@ interface IOneWorkTaskDetailDispatchToProps {
     UpdateTaskName: (id: number, text: string) => void;
     UpdateTaskDescription: (id: number, text: string) => void;
     UpdateTaskStatus: (id: number, idStatus: number) => void;
+    UpdateTaskSprint: (id: number, idSprint: number) => void;
     UpdateTaskExecutor: (id: number, personId: number) => void;
     AddComment: (taskId: number, newCommentText: string) => void;
     // SetEmptyTaskComments: (taskId: number) => void;
@@ -48,6 +51,7 @@ const mapStateToProps = (state: AppState, ownProps: IOneWorkTaskDetailOwnProps) 
     res.Statuses = state.TaskManagementApp.CurrentProjectStatuses;
     res.Task = state.TaskManagementApp.CurrentTask;
     res.CurrentProjectId = state.TaskManagementApp.CurrentProjectId;
+    res.Sprints = state.TaskManagementApp.CurrentProjectSprints;
     return res;
 }
 
@@ -86,6 +90,15 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps)
 
     res.UpdateTaskStatus = (id: number, idStatus: number) => {
         dispatch(window.G_TaskManagementTaskController.UpdateTaskStatusRedux(id, idStatus))
+    };
+
+    res.UpdateTaskSprint = (id: number, idSprint: number) => {
+        if (idSprint > 0) {
+            dispatch(window.G_TaskManagementSprintController.AddTaskToSprintRedux(idSprint, id))
+        }
+        else {
+            dispatch(window.G_TaskManagementSprintController.DeleteTaskFromSprintRedux(id))
+        }
     };
 
     res.UpdateTaskExecutor = (id: number, personId: number) => {

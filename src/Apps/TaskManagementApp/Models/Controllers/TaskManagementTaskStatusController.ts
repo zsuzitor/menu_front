@@ -140,7 +140,8 @@ export class TaskManagementTaskStatusController implements ITaskManagementTaskSt
     }
 
     preloader(show: boolean) {
-        new ControllerHelper().Preloader(show, TaskManagementPreloader);
+        window.TaskManagementCounter = new ControllerHelper()
+            .Preloader(show, TaskManagementPreloader, window.TaskManagementCounter);
         
     }
 

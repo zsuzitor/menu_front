@@ -4,17 +4,21 @@ import { OneTask } from "./OneTask";
 import { TasksFilter } from "./TasksFilter";
 import { WorkTaskStatus } from "./WorkTaskStatus";
 import { ProjectTimes } from "./ProjectTimes";
+import { ProjectSprint } from "./ProjectSprint";
+import { SprintInfo } from "./SprintInfo";
 
 
 export class TaskManagementAppState {
     ProjectsList: OneProjectInList[];
     ProjectsLoaded: boolean;
 
+    //todo вынести это в 1 объект?
     CurrentProjectId: number;//проект на странице которого находимся, в рамках которого работаем
     CurrentProjectUsers: ProjectUser[];
     CurrentProjectStatuses: WorkTaskStatus[];
     CurrentProjectTimes: ProjectTimes;
     CurrentProjectTasks: OneTask[];
+    CurrentProjectSprints: ProjectSprint[];
     CurrentProjectTasksAllCount: number;
     CurrentProjectTasksFilters: TasksFilter;
 
@@ -28,6 +32,9 @@ export class TaskManagementAppState {
     //это не таже ссылка что в CurrentProjectTasks[]
     CurrentTask: OneTask;
 
+    CurrentSprint: SprintInfo;
+
+
 
     constructor() {
         this.CurrentProjectId = -1;
@@ -38,6 +45,7 @@ export class TaskManagementAppState {
         this.CurrentProjectTasks = [];
         this.CurrentProjectTasksAllCount = 0;
         this.CurrentProjectTasksFilters = new TasksFilter();
+        this.CurrentProjectSprints = [];
         this.CurrentProjectStatuses = [];
         this.CurrentTask = null;
         this.ProjectsLoaded = false;

@@ -2,12 +2,14 @@ import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { DeleteProjectActionCreator, AddNewProjectActionCreator, SetCurrentProjectIdActionCreator, SetProjectsActionCreator } from "../Actions/ProjectActions";
+import { GetProjectSprintsActionCreator, GetProjectSprintsActionType } from "../Actions/SprintActions";
 import { SetCurrentProjectStatusesActionCreator } from "../Actions/TaskStatusActions";
 import { SetCurrentProjectUsersActionCreator } from "../Actions/UserActions";
 import { IOneProjectInListDataBack } from "../BackModels/IOneProjectInListDataBack";
 import { IOneProjectInfoDataBack } from "../BackModels/IOneProjectInfoDataBack";
 import { TaskManagementPreloader } from "../Consts";
 import { OneProjectInList } from "../Entity/State/OneProjectInList";
+import { ProjectSprint } from "../Entity/State/ProjectSprint";
 import { ProjectUser } from "../Entity/State/ProjectUser";
 import { WorkTaskStatus } from "../Entity/State/WorkTaskStatus";
 
@@ -89,8 +91,19 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
                         return u;
 
                     });
+
+                    let dtSprints = data.Sprints.map(x => {
+                        let u = new ProjectSprint();
+                        u.FillByIProjectSprintDataBack(x);
+                        return u;
+
+                    });
                     dispatch(SetCurrentProjectUsersActionCreator(dtUsers));
                     dispatch(SetCurrentProjectStatusesActionCreator(dtStatuses));
+                    let spr = new GetProjectSprintsActionType();
+                    spr.projectId = projectId;
+                    spr.data = dtSprints;
+                    dispatch(GetProjectSprintsActionCreator(spr));
                 }
             });
         };
@@ -197,6 +210,7 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
     }
 
     preloader(show: boolean) {
-        new ControllerHelper().Preloader(show, TaskManagementPreloader);
+        window.TaskManagementCounter = new ControllerHelper()
+            .Preloader(show, TaskManagementPreloader, window.TaskManagementCounter);
     }
 }

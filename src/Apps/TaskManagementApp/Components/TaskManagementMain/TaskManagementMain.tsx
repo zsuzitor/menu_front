@@ -12,6 +12,8 @@ import { TaskManagementPreloader } from '../../Models/Consts';
 import ProjectTimePage from '../ProjectTimePage/ProjectTimePage';
 import PersonTimePage from '../PersonTimePage/PersonTimePage';
 import TempoPage from '../TempoPage/TempoPage';
+import Sprints from '../Sprints/Sprints';
+import Sprint from '../Sprint/Sprint';
 
 
 
@@ -120,6 +122,17 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
             props.SetCurrentTask(-1);
         }
 
+        const matchSprint = window.location.href.match(/sprint-(\d+)/);
+        if (matchSprint) {
+            const sprintIdInt = parseInt(matchSprint[1], 10);
+            props.SetCurrentSprint(sprintIdInt);
+            // console.log("SetCurrentProject" + projIdInt);
+        }
+        else {
+
+            props.SetCurrentSprint(-1);
+        }
+
         const matchUser = window.location.href.match(/user-(\d+)/);
         if (matchUser) {
             const userIdInt = parseInt(matchUser[1], 10);
@@ -162,6 +175,8 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
             <Route path="proj-:projectId/time-log" element={<ProjectTimePage />} />
             <Route path="proj-:projectId/user-:userId/time-log" element={<PersonTimePage />} />
             <Route path="proj-:projectId/tempo" element={<TempoPage />} />
+            <Route path="proj-:projectId/sprints" element={<Sprints />} />
+            <Route path="proj-:projectId/sprint-:sprintId" element={<Sprint />} />
         </Routes>
 
         {/* {props.CurrentTaskId && props.CurrentTaskId > 0 ?

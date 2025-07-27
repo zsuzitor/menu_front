@@ -8,7 +8,7 @@ import { TimeLog } from "../Entity/State/TimeLog";
 import { ProjectTimes } from "../Entity/State/ProjectTimes";
 
 
-export function WorkTimeLogReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
+export function TaskManagementWorkTimeLogReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
     switch (action.type) {
         case AddNewTimeLogTaskActionName:
             {

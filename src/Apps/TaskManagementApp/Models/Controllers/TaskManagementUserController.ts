@@ -138,7 +138,8 @@ export class TaskManagementUserController implements ITaskManagementUserControll
     }
 
     preloader(show: boolean) {
-        new ControllerHelper().Preloader(show, TaskManagementPreloader);
+        window.TaskManagementCounter = new ControllerHelper()
+            .Preloader(show, TaskManagementPreloader, window.TaskManagementCounter);
         
     }
 }

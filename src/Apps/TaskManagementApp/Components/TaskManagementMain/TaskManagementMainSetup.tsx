@@ -7,6 +7,7 @@ import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/S
 import { SetCurrentProjectIdActionCreator } from "../../Models/Actions/ProjectActions";
 import { SetCurrentTaskIdActionCreator } from "../../Models/Actions/TaskActions";
 import { SetCurrentUserIdActionCreator } from "../../Models/Actions/UserActions";
+import { SetCurrentSprintActionCreator } from "../../Models/Actions/SprintActions";
 
 
 interface ITaskManagementMainOwnProps {
@@ -29,6 +30,7 @@ interface ITaskManagementMainDispatchToProps {
     ClearClearTaskManagementStateState: () => void;
     SetCurrentProject: (projectId: number) => void;
     SetCurrentTask: (taskId: number) => void;
+    SetCurrentSprint: (sprint: number) => void;
     SetCurrentUser: (userId: number) => void;
     GetTaskInfo: (taskId: number) => void;
 }
@@ -81,6 +83,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: ITaskManagementMainOwnProps
 
     res.GetTaskInfo = (taskId: number) => {
         dispatch(window.G_TaskManagementTaskController.LoadTaskRedux(taskId));
+    };
+
+    res.SetCurrentSprint = (sprintId: number) => {
+        dispatch(SetCurrentSprintActionCreator(sprintId));
     };
 
     return res;

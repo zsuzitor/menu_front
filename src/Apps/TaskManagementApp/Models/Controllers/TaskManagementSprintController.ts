@@ -7,6 +7,8 @@ import { TaskManagementPreloader } from "../Consts";
 import { ProjectSprint } from "../Entity/State/ProjectSprint";
 import { IProjectSprintDataBack } from "../BackModels/IProjectSprintDataBack";
 import { IProjectTaskDataBack } from "../BackModels/IProjectTaskDataBack";
+import { AddTaskToSprintActionCreator, AddTaskToSprintActionName, CreateSprintActionCreator, DeleteSprintActionCreator, DeleteTaskFromSprintActionCreator, GetProjectSprintsActionCreator, GetProjectSprintsActionType, GetSprintsTasksActionCreator, TaskIdWithSprintIdActionType } from "../Actions/SprintActions";
+import { OneTask } from "../Entity/State/OneTask";
 
 
 
@@ -23,7 +25,7 @@ export interface ITaskManagementSprintController {
     CreateSprintRedux: (projectId: number, name: string) => void;
     DeleteSprintRedux: (sprintId: number) => void;
     AddTaskToSprintRedux: (sprintId: number, taskId: number) => void;
-    DeleteTaskFromSprintRedux: (sprintId: number, taskId: number) => void;
+    DeleteTaskFromSprintRedux: ( taskId: number) => void;
 
 
 
@@ -40,12 +42,13 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
             this.preloader(true);
             this.GetForProject(projectId, (error: MainErrorObjectBack, data: IProjectSprintDataBack[]) => {
                 this.preloader(false);
-                if (error) {
-                    return;
-                }
+
 
                 if (data) {
-                    dispatch(UpdateCommentActionCreator(projectId, data));
+                    let dt = new GetProjectSprintsActionType();
+                    dt.projectId = projectId;
+                    dt.data = data.map(x => new ProjectSprint().FillByIProjectSprintDataBack(x));
+                    dispatch(GetProjectSprintsActionCreator(dt));
 
                 }
             });
@@ -74,12 +77,10 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
             this.preloader(true);
             this.GetTasks(sprintId, (error: MainErrorObjectBack, data: IProjectTaskDataBack[]) => {
                 this.preloader(false);
-                if (error) {
-                    return;
-                }
 
                 if (data) {
-                    dispatch(UpdateCommentActionCreator(projectId, data));
+                    let dt = data.map(x => new OneTask().FillByIProjectTaskDataBack(x));
+                    dispatch(GetSprintsTasksActionCreator(dt));
 
                 }
             });
@@ -108,13 +109,11 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
             this.preloader(true);
             this.CreateSprint(projectId, name, (error: MainErrorObjectBack, data: IProjectSprintDataBack) => {
                 this.preloader(false);
-                if (error) {
-                    return;
-                }
 
                 if (data?.Id) {
-                    dispatch(UpdateCommentActionCreator(projectId, data));
-
+                    let dt = new ProjectSprint();
+                    dt.FillByIProjectSprintDataBack(data);
+                    dispatch(CreateSprintActionCreator(dt));
                 }
             });
         };
@@ -142,13 +141,9 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
             this.preloader(true);
             this.DeleteSprint(id, (error: MainErrorObjectBack, data: BoolResultBack) => {
                 this.preloader(false);
-                if (error) {
-                    return;
-                }
 
-                if (data?.Id) {
-                    dispatch(UpdateCommentActionCreator(projectId, data));
-
+                if (data.result) {
+                    dispatch(DeleteSprintActionCreator(id));
                 }
             });
         };
@@ -175,12 +170,13 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
             this.preloader(true);
             this.AddTaskToSprint(sprintId, taskId, (error: MainErrorObjectBack, data: BoolResultBack) => {
                 this.preloader(false);
-                if (error) {
-                    return;
-                }
 
-                if (data?.Id) {
-                    dispatch(UpdateCommentActionCreator(projectId, data));
+
+                if (data?.result) {
+                    let dt = new TaskIdWithSprintIdActionType();
+                    dt.sprintId = sprintId;
+                    dt.taskId = taskId;
+                    dispatch(AddTaskToSprintActionCreator(dt));
 
                 }
             });
@@ -204,26 +200,26 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
         });
     };
 
-    DeleteTaskFromSprintRedux = (sprintId: number, taskId: number) => {
+    DeleteTaskFromSprintRedux = ( taskId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteTaskFromSprint(sprintId, taskId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteTaskFromSprint(taskId, (error: MainErrorObjectBack, data: BoolResultBack) => {
                 this.preloader(false);
-                if (error) {
-                    return;
-                }
 
-                if (data?.Id) {
-                    dispatch(UpdateCommentActionCreator(projectId, data));
+                if (data?.result) {
+                    let dt = new TaskIdWithSprintIdActionType();
+                    dt.sprintId = null;
+                    dt.taskId = taskId;
+                    dispatch(DeleteTaskFromSprintActionCreator(dt));
 
                 }
             });
         };
     }
 
-    DeleteTaskFromSprint = (sprintId: number, taskId: number, onSuccess: Delete) => {
+    DeleteTaskFromSprint = (taskId: number, onSuccess: Delete) => {
         let data = {
-            "sprintId": sprintId,
+            // "sprintId": sprintId,
             "taskId": taskId,
         };
         G_AjaxHelper.GoAjaxRequest({

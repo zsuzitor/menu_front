@@ -28,6 +28,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     const [taskNewCommentEditable, setTaskNewCommentEditable] = useState(false);
     const [taskNameEditable, setTaskNameEditable] = useState(false);
     const [taskStatusEditable, setTaskStatusEditable] = useState(false);
+    const [taskSprintEditable, setTaskSprintEditable] = useState(false);
     const [taskExecutorEditable, setTaskExecutorEditable] = useState(false);
 
     const [showAddWorkTimeNew, setShowAddWorkTimeNew] = useState(false);
@@ -56,6 +57,12 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
         // setTaskName(props.Task?.Name || '');
         setTaskNameEditable(false);
     }, [props.Task?.Name]);
+
+
+    useEffect(() => {
+        // setTaskName(props.Task?.Name || '');
+        setTaskSprintEditable(false);
+    }, [props.Task?.SprintId]);
 
     useEffect(() => {
         // setTaskDescription(props.Task?.Description || '');
@@ -340,6 +347,28 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                 <div>
                     <p>Дата создания: {props.Task.CreateDate}</p>
                     <p>Дата редактирования: {props.Task.LastUpdateDate}</p>
+                </div>
+                <div>
+                    <span onClick={() => setTaskSprintEditable(true)}
+                        className='editable-by-click'>Спринт: </span>
+                    {!taskSprintEditable ? <span
+                        className='editable-by-click'
+                        onClick={() => setTaskSprintEditable(true)}
+                    >{props.Sprints.find(x => x.Id == props.Task.SprintId)?.Name || 'Не привязана к спринту'}</span>
+                        :
+                        <SaveCancelInputSelect
+                            CancelEvent={() => setTaskSprintEditable(false)}
+                            SaveEvent={(id) => {
+                                props.UpdateTaskSprint(props.Task.Id, id);
+                                return true;
+                            }}
+                            Selected={props.Task.SprintId}
+                            ValuesWithId={props.Sprints.map(x => {
+                                return { Id: x.Id, Text: x.Name };
+                            })}
+                        />
+
+                    }
                 </div>
             </div>
         </div>

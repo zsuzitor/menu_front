@@ -184,6 +184,10 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                         e.preventDefault();
                         navigate("/task-management/proj-" + props.Project.Id + '/tempo');
                     }}>Темпо</a>
+                    <a href={'/task-management/proj-' + props.Project.Id + '/sprints'} onClick={(e) => {
+                        e.preventDefault();
+                        navigate("/task-management/proj-" + props.Project.Id + '/sprints');
+                    }}>Спринты</a>
 
                     {showUserList ? <AdditionalWindow CloseWindow={() => setShowUserList(false)}
                         IsHeightWindow={true}

@@ -35,7 +35,8 @@ export declare interface IAjaxInputObject {
     Type?: string;
     Data: any;//generic?
     Url: string;
-    DataType?: string;
+    DataType?: string;//todo не используется?
+    ContentType?: string;//formdata|body
     NeedTryRefreshToken?: boolean;
     NotGlobalError?: boolean;
     NotRedirectWhenNotAuth?: boolean;
@@ -142,20 +143,33 @@ export class FetchHelper implements IAjaxHelper {
             });
         }
         else {
-            let formData = new FormData();
-            if (obj.Data instanceof FormData) {
-                formData = obj.Data;
+            let body = null;
+            let headers = {};
+            if (!obj.ContentType || obj.ContentType === 'formdata') {
+                let formData = new FormData();
+                if (obj.Data instanceof FormData) {
+                    formData = obj.Data;
+                }
+                else {
+                    var dataKeys = Object.keys(obj.Data);
+                    dataKeys.forEach(x => {
+                        formData.append(x, obj.Data[x]);
+                    });
+                }
+                body = formData;
             }
             else {
-                var dataKeys = Object.keys(obj.Data);
-                dataKeys.forEach(x => {
-                    formData.append(x, obj.Data[x]);
-                });
+                body = JSON.stringify(obj.Data);
+                headers = {
+                    'Content-Type': 'application/json' // Добавьте этот заголовок
+                }
             }
+
 
             response = await fetch(obj.Url, {
                 method: obj.Type,
-                body: formData
+                body: body,
+                headers: headers,
             });
         }
 

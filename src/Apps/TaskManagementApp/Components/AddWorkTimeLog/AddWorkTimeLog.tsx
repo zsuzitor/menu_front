@@ -15,9 +15,17 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
     const [taskId, setTaskId] = useState(props.TaskId || 0);
 
     const [timeLogText, setTimeLogText] = useState('');
-    const [timeLogMin, setTimeLogMin] = useState('');
+    const [range, setRange] = useState(false);
+    const [timeLogVal, setTimeLogVal] = useState('');
     const [timeLogDate, setTimeLogDate] = useState<Date>(props.DefaultDate || new Date());
+    // const [rangeStart, setRangeStart] = useState<Date>(props.DefaultDate || new Date());
+    // const [rangeEnd, setRangeEnd] = useState<Date>(props.DefaultDate || new Date());
     // const [timeLogValide, setTimeLogValide] = useState(false);
+
+    const [startTime, setStartTime] = useState('09:00');
+    const [endTime, setEndTime] = useState('18:00');
+    const [duration, setDuration] = useState(0);
+
 
     useEffect(() => {
         setTaskId(props.TaskId || 0);
@@ -45,7 +53,40 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
         return help.FormatDateToInput(date);
     }
 
-    const parsedDate = parseTime(timeLogMin);
+    const calculateDuration = (start: string, end: string) => {
+        const [startHours, startMinutes] = start.split(':').map(Number);
+        const [endHours, endMinutes] = end.split(':').map(Number);
+
+        const startDate = new Date();
+        startDate.setHours(startHours, startMinutes, 0, 0);
+
+        const endDate = new Date();
+        endDate.setHours(endHours, endMinutes, 0, 0);
+
+        // const diffMs = endDate - startDate;
+        const diffMs: number = endDate.getTime() - startDate.getTime();
+        const diffMinutes = Math.floor(diffMs / 60000);
+
+        return diffMinutes > 0 ? diffMinutes : 0;
+    };
+
+    const handleStartTimeChange = (newStartTime: string) => {
+        setStartTime(newStartTime);
+        setDuration(calculateDuration(newStartTime, endTime));
+    };
+
+    const handleEndTimeChange = (newEndTime: string) => {
+        setEndTime(newEndTime);
+        setDuration(calculateDuration(startTime, newEndTime));
+    };
+
+    const getDateWithoutTime = (date: Date): Date => {
+        const newDate = new Date(date);
+        newDate.setHours(0, 0, 0, 0);
+        return newDate;
+    };
+
+    const parsedDate = parseTime(timeLogVal);
     const valideTime = parsedDate.hours > 0 || parsedDate.minutes > 0;
 
     return <div className='add-work-time-window'>
@@ -61,13 +102,61 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
             <input className='form-input-v2' type='text' value={timeLogText}
                 placeholder="Комментарий" onChange={e => setTimeLogText(e.target.value)}></input>
         </div>
-        <div>
-            <span>Отработано</span>
-            <input className='form-input-v2' type='text' value={timeLogMin}
-                placeholder="x:h y:m" onChange={e => setTimeLogMin(e.target.value)}></input>
-            {!valideTime && <p className='add-work-time-error'>Не валидный формат даты, верный x:h y:m</p>}
+        <span>Интервал:</span>
+        <input type="checkbox" defaultChecked={range} onChange={() => setRange(!range)} />
+        {range ?
+            <div>
+                <span>Начало:</span>
+                <input
+                    type="time"
+                    value={startTime}
+                    onChange={(e) => handleStartTimeChange(e.target.value)}
+                />
+                {/* <input
+                    // type="datetime-local"
+                    type="date"
+                    // value={timeLogDate.toISOString().slice(0, 16)}
+                    value={formatDateToInput(rangeStart)}
+                    onChange={(e) => {
+                        if (e.target.value) {
+                            setRangeStart(new Date(e.target.value));
+                        }
+                        else {
+                            setRangeStart(new Date());
+                        }
 
-        </div>
+                    }}></input> */}
+                <span>Окончание:</span>
+                <input
+                    type="time"
+                    value={endTime}
+                    onChange={(e) => handleEndTimeChange(e.target.value)}
+                />
+                {/* <input
+                    // type="datetime-local"
+                    type="date"
+                    // value={timeLogDate.toISOString().slice(0, 16)}
+                    value={formatDateToInput(rangeStart)}
+                    onChange={(e) => {
+                        if (e.target.value) {
+                            setRangeStart(new Date(e.target.value));
+                        }
+                        else {
+                            setRangeStart(new Date());
+                        }
+
+                    }}></input> */}
+                <p>Продолжительность: {duration} минут ({Math.floor(duration / 60)} ч. {duration % 60} мин.)</p>
+            </div>
+            :
+            <div>
+                <span>Отработано</span>
+                <input className='form-input-v2' type='text' value={timeLogVal}
+                    placeholder="x:h y:m" onChange={e => setTimeLogVal(e.target.value)}></input>
+                {!valideTime && <p className='add-work-time-error'>Не валидный формат списания, верный x:h y:m</p>}
+
+            </div>}
+
         <div>
             <span>Дата</span><input
                 // type="datetime-local"
@@ -89,15 +178,35 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
             <button
                 className='button button-blue'
                 onClick={() => {
-                    let time = parseTime(timeLogMin);
-                    let minutes = (time.hours * 60 + time.minutes);
-                    if (minutes == 0) {
-                        let alertFactory = new AlertData();
-                        let alert = alertFactory.GetDefaultError("Не валидный формат даты, верный x:h y:m");
-                        window.G_AddAbsoluteAlertToState(alert);
-                        return false;
+
+                    let startRange: Date = null;
+                    let endRange: Date = null;
+                    let minutes: number = 0;
+                    if (range) {
+                        startRange =
+                            new Date(getDateWithoutTime(timeLogDate).setHours(
+                                parseInt(startTime.split(':')[0]),
+                                parseInt(startTime.split(':')[1])
+                            ));
+                        endRange =
+                            new Date(getDateWithoutTime(timeLogDate).setHours(
+                                parseInt(endTime.split(':')[0]),
+                                parseInt(endTime.split(':')[1])
+                            ));
                     }
-                    props.CreateTimeLog(taskId, timeLogText, minutes, timeLogDate);
+                    else {
+
+                        let time = parseTime(timeLogVal);
+                        minutes = (time.hours * 60 + time.minutes);
+                        if (minutes == 0) {
+                            let alertFactory = new AlertData();
+                            let alert = alertFactory.GetDefaultError("Не валидный формат даты, верный x:h y:m");
+                            window.G_AddAbsoluteAlertToState(alert);
+                            return false;
+                        }
+                    }
+                    console.log(startRange);
+                    props.CreateTimeLog(taskId, timeLogText, minutes, timeLogDate, endRange, startRange);
                 }}>Работа</button>
             <button
                 className='button button-grey'

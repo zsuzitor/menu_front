@@ -13,8 +13,8 @@ export type CreateTime = (error: MainErrorObjectBack, data: IWorkTimeLogDataBack
 
 
 export interface ITaskManagementWorkTimeController {
-    CreateTimeLogRedux: (taskId: number, text: string, minutes: number, dayOfLog: Date) => void;
-    CreateTimeTempoLogRedux: (taskId: number, text: string, minutes: number, dayOfLog: Date) => void;
+    CreateTimeLogRedux: (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;
+    CreateTimeTempoLogRedux: (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;
     DeleteTimeTempoLogRedux: (timeId: number) => void;
     LoadTimeLogsForTaskRedux: (taskId: number) => void;
     LoadTimeLogsForProjectRedux: (projectId: number, dateFrom: Date, dateTo: Date) => void;
@@ -26,10 +26,10 @@ export interface ITaskManagementWorkTimeController {
 export class TaskManagementWorkTimeController implements ITaskManagementWorkTimeController {
 
 
-    CreateTimeLogRedux = (taskId: number, text: string, minutes: number, dayOfLog: Date) => {
+    CreateTimeLogRedux = (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.CreateTimeLog(taskId, text, minutes, dayOfLog, (error: MainErrorObjectBack, data: IWorkTimeLogDataBack) => {
+            this.CreateTimeLog(taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog, (error: MainErrorObjectBack, data: IWorkTimeLogDataBack) => {
                 this.preloader(false);
                 if (error) {
                     return;
@@ -43,10 +43,10 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
         };
     }
 
-    CreateTimeTempoLogRedux = (taskId: number, text: string, minutes: number, dayOfLog: Date) => {
+    CreateTimeTempoLogRedux = (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.CreateTimeLog(taskId, text, minutes, dayOfLog, (error: MainErrorObjectBack, data: IWorkTimeLogDataBack) => {
+            this.CreateTimeLog(taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog, (error: MainErrorObjectBack, data: IWorkTimeLogDataBack) => {
                 this.preloader(false);
                 if (error) {
                     return;
@@ -60,12 +60,15 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
         };
     }
 
-    CreateTimeLog = (taskId: number, text: string, minutes: number, dayOfLog: Date, onSuccess: CreateTime) => {
+    CreateTimeLog = (taskId: number, text: string, minutes: number
+        , dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date, onSuccess: CreateTime) => {
         let data = {
             "taskId": taskId,
             "text": text,
             "minutes": minutes,
             "dayOfLog": dayOfLog.toISOString(),
+            "rangeEndOfLog": new ControllerHelper().ToZeroDate(rangeEndOfLog).toISOString(),
+            "rangeStartOfLog": new ControllerHelper().ToZeroDate(rangeStartOfLog).toISOString(),
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
@@ -74,7 +77,8 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/worktimelog/create'
+            Url: G_PathToServer + 'api/taskmanagement/worktimelog/create',
+            ContentType: 'body'
 
         });
     }
@@ -246,6 +250,6 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
     preloader(show: boolean) {
         window.TaskManagementCounter = new ControllerHelper()
             .Preloader(show, TaskManagementPreloader, window.TaskManagementCounter);
-        
+
     }
 }

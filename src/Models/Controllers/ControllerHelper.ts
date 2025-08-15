@@ -8,6 +8,15 @@ export class ControllerHelper {
     static DeleteHttp = 'DELETE';
     static PutHttp = 'PUT';
 
+    //из локального времени делает +0
+    ToZeroDate(localDate: Date): Date {
+        // Получаем смещение в минутах и конвертируем в миллисекунды
+        const offsetMs = localDate.getTimezoneOffset() * 60000;
+
+        // Компенсируем смещение, чтобы получить "наивную" дату
+        return new Date(localDate.getTime() - offsetMs);
+    }
+
     Preloader(show: boolean, preloaderElementId: string, counter: number): number {
         if (!counter) {
             counter = 0;

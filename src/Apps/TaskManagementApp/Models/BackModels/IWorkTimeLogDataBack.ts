@@ -7,4 +7,6 @@ export interface IWorkTimeLogDataBack {
     CreationTime: string;
     WorkTaskId: number;
     ProjectUserId: number;
+    RangeEndOfLog: string;
+    RangeStartOfLog: string;
 }

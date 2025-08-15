@@ -20,7 +20,7 @@ interface ITempoPageDispatchToProps {
     SetDateTo: (date: Date) => void;
     SetDateFrom: (date: Date) => void;
     ClearTimeState: () => void;
-    CreateTimeLog: (taskId: number, text: string, minutes: number, dayOfLog: Date) => void;
+    CreateTimeLog: (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;
     DeleteTime: (timeId: number) => void;
 }
 
@@ -54,8 +54,8 @@ const mapDispatchToProps = (dispatch: any, ownProps: ITempoPageOwnProps) => {
     };
 
 
-    res.CreateTimeLog = (taskId: number, text: string, minutes: number, dayOfLog: Date) => {
-        dispatch(window.G_TaskManagementWorkTimeController.CreateTimeTempoLogRedux(taskId, text, minutes, dayOfLog))
+    res.CreateTimeLog = (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => {
+        dispatch(window.G_TaskManagementWorkTimeController.CreateTimeTempoLogRedux(taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog))
     };
 
     res.DeleteTime = (timeId: number) => {

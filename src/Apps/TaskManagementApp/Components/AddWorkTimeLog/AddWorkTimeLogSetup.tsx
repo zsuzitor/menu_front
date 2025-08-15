@@ -12,7 +12,7 @@ interface IAddWorkTimeLogOwnProps {
     DefaultDate: Date | null;
 
     Close: () => void;
-    CreateTimeLog: (taskId: number, text: string, minutes: number, dayOfLog: Date) => void;
+    CreateTimeLog: (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;
 }
 
 

@@ -3,6 +3,7 @@
     padding: 5px 10px;
     cursor: pointer;
     overflow: hidden;
+    display: flex;
 }
 
 .management-project + .management-project {
@@ -20,4 +21,10 @@
 
 .selected-management-project:hover {
     background-color: #0561c8;
+}
+
+.management-project a{
+    
+    width: 100%;
+    color: black;
 }

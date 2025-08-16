@@ -4,6 +4,26 @@ import { AppState } from "../Entity/State/AppState";
 
 export class Helper {
 
+    //получить часы из даты, из Sat Aug 16 2025 22:12:47 GMT+0300 (Москва, стандартное время) вернет 22 часа
+    GetHours(date: Date) {
+        return date.getHours();
+    }
+
+    //получить минуты из даты, из Sat Aug 16 2025 22:12:47 GMT+0300 (Москва, стандартное время) вернет 12 минут
+    GetMinutes(date: Date) {
+        return date.getMinutes();
+    }
+
+    DateToGetHM(date: Date) {
+        return `${this.GetHours(date)}:${this.GetMinutes(date)}`;
+    }
+
+    GetDateWithoutTime = (date: Date): Date => {
+        const newDate = new Date(date);
+        newDate.setHours(0, 0, 0, 0);
+        return newDate;
+    };
+
     MinutesToHours(minutes: number) {
         const hours = Math.floor(minutes / 60);
         const remainingMinutes = minutes % 60;
@@ -122,7 +142,9 @@ export class Helper {
 
 
 
-
+    GetIndexById1(arr: any[], f: (x: any) => number): number {
+        return arr.findIndex(f);
+    }
 
     GetIndexById<t extends { Id: tId }, tId>(arr: t[], id: tId): number {
         if (!id) {

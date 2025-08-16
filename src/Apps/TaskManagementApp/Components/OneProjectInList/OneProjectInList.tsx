@@ -22,17 +22,11 @@ const OneProjectInList = (props: IOneProjectInListProps) => {
 
     return <div key={props.Project.Id.toString()}
         className={projectClassName}
-        onClick={() => {
-            // if (!props.CurrentProject) {
-            //     // props.SetCurrentProject(props.Project.Id)
-
-            // }
+    >
+        <a href={'/task-management/proj-' + props.Project.Id} onClick={(e) => {
+            e.preventDefault();
             navigate("/task-management/proj-" + props.Project.Id);
-        }}>
-        {props.Project.Name}
-
-        {/* <div  title={props.Project.Name}>
-        </div> */}
+        }}>{props.Project.Name}</a>
     </div>
 
 }

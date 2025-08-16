@@ -9,6 +9,7 @@ import { Helper } from '../../../../Models/BL/Helper';
 import { useNavigate } from 'react-router-dom';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
 import AddWorkTimeLog from '../AddWorkTimeLog/AddWorkTimeLog';
+import PopupWindow from '../../../../components/Body/PopupWindow/PopupWindow';
 
 
 require('./TempoPage.css');
@@ -19,6 +20,8 @@ require('./TempoPage.css');
 const TempoPage = (props: ITempoPageProps) => {
 
     const [showAddWorkTimeNew, setShowAddWorkTimeNew] = useState(false);
+    // const [rageStart, setRageStart] = useState(7);
+    // const [rageEnd, setRageEnd] = useState(19);
 
     const [defaultDate, setDefaultDate] = useState<Date>(new Date());
 
@@ -27,7 +30,6 @@ const TempoPage = (props: ITempoPageProps) => {
     useEffect(() => {
 
         return () => {
-            //todo очистить
             props.ClearTimeState();
         };
     }, []);
@@ -58,10 +60,6 @@ const TempoPage = (props: ITempoPageProps) => {
         datesForTable.push(new Date(currentDate));
         currentDate.setDate(currentDate.getDate() + 1);
     }
-
-
-
-
 
 
     function formatDateToInput(date: Date): string {
@@ -119,6 +117,10 @@ const TempoPage = (props: ITempoPageProps) => {
                     }
 
                 }}></input>
+            {/* <span>Начало интервала</span>
+            <input type='number' value={rageStart} onChange={(e) => setRageStart(+e.target.value)}></input>
+                <span>Конец интервала</span>
+            <input type='number' value={rageEnd} onChange={(e) => setRageEnd(+e.target.value)}></input> */}
         </div>
         <div className='tempo-time-block'>
 
@@ -152,14 +154,30 @@ const TempoPage = (props: ITempoPageProps) => {
                     <div className='tempo-time-column-header'>{val}</div>
 
                     <div className='tempo-time-column-tasks'>
-                        {works.map(w => <div key={w.Id} className='tempo-time-column-one-content'>
+                        {works.map(w => <div
+                            key={w.Id} className='tempo-time-column-one-content'>
+                            <div>
+                                <PopupWindow
+                                    ButtonContent={<button>...</button>
+                                    }
+                                    PopupContent={<div className='filters-window'>
+                                        <div><button onClick={x => props.DeleteTime(w.Id)}>Удалить</button></div>
+                                        <div><button onClick={x => alert('todo')}>Изменить</button></div>
+                                        <div><button onClick={x => alert('todo')}>Скопировать</button></div>
+                                    </div>}
+                                ></PopupWindow>
+                            </div>
                             <div><a href={'/task-management/proj-' + props.ProjectId + '/task-' + w.WorkTaskId} onClick={(e) => {
                                 e.preventDefault();
                                 navigate("/task-management/proj-" + props.ProjectId + '/task-' + w.WorkTaskId);
                             }}>{w.WorkTaskId}</a></div>
                             <div>{w.Comment}</div>
                             <div>{new Helper().MinutesToHours(w.TimeMinutes)}</div>
-                            <div><button onClick={x => props.DeleteTime(w.Id)}>Удалить</button></div>
+                            {w.RangeStartOfLog && <div>
+                                {`С ${(new Helper().DateToGetHM(w.RangeStartOfLog))} ПО ${(new Helper().DateToGetHM(w.RangeEndOfLog))}`}
+                            </div>}
+
+                            
                         </div>)}</div>
                     <div className='tempo-time-column-add-btn'>
                         <button onClick={() => {

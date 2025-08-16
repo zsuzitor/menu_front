@@ -162,8 +162,26 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
         <div className={'code-management-projects-menu-main' + mainClass}>
             <div onClick={() => setVisibleList(v => !v)}
                 className="hide-management-projects-menu-button">{visibleList ? '<' : '>'}</div>
-            <ProjectsList Projects={props.ProjectsList}
-                CurrentProjectId={props.CurrentProjectId} />
+            <div className='menu-main-inner'>
+                <ProjectsList Projects={props.ProjectsList}
+                    CurrentProjectId={props.CurrentProjectId} />
+
+                {props.CurrentProjectId && <div className='links'
+                >
+                    <a href={'/task-management/proj-' + props.CurrentProjectId + '/time-log'} onClick={(e) => {
+                        e.preventDefault();
+                        navigate("/task-management/proj-" + props.CurrentProjectId + '/time-log');
+                    }}>Работа</a>
+                    <a href={'/task-management/proj-' + props.CurrentProjectId + '/tempo'} onClick={(e) => {
+                        e.preventDefault();
+                        navigate("/task-management/proj-" + props.CurrentProjectId + '/tempo');
+                    }}>Темпо</a>
+                    <a href={'/task-management/proj-' + props.CurrentProjectId + '/sprints'} onClick={(e) => {
+                        e.preventDefault();
+                        navigate("/task-management/proj-" + props.CurrentProjectId + '/sprints');
+                    }}>Спринты</a>
+                </div>}
+            </div>
         </div>
         <Routes>
 

@@ -81,9 +81,7 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
     };
 
     const getDateWithoutTime = (date: Date): Date => {
-        const newDate = new Date(date);
-        newDate.setHours(0, 0, 0, 0);
-        return newDate;
+        return (new Helper).GetDateWithoutTime(date);
     };
 
     const parsedDate = parseTime(timeLogVal);
@@ -112,40 +110,12 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
                     value={startTime}
                     onChange={(e) => handleStartTimeChange(e.target.value)}
                 />
-                {/* <input
-                    // type="datetime-local"
-                    type="date"
-                    // value={timeLogDate.toISOString().slice(0, 16)}
-                    value={formatDateToInput(rangeStart)}
-                    onChange={(e) => {
-                        if (e.target.value) {
-                            setRangeStart(new Date(e.target.value));
-                        }
-                        else {
-                            setRangeStart(new Date());
-                        }
-
-                    }}></input> */}
                 <span>Окончание:</span>
                 <input
                     type="time"
                     value={endTime}
                     onChange={(e) => handleEndTimeChange(e.target.value)}
                 />
-                {/* <input
-                    // type="datetime-local"
-                    type="date"
-                    // value={timeLogDate.toISOString().slice(0, 16)}
-                    value={formatDateToInput(rangeStart)}
-                    onChange={(e) => {
-                        if (e.target.value) {
-                            setRangeStart(new Date(e.target.value));
-                        }
-                        else {
-                            setRangeStart(new Date());
-                        }
-
-                    }}></input> */}
                 <p>Продолжительность: {duration} минут ({Math.floor(duration / 60)} ч. {duration % 60} мин.)</p>
             </div>
             :
@@ -205,7 +175,6 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
                             return false;
                         }
                     }
-                    console.log(startRange);
                     props.CreateTimeLog(taskId, timeLogText, minutes, timeLogDate, endRange, startRange);
                 }}>Работа</button>
             <button

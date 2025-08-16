@@ -57,7 +57,7 @@
     width: 100%;
 }
 
-.task-management-main-container .preloader{
+.task-management-main-container .preloader {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -67,4 +67,11 @@
     opacity: 0.8;
     /* transition: 1s; */
     margin: -4.5rem -0.75rem;
+}
+
+
+.code-management-projects-menu-main .menu-main-inner .links {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
 }

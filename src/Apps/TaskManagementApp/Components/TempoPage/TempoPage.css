@@ -3,6 +3,8 @@
     flex-direction: column;
     width: 110px;
     gap: 5px;
+    border-right: 1px solid black;
+    background-color: lightsteelblue;
 
 }
 
@@ -20,7 +22,7 @@
 }
 
 .tempo-time-column-one-content div {
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .tempo-time-page-main {

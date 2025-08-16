@@ -175,20 +175,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 <br />
                 <div className='management-project-detail-main-header-buttons'>
                     <button className='button button-grey' onClick={() => setShowUserList(e => true)}>Люди проекта</button>
-
-                    <a href={'/task-management/proj-' + props.Project.Id + '/time-log'} onClick={(e) => {
-                        e.preventDefault();
-                        navigate("/task-management/proj-" + props.Project.Id + '/time-log');
-                    }}>Работа</a>
-                    <a href={'/task-management/proj-' + props.Project.Id + '/tempo'} onClick={(e) => {
-                        e.preventDefault();
-                        navigate("/task-management/proj-" + props.Project.Id + '/tempo');
-                    }}>Темпо</a>
-                    <a href={'/task-management/proj-' + props.Project.Id + '/sprints'} onClick={(e) => {
-                        e.preventDefault();
-                        navigate("/task-management/proj-" + props.Project.Id + '/sprints');
-                    }}>Спринты</a>
-
                     {showUserList ? <AdditionalWindow CloseWindow={() => setShowUserList(false)}
                         IsHeightWindow={true}
                         Title='Люди проекта'
@@ -217,7 +203,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                             <span>Добавить фильтр</span>
                         </button>
                         }
-                        PopupContent={<div className='filters-window'>
+                        PopupContent={<div className='tasks-filters-window'>
                             <div className='add-one-filter' onClick={() => setFilterVisibilityName(true)}>Название</div>
                             <div className='add-one-filter' onClick={() => setFilterVisibilityCreator(true)}>Создатель</div>
                             <div className='add-one-filter' onClick={() => setFilterVisibilityReviwer(true)}>Ревьювер</div>

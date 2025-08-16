@@ -6,8 +6,8 @@ export class TimeLog implements MappedWithBack<IWorkTimeLogDataBack> {
     Comment: string;
     TimeMinutes: number;
     DayOfLog: Date;
-    RangeStartOfLog: Date;
-    RangeEndOfLog: Date;
+    RangeStartOfLog?: Date;
+    RangeEndOfLog?: Date;
     CreationTime: Date;
     WorkTaskId: number;
     ProjectUserId: number;
@@ -22,8 +22,8 @@ export class TimeLog implements MappedWithBack<IWorkTimeLogDataBack> {
         this.Comment = newData.Comment;
         this.TimeMinutes = newData.TimeMinutes;
         this.DayOfLog = new Date(newData.DayOfLog);
-        this.RangeEndOfLog = new Date(newData.RangeEndOfLog);
-        this.RangeStartOfLog = new Date(newData.RangeStartOfLog);
+        this.RangeEndOfLog = newData.RangeEndOfLog ? new Date(newData.RangeEndOfLog) : null;
+        this.RangeStartOfLog = newData.RangeStartOfLog ? new Date(newData.RangeStartOfLog) : null;
         this.CreationTime = new Date(newData.CreationTime);
         this.WorkTaskId = newData.WorkTaskId;
         this.ProjectUserId = newData.ProjectUserId;

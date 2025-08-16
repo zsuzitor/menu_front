@@ -157,13 +157,13 @@
     display: flex;
 }
 
-.filters-window {
+.tasks-filters-window {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
-.filters-window .add-one-filter {
+.tasks-filters-window .add-one-filter {
     color: #4a6b8b;
     font-weight: 500;
     border: 1px solid #e1e5eb;

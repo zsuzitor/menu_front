@@ -23,3 +23,23 @@
     margin-top: 0 !important;
     min-width: max-content;
 }
+
+.selected-main-management-project {
+    color: #fff;
+    background-color: #337cca;
+    margin-top: 0.5rem;
+    border-radius: 0.25rem;
+    padding: 5px 10px;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+}
+
+.selected-main-management-project:hover {
+    background-color: #0561c8;
+}
+
+.selected-main-management-project a {
+    width: 100%;
+    color: white;
+}

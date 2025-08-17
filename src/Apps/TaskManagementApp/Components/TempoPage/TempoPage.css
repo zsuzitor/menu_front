@@ -3,22 +3,90 @@
     flex-direction: column;
     width: 110px;
     gap: 5px;
-    border-right: 1px solid black;
-    background-color: lightsteelblue;
+    /* border-right: 1px solid black; */
+    /* background-color: lightsteelblue; */
 
 }
 
 .tempo-time-column-header {
     width: 110px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    border-radius: 7px 7px 0 0;
+    background-color: white;
+}
+
+.tempo-time-column-tasks {
+    border-radius: 0px 0px 7px 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .tempo-time-column-one-content {
     width: 110px;
-    height: 110px;
-    border: 1px solid black;
+    height: 90px;
+    /* border: 1px solid black; */
     padding: 3px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
 
+.tempo-time-column-one-content .head {
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.tempo-time-column-one-content .more-buttons {
+    display: none;
+    /* position: absolute; */
+    width: 10px;
+    height: 10px;
+    /* top: -30px;
+    right: -100px; */
+    cursor: pointer;
+    /* border-radius: 50%;
+    border: 2px solid #2d85e4;
+    height: 14px;
+    width: 14px; */
+}
+
+.tempo-time-column-one-content:hover .more-buttons {
+    display: flex;
+    justify-content: right;
+}
+
+.tempo-time-column-one-content .task-info {
+    font-weight: bold;
+    display: flex;
+    flex-grow: 2;
+}
+
+.tempo-time-column-one-content .time-more-block {
+
+    /* line-height: 0; */
+    display: flex;
+}
+
+.tempo-time-column-one-content .task-info a {
+    height: 16px;
+    width: 100%;
+}
+
+.tempo-time-column-one-content .comment {
+    height: 18px;
+    line-height: 1;
+    overflow: hidden;
+}
+
+.tempo-time-column-one-content .time {
+    font-size: 10px;
+    font-weight: bold;
+    text-align: right;
 }
 
 .tempo-time-column-one-content div {
@@ -33,6 +101,8 @@
 
 .tempo-time-block {
     display: flex;
+    padding-top: 30px;
+    gap: 2px;
 }
 
 .tempo-time-column-add-btn {

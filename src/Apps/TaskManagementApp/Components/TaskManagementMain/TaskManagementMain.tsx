@@ -156,7 +156,6 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
 
 
 
-
     return <div className='task-management-main-container'>
         <div className='preloader' id={TaskManagementPreloader}></div>
         <div className={'code-management-projects-menu-main' + mainClass}>
@@ -166,7 +165,7 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
                 <ProjectsList Projects={props.ProjectsList}
                     CurrentProjectId={props.CurrentProjectId} />
 
-                {props.CurrentProjectId && <div className='links'
+                {props.CurrentProjectId > 0 && <div className='links'
                 >
                     <a href={'/task-management/proj-' + props.CurrentProjectId + '/time-log'} onClick={(e) => {
                         e.preventDefault();

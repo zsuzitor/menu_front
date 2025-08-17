@@ -213,7 +213,8 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/task/add-new-task'
+            Url: G_PathToServer + 'api/taskmanagement/task/add-new-task',
+            ContentType: 'body'
 
         });
 
@@ -253,7 +254,8 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/task/update-task'
+            Url: G_PathToServer + 'api/taskmanagement/task/update-task',
+            ContentType: 'body'
 
         });
     }

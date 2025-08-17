@@ -2,7 +2,7 @@ import { cloneDeep } from "lodash";
 import { AppAction } from "../../../../Models/Actions/Actions";
 import { Helper } from "../../../../Models/BL/Helper";
 import { AppState } from "../../../../Models/Entity/State/AppState";
-import { AddNewTimeLogTaskActionName, ClearProjectTimeLogActionName, DeleteTimeLogActionName, DeleteTimeLogActionParam, SetProjectTimeLogDateFromActionName, SetProjectTimeLogDateToActionName, SetTaskTimeLogActionName, SetTaskTimeLogActionParam, SetProjectTimeLogDataActionName, UpdateTimeLogActionName, SetUserTimeLogDataActionName, ClearUserTimeLogActionName, SetUserTimeLogDateFromActionName, SetUserTimeLogDateToActionName, ClearUserTempoTimeLogActionName, SetUserTempoTimeLogDataActionName, SetUserTempoTimeLogDateFromActionName, SetUserTempoTimeLogDateToActionName, AddNewTimeLogTempoActionName, DelTimeLogTempoActionName } from "../Actions/TimeLogAction";
+import { AddNewTimeLogTaskActionName, ClearProjectTimeLogActionName, DeleteTimeLogActionName, DeleteTimeLogActionParam, SetProjectTimeLogDateFromActionName, SetProjectTimeLogDateToActionName, SetTaskTimeLogActionName, SetTaskTimeLogActionParam, SetProjectTimeLogDataActionName, UpdateTimeLogActionName, SetUserTimeLogDataActionName, ClearUserTimeLogActionName, SetUserTimeLogDateFromActionName, SetUserTimeLogDateToActionName, ClearUserTempoTimeLogActionName, SetUserTempoTimeLogDataActionName, SetUserTempoTimeLogDateFromActionName, SetUserTempoTimeLogDateToActionName, AddNewTimeLogTempoActionName, DelTimeLogTempoActionName, UpdateTimeLogTempoActionName } from "../Actions/TimeLogAction";
 import { IWorkTimeLogDataBack } from "../BackModels/IWorkTimeLogDataBack";
 import { TimeLog } from "../Entity/State/TimeLog";
 import { ProjectTimes } from "../Entity/State/ProjectTimes";
@@ -29,6 +29,19 @@ export function TaskManagementWorkTimeLogReducer(state: AppState = new AppState(
 
                 let payload = action.payload as TimeLog;
                 newState.TaskManagementApp.TempoState.TimeLogs.push(payload);
+                return newState;
+            }
+
+        case UpdateTimeLogTempoActionName:
+            {
+
+                let newState = cloneDeep(state);
+
+                let payload = action.payload as TimeLog;
+                var log = newState.TaskManagementApp.TempoState.TimeLogs.find(x => x.Id === payload.Id);
+                if (log) {
+                    log.Copy(payload);
+                }
                 return newState;
             }
 

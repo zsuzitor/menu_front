@@ -22,6 +22,8 @@ interface ITempoPageDispatchToProps {
     ClearTimeState: () => void;
     CreateTimeLog: (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;
     DeleteTime: (timeId: number) => void;
+    CopyTime: (timeId: number) => void;
+    UpdateTimeLog: (id: number, taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;
 }
 
 export interface ITempoPageProps extends ITempoPageStateToProps, ITempoPageOwnProps, ITempoPageDispatchToProps {
@@ -60,8 +62,15 @@ const mapDispatchToProps = (dispatch: any, ownProps: ITempoPageOwnProps) => {
 
     res.DeleteTime = (timeId: number) => {
         dispatch(window.G_TaskManagementWorkTimeController.DeleteTimeTempoLogRedux(timeId))
-
     }
+
+    res.CopyTime = (timeId: number) => {
+        dispatch(window.G_TaskManagementWorkTimeController.CopyTimeTempoLogRedux(timeId))
+    }
+
+    res.UpdateTimeLog = (id: number, taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => {
+        dispatch(window.G_TaskManagementWorkTimeController.UpdateTimeTempoLogRedux(id, taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog))
+    };
 
     return res;
 };

@@ -19,7 +19,7 @@ require('./TempoPage.css');
 
 const TempoPage = (props: ITempoPageProps) => {
 
-    const [showAddWorkTimeNew, setShowAddWorkTimeNew] = useState(false);
+    const [showAddWorkTimeNew, setShowAddWorkTimeNew] = useState(-1);//-1 не показывать, 0 создание, >0 id лога для редактирования
     // const [rageStart, setRageStart] = useState(7);
     // const [rageEnd, setRageEnd] = useState(19);
 
@@ -48,9 +48,7 @@ const TempoPage = (props: ITempoPageProps) => {
 
 
     const setClearDate = (dt: Date) => {
-        let newDt = new Date(dt);
-        newDt.setHours(0, 0, 0, 0);
-        return newDt;
+        return new Helper().GetDateWithoutTime(dt);
     }
 
     const currentDate = setClearDate(props.DateFrom);
@@ -125,14 +123,16 @@ const TempoPage = (props: ITempoPageProps) => {
         <div className='tempo-time-block'>
 
             {
-                showAddWorkTimeNew ? <AdditionalWindow CloseWindow={() => setShowAddWorkTimeNew(false)}
+                showAddWorkTimeNew != -1 ? <AdditionalWindow CloseWindow={() => setShowAddWorkTimeNew(-1)}
                     IsHeightWindow={false}
                     Title='Работа'
                     InnerContent={() => <AddWorkTimeLog
-                        Close={() => setShowAddWorkTimeNew(false)}
+                        Close={() => setShowAddWorkTimeNew(-1)}
                         TaskId={null}
                         DefaultDate={defaultDate}
                         CreateTimeLog={props.CreateTimeLog}
+                        TimeLog={showAddWorkTimeNew ? props.WorkTimeLog.find(x => x.Id == showAddWorkTimeNew) : null}
+                        UpdateTimeLog={props.UpdateTimeLog}
                     />}></AdditionalWindow> : <></>
             }
             {datesForTable.map(x => {
@@ -151,39 +151,48 @@ const TempoPage = (props: ITempoPageProps) => {
                     key={`${x.getTime()}`}
                     className='tempo-time-column'
                 >
-                    <div className='tempo-time-column-header'>{val}</div>
+                    <div className='tempo-time-column-header'>
+                        <div>{val}</div>
+                        <div>{new Helper().MinutesToHours(works.reduce((sum, item) => sum + item.TimeMinutes, 0))}</div>
+                    </div>
 
                     <div className='tempo-time-column-tasks'>
                         {works.map(w => <div
                             key={w.Id} className='tempo-time-column-one-content'>
-                            <div>
-                                <PopupWindow
-                                    ButtonContent={<button>...</button>
-                                    }
-                                    PopupContent={<div className='filters-window'>
-                                        <div><button onClick={x => props.DeleteTime(w.Id)}>Удалить</button></div>
-                                        <div><button onClick={x => alert('todo')}>Изменить</button></div>
-                                        <div><button onClick={x => alert('todo')}>Скопировать</button></div>
-                                    </div>}
-                                ></PopupWindow>
+                            <div className='head'>
+                                <div className='task-info'><a href={'/task-management/proj-' + props.ProjectId + '/task-' + w.WorkTaskId} onClick={(e) => {
+                                    e.preventDefault();
+                                    navigate("/task-management/proj-" + props.ProjectId + '/task-' + w.WorkTaskId);
+                                }}>{w.WorkTaskId}</a></div>
+
+                                <div className='time-more-block'>
+                                    <PopupWindow
+                                        ButtonContent={<div className='more-buttons'>...</div>
+                                        }
+                                        PopupContent={<div className='filters-window'>
+
+                                            <div><button onClick={x => props.DeleteTime(w.Id)}>Удалить</button></div>
+                                            <div><button onClick={x => setShowAddWorkTimeNew(w.Id)}>Изменить</button></div>
+                                            <div><button onClick={x => props.CopyTime(w.Id)}>Скопировать</button></div>
+                                        </div>}
+                                    ></PopupWindow>
+                                </div>
                             </div>
-                            <div><a href={'/task-management/proj-' + props.ProjectId + '/task-' + w.WorkTaskId} onClick={(e) => {
-                                e.preventDefault();
-                                navigate("/task-management/proj-" + props.ProjectId + '/task-' + w.WorkTaskId);
-                            }}>{w.WorkTaskId}</a></div>
-                            <div>{w.Comment}</div>
-                            <div>{new Helper().MinutesToHours(w.TimeMinutes)}</div>
-                            {w.RangeStartOfLog && <div>
+
+                            <div className='comment' title={w.Comment}>{w.Comment}</div>
+                            <div className='time'>{new Helper().MinutesToHours(w.TimeMinutes)}</div>
+                            {w.RangeStartOfLog && <div className='time'>
                                 {`С ${(new Helper().DateToGetHM(w.RangeStartOfLog))} ПО ${(new Helper().DateToGetHM(w.RangeEndOfLog))}`}
                             </div>}
 
-                            
+
                         </div>)}</div>
                     <div className='tempo-time-column-add-btn'>
-                        <button onClick={() => {
-                            setDefaultDate(x);
-                            setShowAddWorkTimeNew(true)
-                        }}>Работа</button>
+                        <button className='button button-blue'
+                            onClick={() => {
+                                setDefaultDate(x);
+                                setShowAddWorkTimeNew(0);
+                            }}>Работа</button>
                     </div>
                 </div>
 

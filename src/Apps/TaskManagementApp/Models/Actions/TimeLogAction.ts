@@ -12,6 +12,11 @@ export function AddNewTimeLogTempoActionCreator(time: TimeLog): AppAction<TimeLo
     return { type: AddNewTimeLogTempoActionName, payload: time };
 };
 
+export const UpdateTimeLogTempoActionName: string = 'UpdateTimeLogTempoAction';
+export function UpdateTimeLogTempoActionCreator(time: TimeLog): AppAction<TimeLog> {
+    return { type: UpdateTimeLogTempoActionName, payload: time };
+};
+
 export const DelTimeLogTempoActionName: string = 'DelTimeLogTempoAction';
 export function DelTimeLogTempoActionCreator(timeId: number): AppAction<number> {
     return { type: DelTimeLogTempoActionName, payload: timeId };

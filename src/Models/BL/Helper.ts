@@ -15,7 +15,19 @@ export class Helper {
     }
 
     DateToGetHM(date: Date) {
+        if (!date) {
+            return null;
+        }
+
         return `${this.GetHours(date)}:${this.GetMinutes(date)}`;
+    }
+
+    DateToGetHMInput(date: Date) {
+        if (!date) {
+            return null;
+        }
+
+        return `${String(this.GetHours(date)).padStart(2, '0')}:${String(this.GetMinutes(date)).padStart(2, '0')}`;
     }
 
     GetDateWithoutTime = (date: Date): Date => {
@@ -24,7 +36,38 @@ export class Helper {
         return newDate;
     };
 
-    MinutesToHours(minutes: number) {
+    MinutesToHours1(minutes: number): { h: number, m: number } {
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+
+        return {
+            h: hours,
+            m: remainingMinutes
+        };
+    }
+
+    // 60h 4m
+    MinutesToHours2(minutes: number): string {
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+
+        let result = '';
+
+        if (hours > 0) {
+            result += `${hours}h`;
+        }
+
+        if (remainingMinutes > 0) {
+            if (result)
+                result += ' ';
+            result += `${remainingMinutes}m`;
+        }
+
+        return result || '0';
+    }
+
+    //60:h 4:m
+    MinutesToHours(minutes: number): string {
         const hours = Math.floor(minutes / 60);
         const remainingMinutes = minutes % 60;
 

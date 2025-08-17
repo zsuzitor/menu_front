@@ -83,13 +83,14 @@ export class TaskManagementUserController implements ITaskManagementUserControll
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: "PUT",
+            Type: ControllerHelper.PutHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/user/add-new-user'
+            Url: G_PathToServer + 'api/taskmanagement/user/add-new-user',
+            ContentType: 'body'
 
         });
     };
@@ -127,7 +128,8 @@ export class TaskManagementUserController implements ITaskManagementUserControll
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/user/change-user'
+            Url: G_PathToServer + 'api/taskmanagement/user/change-user',
+            ContentType: 'body'
 
         });
     }

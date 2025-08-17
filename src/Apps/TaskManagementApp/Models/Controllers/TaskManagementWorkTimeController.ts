@@ -1,7 +1,8 @@
 import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
-import { SetTaskTimeLogActionCreator, SetProjectTimeLogDataActionCreator, SetUserTimeLogDataActionCreator, SetUserTempoTimeLogDataActionCreator, AddNewTimeLogTaskActionCreator, AddNewTimeLogTempoActionCreator, DelTimeLogTempoActionCreator } from "../Actions/TimeLogAction";
+import { AppState } from "../../../../Models/Entity/State/AppState";
+import { SetTaskTimeLogActionCreator, SetProjectTimeLogDataActionCreator, SetUserTimeLogDataActionCreator, SetUserTempoTimeLogDataActionCreator, AddNewTimeLogTaskActionCreator, AddNewTimeLogTempoActionCreator, DelTimeLogTempoActionCreator, UpdateTimeLogTempoActionCreator } from "../Actions/TimeLogAction";
 import { IProjectUserDataBack } from "../BackModels/IProjectUserDataBack";
 import { IWorkTimeLogDataBack } from "../BackModels/IWorkTimeLogDataBack";
 import { TaskManagementPreloader } from "../Consts";
@@ -15,7 +16,9 @@ export type CreateTime = (error: MainErrorObjectBack, data: IWorkTimeLogDataBack
 export interface ITaskManagementWorkTimeController {
     CreateTimeLogRedux: (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;
     CreateTimeTempoLogRedux: (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;
+    UpdateTimeTempoLogRedux: (id: number, taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;
     DeleteTimeTempoLogRedux: (timeId: number) => void;
+    CopyTimeTempoLogRedux: (timeId: number) => void;
     LoadTimeLogsForTaskRedux: (taskId: number) => void;
     LoadTimeLogsForProjectRedux: (projectId: number, dateFrom: Date, dateTo: Date) => void;
     LoadTimeLogsForUserRedux: (projectId: number, userId: number, dateFrom: Date, dateTo: Date) => void;
@@ -66,9 +69,9 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
             "taskId": taskId,
             "text": text,
             "minutes": minutes,
-            "dayOfLog": dayOfLog.toISOString(),
-            "rangeEndOfLog": new ControllerHelper().ToZeroDate(rangeEndOfLog).toISOString(),
-            "rangeStartOfLog": new ControllerHelper().ToZeroDate(rangeStartOfLog).toISOString(),
+            "dayOfLog": new ControllerHelper().ToZeroDate(dayOfLog).toISOString(),
+            "rangeEndOfLog": rangeEndOfLog ? new ControllerHelper().ToZeroDate(rangeEndOfLog).toISOString() : null,
+            "rangeStartOfLog": rangeStartOfLog ? new ControllerHelper().ToZeroDate(rangeStartOfLog).toISOString() : null,
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
@@ -83,6 +86,48 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
         });
     }
 
+    UpdateTimeTempoLogRedux = (id: number, taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.UpdateTimeLog(id, taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog, (error: MainErrorObjectBack, data: IWorkTimeLogDataBack) => {
+                this.preloader(false);
+                if (error) {
+                    return;
+                }
+
+                if (data?.Id) {
+                    let dt = new TimeLog().FillByBackModel(data);
+                    dispatch(UpdateTimeLogTempoActionCreator(dt));
+                }
+            });
+        };
+    }
+
+    UpdateTimeLog = (id: number, taskId: number, text: string, minutes: number
+        , dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date, onSuccess: CreateTime) => {
+        let data = {
+            "id": id,
+            "taskId": taskId,
+            "text": text,
+            "minutes": minutes,
+            "dayOfLog": new ControllerHelper().ToZeroDate(dayOfLog).toISOString(),
+            "rangeEndOfLog": rangeEndOfLog ? new ControllerHelper().ToZeroDate(rangeEndOfLog).toISOString() : null,
+            "rangeStartOfLog": rangeStartOfLog ? new ControllerHelper().ToZeroDate(rangeStartOfLog).toISOString() : null,
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.PatchHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/taskmanagement/worktimelog/update',
+            ContentType: 'body'
+
+        });
+    }
+
+
     DeleteTimeTempoLogRedux = (timeId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
@@ -96,6 +141,31 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
                     dispatch(DelTimeLogTempoActionCreator(timeId));
                 }
             });
+        };
+    }
+
+    CopyTimeTempoLogRedux = (timeId: number) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            let state = getState() as AppState;
+            var oldTime = state.TaskManagementApp.TempoState.TimeLogs.find(x => x.Id == timeId);
+            if (oldTime) {
+                // let newTime = new TimeLog();
+                // newTime.Copy(oldTime);
+                this.CreateTimeLog(oldTime.WorkTaskId, oldTime.Comment, oldTime.TimeMinutes,
+                    oldTime.DayOfLog, oldTime.RangeEndOfLog, oldTime.RangeStartOfLog, (error: MainErrorObjectBack, data: IWorkTimeLogDataBack) => {
+                        this.preloader(false);
+                        if (error) {
+                            return;
+                        }
+
+                        if (data?.Id) {
+                            let dt = new TimeLog().FillByBackModel(data);
+                            dispatch(AddNewTimeLogTempoActionCreator(dt));
+                        }
+                    });
+            }
+
         };
     }
 
@@ -169,8 +239,8 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
         , onSuccess: (error: MainErrorObjectBack, data: IWorkTimeLogDataBack[]) => void) => {
         let data = {
             "id": projectId,
-            "dateFrom": dateFrom.toISOString(),
-            "dateTo": dateTo.toISOString(),
+            "dateFrom": new ControllerHelper().ToZeroDate(dateFrom).toISOString(),
+            "dateTo": new ControllerHelper().ToZeroDate(dateTo).toISOString(),
             "userId": userId || null
         };
         G_AjaxHelper.GoAjaxRequest({
@@ -225,8 +295,8 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
         , onSuccess: (error: MainErrorObjectBack, data: IWorkTimeLogDataBack[]) => void) => {
         let data = {
             "projectId": projectId || null,
-            "dateFrom": dateFrom.toISOString(),
-            "dateTo": dateTo.toISOString(),
+            "dateFrom": new ControllerHelper().ToZeroDate(dateFrom).toISOString(),
+            "dateTo": new ControllerHelper().ToZeroDate(dateTo).toISOString(),
             "userId": userId
         };
         G_AjaxHelper.GoAjaxRequest({

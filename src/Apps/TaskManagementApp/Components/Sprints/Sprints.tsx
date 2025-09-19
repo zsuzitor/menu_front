@@ -3,6 +3,7 @@ import React, { useState, useEffect, ReactNode } from 'react';
 
 import connectToStore, { ISprintsProps } from './SprintsSetup';
 import { useNavigate } from 'react-router-dom';
+import { Helper } from '../../../../Models/BL/Helper';
 
 require('./Sprints.css');
 
@@ -12,6 +13,8 @@ require('./Sprints.css');
 const Sprints = (props: ISprintsProps) => {
 
     const [newSprintName, setNewSprintName] = useState("");
+    const [dateFrom, setDateFrom] = useState<Date>(new Date());
+    const [dateTo, setDateTo] = useState<Date>(new Date());
 
 
     const navigate = useNavigate();
@@ -35,6 +38,16 @@ const Sprints = (props: ISprintsProps) => {
 
     }, [props.Sprints.length]);
 
+    function formatDateToInput(date: Date): string {
+        const help = new Helper();
+        return help.FormatDateToInput(date);
+    }
+
+    const setClearDate = (dt: Date) => {
+        let newDt = new Date(dt);
+        newDt.setHours(0, 0, 0, 0);
+        return newDt;
+    }
 
     if (!props.Sprints) {
         return <></>
@@ -46,8 +59,36 @@ const Sprints = (props: ISprintsProps) => {
                 placeholder='Введите название'
                 value={newSprintName}
                 onChange={e => setNewSprintName(e.target.value)}></input>
+            <span>Дата начала:</span>
+            <input
+                type="date"
+                value={formatDateToInput(dateFrom)}
+                onChange={(e) => {
+                    if (e.target.value) {
+                        let dt = new Date(e.target.value);
+                        setDateFrom(setClearDate(dt));
+                    }
+                    else {
+                        setDateFrom(setClearDate(new Date()));
+                    }
+
+                }}></input>
+            <span>Дата окончания:</span>
+            <input
+                type="date"
+                value={formatDateToInput(dateTo)}
+                onChange={(e) => {
+                    if (e.target.value) {
+                        let dt = new Date(e.target.value);
+                        setDateTo(setClearDate(dt));
+                    }
+                    else {
+                        setDateTo(setClearDate(new Date()));
+                    }
+
+                }}></input>
             <button onClick={() => {
-                props.CreateSprint(props.ProjectId, newSprintName);
+                props.CreateSprint(props.ProjectId, newSprintName, dateFrom, dateTo);
             }}>Добавить</button>
         </div>
         <div>

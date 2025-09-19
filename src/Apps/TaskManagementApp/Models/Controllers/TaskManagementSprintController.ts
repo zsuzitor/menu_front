@@ -9,6 +9,7 @@ import { IProjectSprintDataBack } from "../BackModels/IProjectSprintDataBack";
 import { IProjectTaskDataBack } from "../BackModels/IProjectTaskDataBack";
 import { AddTaskToSprintActionCreator, AddTaskToSprintActionName, CreateSprintActionCreator, DeleteSprintActionCreator, DeleteTaskFromSprintActionCreator, GetProjectSprintsActionCreator, GetProjectSprintsActionType, GetSprintsTasksActionCreator, TaskIdWithSprintIdActionType } from "../Actions/SprintActions";
 import { OneTask } from "../Entity/State/OneTask";
+import { SprintCreate } from "../Entity/SprintCreate";
 
 
 
@@ -22,10 +23,10 @@ export type Delete = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 export interface ITaskManagementSprintController {
     GetForProjectRedux: (projectId: number) => void;
     GetTasksRedux: (sprintId: number) => void;
-    CreateSprintRedux: (projectId: number, name: string) => void;
+    CreateSprintRedux: (req: SprintCreate) => void;
     DeleteSprintRedux: (sprintId: number) => void;
     AddTaskToSprintRedux: (sprintId: number, taskId: number) => void;
-    DeleteTaskFromSprintRedux: ( taskId: number) => void;
+    DeleteTaskFromSprintRedux: (taskId: number) => void;
 
 
 
@@ -104,10 +105,10 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
     };
 
 
-    CreateSprintRedux = (projectId: number, name: string) => {
+    CreateSprintRedux = (req: SprintCreate) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.CreateSprint(projectId, name, (error: MainErrorObjectBack, data: IProjectSprintDataBack) => {
+            this.CreateSprint(req, (error: MainErrorObjectBack, data: IProjectSprintDataBack) => {
                 this.preloader(false);
 
                 if (data?.Id) {
@@ -119,19 +120,23 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
         };
     }
 
-    CreateSprint = (projectId: number, name: string, onSuccess: CreateSprint) => {
+    CreateSprint = (req: SprintCreate, onSuccess: CreateSprint) => {
         let data = {
-            "projectId": projectId,
-            "name": name,
+            "ProjectId": req.ProjectId,
+            "Name": req.Name,
+            "StartDate": new ControllerHelper().ToZeroDate(req.StartDate).toISOString(),
+            "EndDate": new ControllerHelper().ToZeroDate(req.EndDate).toISOString()
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
             Type: ControllerHelper.PutHttp,
+
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/sprint/create'
+            Url: G_PathToServer + 'api/taskmanagement/sprint/create',
+            ContentType: 'body'
 
         });
     };
@@ -200,7 +205,7 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
         });
     };
 
-    DeleteTaskFromSprintRedux = ( taskId: number) => {
+    DeleteTaskFromSprintRedux = (taskId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
             this.DeleteTaskFromSprint(taskId, (error: MainErrorObjectBack, data: BoolResultBack) => {

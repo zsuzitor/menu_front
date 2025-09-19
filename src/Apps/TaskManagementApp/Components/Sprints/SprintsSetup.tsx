@@ -15,7 +15,7 @@ interface ISprintsStateToProps {
 interface ISprintsDispatchToProps {
     LoadSprints: (projectId: number) => void;
     ClearSprints: (projectId: number) => void;
-    CreateSprint: (projectId: number, sprintName: string) => void;
+    CreateSprint: (projectId: number, sprintName: string, dateFrom: Date, dateTo: Date) => void;
     DeleteSprint: (sprintId: number) => void;
 }
 
@@ -42,8 +42,11 @@ const mapDispatchToProps = (dispatch: any, ownProps: ISprintsOwnProps) => {
         dispatch(GetProjectSprintsActionCreator(dt));
     };
 
-    res.CreateSprint = (projectId: number, sprintName: string) => {
-        dispatch(window.G_TaskManagementSprintController.CreateSprintRedux(projectId, sprintName));
+    res.CreateSprint = (projectId: number, sprintName: string, dateFrom: Date, dateTo: Date) => {
+        dispatch(window.G_TaskManagementSprintController.CreateSprintRedux({
+            ProjectId: projectId,
+            Name: sprintName, StartDate: dateFrom, EndDate: dateTo
+        }));
 
     }
 

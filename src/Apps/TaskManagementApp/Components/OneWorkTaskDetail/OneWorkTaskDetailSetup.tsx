@@ -28,7 +28,9 @@ interface IOneWorkTaskDetailDispatchToProps {
     UpdateTaskName: (id: number, text: string) => void;
     UpdateTaskDescription: (id: number, text: string) => void;
     UpdateTaskStatus: (id: number, idStatus: number) => void;
-    UpdateTaskSprint: (id: number, idSprint: number) => void;
+    AddTaskSprint: (id: number, idSprint: number) => void;
+    UpdateTaskSprints: (id: number, idSprint: number[]) => void;
+    DeleteTaskSprint: (id: number, idSprint: number) => void;
     UpdateTaskExecutor: (id: number, personId: number) => void;
     AddComment: (taskId: number, newCommentText: string) => void;
     // SetEmptyTaskComments: (taskId: number) => void;
@@ -92,13 +94,15 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps)
         dispatch(window.G_TaskManagementTaskController.UpdateTaskStatusRedux(id, idStatus))
     };
 
-    res.UpdateTaskSprint = (id: number, idSprint: number) => {
-        if (idSprint > 0) {
-            dispatch(window.G_TaskManagementSprintController.AddTaskToSprintRedux(idSprint, id))
-        }
-        else {
-            dispatch(window.G_TaskManagementSprintController.DeleteTaskFromSprintRedux(id))
-        }
+    res.AddTaskSprint = (id: number, idSprint: number) => {
+        dispatch(window.G_TaskManagementSprintController.AddTaskToSprintRedux(idSprint, id))
+    };
+    res.DeleteTaskSprint = (id: number, idSprint: number) => {
+        dispatch(window.G_TaskManagementSprintController.DeleteTaskFromSprintRedux(id, idSprint))
+    };
+
+    res.UpdateTaskSprints = (id: number, idSprint: number[]) => {
+        dispatch(window.G_TaskManagementSprintController.UpdateTaskFromSprintRedux(id, idSprint))
     };
 
     res.UpdateTaskExecutor = (id: number, personId: number) => {

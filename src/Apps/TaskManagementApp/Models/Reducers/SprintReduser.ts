@@ -1,7 +1,7 @@
 import { cloneDeep } from "lodash";
 import { AppAction } from "../../../../Models/Actions/Actions";
 import { AppState } from "../../../../Models/Entity/State/AppState";
-import { AddTaskToSprintActionName, CreateSprintActionName, DeleteSprintActionName, DeleteTaskFromSprintActionName, GetProjectSprintsActionName, GetProjectSprintsActionType, GetSprintsTasksActionName, SetCurrentSprintActionName, TaskIdWithSprintIdActionType } from "../Actions/SprintActions";
+import { AddTaskToSprintActionName, CreateSprintActionName, DeleteSprintActionName, DeleteTaskFromSprintActionName, GetProjectSprintsActionName, GetProjectSprintsActionType, GetSprintsTasksActionName, SetCurrentSprintActionName, TaskIdWithSprintIdActionType, TaskIdWithSprintIdsActionType, UpdateTaskSprintActionName } from "../Actions/SprintActions";
 import { OneTask } from "../Entity/State/OneTask";
 import { ProjectSprint } from "../Entity/State/ProjectSprint";
 import { SprintInfo } from "../Entity/State/SprintInfo";
@@ -66,7 +66,7 @@ export function TaskManagementSprintReducer(state: AppState = new AppState(), ac
                 let data = action.payload as TaskIdWithSprintIdActionType;
                 let dt = new OneTask();
                 dt.Id = data.taskId;
-                dt.SprintId = data.sprintId;
+                dt.SprintId = [...dt.SprintId, data.sprintId];
                 if (newState.TaskManagementApp.CurrentSprint?.Id) {
                     newState.TaskManagementApp.CurrentSprint.Tasks.push(dt);//добавляем пустую, чтот бы тригером перезагрузить список
                 }
@@ -74,7 +74,7 @@ export function TaskManagementSprintReducer(state: AppState = new AppState(), ac
                 let helper = new Helper();
                 var tasks = helper.GetTaskFromState(newState, data.taskId);
                 tasks.forEach(tsk => {
-                    tsk.SprintId = data.sprintId;
+                    tsk.SprintId = [...tsk.SprintId, data.sprintId];
                 });
 
                 return newState;
@@ -92,11 +92,49 @@ export function TaskManagementSprintReducer(state: AppState = new AppState(), ac
                 let helper = new Helper();
                 var tasks = helper.GetTaskFromState(newState, data.taskId);
                 tasks.forEach(tsk => {
-                    tsk.SprintId = data.sprintId;
+                    tsk.SprintId = [...tsk.SprintId, data.sprintId];
                 });
 
                 return newState;
             }
+
+        case UpdateTaskSprintActionName:
+            {
+                let newState = cloneDeep(state);
+                let data = action.payload as TaskIdWithSprintIdsActionType
+                if (newState.TaskManagementApp.CurrentSprint?.Id) {
+                    let s = data.sprintId.find(x => x == newState.TaskManagementApp.CurrentSprint?.Id);
+                    if (s) {
+                        //задача либо добавлена либо остается в текущем спринте
+                        let t = newState.TaskManagementApp.CurrentSprint.Tasks
+                            .find(x => x.Id = data.taskId);
+                        if (t) {
+                            //задачи нет, значит добавлена новая
+                            let dt = new OneTask();
+                            dt.Id = data.taskId;
+                            dt.SprintId = [...data.sprintId];
+                            newState.TaskManagementApp.CurrentSprint.Tasks.push(dt);//добавляем пустую, чтот бы тригером перезагрузить список
+                        }
+                        else {
+                            //задача есть ничего не делаем
+                        }
+                    }
+                    else {
+                        newState.TaskManagementApp.CurrentSprint.Tasks
+                            = newState.TaskManagementApp.CurrentSprint.Tasks
+                                .filter(x => x.Id != data.taskId);
+                    }
+                }
+
+                let helper = new Helper();
+                var tasks = helper.GetTaskFromState(newState, data.taskId);
+                tasks.forEach(tsk => {
+                    tsk.SprintId = [...data.sprintId];
+                });
+
+                return newState;
+            }
+
 
 
 

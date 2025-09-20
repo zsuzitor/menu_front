@@ -39,5 +39,11 @@ export function DeleteTaskFromSprintActionCreator(data: TaskIdWithSprintIdAction
     return { type: DeleteTaskFromSprintActionName, payload: data };
 };
 
+export const UpdateTaskSprintActionName: string = 'UpdateTaskSprintAction';
+export class TaskIdWithSprintIdsActionType { taskId: number; sprintId: number[] };
+export function UpdateTaskSprintActionCreator(data: TaskIdWithSprintIdsActionType): AppAction<TaskIdWithSprintIdsActionType> {
+    return { type: UpdateTaskSprintActionName, payload: data };
+};
+
 
 

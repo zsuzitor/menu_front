@@ -7,7 +7,7 @@ import { TaskManagementPreloader } from "../Consts";
 import { ProjectSprint } from "../Entity/State/ProjectSprint";
 import { IProjectSprintDataBack } from "../BackModels/IProjectSprintDataBack";
 import { IProjectTaskDataBack } from "../BackModels/IProjectTaskDataBack";
-import { AddTaskToSprintActionCreator, AddTaskToSprintActionName, CreateSprintActionCreator, DeleteSprintActionCreator, DeleteTaskFromSprintActionCreator, GetProjectSprintsActionCreator, GetProjectSprintsActionType, GetSprintsTasksActionCreator, TaskIdWithSprintIdActionType } from "../Actions/SprintActions";
+import { AddTaskToSprintActionCreator, CreateSprintActionCreator, DeleteSprintActionCreator, DeleteTaskFromSprintActionCreator, GetProjectSprintsActionCreator, GetProjectSprintsActionType, GetSprintsTasksActionCreator, TaskIdWithSprintIdActionType, TaskIdWithSprintIdsActionType, UpdateTaskSprintActionCreator } from "../Actions/SprintActions";
 import { OneTask } from "../Entity/State/OneTask";
 import { SprintCreate } from "../Entity/SprintCreate";
 
@@ -17,6 +17,7 @@ export type GetSprints = (error: MainErrorObjectBack, data: IProjectSprintDataBa
 export type GetTasks = (error: MainErrorObjectBack, data: IProjectTaskDataBack[]) => void;
 export type CreateSprint = (error: MainErrorObjectBack, data: IProjectSprintDataBack) => void;
 export type Delete = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type Update = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 
 
@@ -26,7 +27,8 @@ export interface ITaskManagementSprintController {
     CreateSprintRedux: (req: SprintCreate) => void;
     DeleteSprintRedux: (sprintId: number) => void;
     AddTaskToSprintRedux: (sprintId: number, taskId: number) => void;
-    DeleteTaskFromSprintRedux: (taskId: number) => void;
+    DeleteTaskFromSprintRedux: (taskId: number, sprintId: number) => void;
+    UpdateTaskFromSprintRedux: (taskId: number, sprintId: number[]) => void;
 
 
 
@@ -205,10 +207,10 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
         });
     };
 
-    DeleteTaskFromSprintRedux = (taskId: number) => {
+    DeleteTaskFromSprintRedux = (taskId: number, sprintId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteTaskFromSprint(taskId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteTaskFromSprint(taskId,sprintId, (error: MainErrorObjectBack, data: BoolResultBack) => {
                 this.preloader(false);
 
                 if (data?.result) {
@@ -222,10 +224,11 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
         };
     }
 
-    DeleteTaskFromSprint = (taskId: number, onSuccess: Delete) => {
+    DeleteTaskFromSprint = (taskId: number, sprintId: number, onSuccess: Delete) => {
         let data = {
             // "sprintId": sprintId,
             "taskId": taskId,
+            "sprintId": sprintId
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
@@ -238,6 +241,43 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
 
         });
     };
+
+    UpdateTaskFromSprintRedux = (taskId: number, sprintId: number[]) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.UpdateTaskFromSprint(taskId,sprintId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+                this.preloader(false);
+
+                if (data?.result) {
+                    let dt = new TaskIdWithSprintIdsActionType();
+                    dt.sprintId = sprintId;
+                    dt.taskId = taskId;
+                    dispatch(UpdateTaskSprintActionCreator(dt));
+
+                }
+            });
+        };
+    }
+
+        UpdateTaskFromSprint = (taskId: number, sprintId: number[], onSuccess: Update) => {
+        let data = {
+            // "sprintId": sprintId,
+            "taskId": taskId,
+            "sprintId": sprintId
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.PostHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/taskmanagement/sprint/update-task-sprints',
+            ContentType: 'body'
+
+        });
+    };
+
 
     mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
         return new ControllerHelper().MapWithResult(onSuccess);

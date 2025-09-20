@@ -9,11 +9,12 @@ import { OneTask } from '../../Models/Entity/State/OneTask';
 import { useNavigate } from 'react-router-dom';
 import connectToStore, { IOneWorkTaskDetailProps } from './OneWorkTaskDetailSetup';
 import SaveCancelTextarea from '../../../../components/Body/SaveCancelTextarea/SaveCancelTextarea';
-import SaveCancelInputText from '../../../../components/Body/SaveCancelInput/SaveCancelInputText';
-import SaveCancelInputSelect from '../../../../components/Body/SaveCancelInput/SaveCancelInputSelect';
 import { Helper } from '../../../../Models/BL/Helper';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
 import AddWorkTimeLog from '../AddWorkTimeLog/AddWorkTimeLog';
+import SaveCancelInputMultiSelect from '../../../../components/Body/SaveCancelInput/SaveCancelInputMultiSelect';
+import SaveCancelInputText from '../../../../components/Body/SaveCancelInput/SaveCancelInputText';
+import SaveCancelInputSelect from '../../../../components/Body/SaveCancelInput/SaveCancelInputSelect';
 
 
 require('./OneWorkTaskDetail.css');
@@ -354,12 +355,13 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                     {!taskSprintEditable ? <span
                         className='editable-by-click'
                         onClick={() => setTaskSprintEditable(true)}
-                    >{props.Sprints.find(x => x.Id == props.Task.SprintId)?.Name || 'Не привязана к спринту'}</span>
+                    >{props.Sprints.filter(x => props.Task.SprintId.find(y => y == x.Id)).map(x => x.Name)
+                        .join(',') || 'Не привязана к спринту'}</span>
                         :
-                        <SaveCancelInputSelect
+                        <SaveCancelInputMultiSelect
                             CancelEvent={() => setTaskSprintEditable(false)}
                             SaveEvent={(id) => {
-                                props.UpdateTaskSprint(props.Task.Id, id);
+                                props.UpdateTaskSprints(props.Task.Id, id);
                                 return true;
                             }}
                             Selected={props.Task.SprintId}

@@ -16,7 +16,7 @@ export class ProjectTaskData implements MappedWithBack<IProjectTaskDataBack> {
     Comments: OneWorkTaskComment[];
     CreateDate: string;
     LastUpdateDate: string;
-    SprintId: number;
+    SprintId: number[];
 
     FillByBackModel(newData: IProjectTaskDataBack): ProjectTaskData {
         this.Id = newData.Id;

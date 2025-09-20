@@ -13,7 +13,7 @@ export class OneTask {
     StatusId: number;
     CreateDate: string;
     LastUpdateDate: string;
-    SprintId: number;
+    SprintId: number[];
 
     Description: string;
     Comments: OneWorkTaskComment[];

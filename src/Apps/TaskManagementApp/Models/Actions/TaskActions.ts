@@ -55,6 +55,11 @@ export function SetFilterTaskStatusActionCreator(num: number): AppAction<number>
     return { type: SetFilterTaskStatusActionName, payload: num };
 };
 
+export const SetFilterTaskSprintActionName: string = 'SetFilterTaskSprintAction';
+export function SetFilterTaskSprintActionCreator(num: number): AppAction<number> {
+    return { type: SetFilterTaskSprintActionName, payload: num };
+};
+
 export const SetFilterTaskActionName: string = 'SetFilterTaskAction';
 export function SetFilterTaskActionCreator(data: TasksFilter): AppAction<TasksFilter> {
     return { type: SetFilterTaskActionName, payload: data };

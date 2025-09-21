@@ -7,9 +7,10 @@ import { TaskManagementPreloader } from "../Consts";
 import { ProjectSprint } from "../Entity/State/ProjectSprint";
 import { IProjectSprintDataBack } from "../BackModels/IProjectSprintDataBack";
 import { IProjectTaskDataBack } from "../BackModels/IProjectTaskDataBack";
-import { AddTaskToSprintActionCreator, CreateSprintActionCreator, DeleteSprintActionCreator, DeleteTaskFromSprintActionCreator, GetProjectSprintsActionCreator, GetProjectSprintsActionType, GetSprintsTasksActionCreator, TaskIdWithSprintIdActionType, TaskIdWithSprintIdsActionType, UpdateTaskSprintActionCreator } from "../Actions/SprintActions";
+import { AddTaskToSprintActionCreator, CreateSprintActionCreator, DeleteSprintActionCreator, DeleteTaskFromSprintActionCreator, GetProjectSprintsActionCreator, GetProjectSprintsActionType, GetSprintsTasksActionCreator, TaskIdWithSprintIdActionType, TaskIdWithSprintIdsActionType, UpdateSprintActionCreator, UpdateTaskSprintActionCreator } from "../Actions/SprintActions";
 import { OneTask } from "../Entity/State/OneTask";
 import { SprintCreate } from "../Entity/SprintCreate";
+import { SprintUpdate } from "../Entity/SprintUpdate";
 
 
 
@@ -25,6 +26,7 @@ export interface ITaskManagementSprintController {
     GetForProjectRedux: (projectId: number) => void;
     GetTasksRedux: (sprintId: number) => void;
     CreateSprintRedux: (req: SprintCreate) => void;
+    UpdateSprintRedux: (req: SprintUpdate) => void;
     DeleteSprintRedux: (sprintId: number) => void;
     AddTaskToSprintRedux: (sprintId: number, taskId: number) => void;
     DeleteTaskFromSprintRedux: (taskId: number, sprintId: number) => void;
@@ -143,6 +145,44 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
         });
     };
 
+    UpdateSprintRedux = (req: SprintUpdate) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.UpdateSprint(req, (error: MainErrorObjectBack, data: IProjectSprintDataBack) => {
+                this.preloader(false);
+
+                if (data?.Id) {
+                    let dt = new ProjectSprint();
+                    dt.FillByIProjectSprintDataBack(data);
+                    dispatch(UpdateSprintActionCreator(dt));
+                }
+            });
+        };
+    }
+
+    UpdateSprint = (req: SprintUpdate, onSuccess: CreateSprint) => {
+        let data = {
+            "Id": req.Id,
+            "Name": req.Name,
+            "StartDate": new ControllerHelper().ToZeroDate(req.StartDate).toISOString(),
+            "EndDate": new ControllerHelper().ToZeroDate(req.EndDate).toISOString()
+        };
+        G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.PatchHttp,
+
+            FuncSuccess: (xhr, status, jqXHR) => {
+                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: G_PathToServer + 'api/taskmanagement/sprint/update',
+            ContentType: 'body'
+
+        });
+    };
+
+
+
     DeleteSprintRedux = (id: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
@@ -210,7 +250,7 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
     DeleteTaskFromSprintRedux = (taskId: number, sprintId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteTaskFromSprint(taskId,sprintId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteTaskFromSprint(taskId, sprintId, (error: MainErrorObjectBack, data: BoolResultBack) => {
                 this.preloader(false);
 
                 if (data?.result) {
@@ -245,7 +285,7 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
     UpdateTaskFromSprintRedux = (taskId: number, sprintId: number[]) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateTaskFromSprint(taskId,sprintId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.UpdateTaskFromSprint(taskId, sprintId, (error: MainErrorObjectBack, data: BoolResultBack) => {
                 this.preloader(false);
 
                 if (data?.result) {
@@ -259,7 +299,7 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
         };
     }
 
-        UpdateTaskFromSprint = (taskId: number, sprintId: number[], onSuccess: Update) => {
+    UpdateTaskFromSprint = (taskId: number, sprintId: number[], onSuccess: Update) => {
         let data = {
             // "sprintId": sprintId,
             "taskId": taskId,

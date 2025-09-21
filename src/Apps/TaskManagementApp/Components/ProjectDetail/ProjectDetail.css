@@ -143,6 +143,7 @@
     border-radius: 0.75rem;
     -webkit-box-shadow: 0 0 5px rgb(0 0 0 / 25%);
     box-shadow: 0 0 5px rgb(0 0 0 / 25%);
+    padding: 5px;
 }
 
 /* .filters-window-full {

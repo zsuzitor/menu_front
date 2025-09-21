@@ -3,6 +3,7 @@ export class TasksFilter {
     CreatorId: number;
     ExecutorId: number;
     Status: number;
+    Sprint: number;
     TaskName: string;
     Page: number;
     Retrigger: number;
@@ -14,6 +15,7 @@ export class TasksFilter {
         this.TaskName = '';
         this.Page = 1;
         this.Retrigger = 0;
+        this.Sprint = -1;
     }
 }
 

@@ -7,4 +7,5 @@ export interface ITaskFilter {
     StatusId: number;
     PageNumber: number;
     PageSize: number;
+    SprintId: number;
 }

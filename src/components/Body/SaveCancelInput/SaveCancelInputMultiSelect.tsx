@@ -11,6 +11,9 @@ export interface ISaveCancelInputMultiSelectProps {
 }
 
 const SaveCancelInputMultiSelect = (props: ISaveCancelInputMultiSelectProps) => {
+    // console.log(props.ValuesWithId);
+    // console.log(props.Selected);
+
     const [selected, setSelected] = useState<number[]>([]);
 
     useEffect(() => {
@@ -30,7 +33,7 @@ const SaveCancelInputMultiSelect = (props: ISaveCancelInputMultiSelectProps) => 
     const isSelected = (id: number) => selected.includes(id);
 
     return (
-        <div className="editable-multiselect-container">
+        <div className="save-cancel-input editable-multiselect-container">
             <div className="multiselect-options">
                 {props.ValuesWithId.map(item => (
                     <label key={item.Id} className="multiselect-option">
@@ -45,16 +48,16 @@ const SaveCancelInputMultiSelect = (props: ISaveCancelInputMultiSelectProps) => 
                 ))}
             </div>
             <div className="action-buttons">
-                <button 
-                    type="button" 
-                    className="save-button" 
+                <button
+                    type="button"
+                    className="save-button"
                     title="Сохранить"
                     onClick={() => {
                         // Сравниваем массивы, игнорируя порядок элементов
                         const currentSorted = [...selected].sort();
                         const originalSorted = [...props.Selected].sort();
                         const hasChanged = JSON.stringify(currentSorted) !== JSON.stringify(originalSorted);
-                        
+
                         if (hasChanged) {
                             props.SaveEvent(selected);
                         } else {
@@ -64,9 +67,9 @@ const SaveCancelInputMultiSelect = (props: ISaveCancelInputMultiSelectProps) => 
                 >
                     <span className="save-icon"></span>
                 </button>
-                <button 
-                    type="button" 
-                    className="cancel-button" 
+                <button
+                    type="button"
+                    className="cancel-button"
                     title="Отменить"
                     onClick={() => {
                         setSelected(props.Selected || []);

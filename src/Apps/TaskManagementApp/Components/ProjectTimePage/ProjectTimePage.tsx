@@ -84,13 +84,13 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
 
     const renderHeadLine = (): ReactNode => {
 
-        return <div className='project-time-one-line'>
+        return <div className='project-time-one-line project-time-one-line-header'>
             <div className='one-line-person'></div>
             {datesForTable.map(x => {
 
                 const helper = new Helper();
                 let val = helper.FormatDateToDM(x);
-                return <div className='project-time-one-cell'
+                return <div className='project-time-one-cell project-time-one-cell-header'
                     title={val}
                     key={`${x.getTime()}`}
                 >{val}</div>

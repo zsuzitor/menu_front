@@ -128,8 +128,8 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
     const parsedDate = parseTime(timeLogVal);
     const valideTime = parsedDate.hours > 0 || parsedDate.minutes > 0;
 
-    console.log(timeLogDate);
-    console.log(formatDateToInput(timeLogDate));
+    // console.log(timeLogDate);
+    // console.log(formatDateToInput(timeLogDate));
     return <div className='add-work-time-window'>
         {props.TaskId || <div>
             <span>Задача</span>

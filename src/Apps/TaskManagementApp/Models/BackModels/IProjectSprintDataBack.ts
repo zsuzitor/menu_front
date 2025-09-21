@@ -3,5 +3,5 @@ export interface IProjectSprintDataBack {
     ProjectId: number;
     Name: string;
     StartDate: string;
-    EndDate: string;
+    EndDate?: string;
 }

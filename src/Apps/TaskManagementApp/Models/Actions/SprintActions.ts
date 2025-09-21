@@ -23,6 +23,11 @@ export function CreateSprintActionCreator(data: ProjectSprint): AppAction<Projec
     return { type: CreateSprintActionName, payload: data };
 };
 
+export const UpdateSprintActionName: string = 'UpdateSprintAction';
+export function UpdateSprintActionCreator(data: ProjectSprint): AppAction<ProjectSprint> {
+    return { type: UpdateSprintActionName, payload: data };
+};
+
 export const DeleteSprintActionName: string = 'DeleteSprintAction';
 export function DeleteSprintActionCreator(data: number): AppAction<number> {
     return { type: DeleteSprintActionName, payload: data };

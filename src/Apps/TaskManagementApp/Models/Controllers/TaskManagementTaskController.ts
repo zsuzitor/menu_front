@@ -287,6 +287,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
             "statusId": taskFilter.StatusId,
             "pageNumber": taskFilter.PageNumber,
             "pageSize": taskFilter.PageSize,
+            "sprintId": taskFilter.SprintId,
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,

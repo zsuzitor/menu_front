@@ -17,14 +17,14 @@
     padding-right: 5px;
 }
 
-.editable-input-container .action-buttons {
+.save-cancel-input .action-buttons {
     display: flex;
     gap: 2px;
 }
 
 /* Общие стили для кнопок */
-.editable-input-container .action-buttons .save-button,
-.editable-input-container .action-buttons .cancel-button {
+.save-cancel-input .action-buttons .save-button,
+.save-cancel-input .action-buttons .cancel-button {
     background: none;
     border: none;
     cursor: pointer;
@@ -36,25 +36,25 @@
     justify-content: center;
 }
 
-.editable-input-container .action-buttons .save-button:hover {
+.save-cancel-input .action-buttons .save-button:hover {
     background-color: #EBECF0;
     color: #1B8559;
 }
 
-.editable-input-container .action-buttons .cancel-button:hover {
+.save-cancel-input .action-buttons .cancel-button:hover {
     background-color: #EBECF0;
     color: #DE350B;
 }
 
 /* Иконка галочки */
-.editable-input-container .action-buttons .save-button .save-icon {
+.save-cancel-input .action-buttons .save-button .save-icon {
     display: inline-block;
     width: 16px;
     height: 16px;
     position: relative;
 }
 
-.editable-input-container .action-buttons .save-button .save-icon::before {
+.save-cancel-input .action-buttons .save-button .save-icon::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -67,15 +67,15 @@
 }
 
 /* Иконка крестика */
-.editable-input-container .action-buttons .cancel-button .cancel-icon {
+.save-cancel-input .action-buttons .cancel-button .cancel-icon {
     display: inline-block;
     width: 16px;
     height: 16px;
     position: relative;
 }
 
-.editable-input-container .action-buttons .cancel-button .cancel-icon::before,
-.editable-input-container .action-buttons .cancel-button .cancel-icon::after {
+.save-cancel-input .action-buttons .cancel-button .cancel-icon::before,
+.save-cancel-input .action-buttons .cancel-button .cancel-icon::after {
     content: '';
     position: absolute;
     top: 50%;
@@ -85,11 +85,11 @@
     background-color: currentColor;
 }
 
-.editable-input-container .action-buttons .cancel-button .cancel-icon::before {
+.save-cancel-input .action-buttons .cancel-button .cancel-icon::before {
     transform: translate(-50%, -50%) rotate(45deg);
 }
 
-.editable-input-container .action-buttons .cancel-button .cancel-icon::after {
+.save-cancel-input .action-buttons .cancel-button .cancel-icon::after {
     transform: translate(-50%, -50%) rotate(-45deg);
 }
 
@@ -106,7 +106,7 @@
     background-color: white;
 }
 
-.multiselect-options {
+.save-cancel-input .multiselect-options {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -114,7 +114,7 @@
     overflow-y: auto;
 }
 
-.multiselect-option {
+.save-cancel-input .multiselect-option {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -123,15 +123,15 @@
     border-radius: 3px;
 }
 
-.multiselect-option:hover {
+.save-cancel-input .multiselect-option:hover {
     background-color: #f5f5f5;
 }
 
-.multiselect-checkbox {
+.save-cancel-input .multiselect-checkbox {
     margin: 0;
 }
 
-.multiselect-text {
+.save-cancel-input .multiselect-text {
     font-size: 14px;
 }
 

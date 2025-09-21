@@ -171,9 +171,12 @@ const TempoPage = (props: ITempoPageProps) => {
                                         }
                                         PopupContent={<div className='filters-window'>
 
-                                            <div><button onClick={x => props.DeleteTime(w.Id)}>Удалить</button></div>
-                                            <div><button onClick={x => setShowAddWorkTimeNew(w.Id)}>Изменить</button></div>
-                                            <div><button onClick={x => props.CopyTime(w.Id)}>Скопировать</button></div>
+                                            <div><button className='button button-grey'
+                                                onClick={x => props.DeleteTime(w.Id)}>Удалить</button></div>
+                                            <div><button className='button button-grey'
+                                                onClick={x => setShowAddWorkTimeNew(w.Id)}>Изменить</button></div>
+                                            <div><button className='button button-grey'
+                                                onClick={x => props.CopyTime(w.Id)}>Скопировать</button></div>
                                         </div>}
                                     ></PopupWindow>
                                 </div>

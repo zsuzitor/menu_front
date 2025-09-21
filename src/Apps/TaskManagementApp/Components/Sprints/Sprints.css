@@ -1,0 +1,62 @@
+.sprints-page-main {
+    padding-top: 60px;
+    width: 100%;
+}
+
+.sprints-page-main .new-sprint-block {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 30px;
+    border-bottom: 1px solid black;
+}
+
+.sprints-page-main .new-sprint-content {
+
+    display: flex;
+    flex-direction: column;
+    /* text-align: center; */
+    /* justify-content: center; */
+    width: 300px;
+}
+
+.sprints-page-main .new-sprint-input {
+
+    border: 1px solid #e1e5eb;
+    border-radius: 10px;
+    padding: 2px 9px;
+    font-size: 13px;
+    outline: none;
+    transition: border 0.3s;
+    background-color: white;
+}
+
+.sprints-page-main .one-sprint {
+    display: flex;
+    justify-content: space-between;
+    max-height: 30px;
+    overflow: hidden;
+}
+
+.sprints-page-main .one-sprint-info {
+    display: flex;
+    gap: 20px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.sprints-page-main .action-btn {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.sprints-page-main .sprints-block {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sprints-page-main .sprint-buttons {
+    display: flex;
+}

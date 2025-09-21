@@ -4,6 +4,8 @@ import React, { useState, useEffect, ReactNode } from 'react';
 import connectToStore, { ISprintsProps } from './SprintsSetup';
 import { useNavigate } from 'react-router-dom';
 import { Helper } from '../../../../Models/BL/Helper';
+import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
+import AddEditSprint from '../AddEditSprint/AddEditSprint';
 
 require('./Sprints.css');
 
@@ -12,17 +14,15 @@ require('./Sprints.css');
 
 const Sprints = (props: ISprintsProps) => {
 
-    const [newSprintName, setNewSprintName] = useState("");
-    const [dateFrom, setDateFrom] = useState<Date>(new Date());
-    const [dateTo, setDateTo] = useState<Date>(new Date());
-
+    const [showForm, setShowForm] = useState(false);
+    const [editSprintId, setEditSprintId] = useState(0);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         return () => {
-            //todo очистить
-            props.ClearSprints(props.ProjectId);
+            // props.ClearSprints(props.ProjectId);//тянутся спринты которые на данный момент должны храниться в проекте
+            //при уходе с страницы они должны сохраняться
         };
     }, []);
 
@@ -30,80 +30,66 @@ const Sprints = (props: ISprintsProps) => {
         if (props.ProjectId && props.ProjectId > 0)
             props.LoadSprints(props.ProjectId);
 
-    }, [props.ProjectId]);
+    }, [props.ProjectId, props.Sprints.length]);
 
-    useEffect(() => {
-        if (props.ProjectId && props.ProjectId > 0)
-            props.LoadSprints(props.ProjectId);
-
-    }, [props.Sprints.length]);
-
-    function formatDateToInput(date: Date): string {
-        const help = new Helper();
-        return help.FormatDateToInput(date);
-    }
-
-    const setClearDate = (dt: Date) => {
-        let newDt = new Date(dt);
-        newDt.setHours(0, 0, 0, 0);
-        return newDt;
-    }
 
     if (!props.Sprints) {
         return <></>
     }
 
-    return <div>
-        <div>
-            <input type='text' className='filter-input'
-                placeholder='Введите название'
-                value={newSprintName}
-                onChange={e => setNewSprintName(e.target.value)}></input>
-            <span>Дата начала:</span>
-            <input
-                type="date"
-                value={formatDateToInput(dateFrom)}
-                onChange={(e) => {
-                    if (e.target.value) {
-                        let dt = new Date(e.target.value);
-                        setDateFrom(setClearDate(dt));
-                    }
-                    else {
-                        setDateFrom(setClearDate(new Date()));
-                    }
+    let editSprint = props.Sprints.find(x => x.Id == editSprintId);
 
-                }}></input>
-            <span>Дата окончания:</span>
-            <input
-                type="date"
-                value={formatDateToInput(dateTo)}
-                onChange={(e) => {
-                    if (e.target.value) {
-                        let dt = new Date(e.target.value);
-                        setDateTo(setClearDate(dt));
-                    }
-                    else {
-                        setDateTo(setClearDate(new Date()));
-                    }
+    return <div className='sprints-page-main'>
 
-                }}></input>
-            <button onClick={() => {
-                props.CreateSprint(props.ProjectId, newSprintName, dateFrom, dateTo);
-            }}>Добавить</button>
+        <div >
+            <button className='button button-grey' onClick={() => setShowForm(true)}>Добавить</button>
+            {showForm ? <AdditionalWindow CloseWindow={() => setShowForm(false)}
+                IsHeightWindow={true}
+                Title='Люди проекта'
+                InnerContent={() => <AddEditSprint
+                    Id={editSprintId}
+                    Name={editSprint?.Name || ''}
+                    ProjectId={editSprint?.ProjectId || props.ProjectId}
+                    StartDate={editSprint?.StartDate || new Date()}
+                    EndDate={editSprint?.EndDate || new Date()}
+                    CreateSprint={props.CreateSprint}
+                    UpdateSprint={props.UpdateSprint}
+                />}></AdditionalWindow> : <></>}
+
         </div>
-        <div>
-            {props.Sprints.map(x => <div key={x.Id}>
-                <div onClick={() => {
-                    navigate("/task-management/proj-" + props.ProjectId + '/sprint-' + x.Id);
-                }}>
-                    <p>{x.Id}</p>
-                    <p>{x.Name}</p>
+
+
+
+        <div className='sprints-block'>
+            {props.Sprints.map(x => <div
+                className='one-sprint'
+                key={x.Id}>
+                <div
+                    className='one-sprint-info'
+                    onClick={() => {
+                        navigate("/task-management/proj-" + props.ProjectId + '/sprint-' + x.Id);
+                    }}>
+                    <div>{x.Id}</div>
+                    <div>{x.Name}</div>
 
                 </div>
-                <button onClick={(e) => {
-                    e.preventDefault();
-                    props.DeleteSprint(x.Id)
-                }}>Удалить</button>
+                <div className='sprint-buttons'>
+                    <div className='action-btn' onClick={(e) => {
+                        e.preventDefault();
+                        props.DeleteSprint(x.Id)
+                    }}
+                        title='Удалить спринт'>
+                        <img className='persent-100-width-height' src="/images/delete-icon.png" />
+                    </div>
+                    <div className='action-btn' onClick={() => {
+                        setEditSprintId(x.Id);
+                        setShowForm(true);
+
+                    }}
+                        title='Редактировать спринт'>
+                        <img className='persent-100-width-height' src="/images/pencil-edit.png" />
+                    </div>
+                </div>
             </div>)}
         </div>
     </div>

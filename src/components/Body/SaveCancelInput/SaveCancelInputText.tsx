@@ -22,7 +22,7 @@ const SaveCancelInputText = (props: ISaveCancelInputTextProps) => {
 
 
 
-    return <div className="editable-input-container">
+    return <div className="save-cancel-input editable-input-container">
 
         <input type="text"
             className="editable-input"

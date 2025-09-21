@@ -34,6 +34,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     const [filterVisibilityName, setFilterVisibilityName] = useState(false);
     const [filterVisibilityCreator, setFilterVisibilityCreator] = useState(false);
     const [filterVisibilityStatus, setFilterVisibilityStatus] = useState(false);
+    const [filterVisibilitySprint, setFilterVisibilitySprint] = useState(false);
     const [filterVisibilityReviwer, setFilterVisibilityReviwer] = useState(false);
 
 
@@ -106,7 +107,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
     }, [props.Project?.Id, props.TasksFilters.CreatorId, props.TasksFilters.ExecutorId
         , props.TasksFilters.Status, props.TasksFilters.TaskName
-        , props.TasksFilters.Page, props.TasksFilters.Retrigger]);
+        , props.TasksFilters.Page, props.TasksFilters.Retrigger, props.TasksFilters.Sprint]);
 
 
 
@@ -116,7 +117,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             Name: props.TasksFilters.TaskName, CreatorId: props.TasksFilters.CreatorId
             , PageNumber: props.TasksFilters.Page, PageSize: tasksOnPageCount
             , ProjectId: props.Project.Id, ExecutorId: props.TasksFilters.ExecutorId
-            , StatusId: props.TasksFilters.Status
+            , StatusId: props.TasksFilters.Status, SprintId: props.TasksFilters.Sprint
         } as ITaskFilter;
 
         props.ReloadTasks(filter);
@@ -134,6 +135,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         setFilterVisibilityCreator(false);
         setFilterVisibilityStatus(false);
         setFilterVisibilityReviwer(false);
+        setFilterVisibilitySprint(false);
 
     }
 
@@ -174,7 +176,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                     InnerContent={() => <EditProject></EditProject>}></AdditionalWindow> : <></>}
                 <br />
                 <div className='management-project-detail-main-header-buttons'>
-                    <button className='button button-grey' onClick={() => setShowUserList(e => true)}>Люди проекта</button>
+                    <button className='button button-grey' onClick={() => setShowUserList(true)}>Люди проекта</button>
                     {showUserList ? <AdditionalWindow CloseWindow={() => setShowUserList(false)}
                         IsHeightWindow={true}
                         Title='Люди проекта'
@@ -208,6 +210,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                             <div className='add-one-filter' onClick={() => setFilterVisibilityCreator(true)}>Создатель</div>
                             <div className='add-one-filter' onClick={() => setFilterVisibilityReviwer(true)}>Ревьювер</div>
                             <div className='add-one-filter' onClick={() => setFilterVisibilityStatus(true)}>Статус</div>
+                            <div className='add-one-filter' onClick={() => setFilterVisibilitySprint(true)}>Спринт</div>
                         </div>}
                     ></PopupWindow></div>
 
@@ -296,6 +299,22 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                                 onClick={() => {
                                     props.SetFilterTaskStatus(-1);
                                     setFilterVisibilityStatus(false);
+                                }}>×</button>
+                        </div>}
+                        {filterVisibilitySprint && <div className='filter-tag'>
+                            <span className='filter-name'>Спринт:</span>
+
+                            <select className='filter-input'
+                                onChange={e => props.SetFilterTaskSprint(+e.target.value)}
+                                value={props.TasksFilters.Sprint}>
+                                <option value={-1}>Любой</option>
+                                {props.Sprints.map(sprint => <option value={sprint.Id} key={sprint.Id}>{sprint.Name}</option>)}
+                            </select>
+
+                            <button className='remove-filter' title='Удалить фильтр'
+                                onClick={() => {
+                                    props.SetFilterTaskSprint(-1);
+                                    setFilterVisibilitySprint(false);
                                 }}>×</button>
                         </div>}
                     </div>

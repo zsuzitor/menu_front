@@ -13,7 +13,7 @@ const Sprint = (props: ISprintProps) => {
 
     // const [showAddWorkTimeNew, setShowAddWorkTimeNew] = useState(false);
 
-
+    // console.log(props.Tasks);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -32,8 +32,9 @@ const Sprint = (props: ISprintProps) => {
     if (!props.SprintId || !props.Tasks)
         return <></>
 
-    return <div>
+    return <div className='one-sprint-block'>
         <div>
+            {props.Tasks.length == 0 && <h1>Нет задач в спринте</h1>}
             {props.Tasks.map(x => <div key={x.Id}>
                 <div>
                     <a href={'/task-management/proj-' + props.ProjectId + '/task-' + x.Id} onClick={(e) => {

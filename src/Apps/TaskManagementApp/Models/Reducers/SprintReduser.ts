@@ -1,7 +1,7 @@
 import { cloneDeep } from "lodash";
 import { AppAction } from "../../../../Models/Actions/Actions";
 import { AppState } from "../../../../Models/Entity/State/AppState";
-import { AddTaskToSprintActionName, CreateSprintActionName, DeleteSprintActionName, DeleteTaskFromSprintActionName, GetProjectSprintsActionName, GetProjectSprintsActionType, GetSprintsTasksActionName, SetCurrentSprintActionName, TaskIdWithSprintIdActionType, TaskIdWithSprintIdsActionType, UpdateTaskSprintActionName } from "../Actions/SprintActions";
+import { AddTaskToSprintActionName, CreateSprintActionName, DeleteSprintActionName, DeleteTaskFromSprintActionName, GetProjectSprintsActionName, GetProjectSprintsActionType, GetSprintsTasksActionName, SetCurrentSprintActionName, TaskIdWithSprintIdActionType, TaskIdWithSprintIdsActionType, UpdateSprintActionName, UpdateTaskSprintActionName } from "../Actions/SprintActions";
 import { OneTask } from "../Entity/State/OneTask";
 import { ProjectSprint } from "../Entity/State/ProjectSprint";
 import { SprintInfo } from "../Entity/State/SprintInfo";
@@ -51,6 +51,20 @@ export function TaskManagementSprintReducer(state: AppState = new AppState(), ac
 
                 return newState;
             }
+        case UpdateSprintActionName:
+            {
+                let newState = cloneDeep(state);
+                let data = action.payload as ProjectSprint;
+                let sprint = newState.TaskManagementApp.CurrentProjectSprints.find(x => x.Id == data.Id);
+                if (sprint) {
+                    sprint.Name = data.Name;
+                    sprint.EndDate = data.EndDate;
+                    sprint.StartDate = data.StartDate;
+                }
+
+                return newState;
+            }
+
         case DeleteSprintActionName:
             {
                 let newState = cloneDeep(state);

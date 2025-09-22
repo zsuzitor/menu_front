@@ -9,4 +9,5 @@ export interface IOneProjectInfoDataBack {
     Tasks: IProjectTaskDataBack[];
     Statuses: IWorkTaskStatusDataBack[];
     Sprints: IProjectSprintDataBack[];
+    Labels: IProjectSprintDataBack[];
 }

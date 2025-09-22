@@ -38,7 +38,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: ISprintsOwnProps) => {
     };
     res.ClearSprints = (projectId: number) => {
         let dt = new GetProjectSprintsActionType();
-        dt.projectId = projectId;
+        // dt.projectId = projectId;
         dt.data = [];
         dispatch(GetProjectSprintsActionCreator(dt));
     };

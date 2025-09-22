@@ -1,8 +1,6 @@
 import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
-import { IOneWorkTaskCommentDataBack } from "../BackModels/IOneWorkTaskCommentDataBack";
-import { CommentUpdate } from "../Entity/CommentUpdate";
 import { TaskManagementPreloader } from "../Consts";
 import { ProjectSprint } from "../Entity/State/ProjectSprint";
 import { IProjectSprintDataBack } from "../BackModels/IProjectSprintDataBack";
@@ -51,7 +49,7 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
 
                 if (data) {
                     let dt = new GetProjectSprintsActionType();
-                    dt.projectId = projectId;
+                    // dt.projectId = projectId;
                     dt.data = data.map(x => new ProjectSprint().FillByIProjectSprintDataBack(x));
                     dispatch(GetProjectSprintsActionCreator(dt));
 

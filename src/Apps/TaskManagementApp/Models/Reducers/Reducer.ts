@@ -10,7 +10,8 @@ import { TaskManagementAppState } from '../Entity/State/TaskManagementAppState';
 import { TaskManagementCommentReducer } from './CommentReducer';
 import { TaskManagementTaskStatusReducer } from './TaskStatusReducer';
 import { TaskManagementWorkTimeLogReducer } from './WorkTimeLogReducer';
-import { TaskManagementSprintReducer } from './SprintReduser';
+import { TaskManagementSprintReducer } from './SprintReducer';
+import { TaskManagementLabelReducer } from './LabelReducer';
 
 
 
@@ -24,6 +25,7 @@ export function TaskManagementAppReducer(state: AppState = new AppState(), actio
     st = TaskManagementTaskStatusReducer(st, action);
     st = TaskManagementWorkTimeLogReducer(st, action);
     st = TaskManagementSprintReducer(st, action);
+    st = TaskManagementLabelReducer(st, action);
 
     switch (action.type) {
         case ClearTaskManagementStateActionName:

@@ -6,6 +6,7 @@ import { WorkTaskStatus } from "./WorkTaskStatus";
 import { ProjectTimes } from "./ProjectTimes";
 import { ProjectSprint } from "./ProjectSprint";
 import { SprintInfo } from "./SprintInfo";
+import { TaskLabel } from "./TaskLabel";
 
 
 export class TaskManagementAppState {
@@ -19,6 +20,7 @@ export class TaskManagementAppState {
     CurrentProjectTimes: ProjectTimes;
     CurrentProjectTasks: OneTask[];
     CurrentProjectSprints: ProjectSprint[];
+    CurrentProjectLabels: TaskLabel[];
     CurrentProjectTasksAllCount: number;
     CurrentProjectTasksFilters: TasksFilter;
 
@@ -47,6 +49,7 @@ export class TaskManagementAppState {
         this.CurrentProjectTasksFilters = new TasksFilter();
         this.CurrentProjectSprints = [];
         this.CurrentProjectStatuses = [];
+        this.CurrentProjectLabels = [];
         this.CurrentTask = null;
         this.ProjectsLoaded = false;
         this.CurrentProjectTimes = new ProjectTimes();

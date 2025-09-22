@@ -6,6 +6,7 @@ import { OneTask } from "../Entity/State/OneTask";
 import { ProjectSprint } from "../Entity/State/ProjectSprint";
 import { SprintInfo } from "../Entity/State/SprintInfo";
 import { Helper } from "../../../../Models/BL/Helper";
+import { TaskLabel } from "../Entity/State/TaskLabel";
 
 
 export function TaskManagementSprintReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
@@ -35,6 +36,7 @@ export function TaskManagementSprintReducer(state: AppState = new AppState(), ac
 
                 return newState;
             }
+            
         case GetSprintsTasksActionName:
             {
                 let newState = cloneDeep(state);

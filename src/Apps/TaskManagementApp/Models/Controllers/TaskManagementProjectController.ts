@@ -1,6 +1,7 @@
 import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
+import { GetTaskLabelsActionCreator } from "../Actions/LabelActions";
 import { DeleteProjectActionCreator, AddNewProjectActionCreator, SetCurrentProjectIdActionCreator, SetProjectsActionCreator } from "../Actions/ProjectActions";
 import { GetProjectSprintsActionCreator, GetProjectSprintsActionType } from "../Actions/SprintActions";
 import { SetCurrentProjectStatusesActionCreator } from "../Actions/TaskStatusActions";
@@ -11,6 +12,7 @@ import { TaskManagementPreloader } from "../Consts";
 import { OneProjectInList } from "../Entity/State/OneProjectInList";
 import { ProjectSprint } from "../Entity/State/ProjectSprint";
 import { ProjectUser } from "../Entity/State/ProjectUser";
+import { TaskLabel } from "../Entity/State/TaskLabel";
 import { WorkTaskStatus } from "../Entity/State/WorkTaskStatus";
 
 
@@ -98,12 +100,19 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
                         return u;
 
                     });
+                    let dtLabels = data.Labels.map(x => {
+                        let u = new TaskLabel();
+                        u.FillByIProjectLabelDataBack(x);
+                        return u;
+
+                    });
                     dispatch(SetCurrentProjectUsersActionCreator(dtUsers));
                     dispatch(SetCurrentProjectStatusesActionCreator(dtStatuses));
                     let spr = new GetProjectSprintsActionType();
-                    spr.projectId = projectId;
+                    // spr.projectId = projectId;
                     spr.data = dtSprints;
                     dispatch(GetProjectSprintsActionCreator(spr));
+                    dispatch(GetTaskLabelsActionCreator(dtLabels));
                 }
             });
         };

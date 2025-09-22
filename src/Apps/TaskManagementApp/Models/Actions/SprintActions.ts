@@ -1,6 +1,7 @@
 import { AppAction } from "../../../../Models/Actions/Actions";
 import { OneTask } from "../Entity/State/OneTask";
 import { ProjectSprint } from "../Entity/State/ProjectSprint";
+import { TaskLabel } from "../Entity/State/TaskLabel";
 
 export const SetCurrentSprintActionName: string = 'SetCurrentSprintAction';
 export function SetCurrentSprintActionCreator(sprintId: number): AppAction<number> {
@@ -8,7 +9,8 @@ export function SetCurrentSprintActionCreator(sprintId: number): AppAction<numbe
 };
 
 export const GetProjectSprintsActionName: string = 'GetProjectSprintsAction';
-export class GetProjectSprintsActionType { projectId: number; data: ProjectSprint[] };
+export class GetProjectSprintsActionType { //projectId: number;
+     data: ProjectSprint[] };
 export function GetProjectSprintsActionCreator(data: GetProjectSprintsActionType): AppAction<GetProjectSprintsActionType> {
     return { type: GetProjectSprintsActionName, payload: data };
 };

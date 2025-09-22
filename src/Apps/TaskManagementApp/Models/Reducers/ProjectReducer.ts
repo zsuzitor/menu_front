@@ -86,6 +86,7 @@ export function TaskManagementProjectReducer(state: AppState = new AppState(), a
                 newState.TaskManagementApp.CurrentProjectTasks = [];
                 newState.TaskManagementApp.CurrentProjectStatuses = [];
                 newState.TaskManagementApp.CurrentProjectSprints = [];
+                newState.TaskManagementApp.CurrentProjectLabels = [];
                 newState.TaskManagementApp.ProjectsLoaded = false;
                 return newState;
             }

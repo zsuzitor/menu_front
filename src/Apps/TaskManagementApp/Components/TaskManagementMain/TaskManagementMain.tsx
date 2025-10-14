@@ -8,13 +8,14 @@ import cloneDeep from 'lodash/cloneDeep';
 import connectToStore, { TaskManagementMainProps } from './TaskManagementMainSetup';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import OneWorkTaskDetail from '../OneWorkTaskDetail/OneWorkTaskDetail';
-import { TaskManagementPreloader } from '../../Models/Consts';
+import { TaskManagementLabelsRoute, TaskManagementPreloader, TaskManagementProjectRoute, TaskManagementSprintRoute, TaskManagementTaskRoute, TaskManagementTempoRoute, TaskManagementTimeLogRoute, TaskManagementUserRoute } from '../../Models/Consts';
 import ProjectTimePage from '../ProjectTimePage/ProjectTimePage';
 import PersonTimePage from '../PersonTimePage/PersonTimePage';
 import TempoPage from '../TempoPage/TempoPage';
 import Sprints from '../Sprints/Sprints';
 import Sprint from '../Sprint/Sprint';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
+import Labels from '../Labels/Labels';
 
 
 
@@ -160,6 +161,7 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
     const timeLogUrl = new RouteBuilder().TimeLogUrl(props.CurrentProjectId);
     const tempoUrl = new RouteBuilder().TempoUrl(props.CurrentProjectId);
     const sprintsUrl = new RouteBuilder().SprintsUrl(props.CurrentProjectId);
+    const labelsUrl = new RouteBuilder().LabelsUrl(props.CurrentProjectId);
 
     return <div className='task-management-main-container'>
         <div className='preloader' id={TaskManagementPreloader}></div>
@@ -184,21 +186,26 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
                         e.preventDefault();
                         navigate(sprintsUrl);
                     }}>Спринты</a>
+                    <a href={labelsUrl} onClick={(e) => {
+                        e.preventDefault();
+                        navigate(labelsUrl);
+                    }}>Лейблы</a>
                 </div>}
             </div>
         </div>
         <Routes>
 
 
-            <Route path="proj-:projectId" element={<ProjectDetail
+            <Route path={`${TaskManagementProjectRoute}:projectId`} element={<ProjectDetail
                 Project={props.ProjectsList.find(x => x.Id == props.CurrentProjectId)}
                 Tasks={props.Tasks} />} />
-            <Route path="proj-:projectId/task-:taskId" element={<OneWorkTaskDetail />} />
-            <Route path="proj-:projectId/time-log" element={<ProjectTimePage />} />
-            <Route path="proj-:projectId/user-:userId/time-log" element={<PersonTimePage />} />
-            <Route path="proj-:projectId/tempo" element={<TempoPage />} />
-            <Route path="proj-:projectId/sprints" element={<Sprints />} />
-            <Route path="proj-:projectId/sprint-:sprintId" element={<Sprint />} />
+            <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementTaskRoute}:taskId`} element={<OneWorkTaskDetail />} />
+            <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementTimeLogRoute}`} element={<ProjectTimePage />} />
+            <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementUserRoute}:userId/${TaskManagementTimeLogRoute}`} element={<PersonTimePage />} />
+            <Route path={`${TaskManagementProjectRoute}:projectId/`} element={<TempoPage />} />
+            <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementSprintRoute}`} element={<Sprints />} />
+            <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementLabelsRoute}`} element={<Labels />} />
+            <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementSprintRoute}:sprintId`} element={<Sprint />} />
         </Routes>
 
         {/* {props.CurrentTaskId && props.CurrentTaskId > 0 ?

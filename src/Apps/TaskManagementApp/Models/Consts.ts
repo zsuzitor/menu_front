@@ -9,6 +9,7 @@ export const TaskManagementTaskRoute: string = 'task-';
 export const TaskManagementUserRoute: string = 'user-';
 export const TaskManagementTimeLogRoute: string = 'time-log';
 export const TaskManagementSprintsRoute: string = 'sprints';
+export const TaskManagementLabelsRoute: string = 'labels';
 export const TaskManagementSprintRoute: string = 'sprint-';
 export const TaskManagementTempoRoute: string = 'tempo';
 

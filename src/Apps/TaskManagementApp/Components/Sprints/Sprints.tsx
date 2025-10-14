@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Helper } from '../../../../Models/BL/Helper';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
 import AddEditSprint from '../AddEditSprint/AddEditSprint';
+import RouteBuilder from '../../Models/BL/RouteBuilder';
 
 require('./Sprints.css');
 
@@ -43,9 +44,12 @@ const Sprints = (props: ISprintsProps) => {
 
         <div >
             <button className='button button-grey' onClick={() => setShowForm(true)}>Добавить</button>
-            {showForm ? <AdditionalWindow CloseWindow={() => setShowForm(false)}
+            {showForm ? <AdditionalWindow CloseWindow={() => {
+                setShowForm(false);
+                setEditSprintId(0);
+            }}
                 IsHeightWindow={true}
-                Title='Люди проекта'
+                Title='Спринт'
                 InnerContent={() => <AddEditSprint
                     Id={editSprintId}
                     Name={editSprint?.Name || ''}
@@ -61,36 +65,40 @@ const Sprints = (props: ISprintsProps) => {
 
 
         <div className='sprints-block'>
-            {props.Sprints.map(x => <div
-                className='one-sprint'
-                key={x.Id}>
-                <div
-                    className='one-sprint-info'
-                    onClick={() => {
-                        navigate("/task-management/proj-" + props.ProjectId + '/sprint-' + x.Id);
-                    }}>
-                    <div>{x.Id}</div>
-                    <div>{x.Name}</div>
+            {props.Sprints.map(x => {
 
-                </div>
-                <div className='sprint-buttons'>
-                    <div className='action-btn' onClick={(e) => {
-                        e.preventDefault();
-                        props.DeleteSprint(x.Id)
-                    }}
-                        title='Удалить спринт'>
-                        <img className='persent-100-width-height' src="/images/delete-icon.png" />
-                    </div>
-                    <div className='action-btn' onClick={() => {
-                        setEditSprintId(x.Id);
-                        setShowForm(true);
+                const sprintUrl = new RouteBuilder().SprintUrl(props.ProjectId, x.Id);
+                return <div
+                    className='one-sprint'
+                    key={x.Id}>
+                    <div
+                        className='one-sprint-info'
+                        onClick={() => {
+                            navigate(sprintUrl);
+                        }}>
+                        <div>{x.Id}</div>
+                        <div>{x.Name}</div>
 
-                    }}
-                        title='Редактировать спринт'>
-                        <img className='persent-100-width-height' src="/images/pencil-edit.png" />
+                    </div>
+                    <div className='sprint-buttons'>
+                        <div className='action-btn' onClick={(e) => {
+                            e.preventDefault();
+                            props.DeleteSprint(x.Id)
+                        }}
+                            title='Удалить спринт'>
+                            <img className='persent-100-width-height' src="/images/delete-icon.png" />
+                        </div>
+                        <div className='action-btn' onClick={() => {
+                            setEditSprintId(x.Id);
+                            setShowForm(true);
+
+                        }}
+                            title='Редактировать спринт'>
+                            <img className='persent-100-width-height' src="/images/pencil-edit.png" />
+                        </div>
                     </div>
                 </div>
-            </div>)}
+            })}
         </div>
     </div>
 

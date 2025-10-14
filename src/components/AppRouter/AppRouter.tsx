@@ -14,6 +14,7 @@ import { WordsCardsAppMain } from "../../Apps/WordsCardsApp/Components/WordsCard
 import PlaningPokerMain from "../../Apps/PlaningPoker/Components/PlaningPokerMain";
 import VaultMain from "../../Apps/Vault/Components/VaultMain/VaultMain";
 import { IAuthState } from "../../Models/Entity/AuthState";
+import { TaskManagementAppRute } from "../../Apps/TaskManagementApp/Models/Consts";
 
 
 require('./AppRouter.css');
@@ -31,7 +32,7 @@ const AppRouter = (props: AppRouterProps) => {
             <Route path="/menu-app/*" element={<MenuAppMain />} />
             <Route path="/words-cards-app/*" element={<WordsCardsAppMain />} />
             <Route path="/planing-poker/*" element={<PlaningPokerMain />} />
-            <Route path="/task-management/*" element={<TaskManagementMain />} />
+            <Route path={`/${TaskManagementAppRute}/*`} element={<TaskManagementMain />} />
 
             <Route path="/menu/auth/login/*" element={<MainAuth LoginPage={true} />} />
             <Route path="/menu/auth/register/*" element={<MainAuth LoginPage={false} />} />

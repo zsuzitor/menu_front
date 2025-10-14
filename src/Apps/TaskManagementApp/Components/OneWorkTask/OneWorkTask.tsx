@@ -8,6 +8,7 @@ import { OneTask } from '../../Models/Entity/State/OneTask';
 import connectToStore, { IOneWorkTaskProps } from './OneWorkTaskSetup';
 
 import { useNavigate } from 'react-router-dom';
+import RouteBuilder from '../../Models/BL/RouteBuilder';
 
 
 require('./OneWorkTask.css');
@@ -124,14 +125,16 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
     }
 
 
+    const taskUrl = new RouteBuilder().TaskUrl(props.CurrentProjectId, props.Task.Id);
+
     if (!showFullTask) {
         return <div className='one-work-task-block'>
             <div className='one-work-task-block-flex'>
                 <div className='one-work-task-short-content'>
                     {/* <a href="/" target="_blank">{props.Task.Name}</a> */}
-                    <a href={'/task-management/proj-' + props.CurrentProjectId + '/task-' + props.Task.Id} onClick={(e) => {
+                    <a href={taskUrl} onClick={(e) => {
                         e.preventDefault();
-                        navigate("/task-management/proj-" + props.CurrentProjectId + '/task-' + props.Task.Id);
+                        navigate(taskUrl);
                     }}>{props.Task.Name}</a>
                 </div>
                 <div className='one-work-task-buttons'>
@@ -191,7 +194,7 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
                         alt="Delete" title='Удалить задачу' />
                 </div>
                 <div className='task-button' onClick={() =>
-                    navigate("/task-management/proj-" + props.CurrentProjectId + '/task-' + props.Task.Id)
+                    navigate(taskUrl)
                 }>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'external-link.png'}
                         alt="Link" title='Открыть ссылку' />

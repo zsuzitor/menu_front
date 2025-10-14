@@ -7,6 +7,7 @@ import OneProjectUser from '../OneProjectUser/OneProjectUser';
 import connectToStore, { IPersonTimePageProps } from './PersonTimePageSetup';
 import { Helper } from '../../../../Models/BL/Helper';
 import { useNavigate } from 'react-router-dom';
+import RouteBuilder from '../../Models/BL/RouteBuilder';
 
 
 require('./PersonTimePage.css');
@@ -160,17 +161,17 @@ const PersonTimePage = (props: IPersonTimePageProps) => {
                 }}></input>
         </div>
         <div className='user-time-time-block'>
-            {uniqueTaskIds.length == 0 ? <><h1>Выберите другой периуд</h1></>
+            {uniqueTaskIds.length == 0 ? <><h1>Выберите другой период</h1></>
                 : <>
                     {renderHeadLine()}
                     {uniqueTaskIds.map(x => {
-
+                        const taskUrl = new RouteBuilder().TaskUrl(props.CurrentProjectId, x);
                         return <div className='user-time-one-line'
                             key={x}>
                             <div className='user-time-line-header'>
-                                <a href={'/task-management/proj-' + props.CurrentProjectId + '/task-' + x} onClick={(e) => {
+                                <a href={taskUrl} onClick={(e) => {
                                     e.preventDefault();
-                                    navigate("/task-management/proj-" + props.CurrentProjectId + '/task-' + x);
+                                    navigate(taskUrl);
                                 }}>{'Task-' + x}</a>
                             </div>
                             {renderOneLine(x)}

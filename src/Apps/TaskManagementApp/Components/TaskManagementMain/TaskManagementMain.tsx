@@ -14,6 +14,7 @@ import PersonTimePage from '../PersonTimePage/PersonTimePage';
 import TempoPage from '../TempoPage/TempoPage';
 import Sprints from '../Sprints/Sprints';
 import Sprint from '../Sprint/Sprint';
+import RouteBuilder from '../../Models/BL/RouteBuilder';
 
 
 
@@ -45,7 +46,8 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
             && matchProj//при этом в урле он есть
         ) {
 
-            navigate("/task-management/");
+            const url = new RouteBuilder().AppUrl();
+            navigate(url);
         }
 
     }, [props.ProjectsList.length, props.ProjectsLoaded]);
@@ -155,6 +157,9 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
 
 
 
+    const timeLogUrl = new RouteBuilder().TimeLogUrl(props.CurrentProjectId);
+    const tempoUrl = new RouteBuilder().TempoUrl(props.CurrentProjectId);
+    const sprintsUrl = new RouteBuilder().SprintsUrl(props.CurrentProjectId);
 
     return <div className='task-management-main-container'>
         <div className='preloader' id={TaskManagementPreloader}></div>
@@ -167,17 +172,17 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
 
                 {props.CurrentProjectId > 0 && <div className='links'
                 >
-                    <a href={'/task-management/proj-' + props.CurrentProjectId + '/time-log'} onClick={(e) => {
+                    <a href={timeLogUrl} onClick={(e) => {
                         e.preventDefault();
-                        navigate("/task-management/proj-" + props.CurrentProjectId + '/time-log');
+                        navigate(timeLogUrl);
                     }}>Работа</a>
-                    <a href={'/task-management/proj-' + props.CurrentProjectId + '/tempo'} onClick={(e) => {
+                    <a href={tempoUrl} onClick={(e) => {
                         e.preventDefault();
-                        navigate("/task-management/proj-" + props.CurrentProjectId + '/tempo');
+                        navigate(tempoUrl);
                     }}>Темпо</a>
-                    <a href={'/task-management/proj-' + props.CurrentProjectId + '/sprints'} onClick={(e) => {
+                    <a href={sprintsUrl} onClick={(e) => {
                         e.preventDefault();
-                        navigate("/task-management/proj-" + props.CurrentProjectId + '/sprints');
+                        navigate(sprintsUrl);
                     }}>Спринты</a>
                 </div>}
             </div>

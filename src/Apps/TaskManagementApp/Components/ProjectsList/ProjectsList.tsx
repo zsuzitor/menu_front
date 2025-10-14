@@ -5,6 +5,7 @@ import { AlertData } from '../../../../Models/Entity/AlertData';
 
 import connectToStore, { IProjectsListProps } from './ProjectsListSetup';
 import { useNavigate } from 'react-router-dom';
+import RouteBuilder from '../../Models/BL/RouteBuilder';
 
 require('./ProjectsList.css');
 
@@ -38,6 +39,8 @@ const ProjectsList = (props: IProjectsListProps) => {
         currentProject = props.Projects.find(x => x.Id == props.CurrentProjectId);
     }
 
+
+    const projectUrl = new RouteBuilder().ProjectUrl(props.CurrentProjectId);
     return <>
 
         <div className='code-management-projects-menu'>
@@ -69,9 +72,9 @@ const ProjectsList = (props: IProjectsListProps) => {
                     <div
                         className='selected-main-management-project'
                     >
-                        <a href={'/task-management/proj-' + props.CurrentProjectId} onClick={(e) => {
+                        <a href={projectUrl} onClick={(e) => {
                             e.preventDefault();
-                            navigate("/task-management/proj-" + props.CurrentProjectId);
+                            navigate(projectUrl);
                         }}>{currentProject.Name}</a>
                     </div>
                 </>}

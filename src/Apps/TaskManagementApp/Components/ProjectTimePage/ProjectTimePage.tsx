@@ -7,6 +7,7 @@ import OneProjectUser from '../OneProjectUser/OneProjectUser';
 import connectToStore, { IProjectTimePageProps } from './ProjectTimePageSetup';
 import { Helper } from '../../../../Models/BL/Helper';
 import { useNavigate } from 'react-router-dom';
+import RouteBuilder from '../../Models/BL/RouteBuilder';
 
 
 require('./ProjectTimePage.css');
@@ -164,12 +165,14 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
             {renderHeadLine()}
             {props.ProjectUsers.map(x => {
 
+                const timeLogUrl = new RouteBuilder().TimeLogUserUrl(props.ProjectId, x.Id);
+
                 return <div className='project-time-one-line'
                     key={x.Id}>
                     <div className='one-line-person'>
-                        <a href={"/task-management/proj-" + props.ProjectId + "/user-" + x.Id + "/time-log"} onClick={(e) => {
+                        <a href={timeLogUrl} onClick={(e) => {
                             e.preventDefault();
-                            navigate("/task-management/proj-" + props.ProjectId + "/user-" + x.Id + "/time-log");
+                            navigate(timeLogUrl);
                         }}>{x.Email}</a>
 
                     </div>

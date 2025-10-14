@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
 import AddWorkTimeLog from '../AddWorkTimeLog/AddWorkTimeLog';
 import PopupWindow from '../../../../components/Body/PopupWindow/PopupWindow';
+import RouteBuilder from '../../Models/BL/RouteBuilder';
 
 
 require('./TempoPage.css');
@@ -157,39 +158,43 @@ const TempoPage = (props: ITempoPageProps) => {
                     </div>
 
                     <div className='tempo-time-column-tasks'>
-                        {works.map(w => <div
-                            key={w.Id} className='tempo-time-column-one-content'>
-                            <div className='head'>
-                                <div className='task-info'><a href={'/task-management/proj-' + props.ProjectId + '/task-' + w.WorkTaskId} onClick={(e) => {
-                                    e.preventDefault();
-                                    navigate("/task-management/proj-" + props.ProjectId + '/task-' + w.WorkTaskId);
-                                }}>{w.WorkTaskId}</a></div>
+                        {works.map(w => {
+                            const taskUrl = new RouteBuilder().TaskUrl(props.ProjectId, w.WorkTaskId);
+                            return <div
+                                key={w.Id} className='tempo-time-column-one-content'>
+                                <div className='head'>
+                                    <div className='task-info'>
+                                        <a href={taskUrl} onClick={(e) => {
+                                            e.preventDefault();
+                                            navigate(taskUrl);
+                                        }}>{w.WorkTaskId}</a></div>
 
-                                <div className='time-more-block'>
-                                    <PopupWindow
-                                        ButtonContent={<div className='more-buttons'>...</div>
-                                        }
-                                        PopupContent={<div className='filters-window'>
+                                    <div className='time-more-block'>
+                                        <PopupWindow
+                                            ButtonContent={<div className='more-buttons'>...</div>
+                                            }
+                                            PopupContent={<div className='filters-window'>
 
-                                            <div><button className='button button-grey'
-                                                onClick={x => props.DeleteTime(w.Id)}>Удалить</button></div>
-                                            <div><button className='button button-grey'
-                                                onClick={x => setShowAddWorkTimeNew(w.Id)}>Изменить</button></div>
-                                            <div><button className='button button-grey'
-                                                onClick={x => props.CopyTime(w.Id)}>Скопировать</button></div>
-                                        </div>}
-                                    ></PopupWindow>
+                                                <div><button className='button button-grey'
+                                                    onClick={x => props.DeleteTime(w.Id)}>Удалить</button></div>
+                                                <div><button className='button button-grey'
+                                                    onClick={x => setShowAddWorkTimeNew(w.Id)}>Изменить</button></div>
+                                                <div><button className='button button-grey'
+                                                    onClick={x => props.CopyTime(w.Id)}>Скопировать</button></div>
+                                            </div>}
+                                        ></PopupWindow>
+                                    </div>
                                 </div>
+
+                                <div className='comment' title={w.Comment}>{w.Comment}</div>
+                                <div className='time'>{new Helper().MinutesToHours(w.TimeMinutes)}</div>
+                                {w.RangeStartOfLog && <div className='time'>
+                                    {`С ${(new Helper().DateToGetHM(w.RangeStartOfLog))} ПО ${(new Helper().DateToGetHM(w.RangeEndOfLog))}`}
+                                </div>}
+
+
                             </div>
-
-                            <div className='comment' title={w.Comment}>{w.Comment}</div>
-                            <div className='time'>{new Helper().MinutesToHours(w.TimeMinutes)}</div>
-                            {w.RangeStartOfLog && <div className='time'>
-                                {`С ${(new Helper().DateToGetHM(w.RangeStartOfLog))} ПО ${(new Helper().DateToGetHM(w.RangeEndOfLog))}`}
-                            </div>}
-
-
-                        </div>)}</div>
+                        })}</div>
                     <div className='tempo-time-column-add-btn'>
                         <button className='button button-blue'
                             onClick={() => {

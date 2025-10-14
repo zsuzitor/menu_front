@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import connectToStore, { IOneProjectInListProps } from './OneProjectInListSetup';
 
 import { useNavigate } from 'react-router-dom';
+import RouteBuilder from '../../Models/BL/RouteBuilder';
 
 require('./OneProjectInList.css');
 
@@ -19,13 +20,13 @@ const OneProjectInList = (props: IOneProjectInListProps) => {
         projectClassName += ' selected-management-project'
     }
 
-
+    const projectUrl = new RouteBuilder().ProjectUrl(props.Project.Id);
     return <div key={props.Project.Id.toString()}
         className={projectClassName}
     >
-        <a href={'/task-management/proj-' + props.Project.Id} onClick={(e) => {
+        <a href={projectUrl} onClick={(e) => {
             e.preventDefault();
-            navigate("/task-management/proj-" + props.Project.Id);
+            navigate(projectUrl);
         }}>{props.Project.Name}</a>
     </div>
 

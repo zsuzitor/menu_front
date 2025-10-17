@@ -202,7 +202,7 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementTaskRoute}:taskId`} element={<OneWorkTaskDetail />} />
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementTimeLogRoute}`} element={<ProjectTimePage />} />
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementUserRoute}:userId/${TaskManagementTimeLogRoute}`} element={<PersonTimePage />} />
-            <Route path={`${TaskManagementProjectRoute}:projectId/`} element={<TempoPage />} />
+            <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementTempoRoute}`} element={<TempoPage />} />
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementSprintRoute}`} element={<Sprints />} />
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementLabelsRoute}`} element={<Labels />} />
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementSprintRoute}:sprintId`} element={<Sprint />} />

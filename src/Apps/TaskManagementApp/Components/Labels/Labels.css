@@ -1,0 +1,35 @@
+.labels-page-main {
+    padding-top: 60px;
+    width: 100%;
+}
+
+.labels-page-main .label-block {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.labels-page-main .one-label {
+    display: flex;
+    justify-content: space-between;
+    max-height: 30px;
+    overflow: hidden;
+}
+
+.labels-page-main .one-label-info {
+    display: flex;
+    gap: 20px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.labels-page-main .label-buttons {
+    display: flex;
+}
+
+.labels-page-main .action-btn {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    flex-shrink: 0;
+}

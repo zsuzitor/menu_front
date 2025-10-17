@@ -29,6 +29,7 @@ import { MainErrorHandler } from "./Models/BL/ErrorHandleLogic";
 import { TaskManagementTaskStatusController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementTaskStatusController";
 import { TaskManagementWorkTimeController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementWorkTimeController";
 import { TaskManagementSprintController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementSprintController";
+import { TaskManagementLabelController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementLabelController";
 
 
 require('../style/main.css');
@@ -75,6 +76,7 @@ window.G_TaskManagementTaskStatusController = new TaskManagementTaskStatusContro
 window.G_TaskManagementCommentController = new TaskManagementCommentController();
 window.G_TaskManagementSprintController = new TaskManagementSprintController();
 window.G_VaultController = new VaultController();
+window.G_TaskManagementLabelController = new TaskManagementLabelController();
 
 
 

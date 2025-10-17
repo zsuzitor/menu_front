@@ -15,87 +15,80 @@ require('./Labels.css');
 
 const Labels = (props: ILabelsProps) => {
 
-    const [showForm, setShowForm] = useState(false);
-    const [editSprintId, setEditSprintId] = useState(0);
+    const [editLabelId, setEditLabelId] = useState(0);
+    const [editLabelText, setEditLabelText] = useState('');
 
     const navigate = useNavigate();
 
     useEffect(() => {
         return () => {
-            // props.ClearSprints(props.ProjectId);//тянутся спринты которые на данный момент должны храниться в проекте
+            // props.ClearLabels(props.ProjectId);//тянутся лейблы которые на данный момент должны храниться в проекте
             //при уходе с страницы они должны сохраняться
         };
     }, []);
 
     useEffect(() => {
         if (props.ProjectId && props.ProjectId > 0)
-            props.LoadSprints(props.ProjectId);
+            props.LoadLabels(props.ProjectId);
 
-    }, [props.ProjectId, props.Sprints.length]);
+    }, [props.ProjectId, props.Labels.length]);
 
 
-    if (!props.Sprints) {
+    if (!props.Labels) {
         return <></>
     }
 
-    let editSprint = props.Sprints.find(x => x.Id == editSprintId);
+    // let editSprint = props.Labels.find(x => x.Id == editLabelId);
 
-    return <div className='sprints-page-main'>
+    return <div className='labels-page-main'>
+        <div className='label-block'>
+            {props.Labels.map(x => {
 
-        <div >
-            <button className='button button-grey' onClick={() => setShowForm(true)}>Добавить</button>
-            {showForm ? <AdditionalWindow CloseWindow={() => {
-                setShowForm(false);
-                setEditSprintId(0);
-            }}
-                IsHeightWindow={true}
-                Title='Спринт'
-                InnerContent={() => <AddEditSprint
-                    Id={editSprintId}
-                    Name={editSprint?.Name || ''}
-                    ProjectId={editSprint?.ProjectId || props.ProjectId}
-                    StartDate={editSprint?.StartDate || new Date()}
-                    EndDate={editSprint?.EndDate || new Date()}
-                    CreateSprint={props.CreateSprint}
-                    UpdateSprint={props.UpdateSprint}
-                />}></AdditionalWindow> : <></>}
-
-        </div>
-
-
-
-        <div className='sprints-block'>
-            {props.Sprints.map(x => {
-
-                const sprintUrl = new RouteBuilder().SprintUrl(props.ProjectId, x.Id);
                 return <div
-                    className='one-sprint'
+                    className='one-label'
                     key={x.Id}>
                     <div
-                        className='one-sprint-info'
+                        className='one-label-info'
                         onClick={() => {
-                            navigate(sprintUrl);
+                            setEditLabelId(x.Id);
+                            setEditLabelText(x.Name);
                         }}>
                         <div>{x.Id}</div>
-                        <div>{x.Name}</div>
+                        {editLabelId == x.Id ? <input type='text'
+                            onChange={(e) => setEditLabelText(e.target.value)}>
+                        </input> : <div>{x.Name}</div>}
+
 
                     </div>
-                    <div className='sprint-buttons'>
+                    <div className='label-buttons'>
                         <div className='action-btn' onClick={(e) => {
+                            if (!confirm('Удалить лейбл' + x.Name + '?')) {
+                                return;
+                            }
                             e.preventDefault();
-                            props.DeleteSprint(x.Id)
+                            props.DeleteLabel(x.Id)
                         }}
-                            title='Удалить спринт'>
+                            title='Удалить лейбл'>
                             <img className='persent-100-width-height' src="/images/delete-icon.png" />
                         </div>
-                        <div className='action-btn' onClick={() => {
-                            setEditSprintId(x.Id);
-                            setShowForm(true);
+                        {editLabelId ? <>
+                            <div className='action-btn' onClick={() => {
+                                setEditLabelId(0);
 
-                        }}
-                            title='Редактировать спринт'>
-                            <img className='persent-100-width-height' src="/images/pencil-edit.png" />
-                        </div>
+                            }}
+                                title='Отменить редактирование'>
+                                <img className='persent-100-width-height' src="/images/cancel.png" />
+                            </div>
+                            <div className='action-btn' onClick={() => {
+                                setEditLabelId(0);
+                                props.UpdateLabel(x.Id, editLabelText);
+
+                            }}
+                                title='Сохранить изменения'>
+                                <img className='persent-100-width-height' src="/images/save-icon.png" />
+                            </div>
+                        </> : <></>}
+
                     </div>
                 </div>
             })}

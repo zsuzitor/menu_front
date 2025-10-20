@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { AppState } from "../../../../Models/Entity/State/AppState";
 import { TaskLabel } from "../../Models/Entity/State/TaskLabel";
-import { GetProjectLabelsActionCreator } from "../../Models/Actions/LabelActions";
+import { GetTaskLabelsActionCreator } from "../../Models/Actions/LabelActions";
 
 interface ILabelsOwnProps {
 }
@@ -40,7 +40,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: ILabelsOwnProps) => {
     //     dispatch(window.G_TaskManagementSprintController.GetForProjectRedux(projectId));
     // };
     res.ClearLabels = (projectId: number) => {
-        dispatch(GetProjectLabelsActionCreator([]));
+        dispatch(GetTaskLabelsActionCreator([]));
     };
 
     res.CreateLabel = (projectId: number, labelName: string) => {

@@ -17,6 +17,7 @@ const Labels = (props: ILabelsProps) => {
 
     const [editLabelId, setEditLabelId] = useState(0);
     const [editLabelText, setEditLabelText] = useState('');
+    const [newLabelText, setNewLabelText] = useState('');
 
     const navigate = useNavigate();
 
@@ -42,6 +43,27 @@ const Labels = (props: ILabelsProps) => {
 
     return <div className='labels-page-main'>
         <div className='label-block'>
+            <div
+                className='one-label'>
+                <div
+                    className='one-label-info'>
+                    <input type='text' className='new-name'
+                        onChange={(e) => setNewLabelText(e.target.value)}>
+                    </input>
+                </div>
+                <div className='label-buttons'>
+                    <div className='action-btn' onClick={() => {
+                        setEditLabelId(0);
+                        props.CreateLabel(props.ProjectId, newLabelText);
+
+                    }}
+                        title='Создать'>
+                        <img className='persent-100-width-height' src="/images/save-icon.png" />
+                    </div>
+
+                </div>
+            </div>
+
             {props.Labels.map(x => {
 
                 return <div
@@ -54,7 +76,7 @@ const Labels = (props: ILabelsProps) => {
                             setEditLabelText(x.Name);
                         }}>
                         <div>{x.Id}</div>
-                        {editLabelId == x.Id ? <input type='text'
+                        {editLabelId == x.Id ? <input type='text' value={editLabelText}
                             onChange={(e) => setEditLabelText(e.target.value)}>
                         </input> : <div>{x.Name}</div>}
 
@@ -71,7 +93,7 @@ const Labels = (props: ILabelsProps) => {
                             title='Удалить лейбл'>
                             <img className='persent-100-width-height' src="/images/delete-icon.png" />
                         </div>
-                        {editLabelId ? <>
+                        {editLabelId == x.Id ? <>
                             <div className='action-btn' onClick={() => {
                                 setEditLabelId(0);
 

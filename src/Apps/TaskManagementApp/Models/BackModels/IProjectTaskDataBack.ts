@@ -11,5 +11,6 @@ export interface IProjectTaskDataBack {
     Description: string;
     Comments: IOneWorkTaskCommentDataBack[];
     SprintId: number[];
+    LabelsId: number[];
 
 }

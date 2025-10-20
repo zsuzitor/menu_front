@@ -5,6 +5,7 @@ import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
 import { WorkTaskStatus } from "../../Models/Entity/State/WorkTaskStatus";
 import { ClearCurrentTaskStateActionCreator, SetCurrentTaskIdActionCreator } from "../../Models/Actions/TaskActions";
 import { ProjectSprint } from "../../Models/Entity/State/ProjectSprint";
+import { TaskLabel } from "../../Models/Entity/State/TaskLabel";
 
 
 interface IOneWorkTaskDetailOwnProps {
@@ -16,6 +17,7 @@ interface IOneWorkTaskDetailStateToProps {
     ProjectUsers: ProjectUser[];
     Statuses: WorkTaskStatus[];
     Sprints: ProjectSprint[];
+    Labels: TaskLabel[];
     Task: OneTask;
     CurrentProjectId: number;
 
@@ -28,9 +30,10 @@ interface IOneWorkTaskDetailDispatchToProps {
     UpdateTaskName: (id: number, text: string) => void;
     UpdateTaskDescription: (id: number, text: string) => void;
     UpdateTaskStatus: (id: number, idStatus: number) => void;
-    AddTaskSprint: (id: number, idSprint: number) => void;
+    // AddTaskSprint: (id: number, idSprint: number) => void;
     UpdateTaskSprints: (id: number, idSprint: number[]) => void;
-    DeleteTaskSprint: (id: number, idSprint: number) => void;
+    UpdateTaskLabels: (id: number, idLabel: number[]) => void;
+    // DeleteTaskSprint: (id: number, idSprint: number) => void;
     UpdateTaskExecutor: (id: number, personId: number) => void;
     AddComment: (taskId: number, newCommentText: string) => void;
     // SetEmptyTaskComments: (taskId: number) => void;
@@ -54,6 +57,7 @@ const mapStateToProps = (state: AppState, ownProps: IOneWorkTaskDetailOwnProps) 
     res.Task = state.TaskManagementApp.CurrentTask;
     res.CurrentProjectId = state.TaskManagementApp.CurrentProjectId;
     res.Sprints = state.TaskManagementApp.CurrentProjectSprints;
+    res.Labels = state.TaskManagementApp.CurrentProjectLabels;
     return res;
 }
 
@@ -94,16 +98,20 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps)
         dispatch(window.G_TaskManagementTaskController.UpdateTaskStatusRedux(id, idStatus))
     };
 
-    res.AddTaskSprint = (id: number, idSprint: number) => {
-        dispatch(window.G_TaskManagementSprintController.AddTaskToSprintRedux(idSprint, id))
-    };
-    res.DeleteTaskSprint = (id: number, idSprint: number) => {
-        dispatch(window.G_TaskManagementSprintController.DeleteTaskFromSprintRedux(id, idSprint))
-    };
+    // res.AddTaskSprint = (id: number, idSprint: number) => {
+    //     dispatch(window.G_TaskManagementSprintController.AddTaskToSprintRedux(idSprint, id))
+    // };
+    // res.DeleteTaskSprint = (id: number, idSprint: number) => {
+    //     dispatch(window.G_TaskManagementSprintController.DeleteTaskFromSprintRedux(id, idSprint))
+    // };
 
     res.UpdateTaskSprints = (id: number, idSprint: number[]) => {
         dispatch(window.G_TaskManagementSprintController.UpdateTaskFromSprintRedux(id, idSprint))
     };
+    res.UpdateTaskLabels = (id: number, idLabel: number[]) => {
+        dispatch(window.G_TaskManagementLabelController.UpdateTaskLabelsRedux(id, idLabel))
+    };
+
 
     res.UpdateTaskExecutor = (id: number, personId: number) => {
         dispatch(window.G_TaskManagementTaskController.UpdateTaskExecutorRedux(id, personId))

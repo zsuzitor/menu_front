@@ -21,10 +21,12 @@
     gap: 20px;
     overflow: hidden;
     cursor: pointer;
+    flex-grow: 1;
 }
 
 .labels-page-main .label-buttons {
     display: flex;
+    flex-grow: 0;
 }
 
 .labels-page-main .action-btn {
@@ -32,4 +34,9 @@
     height: 30px;
     cursor: pointer;
     flex-shrink: 0;
+}
+
+.one-label-info .new-name {
+
+    width: 100%;
 }

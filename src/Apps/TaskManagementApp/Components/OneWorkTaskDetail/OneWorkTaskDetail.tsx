@@ -30,6 +30,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     const [taskNameEditable, setTaskNameEditable] = useState(false);
     const [taskStatusEditable, setTaskStatusEditable] = useState(false);
     const [taskSprintEditable, setTaskSprintEditable] = useState(false);
+    const [taskLabelEditable, setTaskLabelEditable] = useState(false);
     const [taskExecutorEditable, setTaskExecutorEditable] = useState(false);
 
     const [showAddWorkTimeNew, setShowAddWorkTimeNew] = useState(false);
@@ -64,6 +65,11 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
         // setTaskName(props.Task?.Name || '');
         setTaskSprintEditable(false);
     }, [props.Task?.SprintId]);
+
+    useEffect(() => {
+        // setTaskName(props.Task?.Name || '');
+        setTaskLabelEditable(false);
+    }, [props.Task?.LabelId]);
 
     useEffect(() => {
         // setTaskDescription(props.Task?.Description || '');
@@ -366,6 +372,29 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                             }}
                             Selected={props.Task.SprintId}
                             ValuesWithId={props.Sprints.map(x => {
+                                return { Id: x.Id, Text: x.Name };
+                            })}
+                        />
+
+                    }
+                </div>
+                <div>
+                    <span onClick={() => setTaskLabelEditable(true)}
+                        className='editable-by-click'>Лейблы: </span>
+                    {!taskLabelEditable ? <span
+                        className='editable-by-click'
+                        onClick={() => setTaskLabelEditable(true)}
+                    >{props.Labels.filter(x => props.Task.LabelId.find(y => y == x.Id)).map(x => x.Name)
+                        .join(',') || '-'}</span>
+                        :
+                        <SaveCancelInputMultiSelect
+                            CancelEvent={() => setTaskLabelEditable(false)}
+                            SaveEvent={(id) => {
+                                props.UpdateTaskLabels(props.Task.Id, id);
+                                return true;
+                            }}
+                            Selected={props.Task.LabelId}
+                            ValuesWithId={props.Labels.map(x => {
                                 return { Id: x.Id, Text: x.Name };
                             })}
                         />

@@ -7,10 +7,10 @@ export function GetTaskLabelsActionCreator(data: TaskLabel[]): AppAction<TaskLab
 };
 
 
-export const GetProjectLabelsActionName: string = 'GetProjectLabelsAction';
-export function GetProjectLabelsActionCreator(data: TaskLabel[]): AppAction<TaskLabel[]> {
-    return { type: GetProjectLabelsActionName, payload: data };
-};
+// export const GetProjectLabelsActionName: string = 'GetProjectLabelsAction';
+// export function GetProjectLabelsActionCreator(data: TaskLabel[]): AppAction<TaskLabel[]> {
+//     return { type: GetProjectLabelsActionName, payload: data };
+// };
 
 export const CreateProjectLabelActionName: string = 'CreateProjectLabelAction';
 export function CreateProjectLabelActionCreator(data: TaskLabel): AppAction<TaskLabel> {

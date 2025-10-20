@@ -14,6 +14,7 @@ export class OneTask {
     CreateDate: string;
     LastUpdateDate: string;
     SprintId: number[];
+    LabelId: number[];
 
     Description: string;
     Comments: OneWorkTaskComment[];
@@ -22,6 +23,8 @@ export class OneTask {
     constructor() {
         this.Comments = [];
         this.TimeLogs = [];
+        this.SprintId = [];
+        this.LabelId = [];
     }
 
     FillByProjectTaskData(data: ProjectTaskData): OneTask {
@@ -36,6 +39,7 @@ export class OneTask {
         this.Comments = data.Comments
             .map(x => new OneWorkTaskComment().FillByOneWorkTaskComment(x));
         this.SprintId = data.SprintId;
+        this.LabelId = data.LabelId;
         return this;
     }
 
@@ -52,6 +56,7 @@ export class OneTask {
         this.Comments = data.Comments.
             map(x => new OneWorkTaskComment().FillByBackModel(x));
         this.SprintId = data.SprintId;
+        this.LabelId = data.LabelsId;
 
         return this;
     }

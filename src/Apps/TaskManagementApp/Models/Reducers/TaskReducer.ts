@@ -18,7 +18,7 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
                 let newState = cloneDeep(state);
                 let payload = action.payload as ProjectTaskData;
                 let tsk = new OneTask();
-                tsk.FillByIProjectTaskDataBack(payload);
+                tsk.FillByProjectTaskData(payload);
                 newState.TaskManagementApp.CurrentProjectTasks.push(tsk);
                 return newState;
             }
@@ -53,7 +53,7 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
                 let payload = action.payload as LoadWorkTasksResult;
                 newState.TaskManagementApp.CurrentProjectTasks = payload.Tasks.map(x => {
                     let tsk = new OneTask();
-                    tsk.FillByIProjectTaskDataBack(x);
+                    tsk.FillByProjectTaskData(x);
                     return tsk;
                 });
                 newState.TaskManagementApp.CurrentProjectTasksAllCount = payload.TasksCount;

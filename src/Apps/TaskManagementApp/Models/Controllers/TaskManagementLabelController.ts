@@ -1,7 +1,7 @@
 import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
-import { AddLabelToTaskActionCreator, CreateProjectLabelActionCreator, DeleteLabelFromTaskActionCreator, DeleteLabelFromTaskActionDataType, DeleteProjectLabelActionCreator, GetProjectLabelsActionCreator, UpdateProjectLabelActionCreator, UpdateTaskLabelActionDataType, UpdateTaskLabelsActionCreator, UpdateTaskLabelsActionDataType } from "../Actions/LabelActions";
+import { AddLabelToTaskActionCreator, CreateProjectLabelActionCreator, DeleteLabelFromTaskActionCreator, DeleteLabelFromTaskActionDataType, DeleteProjectLabelActionCreator, GetTaskLabelsActionCreator, UpdateProjectLabelActionCreator, UpdateTaskLabelActionDataType, UpdateTaskLabelsActionCreator, UpdateTaskLabelsActionDataType } from "../Actions/LabelActions";
 import { ITaskLabelDataBack } from "../BackModels/ITaskLabelDataBack";
 import { TaskManagementPreloader } from "../Consts";
 import { TaskLabel } from "../Entity/State/TaskLabel";
@@ -31,7 +31,7 @@ export class TaskManagementLabelController implements ITaskManagementLabelContro
                 if (data) {
                     // dt.projectId = projectId;
                     let dt = data.map(x => new TaskLabel().FillByIProjectLabelDataBack(x));
-                    dispatch(GetProjectLabelsActionCreator(dt));
+                    dispatch(GetTaskLabelsActionCreator(dt));
 
                 }
             });

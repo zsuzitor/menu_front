@@ -8,4 +8,5 @@ export interface ITaskFilter {
     PageNumber: number;
     PageSize: number;
     SprintId: number;
+    LabelId: number;
 }

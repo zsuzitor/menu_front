@@ -4,7 +4,7 @@ import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelpe
 import { AddLoadTriggerActionCreator, UpdateTaskActionCreator, LoadTasksActionCreator, DeleteTaskActionCreator, LoadTaskActionCreator, UpdateTaskNameActionCreator, UpdateTaskDescriptionActionCreator, UpdateTaskStatusActionCreator, UpdateTaskExecutorActionCreator } from "../Actions/TaskActions";
 import { ILoadWorkTasksResultDataBack } from "../BackModels/ILoadWorkTasksResultDataBack";
 import { IProjectTaskDataBack } from "../BackModels/IProjectTaskDataBack";
-import { TaskManagementPreloader } from "../Consts";
+import { TaskManagementApiTaskUrl, TaskManagementPreloader, TaskManagementTaskAddNewUrl, TaskManagementTaskDeleteUrl, TaskManagementTaskGetUrl, TaskManagementTasksGetUrl, TaskManagementTaskUpdateDescriptionUrl, TaskManagementTaskUpdateExecutorUrl, TaskManagementTaskUpdateNameUrl, TaskManagementTaskUpdateStatusUrl, TaskManagementTaskUpdateUrl } from "../Consts";
 import { ITaskFilter } from "../Entity/ITaskFilter";
 import { LoadWorkTasksResult, ProjectTaskData } from "../Entity/LoadWorkTasksResult";
 import { OneTask } from "../Entity/State/OneTask";
@@ -67,7 +67,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/task/update-name'
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTaskUpdateNameUrl}`
 
         });
     }
@@ -103,7 +103,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/task/update-description'
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTaskUpdateDescriptionUrl}`
 
         });
     }
@@ -138,7 +138,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/task/update-status'
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTaskUpdateStatusUrl}`
 
         });
     }
@@ -173,7 +173,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/task/update-executor'
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTaskUpdateExecutorUrl}`
 
         });
     }
@@ -213,7 +213,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/task/add-new-task',
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTaskAddNewUrl}`,
             ContentType: 'body'
 
         });
@@ -254,7 +254,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/task/update-task',
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTaskUpdateUrl}`,
             ContentType: 'body'
 
         });
@@ -288,6 +288,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
             "pageNumber": taskFilter.PageNumber,
             "pageSize": taskFilter.PageSize,
             "sprintId": taskFilter.SprintId,
+            "labelId": taskFilter.LabelId,
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
@@ -296,7 +297,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/task/get-project-tasks'
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTasksGetUrl}`
 
         });
     };
@@ -330,7 +331,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/task/get-project-task'
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTaskGetUrl}`
 
         });
     };
@@ -363,7 +364,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/task/delete-task'
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTaskDeleteUrl}`
 
         });
     };
@@ -376,6 +377,6 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
     preloader(show: boolean) {
         window.TaskManagementCounter = new ControllerHelper()
             .Preloader(show, TaskManagementPreloader, window.TaskManagementCounter);
-        
+
     }
 }

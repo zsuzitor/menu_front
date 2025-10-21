@@ -8,7 +8,7 @@ import { CommentAdd } from "../Entity/CommentAdd";
 import { CommentSet } from "../Entity/CommentSet";
 import { OneWorkTaskComment } from "../Entity/OneTaskWorkComment";
 import { UpdateCommentActionCreator, DeleteCommentActionCreator, AddCommentActionCreator, SetCommentsActionCreator } from "../Actions/CommentActions";
-import { TaskManagementPreloader } from "../Consts";
+import { TaskManagementApiCommentUrl, TaskManagementPreloader } from "../Consts";
 
 
 
@@ -62,7 +62,7 @@ export class TaskManagementCommentController implements ITaskManagementCommentCo
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/comment/edit-comment'
+            Url: `${G_PathToServer}${TaskManagementApiCommentUrl}/edit-comment`
 
         });
     };
@@ -95,7 +95,7 @@ export class TaskManagementCommentController implements ITaskManagementCommentCo
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/comment/delete-comment'
+            Url: `${G_PathToServer}${TaskManagementApiCommentUrl}/delete-comment`
 
         });
     };
@@ -129,7 +129,7 @@ export class TaskManagementCommentController implements ITaskManagementCommentCo
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/comment/create-comment'
+            Url: `${G_PathToServer}${TaskManagementApiCommentUrl}/create-comment`
 
         });
     };
@@ -168,7 +168,7 @@ export class TaskManagementCommentController implements ITaskManagementCommentCo
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/comment/get-comments'
+            Url: `${G_PathToServer}${TaskManagementApiCommentUrl}/get-comments`
 
         });
     };

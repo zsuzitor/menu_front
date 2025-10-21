@@ -15,6 +15,7 @@ import AddWorkTimeLog from '../AddWorkTimeLog/AddWorkTimeLog';
 import SaveCancelInputMultiSelect from '../../../../components/Body/SaveCancelInput/SaveCancelInputMultiSelect';
 import SaveCancelInputText from '../../../../components/Body/SaveCancelInput/SaveCancelInputText';
 import SaveCancelInputSelect from '../../../../components/Body/SaveCancelInput/SaveCancelInputSelect';
+import SaveCancelInputMultiSelectWithSearch from '../../../../components/Body/SaveCancelInput/SaveCancelInputMultiSelectWithSearch';
 
 
 require('./OneWorkTaskDetail.css');
@@ -364,7 +365,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                     >{props.Sprints.filter(x => props.Task.SprintId.find(y => y == x.Id)).map(x => x.Name)
                         .join(',') || 'Не привязана к спринту'}</span>
                         :
-                        <SaveCancelInputMultiSelect
+                        <SaveCancelInputMultiSelectWithSearch
                             CancelEvent={() => setTaskSprintEditable(false)}
                             SaveEvent={(id) => {
                                 props.UpdateTaskSprints(props.Task.Id, id);
@@ -387,7 +388,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                     >{props.Labels.filter(x => props.Task.LabelId.find(y => y == x.Id)).map(x => x.Name)
                         .join(',') || '-'}</span>
                         :
-                        <SaveCancelInputMultiSelect
+                        <SaveCancelInputMultiSelectWithSearch
                             CancelEvent={() => setTaskLabelEditable(false)}
                             SaveEvent={(id) => {
                                 props.UpdateTaskLabels(props.Task.Id, id);

@@ -1,7 +1,7 @@
 import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
-import { TaskManagementPreloader } from "../Consts";
+import { TaskManagementApiSprintUrl, TaskManagementPreloader } from "../Consts";
 import { ProjectSprint } from "../Entity/State/ProjectSprint";
 import { IProjectSprintDataBack } from "../BackModels/IProjectSprintDataBack";
 import { IProjectTaskDataBack } from "../BackModels/IProjectTaskDataBack";
@@ -69,7 +69,7 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/sprint/get-for-project'
+            Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/get-for-project`
 
         });
     };
@@ -101,7 +101,7 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/sprint/get-tasks'
+            Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/get-tasks`
 
         });
     };
@@ -137,7 +137,7 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/sprint/create',
+            Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/create`,
             ContentType: 'body'
 
         });
@@ -173,7 +173,7 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/sprint/update',
+            Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/update`,
             ContentType: 'body'
 
         });
@@ -205,7 +205,7 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/sprint/delete'
+            Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/delete`
 
         });
     };
@@ -240,7 +240,7 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/sprint/add-task-to-sprint'
+            Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/add-task-to-sprint`
 
         });
     };
@@ -275,7 +275,7 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/sprint/delete-task-from-sprint'
+            Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/delete-task-from-sprint`
 
         });
     };
@@ -310,7 +310,7 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/sprint/update-task-sprints',
+            Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/update-task-sprints`,
             ContentType: 'body'
 
         });

@@ -35,6 +35,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     const [filterVisibilityCreator, setFilterVisibilityCreator] = useState(false);
     const [filterVisibilityStatus, setFilterVisibilityStatus] = useState(false);
     const [filterVisibilitySprint, setFilterVisibilitySprint] = useState(false);
+    const [filterVisibilityLabel, setFilterVisibilityLabel] = useState(false);
     const [filterVisibilityReviwer, setFilterVisibilityReviwer] = useState(false);
 
 
@@ -107,7 +108,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
     }, [props.Project?.Id, props.TasksFilters.CreatorId, props.TasksFilters.ExecutorId
         , props.TasksFilters.Status, props.TasksFilters.TaskName
-        , props.TasksFilters.Page, props.TasksFilters.Retrigger, props.TasksFilters.Sprint]);
+        , props.TasksFilters.Page, props.TasksFilters.Retrigger, props.TasksFilters.Sprint, props.TasksFilters.Label]);
 
 
 
@@ -118,6 +119,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             , PageNumber: props.TasksFilters.Page, PageSize: tasksOnPageCount
             , ProjectId: props.Project.Id, ExecutorId: props.TasksFilters.ExecutorId
             , StatusId: props.TasksFilters.Status, SprintId: props.TasksFilters.Sprint
+            , LabelId: props.TasksFilters.Label
         } as ITaskFilter;
 
         props.ReloadTasks(filter);
@@ -136,6 +138,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         setFilterVisibilityStatus(false);
         setFilterVisibilityReviwer(false);
         setFilterVisibilitySprint(false);
+        setFilterVisibilityLabel(false);
 
     }
 
@@ -211,16 +214,21 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                             <div className='add-one-filter' onClick={() => setFilterVisibilityReviwer(true)}>Ревьювер</div>
                             <div className='add-one-filter' onClick={() => setFilterVisibilityStatus(true)}>Статус</div>
                             <div className='add-one-filter' onClick={() => setFilterVisibilitySprint(true)}>Спринт</div>
+                            <div className='add-one-filter' onClick={() => setFilterVisibilityLabel(true)}>Лейбл</div>
                         </div>}
                     ></PopupWindow></div>
 
                     {((filterVisibilityName
                         || filterVisibilityCreator
                         || filterVisibilityReviwer
-                        || filterVisibilityStatus)
+                        || filterVisibilityStatus
+                        || filterVisibilitySprint
+                        || filterVisibilityLabel)
                         || (props.TasksFilters.CreatorId != -1
                             || props.TasksFilters.ExecutorId != -1
                             || props.TasksFilters.Status != -1
+                            || props.TasksFilters.Sprint != -1
+                            || props.TasksFilters.Label != -1
                             || props.TasksFilters.TaskName != ''
                             || props.TasksFilters.Page != 1))
                         &&
@@ -315,6 +323,21 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                                 onClick={() => {
                                     props.SetFilterTaskSprint(-1);
                                     setFilterVisibilitySprint(false);
+                                }}>×</button>
+                        </div>}
+                        {filterVisibilityLabel && <div className='filter-tag'>
+                            <span className='filter-name'>Лейбл:</span>
+                            <select className='filter-input'
+                                onChange={e => props.SetFilterTaskLabel(+e.target.value)}
+                                value={props.TasksFilters.Label}>
+                                <option value={-1}>Любой</option>
+                                {props.Labels.map(label => <option value={label.Id} key={label.Id}>{label.Name}</option>)}
+                            </select>
+
+                            <button className='remove-filter' title='Удалить фильтр'
+                                onClick={() => {
+                                    props.SetFilterTaskLabel(-1);
+                                    setFilterVisibilityLabel(false);
                                 }}>×</button>
                         </div>}
                     </div>

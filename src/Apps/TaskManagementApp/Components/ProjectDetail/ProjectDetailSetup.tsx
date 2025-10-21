@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { AppState } from "../../../../Models/Entity/State/AppState";
-import { SetFilterTaskCreatorActionCreator, SetFilterTaskExecutorActionCreator, SetFilterTaskNameActionCreator, SetFilterTaskPageActionCreator, SetFilterTaskStatusActionCreator, SetFilterTaskActionCreator, SetFilterTaskSprintActionCreator } from "../../Models/Actions/TaskActions";
+import { SetFilterTaskCreatorActionCreator, SetFilterTaskExecutorActionCreator, SetFilterTaskNameActionCreator, SetFilterTaskPageActionCreator, SetFilterTaskStatusActionCreator, SetFilterTaskActionCreator, SetFilterTaskSprintActionCreator, SetFilterTaskLabelActionCreator } from "../../Models/Actions/TaskActions";
 import { ITaskFilter } from "../../Models/Entity/ITaskFilter";
 import { OneTask } from "../../Models/Entity/State/OneTask";
 import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
@@ -8,6 +8,7 @@ import { TasksFilter } from "../../Models/Entity/State/TasksFilter";
 import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/State/OneProjectInList';
 import { WorkTaskStatus } from "../../Models/Entity/State/WorkTaskStatus";
 import { ProjectSprint } from "../../Models/Entity/State/ProjectSprint";
+import { TaskLabel } from "../../Models/Entity/State/TaskLabel";
 
 
 interface IProjectDetailOwnProps {
@@ -21,6 +22,7 @@ interface IProjectDetailStateToProps {
     TasksFilters: TasksFilter;
     Statuses: WorkTaskStatus[];
     Sprints: ProjectSprint[];
+    Labels: TaskLabel[];
 
     CurrentProjectTasksAllCount: number;
 }
@@ -32,6 +34,7 @@ interface IProjectDetailDispatchToProps {
     SetFilterTaskPage: (num: number) => void;
     SetFilterTaskStatus: (status: number) => void;
     SetFilterTaskSprint: (sprint: number) => void;
+    SetFilterTaskLabel: (sprint: number) => void;
     ClearFilterTask: () => void;
 
     ReloadTasks: (filters: ITaskFilter) => void;
@@ -52,6 +55,7 @@ const mapStateToProps = (state: AppState, ownProps: IProjectDetailOwnProps) => {
     res.CurrentProjectTasksAllCount = state.TaskManagementApp.CurrentProjectTasksAllCount;
     res.Statuses = state.TaskManagementApp.CurrentProjectStatuses;
     res.Sprints = state.TaskManagementApp.CurrentProjectSprints;
+    res.Labels = state.TaskManagementApp.CurrentProjectLabels;
     return res;
 }
 
@@ -76,6 +80,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: IProjectDetailOwnProps) => 
 
     res.SetFilterTaskSprint = (sprint: number) => {
         dispatch(SetFilterTaskSprintActionCreator(sprint));
+    };
+
+    res.SetFilterTaskLabel = (label: number) => {
+        dispatch(SetFilterTaskLabelActionCreator(label));
     };
 
     res.ReloadTasks = (filter: ITaskFilter) => {

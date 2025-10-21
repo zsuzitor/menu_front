@@ -8,7 +8,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import connectToStore, { TaskManagementMainProps } from './TaskManagementMainSetup';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import OneWorkTaskDetail from '../OneWorkTaskDetail/OneWorkTaskDetail';
-import { TaskManagementLabelsRoute, TaskManagementPreloader, TaskManagementProjectRoute, TaskManagementSprintRoute, TaskManagementTaskRoute, TaskManagementTempoRoute, TaskManagementTimeLogRoute, TaskManagementUserRoute } from '../../Models/Consts';
+import { TaskManagementLabelsRoute, TaskManagementPreloader, TaskManagementProjectRoute, TaskManagementSprintRoute, TaskManagementSprintsRoute, TaskManagementTaskRoute, TaskManagementTempoRoute, TaskManagementTimeLogRoute, TaskManagementUserRoute } from '../../Models/Consts';
 import ProjectTimePage from '../ProjectTimePage/ProjectTimePage';
 import PersonTimePage from '../PersonTimePage/PersonTimePage';
 import TempoPage from '../TempoPage/TempoPage';
@@ -203,7 +203,7 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementTimeLogRoute}`} element={<ProjectTimePage />} />
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementUserRoute}:userId/${TaskManagementTimeLogRoute}`} element={<PersonTimePage />} />
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementTempoRoute}`} element={<TempoPage />} />
-            <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementSprintRoute}`} element={<Sprints />} />
+            <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementSprintsRoute}`} element={<Sprints />} />
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementLabelsRoute}`} element={<Labels />} />
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementSprintRoute}:sprintId`} element={<Sprint />} />
         </Routes>

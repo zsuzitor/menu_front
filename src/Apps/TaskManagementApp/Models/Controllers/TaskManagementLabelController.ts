@@ -3,7 +3,7 @@ import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { AddLabelToTaskActionCreator, CreateProjectLabelActionCreator, DeleteLabelFromTaskActionCreator, DeleteLabelFromTaskActionDataType, DeleteProjectLabelActionCreator, GetTaskLabelsActionCreator, UpdateProjectLabelActionCreator, UpdateTaskLabelActionDataType, UpdateTaskLabelsActionCreator, UpdateTaskLabelsActionDataType } from "../Actions/LabelActions";
 import { ITaskLabelDataBack } from "../BackModels/ITaskLabelDataBack";
-import { TaskManagementPreloader } from "../Consts";
+import { TaskManagementApiLabelUrl, TaskManagementPreloader } from "../Consts";
 import { TaskLabel } from "../Entity/State/TaskLabel";
 
 
@@ -49,7 +49,7 @@ export class TaskManagementLabelController implements ITaskManagementLabelContro
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/label/get-all'
+            Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/get-all`
 
         });
     };
@@ -82,7 +82,7 @@ export class TaskManagementLabelController implements ITaskManagementLabelContro
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/label/create',
+            Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/create`,
             ContentType: 'body'
 
         });
@@ -115,7 +115,7 @@ export class TaskManagementLabelController implements ITaskManagementLabelContro
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/label/update',
+            Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/update`,
             ContentType: 'body'
 
         });
@@ -146,7 +146,7 @@ export class TaskManagementLabelController implements ITaskManagementLabelContro
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/label/delete',
+            Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/delete`,
             ContentType: 'body'
 
         });
@@ -182,7 +182,7 @@ export class TaskManagementLabelController implements ITaskManagementLabelContro
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/label/update-task-labels',
+            Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/update-task-labels`,
             ContentType: 'body'
 
         });
@@ -219,7 +219,7 @@ export class TaskManagementLabelController implements ITaskManagementLabelContro
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/label/add-to-task',
+            Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/add-to-task`,
             ContentType: 'body'
 
         });
@@ -255,7 +255,7 @@ export class TaskManagementLabelController implements ITaskManagementLabelContro
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/label/delete-from-task',
+            Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/delete-from-task`,
             ContentType: 'body'
 
         });

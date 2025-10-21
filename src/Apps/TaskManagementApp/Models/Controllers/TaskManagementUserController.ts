@@ -3,7 +3,7 @@ import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { DeleteProjectUserActionCreator, AddProjectUserActionCreator, ChangeProjectUserActionCreator } from "../Actions/UserActions";
 import { IProjectUserDataBack } from "../BackModels/IProjectUserDataBack";
-import { TaskManagementPreloader } from "../Consts";
+import { TaskManagementApiUserUrl, TaskManagementPreloader } from "../Consts";
 import { ProjectUser } from "../Entity/State/ProjectUser";
 
 export type AddNewUserToProject = (error: MainErrorObjectBack, data: IProjectUserDataBack) => void;
@@ -50,7 +50,7 @@ export class TaskManagementUserController implements ITaskManagementUserControll
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/user/delete-user'
+            Url: `${G_PathToServer}${TaskManagementApiUserUrl}/delete-user`
 
         });
     }
@@ -89,7 +89,7 @@ export class TaskManagementUserController implements ITaskManagementUserControll
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/user/add-new-user',
+            Url: `${G_PathToServer}${TaskManagementApiUserUrl}/add-new-user`,
             ContentType: 'body'
 
         });
@@ -128,7 +128,7 @@ export class TaskManagementUserController implements ITaskManagementUserControll
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/user/change-user',
+            Url: `${G_PathToServer}${TaskManagementApiUserUrl}/change-user`,
             ContentType: 'body'
 
         });

@@ -34,9 +34,10 @@ const Sprints = (props: ISprintsProps) => {
     }, [props.ProjectId, props.Sprints.length]);
 
 
-    if (!props.Sprints) {
-        return <></>
-    }
+    // if (!props.Sprints) {
+    //     return <></>
+    // }
+    // console.log(props.Sprints);
 
     let editSprint = props.Sprints.find(x => x.Id == editSprintId);
 

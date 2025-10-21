@@ -60,6 +60,11 @@ export function SetFilterTaskSprintActionCreator(num: number): AppAction<number>
     return { type: SetFilterTaskSprintActionName, payload: num };
 };
 
+export const SetFilterTaskLabelActionName: string = 'SetFilterTaskLabelAction';
+export function SetFilterTaskLabelActionCreator(num: number): AppAction<number> {
+    return { type: SetFilterTaskLabelActionName, payload: num };
+};
+
 export const SetFilterTaskActionName: string = 'SetFilterTaskAction';
 export function SetFilterTaskActionCreator(data: TasksFilter): AppAction<TasksFilter> {
     return { type: SetFilterTaskActionName, payload: data };

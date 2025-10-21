@@ -5,7 +5,7 @@ import { AppState } from "../../../../Models/Entity/State/AppState";
 import { SetTaskTimeLogActionCreator, SetProjectTimeLogDataActionCreator, SetUserTimeLogDataActionCreator, SetUserTempoTimeLogDataActionCreator, AddNewTimeLogTaskActionCreator, AddNewTimeLogTempoActionCreator, DelTimeLogTempoActionCreator, UpdateTimeLogTempoActionCreator } from "../Actions/TimeLogAction";
 import { IProjectUserDataBack } from "../BackModels/IProjectUserDataBack";
 import { IWorkTimeLogDataBack } from "../BackModels/IWorkTimeLogDataBack";
-import { TaskManagementPreloader } from "../Consts";
+import { TaskManagementApiWorkTimeUrl, TaskManagementPreloader } from "../Consts";
 import { TimeLog } from "../Entity/State/TimeLog";
 
 export type AddNewUserToProject = (error: MainErrorObjectBack, data: IProjectUserDataBack) => void;
@@ -80,7 +80,7 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/worktimelog/create',
+            Url: `${G_PathToServer}${TaskManagementApiWorkTimeUrl}/create`,
             ContentType: 'body'
 
         });
@@ -121,7 +121,7 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/worktimelog/update',
+            Url: `${G_PathToServer}${TaskManagementApiWorkTimeUrl}/update`,
             ContentType: 'body'
 
         });
@@ -180,7 +180,7 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/worktimelog/delete'
+            Url: `${G_PathToServer}${TaskManagementApiWorkTimeUrl}/delete`
 
         });
     }
@@ -212,7 +212,7 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/worktimelog/task-time'
+            Url: `${G_PathToServer}${TaskManagementApiWorkTimeUrl}/task-time`
 
         });
     }
@@ -250,7 +250,7 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/worktimelog/project-time'
+            Url: `${G_PathToServer}${TaskManagementApiWorkTimeUrl}/project-time`
 
         });
     }
@@ -306,7 +306,7 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/worktimelog/user-time'
+            Url: `${G_PathToServer}${TaskManagementApiWorkTimeUrl}/user-time`
 
         });
     }

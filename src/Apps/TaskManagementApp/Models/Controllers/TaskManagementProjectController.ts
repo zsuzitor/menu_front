@@ -8,7 +8,7 @@ import { SetCurrentProjectStatusesActionCreator } from "../Actions/TaskStatusAct
 import { SetCurrentProjectUsersActionCreator } from "../Actions/UserActions";
 import { IOneProjectInListDataBack } from "../BackModels/IOneProjectInListDataBack";
 import { IOneProjectInfoDataBack } from "../BackModels/IOneProjectInfoDataBack";
-import { TaskManagementPreloader } from "../Consts";
+import { TaskManagementApiProjectUrl, TaskManagementPreloader } from "../Consts";
 import { OneProjectInList } from "../Entity/State/OneProjectInList";
 import { ProjectSprint } from "../Entity/State/ProjectSprint";
 import { ProjectUser } from "../Entity/State/ProjectUser";
@@ -45,8 +45,6 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
 
                 if (data?.result) {
                     dispatch(DeleteProjectActionCreator(projectId));
-
-
                 }
             });
         };
@@ -65,7 +63,7 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/project/delete-project'
+            Url: `${G_PathToServer}${TaskManagementApiProjectUrl}/delete-project`
 
         });
     }
@@ -130,7 +128,7 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/project/get-project-info'
+            Url: `${G_PathToServer}${TaskManagementApiProjectUrl}/get-project-info`
 
         });
     };
@@ -168,7 +166,7 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/project/add-new-project'
+            Url: `${G_PathToServer}${TaskManagementApiProjectUrl}/add-new-project`
 
         });
     };
@@ -206,7 +204,7 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/project/get-projects',
+            Url: `${G_PathToServer}${TaskManagementApiProjectUrl}/get-projects`,
 
         });
     };

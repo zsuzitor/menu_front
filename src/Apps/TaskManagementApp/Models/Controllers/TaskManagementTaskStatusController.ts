@@ -3,7 +3,7 @@ import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { CreateCurrentProjectTaskStatusActionCreator, DeleteCurrentProjectTaskStatusActionCreator, UpdateCurrentProjectTaskStatusActionCreator } from "../Actions/TaskStatusActions";
 import { IWorkTaskStatusDataBack } from "../BackModels/IWorkTaskStatusDataBack";
-import { TaskManagementPreloader } from "../Consts";
+import { TaskManagementApiStatusUrl, TaskManagementPreloader } from "../Consts";
 import { WorkTaskStatus } from "../Entity/State/WorkTaskStatus";
 
 
@@ -49,7 +49,7 @@ export class TaskManagementTaskStatusController implements ITaskManagementTaskSt
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/status/delete-status'
+            Url: `${G_PathToServer}${TaskManagementApiStatusUrl}/delete-status`
 
         });
     }
@@ -90,7 +90,7 @@ export class TaskManagementTaskStatusController implements ITaskManagementTaskSt
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/status/create-status'
+            Url: `${G_PathToServer}${TaskManagementApiStatusUrl}/create-status`
 
         });
     }
@@ -128,7 +128,7 @@ export class TaskManagementTaskStatusController implements ITaskManagementTaskSt
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/taskmanagement/status/update-status'
+            Url: `${G_PathToServer}${TaskManagementApiStatusUrl}/update-status`
 
         });
     }

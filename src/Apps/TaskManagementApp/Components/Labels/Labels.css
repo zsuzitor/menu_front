@@ -24,6 +24,10 @@
     flex-grow: 1;
 }
 
+.labels-page-main .one-label-info input {
+    flex-grow: 1;
+}
+
 .labels-page-main .label-buttons {
     display: flex;
     flex-grow: 0;

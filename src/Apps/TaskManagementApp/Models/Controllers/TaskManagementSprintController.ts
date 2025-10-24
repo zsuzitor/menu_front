@@ -9,6 +9,7 @@ import { AddTaskToSprintActionCreator, CreateSprintActionCreator, DeleteSprintAc
 import { OneTask } from "../Entity/State/OneTask";
 import { SprintCreate } from "../Entity/SprintCreate";
 import { SprintUpdate } from "../Entity/SprintUpdate";
+import { ServerResult } from "../../../../Models/AjaxLogic";
 
 
 
@@ -21,7 +22,10 @@ export type Update = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 
 export interface ITaskManagementSprintController {
-    GetForProjectRedux: (projectId: number) => void;
+    // GetForProjectRedux: (projectId: number) => void;
+    GetForProjectRedux: (projectId: number, dispatch: any) => Promise<any>;
+
+
     GetTasksRedux: (sprintId: number) => void;
     CreateSprintRedux: (req: SprintCreate) => void;
     UpdateSprintRedux: (req: SprintUpdate) => void;
@@ -38,41 +42,69 @@ export interface ITaskManagementSprintController {
 
 export class TaskManagementSprintController implements ITaskManagementSprintController {
 
+    GetForProjectRedux = async (projectId: number, dispatch: any): Promise<any> => {
+        this.preloader(true);
+        let backResult = await this.GetForProject(projectId);
+        this.preloader(false);
+        if (backResult) {
+            let dt = new GetProjectSprintsActionType();
+            // dt.projectId = projectId;
+            dt.data = backResult.map(x => new ProjectSprint().FillByIProjectSprintDataBack(x));
+            dispatch(GetProjectSprintsActionCreator(dt));
 
+        }
 
-    GetForProjectRedux = (projectId: number) => {
-        return (dispatch: any, getState: any) => {
-            this.preloader(true);
-            this.GetForProject(projectId, (error: MainErrorObjectBack, data: IProjectSprintDataBack[]) => {
-                this.preloader(false);
-
-
-                if (data) {
-                    let dt = new GetProjectSprintsActionType();
-                    // dt.projectId = projectId;
-                    dt.data = data.map(x => new ProjectSprint().FillByIProjectSprintDataBack(x));
-                    dispatch(GetProjectSprintsActionCreator(dt));
-
-                }
-            });
-        };
     }
 
-    GetForProject = (projectId: number, onSuccess: GetSprints) => {
+    GetForProject = async (projectId: number): Promise<IProjectSprintDataBack[]> => {
         let data = {
             "projectId": projectId,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        let res = await G_AjaxHelper.GoAjaxRequest({
             Data: data,
             Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/get-for-project`
 
-        });
+        }) as ServerResult<any>;
+        return res.Data;
     };
+
+    // GetForProjectRedux = (projectId: number) => {
+    //     return (dispatch: any, getState: any) => {
+    //         this.preloader(true);
+    //         this.GetForProject(projectId, (error: MainErrorObjectBack, data: IProjectSprintDataBack[]) => {
+    //             this.preloader(false);
+
+
+    //             if (data) {
+    //                 let dt = new GetProjectSprintsActionType();
+    //                 // dt.projectId = projectId;
+    //                 dt.data = data.map(x => new ProjectSprint().FillByIProjectSprintDataBack(x));
+    //                 dispatch(GetProjectSprintsActionCreator(dt));
+
+    //             }
+    //         });
+    //     };
+    // }
+
+    // GetForProject = (projectId: number, onSuccess: GetSprints) => {
+    //     let data = {
+    //         "projectId": projectId,
+    //     };
+    //     G_AjaxHelper.GoAjaxRequest({
+    //         Data: data,
+    //         Type: ControllerHelper.GetHttp,
+    //         FuncSuccess: (xhr, status, jqXHR) => {
+    //             this.mapWithResult(onSuccess)(xhr, status, jqXHR);
+    //         },
+    //         FuncError: (xhr, status, error) => { },
+    //         Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/get-for-project`
+
+    //     });
+    // };
 
 
     GetTasksRedux = (sprintId: number) => {

@@ -34,7 +34,8 @@ const mapStateToProps = (state: AppState, ownProps: ISprintsOwnProps) => {
 const mapDispatchToProps = (dispatch: any, ownProps: ISprintsOwnProps) => {
     let res = {} as ISprintsDispatchToProps;
     res.LoadSprints = (projectId: number) => {
-        dispatch(window.G_TaskManagementSprintController.GetForProjectRedux(projectId));
+        // dispatch(window.G_TaskManagementSprintController.GetForProjectRedux(projectId));
+        window.G_TaskManagementSprintController.GetForProjectRedux(projectId, dispatch);
     };
     res.ClearSprints = (projectId: number) => {
         let dt = new GetProjectSprintsActionType();

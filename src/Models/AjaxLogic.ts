@@ -29,6 +29,10 @@ import { AlertData } from "./Entity/AlertData";
 
 ///
 
+export declare interface ServerResult<T> {
+    Error?: MainErrorObjectBack;
+    Data?: T;
+}
 
 
 export declare interface IAjaxInputObject {
@@ -205,13 +209,19 @@ export class FetchHelper implements IAjaxHelper {
         if (successFromInner) {
             return resultFromInner;
         }
-        else if (response.ok) {
+
+        if (response.ok) {
             obj.FuncSuccess && obj.FuncSuccess(responseResult, null, null);
-            return responseResult;//todo возможно надо отдавать всегда
+            return { Data:responseResult } as ServerResult<any>;
+        }
+        else {
+            obj.FuncError && obj.FuncError(responseResult, null, null);
+            return { Error:responseResult } as ServerResult<any>;
+
         }
 
 
-        return null;
+        return responseResult;
 
     }
 

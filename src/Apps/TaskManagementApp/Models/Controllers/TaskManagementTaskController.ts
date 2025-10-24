@@ -4,7 +4,7 @@ import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelpe
 import { AddLoadTriggerActionCreator, UpdateTaskActionCreator, LoadTasksActionCreator, DeleteTaskActionCreator, LoadTaskActionCreator, UpdateTaskNameActionCreator, UpdateTaskDescriptionActionCreator, UpdateTaskStatusActionCreator, UpdateTaskExecutorActionCreator } from "../Actions/TaskActions";
 import { ILoadWorkTasksResultDataBack } from "../BackModels/ILoadWorkTasksResultDataBack";
 import { IProjectTaskDataBack } from "../BackModels/IProjectTaskDataBack";
-import { TaskManagementApiTaskUrl, TaskManagementPreloader, TaskManagementTaskAddNewUrl, TaskManagementTaskDeleteUrl, TaskManagementTaskGetUrl, TaskManagementTasksGetUrl, TaskManagementTaskUpdateDescriptionUrl, TaskManagementTaskUpdateExecutorUrl, TaskManagementTaskUpdateNameUrl, TaskManagementTaskUpdateStatusUrl, TaskManagementTaskUpdateUrl } from "../Consts";
+import { TaskManagementApiTaskUrl, TaskManagementPreloader, TaskManagementTaskAddNewUrl, TaskManagementTaskCopyUrl, TaskManagementTaskDeleteUrl, TaskManagementTaskGetUrl, TaskManagementTasksGetUrl, TaskManagementTaskUpdateDescriptionUrl, TaskManagementTaskUpdateExecutorUrl, TaskManagementTaskUpdateNameUrl, TaskManagementTaskUpdateStatusUrl, TaskManagementTaskUpdateUrl } from "../Consts";
 import { ITaskFilter } from "../Entity/ITaskFilter";
 import { LoadWorkTasksResult, ProjectTaskData } from "../Entity/LoadWorkTasksResult";
 import { OneTask } from "../Entity/State/OneTask";
@@ -24,6 +24,7 @@ export interface ITaskManagementTaskController {
     LoadTasksRedux: (taskFilter: ITaskFilter) => void;
     LoadTaskRedux: (taskId: number) => void;
     DeleteTaskRedux: (id: number) => void;
+    CopyTaskUI: (id: number) => Promise<number>;
 
 
     UpdateTaskNameRedux: (id: number, text: string) => void;
@@ -368,6 +369,29 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
 
         });
     };
+
+    CopyTaskUI = async (id: number): Promise<number> => {
+        this.preloader(true);
+        let backResult = await this.CopyTaskAsync(id);
+        this.preloader(false);
+        return backResult.Id;
+    }
+
+    CopyTaskAsync = async (id: number): Promise<IProjectTaskDataBack> => {
+        let data = {
+            "id": id,
+        };
+        let backResult = await G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.PutHttp,
+            FuncSuccess: (xhr, status, jqXHR) => { },
+            FuncError: (xhr, status, error) => { },
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTaskCopyUrl}`
+        });
+        return backResult as IProjectTaskDataBack;
+    };
+
+
 
     mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
         return new ControllerHelper().MapWithResult(onSuccess);

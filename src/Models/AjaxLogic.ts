@@ -161,7 +161,7 @@ export class FetchHelper implements IAjaxHelper {
             else {
                 body = JSON.stringify(obj.Data);
                 headers = {
-                    'Content-Type': 'application/json' // Добавьте этот заголовок
+                    'Content-Type': 'application/json'
                 }
             }
 
@@ -206,7 +206,7 @@ export class FetchHelper implements IAjaxHelper {
             return resultFromInner;
         }
         else if (response.ok) {
-            obj.FuncSuccess(responseResult, null, null);
+            obj.FuncSuccess && obj.FuncSuccess(responseResult, null, null);
             return responseResult;//todo возможно надо отдавать всегда
         }
 

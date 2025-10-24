@@ -16,6 +16,7 @@ import SaveCancelInputMultiSelect from '../../../../components/Body/SaveCancelIn
 import SaveCancelInputText from '../../../../components/Body/SaveCancelInput/SaveCancelInputText';
 import SaveCancelInputSelect from '../../../../components/Body/SaveCancelInput/SaveCancelInputSelect';
 import SaveCancelInputMultiSelectWithSearch from '../../../../components/Body/SaveCancelInput/SaveCancelInputMultiSelectWithSearch';
+import RouteBuilder from '../../Models/BL/RouteBuilder';
 
 
 require('./OneWorkTaskDetail.css');
@@ -103,6 +104,12 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
         }
 
         props.DeleteTask(props.Task.Id);
+    };
+
+    const copyTask = async () => {
+        let newTaskId = await props.CopyTask(props.Task.Id);
+        const taskUrl = new RouteBuilder().TaskUrl(props.CurrentProjectId, newTaskId);
+        navigate(taskUrl);
     };
 
     const addComment = (val: string) => {
@@ -270,6 +277,10 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
 
             </div>
             <div className='one-work-task-detail-buttons'>
+                <div className='task-button' onClick={() => copyTask()}>
+                    <img className='persent-100-width-height' src={G_PathToBaseImages + 'copy.png'}
+                        alt="Delete" title='Скопировать задачу' />
+                </div>
                 <div className='task-button' onClick={() => deleteTask()}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
                         alt="Delete" title='Удалить задачу' />

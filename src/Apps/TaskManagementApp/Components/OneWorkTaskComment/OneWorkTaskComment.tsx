@@ -81,7 +81,7 @@ const OneWorkTaskComment = (props: IOneWorkTaskCommentProps) => {
             {commentOwner ? <>
                 <div className='work-task-comment-delete-button' onClick={() => deleteComment()}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
-                        alt="Delete" title='удалить задачу' />
+                        alt="Delete" title='Удалить комментарий' />
                 </div>
                 <div className='work-task-comment-edit-button' onClick={() => setEditMode(st => true)}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'edit-1.svg'}

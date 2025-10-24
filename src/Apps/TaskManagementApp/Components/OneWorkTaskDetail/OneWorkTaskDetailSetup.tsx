@@ -26,6 +26,7 @@ interface IOneWorkTaskDetailStateToProps {
 interface IOneWorkTaskDetailDispatchToProps {
     // UpdateTask: (task: OneTask) => void;
     DeleteTask: (id: number) => void;
+    CopyTask: (id: number) => Promise<number>;
     LoadTaskTimeLogs: (id: number) => void;
     UpdateTaskName: (id: number, text: string) => void;
     UpdateTaskDescription: (id: number, text: string) => void;
@@ -66,6 +67,11 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps)
 
     res.DeleteTask = (taskId: number) => {
         dispatch(window.G_TaskManagementTaskController.DeleteTaskRedux(taskId));
+    };
+
+    res.CopyTask = async (taskId: number): Promise<number> => {
+        return await window.G_TaskManagementTaskController.CopyTaskUI(taskId)
+
     };
 
     res.AddComment = (taskId: number, text: string) => {

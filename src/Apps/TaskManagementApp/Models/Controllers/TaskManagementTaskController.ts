@@ -6,7 +6,7 @@ import { ILoadWorkTasksResultDataBack } from "../BackModels/ILoadWorkTasksResult
 import { IProjectTaskDataBack } from "../BackModels/IProjectTaskDataBack";
 import { TaskManagementApiTaskUrl, TaskManagementPreloader, TaskManagementTaskAddNewUrl, TaskManagementTaskCopyUrl, TaskManagementTaskDeleteUrl, TaskManagementTaskGetUrl, TaskManagementTasksGetUrl, TaskManagementTaskUpdateDescriptionUrl, TaskManagementTaskUpdateExecutorUrl, TaskManagementTaskUpdateNameUrl, TaskManagementTaskUpdateStatusUrl, TaskManagementTaskUpdateUrl } from "../Consts";
 import { ITaskFilter } from "../Entity/ITaskFilter";
-import { LoadWorkTasksResult, ProjectTaskData } from "../Entity/LoadWorkTasksResult";
+import { LoadWorkTasksResult } from "../Entity/LoadWorkTasksResult";
 import { OneTask } from "../Entity/State/OneTask";
 
 
@@ -25,6 +25,8 @@ export interface ITaskManagementTaskController {
     LoadTaskRedux: (taskId: number) => void;
     DeleteTaskRedux: (id: number) => void;
     CopyTaskUI: (id: number) => Promise<number>;
+    AddTaskRelationUI: (mainTaskid: number, subTaskid: number, type: number) => Promise<number>;
+    DeleteTaskRelationUI: (id: number) => Promise<number>;
 
 
     UpdateTaskNameRedux: (id: number, text: string) => void;
@@ -313,8 +315,8 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
                 }
 
                 if (data) {
-                    let dt = new ProjectTaskData();
-                    dt.FillByBackModel(data);
+                    let dt = new OneTask();
+                    dt.FillByIProjectTaskDataBack(data);
                     dispatch(LoadTaskActionCreator(dt));
                 }
             });

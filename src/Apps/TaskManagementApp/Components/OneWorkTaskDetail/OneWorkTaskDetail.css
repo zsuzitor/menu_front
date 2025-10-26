@@ -221,3 +221,32 @@
     font-weight: bold;
     font-size: 14px;
 }
+
+.add-relation-plus-icon {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.add-relation-btn {
+
+    background-color: #6e98cc;
+    color: white;
+    border: none;
+    border-radius: 18px;
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.2s;
+}
+
+
+.add-relation-btn:hover {
+    background-color: #5b8cca;
+}
+
+.one-work-task-detail-relations-block {}
+
+.one-work-task-detail-relations-block .one-relation {}

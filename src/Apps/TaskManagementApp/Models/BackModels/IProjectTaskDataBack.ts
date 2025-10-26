@@ -1,4 +1,5 @@
 import { IOneWorkTaskCommentDataBack } from "./IOneWorkTaskCommentDataBack";
+import { IProjectTaskRelationDataBack } from "./IProjectTaskRelationDataBack";
 
 export interface IProjectTaskDataBack {
     Id: number;
@@ -12,5 +13,6 @@ export interface IProjectTaskDataBack {
     Comments: IOneWorkTaskCommentDataBack[];
     SprintId: number[];
     LabelsId: number[];
+    Relations: IProjectTaskRelationDataBack[];
 
 }

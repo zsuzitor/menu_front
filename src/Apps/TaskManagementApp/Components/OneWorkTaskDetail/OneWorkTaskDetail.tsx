@@ -17,6 +17,7 @@ import SaveCancelInputText from '../../../../components/Body/SaveCancelInput/Sav
 import SaveCancelInputSelect from '../../../../components/Body/SaveCancelInput/SaveCancelInputSelect';
 import SaveCancelInputMultiSelectWithSearch from '../../../../components/Body/SaveCancelInput/SaveCancelInputMultiSelectWithSearch';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
+import { TaskRelation } from '../../Models/Entity/State/TaskRelation';
 
 
 require('./OneWorkTaskDetail.css');
@@ -36,6 +37,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     const [taskExecutorEditable, setTaskExecutorEditable] = useState(false);
 
     const [showAddWorkTimeNew, setShowAddWorkTimeNew] = useState(false);
+    const [showAddRelationNew, setShowAddRelationNew] = useState(false);
     const [showAddWorkTimeBlock, setShowAddWorkTimeBlock] = useState(false);
 
 
@@ -226,6 +228,62 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
         </div>
     }
 
+    const GetRelationAnotherId = (relation: TaskRelation) => {
+        if (relation.MainWorkTaskId == props.Task.Id) {
+            return relation.SubWorkTaskId;
+        }
+        return relation.MainWorkTaskId;
+    }
+    const GetRelationWord = (relation: TaskRelation) => {
+        if (relation.RelationType == 1) {
+            if (relation.MainWorkTaskId == props.Task.Id) {
+                return 'Главная для ' + GetRelationAnotherId(relation);
+            }
+            else {
+                return 'Зависимая для ' + GetRelationAnotherId(relation);
+            }
+        }
+        if (relation.RelationType == 2) {
+            return 'Связана с ' + GetRelationAnotherId(relation);
+        }
+
+        return 'Связана с ' + GetRelationAnotherId(relation);
+    }
+
+    const renderRelations = () => {
+        return <div className='one-work-task-detail-relations-block'>
+            {showAddRelationNew ? <AdditionalWindow CloseWindow={() => setShowAddRelationNew(false)}
+                IsHeightWindow={false}
+                Title='Связь'
+                InnerContent={() => <AddWorkTimeLog1
+                    Close={() => setShowAddRelationNew(false)}
+                    TaskId={props.Task.Id}
+                    DefaultDate={null}
+                    CreateTimeLog={props.CreateTimeLog}
+                />}></AdditionalWindow> : <></>}
+            <p>Зависимости</p>
+            <div><button className='add-relation-btn'
+                onClick={() => setShowAddRelationNew(true)}>
+                <span className='add-relation-plus-icon'>+</span>
+                <span>Добавить связь</span>
+            </button></div>
+            {props.Task.Relations.map(x => {
+                const taskUrl = new RouteBuilder().TaskUrl(props.CurrentProjectId, GetRelationAnotherId(x));
+                return <div key={x.Id} className='one-relation'>
+                    <a href={taskUrl} onClick={(e) => {
+                        e.preventDefault();
+                        navigate(taskUrl);
+                    }}>{GetRelationWord(x)}</a>
+                    <div className='task-button' onClick={() => deleteTask()}>
+                        <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
+                            alt="Delete" title='Удалить Связь' />
+                    </div>
+                </div>
+
+            })}
+        </div>
+    }
+
 
     if (!props.Task) {
         return <div>Загружаем данные</div>
@@ -279,7 +337,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
             <div className='one-work-task-detail-buttons'>
                 <div className='task-button' onClick={() => copyTask()}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'copy.png'}
-                        alt="Delete" title='Скопировать задачу' />
+                        alt="Copy" title='Скопировать задачу' />
                 </div>
                 <div className='task-button' onClick={() => deleteTask()}>
                     <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
@@ -417,6 +475,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
         </div>
         <div>
             {renderTime()}
+            {renderRelations()}
         </div>
         {renderComments()}
     </div>

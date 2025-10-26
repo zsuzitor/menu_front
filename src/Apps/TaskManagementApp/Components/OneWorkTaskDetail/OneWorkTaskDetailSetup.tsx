@@ -6,6 +6,7 @@ import { WorkTaskStatus } from "../../Models/Entity/State/WorkTaskStatus";
 import { ClearCurrentTaskStateActionCreator, SetCurrentTaskIdActionCreator } from "../../Models/Actions/TaskActions";
 import { ProjectSprint } from "../../Models/Entity/State/ProjectSprint";
 import { TaskLabel } from "../../Models/Entity/State/TaskLabel";
+import { TaskRelation } from "../../Models/Entity/State/TaskRelation";
 
 
 interface IOneWorkTaskDetailOwnProps {

@@ -1,7 +1,7 @@
 
 import { IProjectTaskDataBack } from "../../BackModels/IProjectTaskDataBack";
-import { ProjectTaskData } from "../LoadWorkTasksResult";
 import { OneWorkTaskComment } from "../OneTaskWorkComment";
+import { TaskRelation } from "./TaskRelation";
 import { TimeLog } from "./TimeLog";
 
 
@@ -18,6 +18,7 @@ export class OneTask {
 
     Description: string;
     Comments: OneWorkTaskComment[];
+    Relations: TaskRelation[];
     TimeLogs: TimeLog[];
 
     constructor() {
@@ -27,21 +28,22 @@ export class OneTask {
         this.LabelId = [];
     }
 
-    FillByProjectTaskData(data: ProjectTaskData): OneTask {
-        this.Id = data.Id;
-        this.Name = data.Name;
-        this.CreatorId = data.CreatorId;
-        this.ExecutorId = data.ExecutorId;
-        this.StatusId = data.StatusId;
-        this.CreateDate = data.CreateDate;
-        this.LastUpdateDate = data.LastUpdateDate;
-        this.Description = data.Description;
-        this.Comments = data.Comments
-            .map(x => new OneWorkTaskComment().FillByOneWorkTaskComment(x));
-        this.SprintId = data.SprintId;
-        this.LabelId = data.LabelId;
-        return this;
-    }
+    // FillByProjectTaskData(data: ProjectTaskData): OneTask {
+    //     this.Id = data.Id;
+    //     this.Name = data.Name;
+    //     this.CreatorId = data.CreatorId;
+    //     this.ExecutorId = data.ExecutorId;
+    //     this.StatusId = data.StatusId;
+    //     this.CreateDate = data.CreateDate;
+    //     this.LastUpdateDate = data.LastUpdateDate;
+    //     this.Description = data.Description;
+    //     this.Comments = data.Comments
+    //         .map(x => new OneWorkTaskComment().FillByOneWorkTaskComment(x));
+    //     this.SprintId = data.SprintId;
+    //     this.LabelId = data.LabelId;
+    //     this.Relations = data.Relations;
+    //     return this;
+    // }
 
 
     FillByIProjectTaskDataBack(data: IProjectTaskDataBack): OneTask {
@@ -57,6 +59,8 @@ export class OneTask {
             map(x => new OneWorkTaskComment().FillByBackModel(x));
         this.SprintId = data.SprintId;
         this.LabelId = data.LabelsId;
+        this.Relations = data.Relations.
+            map(x => new TaskRelation().FillByDataBack(x));
 
         return this;
     }

@@ -1,4 +1,4 @@
-import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
+import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { DeleteProjectUserActionCreator, AddProjectUserActionCreator, ChangeProjectUserActionCreator } from "../Actions/UserActions";
@@ -8,8 +8,8 @@ import { ProjectUser } from "../Entity/State/ProjectUser";
 
 export type AddNewUserToProject = (error: MainErrorObjectBack, data: IProjectUserDataBack) => void;
 
-export type ChangeUser = (error: MainErrorObjectBack, data: BoolResultBack) => void;
-export type DeleteUser = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type ChangeUser = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
+export type DeleteUser = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
 
 
 export interface ITaskManagementUserController {
@@ -25,13 +25,13 @@ export class TaskManagementUserController implements ITaskManagementUserControll
     DeleteProjectUserRedux = (id: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteProjectUser(id, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteProjectUser(id, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
                 }
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(DeleteProjectUserActionCreator(id));
                 }
             });
@@ -99,13 +99,13 @@ export class TaskManagementUserController implements ITaskManagementUserControll
     ChangeProjectUserRedux = (user: ProjectUser) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.ChangeProjectUser(user, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.ChangeProjectUser(user, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
                 }
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(ChangeProjectUserActionCreator(user));
                 }
             });

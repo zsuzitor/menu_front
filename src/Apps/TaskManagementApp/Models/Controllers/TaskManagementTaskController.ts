@@ -1,4 +1,4 @@
-import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
+import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { AddLoadTriggerActionCreator, UpdateTaskActionCreator, LoadTasksActionCreator, DeleteTaskActionCreator, LoadTaskActionCreator, UpdateTaskNameActionCreator, UpdateTaskDescriptionActionCreator, UpdateTaskStatusActionCreator, UpdateTaskExecutorActionCreator } from "../Actions/TaskActions";
@@ -11,11 +11,11 @@ import { OneTask } from "../Entity/State/OneTask";
 
 
 export type AddNewProjectTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => void;
-export type UpdateTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type UpdateTask = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
 export type LoadTasks = (error: MainErrorObjectBack, data: ILoadWorkTasksResultDataBack) => void;
 export type LoadTask = (error: MainErrorObjectBack, data: IProjectTaskDataBack) => void;
-export type DeleteTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
-export type UpdatePartTask = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type DeleteTask = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
+export type UpdatePartTask = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
 
 
 export interface ITaskManagementTaskController {
@@ -41,13 +41,13 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
     UpdateTaskNameRedux = (id: number, text: string) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateTaskName(id, text, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.UpdateTaskName(id, text, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
                 }
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(UpdateTaskNameActionCreator({ Id: id, Text: text }));
 
                 }
@@ -77,13 +77,13 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
     UpdateTaskDescriptionRedux = (id: number, text: string) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateTaskDescription(id, text, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.UpdateTaskDescription(id, text, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
                 }
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(UpdateTaskDescriptionActionCreator({ Id: id, Text: text }));
 
                 }
@@ -112,13 +112,13 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
     UpdateTaskStatusRedux = (id: number, idStatus: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateTaskStatus(id, idStatus, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.UpdateTaskStatus(id, idStatus, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
                 }
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(UpdateTaskStatusActionCreator({ Id: id, IdStatus: idStatus }));
 
                 }
@@ -147,13 +147,13 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
     UpdateTaskExecutorRedux = (id: number, personId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateTaskExecutor(id, personId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.UpdateTaskExecutor(id, personId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
                 }
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(UpdateTaskExecutorActionCreator({ Id: id, PersonId: personId }));
 
                 }
@@ -225,13 +225,13 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
     UpdateTaskRedux = (task: OneTask) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateTask(task, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.UpdateTask(task, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
                 }
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(UpdateTaskActionCreator(task));
                 }
             });
@@ -341,13 +341,13 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
     DeleteTaskRedux = (id: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteTask(id, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteTask(id, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
                 }
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(DeleteTaskActionCreator(id));
                 }
             });

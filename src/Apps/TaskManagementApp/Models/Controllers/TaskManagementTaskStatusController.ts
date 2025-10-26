@@ -1,4 +1,4 @@
-import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
+import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { CreateCurrentProjectTaskStatusActionCreator, DeleteCurrentProjectTaskStatusActionCreator, UpdateCurrentProjectTaskStatusActionCreator } from "../Actions/TaskStatusActions";
@@ -8,7 +8,7 @@ import { WorkTaskStatus } from "../Entity/State/WorkTaskStatus";
 
 
 
-export type DeleteStatus = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type DeleteStatus = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
 export type CreateStatus = (error: MainErrorObjectBack, data: IWorkTaskStatusDataBack) => void;
 
 
@@ -23,13 +23,13 @@ export class TaskManagementTaskStatusController implements ITaskManagementTaskSt
     DeleteStatusRedux = (statusId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteStatus(statusId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteStatus(statusId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
                 }
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(DeleteCurrentProjectTaskStatusActionCreator(statusId));
                 }
             });

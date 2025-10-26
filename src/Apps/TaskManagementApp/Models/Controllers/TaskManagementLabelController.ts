@@ -1,4 +1,4 @@
-import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
+import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { AddLabelToTaskActionCreator, CreateProjectLabelActionCreator, DeleteLabelFromTaskActionCreator, DeleteLabelFromTaskActionDataType, DeleteProjectLabelActionCreator, GetTaskLabelsActionCreator, UpdateProjectLabelActionCreator, UpdateTaskLabelActionDataType, UpdateTaskLabelsActionCreator, UpdateTaskLabelsActionDataType } from "../Actions/LabelActions";
@@ -9,7 +9,7 @@ import { TaskLabel } from "../Entity/State/TaskLabel";
 
 export type GetLabels = (error: MainErrorObjectBack, data: ITaskLabelDataBack[]) => void;
 export type CreateLabel = (error: MainErrorObjectBack, data: ITaskLabelDataBack) => void;
-export type Boolres = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type Boolres = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
 
 export interface ITaskManagementLabelController {
     GetForProjectRedux: (projectId: number) => void;
@@ -124,10 +124,10 @@ export class TaskManagementLabelController implements ITaskManagementLabelContro
     DeleteLabelRedux = (id: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteLabel(id, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteLabel(id, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(DeleteProjectLabelActionCreator(id));
                 }
             });
@@ -156,10 +156,10 @@ export class TaskManagementLabelController implements ITaskManagementLabelContro
     UpdateTaskLabelsRedux = (taskId: number, labelId: number[]) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateTaskLabels(taskId, labelId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.UpdateTaskLabels(taskId, labelId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
 
-                if (data?.result) {
+                if (data?.Result) {
                     let dt = new UpdateTaskLabelsActionDataType();
                     dt.LabelId = labelId;
                     dt.TaskId = taskId;
@@ -193,10 +193,10 @@ export class TaskManagementLabelController implements ITaskManagementLabelContro
     AddLabelToTaskRedux = (taskId: number, labelId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.AddLabelToTask(taskId, labelId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.AddLabelToTask(taskId, labelId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
 
-                if (data?.result) {
+                if (data?.Result) {
                     let dt = new UpdateTaskLabelActionDataType();
                     dt.LabelId = labelId;
                     dt.TaskId = taskId;
@@ -229,10 +229,10 @@ export class TaskManagementLabelController implements ITaskManagementLabelContro
     DeleteLabelFromTaskRedux = (taskId: number, labelId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteLabelFromTask(taskId, labelId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteLabelFromTask(taskId, labelId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
 
-                if (data?.result) {
+                if (data?.Result) {
                     let dt = new DeleteLabelFromTaskActionDataType();
                     dt.LabelId = labelId;
                     dt.TaskId = taskId;

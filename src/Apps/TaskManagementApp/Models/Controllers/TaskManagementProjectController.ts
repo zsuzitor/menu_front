@@ -1,4 +1,4 @@
-import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
+import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { GetTaskLabelsActionCreator } from "../Actions/LabelActions";
@@ -20,7 +20,7 @@ import { WorkTaskStatus } from "../Entity/State/WorkTaskStatus";
 export type ListOfCardOnReturn = (error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => void;
 export type CreateNewProject = (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => void;
 export type GetProjectInfo = (error: MainErrorObjectBack, data: IOneProjectInfoDataBack) => void;
-export type DeleteProject = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type DeleteProject = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
 
 export interface ITaskManagementProjectController {
     GetUserProjectsRedux: () => void;
@@ -37,13 +37,13 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
     DeleteProjectRedux = (projectId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteProject(projectId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteProject(projectId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
                 }
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(DeleteProjectActionCreator(projectId));
                 }
             });

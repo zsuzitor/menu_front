@@ -1,4 +1,4 @@
-import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
+import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { TaskManagementApiSprintUrl, TaskManagementPreloader } from "../Consts";
@@ -16,8 +16,8 @@ import { ServerResult } from "../../../../Models/AjaxLogic";
 export type GetSprints = (error: MainErrorObjectBack, data: IProjectSprintDataBack[]) => void;
 export type GetTasks = (error: MainErrorObjectBack, data: IProjectTaskDataBack[]) => void;
 export type CreateSprint = (error: MainErrorObjectBack, data: IProjectSprintDataBack) => void;
-export type Delete = (error: MainErrorObjectBack, data: BoolResultBack) => void;
-export type Update = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type Delete = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
+export type Update = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
 
 
 
@@ -216,10 +216,10 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
     DeleteSprintRedux = (id: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteSprint(id, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteSprint(id, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
 
-                if (data.result) {
+                if (data.Result) {
                     dispatch(DeleteSprintActionCreator(id));
                 }
             });
@@ -245,11 +245,11 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
     AddTaskToSprintRedux = (sprintId: number, taskId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.AddTaskToSprint(sprintId, taskId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.AddTaskToSprint(sprintId, taskId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
 
 
-                if (data?.result) {
+                if (data?.Result) {
                     let dt = new TaskIdWithSprintIdActionType();
                     dt.sprintId = sprintId;
                     dt.taskId = taskId;
@@ -280,10 +280,10 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
     DeleteTaskFromSprintRedux = (taskId: number, sprintId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteTaskFromSprint(taskId, sprintId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteTaskFromSprint(taskId, sprintId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
 
-                if (data?.result) {
+                if (data?.Result) {
                     let dt = new TaskIdWithSprintIdActionType();
                     dt.sprintId = null;
                     dt.taskId = taskId;
@@ -315,10 +315,10 @@ export class TaskManagementSprintController implements ITaskManagementSprintCont
     UpdateTaskFromSprintRedux = (taskId: number, sprintId: number[]) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateTaskFromSprint(taskId, sprintId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.UpdateTaskFromSprint(taskId, sprintId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
 
-                if (data?.result) {
+                if (data?.Result) {
                     let dt = new TaskIdWithSprintIdsActionType();
                     dt.sprintId = sprintId;
                     dt.taskId = taskId;

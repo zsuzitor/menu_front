@@ -1,4 +1,4 @@
-import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
+import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { IOneWorkTaskCommentDataBack } from "../BackModels/IOneWorkTaskCommentDataBack";
@@ -14,8 +14,8 @@ import { TaskManagementApiCommentUrl, TaskManagementPreloader } from "../Consts"
 
 export type LoadComments = (error: MainErrorObjectBack, data: IOneWorkTaskCommentDataBack[]) => void;
 export type AddComment = (error: MainErrorObjectBack, data: IOneWorkTaskCommentDataBack) => void;
-export type DeleteComment = (error: MainErrorObjectBack, data: BoolResultBack) => void;
-export type UpdateComment = (error: MainErrorObjectBack, data: BoolResultBack) => void;
+export type DeleteComment = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
+export type UpdateComment = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
 
 
 export interface ITaskManagementCommentController {
@@ -36,13 +36,13 @@ export class TaskManagementCommentController implements ITaskManagementCommentCo
     UpdateCommentRedux = (comment: CommentUpdate) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateComment(comment.Id, comment.Text, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.UpdateComment(comment.Id, comment.Text, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
                 }
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(UpdateCommentActionCreator(comment));
 
                 }
@@ -71,13 +71,13 @@ export class TaskManagementCommentController implements ITaskManagementCommentCo
     DeleteCommentRedux = (dataForDel: CommentDelete) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteComment(dataForDel.Id, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteComment(dataForDel.Id, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
                 }
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(DeleteCommentActionCreator(dataForDel));
                 }
             });

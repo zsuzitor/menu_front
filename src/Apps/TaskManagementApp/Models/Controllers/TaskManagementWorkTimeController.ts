@@ -1,4 +1,4 @@
-import { BoolResultBack } from "../../../../Models/BackModel/BoolResultBack";
+import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { AppState } from "../../../../Models/Entity/State/AppState";
@@ -131,13 +131,13 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
     DeleteTimeTempoLogRedux = (timeId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteTimeLog(timeId, (error: MainErrorObjectBack, data: BoolResultBack) => {
+            this.DeleteTimeLog(timeId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
                 }
 
-                if (data?.result) {
+                if (data?.Result) {
                     dispatch(DelTimeLogTempoActionCreator(timeId));
                 }
             });
@@ -169,7 +169,7 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
         };
     }
 
-    DeleteTimeLog = (timeId: number, onSuccess: (error: MainErrorObjectBack, data: BoolResultBack) => void) => {
+    DeleteTimeLog = (timeId: number, onSuccess: (error: MainErrorObjectBack, data: BoolResultBackNew) => void) => {
         let data = {
             "id": timeId,
         };

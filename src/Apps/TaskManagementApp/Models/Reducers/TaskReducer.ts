@@ -4,11 +4,12 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { AppAction } from '../../../../Models/Actions/Actions';
 import { AppState } from '../../../../Models/Entity/State/AppState';
-import { AddTaskToProjectActionName, AddLoadTriggerActionName, UpdateTaskActionName, LoadTasksActionName, DeleteTaskActionName, SetFilterTaskCreatorActionName, SetFilterTaskExecutorActionName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskStatusActionName, SetFilterTaskActionName, SetCurrentTaskIdActionName, LoadTaskActionName, ClearCurrentTaskStateActionName, UpdateTaskNameActionName, UpdateTaskNameActionParam, UpdateTaskDescriptionActionName, UpdateTaskDescriptionActionParam, UpdateTaskStatusActionName, UpdateTaskStatusActionParam, UpdateTaskExecutorActionName, UpdateTaskExecutorActionParam, SetFilterTaskSprintActionName, SetFilterTaskLabelActionName } from '../Actions/TaskActions';
-import { ProjectTaskData, LoadWorkTasksResult } from '../Entity/LoadWorkTasksResult';
+import { AddTaskToProjectActionName, AddLoadTriggerActionName, UpdateTaskActionName, LoadTasksActionName, DeleteTaskActionName, SetFilterTaskCreatorActionName, SetFilterTaskExecutorActionName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskStatusActionName, SetFilterTaskActionName, SetCurrentTaskIdActionName, LoadTaskActionName, ClearCurrentTaskStateActionName, UpdateTaskNameActionName, UpdateTaskNameActionParam, UpdateTaskDescriptionActionName, UpdateTaskDescriptionActionParam, UpdateTaskStatusActionName, UpdateTaskStatusActionParam, UpdateTaskExecutorActionName, UpdateTaskExecutorActionParam, SetFilterTaskSprintActionName, SetFilterTaskLabelActionName, AddTaskRelationStateActionName, DeleteTaskRelationStateActionName } from '../Actions/TaskActions';
+import {  LoadWorkTasksResult } from '../Entity/LoadWorkTasksResult';
 import { OneTask } from '../Entity/State/OneTask';
 import { TasksFilter } from '../Entity/State/TasksFilter';
 import { Helper } from '../../../../Models/BL/Helper';
+import { TaskRelation } from '../Entity/State/TaskRelation';
 
 
 export function TaskManagementTaskReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
@@ -16,10 +17,8 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
         case AddTaskToProjectActionName:
             {
                 let newState = cloneDeep(state);
-                let payload = action.payload as ProjectTaskData;
-                let tsk = new OneTask();
-                tsk.FillByProjectTaskData(payload);
-                newState.TaskManagementApp.CurrentProjectTasks.push(tsk);
+                let payload = action.payload as OneTask;
+                newState.TaskManagementApp.CurrentProjectTasks.push(payload);
                 return newState;
             }
         case AddLoadTriggerActionName:
@@ -51,11 +50,7 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as LoadWorkTasksResult;
-                newState.TaskManagementApp.CurrentProjectTasks = payload.Tasks.map(x => {
-                    let tsk = new OneTask();
-                    tsk.FillByProjectTaskData(x);
-                    return tsk;
-                });
+                newState.TaskManagementApp.CurrentProjectTasks = payload.Tasks;
                 newState.TaskManagementApp.CurrentProjectTasksAllCount = payload.TasksCount;
                 return newState;
             }
@@ -141,8 +136,8 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
         case LoadTaskActionName: {
 
             let newState = cloneDeep(state);
-            let payload = action.payload as ProjectTaskData;
-            newState.TaskManagementApp.CurrentTask = new OneTask().FillByProjectTaskData(payload);
+            let payload = action.payload as OneTask;
+            newState.TaskManagementApp.CurrentTask = payload;
 
             return newState;
         }
@@ -210,6 +205,35 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
                 return newState;
             }
 
+        case AddTaskRelationStateActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as TaskRelation;
+                let helper = new Helper();
+                var tasks = helper.GetTaskFromState(newState, payload.MainWorkTaskId);
+                tasks.forEach(tsk => {
+                    tsk.Relations = [...tsk.Relations, payload];
+                });
+                tasks = helper.GetTaskFromState(newState, payload.SubWorkTaskId);
+                tasks.forEach(tsk => {
+                    tsk.Relations = [...tsk.Relations, payload];
+                });
+
+                return newState;
+            }
+
+        case DeleteTaskRelationStateActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as number;
+                let helper = new Helper();
+                var tasks = helper.GetAllTaskFromState(newState);
+                tasks.forEach(tsk => {
+                    tsk.Relations = tsk.Relations.filter(x => x.Id != payload)
+                });
+
+                return newState;
+            }
         default:
             return state;
     }

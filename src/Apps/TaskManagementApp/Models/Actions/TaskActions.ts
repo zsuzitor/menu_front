@@ -1,11 +1,12 @@
 import { AppAction } from "../../../../Models/Actions/Actions";
-import { ProjectTaskData, LoadWorkTasksResult } from "../Entity/LoadWorkTasksResult";
+import { LoadWorkTasksResult } from "../Entity/LoadWorkTasksResult";
 import { OneTask } from "../Entity/State/OneTask";
+import { TaskRelation } from "../Entity/State/TaskRelation";
 import { TasksFilter } from "../Entity/State/TasksFilter";
 
 
 export const AddTaskToProjectActionName: string = 'AddTaskToProjectAction';
-export function AddTaskToProjectActionCreator(data: ProjectTaskData): AppAction<ProjectTaskData> {
+export function AddTaskToProjectActionCreator(data: OneTask): AppAction<OneTask> {
     return { type: AddTaskToProjectActionName, payload: data };
 };
 
@@ -77,7 +78,7 @@ export function SetCurrentTaskIdActionCreator(data: number): AppAction<number> {
 };
 
 export const LoadTaskActionName: string = 'LoadTaskAction';
-export function LoadTaskActionCreator(data: ProjectTaskData): AppAction<ProjectTaskData> {
+export function LoadTaskActionCreator(data: OneTask): AppAction<OneTask> {
     return { type: LoadTaskActionName, payload: data };
 };
 
@@ -86,6 +87,20 @@ export function ClearCurrentTaskStateActionCreator(): AppAction<void> {
     return { type: ClearCurrentTaskStateActionName, payload: null };
 };
 
+export const AddTaskRelationStateActionName: string = 'AddTaskRelationStateAction';
+export function AddTaskRelationStateActionCreator(data: TaskRelation): AppAction<TaskRelation> {
+    return { type: AddTaskRelationStateActionName, payload: data };
+};
+
+// export const DeleteTaskRelationStateActionName: string = 'DeleteTaskRelationStateAction';
+// export function DeleteTaskRelationStateActionCreator(taskId: number, id: number): AppAction<{ taskId: number, id: number }> {
+//     return { type: DeleteTaskRelationStateActionName, payload: { taskId: taskId, id: id } };
+// };
+
+export const DeleteTaskRelationStateActionName: string = 'DeleteTaskRelationStateAction';
+export function DeleteTaskRelationStateActionCreator(id: number): AppAction<number> {
+    return { type: DeleteTaskRelationStateActionName, payload: id };
+};
 
 export class UpdateTaskNameActionParam { Id: number; Text: string }
 export const UpdateTaskNameActionName: string = 'UpdateTaskNameAction';

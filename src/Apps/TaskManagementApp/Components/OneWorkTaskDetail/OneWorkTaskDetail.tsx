@@ -18,6 +18,7 @@ import SaveCancelInputSelect from '../../../../components/Body/SaveCancelInput/S
 import SaveCancelInputMultiSelectWithSearch from '../../../../components/Body/SaveCancelInput/SaveCancelInputMultiSelectWithSearch';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
 import { TaskRelation } from '../../Models/Entity/State/TaskRelation';
+import AddTaskRelation from '../AddTaskRelation/AddTaskRelation';
 
 
 require('./OneWorkTaskDetail.css');
@@ -255,11 +256,9 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
             {showAddRelationNew ? <AdditionalWindow CloseWindow={() => setShowAddRelationNew(false)}
                 IsHeightWindow={false}
                 Title='Связь'
-                InnerContent={() => <AddWorkTimeLog1
+                InnerContent={() => <AddTaskRelation
                     Close={() => setShowAddRelationNew(false)}
                     TaskId={props.Task.Id}
-                    DefaultDate={null}
-                    CreateTimeLog={props.CreateTimeLog}
                 />}></AdditionalWindow> : <></>}
             <p>Зависимости</p>
             <div><button className='add-relation-btn'

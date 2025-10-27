@@ -42,6 +42,8 @@ export const TaskManagementTasksGetUrl: string = 'get-project-tasks';
 export const TaskManagementTaskGetUrl: string = 'get-project-task';
 export const TaskManagementTaskDeleteUrl: string = 'delete-task';
 export const TaskManagementTaskCopyUrl: string = 'copy-project-task';
+export const TaskManagementAddTaskRelationUrl: string = 'add-task-relation';
+export const TaskManagementDeleteTaskRelationUrl: string = 'delete-task-relation';
 //task
 
 

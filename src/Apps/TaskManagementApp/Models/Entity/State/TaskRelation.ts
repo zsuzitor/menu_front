@@ -1,11 +1,13 @@
 import { IProjectTaskRelationDataBack } from "../../BackModels/IProjectTaskRelationDataBack";
 
+export enum TaskRelationType { SubTask = 1, Link = 2 };
+
 export class TaskRelation {
     Id: number;
     SubWorkTaskId: number;
     MainWorkTaskId: number;
     // SubTask = 1, Link = 2,
-    RelationType: number;
+    RelationType: TaskRelationType;
 
     FillByDataBack(data: IProjectTaskRelationDataBack): TaskRelation {
         this.Id = data.Id;

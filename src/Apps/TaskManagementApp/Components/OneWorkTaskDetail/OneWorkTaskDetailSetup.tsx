@@ -27,8 +27,10 @@ interface IOneWorkTaskDetailStateToProps {
 interface IOneWorkTaskDetailDispatchToProps {
     // UpdateTask: (task: OneTask) => void;
     DeleteTask: (id: number) => void;
+    DeleteTaskRelation: (id: number) => void;
     CopyTask: (id: number) => Promise<number>;
     LoadTaskTimeLogs: (id: number) => void;
+    LoadTaskRelations: (id: number) => void;
     UpdateTaskName: (id: number, text: string) => void;
     UpdateTaskDescription: (id: number, text: string) => void;
     UpdateTaskStatus: (id: number, idStatus: number) => void;
@@ -69,9 +71,13 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps)
     res.DeleteTask = (taskId: number) => {
         dispatch(window.G_TaskManagementTaskController.DeleteTaskRedux(taskId));
     };
+    res.DeleteTaskRelation = (relationId: number) => {
+        window.G_TaskManagementTaskController.DeleteTaskRelationRedux(relationId, dispatch);
+    };
+
 
     res.CopyTask = async (taskId: number): Promise<number> => {
-        return await window.G_TaskManagementTaskController.CopyTaskUI(taskId)
+        return await window.G_TaskManagementTaskController.CopyTaskUI(taskId);
 
     };
 
@@ -89,20 +95,20 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps)
     // };
 
     res.ClearCurrentTaskState = () => {
-        dispatch(ClearCurrentTaskStateActionCreator())
+        dispatch(ClearCurrentTaskStateActionCreator());
     };
 
 
     res.UpdateTaskName = (id: number, text: string) => {
-        dispatch(window.G_TaskManagementTaskController.UpdateTaskNameRedux(id, text))
+        dispatch(window.G_TaskManagementTaskController.UpdateTaskNameRedux(id, text));
     };
 
     res.UpdateTaskDescription = (id: number, text: string) => {
-        dispatch(window.G_TaskManagementTaskController.UpdateTaskDescriptionRedux(id, text))
+        dispatch(window.G_TaskManagementTaskController.UpdateTaskDescriptionRedux(id, text));
     };
 
     res.UpdateTaskStatus = (id: number, idStatus: number) => {
-        dispatch(window.G_TaskManagementTaskController.UpdateTaskStatusRedux(id, idStatus))
+        dispatch(window.G_TaskManagementTaskController.UpdateTaskStatusRedux(id, idStatus));
     };
 
     // res.AddTaskSprint = (id: number, idSprint: number) => {
@@ -113,24 +119,28 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps)
     // };
 
     res.UpdateTaskSprints = (id: number, idSprint: number[]) => {
-        dispatch(window.G_TaskManagementSprintController.UpdateTaskFromSprintRedux(id, idSprint))
+        dispatch(window.G_TaskManagementSprintController.UpdateTaskFromSprintRedux(id, idSprint));
     };
     res.UpdateTaskLabels = (id: number, idLabel: number[]) => {
-        dispatch(window.G_TaskManagementLabelController.UpdateTaskLabelsRedux(id, idLabel))
+        dispatch(window.G_TaskManagementLabelController.UpdateTaskLabelsRedux(id, idLabel));
     };
 
 
     res.UpdateTaskExecutor = (id: number, personId: number) => {
-        dispatch(window.G_TaskManagementTaskController.UpdateTaskExecutorRedux(id, personId))
+        dispatch(window.G_TaskManagementTaskController.UpdateTaskExecutorRedux(id, personId));
     };
 
     res.LoadTaskTimeLogs = (id: number) => {
-        dispatch(window.G_TaskManagementWorkTimeController.LoadTimeLogsForTaskRedux(id))
+        dispatch(window.G_TaskManagementWorkTimeController.LoadTimeLogsForTaskRedux(id));
+    };
+
+    res.LoadTaskRelations = (id: number) => {
+        window.G_TaskManagementTaskController.LoadRelationsForTaskRedux(id, dispatch);
     };
 
 
     res.CreateTimeLog = (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => {
-        dispatch(window.G_TaskManagementWorkTimeController.CreateTimeLogRedux(taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog))
+        dispatch(window.G_TaskManagementWorkTimeController.CreateTimeLogRedux(taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog));
     };
 
 

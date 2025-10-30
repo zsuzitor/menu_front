@@ -212,16 +212,16 @@ export class FetchHelper implements IAjaxHelper {
 
         if (response.ok) {
             obj.FuncSuccess && obj.FuncSuccess(responseResult, null, null);
-            return { Data:responseResult } as ServerResult<any>;
+            return { Data: responseResult } as ServerResult<any>;
         }
         else {
             obj.FuncError && obj.FuncError(responseResult, null, null);
-            return { Error:responseResult } as ServerResult<any>;
+            return { Error: responseResult } as ServerResult<any>;
 
         }
 
 
-        return responseResult;
+        // return responseResult;
 
     }
 

@@ -4,8 +4,8 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { AppAction } from '../../../../Models/Actions/Actions';
 import { AppState } from '../../../../Models/Entity/State/AppState';
-import { AddTaskToProjectActionName, AddLoadTriggerActionName, UpdateTaskActionName, LoadTasksActionName, DeleteTaskActionName, SetFilterTaskCreatorActionName, SetFilterTaskExecutorActionName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskStatusActionName, SetFilterTaskActionName, SetCurrentTaskIdActionName, LoadTaskActionName, ClearCurrentTaskStateActionName, UpdateTaskNameActionName, UpdateTaskNameActionParam, UpdateTaskDescriptionActionName, UpdateTaskDescriptionActionParam, UpdateTaskStatusActionName, UpdateTaskStatusActionParam, UpdateTaskExecutorActionName, UpdateTaskExecutorActionParam, SetFilterTaskSprintActionName, SetFilterTaskLabelActionName, AddTaskRelationStateActionName, DeleteTaskRelationStateActionName } from '../Actions/TaskActions';
-import {  LoadWorkTasksResult } from '../Entity/LoadWorkTasksResult';
+import { AddTaskToProjectActionName, AddLoadTriggerActionName, UpdateTaskActionName, LoadTasksActionName, DeleteTaskActionName, SetFilterTaskCreatorActionName, SetFilterTaskExecutorActionName, SetFilterTaskNameActionName, SetFilterTaskPageActionName, SetFilterTaskStatusActionName, SetFilterTaskActionName, SetCurrentTaskIdActionName, LoadTaskActionName, ClearCurrentTaskStateActionName, UpdateTaskNameActionName, UpdateTaskNameActionParam, UpdateTaskDescriptionActionName, UpdateTaskDescriptionActionParam, UpdateTaskStatusActionName, UpdateTaskStatusActionParam, UpdateTaskExecutorActionName, UpdateTaskExecutorActionParam, SetFilterTaskSprintActionName, SetFilterTaskLabelActionName, AddTaskRelationStateActionName, DeleteTaskRelationStateActionName, LoadTaskRelationStateActionName } from '../Actions/TaskActions';
+import { LoadWorkTasksResult } from '../Entity/LoadWorkTasksResult';
 import { OneTask } from '../Entity/State/OneTask';
 import { TasksFilter } from '../Entity/State/TasksFilter';
 import { Helper } from '../../../../Models/BL/Helper';
@@ -229,11 +229,26 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
                 let helper = new Helper();
                 var tasks = helper.GetAllTaskFromState(newState);
                 tasks.forEach(tsk => {
-                    tsk.Relations = tsk.Relations.filter(x => x.Id != payload)
+                    tsk.Relations = tsk.Relations.filter(x => x.Id != payload);
                 });
 
                 return newState;
             }
+        case LoadTaskRelationStateActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as TaskRelation[];
+                let helper = new Helper();
+                var tasks = helper.GetAllTaskFromState(newState);
+                tasks.forEach(tsk => {
+                    tsk.Relations = payload;
+                });
+
+                return newState;
+            }
+
+
+
         default:
             return state;
     }

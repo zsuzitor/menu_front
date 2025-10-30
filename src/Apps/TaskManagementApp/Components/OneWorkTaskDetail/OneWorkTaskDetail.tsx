@@ -39,7 +39,8 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
 
     const [showAddWorkTimeNew, setShowAddWorkTimeNew] = useState(false);
     const [showAddRelationNew, setShowAddRelationNew] = useState(false);
-    const [showAddWorkTimeBlock, setShowAddWorkTimeBlock] = useState(false);
+    // const [showAddWorkTimeBlock, setShowAddWorkTimeBlock] = useState(false);
+    const [radioContentTypeShown, setRadioContentTypeShown] = useState(0);//1-списания, 2 подзадачи
 
 
 
@@ -47,11 +48,18 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (props.Task?.Id && showAddWorkTimeBlock) {
+        if (props.Task?.Id && radioContentTypeShown == 1) {
             props.LoadTaskTimeLogs(props.Task.Id);
         }
 
-    }, [props.Task?.Id, showAddWorkTimeBlock]);
+    }, [props.Task?.Id, radioContentTypeShown]);
+
+    useEffect(() => {
+        if (props.Task?.Id && radioContentTypeShown == 2) {
+            props.LoadTaskRelations(props.Task.Id);
+        }
+
+    }, [props.Task?.Id, radioContentTypeShown]);
 
     useEffect(() => {
 
@@ -111,8 +119,11 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
 
     const copyTask = async () => {
         let newTaskId = await props.CopyTask(props.Task.Id);
-        const taskUrl = new RouteBuilder().TaskUrl(props.CurrentProjectId, newTaskId);
-        navigate(taskUrl);
+        if (newTaskId) {
+
+            const taskUrl = new RouteBuilder().TaskUrl(props.CurrentProjectId, newTaskId);
+            navigate(taskUrl);
+        }
     };
 
     const addComment = (val: string) => {
@@ -164,22 +175,22 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                     CreateTimeLog={props.CreateTimeLog}
                 />}></AdditionalWindow> : <></>}
             <div className='add-time-log-header'>
-                <div className='add-time-log-show-btn'
-                    onClick={() => setShowAddWorkTimeBlock(!showAddWorkTimeBlock)}>Списания:</div>
+                {/* <div className='add-time-log-show-btn'
+                    onClick={() => setShowAddWorkTimeBlock(!showAddWorkTimeBlock)}>Списания:</div> */}
                 <div><button className='add-time-log-btn'
                     onClick={() => setShowAddWorkTimeNew(true)}>
                     <span className='add-time-log-plus-icon'>+</span>
                     <span>Добавить списание</span>
                 </button></div>
             </div>
-            {showAddWorkTimeBlock && <div className='work-time-block-list'>
+            <div className='work-time-block-list'>
                 {props.Task.TimeLogs.map(x => {
                     return <div key={x.Id} className='one-work-time-block'>
                         <div className='time-block-left'>{props.ProjectUsers.find(u => u.Id === x.ProjectUserId)?.Email || ''}</div>
                         <div className='time-block-center'>{formatDate(x.DayOfLog)}</div>
                         <div className='time-block-right'>{renderWorkNum(x.TimeMinutes)}</div>
                     </div>
-                })}</div>}
+                })}</div>
 
 
 
@@ -260,7 +271,6 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                     Close={() => setShowAddRelationNew(false)}
                     TaskId={props.Task.Id}
                 />}></AdditionalWindow> : <></>}
-            <p>Зависимости</p>
             <div><button className='add-relation-btn'
                 onClick={() => setShowAddRelationNew(true)}>
                 <span className='add-relation-plus-icon'>+</span>
@@ -273,7 +283,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                         e.preventDefault();
                         navigate(taskUrl);
                     }}>{GetRelationWord(x)}</a>
-                    <div className='task-button' onClick={() => deleteTask()}>
+                    <div className='task-button' onClick={() => props.DeleteTaskRelation(x.Id)}>
                         <img className='persent-100-width-height' src={G_PathToBaseImages + 'delete-icon.png'}
                             alt="Delete" title='Удалить Связь' />
                     </div>
@@ -473,8 +483,12 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
             </div>
         </div>
         <div>
-            {renderTime()}
-            {renderRelations()}
+            <div className='radio-check-block'>
+                <div className={`button-c ${radioContentTypeShown === 1 ? 'active' : ''}`} onClick={() => setRadioContentTypeShown(1)}>Списания</div>
+                <div className={`button-c ${radioContentTypeShown === 2 ? 'active' : ''}`} onClick={() => setRadioContentTypeShown(2)}>Связи</div>
+            </div>
+            {radioContentTypeShown == 1 && renderTime()}
+            {radioContentTypeShown == 2 && renderRelations()}
         </div>
         {renderComments()}
     </div>

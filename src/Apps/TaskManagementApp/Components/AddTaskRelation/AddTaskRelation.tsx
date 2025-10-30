@@ -42,6 +42,7 @@ const AddTaskRelation = (props: IAddTaskRelationProps) => {
             placeholder='Задача' value={subTaskId}></input>
 
 
+        <button className='btn-b btn-border create-new-task-btn' onClick={() => props.Create(mainTaskId, subTaskId, type)}>Связать</button>
     </div>
 }
 

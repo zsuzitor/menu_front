@@ -1,11 +1,12 @@
+import { ServerResult } from "../../../../Models/AjaxLogic";
 import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
-import { AddLoadTriggerActionCreator, UpdateTaskActionCreator, LoadTasksActionCreator, DeleteTaskActionCreator, LoadTaskActionCreator, UpdateTaskNameActionCreator, UpdateTaskDescriptionActionCreator, UpdateTaskStatusActionCreator, UpdateTaskExecutorActionCreator, AddTaskRelationStateActionCreator, DeleteTaskRelationStateActionCreator } from "../Actions/TaskActions";
+import { AddLoadTriggerActionCreator, UpdateTaskActionCreator, LoadTasksActionCreator, DeleteTaskActionCreator, LoadTaskActionCreator, UpdateTaskNameActionCreator, UpdateTaskDescriptionActionCreator, UpdateTaskStatusActionCreator, UpdateTaskExecutorActionCreator, AddTaskRelationStateActionCreator, DeleteTaskRelationStateActionCreator, LoadTaskRelationStateActionCreator } from "../Actions/TaskActions";
 import { ILoadWorkTasksResultDataBack } from "../BackModels/ILoadWorkTasksResultDataBack";
 import { IProjectTaskDataBack } from "../BackModels/IProjectTaskDataBack";
 import { IProjectTaskRelationDataBack } from "../BackModels/IProjectTaskRelationDataBack";
-import { TaskManagementAddTaskRelationUrl, TaskManagementApiTaskUrl, TaskManagementDeleteTaskRelationUrl, TaskManagementPreloader, TaskManagementTaskAddNewUrl, TaskManagementTaskCopyUrl, TaskManagementTaskDeleteUrl, TaskManagementTaskGetUrl, TaskManagementTasksGetUrl, TaskManagementTaskUpdateDescriptionUrl, TaskManagementTaskUpdateExecutorUrl, TaskManagementTaskUpdateNameUrl, TaskManagementTaskUpdateStatusUrl, TaskManagementTaskUpdateUrl } from "../Consts";
+import { TaskManagementAddTaskRelationUrl, TaskManagementApiTaskUrl, TaskManagementDeleteTaskRelationUrl, TaskManagementGetTaskRelationUrl, TaskManagementPreloader, TaskManagementTaskAddNewUrl, TaskManagementTaskCopyUrl, TaskManagementTaskDeleteUrl, TaskManagementTaskGetUrl, TaskManagementTasksGetUrl, TaskManagementTaskUpdateDescriptionUrl, TaskManagementTaskUpdateExecutorUrl, TaskManagementTaskUpdateNameUrl, TaskManagementTaskUpdateStatusUrl, TaskManagementTaskUpdateUrl } from "../Consts";
 import { ITaskFilter } from "../Entity/ITaskFilter";
 import { LoadWorkTasksResult } from "../Entity/LoadWorkTasksResult";
 import { OneTask } from "../Entity/State/OneTask";
@@ -29,6 +30,7 @@ export interface ITaskManagementTaskController {
     CopyTaskUI: (id: number) => Promise<number>;
     AddTaskRelationRedux: (mainTaskid: number, subTaskid: number, type: number, dispatch: any) => Promise<TaskRelation>;
     DeleteTaskRelationRedux: (id: number, dispatch: any) => Promise<boolean>;
+    LoadRelationsForTaskRedux: (taskId: number, dispatch: any) => void;
 
 
     UpdateTaskNameRedux: (id: number, text: string) => void;
@@ -41,10 +43,18 @@ export interface ITaskManagementTaskController {
 
 export class TaskManagementTaskController implements ITaskManagementTaskController {
     AddTaskRelationRedux = async (mainTaskid: number, subTaskid: number, type: number, dispatch: any): Promise<TaskRelation> => {
+
+        this.preloader(true);
         let res = await this.AddTaskRelation(mainTaskid, subTaskid, type);
-        var result = new TaskRelation().FillByDataBack(res);
-        dispatch(AddTaskRelationStateActionCreator(result));
-        return result;
+
+        this.preloader(false);
+        if (res) {
+            var result = new TaskRelation().FillByDataBack(res);
+            dispatch(AddTaskRelationStateActionCreator(result));
+            return result;
+        }
+
+        return null;
     }
 
     AddTaskRelation = async (mainTaskid: number, subTaskid: number, type: number): Promise<IProjectTaskRelationDataBack> => {
@@ -58,17 +68,22 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
             Type: ControllerHelper.PutHttp,
             FuncSuccess: (xhr, status, jqXHR) => { },
             FuncError: (xhr, status, error) => { },
-            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementAddTaskRelationUrl}`
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementAddTaskRelationUrl}`,
+            ContentType: 'body'
         });
-        return backResult as IProjectTaskRelationDataBack;
+        return (backResult as ServerResult<IProjectTaskRelationDataBack>).Data;
     };
 
 
     DeleteTaskRelationRedux = async (id: number, dispatch: any): Promise<boolean> => {
+        this.preloader(true);
         let res = await this.DeleteTaskRelation(id);
-        if (res.Result)
+        this.preloader(false);
+        if (res?.Result) {
+
             dispatch(DeleteTaskRelationStateActionCreator(id));
-        return res.Result;
+        }
+        return res?.Result ?? false;
     }
 
     DeleteTaskRelation = async (id: number): Promise<BoolResultBackNew> => {
@@ -82,8 +97,35 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementDeleteTaskRelationUrl}`
         });
-        return backResult as BoolResultBackNew;
+        return (backResult as ServerResult<BoolResultBackNew>).Data;
     };
+
+    LoadRelationsForTaskRedux = async (id: number, dispatch: any): Promise<TaskRelation[]> => {
+        this.preloader(true);
+        let res = await this.LoadRelationsForTask(id);
+        this.preloader(false);
+        if (res) {
+            var result = res.map(x => new TaskRelation().FillByDataBack(x));
+            dispatch(LoadTaskRelationStateActionCreator(result));
+            return result;
+        }
+        return null;
+    }
+
+    LoadRelationsForTask = async (id: number): Promise<IProjectTaskRelationDataBack[]> => {
+        let data = {
+            "taskId": id
+        };
+        let backResult = await G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.GetHttp,
+            FuncSuccess: (xhr, status, jqXHR) => { },
+            FuncError: (xhr, status, error) => { },
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementGetTaskRelationUrl}`
+        });
+        return (backResult as ServerResult<IProjectTaskRelationDataBack[]>).Data;
+    };
+
 
 
     UpdateTaskNameRedux = (id: number, text: string) => {
@@ -422,7 +464,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
         this.preloader(true);
         let backResult = await this.CopyTaskAsync(id);
         this.preloader(false);
-        return backResult.Id;
+        return backResult?.Id;
     }
 
     CopyTaskAsync = async (id: number): Promise<IProjectTaskDataBack> => {
@@ -436,7 +478,8 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTaskCopyUrl}`
         });
-        return backResult as IProjectTaskDataBack;
+
+        return (backResult as ServerResult<IProjectTaskDataBack>).Data;
     };
 
 

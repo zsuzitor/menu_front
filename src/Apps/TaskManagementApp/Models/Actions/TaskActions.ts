@@ -102,6 +102,11 @@ export function DeleteTaskRelationStateActionCreator(id: number): AppAction<numb
     return { type: DeleteTaskRelationStateActionName, payload: id };
 };
 
+export const LoadTaskRelationStateActionName: string = 'LoadTaskRelationStateAction';
+export function LoadTaskRelationStateActionCreator(data:TaskRelation[]): AppAction<TaskRelation[]> {
+    return { type: LoadTaskRelationStateActionName, payload: data };
+};
+
 export class UpdateTaskNameActionParam { Id: number; Text: string }
 export const UpdateTaskNameActionName: string = 'UpdateTaskNameAction';
 export function UpdateTaskNameActionCreator(param: UpdateTaskNameActionParam): AppAction<UpdateTaskNameActionParam> {

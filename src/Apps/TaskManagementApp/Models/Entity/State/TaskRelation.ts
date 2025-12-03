@@ -1,6 +1,8 @@
 import { IProjectTaskRelationDataBack } from "../../BackModels/IProjectTaskRelationDataBack";
 
-export enum TaskRelationType { SubTask = 1, Link = 2 };
+export enum TaskRelationType { SubTask = 1, Link = 2,
+     MainTask = 3 //на бэке такого нет, чисто для формы редактирования
+     };
 
 export class TaskRelation {
     Id: number;

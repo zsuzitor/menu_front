@@ -31,8 +31,10 @@ const AddTaskRelation = (props: IAddTaskRelationProps) => {
                 return +e.target.value;
             });
         }}>
+            {/* тут специально перепутаны лейблы */}
             <option value="-">Не выбрано</option>
             <option value={TaskRelationType.SubTask}>Главная для</option>
+            <option value={TaskRelationType.MainTask}>Зависимая для</option>
             <option value={TaskRelationType.Link}>Связана с</option>
         </select>
 

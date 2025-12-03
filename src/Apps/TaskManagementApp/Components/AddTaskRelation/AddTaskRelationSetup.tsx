@@ -36,6 +36,12 @@ const mapStateToProps = (state: AppState, ownProps: IAddTaskRelationOwnProps) =>
 const mapDispatchToProps = (dispatch: any, ownProps: IAddTaskRelationOwnProps) => {
     let res = {} as IAddTaskRelationDispatchToProps;
     res.Create = async (mainTaskid: number, subTaskid: number, type: TaskRelationType) => {
+        if (type == TaskRelationType.MainTask) {
+            type = TaskRelationType.SubTask;
+            let f = mainTaskid;
+            mainTaskid = subTaskid;
+            subTaskid = f;
+        }
         await window.G_TaskManagementTaskController.AddTaskRelationRedux(mainTaskid, subTaskid, type, dispatch);
     };
     return res;

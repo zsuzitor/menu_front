@@ -34,7 +34,7 @@ interface IProjectDetailDispatchToProps {
     SetFilterTaskPage: (num: number) => void;
     SetFilterTaskStatus: (status: number) => void;
     SetFilterTaskSprint: (sprint: number) => void;
-    SetFilterTaskLabel: (sprint: number) => void;
+    SetFilterTaskLabel: (sprint: number[]) => void;
     ClearFilterTask: () => void;
 
     ReloadTasks: (filters: ITaskFilter) => void;
@@ -82,7 +82,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: IProjectDetailOwnProps) => 
         dispatch(SetFilterTaskSprintActionCreator(sprint));
     };
 
-    res.SetFilterTaskLabel = (label: number) => {
+    res.SetFilterTaskLabel = (label: number[]) => {
         dispatch(SetFilterTaskLabelActionCreator(label));
     };
 

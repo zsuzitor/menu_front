@@ -379,7 +379,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
             "pageNumber": taskFilter.PageNumber,
             "pageSize": taskFilter.PageSize,
             "sprintId": taskFilter.SprintId,
-            "labelId": taskFilter.LabelId,
+            // "labelId": taskFilter.LabelId,//todo
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,

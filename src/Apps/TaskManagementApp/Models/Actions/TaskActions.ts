@@ -62,7 +62,7 @@ export function SetFilterTaskSprintActionCreator(num: number): AppAction<number>
 };
 
 export const SetFilterTaskLabelActionName: string = 'SetFilterTaskLabelAction';
-export function SetFilterTaskLabelActionCreator(num: number): AppAction<number> {
+export function SetFilterTaskLabelActionCreator(num: number[]): AppAction<number[]> {
     return { type: SetFilterTaskLabelActionName, payload: num };
 };
 

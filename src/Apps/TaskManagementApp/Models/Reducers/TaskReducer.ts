@@ -109,8 +109,8 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
         case SetFilterTaskLabelActionName:
             {
                 let newState = cloneDeep(state);
-                let payload = action.payload as number;
-                newState.TaskManagementApp.CurrentProjectTasksFilters.Label = payload;
+                let payload = action.payload as number[];
+                newState.TaskManagementApp.CurrentProjectTasksFilters.Labels = payload;
                 return newState;
             }
 

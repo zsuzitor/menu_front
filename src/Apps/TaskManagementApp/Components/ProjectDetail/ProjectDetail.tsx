@@ -36,7 +36,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     const [filterVisibilityCreator, setFilterVisibilityCreator] = useState(false);
     const [filterVisibilityStatus, setFilterVisibilityStatus] = useState(false);
     const [filterVisibilitySprint, setFilterVisibilitySprint] = useState(false);
-    const [filterVisibilityLabel, setFilterVisibilityLabel] = useState(false);
     const [filterVisibilityReviwer, setFilterVisibilityReviwer] = useState(false);
 
 
@@ -85,6 +84,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     }, [props.ProjectUsers.length]);
 
 
+    const labelsChanges = props.TasksFilters.Labels.join(',');
     useEffect(() => {
         if (!props.Project?.Id) {
             return;
@@ -109,7 +109,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
     }, [props.Project?.Id, props.TasksFilters.CreatorId, props.TasksFilters.ExecutorId
         , props.TasksFilters.Status, props.TasksFilters.TaskName
-        , props.TasksFilters.Page, props.TasksFilters.Retrigger, props.TasksFilters.Sprint, props.TasksFilters.Labels.length]);
+        , props.TasksFilters.Page, props.TasksFilters.Retrigger, props.TasksFilters.Sprint, labelsChanges]);
 
 
 
@@ -139,7 +139,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         setFilterVisibilityStatus(false);
         setFilterVisibilityReviwer(false);
         setFilterVisibilitySprint(false);
-        setFilterVisibilityLabel(false);
 
     }
 
@@ -177,20 +176,22 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
     const labelsRender = (labels: number[]) => {
         // return <div></div>
-        if (labels.length == 0) {
-            labels.push(-1);
-        }
+        // if (labels.length == 0) {
+        //     labels.push(-1);
+        // }
         let arr = [];
         for (let i = 0; i < labels.length; ++i) {
             arr.push(i);
         }
         return <>
-            {arr.map(x => <div className='filter-tag' key={labels[x]}>
+            {arr.map(x => <div className='filter-tag' key={x}>
                 <span className='filter-name'>Лейбл:</span>
                 <select className='filter-input'
                     onChange={e => {
                         let id = +e.target.value;
-                        let newLalbels = [...labels, id].filter(((value, index, array) => array.indexOf(value) === index))
+                        // let newLalbels = [...labels, id].filter(((value, index, array) => array.indexOf(value) === index));
+                        let newLalbels = [...labels];
+                        newLalbels[x] = id;
                         props.SetFilterTaskLabel(newLalbels)
                     }}
                     value={labels[x]}>
@@ -200,10 +201,14 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
                 <button className='remove-filter' title='Удалить фильтр'
                     onClick={() => {
-                        let lbls = labels.filter(l => l != labels[x]);
+                        // let lbls = labels.filter(l => l != labels[x]);
+                        // console.log('1' + labels);
+                        let lbls = [...labels];
+                        lbls.splice(x, 1);
+                        // console.log(lbls);
                         props.SetFilterTaskLabel(lbls);
-                        if (lbls.length == 0)
-                            setFilterVisibilityLabel(false);
+                        // if (lbls.length == 0)
+                        //     setFilterVisibilityLabel(false);
                     }}>×</button>
             </div>)}
         </>
@@ -280,7 +285,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                             <div className='add-one-filter' onClick={() => setFilterVisibilityReviwer(true)}>Ревьювер</div>
                             <div className='add-one-filter' onClick={() => setFilterVisibilityStatus(true)}>Статус</div>
                             <div className='add-one-filter' onClick={() => setFilterVisibilitySprint(true)}>Спринт</div>
-                            <div className='add-one-filter' onClick={() => setFilterVisibilityLabel(true)}>Лейбл</div>
+                            <div className='add-one-filter' onClick={() => props.SetFilterTaskLabel([...props.TasksFilters.Labels, -1])}>Лейбл</div>
                         </div>}
                     ></PopupWindow></div>
 
@@ -288,8 +293,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                         || filterVisibilityCreator
                         || filterVisibilityReviwer
                         || filterVisibilityStatus
-                        || filterVisibilitySprint
-                        || filterVisibilityLabel)
+                        || filterVisibilitySprint)
                         || (props.TasksFilters.CreatorId != -1
                             || props.TasksFilters.ExecutorId != -1
                             || props.TasksFilters.Status != -1
@@ -392,7 +396,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                                 }}>×</button>
                         </div>}
 
-                        {filterVisibilityLabel && labelsRender(props.TasksFilters.Labels)}
+                        {labelsRender(props.TasksFilters.Labels)}
                         {/* {filterVisibilityLabel && props.TasksFilters.Labels.map(x => <div className='filter-tag'>
                             <span className='filter-name'>Лейбл:</span>
                             <select className='filter-input'

@@ -379,16 +379,19 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
             "pageNumber": taskFilter.PageNumber,
             "pageSize": taskFilter.PageSize,
             "sprintId": taskFilter.SprintId,
-            // "labelId": taskFilter.LabelId,//todo
+            "labelId": taskFilter.LabelIds,
         };
+
+
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
-            Type: ControllerHelper.GetHttp,
+            Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTasksGetUrl}`
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTasksGetUrl}`,
+            ContentType: 'body'
 
         });
     };

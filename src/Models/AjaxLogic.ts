@@ -134,11 +134,12 @@ export class FetchHelper implements IAjaxHelper {
                 getUrl = getUrl.slice(0, -1);
             }
 
-            let urlParams = new URLSearchParams();
-            var dataKeys = Object.keys(obj.Data);
-            dataKeys.forEach(x => {
-                urlParams.append(x, obj.Data[x]);
-            });
+            let urlParams = this.buildUrlParams(obj.Data);
+            // new URLSearchParams();
+            // var dataKeys = Object.keys(obj.Data);
+            // dataKeys.forEach(x => {
+            //     urlParams.append(x, obj.Data[x]);
+            // });
 
             getUrl += '?' + urlParams;
 
@@ -248,6 +249,22 @@ export class FetchHelper implements IAjaxHelper {
 
     MapWithResultDataOnlyObject<T>(data: any) {
         return new ControllerHelper().MapWithResultDataOnlyObject<T>(data);
+    }
+
+    buildUrlParams(obj: any) {
+        const params = new URLSearchParams();
+
+        Object.entries(obj).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+                // Для массива добавляем каждый элемент отдельно
+                value.forEach(item => params.append(key, item));
+            } else {
+                // Для одиночных значений добавляем как есть
+                params.append(key, value as string);
+            }
+        });
+
+        return params;
     }
 
 }

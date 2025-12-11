@@ -12,6 +12,7 @@ import { TaskManagementTaskStatusReducer } from './TaskStatusReducer';
 import { TaskManagementWorkTimeLogReducer } from './WorkTimeLogReducer';
 import { TaskManagementSprintReducer } from './SprintReducer';
 import { TaskManagementLabelReducer } from './LabelReducer';
+import { TaskManagementPresetReducer } from './PresetReducer';
 
 
 
@@ -26,6 +27,7 @@ export function TaskManagementAppReducer(state: AppState = new AppState(), actio
     st = TaskManagementWorkTimeLogReducer(st, action);
     st = TaskManagementSprintReducer(st, action);
     st = TaskManagementLabelReducer(st, action);
+    st = TaskManagementPresetReducer(st, action);
 
     switch (action.type) {
         case ClearTaskManagementStateActionName:

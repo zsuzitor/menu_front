@@ -7,6 +7,7 @@ import { ProjectTimes } from "./ProjectTimes";
 import { ProjectSprint } from "./ProjectSprint";
 import { SprintInfo } from "./SprintInfo";
 import { TaskLabel } from "./TaskLabel";
+import { Preset } from "./Preset";
 
 
 export class TaskManagementAppState {
@@ -23,6 +24,7 @@ export class TaskManagementAppState {
     CurrentProjectLabels: TaskLabel[];
     CurrentProjectTasksAllCount: number;
     CurrentProjectTasksFilters: TasksFilter;
+    CurrentProjectPresets: Preset[];
 
     CurrentUserId: number;//на страницах относящехся к пользователю
     PersonTimes: ProjectTimes;
@@ -50,6 +52,7 @@ export class TaskManagementAppState {
         this.CurrentProjectSprints = [];
         this.CurrentProjectStatuses = [];
         this.CurrentProjectLabels = [];
+        this.CurrentProjectPresets = [];
         this.CurrentTask = null;
         this.ProjectsLoaded = false;
         this.CurrentProjectTimes = new ProjectTimes();

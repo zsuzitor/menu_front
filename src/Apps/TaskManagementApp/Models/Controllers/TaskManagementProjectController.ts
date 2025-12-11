@@ -2,6 +2,7 @@ import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { GetTaskLabelsActionCreator } from "../Actions/LabelActions";
+import { LoadPresetsActionCreator } from "../Actions/PresetActions";
 import { DeleteProjectActionCreator, AddNewProjectActionCreator, SetCurrentProjectIdActionCreator, SetProjectsActionCreator } from "../Actions/ProjectActions";
 import { GetProjectSprintsActionCreator, GetProjectSprintsActionType } from "../Actions/SprintActions";
 import { SetCurrentProjectStatusesActionCreator } from "../Actions/TaskStatusActions";
@@ -10,6 +11,7 @@ import { IOneProjectInListDataBack } from "../BackModels/IOneProjectInListDataBa
 import { IOneProjectInfoDataBack } from "../BackModels/IOneProjectInfoDataBack";
 import { TaskManagementApiProjectUrl, TaskManagementPreloader } from "../Consts";
 import { OneProjectInList } from "../Entity/State/OneProjectInList";
+import { Preset } from "../Entity/State/Preset";
 import { ProjectSprint } from "../Entity/State/ProjectSprint";
 import { ProjectUser } from "../Entity/State/ProjectUser";
 import { TaskLabel } from "../Entity/State/TaskLabel";
@@ -104,6 +106,12 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
                         return u;
 
                     });
+                    let dtPreset = data.Presets.map(x => {
+                        let u = new Preset();
+                        u.FillByIProjectTaskDataBack(x);
+                        return u;
+
+                    });
                     dispatch(SetCurrentProjectUsersActionCreator(dtUsers));
                     dispatch(SetCurrentProjectStatusesActionCreator(dtStatuses));
                     let spr = new GetProjectSprintsActionType();
@@ -111,6 +119,7 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
                     spr.data = dtSprints;
                     dispatch(GetProjectSprintsActionCreator(spr));
                     dispatch(GetTaskLabelsActionCreator(dtLabels));
+                    dispatch(LoadPresetsActionCreator(dtPreset));
                 }
             });
         };

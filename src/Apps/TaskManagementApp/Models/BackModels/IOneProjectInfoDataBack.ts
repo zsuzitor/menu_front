@@ -1,3 +1,4 @@
+import { IPresetDataBack } from "./IPresetDataBack";
 import { IProjectSprintDataBack } from "./IProjectSprintDataBack";
 import { IProjectTaskDataBack } from "./IProjectTaskDataBack";
 import { IProjectUserDataBack } from "./IProjectUserDataBack";
@@ -10,4 +11,5 @@ export interface IOneProjectInfoDataBack {
     Statuses: IWorkTaskStatusDataBack[];
     Sprints: IProjectSprintDataBack[];
     Labels: IProjectSprintDataBack[];
+    Presets: IPresetDataBack[];
 }

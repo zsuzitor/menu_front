@@ -13,6 +13,7 @@ export const TaskManagementTimeLogRoute: string = 'time-log';
 export const TaskManagementSprintsRoute: string = 'sprints';
 export const TaskManagementLabelsRoute: string = 'labels';
 export const TaskManagementSprintRoute: string = 'sprint-';
+export const TaskManagementPresetsRoute: string = 'presets';
 export const TaskManagementTempoRoute: string = 'tempo';
 //Routes
 
@@ -25,6 +26,7 @@ export const TaskManagementCommentControllerUrl: string = 'comment';
 export const TaskManagementLabelControllerUrl: string = 'label';
 export const TaskManagementProjectControllerUrl: string = 'project';
 export const TaskManagementSprintControllerUrl: string = 'sprint';
+export const TaskManagementPresetControllerUrl: string = 'preset';
 export const TaskManagementStatusControllerUrl: string = 'status';
 export const TaskManagementUserControllerUrl: string = 'user';
 export const TaskManagementWorkTimeLogControllerUrl: string = 'worktimelog';
@@ -56,6 +58,7 @@ export const TaskManagementApiCommentUrl: string = `${TaskManagementApiUrl}/${Ta
 export const TaskManagementApiLabelUrl: string = `${TaskManagementApiUrl}/${TaskManagementLabelControllerUrl}`;
 export const TaskManagementApiProjectUrl: string = `${TaskManagementApiUrl}/${TaskManagementProjectControllerUrl}`;
 export const TaskManagementApiSprintUrl: string = `${TaskManagementApiUrl}/${TaskManagementSprintControllerUrl}`;
+export const TaskManagementApiPresetUrl: string = `${TaskManagementApiUrl}/${TaskManagementPresetControllerUrl}`;
 export const TaskManagementApiStatusUrl: string = `${TaskManagementApiUrl}/${TaskManagementStatusControllerUrl}`;
 export const TaskManagementApiUserUrl: string = `${TaskManagementApiUrl}/${TaskManagementUserControllerUrl}`;
 export const TaskManagementApiWorkTimeUrl: string = `${TaskManagementApiUrl}/${TaskManagementWorkTimeLogControllerUrl}`;

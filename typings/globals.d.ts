@@ -29,6 +29,7 @@ declare var G_TaskManagementUserController: import("../src/Apps/TaskManagementAp
 declare var G_TaskManagementCommentController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementCommentController").ITaskManagementCommentController;
 declare var G_TaskManagementSprintController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementSprintController").ITaskManagementSprintController;
 declare var G_TaskManagementLabelController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementLabelController").ITaskManagementLabelController;
+declare var G_TaskManagementPresetController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementPresetController").ITaskManagementPresetController;
 declare var G_VaultController: import("../src/Apps/Vault/Models/Controllers/VaultController").IVaultController;
 
 declare var TaskManagementCounter: number;

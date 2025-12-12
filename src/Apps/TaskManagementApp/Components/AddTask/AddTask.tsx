@@ -76,7 +76,7 @@ const AddTask = (props: IAddTaskProps) => {
             {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
         </select>
         <br />
-        <label>Ревьювер:</label>
+        <label>Исполнитель:</label>
         <select className='form-control-b' value={newTaskReviwer} onChange={(e) => setNewTaskReviwer(+e.target.value)}>
             <option value={-1}>Не выбрано</option>
             {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}

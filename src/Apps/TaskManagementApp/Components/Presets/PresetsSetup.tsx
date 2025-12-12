@@ -9,6 +9,7 @@ interface IPresetsOwnProps {
 
 interface IPresetsStateToProps {
     Presets: Preset[];
+    ProjectId: number;
 
 }
 
@@ -26,6 +27,7 @@ export interface IPresetsProps extends IPresetsStateToProps, IPresetsOwnProps, I
 const mapStateToProps = (state: AppState, ownProps: IPresetsOwnProps) => {
     let res = {} as IPresetsStateToProps;
     res.Presets = state.TaskManagementApp.CurrentProjectPresets;
+    res.ProjectId = state.TaskManagementApp.CurrentProjectId;
     return res;
 }
 
@@ -36,13 +38,13 @@ const mapDispatchToProps = (dispatch: any, ownProps: IPresetsOwnProps) => {
     //     dispatch(SetFilterTaskCreatorActionCreator(id));
     // };
     res.CreatePreset = (projectId: number, name: string) => {
-        dispatch(window.G_TaskManagementTaskController.LoadTasksRedux(filter));
+        window.G_TaskManagementPresetController.CreateRedux(name, projectId, dispatch);
     };
     res.UpdatePreset = (preset: Preset) => {
-        dispatch(window.G_TaskManagementTaskController.LoadTasksRedux(filter));
+        window.G_TaskManagementPresetController.UpdateRedux(preset, dispatch);
     };
     res.DeletePreset = (id: number) => {
-        dispatch(window.G_TaskManagementTaskController.LoadTasksRedux(filter));
+        window.G_TaskManagementPresetController.DeleteRedux(id, dispatch);
     };
 
     return res;

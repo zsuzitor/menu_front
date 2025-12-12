@@ -163,6 +163,7 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
     const tempoUrl = new RouteBuilder().TempoUrl(props.CurrentProjectId);
     const sprintsUrl = new RouteBuilder().SprintsUrl(props.CurrentProjectId);
     const labelsUrl = new RouteBuilder().LabelsUrl(props.CurrentProjectId);
+    const presetsUrl = new RouteBuilder().PresetsUrl(props.CurrentProjectId);
 
     return <div className='task-management-main-container'>
         <div className='preloader' id={TaskManagementPreloader}></div>
@@ -191,6 +192,10 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
                         e.preventDefault();
                         navigate(labelsUrl);
                     }}>Лейблы</a>
+                    <a href={presetsUrl} onClick={(e) => {
+                        e.preventDefault();
+                        navigate(presetsUrl);
+                    }}>Пресеты</a>
                 </div>}
             </div>
         </div>

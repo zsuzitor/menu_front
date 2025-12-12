@@ -305,7 +305,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                         PopupContent={<div className='tasks-filters-window'>
                             <div className='add-one-filter' onClick={() => setFilterVisibilityName(true)}>Название</div>
                             <div className='add-one-filter' onClick={() => setFilterVisibilityCreator(true)}>Создатель</div>
-                            <div className='add-one-filter' onClick={() => setFilterVisibilityReviwer(true)}>Ревьювер</div>
+                            <div className='add-one-filter' onClick={() => setFilterVisibilityReviwer(true)}>Исполнитель</div>
                             <div className='add-one-filter' onClick={() => setFilterVisibilityStatus(true)}>Статус</div>
                             <div className='add-one-filter' onClick={() => setFilterVisibilitySprint(true)}>Спринт</div>
                             {/* <div className='add-one-filter' onClick={() => props.SetFilterTaskLabel([...props.TasksFilters.Labels, -1])}>Лейбл</div> */}
@@ -375,7 +375,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                             </div>
                         </div>}
                         {filterVisibilityReviwer && <div className='filter-tag'>
-                            <span className='filter-name'>Ревьювер:</span>
+                            <span className='filter-name'>Исполнитель:</span>
                             <select className='filter-input' value={props.TasksFilters.ExecutorId}
                                 onChange={(e) => props.SetFilterTaskExecutor(+e.target.value)}>
                                 <option value={-1}>Не выбрано</option>

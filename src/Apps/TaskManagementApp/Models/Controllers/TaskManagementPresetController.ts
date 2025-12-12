@@ -106,7 +106,8 @@ export class TaskManagementPresetController implements ITaskManagementPresetCont
             FuncSuccess: (xhr, status, jqXHR) => {
             },
             FuncError: (xhr, status, error) => { },
-            Url: `${G_PathToServer}${TaskManagementApiPresetUrl}/create`
+            Url: `${G_PathToServer}${TaskManagementApiPresetUrl}/create`,
+            ContentType: 'body'
 
         }) as ServerResult<IPresetDataBack>;
         return res.Data;
@@ -140,7 +141,8 @@ export class TaskManagementPresetController implements ITaskManagementPresetCont
             FuncSuccess: (xhr, status, jqXHR) => {
             },
             FuncError: (xhr, status, error) => { },
-            Url: `${G_PathToServer}${TaskManagementApiPresetUrl}/update`
+            Url: `${G_PathToServer}${TaskManagementApiPresetUrl}/update`,
+            ContentType: 'body'
 
         }) as ServerResult<BoolResultBackNew>;
         return res.Data;

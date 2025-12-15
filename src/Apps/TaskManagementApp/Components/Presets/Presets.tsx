@@ -46,7 +46,7 @@ const Presets = (props: IPresetsProps) => {
                 <div>{x.Id} {x.Name}</div>
                 <div className='one-preset-buttons'>
                     <div className='action-btn' onClick={(e) => {
-                        if (!confirm('Удалить пресет' + x.Name + '?')) {
+                        if (!confirm('Удалить пресет ' + x.Name + '?')) {
                             return;
                         }
                         e.preventDefault();

@@ -15,18 +15,18 @@ require('./EditPreset.css');
 const EditPreset = (props: IEditPresetProps) => {
 
     const [newName, setNewName] = useState("");
-    const [newCreatorId, setNewCreatorId] = useState(0);
-    const [newExecutorId, setNewExecutorId] = useState(0);
-    const [newStatusId, setNewStatusId] = useState(0);
-    const [newSprintId, setNewSprintId] = useState(0);
+    const [newCreatorId, setNewCreatorId] = useState(-1);
+    const [newExecutorId, setNewExecutorId] = useState(-1);
+    const [newStatusId, setNewStatusId] = useState(-1);
+    const [newSprintId, setNewSprintId] = useState(-1);
     const [newLabels, setNewLabels] = useState([]);
 
     useEffect(() => {
-        setNewName(props.Preset.Name);
-        setNewCreatorId(props.Preset.CreatorId);
-        setNewExecutorId(props.Preset.ExecutorId);
-        setNewStatusId(props.Preset.StatusId);
-        setNewSprintId(props.Preset.SprintId);
+        setNewName(props.Preset.Name ?? '');
+        setNewCreatorId(props.Preset.CreatorId ?? -1);
+        setNewExecutorId(props.Preset.ExecutorId ?? -1);
+        setNewStatusId(props.Preset.StatusId ?? -1);
+        setNewSprintId(props.Preset.SprintId ?? -1);
         setNewLabels(props.Preset.LabelId);
     }, [props.Preset]);
 
@@ -73,21 +73,23 @@ const EditPreset = (props: IEditPresetProps) => {
                 {props.Sprints.map(sprint => <option value={sprint.Id} key={sprint.Id}>{sprint.Name}</option>)}
             </select>
 
-            <SaveCancelInputMultiSelectWithSearch
-                CancelEvent={() => {
-                    // setTaskLabelEditable(false)
-                    setNewLabels([]);
-                }}
-                SaveEvent={(id) => {
-                    // props.UpdateTaskLabels(props.Task.Id, id);
-                    setNewLabels(id);
-                    return true;
-                }}
-                Selected={newLabels}
-                ValuesWithId={props.Labels.map(x => {
-                    return { Id: x.Id, Text: x.Name };
-                })}
-            />
+            <div className='edit-labels'>
+                <SaveCancelInputMultiSelectWithSearch
+                    CancelEvent={() => {
+                        // setTaskLabelEditable(false)
+                        setNewLabels([]);
+                    }}
+                    SaveEvent={(id) => {
+                        // props.UpdateTaskLabels(props.Task.Id, id);
+                        setNewLabels(id);
+                        return true;
+                    }}
+                    Selected={newLabels}
+                    ValuesWithId={props.Labels.map(x => {
+                        return { Id: x.Id, Text: x.Name };
+                    })}
+                />
+            </div>
 
             <button className='button button-grey' onClick={() => {
                 props.UpdatePreset({

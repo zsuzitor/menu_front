@@ -4,10 +4,10 @@ export class Preset {
     Id: number;
     Name: string;
     ProjectId: number;
-    CreatorId: number;
+    CreatorId?: number;
     ExecutorId?: number;
-    StatusId: number;
-    SprintId: number;
+    StatusId?: number;
+    SprintId?: number;
     LabelId: number[];
 
     constructor() {
@@ -24,7 +24,7 @@ export class Preset {
         this.ExecutorId = data.ExecutorId;
         this.StatusId = data.StatusId;
         this.SprintId = data.SprintId;
-        this.LabelId = data.LabelId;
+        this.LabelId = data.Labels;
 
         return this;
     }

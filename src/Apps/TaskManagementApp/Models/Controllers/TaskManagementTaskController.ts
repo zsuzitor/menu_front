@@ -380,6 +380,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
             "pageSize": taskFilter.PageSize,
             "sprintId": taskFilter.SprintId,
             "labelId": taskFilter.LabelIds,
+            "presetId":taskFilter.PresetId,
         };
 
 

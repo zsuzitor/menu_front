@@ -1,6 +1,30 @@
 .presets-page-main {
     width: 100%;
+    padding-top: 60px;
 }
+
+.presets-page-main .one-preset-block {
+
+    display: flex;
+    justify-content: space-between;
+    max-height: 30px;
+    overflow: hidden;
+}
+
+.presets-page-main .one-preset-info {
+
+    display: flex;
+    gap: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    flex-grow: 1;
+}
+
+
+.presets-page-main .one-preset-info input {
+    flex-grow: 1;
+}
+
 
 
 .presets-page-main .action-btn {
@@ -10,12 +34,15 @@
     flex-shrink: 0;
 }
 
-.presets-page-main .one-preset-block {
+.presets-page-main .preset-block {
+
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .one-preset-block .one-preset-buttons {
     display: flex;
+    flex-grow: 0;
 
 }

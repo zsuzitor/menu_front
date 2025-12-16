@@ -5,6 +5,7 @@ export interface ITaskFilter {
     CreatorId: number;
     ExecutorId: number;
     StatusId: number;
+    PresetId: number;
     PageNumber: number;
     PageSize: number;
     SprintId: number;

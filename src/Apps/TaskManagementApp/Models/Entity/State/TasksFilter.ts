@@ -4,6 +4,7 @@ export class TasksFilter {
     ExecutorId: number;
     Status: number;
     Sprint: number;
+    Preset: number;
     Labels: number[];
     TaskName: string;
     Page: number;
@@ -17,6 +18,7 @@ export class TasksFilter {
         this.Page = 1;
         this.Retrigger = 0;
         this.Sprint = -1;
+        this.Preset = -1;
         this.Labels = [];
     }
 }

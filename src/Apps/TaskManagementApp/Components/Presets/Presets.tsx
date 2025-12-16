@@ -32,16 +32,27 @@ const Presets = (props: IPresetsProps) => {
                 Preset={editPreset}
                 UpdatePreset={props.UpdatePreset}
             />}></AdditionalWindow> : <></>}
-        <div>
-            <input type='text' className='form-control'
-                placeholder='Название'
-                value={newPresetName} onChange={(e) => setNewPresetName(e.target.value)}></input>
-            <button className='btn btn-b-light'
-                onClick={() => {
-                    props.CreatePreset(props.ProjectId, newPresetName);
-                }}>Добавить</button>
-        </div>
-        <div>
+
+
+        <div className='preset-block'>
+            <div className='one-preset-block'>
+                <div className='one-preset-info'>
+                    <input type='text'
+                        placeholder='Название'
+                        value={newPresetName} onChange={(e) => setNewPresetName(e.target.value)}></input>
+                </div>
+
+                <div className='one-preset-buttons'>
+                    <div className='action-btn' onClick={() => {
+                        props.CreatePreset(props.ProjectId, newPresetName);
+
+                    }}
+                        title='Создать'>
+                        <img className='persent-100-width-height' src="/images/save-icon.png" />
+                    </div>
+
+                </div>
+            </div>
             {props.Presets.map(x => <div className='one-preset-block' key={x.Id} >
                 <div>{x.Id} {x.Name}</div>
                 <div className='one-preset-buttons'>

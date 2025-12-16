@@ -38,6 +38,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
     const [filterVisibilityStatus, setFilterVisibilityStatus] = useState(false);
     const [filterVisibilitySprint, setFilterVisibilitySprint] = useState(false);
     const [filterVisibilityLabel, setFilterVisibilityLabel] = useState(false);
+    const [filterVisibilityPreset, setFilterVisibilityPreset] = useState(false);
     const [filterVisibilityReviwer, setFilterVisibilityReviwer] = useState(false);
 
 
@@ -111,7 +112,8 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
     }, [props.Project?.Id, props.TasksFilters.CreatorId, props.TasksFilters.ExecutorId
         , props.TasksFilters.Status, props.TasksFilters.TaskName
-        , props.TasksFilters.Page, props.TasksFilters.Retrigger, props.TasksFilters.Sprint, labelsChanges]);
+        , props.TasksFilters.Page, props.TasksFilters.Retrigger, props.TasksFilters.Sprint
+        , props.TasksFilters.Preset, labelsChanges]);
 
 
 
@@ -122,7 +124,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
             , PageNumber: props.TasksFilters.Page, PageSize: tasksOnPageCount
             , ProjectId: props.Project.Id, ExecutorId: props.TasksFilters.ExecutorId
             , StatusId: props.TasksFilters.Status, SprintId: props.TasksFilters.Sprint
-            , LabelIds: props.TasksFilters.Labels
+            , LabelIds: props.TasksFilters.Labels, PresetId: props.TasksFilters.Preset
         } as ITaskFilter;
 
         props.ReloadTasks(filter);
@@ -142,6 +144,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
         setFilterVisibilityReviwer(false);
         setFilterVisibilitySprint(false);
         setFilterVisibilityLabel(false);
+        setFilterVisibilityPreset(false);
     }
 
     // const labelsRender = (labels: TaskLabel[]) => {
@@ -310,6 +313,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                             <div className='add-one-filter' onClick={() => setFilterVisibilitySprint(true)}>Спринт</div>
                             {/* <div className='add-one-filter' onClick={() => props.SetFilterTaskLabel([...props.TasksFilters.Labels, -1])}>Лейбл</div> */}
                             <div className='add-one-filter' onClick={() => setFilterVisibilityLabel(true)}>Лейбл</div>
+                            <div className='add-one-filter' onClick={() => setFilterVisibilityPreset(true)}>Пресет</div>
                         </div>}
                     ></PopupWindow></div>
 
@@ -318,11 +322,13 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                         || filterVisibilityReviwer
                         || filterVisibilityStatus
                         || filterVisibilityLabel
-                        || filterVisibilitySprint)
+                        || filterVisibilitySprint
+                        || filterVisibilityPreset)
                         || (props.TasksFilters.CreatorId != -1
                             || props.TasksFilters.ExecutorId != -1
                             || props.TasksFilters.Status != -1
                             || props.TasksFilters.Sprint != -1
+                            || props.TasksFilters.Preset != -1
                             || props.TasksFilters.Labels.length > 0
                             || props.TasksFilters.TaskName != ''
                             || props.TasksFilters.Page != 1))
@@ -437,6 +443,21 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                                     setFilterVisibilityLabel(false);
                                 }}>×</button>
                         </div>)} */}
+                        {filterVisibilityPreset && <div className='filter-container'>
+                            <div className='filter-tag'>
+                                <span className='filter-name'>Пресет:</span>
+                                <select className='filter-input' value={props.TasksFilters.Preset}
+                                    onChange={(e) => props.SetFilterPreset(+e.target.value)}>
+                                    <option value={-1}>Не выбрано</option>
+                                    {props.Presets.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                                </select>
+                                <button className='remove-filter' title='Удалить фильтр'
+                                    onClick={() => {
+                                        props.SetFilterPreset(-1);
+                                        setFilterVisibilityPreset(false);
+                                    }}>×</button>
+                            </div>
+                        </div>}
                     </div>
 
                     {/* <button className='button button-grey' onClick={() => clearFilters()}>Очистить</button> */}

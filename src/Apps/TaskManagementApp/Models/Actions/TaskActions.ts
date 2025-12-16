@@ -61,6 +61,11 @@ export function SetFilterTaskSprintActionCreator(num: number): AppAction<number>
     return { type: SetFilterTaskSprintActionName, payload: num };
 };
 
+export const SetFilterTaskPresetActionName: string = 'SetFilterTaskPresetAction';
+export function SetFilterTaskPresetActionCreator(num: number): AppAction<number> {
+    return { type: SetFilterTaskPresetActionName, payload: num };
+};
+
 export const SetFilterTaskLabelActionName: string = 'SetFilterTaskLabelAction';
 export function SetFilterTaskLabelActionCreator(num: number[]): AppAction<number[]> {
     return { type: SetFilterTaskLabelActionName, payload: num };

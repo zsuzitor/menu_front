@@ -38,6 +38,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
     const [taskExecutorEditable, setTaskExecutorEditable] = useState(false);
 
     const [showAddWorkTimeNew, setShowAddWorkTimeNew] = useState(false);
+    const [showEditWorkTime, setShowEditWorkTime] = useState(-1);
     const [showAddRelationNew, setShowAddRelationNew] = useState(false);
     // const [showAddWorkTimeBlock, setShowAddWorkTimeBlock] = useState(false);
     const [radioContentTypeShown, setRadioContentTypeShown] = useState(0);//1-списания, 2 подзадачи
@@ -165,15 +166,30 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
 
                 }}></input> */}
             {/* <button onClick={() => props.CreateTimeLog(props.Task.Id, timeLogText, timeLogMin, timeLogDate)}>добавить</button> */}
-            {showAddWorkTimeNew ? <AdditionalWindow CloseWindow={() => setShowAddWorkTimeNew(false)}
+            {showAddWorkTimeNew ? <AdditionalWindow CloseWindow={() => {
+                setShowEditWorkTime(-1);
+                setShowAddWorkTimeNew(false)
+            }}
                 IsHeightWindow={false}
                 Title='Работа'
                 InnerContent={() => <AddWorkTimeLog
-                    Close={() => setShowAddWorkTimeNew(false)}
+                    Close={() => {
+
+                        setShowEditWorkTime(-1);
+                        setShowAddWorkTimeNew(false);
+                    }}
                     TaskId={props.Task.Id}
                     DefaultDate={null}
                     CreateTimeLog={props.CreateTimeLog}
-                />}></AdditionalWindow> : <></>}
+                    TimeLog={showEditWorkTime > 1 ? props.Task.TimeLogs.find(x => x.Id == showEditWorkTime) : null}
+                    UpdateTimeLog={props.UpdateTimeLog}
+                    DeleteTimeLog={(i => {
+                        props.DeleteTimeLog(i, props.Task.Id);
+                        setShowEditWorkTime(-1);
+                        setShowAddWorkTimeNew(false);
+                    })}
+                />}></AdditionalWindow> : <></>
+            }
             <div className='add-time-log-header'>
                 {/* <div className='add-time-log-show-btn'
                     onClick={() => setShowAddWorkTimeBlock(!showAddWorkTimeBlock)}>Списания:</div> */}
@@ -185,7 +201,12 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
             </div>
             <div className='work-time-block-list'>
                 {props.Task.TimeLogs.map(x => {
-                    return <div key={x.Id} className='one-work-time-block'>
+                    return <div key={x.Id} className='one-work-time-block'
+                        onClick={() => {
+                            setShowEditWorkTime(x.Id);
+                            setShowAddWorkTimeNew(true);
+                        }}
+                    >
                         <div className='time-block-left'>{props.ProjectUsers.find(u => u.Id === x.ProjectUserId)?.Email || ''}</div>
                         <div className='time-block-center'>{formatDate(x.DayOfLog)}</div>
                         <div className='time-block-right'>{renderWorkNum(x.TimeMinutes)}</div>
@@ -194,7 +215,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
 
 
 
-        </div>
+        </div >
     }
 
 

@@ -228,6 +228,10 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
             <button
                 className='button button-grey'
                 onClick={() => props.Close()}>Отменить</button>
+
+            {props.DeleteTimeLog && <button
+                className='button button-grey'
+                onClick={() => props.DeleteTimeLog(props.TimeLog.Id)}>Удалить</button>}
         </div>
 
     </div>

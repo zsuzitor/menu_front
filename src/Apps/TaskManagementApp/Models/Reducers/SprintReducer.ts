@@ -36,7 +36,7 @@ export function TaskManagementSprintReducer(state: AppState = new AppState(), ac
 
                 return newState;
             }
-            
+
         case GetSprintsTasksActionName:
             {
                 let newState = cloneDeep(state);
@@ -87,11 +87,12 @@ export function TaskManagementSprintReducer(state: AppState = new AppState(), ac
                     newState.TaskManagementApp.CurrentSprint.Tasks.push(dt);//добавляем пустую, чтот бы тригером перезагрузить список
                 }
 
-                let helper = new Helper();
-                var tasks = helper.GetTaskFromState(newState, data.taskId);
-                tasks.forEach(tsk => {
-                    tsk.SprintId = [...tsk.SprintId, data.sprintId];
-                });
+
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == data.taskId)
+                    task.SprintId = [...task.SprintId, data.sprintId];
+
+          
 
                 return newState;
             }
@@ -105,11 +106,12 @@ export function TaskManagementSprintReducer(state: AppState = new AppState(), ac
                             .filter(x => x.Id != data.taskId);
                 }
 
-                let helper = new Helper();
-                var tasks = helper.GetTaskFromState(newState, data.taskId);
-                tasks.forEach(tsk => {
-                    tsk.SprintId = [...tsk.SprintId, data.sprintId];
-                });
+
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == data.taskId)
+                    task.SprintId = task.SprintId.filter(x => x != data.sprintId);
+
+            
 
                 return newState;
             }
@@ -142,11 +144,11 @@ export function TaskManagementSprintReducer(state: AppState = new AppState(), ac
                     }
                 }
 
-                let helper = new Helper();
-                var tasks = helper.GetTaskFromState(newState, data.taskId);
-                tasks.forEach(tsk => {
-                    tsk.SprintId = [...data.sprintId];
-                });
+
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == data.taskId)
+                    task.SprintId = [...data.sprintId];
+
 
                 return newState;
             }

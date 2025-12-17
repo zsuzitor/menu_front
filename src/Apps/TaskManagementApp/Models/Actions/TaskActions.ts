@@ -1,6 +1,7 @@
 import { AppAction } from "../../../../Models/Actions/Actions";
 import { LoadWorkTasksResult } from "../Entity/LoadWorkTasksResult";
 import { OneTask } from "../Entity/State/OneTask";
+import { OneTaskInList } from "../Entity/State/OneTaskInList";
 import { TaskRelation } from "../Entity/State/TaskRelation";
 import { TasksFilter } from "../Entity/State/TasksFilter";
 
@@ -17,7 +18,7 @@ export function AddLoadTriggerActionCreator(): AppAction<null> {
 
 
 export const UpdateTaskActionName: string = 'UpdateTaskAction';
-export function UpdateTaskActionCreator(data: OneTask): AppAction<OneTask> {
+export function UpdateTaskActionCreator(data: OneTaskInList): AppAction<OneTaskInList> {
     return { type: UpdateTaskActionName, payload: data };
 };
 

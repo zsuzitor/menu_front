@@ -10,6 +10,7 @@ import { TaskManagementAddTaskRelationUrl, TaskManagementApiTaskUrl, TaskManagem
 import { ITaskFilter } from "../Entity/ITaskFilter";
 import { LoadWorkTasksResult } from "../Entity/LoadWorkTasksResult";
 import { OneTask } from "../Entity/State/OneTask";
+import { OneTaskInList } from "../Entity/State/OneTaskInList";
 import { TaskRelation } from "../Entity/State/TaskRelation";
 
 
@@ -23,7 +24,7 @@ export type UpdatePartTask = (error: MainErrorObjectBack, data: BoolResultBackNe
 
 export interface ITaskManagementTaskController {
     AddTaskToProjectRedux: (task: OneTask, projectId: number) => void;
-    UpdateTaskRedux: (task: OneTask) => void;
+    UpdateTaskRedux: (task: OneTaskInList) => void;
     LoadTasksRedux: (taskFilter: ITaskFilter) => void;
     LoadTaskRedux: (taskId: number) => void;
     DeleteTaskRedux: (id: number) => void;
@@ -312,7 +313,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
     }
 
 
-    UpdateTaskRedux = (task: OneTask) => {
+    UpdateTaskRedux = (task: OneTaskInList) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
             this.UpdateTask(task, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
@@ -328,14 +329,14 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
         };
     }
 
-    UpdateTask = (task: OneTask, onSuccess: UpdateTask) => {
+    UpdateTask = (task: OneTaskInList, onSuccess: UpdateTask) => {
         let data = {
             "taskId": task.Id,
             "name": task.Name,
             "statusId": task.StatusId,
-            "creatorId": task.CreatorId,
+            // "creatorId": task.CreatorId,
             "executorId": task.ExecutorId,
-            "description": task.Description,
+            // "description": task.Description,
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,

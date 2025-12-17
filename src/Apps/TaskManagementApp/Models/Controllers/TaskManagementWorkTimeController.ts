@@ -2,7 +2,7 @@ import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { AppState } from "../../../../Models/Entity/State/AppState";
-import { SetTaskTimeLogActionCreator, SetProjectTimeLogDataActionCreator, SetUserTimeLogDataActionCreator, SetUserTempoTimeLogDataActionCreator, AddNewTimeLogTaskActionCreator, AddNewTimeLogTempoActionCreator, DelTimeLogTempoActionCreator, UpdateTimeLogTempoActionCreator } from "../Actions/TimeLogAction";
+import { SetTaskTimeLogActionCreator, SetProjectTimeLogDataActionCreator, SetUserTimeLogDataActionCreator, SetUserTempoTimeLogDataActionCreator, AddNewTimeLogTaskActionCreator, AddNewTimeLogTempoActionCreator, DeleteTimeLogTempoActionCreator, UpdateTimeLogTempoActionCreator, DeleteTimeLogActionCreator, DeleteTimeLogActionParam } from "../Actions/TimeLogAction";
 import { IProjectUserDataBack } from "../BackModels/IProjectUserDataBack";
 import { IWorkTimeLogDataBack } from "../BackModels/IWorkTimeLogDataBack";
 import { TaskManagementApiWorkTimeUrl, TaskManagementPreloader } from "../Consts";
@@ -18,6 +18,7 @@ export interface ITaskManagementWorkTimeController {
     CreateTimeTempoLogRedux: (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;
     UpdateTimeTempoLogRedux: (id: number, taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;
     DeleteTimeTempoLogRedux: (timeId: number) => void;
+    DeleteTimeTaskLogRedux: (timeId: number, taskId: number) => void;
     CopyTimeTempoLogRedux: (timeId: number) => void;
     LoadTimeLogsForTaskRedux: (taskId: number) => void;
     LoadTimeLogsForProjectRedux: (projectId: number, dateFrom: Date, dateTo: Date) => void;
@@ -39,7 +40,9 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
                 }
 
                 if (data?.Id) {
+                    // console.log(data);
                     let dt = new TimeLog().FillByBackModel(data);
+                    // console.log(dt);
                     dispatch(AddNewTimeLogTaskActionCreator(dt));
                 }
             });
@@ -138,11 +141,31 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
                 }
 
                 if (data?.Result) {
-                    dispatch(DelTimeLogTempoActionCreator(timeId));
+                    dispatch(DeleteTimeLogTempoActionCreator(timeId));
                 }
             });
         };
     }
+
+    DeleteTimeTaskLogRedux = (timeId: number, taskId: number) => {
+        return (dispatch: any, getState: any) => {
+            this.preloader(true);
+            this.DeleteTimeLog(timeId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
+                this.preloader(false);
+                if (error) {
+                    return;
+                }
+
+                if (data?.Result) {
+                    let d = new DeleteTimeLogActionParam();
+                    d.Id = timeId;
+                    d.TaskId = taskId;
+                    dispatch(DeleteTimeLogActionCreator(d));
+                }
+            });
+        };
+    }
+
 
     CopyTimeTempoLogRedux = (timeId: number) => {
         return (dispatch: any, getState: any) => {
@@ -194,7 +217,9 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
                 }
 
                 if (data) {
+                    // console.log(data);
                     let mapped = data.map(x => new TimeLog().FillByBackModel(x));
+                    // console.log(mapped);
                     dispatch(SetTaskTimeLogActionCreator({ TaskId: taskId, Time: mapped }));
                 }
             });

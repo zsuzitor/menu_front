@@ -466,7 +466,6 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                     ? props.Tasks.map(x =>
                         <OneWorkTask key={x.Id}
                             Task={x}
-                            Comments={x.Comments}
                             CurrentProjectId={props.Project.Id}
                         ></OneWorkTask>)
                     : <div className='management-project-tasks-no-tasks'>

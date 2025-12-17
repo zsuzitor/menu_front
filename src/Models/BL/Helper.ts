@@ -164,22 +164,22 @@ export class Helper {
         return retult;
     }
 
-    GetAllTaskFromState(state: AppState): OneTask[] {
-        //todo куда то вынести
-        let res: OneTask[] = [...state.TaskManagementApp.CurrentProjectTasks];
-        if (state.TaskManagementApp.CurrentTask)
-            res.push(state.TaskManagementApp.CurrentTask);
+    // GetAllTaskFromState(state: AppState): OneTask[] {
+    //     //todo куда то вынести
+    //     let res: OneTask[] = [...state.TaskManagementApp.CurrentProjectTasks];
+    //     if (state.TaskManagementApp.CurrentTask)
+    //         res.push(state.TaskManagementApp.CurrentTask);
 
-        return res;
-    }
+    //     return res;
+    // }
 
-    GetTaskFromState(state: AppState, taskId: number): OneTask[] {
-        //todo куда то вынести
-        if (taskId < 1) {
-            return [];
-        }
-        return this.GetAllTaskFromState(state).filter(x =>x.Id=== taskId)
-    }
+    // GetTaskFromState(state: AppState, taskId: number): OneTask[] {
+    //     //todo куда то вынести
+    //     if (taskId < 1) {
+    //         return [];
+    //     }
+    //     return this.GetAllTaskFromState(state).filter(x =>x.Id=== taskId)
+    // }
 
 
 

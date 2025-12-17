@@ -49,11 +49,14 @@ export function TaskManagementLabelReducer(state: AppState = new AppState(), act
             {
                 let newState = cloneDeep(state);
                 let data = action.payload as UpdateTaskLabelsActionDataType;
-                let helper = new Helper();
-                var tasks = helper.GetTaskFromState(newState, data.TaskId);
-                tasks.forEach(tsk => {
-                    tsk.LabelId = data.LabelId;
-                });
+                // let helper = new Helper();
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == data.TaskId)
+                    task.LabelId = data.LabelId;
+                // var tasks = helper.GetTaskFromState(newState, data.TaskId);
+                // tasks.forEach(tsk => {
+                //     tsk.LabelId = data.LabelId;
+                // });
 
                 return newState;
             }
@@ -61,12 +64,18 @@ export function TaskManagementLabelReducer(state: AppState = new AppState(), act
             {
                 let newState = cloneDeep(state);
                 let data = action.payload as UpdateTaskLabelActionDataType;
-                let helper = new Helper();
-                var tasks = helper.GetTaskFromState(newState, data.TaskId);
-                tasks.forEach(tsk => {
-                    if (!tsk.LabelId.find(x => x == data.LabelId))
-                        tsk.LabelId = [...tsk.LabelId, data.LabelId];
-                });
+                // let helper = new Helper();
+
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == data.TaskId)
+                    if (!task.LabelId.find(x => x == data.LabelId))
+                        task.LabelId = [...task.LabelId, data.LabelId];
+
+                // var tasks = helper.GetTaskFromState(newState, data.TaskId);
+                // tasks.forEach(tsk => {
+                //     if (!tsk.LabelId.find(x => x == data.LabelId))
+                //         tsk.LabelId = [...tsk.LabelId, data.LabelId];
+                // });
 
                 return newState;
             }
@@ -75,11 +84,14 @@ export function TaskManagementLabelReducer(state: AppState = new AppState(), act
             {
                 let newState = cloneDeep(state);
                 let data = action.payload as DeleteLabelFromTaskActionDataType;
-                let helper = new Helper();
-                var tasks = helper.GetTaskFromState(newState, data.TaskId);
-                tasks.forEach(tsk => {
-                    tsk.LabelId = tsk.LabelId.filter(x => x != data.LabelId);
-                });
+                // let helper = new Helper();
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == data.TaskId)
+                    task.LabelId = task.LabelId.filter(x => x != data.LabelId);
+                // var tasks = helper.GetTaskFromState(newState, data.TaskId);
+                // tasks.forEach(tsk => {
+                //     tsk.LabelId = tsk.LabelId.filter(x => x != data.LabelId);
+                // });
 
                 return newState;
             }

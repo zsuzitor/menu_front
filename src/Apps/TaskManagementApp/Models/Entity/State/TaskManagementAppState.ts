@@ -8,6 +8,7 @@ import { ProjectSprint } from "./ProjectSprint";
 import { SprintInfo } from "./SprintInfo";
 import { TaskLabel } from "./TaskLabel";
 import { Preset } from "./Preset";
+import { OneTaskInList } from "./OneTaskInList";
 
 
 export class TaskManagementAppState {
@@ -19,7 +20,7 @@ export class TaskManagementAppState {
     CurrentProjectUsers: ProjectUser[];
     CurrentProjectStatuses: WorkTaskStatus[];
     CurrentProjectTimes: ProjectTimes;
-    CurrentProjectTasks: OneTask[];
+    CurrentProjectTasks: OneTaskInList[];
     CurrentProjectSprints: ProjectSprint[];
     CurrentProjectLabels: TaskLabel[];
     CurrentProjectTasksAllCount: number;

@@ -10,6 +10,7 @@ import { OneTask } from '../Entity/State/OneTask';
 import { TasksFilter } from '../Entity/State/TasksFilter';
 import { Helper } from '../../../../Models/BL/Helper';
 import { TaskRelation } from '../Entity/State/TaskRelation';
+import { OneTaskInList } from '../Entity/State/OneTaskInList';
 
 
 export function TaskManagementTaskReducer(state: AppState = new AppState(), action: AppAction<any>): AppState {
@@ -30,19 +31,27 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
         case UpdateTaskActionName:
             {
                 let newState = cloneDeep(state);
-                let payload = action.payload as OneTask;
-                let helper = new Helper();
-                var tasks = helper.GetTaskFromState(newState, payload.Id);
-                tasks.forEach(tsk => {
-                    tsk.Name = payload.Name;
-                    tsk.StatusId = payload.StatusId;
-                    tsk.ExecutorId = payload.ExecutorId;
-                    tsk.CreatorId = payload.CreatorId;
-                    tsk.CreateDate = payload.CreateDate;
-                    tsk.LastUpdateDate = payload.LastUpdateDate;
-                    tsk.Description = payload.Description;
-                });
+                let payload = action.payload as OneTaskInList;
 
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == payload.Id) {
+                    task.Name = payload.Name;
+                    task.StatusId = payload.StatusId;
+                    task.ExecutorId = payload.ExecutorId;
+                    task.CreatorId = payload.CreatorId;
+                    task.CreateDate = payload.CreateDate;
+
+                }
+
+                var taskList = newState.TaskManagementApp.CurrentProjectTasks.find(x => x.Id == payload.Id);
+                if (taskList) {
+                    taskList.Name = payload.Name;
+                    taskList.StatusId = payload.StatusId;
+                    taskList.ExecutorId = payload.ExecutorId;
+                    taskList.CreatorId = payload.CreatorId;
+                    taskList.CreateDate = payload.CreateDate;
+
+                }
 
                 return newState;
             }
@@ -165,11 +174,18 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as UpdateTaskNameActionParam;
-                let helper = new Helper();
-                var tasks = helper.GetTaskFromState(newState, payload.Id);
-                tasks.forEach(tsk => {
-                    tsk.Name = payload.Text;
-                });
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == payload.Id) {
+                    task.Name = payload.Text;
+
+                }
+
+
+                var taskList = newState.TaskManagementApp.CurrentProjectTasks.find(x => x.Id == payload.Id);
+                if (taskList)
+                    taskList.Name = payload.Text;
+
+          
 
                 return newState;
             }
@@ -178,12 +194,13 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as UpdateTaskDescriptionActionParam;
-                let helper = new Helper();
-                var tasks = helper.GetTaskFromState(newState, payload.Id);
-                tasks.forEach(tsk => {
-                    tsk.Description = payload.Text;
-                });
 
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == payload.Id) {
+                    task.Description = payload.Text;
+
+                }
+            
                 return newState;
             }
 
@@ -191,11 +208,16 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as UpdateTaskStatusActionParam;
-                let helper = new Helper();
-                var tasks = helper.GetTaskFromState(newState, payload.Id);
-                tasks.forEach(tsk => {
-                    tsk.StatusId = payload.IdStatus;
-                });
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == payload.Id) {
+                    task.StatusId = payload.IdStatus;
+
+                }
+
+                var taskList = newState.TaskManagementApp.CurrentProjectTasks.find(x => x.Id == payload.Id);
+                if (taskList)
+                    taskList.StatusId = payload.IdStatus;
+          
 
                 return newState;
             }
@@ -204,11 +226,15 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as UpdateTaskExecutorActionParam;
-                let helper = new Helper();
-                var tasks = helper.GetTaskFromState(newState, payload.Id);
-                tasks.forEach(tsk => {
-                    tsk.ExecutorId = payload.PersonId;
-                });
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == payload.Id) {
+                    task.ExecutorId = payload.PersonId;
+                }
+
+                var taskList = newState.TaskManagementApp.CurrentProjectTasks.find(x => x.Id == payload.Id);
+                if (taskList)
+                    taskList.ExecutorId = payload.PersonId;
+            
 
                 return newState;
             }
@@ -217,15 +243,12 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as TaskRelation;
-                let helper = new Helper();
-                var tasks = helper.GetTaskFromState(newState, payload.MainWorkTaskId);
-                tasks.forEach(tsk => {
-                    tsk.Relations = [...tsk.Relations, payload];
-                });
-                tasks = helper.GetTaskFromState(newState, payload.SubWorkTaskId);
-                tasks.forEach(tsk => {
-                    tsk.Relations = [...tsk.Relations, payload];
-                });
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == payload.MainWorkTaskId || task?.Id == payload.SubWorkTaskId) {
+                    task.Relations = [...task.Relations, payload];
+                }
+
+          
 
                 return newState;
             }
@@ -235,10 +258,9 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
                 let newState = cloneDeep(state);
                 let payload = action.payload as number;
                 let helper = new Helper();
-                var tasks = helper.GetAllTaskFromState(newState);
-                tasks.forEach(tsk => {
-                    tsk.Relations = tsk.Relations.filter(x => x.Id != payload);
-                });
+                newState.TaskManagementApp.CurrentTask.Relations
+                    = newState.TaskManagementApp.CurrentTask.Relations.filter(x => x.Id != payload);
+              
 
                 return newState;
             }
@@ -247,10 +269,8 @@ export function TaskManagementTaskReducer(state: AppState = new AppState(), acti
                 let newState = cloneDeep(state);
                 let payload = action.payload as TaskRelation[];
                 let helper = new Helper();
-                var tasks = helper.GetAllTaskFromState(newState);
-                tasks.forEach(tsk => {
-                    tsk.Relations = payload;
-                });
+                newState.TaskManagementApp.CurrentTask.Relations = payload;
+            
 
                 return newState;
             }

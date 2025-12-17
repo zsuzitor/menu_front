@@ -8,6 +8,7 @@ import { SetCurrentProjectIdActionCreator } from "../../Models/Actions/ProjectAc
 import { SetCurrentTaskIdActionCreator } from "../../Models/Actions/TaskActions";
 import { SetCurrentUserIdActionCreator } from "../../Models/Actions/UserActions";
 import { SetCurrentSprintActionCreator } from "../../Models/Actions/SprintActions";
+import { OneTaskInList } from "../../Models/Entity/State/OneTaskInList";
 
 
 interface ITaskManagementMainOwnProps {
@@ -21,7 +22,7 @@ interface ITaskManagementMainStateToProps {
     ProjectsList: OneProjectInListModel[];
     ProjectsLoaded: boolean;
     CurrentProjectUsers: ProjectUser[];
-    Tasks: OneTask[];
+    Tasks: OneTaskInList[];
 }
 
 interface ITaskManagementMainDispatchToProps {

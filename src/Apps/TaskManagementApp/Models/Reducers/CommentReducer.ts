@@ -24,20 +24,28 @@ export function TaskManagementCommentReducer(state: AppState = new AppState(), a
                 let helper = new Helper();
                 let newState = cloneDeep(state);
                 let payload = action.payload as CommentUpdate;
-                let task = helper.GetTaskFromState(newState, payload.TaskId);
-
-                if (task.length == 0) {
-                    return newState;
-                }
-
-                task.forEach(tsk => {
-                    var comm = tsk.Comments.find(x => x.Id === payload.Id);
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == payload.TaskId) {
+                    var comm = task.Comments.find(x => x.Id === payload.Id);
                     if (!comm) {
                         return newState;
                     }
 
                     comm.Text = payload.Text;
-                });
+                }
+
+                // if (task.length == 0) {
+                //     return newState;
+                // }
+
+                // task.forEach(tsk => {
+                //     var comm = tsk.Comments.find(x => x.Id === payload.Id);
+                //     if (!comm) {
+                //         return newState;
+                //     }
+
+                //     comm.Text = payload.Text;
+                // });
 
                 return newState;
             }
@@ -46,14 +54,9 @@ export function TaskManagementCommentReducer(state: AppState = new AppState(), a
                 let helper = new Helper();
                 let newState = cloneDeep(state);
                 let payload = action.payload as CommentDelete;
-                let task = helper.GetTaskFromState(newState, payload.TaskId);
-                if (task.length > 0) {
-                    task.forEach(tsk => {
-                        tsk.Comments = tsk.Comments.filter(x => x.Id !== payload.Id);
-                    });
-                    return newState;
-                }
-
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == payload.TaskId)
+                    task.Comments = task.Comments.filter(x => x.Id !== payload.Id);
 
                 return newState;
             }
@@ -69,14 +72,10 @@ export function TaskManagementCommentReducer(state: AppState = new AppState(), a
                 comment.CreateDate = payload.CreateDate;
                 comment.CreatorId = payload.CreatorId;
 
-                let task = helper.GetTaskFromState(newState, payload.TaskId);
-                if (task.length > 0) {
-                    task.forEach(tsk => {
-                        tsk.Comments.push(comment);
-                    });
-                    return newState;
-                }
-
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == payload.TaskId)
+                    task.Comments.push(comment);
+    
                 return newState;
             }
         case SetCommentsActionName:
@@ -84,13 +83,9 @@ export function TaskManagementCommentReducer(state: AppState = new AppState(), a
                 let helper = new Helper();
                 let newState = cloneDeep(state);
                 let payload = action.payload as CommentSet;
-                let task = helper.GetTaskFromState(newState, payload.TaskId);
-                if (task.length > 0) {
-                    task.forEach(tsk => {
-                        tsk.Comments = payload.Comments
-                    });
-                    return newState;
-                }
+                let task = newState.TaskManagementApp.CurrentTask;
+                if (task?.Id == payload.TaskId)
+                    task.Comments = payload.Comments;
 
                 return newState;
             }

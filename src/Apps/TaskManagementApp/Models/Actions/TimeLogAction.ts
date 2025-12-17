@@ -17,9 +17,9 @@ export function UpdateTimeLogTempoActionCreator(time: TimeLog): AppAction<TimeLo
     return { type: UpdateTimeLogTempoActionName, payload: time };
 };
 
-export const DelTimeLogTempoActionName: string = 'DelTimeLogTempoAction';
-export function DelTimeLogTempoActionCreator(timeId: number): AppAction<number> {
-    return { type: DelTimeLogTempoActionName, payload: timeId };
+export const DeleteTimeLogTempoActionName: string = 'DeleteTimeLogTempoAction';
+export function DeleteTimeLogTempoActionCreator(timeId: number): AppAction<number> {
+    return { type: DeleteTimeLogTempoActionName, payload: timeId };
 };
 
 export const UpdateTimeLogActionName: string = 'UpdateTimeLogLogAction';

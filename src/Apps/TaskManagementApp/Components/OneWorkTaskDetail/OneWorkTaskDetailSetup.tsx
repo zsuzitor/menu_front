@@ -45,7 +45,8 @@ interface IOneWorkTaskDetailDispatchToProps {
     // SetCurrentTask: (taskId: number) => void;
     ClearCurrentTaskState: () => void;
     CreateTimeLog: (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;
-
+    UpdateTimeLog: (id: number, taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;
+    DeleteTimeLog: (id: number, taskId: number) => void;
 }
 
 export interface IOneWorkTaskDetailProps extends IOneWorkTaskDetailStateToProps, IOneWorkTaskDetailOwnProps, IOneWorkTaskDetailDispatchToProps {
@@ -143,6 +144,13 @@ const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskDetailOwnProps)
         dispatch(window.G_TaskManagementWorkTimeController.CreateTimeLogRedux(taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog));
     };
 
+    res.UpdateTimeLog = (id: number, taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => {
+        dispatch(window.G_TaskManagementWorkTimeController.UpdateTimeTempoLogRedux(id, taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog));
+    };
+
+    res.DeleteTimeLog = (id: number, taskId: number) => {
+        dispatch(window.G_TaskManagementWorkTimeController.DeleteTimeTaskLogRedux(id, taskId));
+    };
 
     return res;
 };

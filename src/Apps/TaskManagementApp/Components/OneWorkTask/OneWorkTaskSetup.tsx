@@ -3,15 +3,15 @@ import { AppState } from "../../../../Models/Entity/State/AppState";
 import { SetCommentsActionCreator } from "../../Models/Actions/CommentActions";
 import { CommentSet } from "../../Models/Entity/CommentSet";
 import { OneWorkTaskComment } from "../../Models/Entity/OneTaskWorkComment";
-import { OneTask } from "../../Models/Entity/State/OneTask";
 import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
 import { WorkTaskStatus } from "../../Models/Entity/State/WorkTaskStatus";
 import { SetCurrentTaskIdActionCreator } from "../../Models/Actions/TaskActions";
+import { OneTaskInList } from "../../Models/Entity/State/OneTaskInList";
 
 
 interface IOneWorkTaskOwnProps {
-    Task: OneTask;
-    Comments: OneWorkTaskComment[];
+    Task: OneTaskInList;
+    // Comments: OneWorkTaskComment[];
     CurrentProjectId: number;
 
 }
@@ -24,7 +24,7 @@ interface IOneWorkTaskStateToProps {
 }
 
 interface IOneWorkTaskDispatchToProps {
-    UpdateTask: (task: OneTask) => void;
+    UpdateTask: (task: OneTaskInList) => void;
     DeleteTask: (id: number) => void;
     SetEmptyTaskComments: (taskId: number) => void;
     LoadTaskComments: (taskId: number) => void;
@@ -48,7 +48,7 @@ const mapStateToProps = (state: AppState, ownProps: IOneWorkTaskOwnProps) => {
 
 const mapDispatchToProps = (dispatch: any, ownProps: IOneWorkTaskOwnProps) => {
     let res = {} as IOneWorkTaskDispatchToProps;
-    res.UpdateTask = (forAdd: OneTask) => {
+    res.UpdateTask = (forAdd: OneTaskInList) => {
         dispatch(window.G_TaskManagementTaskController.UpdateTaskRedux(forAdd));
     };
 

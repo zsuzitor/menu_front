@@ -2,7 +2,6 @@ import { connect } from "react-redux";
 import { AppState } from "../../../../Models/Entity/State/AppState";
 import { SetFilterTaskCreatorActionCreator, SetFilterTaskExecutorActionCreator, SetFilterTaskNameActionCreator, SetFilterTaskPageActionCreator, SetFilterTaskStatusActionCreator, SetFilterTaskActionCreator, SetFilterTaskSprintActionCreator, SetFilterTaskLabelActionCreator, SetFilterTaskPresetActionCreator } from "../../Models/Actions/TaskActions";
 import { ITaskFilter } from "../../Models/Entity/ITaskFilter";
-import { OneTask } from "../../Models/Entity/State/OneTask";
 import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
 import { TasksFilter } from "../../Models/Entity/State/TasksFilter";
 import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/State/OneProjectInList';
@@ -10,11 +9,12 @@ import { WorkTaskStatus } from "../../Models/Entity/State/WorkTaskStatus";
 import { ProjectSprint } from "../../Models/Entity/State/ProjectSprint";
 import { TaskLabel } from "../../Models/Entity/State/TaskLabel";
 import { Preset } from "../../Models/Entity/State/Preset";
+import { OneTaskInList } from "../../Models/Entity/State/OneTaskInList";
 
 
 interface IProjectDetailOwnProps {
     Project: OneProjectInListModel;
-    Tasks: OneTask[];
+    Tasks: OneTaskInList[];
 }
 
 

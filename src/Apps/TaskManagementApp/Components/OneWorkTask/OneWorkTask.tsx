@@ -26,7 +26,7 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
     const [taskCreator, setTaskCreator] = useState(props.Task.CreatorId);
     const [newCommentName, setNewCommentName] = useState('');
 
-    const [showComments, setShowComments] = useState(false);
+    // const [showComments, setShowComments] = useState(false);
     const [showFullTask, setShowFullTask] = useState(false);
 
 
@@ -48,18 +48,6 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
     useEffect(() => {
         setTaskCreator(props.Task.CreatorId);
     }, [props.Task.CreatorId]);
-
-    useEffect(() => {
-        if (!showComments) {
-            // setComments([]);
-            props.SetEmptyTaskComments(props.Task.Id);
-            return;
-        }
-
-        props.LoadTaskComments(props.Task.Id);
-    }, [showComments]);
-
-
 
 
     const cancelTask = () => {

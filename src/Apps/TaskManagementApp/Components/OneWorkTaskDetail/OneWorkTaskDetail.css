@@ -156,6 +156,8 @@
 
 .work-time-block .one-work-time-block {
     display: flex;
+    cursor: pointer;
+    width: 500px;
 }
 
 .add-time-log-show-btn {
@@ -342,7 +344,7 @@
 .one-work-task-detail-block .radio-check-block div.active {
     color: #424242;
     background-color: #fff;
-    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* .radio-check-block div.active::before {

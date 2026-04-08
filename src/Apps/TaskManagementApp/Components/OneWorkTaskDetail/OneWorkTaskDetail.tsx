@@ -179,6 +179,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                         setShowAddWorkTimeNew(false);
                     }}
                     TaskId={props.Task.Id}
+                    TaskName={props.Task.Name}
                     DefaultDate={null}
                     CreateTimeLog={props.CreateTimeLog}
                     TimeLog={showEditWorkTime > 1 ? props.Task.TimeLogs.find(x => x.Id == showEditWorkTime) : null}

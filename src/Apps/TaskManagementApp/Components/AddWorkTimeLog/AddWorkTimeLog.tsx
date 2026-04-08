@@ -14,6 +14,10 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
 
     let helper = new Helper();
     const [taskId, setTaskId] = useState(props.TaskId || props.TimeLog?.WorkTaskId || 0);
+    const [taskName, setTaskName] = useState('');
+
+
+    const [loadTasksTimerId, setLoadTasksTimerId] = useState(null);
 
     const [timeLogText, setTimeLogText] = useState(props.TimeLog?.Comment || '');
     const [range, setRange] = useState(props.TimeLog?.RangeStartOfLog ? true : false);
@@ -49,6 +53,35 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
     useEffect(() => {
         setTaskId(props.TaskId || props.TimeLog?.WorkTaskId || 0);
     }, [props.TaskId, props.TimeLog?.WorkTaskId]);
+
+
+    // useEffect(() => {
+    //     setTaskName(props.TaskName || '');
+    // }, [props.TaskName]);
+
+    useEffect(() => {
+        if (loadTasksTimerId) {
+            clearTimeout(loadTasksTimerId);
+        }
+
+        if (props.TaskName != taskName) {
+            setTaskName(props.TaskName || '');
+
+        }
+
+
+
+        if (taskId && taskId > 0 && !props.TaskName) {
+            var timerId = setTimeout(async () => {
+                var tName = await props.GetTaskName(taskId);
+                setTaskName(tName || '');
+            }, 1500);
+
+            setLoadTasksTimerId(timerId);
+        }
+
+    }, [taskId, props.TaskName]);
+
 
     useEffect(() => {
         setTimeLogDate(props.TimeLog?.DayOfLog || props.DefaultDate || new Date());
@@ -137,6 +170,7 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
                 onChange={(e) => setTaskId(+e.target.value)}
                 placeholder='Задача' value={taskId}></input>
         </div>}
+        <p>{taskName}</p>
 
         <div>
             <span>Комментарий</span>

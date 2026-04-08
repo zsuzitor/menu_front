@@ -5,8 +5,9 @@ import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelpe
 import { AddLoadTriggerActionCreator, UpdateTaskActionCreator, LoadTasksActionCreator, DeleteTaskActionCreator, LoadTaskActionCreator, UpdateTaskNameActionCreator, UpdateTaskDescriptionActionCreator, UpdateTaskStatusActionCreator, UpdateTaskExecutorActionCreator, AddTaskRelationStateActionCreator, DeleteTaskRelationStateActionCreator, LoadTaskRelationStateActionCreator } from "../Actions/TaskActions";
 import { ILoadWorkTasksResultDataBack } from "../BackModels/ILoadWorkTasksResultDataBack";
 import { IProjectTaskDataBack } from "../BackModels/IProjectTaskDataBack";
+import { IProjectTaskNameDataBack } from "../BackModels/IProjectTaskNameDataBack";
 import { IProjectTaskRelationDataBack } from "../BackModels/IProjectTaskRelationDataBack";
-import { TaskManagementAddTaskRelationUrl, TaskManagementApiTaskUrl, TaskManagementDeleteTaskRelationUrl, TaskManagementGetTaskRelationUrl, TaskManagementPreloader, TaskManagementTaskAddNewUrl, TaskManagementTaskCopyUrl, TaskManagementTaskDeleteUrl, TaskManagementTaskGetUrl, TaskManagementTasksGetUrl, TaskManagementTaskUpdateDescriptionUrl, TaskManagementTaskUpdateExecutorUrl, TaskManagementTaskUpdateNameUrl, TaskManagementTaskUpdateStatusUrl, TaskManagementTaskUpdateUrl } from "../Consts";
+import { TaskManagementAddTaskRelationUrl, TaskManagementApiTaskUrl, TaskManagementDeleteTaskRelationUrl, TaskManagementGetTaskRelationUrl, TaskManagementPreloader, TaskManagementTaskAddNewUrl, TaskManagementTaskCopyUrl, TaskManagementTaskDeleteUrl, TaskManagementTaskGetUrl, TaskManagementTaskNameUrl, TaskManagementTasksGetUrl, TaskManagementTaskUpdateDescriptionUrl, TaskManagementTaskUpdateExecutorUrl, TaskManagementTaskUpdateNameUrl, TaskManagementTaskUpdateStatusUrl, TaskManagementTaskUpdateUrl } from "../Consts";
 import { ITaskFilter } from "../Entity/ITaskFilter";
 import { LoadWorkTasksResult } from "../Entity/LoadWorkTasksResult";
 import { OneTask } from "../Entity/State/OneTask";
@@ -38,6 +39,9 @@ export interface ITaskManagementTaskController {
     UpdateTaskDescriptionRedux: (id: number, text: string) => void;
     UpdateTaskStatusRedux: (id: number, idStatus: number) => void;
     UpdateTaskExecutorRedux: (id: number, personId: number) => void;
+
+
+    GetTaskNameUI: (id: number) => Promise<string>;
 }
 
 
@@ -381,7 +385,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
             "pageSize": taskFilter.PageSize,
             "sprintId": taskFilter.SprintId,
             "labelId": taskFilter.LabelIds,
-            "presetId":taskFilter.PresetId,
+            "presetId": taskFilter.PresetId,
         };
 
 
@@ -485,6 +489,31 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
         });
 
         return (backResult as ServerResult<IProjectTaskDataBack>).Data;
+    };
+
+
+
+    GetTaskNameUI = async (id: number): Promise<string>=>{
+        this.preloader(true);
+        let backResult = await this.GetTaskNameAsync(id);
+        this.preloader(false);
+        return backResult?.Name;
+
+    }
+
+        GetTaskNameAsync = async (id: number): Promise<IProjectTaskNameDataBack> => {
+        let data = {
+            "id": id,
+        };
+        let backResult = await G_AjaxHelper.GoAjaxRequest({
+            Data: data,
+            Type: ControllerHelper.GetHttp,
+            FuncSuccess: (xhr, status, jqXHR) => { },
+            FuncError: (xhr, status, error) => { },
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTaskNameUrl}`
+        });
+
+        return (backResult as ServerResult<IProjectTaskNameDataBack>).Data;
     };
 
 

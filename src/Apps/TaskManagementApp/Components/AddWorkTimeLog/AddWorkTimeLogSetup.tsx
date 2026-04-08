@@ -6,6 +6,7 @@ import { TimeLog } from "../../Models/Entity/State/TimeLog";
 
 interface IAddWorkTimeLogOwnProps {
     TaskId: number | null;
+    TaskName?: string | null;
     DefaultDate: Date | null;
     TimeLog?: TimeLog;
 
@@ -20,6 +21,8 @@ interface IAddWorkTimeLogStateToProps {
 }
 
 interface IAddWorkTimeLogDispatchToProps {
+    GetTaskName: (taskId: number) => Promise<string>;
+
 }
 
 export interface IAddWorkTimeLogProps extends IAddWorkTimeLogStateToProps, IAddWorkTimeLogOwnProps, IAddWorkTimeLogDispatchToProps {
@@ -33,6 +36,11 @@ const mapStateToProps = (state: AppState, ownProps: IAddWorkTimeLogOwnProps) => 
 
 const mapDispatchToProps = (dispatch: any, ownProps: IAddWorkTimeLogOwnProps) => {
     let res = {} as IAddWorkTimeLogDispatchToProps;
+
+    res.GetTaskName = async (taskId: number): Promise<string> => {
+        return await window.G_TaskManagementTaskController.GetTaskNameUI(taskId);
+
+    };
 
     return res;
 };

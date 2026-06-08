@@ -74,12 +74,12 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
     useEffect(() => {
 
-        let filterCreatorExist = props.ProjectUsers.some((x) => x.Id === props.TasksFilters.CreatorId);
+        let filterCreatorExist = props.ProjectUsers.some((x) => x.MainAppUserId === props.TasksFilters.CreatorId);
         if (!filterCreatorExist) {
             props.SetFilterTaskCreator(-1);
         }
 
-        let filterExecutorExist = props.ProjectUsers.some((x) => x.Id === props.TasksFilters.ExecutorId);
+        let filterExecutorExist = props.ProjectUsers.some((x) => x.MainAppUserId === props.TasksFilters.ExecutorId);
         if (!filterExecutorExist) {
             props.SetFilterTaskExecutor(-1);
         }
@@ -371,7 +371,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                                 <select className='filter-input' value={props.TasksFilters.CreatorId}
                                     onChange={(e) => props.SetFilterTaskCreator(+e.target.value)}>
                                     <option value={-1}>Не выбрано</option>
-                                    {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                                    {props.ProjectUsers.map(x => <option key={x.MainAppUserId} value={x.MainAppUserId}>{x.Name}</option>)}
                                 </select>
                                 <button className='remove-filter' title='Удалить фильтр'
                                     onClick={() => {
@@ -385,7 +385,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                             <select className='filter-input' value={props.TasksFilters.ExecutorId}
                                 onChange={(e) => props.SetFilterTaskExecutor(+e.target.value)}>
                                 <option value={-1}>Не выбрано</option>
-                                {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                                {props.ProjectUsers.map(x => <option key={x.MainAppUserId} value={x.MainAppUserId}>{x.Name}</option>)}
                             </select>
                             <button className='remove-filter' title='Удалить фильтр'
                                 onClick={() => {

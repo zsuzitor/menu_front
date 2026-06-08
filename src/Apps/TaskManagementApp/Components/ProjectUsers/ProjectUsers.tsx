@@ -15,23 +15,15 @@ require('./ProjectUsers.css');
 const ProjectUsers = (props: IProjectUsersProps) => {
 
 
-    const [newUserName, setNewUserName] = useState('');
     const [userMainAppEmail, setUserMainAppEmail] = useState('');
     const [hideDeactivated, setHideDeactivated] = useState(true);
 
     const addNewUser = () => {
-        if (!newUserName) {
-            return;
-        }
 
-        props.AddUserToProject(newUserName, userMainAppEmail, props.ProjectId);
-        setNewUserName('');
+        props.AddUserToProject( userMainAppEmail, props.ProjectId);
     };
 
     return <div className={'project-management-user-list'}>
-        <span>Имя человека</span>
-        <input className='form-control-b' type='text' placeholder='Имя человека'
-            onChange={(e) => setNewUserName(e.target.value)} value={newUserName}></input>
         <br />
         <span>Почта из основного приложения</span>
         <input className='form-control-b' type='text' value={userMainAppEmail} placeholder="Почта  из основного приложения" onChange={e => setUserMainAppEmail(e.target.value)}></input>
@@ -43,7 +35,7 @@ const ProjectUsers = (props: IProjectUsersProps) => {
         {props.ProjectUsers.filter(x => !hideDeactivated || !x.Deactivated)
             .map(x => {
                 return <OneProjectUser User={x}
-                    key={x.Id} ></OneProjectUser>
+                    key={x.MainAppUserId} ></OneProjectUser>
             })}
     </div>
 }

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { AlertData } from '../../../../Models/Entity/AlertData';
-import { AppState } from '../../../../Models/Entity/State/AppState';
 import { ProjectUser } from '../../Models/Entity/State/ProjectUser';
 import connectToStore, { IOneProjectOneProjectUserProps } from './OneProjectUserSetup';
 
@@ -15,20 +13,10 @@ require('./OneProjectUser.css');
 
 const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
 
-    const [userName, setUserName] = useState(props.User.Name);
-    const [userEmail, setUserEmail] = useState(props.User.Email || '');
     const [userIsAdmin, setUserIsAdmin] = useState(props.User.IsAdmin);
     const [userIsDeactivated, setUserIsDeactivated] = useState(props.User.Deactivated);
 
 
-
-    useEffect(() => {
-        setUserName(props.User.Name);
-    }, [props.User.Name]);
-
-    useEffect(() => {
-        setUserEmail(props.User.Email || '');
-    }, [props.User.Email]);
 
     useEffect(() => {
         setUserIsAdmin(props.User.IsAdmin);
@@ -40,37 +28,23 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
 
 
     const changeUser = () => {
-        if (!userName) {
-            let alertFactory = new AlertData();
-            let alert = alertFactory.GetDefaultError("Введите имя пользователя");
-            window.G_AddAbsoluteAlertToState(alert);
-            return;
-        }
 
         let newUserData = new ProjectUser();
-        newUserData.Id = props.User.Id;
-        newUserData.Name = userName;
-        newUserData.Email = userEmail;
+        newUserData.MainAppUserId = props.User.MainAppUserId;
         newUserData.IsAdmin = userIsAdmin;
         newUserData.Deactivated = userIsDeactivated;
-       
-        props.ChangeUser(newUserData);
+
+        props.ChangeUser(newUserData, props.CurrentProjectId);
     };
 
 
-    let userHasChanges = userName !== props.User.Name ||
-        ((props.User.Email || userEmail) && userEmail !== props.User.Email) ||
+    let userHasChanges =
         userIsAdmin !== props.User.IsAdmin ||
         userIsDeactivated !== props.User.Deactivated;
 
 
     return <div className='one-project-user-content'>
-        <label>Имя</label>
-        <input className='form-control-b' type='text' value={userName} placeholder="Имя" onChange={e => setUserName(e.target.value)}></input>
-        <br />
-        <label>Почта для уведомлений</label>
-        <input className='form-control-b' type='text' value={userEmail} placeholder="Почта" onChange={e => setUserEmail(e.target.value)}></input>
-        <label>Роль Админа</label>
+<label>Роль Админа</label>
         <input type="checkbox" checked={userIsAdmin} onChange={e => setUserIsAdmin(e.target.checked)} />
         <label>Пользователь деактивирован</label>
         <input type="checkbox" checked={userIsDeactivated} onChange={e => setUserIsDeactivated(e.target.checked)} />
@@ -80,8 +54,6 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
                 <img className='persent-100-width-height' src={G_PathToBaseImages + 'save-icon.png'} alt="Save" title='сохранить' />
             </div>
             <div className='project-user-action-btn' onClick={() => {
-                setUserName(props.User.Name);
-                setUserEmail(props.User.Email || '');
                 setUserIsAdmin(props.User.IsAdmin);
                 setUserIsDeactivated(props.User.Deactivated);
             }}>

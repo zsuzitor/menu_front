@@ -9,10 +9,12 @@ interface IOneProjectOneProjectUserOwnProps {
 
 
 interface IOneProjectOneProjectUserStateToProps {
+    
+    CurrentProjectId: number;
 }
 
 interface IOneProjectOneProjectUserDispatchToProps {
-    ChangeUser: (user: ProjectUser) => void;
+    ChangeUser: (user: ProjectUser, projectId: number) => void;
 }
 
 export interface IOneProjectOneProjectUserProps extends IOneProjectOneProjectUserStateToProps, IOneProjectOneProjectUserOwnProps, IOneProjectOneProjectUserDispatchToProps {
@@ -23,12 +25,13 @@ export interface IOneProjectOneProjectUserProps extends IOneProjectOneProjectUse
 const mapStateToProps = (state: AppState, ownProps: IOneProjectOneProjectUserOwnProps) => {
     let res = {} as IOneProjectOneProjectUserStateToProps;
 
+    res.CurrentProjectId = state.TaskManagementApp.CurrentProjectId;
     return res;
 }
 
 const mapDispatchToProps = (dispatch: any, ownProps: IOneProjectOneProjectUserOwnProps) => {
     let res = {} as IOneProjectOneProjectUserDispatchToProps;
-    res.ChangeUser = (user) => { dispatch(window.G_TaskManagementUserController.ChangeProjectUserRedux(user)) };
+    res.ChangeUser = (user, projectId) => { dispatch(window.G_TaskManagementUserController.ChangeProjectUserRedux(user, projectId)) };
     return res;
 };
 

@@ -2,7 +2,6 @@
 
 import { cloneDeep } from 'lodash';
 import React, { useState, useEffect, ReactNode } from 'react';
-import OneProjectUser from '../OneProjectUser/OneProjectUser';
 
 import connectToStore, { IProjectTimePageProps } from './ProjectTimePageSetup';
 import { Helper } from '../../../../Models/BL/Helper';
@@ -61,14 +60,14 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
 
         return <div className='one-line-times'>
             {datesForTable.map(x => {
-                let works = props.WorkTimeLog.filter(w => w.ProjectUserId == userId
-                    && setClearDate(w.DayOfLog).getTime() == setClearDate(x).getTime()
+                let works = props.WorkTimeLog.filter(w => w.UserId == userId
+                    && setClearDate(w.DayOfLog!).getTime() == setClearDate(x).getTime()
                 );
                 let minuteTotal = 0;
                 let worksId = 'ids-';
                 works.forEach(element => {
                     worksId += element.Id + ','
-                    minuteTotal += element.TimeMinutes;
+                    minuteTotal += element.TimeMinutes ?? 0;
                 });
                 const helper = new Helper();
                 let val = helper.MinutesToHours(minuteTotal);
@@ -165,10 +164,10 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
             {renderHeadLine()}
             {props.ProjectUsers.map(x => {
 
-                const timeLogUrl = new RouteBuilder().TimeLogUserUrl(props.ProjectId, x.Id);
+                const timeLogUrl = new RouteBuilder().TimeLogUserUrl(props.ProjectId, x.MainAppUserId);
 
                 return <div className='project-time-one-line'
-                    key={x.Id}>
+                    key={x.MainAppUserId}>
                     <div className='one-line-person'>
                         <a href={timeLogUrl} onClick={(e) => {
                             e.preventDefault();
@@ -176,7 +175,7 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
                         }}>{x.Email}</a>
 
                     </div>
-                    {renderOneLine(x.Id)}
+                    {renderOneLine(x.MainAppUserId)}
 
                 </div>
             })}

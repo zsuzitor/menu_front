@@ -38,7 +38,7 @@ const OneWorkTaskComment = (props: IOneWorkTaskCommentProps) => {
     //     setChangedText(props.Comment.Text);
     // }
 
-    let user = props.ProjectUsers.find(x => x.Id == props.Comment.CreatorId);
+    let user = props.ProjectUsers.find(x => x.MainAppUserId == props.Comment.CreatorId);
     // let userCurrent = props.ProjectUsers.find(x => x.MainAppUserId == props.AuthInfo?.User?.Id);
     let commentOwner = user && user.MainAppUserId === props.AuthInfo?.User?.Id;
 

@@ -3,12 +3,12 @@ import { IProjectUserDataBack } from "../../BackModels/IProjectUserDataBack";
 
 
 export class ProjectUser implements MappedWithBack<IProjectUserDataBack>{
-    Id: number;
-    Name: string;
-    Email: string;
-    IsAdmin: boolean;
+    Id?: number;
+    Name?: string;
+    Email?: string;
+    IsAdmin?: boolean;
     MainAppUserId?: number;
-    Deactivated: boolean;
+    Deactivated?: boolean;
 
     FillByBackModel(newData: IProjectUserDataBack): ProjectUser {
         this.Id = newData.Id;

@@ -15,18 +15,12 @@ const AddTask = (props: IAddTaskProps) => {
     const [newTaskName, setNewTaskName] = useState('');
     const [newTaskDescription, setNewTaskDescription] = useState('');
     let currentUser = props.ProjectUsers.find(x => x.MainAppUserId === props.Auth.User?.Id);
-    const [newTaskCreator, setNewTaskCreator] = useState(currentUser?.Id || -1);
     const [newTaskReviwer, setNewTaskReviwer] = useState(-1);
     const [taskStatus, setTaskStatus] = useState(-1);
 
     useEffect(() => {
-        if (newTaskCreator === -1) {
-            let firstUser = props.ProjectUsers.find(() => true);
-            setNewTaskCreator(firstUser?.Id || -1);
 
-        }
-
-        let reviwerExist = props.ProjectUsers.some((x) => x.Id === newTaskReviwer);
+        let reviwerExist = props.ProjectUsers.some((x) => x.MainAppUserId === newTaskReviwer);
         if (!reviwerExist) {
             setNewTaskReviwer(-1);
         }
@@ -54,7 +48,6 @@ const AddTask = (props: IAddTaskProps) => {
 
         let tsk = new OneTask()
         tsk.Name = newTaskName;
-        tsk.CreatorId = newTaskCreator;
         tsk.ExecutorId = newTaskReviwer;
         tsk.Description = newTaskDescription;
         tsk.StatusId = taskStatus;
@@ -71,15 +64,11 @@ const AddTask = (props: IAddTaskProps) => {
             className='form-control-b persent-100-width'
             onChange={(e) => setNewTaskDescription(e.target.value)}
             value={newTaskDescription} placeholder='Описание'></textarea>
-        <label>Автор:</label>
-        <select className='form-control-b' value={newTaskCreator} onChange={(e) => setNewTaskCreator(+e.target.value)}>
-            {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
-        </select>
         <br />
         <label>Исполнитель:</label>
         <select className='form-control-b' value={newTaskReviwer} onChange={(e) => setNewTaskReviwer(+e.target.value)}>
             <option value={-1}>Не выбрано</option>
-            {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+            {props.ProjectUsers.map(x => <option key={x.MainAppUserId} value={x.MainAppUserId}>{x.Name}</option>)}
         </select>
         <br />
 

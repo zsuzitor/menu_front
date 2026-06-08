@@ -12,7 +12,7 @@ interface IProjectUsersStateToProps {
 }
 
 interface IProjectUsersDispatchToProps {
-    AddUserToProject: (newUserName: string, userMainAppEmail: string, projectId: number) => void;
+    AddUserToProject: (userMainAppEmail: string, projectId: number) => void;
 }
 
 export interface IProjectUsersProps extends IProjectUsersStateToProps, IProjectUsersOwnProps, IProjectUsersDispatchToProps {
@@ -28,8 +28,8 @@ const mapStateToProps = (state: AppState, ownProps: IProjectUsersOwnProps) => {
 
 const mapDispatchToProps = (dispatch: any, ownProps: IProjectUsersOwnProps) => {
     let res = {} as IProjectUsersDispatchToProps;
-    res.AddUserToProject = (newUserName: string, userMainAppEmail: string, projectId: number) => {
-        dispatch(window.G_TaskManagementUserController.AddUserToProjectRedux(newUserName, userMainAppEmail, projectId))
+    res.AddUserToProject = ( userMainAppEmail: string, projectId: number) => {
+        dispatch(window.G_TaskManagementUserController.AddUserToProjectRedux(userMainAppEmail, projectId))
     };
     return res;
 };

@@ -8,7 +8,7 @@ interface IAddWorkTimeLogOwnProps {
     TaskId: number | null;
     TaskName?: string | null;
     DefaultDate: Date | null;
-    TimeLog?: TimeLog;
+    TimeLog?: TimeLog | null;
 
     Close: () => void;
     CreateTimeLog: (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => void;

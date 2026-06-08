@@ -3,7 +3,6 @@
 import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { AlertData } from '../../../../Models/Entity/AlertData';
-import OneWorkTaskComment from '../OneWorkTaskComment/OneWorkTaskComment';
 import { OneTask } from '../../Models/Entity/State/OneTask';
 import connectToStore, { IOneWorkTaskProps } from './OneWorkTaskSetup';
 
@@ -23,8 +22,6 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
     const [taskName, setTaskName] = useState(props.Task.Name);
     const [taskStatus, setTaskStatus] = useState(props.Task.StatusId || -1);
     const [taskExecutorId, setTaskExecutorId] = useState(props.Task.ExecutorId || -1);
-    const [taskCreator, setTaskCreator] = useState(props.Task.CreatorId);
-    const [newCommentName, setNewCommentName] = useState('');
 
     // const [showComments, setShowComments] = useState(false);
     const [showFullTask, setShowFullTask] = useState(false);
@@ -45,10 +42,6 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
         setTaskExecutorId(props.Task.ExecutorId || -1);
     }, [props.Task.ExecutorId]);
 
-    useEffect(() => {
-        setTaskCreator(props.Task.CreatorId);
-    }, [props.Task.CreatorId]);
-
 
     const cancelTask = () => {
         if (!confirm('Отменить изменения?')) {
@@ -58,7 +51,6 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
         // setTaskLink(props.Task.Link || '');
         setTaskStatus(props.Task.StatusId);
         setTaskExecutorId(props.Task.ExecutorId || -1);
-        setTaskCreator(props.Task.CreatorId);
     };
 
     const updateTask = () => {
@@ -74,7 +66,6 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
         // forAdd.Link = taskLink;
         forAdd.StatusId = taskStatus;
         forAdd.ExecutorId = taskExecutorId;
-        forAdd.CreatorId = taskCreator;
 
         props.UpdateTask(forAdd);
     };
@@ -96,17 +87,16 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
     let taskHasChanges = taskName !== props.Task.Name ||
         // (taskLink !== props.Task.Link && (taskLink || props.Task.Link)) ||
         taskStatus !== props.Task.StatusId ||
-        ((props.Task.ExecutorId || taskExecutorId != -1) && taskExecutorId !== props.Task.ExecutorId) ||
-        taskCreator !== props.Task.CreatorId;
+        ((props.Task.ExecutorId || taskExecutorId != -1) && taskExecutorId !== props.Task.ExecutorId);
 
 
-    let creator = props.ProjectUsers.find(x => x.Id === taskCreator);
+    let creator = props.ProjectUsers.find(x => x.MainAppUserId === props.Task.CreatorId);
     let creatorsList = props.ProjectUsers.filter(us => !us.Deactivated);
     if (creator && creator.Deactivated) {
         creatorsList.push(creator);
     }
 
-    let executor = props.ProjectUsers.find(x => x.Id === taskExecutorId);
+    let executor = props.ProjectUsers.find(x => x.MainAppUserId === taskExecutorId);
     let executorList = props.ProjectUsers.filter(us => !us.Deactivated);
     if (executor && executor.Deactivated) {
         executorList.push(executor);
@@ -143,13 +133,13 @@ const OneWorkTask = (props: IOneWorkTaskProps) => {
                     value={taskName} onChange={e => setTaskName(e.target.value)}
                 ></input>
                 <br />
-                <span>Создатель: {creatorsList.find(x => x.Id == taskCreator).Name}</span>
+                <span>Создатель: {creatorsList.find(x => x.MainAppUserId == props.Task.CreatorId)?.Name || ''}</span>
                 <div>
                     <span>Исполнитель:</span>
                     <select className='form-select-v2' value={taskExecutorId}
                         onChange={(e) => setTaskExecutorId(+e.target.value)}>
                         <option value={-1}>Не выбрано</option>
-                        {executorList.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                        {executorList.map(x => <option key={x.MainAppUserId} value={x.MainAppUserId}>{x.Name}</option>)}
                     </select>
                 </div>
                 <div>

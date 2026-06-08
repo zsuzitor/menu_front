@@ -13,19 +13,19 @@ export type DeleteUser = (error: MainErrorObjectBack, data: BoolResultBackNew) =
 
 
 export interface ITaskManagementUserController {
-    AddUserToProjectRedux: (newUserName: string, mainAppUserEmail: string, projectId: number) => void;
-    ChangeProjectUserRedux: (user: ProjectUser) => void;
-    DeleteProjectUserRedux: (id: number) => void;
+    AddUserToProjectRedux: (mainAppUserEmail: string, projectId: number) => void;
+    ChangeProjectUserRedux: (user: ProjectUser, projectId: number) => void;
+    DeleteProjectUserRedux: (id: number, projectId: number) => void;
 }
 
 
 export class TaskManagementUserController implements ITaskManagementUserController {
 
 
-    DeleteProjectUserRedux = (id: number) => {
+    DeleteProjectUserRedux = (id: number, projectId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteProjectUser(id, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
+            this.DeleteProjectUser(id, projectId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
@@ -38,9 +38,10 @@ export class TaskManagementUserController implements ITaskManagementUserControll
         };
     }
 
-    DeleteProjectUser = (id: number, onSuccess: DeleteUser) => {
+    DeleteProjectUser = (id: number, projectId: number, onSuccess: DeleteUser) => {
         let data = {
             "userId": id,
+            "projectId": projectId,
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
@@ -56,10 +57,10 @@ export class TaskManagementUserController implements ITaskManagementUserControll
     }
 
 
-    AddUserToProjectRedux = (newUserName: string, mainAppUserEmail: string, projectId: number) => {
+    AddUserToProjectRedux = (mainAppUserEmail: string, projectId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.AddUserToProject(newUserName, mainAppUserEmail, projectId
+            this.AddUserToProject(mainAppUserEmail, projectId
                 , (error: MainErrorObjectBack, data: IProjectUserDataBack) => {
                     this.preloader(false);
                     if (error) {
@@ -75,9 +76,8 @@ export class TaskManagementUserController implements ITaskManagementUserControll
         };
     }
 
-    AddUserToProject = (newUserName: string, mainAppUserEmail: string, projectId: number, onSuccess: AddNewUserToProject) => {
+    AddUserToProject = (mainAppUserEmail: string, projectId: number, onSuccess: AddNewUserToProject) => {
         let data = {
-            "userName": newUserName,
             "projectId": projectId,
             "mainAppUserEmail": mainAppUserEmail,
         };
@@ -96,10 +96,10 @@ export class TaskManagementUserController implements ITaskManagementUserControll
     };
 
 
-    ChangeProjectUserRedux = (user: ProjectUser) => {
+    ChangeProjectUserRedux = (user: ProjectUser, projectId: number) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.ChangeProjectUser(user, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
+            this.ChangeProjectUser(user, projectId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
                 this.preloader(false);
                 if (error) {
                     return;
@@ -112,13 +112,12 @@ export class TaskManagementUserController implements ITaskManagementUserControll
         };
     }
 
-    ChangeProjectUser = (user: ProjectUser, onSuccess: ChangeUser) => {
+    ChangeProjectUser = (user: ProjectUser, projectId: number, onSuccess: ChangeUser) => {
         let data = {
-            "userId": user.Id,
-            "name": user.Name,
-            "email": user.Email,
+            "userId": user.MainAppUserId,
             "isAdmin": user.IsAdmin,
             "deactivated": user.Deactivated,
+            "projectId": projectId,
         };
         G_AjaxHelper.GoAjaxRequest({
             Data: data,
@@ -142,7 +141,7 @@ export class TaskManagementUserController implements ITaskManagementUserControll
     preloader(show: boolean) {
         window.TaskManagementCounter = new ControllerHelper()
             .Preloader(show, TaskManagementPreloader, window.TaskManagementCounter);
-        
+
     }
 }
 

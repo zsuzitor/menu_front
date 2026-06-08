@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import OneProjectInList from '../OneProjectInList/OneProjectInList';
-
-import { AlertData } from '../../../../Models/Entity/AlertData';
 
 import connectToStore, { IPresetsProps } from './PresetsSetup';
-import { useNavigate } from 'react-router-dom';
-import RouteBuilder from '../../Models/BL/RouteBuilder';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
 import EditPreset from '../EditPreset/EditPreset';
 

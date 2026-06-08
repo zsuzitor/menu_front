@@ -187,7 +187,7 @@ export class Helper {
         return arr.findIndex(f);
     }
 
-    GetIndexById<t extends { Id: tId }, tId>(arr: t[], id: tId): number {
+    GetIndexById<t extends { Id?: tId }, tId>(arr: t[], id: tId): number {
         if (!id) {
             return -1;
         }
@@ -200,10 +200,10 @@ export class Helper {
         return index;
     }
 
-    GetElemById<t extends { Id: tId }, tId>(arr: t[], id: tId): t {
+    GetElemById<t extends { Id?: tId }, tId>(arr: t[], id: tId): t | null {
         let index = this.GetIndexById(arr, id);
         if (index < 0) {
-            return;
+            return null;
         }
 
         return arr[index];

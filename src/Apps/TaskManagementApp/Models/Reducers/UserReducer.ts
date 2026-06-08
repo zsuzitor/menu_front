@@ -18,7 +18,7 @@ export function TaskManagementUserReducer(state: AppState = new AppState(), acti
                 let newState = cloneDeep(state);
                 let userId = action.payload as number;
                 newState.TaskManagementApp.CurrentProjectUsers = newState.TaskManagementApp.CurrentProjectUsers
-                    .filter(x => x.Id != userId);
+                    .filter(x => x.MainAppUserId != userId);
                 return newState;
             }
 
@@ -34,10 +34,8 @@ export function TaskManagementUserReducer(state: AppState = new AppState(), acti
             {
                 let newState = cloneDeep(state);
                 let user = action.payload as ProjectUser;
-                let userState = newState.TaskManagementApp.CurrentProjectUsers.find(x => x.Id === user.Id);
+                let userState = newState.TaskManagementApp.CurrentProjectUsers.find(x => x.MainAppUserId === user.MainAppUserId);
                 if (userState) {
-                    userState.Email = user.Email;
-                    userState.Name = user.Name;
                     userState.IsAdmin = user.IsAdmin;
                     userState.Deactivated = user.Deactivated;
                 }

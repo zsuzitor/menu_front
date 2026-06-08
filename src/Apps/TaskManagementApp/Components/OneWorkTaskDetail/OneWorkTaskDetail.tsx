@@ -4,7 +4,6 @@ import { cloneDeep } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { AlertData } from '../../../../Models/Entity/AlertData';
 import OneWorkTaskComment from '../OneWorkTaskComment/OneWorkTaskComment';
-import { OneTask } from '../../Models/Entity/State/OneTask';
 
 import { useNavigate } from 'react-router-dom';
 import connectToStore, { IOneWorkTaskDetailProps } from './OneWorkTaskDetailSetup';
@@ -12,7 +11,6 @@ import SaveCancelTextarea from '../../../../components/Body/SaveCancelTextarea/S
 import { Helper } from '../../../../Models/BL/Helper';
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
 import AddWorkTimeLog from '../AddWorkTimeLog/AddWorkTimeLog';
-import SaveCancelInputMultiSelect from '../../../../components/Body/SaveCancelInput/SaveCancelInputMultiSelect';
 import SaveCancelInputText from '../../../../components/Body/SaveCancelInput/SaveCancelInputText';
 import SaveCancelInputSelect from '../../../../components/Body/SaveCancelInput/SaveCancelInputSelect';
 import SaveCancelInputMultiSelectWithSearch from '../../../../components/Body/SaveCancelInput/SaveCancelInputMultiSelectWithSearch';
@@ -182,7 +180,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                     TaskName={props.Task.Name}
                     DefaultDate={null}
                     CreateTimeLog={props.CreateTimeLog}
-                    TimeLog={showEditWorkTime > 1 ? props.Task.TimeLogs.find(x => x.Id == showEditWorkTime) : null}
+                    TimeLog={showEditWorkTime > 1 ? props.Task.TimeLogs.find(x => x.Id == showEditWorkTime) || null : null}
                     UpdateTimeLog={props.UpdateTimeLog}
                     DeleteTimeLog={(i => {
                         props.DeleteTimeLog(i, props.Task.Id);
@@ -208,7 +206,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                             setShowAddWorkTimeNew(true);
                         }}
                     >
-                        <div className='time-block-left'>{props.ProjectUsers.find(u => u.Id === x.ProjectUserId)?.Email || ''}</div>
+                        <div className='time-block-left'>{props.ProjectUsers.find(u => u.MainAppUserId === x.UserId)?.Email || ''}</div>
                         <div className='time-block-center'>{formatDate(x.DayOfLog)}</div>
                         <div className='time-block-right'>{renderWorkNum(x.TimeMinutes)}</div>
                     </div>
@@ -322,13 +320,13 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
 
 
 
-    let creator = props.ProjectUsers.find(x => x.Id === props.Task.CreatorId);
+    let creator = props.ProjectUsers.find(x => x.MainAppUserId === props.Task.CreatorId);
     let creatorsList = props.ProjectUsers.filter(us => !us.Deactivated);
     if (creator && creator.Deactivated) {
         creatorsList.push(creator);
     }
 
-    let executor = props.ProjectUsers.find(x => x.Id === props.Task.ExecutorId);
+    let executor = props.ProjectUsers.find(x => x.MainAppUserId === props.Task.ExecutorId);
     let executorList = props.ProjectUsers.filter(us => !us.Deactivated);
     if (executor && executor.Deactivated) {
         executorList.push(executor);
@@ -358,6 +356,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                             }
 
                             props.UpdateTaskName(props.Task.Id, val);
+                            return true;
 
                         }}
                         Text={props.Task.Name}
@@ -424,7 +423,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                     {!taskExecutorEditable ? <span
                         className='editable-by-click'
                         onClick={() => setTaskExecutorEditable(true)}
-                    >{executorList.find(x => x.Id == props.Task.ExecutorId)?.Name || ''}</span>
+                    >{executorList.find(x => x.MainAppUserId == props.Task.ExecutorId)?.Name || ''}</span>
                         :
                         <SaveCancelInputSelect
                             CancelEvent={() => setTaskExecutorEditable(false)}
@@ -439,16 +438,16 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                                 props.UpdateTaskExecutor(props.Task.Id, id);
                                 return true;
                             }}
-                            Selected={props.Task.ExecutorId}
+                            Selected={props.Task.ExecutorId || -1}
                             ValuesWithId={executorList.map(x => ({
-                                Id: x.Id,
+                                Id: x.MainAppUserId,
                                 Text: x.Name
                             }))}
                         />}
                 </div>
                 <div>
                     <span>Создатель: {creatorsList
-                        .find(x => x.Id == props.Task.CreatorId)?.Name || ''}</span>
+                        .find(x => x.MainAppUserId == props.Task.CreatorId)?.Name || ''}</span>
 
                 </div>
 

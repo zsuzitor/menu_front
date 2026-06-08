@@ -19,7 +19,7 @@ const EditPreset = (props: IEditPresetProps) => {
     const [newExecutorId, setNewExecutorId] = useState(-1);
     const [newStatusId, setNewStatusId] = useState(-1);
     const [newSprintId, setNewSprintId] = useState(-1);
-    const [newLabels, setNewLabels] = useState([]);
+    const [newLabels, setNewLabels] = useState<number[]>([]);
 
     useEffect(() => {
         setNewName(props.Preset.Name ?? '');
@@ -47,14 +47,14 @@ const EditPreset = (props: IEditPresetProps) => {
             <select className='filter-input' value={newCreatorId}
                 onChange={(e) => setNewCreatorId(+e.target.value)}>
                 <option value={-1}>Не выбрано</option>
-                {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                {props.ProjectUsers.map(x => <option key={x.MainAppUserId} value={x.MainAppUserId}>{x.Name}</option>)}
             </select>
 
             <span className='filter-name'>Исполнитель:</span>
             <select className='filter-input' value={newExecutorId}
                 onChange={(e) => setNewExecutorId(+e.target.value)}>
                 <option value={-1}>Не выбрано</option>
-                {props.ProjectUsers.map(x => <option key={x.Id} value={x.Id}>{x.Name}</option>)}
+                {props.ProjectUsers.map(x => <option key={x.MainAppUserId} value={x.MainAppUserId}>{x.Name}</option>)}
             </select>
 
             <span className='filter-name'>Статус:</span>
@@ -93,9 +93,14 @@ const EditPreset = (props: IEditPresetProps) => {
 
             <button className='button button-grey' onClick={() => {
                 props.UpdatePreset({
-                    CreatorId: newCreatorId, Id: props.Preset.Id, LabelId: newLabels,
-                    Name: newName, ProjectId: props.Preset.ProjectId,
-                    SprintId: newSprintId, StatusId: newStatusId, ExecutorId: newExecutorId
+                    CreatorId: newCreatorId,
+                    Id: props.Preset.Id,
+                    LabelId: newLabels,
+                    Name: newName,
+                    ProjectId: props.Preset.ProjectId,
+                    SprintId: newSprintId,
+                    StatusId: newStatusId,
+                    ExecutorId: newExecutorId
 
                 } as Preset);
             }}>Сохранить</button>

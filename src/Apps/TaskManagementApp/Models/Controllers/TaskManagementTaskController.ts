@@ -295,7 +295,6 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
     AddTaskToProject = (task: OneTask, projectId: number, onSuccess: AddNewProjectTask) => {
         let data = {
             "taskName": task.Name,
-            "taskCreatorId": task.CreatorId,
             "taskReviwerId": task.ExecutorId,
             "description": task.Description,
             "projectId": projectId,

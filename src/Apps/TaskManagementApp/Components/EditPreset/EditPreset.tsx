@@ -73,6 +73,7 @@ const EditPreset = (props: IEditPresetProps) => {
                 {props.Sprints.map(sprint => <option value={sprint.Id} key={sprint.Id}>{sprint.Name}</option>)}
             </select>
 
+            <span className='filter-name'>Лейблы:</span>
             <div className='edit-labels'>
                 <SaveCancelInputMultiSelectWithSearch
                     CancelEvent={() => {

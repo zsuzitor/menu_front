@@ -25,8 +25,8 @@ const ProjectUsers = (props: IProjectUsersProps) => {
 
     return <div className={'project-management-user-list'}>
         <br />
-        <span>Почта из основного приложения</span>
-        <input className='form-control-b' type='text' value={userMainAppEmail} placeholder="Почта  из основного приложения" onChange={e => setUserMainAppEmail(e.target.value)}></input>
+        <span>Почта</span>
+        <input className='form-control-b' type='text' value={userMainAppEmail} placeholder="Почта" onChange={e => setUserMainAppEmail(e.target.value)}></input>
         <br />
         <button className='btn-b btn-border add-new-management-user-btn' onClick={() => addNewUser()}>Добавить человека</button>
         <br />

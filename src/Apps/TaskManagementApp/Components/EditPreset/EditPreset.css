@@ -1,3 +1,7 @@
 .new-preset-block .edit-labels {
     color: black;
 }
+
+.edit-labels {
+    width: 200px;
+}

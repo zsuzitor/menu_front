@@ -44,7 +44,9 @@ const OneProjectUser = (props: IOneProjectOneProjectUserProps) => {
 
 
     return <div className='one-project-user-content'>
-<label>Роль Админа</label>
+        <label>Имя</label>
+        <label>{props.User.Name}</label>
+        <label>Роль Админа</label>
         <input type="checkbox" checked={userIsAdmin} onChange={e => setUserIsAdmin(e.target.checked)} />
         <label>Пользователь деактивирован</label>
         <input type="checkbox" checked={userIsDeactivated} onChange={e => setUserIsDeactivated(e.target.checked)} />

@@ -11,6 +11,7 @@ import AdditionalWindow from '../../../../components/Body/AdditionalWindow/Addit
 import AddWorkTimeLog from '../AddWorkTimeLog/AddWorkTimeLog';
 import PopupWindow from '../../../../components/Body/PopupWindow/PopupWindow';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
+import { useSearchParams } from 'react-router-dom';
 
 
 require('./TempoPage.css');
@@ -27,8 +28,26 @@ const TempoPage = (props: ITempoPageProps) => {
     const [defaultDate, setDefaultDate] = useState<Date>(new Date());
 
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const setDatesToUrl = (from: Date, to: Date) => {
+        // Форматируем даты в ISO строку (YYYY-MM-DD)
+        const formatDate = (date: Date): string => {
+            return date.toISOString().split('T')[0]; // '2024-01-15'
+        };
+
+        setSearchParams({
+            datefrom: formatDate(from),
+            dateto: formatDate(to)
+        });
+    };
+
+
 
     useEffect(() => {
+
+
+
 
         return () => {
             props.ClearTimeState();
@@ -42,10 +61,46 @@ const TempoPage = (props: ITempoPageProps) => {
     }, [props.DateFrom.getTime(), props.DateTo.getTime(), props.ProjectId]);
 
 
+    useEffect(() => {
+
+        const dateFrom = searchParams.get('datefrom');
+        const dateTo = searchParams.get('dateto');
+
+        // Преобразуем в объекты Date
+        const fromDate = dateFrom ? new Date(dateFrom) : null;
+        const toDate = dateTo ? new Date(dateTo) : null;
+
+        // Проверка на валидность
+        const isValidFrom = fromDate && !isNaN(fromDate.getTime());
+        const isValidTo = toDate && !isNaN(toDate.getTime());
+
+        if (isValidFrom && isValidTo) {
+            if (fromDate.getTime() !== props.DateFrom.getTime()) {
+                props.SetDateFrom(fromDate);
+            }
+            if (toDate.getTime() !== props.DateTo.getTime()) {
+                props.SetDateTo(toDate);
+            }
+        }
+        else {
+            setDatesToUrl(setClearDate(props.DateFrom), setClearDate(props.DateTo));
+        }
+
+
+    }, [window.location.href, props.DateFrom.getTime(), props.DateTo.getTime()]);
+
+
+
+
+
 
     if (!props.WorkTimeLog) {
         return <div></div>
     }
+
+
+
+
 
 
     const setClearDate = (dt: Date) => {
@@ -80,15 +135,19 @@ const TempoPage = (props: ITempoPageProps) => {
                     if (e.target.value) {
                         let dt = new Date(e.target.value);
                         if (dt > props.DateTo)
-                            props.SetDateFrom(setClearDate(props.DateTo));
+                            setDatesToUrl(setClearDate(props.DateTo), setClearDate(props.DateTo));
+                        // props.SetDateFrom(setClearDate(props.DateTo));
                         else
-                            props.SetDateFrom(setClearDate(dt));
+                            // props.SetDateFrom(setClearDate(dt));
+                            setDatesToUrl(setClearDate(dt), setClearDate(props.DateTo));
                     }
                     else {
                         if (new Date() > props.DateTo)
-                            props.SetDateFrom(setClearDate(props.DateTo));
+                            // props.SetDateFrom(setClearDate(props.DateTo));
+                            setDatesToUrl(setClearDate(props.DateTo), setClearDate(props.DateTo));
                         else
-                            props.SetDateFrom(setClearDate(new Date()));
+                            // props.SetDateFrom(setClearDate(new Date()));
+                            setDatesToUrl(setClearDate(new Date()), setClearDate(props.DateTo));
 
                     }
 
@@ -103,15 +162,19 @@ const TempoPage = (props: ITempoPageProps) => {
                     if (e.target.value) {
                         let dt = new Date(e.target.value);
                         if (dt < props.DateFrom)
-                            props.SetDateTo(setClearDate(props.DateFrom));
+                            // props.SetDateTo(setClearDate(props.DateFrom));
+                            setDatesToUrl(setClearDate(props.DateFrom), setClearDate(props.DateFrom));
                         else
-                            props.SetDateTo(setClearDate(dt));
+                            // props.SetDateTo(setClearDate(dt));
+                            setDatesToUrl(setClearDate(props.DateFrom), setClearDate(dt));
                     }
                     else {
                         if (new Date() < props.DateFrom)
-                            props.SetDateTo(setClearDate(props.DateFrom));
+                            // props.SetDateTo(setClearDate(props.DateFrom));
+                            setDatesToUrl(setClearDate(props.DateFrom), setClearDate(props.DateFrom));
                         else
-                            props.SetDateTo(setClearDate(new Date()));
+                            // props.SetDateTo(setClearDate(new Date()));
+                            setDatesToUrl(setClearDate(props.DateFrom), setClearDate(new Date()));
 
                     }
 

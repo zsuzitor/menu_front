@@ -6,6 +6,7 @@ require('./SaveCancelInput.css');
 export interface ISaveCancelInputMultiSelectWithSearchProps {
     CancelEvent: () => void;
     SaveEvent: (ids: number[]) => boolean;
+    CancelOnSaveNoChanges:boolean;
     ValuesWithId: { Id: number, Text: string }[];
     Selected: number[];
 }
@@ -106,7 +107,7 @@ const SaveCancelInputMultiSelectWithSearch = (props: ISaveCancelInputMultiSelect
 
                         if (hasChanged) {
                             props.SaveEvent(selected);
-                        } else {
+                        } else if(props.CancelOnSaveNoChanges){
                             props.CancelEvent();
                         }
                     }}

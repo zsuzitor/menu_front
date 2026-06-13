@@ -32,6 +32,8 @@
 .project-time-page-main {
     padding-top: 20px;
     overflow-x: auto;
+    width: 100%;
+    padding-top: 40px;
 }
 
 .project-time-time-block {

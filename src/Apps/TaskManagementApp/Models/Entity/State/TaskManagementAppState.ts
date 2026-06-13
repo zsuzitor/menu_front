@@ -27,7 +27,7 @@ export class TaskManagementAppState {
     CurrentProjectTasksFilters: TasksFilter;
     CurrentProjectPresets: Preset[];
 
-    CurrentUserId: number;//на страницах относящехся к пользователю
+    CurrentUserId: number;//на страницах относящехся к пользователю, тоесть когда открываем страницу пользака, парсится из урла,
     PersonTimes: ProjectTimes;
 
     TempoState: ProjectTimes;//страница списаний текущего пользака
@@ -35,9 +35,9 @@ export class TaskManagementAppState {
 
     CurrentTaskId: number;//на страницах относящихся к задаче
     //это не таже ссылка что в CurrentProjectTasks[]
-    CurrentTask: OneTask;
+    CurrentTask: OneTask | null;
 
-    CurrentSprint: SprintInfo;
+    CurrentSprint: SprintInfo | null;
 
 
 
@@ -59,5 +59,6 @@ export class TaskManagementAppState {
         this.CurrentProjectTimes = new ProjectTimes();
         this.PersonTimes = new ProjectTimes();
         this.TempoState = new ProjectTimes();
+        this.CurrentSprint = null;
     }
 }

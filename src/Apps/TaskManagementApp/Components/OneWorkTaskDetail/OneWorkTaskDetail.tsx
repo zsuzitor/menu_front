@@ -470,6 +470,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                                 props.UpdateTaskSprints(props.Task.Id, id);
                                 return true;
                             }}
+                            CancelOnSaveNoChanges={true}
                             Selected={props.Task.SprintId}
                             ValuesWithId={props.Sprints.map(x => {
                                 return { Id: x.Id, Text: x.Name };
@@ -493,6 +494,7 @@ const OneWorkTaskDetail = (props: IOneWorkTaskDetailProps) => {
                                 props.UpdateTaskLabels(props.Task.Id, id);
                                 return true;
                             }}
+                            CancelOnSaveNoChanges={true}
                             Selected={props.Task.LabelId}
                             ValuesWithId={props.Labels.map(x => {
                                 return { Id: x.Id, Text: x.Name };

@@ -22,7 +22,7 @@ const Presets = (props: IPresetsProps) => {
             setEditPresetId(0);
         }}
             IsHeightWindow={true}
-            Title='Спринт'
+            Title='Пресет'
             InnerContent={() => <EditPreset
                 Preset={editPreset}
                 UpdatePreset={props.UpdatePreset}
@@ -32,8 +32,8 @@ const Presets = (props: IPresetsProps) => {
         <div className='preset-block'>
             <div className='one-preset-block'>
                 <div className='one-preset-info'>
-                    <input type='text'
-                        placeholder='Название'
+                    <input type='text' className='form-control-b persent-100-width'
+                        placeholder='Название пресета'
                         value={newPresetName} onChange={(e) => setNewPresetName(e.target.value)}></input>
                 </div>
 

@@ -12,7 +12,6 @@ import connectToStore, { IProjectDetailProps } from './ProjectDetailSetup';
 import EditProject from '../EditProject/EditProject';
 import PopupWindow from '../../../../components/Body/PopupWindow/PopupWindow';
 import { useNavigate } from 'react-router-dom';
-import { TaskLabel } from '../../Models/Entity/State/TaskLabel';
 import SaveCancelInputMultiSelectWithSearch from '../../../../components/Body/SaveCancelInput/SaveCancelInputMultiSelectWithSearch';
 
 
@@ -28,8 +27,7 @@ require('./ProjectDetail.css');
 const ProjectDetail = (props: IProjectDetailProps) => {
     const tasksOnPageCount = 5;
 
-    const [loadTasksTimerId, setLoadTasksTimerId] = useState(null);
-    const [showUserList, setShowUserList] = useState(false);
+    const [loadTasksTimerId, setLoadTasksTimerId] = useState<number | null | any>(null);
     const [showEditProject, setShowEditProject] = useState(false);
     const [showAddNewTaskForm, setShowAddNewTaskForm] = useState(false);
 
@@ -233,6 +231,7 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                 props.SetFilterTaskLabel(id);
                 return true;
             }}
+            CancelOnSaveNoChanges={false}
             Selected={labels}
             ValuesWithId={props.Labels.map(x => {
                 return { Id: x.Id, Text: x.Name };
@@ -276,11 +275,11 @@ const ProjectDetail = (props: IProjectDetailProps) => {
                     InnerContent={() => <EditProject></EditProject>}></AdditionalWindow> : <></>}
                 <br />
                 <div className='management-project-detail-main-header-buttons'>
-                    <button className='button button-grey' onClick={() => setShowUserList(true)}>Люди проекта</button>
+                    {/* <button className='button button-grey' onClick={() => setShowUserList(true)}>Люди проекта</button>
                     {showUserList ? <AdditionalWindow CloseWindow={() => setShowUserList(false)}
                         IsHeightWindow={true}
                         Title='Люди проекта'
-                        InnerContent={() => <ProjectUsers></ProjectUsers>}></AdditionalWindow> : <></>}
+                        InnerContent={() => <ProjectUsers></ProjectUsers>}></AdditionalWindow> : <></>} */}
 
                 </div>
             </div>

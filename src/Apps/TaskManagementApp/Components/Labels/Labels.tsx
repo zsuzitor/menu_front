@@ -47,7 +47,7 @@ const Labels = (props: ILabelsProps) => {
                 className='one-label'>
                 <div
                     className='one-label-info'>
-                    <input type='text' className='new-name'
+                    <input type='text' className='new-name form-control-b persent-100-width' placeholder='Название лейбла'
                         onChange={(e) => setNewLabelText(e.target.value)}>
                     </input>
                 </div>

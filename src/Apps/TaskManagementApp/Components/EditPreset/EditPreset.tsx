@@ -85,6 +85,7 @@ const EditPreset = (props: IEditPresetProps) => {
                         setNewLabels(id);
                         return true;
                     }}
+                    CancelOnSaveNoChanges={true}
                     Selected={newLabels}
                     ValuesWithId={props.Labels.map(x => {
                         return { Id: x.Id, Text: x.Name };

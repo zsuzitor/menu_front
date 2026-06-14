@@ -14,6 +14,7 @@
     border-radius: 0.75rem;
     box-shadow: 0 0 5px rgb(0 0 0 / 25%);
     transition: 0.5s;
+    /* overflow: hidden; */
 }
 
 .code-management-projects-menu-main-visible {
@@ -22,9 +23,10 @@
 }
 
 .code-management-projects-menu-main-hide {
-    margin-right: -1.25rem;
+    /* margin-right: -1.25rem;
     width: 0;
-    transform: translateX(-250px);
+    transform: translateX(-250px); */
+    width: 50px;
 }
 
 .hide-management-projects-menu-button {
@@ -50,7 +52,7 @@
 }
 
 .code-management-projects-menu-main-hide .hide-management-projects-menu-button {
-    right: -16rem;
+    /* right: -16rem; */
 }
 
 .code-management-project-info {

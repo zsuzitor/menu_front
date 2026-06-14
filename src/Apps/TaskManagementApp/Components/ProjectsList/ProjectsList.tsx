@@ -44,7 +44,8 @@ const ProjectsList = (props: IProjectsListProps) => {
     return <>
 
         <div className='code-management-projects-menu'>
-            {(showProjectList || !currentProject) ? <>
+            {((showProjectList || !currentProject) && !props.OnlyCurrentProject) ? <>
+                <>
                 <div className='management-project-new-block'>
                     {/* <input type="test" onChange={e => props.ChangeTestString(e.target.value)} value={props.Test}></input>
                 <p>{props.Test}</p> */}
@@ -62,13 +63,20 @@ const ProjectsList = (props: IProjectsListProps) => {
                     }}>Создать проект</button>
                     <button className='button button-grey' onClick={x => setShowProjectList(false)}>Скрыть</button>
                 </div>
-                <hr />
-                <input className='form-input' type="text" value={filterProjectName} placeholder='Фильтр'
-                    onChange={e => setFilterProjectName(e.target.value)} />
+                
+                        <hr />
+                        <input className='form-input' type="text" value={filterProjectName} placeholder='Фильтр'
+                            onChange={e => setFilterProjectName(e.target.value)} />
+                </>
+
+
                 {renderList()}</>
                 : <>
-                    <button className='button button-grey' onClick={x => setShowProjectList(true)}>Показать</button>
-
+                    {!props.OnlyCurrentProject ? <>
+                        <button className='button button-grey' onClick={x => setShowProjectList(true)}>Показать</button>
+                    </>
+                        : <></>
+                    }
                     <div
                         className='selected-main-management-project'
                     >
@@ -77,6 +85,8 @@ const ProjectsList = (props: IProjectsListProps) => {
                             navigate(projectUrl);
                         }}>{currentProject.Name}</a>
                     </div>
+
+
                 </>}
 
         </div>

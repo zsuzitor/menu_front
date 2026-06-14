@@ -5,6 +5,7 @@ import { OneProjectInList as OneProjectInListModel } from '../../Models/Entity/S
 export interface IProjectsListOwnProps {
     Projects: OneProjectInListModel[];
     CurrentProjectId: number;
+    OnlyCurrentProject: boolean;
 }
 
 interface IProjectsListStateToProps {

@@ -176,40 +176,40 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
                 className="hide-management-projects-menu-button">{visibleList ? '<' : '>'}</div>
             <div className='menu-main-inner'>
                 <ProjectsList Projects={props.ProjectsList}
-                    CurrentProjectId={props.CurrentProjectId} />
+                    CurrentProjectId={props.CurrentProjectId} OnlyCurrentProject={!visibleList} />
 
                 {props.CurrentProjectId > 0 && <div className='links'
                 >
-                    
+
                     <a href={tempoUrl} onClick={(e) => {
                         e.preventDefault();
                         navigate(tempoUrl);
-                    }}>Темпо</a>
+                    }}>{visibleList ? 'Темпо' : 'Т'}</a>
                     <a href={projectsUsersUrl} onClick={(e) => {
                         e.preventDefault();
                         navigate(projectsUsersUrl);
-                    }}>Люди</a>
+                    }}>{visibleList ? 'Люди' : 'Л'}</a>
 
                     <a href={timeLogUrl} onClick={(e) => {
                         e.preventDefault();
                         navigate(timeLogUrl);
-                    }}>Работа</a>
+                    }}>{visibleList ? 'Работа' : 'Р'}</a>
                     <a href={sprintsUrl} onClick={(e) => {
                         e.preventDefault();
                         navigate(sprintsUrl);
-                    }}>Спринты</a>
+                    }}>{visibleList ? 'Спринты' : 'С'}</a>
                     <a href={labelsUrl} onClick={(e) => {
                         e.preventDefault();
                         navigate(labelsUrl);
-                    }}>Лейблы</a>
+                    }}>{visibleList ? 'Лейблы' : 'Л'}</a>
                     <a href={presetsUrl} onClick={(e) => {
                         e.preventDefault();
                         navigate(presetsUrl);
-                    }}>Пресеты</a>
+                    }}>{visibleList ? 'Пресеты' : 'П'}</a>
                     <a href={statusesUrl} onClick={(e) => {
                         e.preventDefault();
                         navigate(statusesUrl);
-                    }}>Статусы</a>
+                    }}>{visibleList ? 'Статусы' : 'С'}</a>
                 </div>}
             </div>
         </div>

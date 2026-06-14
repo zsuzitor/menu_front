@@ -16,6 +16,7 @@ export const TaskManagementSprintRoute: string = 'sprint-';
 export const TaskManagementPresetsRoute: string = 'presets';
 export const TaskManagementUsersRoute: string = 'users';
 export const TaskManagementStatusesRoute: string = 'statuses';
+export const TaskManagementTaskUsersRoute: string = 'users-tasks';
 export const TaskManagementTempoRoute: string = 'tempo';
 //Routes
 

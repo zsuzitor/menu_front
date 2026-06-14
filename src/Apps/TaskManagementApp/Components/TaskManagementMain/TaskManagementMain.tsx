@@ -8,7 +8,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import connectToStore, { TaskManagementMainProps } from './TaskManagementMainSetup';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import OneWorkTaskDetail from '../OneWorkTaskDetail/OneWorkTaskDetail';
-import { TaskManagementLabelsRoute, TaskManagementPreloader, TaskManagementPresetsRoute, TaskManagementProjectRoute, TaskManagementSprintRoute, TaskManagementSprintsRoute, TaskManagementStatusesRoute, TaskManagementTaskRoute, TaskManagementTempoRoute, TaskManagementTimeLogRoute, TaskManagementUserRoute, TaskManagementUsersRoute } from '../../Models/Consts';
+import { TaskManagementLabelsRoute, TaskManagementPreloader, TaskManagementPresetsRoute, TaskManagementProjectRoute, TaskManagementSprintRoute, TaskManagementSprintsRoute, TaskManagementStatusesRoute, TaskManagementTaskRoute, TaskManagementTaskUsersRoute, TaskManagementTempoRoute, TaskManagementTimeLogRoute, TaskManagementUserRoute, TaskManagementUsersRoute } from '../../Models/Consts';
 import ProjectTimePage from '../ProjectTimePage/ProjectTimePage';
 import PersonTimePage from '../PersonTimePage/PersonTimePage';
 import TempoPage from '../TempoPage/TempoPage';
@@ -19,6 +19,7 @@ import Labels from '../Labels/Labels';
 import Presets from '../Presets/Presets';
 import Statuses from '../Statuses/Statuses';
 import ProjectUsers from '../ProjectUsers/ProjectUsers';
+import TasksUser from '../TasksUser/TasksUser';
 
 
 
@@ -168,6 +169,7 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
     const presetsUrl = new RouteBuilder().PresetsUrl(props.CurrentProjectId);
     const projectsUsersUrl = new RouteBuilder().ProjectsUsersUrl(props.CurrentProjectId);
     const statusesUrl = new RouteBuilder().StatusesUrl(props.CurrentProjectId);
+    const taskUsersUrl = new RouteBuilder().TaskUsersUrl(props.CurrentProjectId);
 
     return <div className='task-management-main-container'>
         <div className='preloader' id={TaskManagementPreloader}></div>
@@ -210,6 +212,10 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
                         e.preventDefault();
                         navigate(statusesUrl);
                     }}>{visibleList ? 'Статусы' : 'С'}</a>
+                    <a href={taskUsersUrl} onClick={(e) => {
+                        e.preventDefault();
+                        navigate(taskUsersUrl);
+                    }}>{visibleList ? 'Задачи пользователей' : 'ЗП'}</a>
                 </div>}
             </div>
         </div>
@@ -229,6 +235,7 @@ const TaskManagementMain = (props: TaskManagementMainProps) => {
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementPresetsRoute}`} element={<Presets />} />
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementUsersRoute}`} element={<ProjectUsers />} />
             <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementStatusesRoute}`} element={<Statuses />} />
+            <Route path={`${TaskManagementProjectRoute}:projectId/${TaskManagementTaskUsersRoute}`} element={<TasksUser />} />
         </Routes>
 
         {/* {props.CurrentTaskId && props.CurrentTaskId > 0 ?

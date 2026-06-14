@@ -7,7 +7,6 @@ import { TaskManagementLocalStorageHelper } from '../../../PlaningPoker/Models/P
 import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
 import Paggination from '../../../../components/Body/Paggination/Paggination';
 import { ITaskFilter } from '../../Models/Entity/ITaskFilter';
-import ProjectUsers from '../ProjectUsers/ProjectUsers';
 import connectToStore, { IProjectDetailProps } from './ProjectDetailSetup';
 import EditProject from '../EditProject/EditProject';
 import PopupWindow from '../../../../components/Body/PopupWindow/PopupWindow';

@@ -1,4 +1,4 @@
-import { TaskManagementAppRute, TaskManagementLabelsRoute, TaskManagementPresetsRoute, TaskManagementProjectRoute, TaskManagementSprintRoute, TaskManagementSprintsRoute, TaskManagementStatusesRoute, TaskManagementTaskRoute, TaskManagementTempoRoute, TaskManagementTimeLogRoute, TaskManagementUserRoute, TaskManagementUsersRoute } from "../Consts";
+import { TaskManagementAppRute, TaskManagementLabelsRoute, TaskManagementPresetsRoute, TaskManagementProjectRoute, TaskManagementSprintRoute, TaskManagementSprintsRoute, TaskManagementStatusesRoute, TaskManagementTaskRoute, TaskManagementTaskUsersRoute, TaskManagementTempoRoute, TaskManagementTimeLogRoute, TaskManagementUserRoute, TaskManagementUsersRoute } from "../Consts";
 
 export default class RouteBuilder {
     //можно сделать полноценный билдер через withApproute.withProject но как будто смысла особо нет
@@ -46,6 +46,10 @@ export default class RouteBuilder {
     StatusesUrl(projectId: number): string {
         ///task-management/proj-' + props.CurrentProjectId + '/task-' + props.Task.Id
         return `/${TaskManagementAppRute}/${TaskManagementProjectRoute}${projectId}/${TaskManagementStatusesRoute}`;
+    }
+    TaskUsersUrl(projectId: number): string {
+        ///task-management/proj-' + props.CurrentProjectId + '/task-' + props.Task.Id
+        return `/${TaskManagementAppRute}/${TaskManagementProjectRoute}${projectId}/${TaskManagementTaskUsersRoute}`;
     }
 
     SprintUrl(projectId: number, sprintId: number): string {

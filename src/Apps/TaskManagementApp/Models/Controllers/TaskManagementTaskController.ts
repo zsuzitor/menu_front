@@ -42,6 +42,8 @@ export interface ITaskManagementTaskController {
 
 
     GetTaskNameUI: (id: number) => Promise<string>;
+    LoadTasksUI: (taskFilter: ITaskFilter) => Promise<OneTask[]>;
+
 }
 
 
@@ -316,6 +318,10 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
     }
 
 
+
+
+
+
     UpdateTaskRedux = (task: OneTaskInList) => {
         return (dispatch: any, getState: any) => {
             this.preloader(true);
@@ -355,25 +361,20 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
         });
     }
 
-    LoadTasksRedux = (taskFilter: ITaskFilter) => {
-        return (dispatch: any, getState: any) => {
-            this.preloader(true);
-            this.LoadTasks(taskFilter, (error: MainErrorObjectBack, data: ILoadWorkTasksResultDataBack) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
 
-                if (data) {
-                    let dt = new LoadWorkTasksResult();
-                    dt.FillByBackModel(data);
-                    dispatch(LoadTasksActionCreator(dt));
-                }
-            });
-        };
+
+    LoadTasksUI = async (taskFilter: ITaskFilter): Promise<OneTask[]> => {
+        this.preloader(true);
+        let backResult = await this.LoadTasksAsync(taskFilter);
+        this.preloader(false);
+        let dt = new LoadWorkTasksResult();
+        dt.FillByBackModel(backResult);
+        return dt.Tasks;
+
     }
 
-    LoadTasks = (taskFilter: ITaskFilter, onSuccess: LoadTasks) => {
+    LoadTasksAsync = async (taskFilter: ITaskFilter): Promise<ILoadWorkTasksResultDataBack> => {
+
         let data = {
             "projectId": taskFilter.ProjectId,
             "nameLike": taskFilter.Name,
@@ -387,19 +388,35 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
             "presetId": taskFilter.PresetId,
         };
 
-
-        G_AjaxHelper.GoAjaxRequest({
+        let backResult = await G_AjaxHelper.GoAjaxRequest({
             Data: data,
             Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/${TaskManagementTasksGetUrl}`,
             ContentType: 'body'
 
         });
+
+        return (backResult as ServerResult<ILoadWorkTasksResultDataBack>).Data;
     };
+
+
+
+    LoadTasksRedux = (taskFilter: ITaskFilter) => {
+        return async (dispatch: any, getState: any) => {
+            this.preloader(true);
+            var data = await this.LoadTasksAsync(taskFilter);
+            this.preloader(false);
+            if (data) {
+                let dt = new LoadWorkTasksResult();
+                dt.FillByBackModel(data);
+                dispatch(LoadTasksActionCreator(dt));
+            }
+        };
+    }
+
 
     LoadTaskRedux = (taskId: number) => {
         return (dispatch: any, getState: any) => {
@@ -492,7 +509,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
 
 
 
-    GetTaskNameUI = async (id: number): Promise<string>=>{
+    GetTaskNameUI = async (id: number): Promise<string> => {
         this.preloader(true);
         let backResult = await this.GetTaskNameAsync(id);
         this.preloader(false);
@@ -500,7 +517,7 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
 
     }
 
-        GetTaskNameAsync = async (id: number): Promise<IProjectTaskNameDataBack> => {
+    GetTaskNameAsync = async (id: number): Promise<IProjectTaskNameDataBack> => {
         let data = {
             "id": id,
         };

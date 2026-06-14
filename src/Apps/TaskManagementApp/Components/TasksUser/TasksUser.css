@@ -1,0 +1,32 @@
+.tasks-user-main{
+    padding-top: 40px;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.tasks-user-main .one-status-column {
+    width: 130px;
+    height: 30px;
+}
+
+.tasks-user-main .one-status-empty {
+    width: 230px;
+}
+
+.tasks-user-main .user-name {
+    width: 230px;
+}
+
+.tasks-user-main .one-status-line {
+    display: flex;
+}
+
+.tasks-user-main .one-user-line {
+    display: flex;
+}
+
+.tasks-user-main .one-task {
+    border: 1px solid black;
+    width: 130px;
+    overflow: hidden;
+}

@@ -52,7 +52,8 @@ export declare interface IAjaxInputObject {
 
 export interface IAjaxHelper {
     TryRefreshToken(notRedirectWhenNotAuth: boolean, callBack?: () => void): Promise<any>;//тут вообще токены возвращаются как минимум
-    GoAjaxRequest(obj: IAjaxInputObject, fileLoad?: boolean): Promise<any>;
+    // GoAjaxRequest(obj: IAjaxInputObject, fileLoad?: boolean): Promise<any>;
+    GoAjaxRequest<T>(obj: IAjaxInputObject, fileLoad?: boolean): Promise<ServerResult<T>>;
     TrySend(ajaxObj: JQuery.AjaxSettings): void;
 }
 
@@ -108,9 +109,8 @@ export class FetchHelper implements IAjaxHelper {
         return response.ok;
     }
 
-
-
-    async GoAjaxRequest(obj: IAjaxInputObject, fileLoad?: boolean): Promise<any> {
+    async GoAjaxRequest<T>(obj: IAjaxInputObject, fileLoad?: boolean): Promise<ServerResult<T>> {
+        // async GoAjaxRequest(obj: IAjaxInputObject, fileLoad?: boolean): Promise<any> {
 
         if (!obj.Type)
             obj.Type = 'GET';
@@ -180,14 +180,14 @@ export class FetchHelper implements IAjaxHelper {
 
         let responseResult = await response.json();//todo а если тут что то другое? например файл\xml
         let successFromInner = false;
-        let resultFromInner = null;
+        let resultFromInner: ServerResult<T> = null!;
         if (response.status === 401) {
             if (obj.NeedTryRefreshToken) {
                 let successedRefresh = await this.TryRefreshToken(obj.NotRedirectWhenNotAuth, null) as boolean;
                 if (successedRefresh) {
                     let newObj = { ...obj };
                     newObj.NeedTryRefreshToken = false;
-                    resultFromInner = await this.GoAjaxRequest(newObj);
+                    resultFromInner = await this.GoAjaxRequest<T>(newObj);
                     successFromInner = true;
                 }
             }
@@ -213,11 +213,11 @@ export class FetchHelper implements IAjaxHelper {
 
         if (response.ok) {
             obj.FuncSuccess && obj.FuncSuccess(responseResult, null, null);
-            return { Data: responseResult } as ServerResult<any>;
+            return { Data: responseResult } as ServerResult<T>;
         }
         else {
             obj.FuncError && obj.FuncError(responseResult, null, null);
-            return { Error: responseResult } as ServerResult<any>;
+            return { Error: responseResult } as ServerResult<T>;
 
         }
 

@@ -1,3 +1,4 @@
+import { ServerResult } from "../../../../Models/AjaxLogic";
 import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
@@ -31,43 +32,41 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
 
 
     CreateTimeLogRedux = (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.CreateTimeLog(taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog, (error: MainErrorObjectBack, data: IWorkTimeLogDataBack) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.CreateTimeLogAsync(taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog);
+            this.preloader(false);
+            if (backResult.Error) {
+                return;
+            }
 
-                if (data?.Id) {
-                    // console.log(data);
-                    let dt = new TimeLog().FillByBackModel(data);
-                    // console.log(dt);
-                    dispatch(AddNewTimeLogTaskActionCreator(dt));
-                }
-            });
+            if (backResult.Data?.Id) {
+                // console.log(data);
+                let dt = new TimeLog().FillByBackModel(backResult.Data);
+                // console.log(dt);
+                dispatch(AddNewTimeLogTaskActionCreator(dt));
+            }
         };
     }
 
     CreateTimeTempoLogRedux = (taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.CreateTimeLog(taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog, (error: MainErrorObjectBack, data: IWorkTimeLogDataBack) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.CreateTimeLogAsync(taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog);
+            this.preloader(false);
+            if (backResult.Error) {
+                return;
+            }
 
-                if (data?.Id) {
-                    let dt = new TimeLog().FillByBackModel(data);
-                    dispatch(AddNewTimeLogTempoActionCreator(dt));
-                }
-            });
+            if (backResult.Data?.Id) {
+                let dt = new TimeLog().FillByBackModel(backResult.Data);
+                dispatch(AddNewTimeLogTempoActionCreator(dt));
+            }
         };
     }
 
-    CreateTimeLog = (taskId: number, text: string, minutes: number
-        , dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date, onSuccess: CreateTime) => {
+    CreateTimeLogAsync = async (taskId: number, text: string, minutes: number
+        , dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date): Promise<ServerResult<IWorkTimeLogDataBack>> => {
         let data = {
             "taskId": taskId,
             "text": text,
@@ -76,38 +75,39 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
             "rangeEndOfLog": rangeEndOfLog ? new ControllerHelper().ToZeroDate(rangeEndOfLog).toISOString() : null,
             "rangeStartOfLog": rangeStartOfLog ? new ControllerHelper().ToZeroDate(rangeStartOfLog).toISOString() : null,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IWorkTimeLogDataBack>({
             Data: data,
             Type: ControllerHelper.PutHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiWorkTimeUrl}/create`,
             ContentType: 'body'
 
         });
+
+
+        return backResult;
     }
 
     UpdateTimeTempoLogRedux = (id: number, taskId: number, text: string, minutes: number, dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateTimeLog(id, taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog, (error: MainErrorObjectBack, data: IWorkTimeLogDataBack) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.UpdateTimeLogAsync(id, taskId, text, minutes, dayOfLog, rangeEndOfLog, rangeStartOfLog);
+            this.preloader(false);
+            if (backResult.Error) {
+                return;
+            }
 
-                if (data?.Id) {
-                    let dt = new TimeLog().FillByBackModel(data);
-                    dispatch(UpdateTimeLogTempoActionCreator(dt));
-                }
-            });
+            if (backResult.Data?.Id) {
+                let dt = new TimeLog().FillByBackModel(backResult.Data);
+                dispatch(UpdateTimeLogTempoActionCreator(dt));
+            }
         };
     }
 
-    UpdateTimeLog = (id: number, taskId: number, text: string, minutes: number
-        , dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date, onSuccess: CreateTime) => {
+    UpdateTimeLogAsync = async (id: number, taskId: number, text: string, minutes: number
+        , dayOfLog: Date, rangeEndOfLog: Date, rangeStartOfLog: Date): Promise<ServerResult<IWorkTimeLogDataBack>> => {
         let data = {
             "id": id,
             "taskId": taskId,
@@ -117,223 +117,212 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
             "rangeEndOfLog": rangeEndOfLog ? new ControllerHelper().ToZeroDate(rangeEndOfLog).toISOString() : null,
             "rangeStartOfLog": rangeStartOfLog ? new ControllerHelper().ToZeroDate(rangeStartOfLog).toISOString() : null,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IWorkTimeLogDataBack>({
             Data: data,
             Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiWorkTimeUrl}/update`,
             ContentType: 'body'
 
         });
+        return backResult;
     }
 
 
     DeleteTimeTempoLogRedux = (timeId: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteTimeLog(timeId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            var backResult = await this.DeleteTimeLogAsync(timeId);
+            this.preloader(false);
+            if (backResult.Error) {
+                return;
+            }
 
-                if (data?.Result) {
-                    dispatch(DeleteTimeLogTempoActionCreator(timeId));
-                }
-            });
+            if (backResult.Data?.Result) {
+                dispatch(DeleteTimeLogTempoActionCreator(timeId));
+            }
         };
     }
 
     DeleteTimeTaskLogRedux = (timeId: number, taskId: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteTimeLog(timeId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.DeleteTimeLogAsync(timeId);
+            this.preloader(false);
+            if (backResult.Error) {
+                return;
+            }
 
-                if (data?.Result) {
-                    let d = new DeleteTimeLogActionParam();
-                    d.Id = timeId;
-                    d.TaskId = taskId;
-                    dispatch(DeleteTimeLogActionCreator(d));
-                }
-            });
+            if (backResult.Data?.Result) {
+                let d = new DeleteTimeLogActionParam();
+                d.Id = timeId;
+                d.TaskId = taskId;
+                dispatch(DeleteTimeLogActionCreator(d));
+            }
         };
     }
 
 
     CopyTimeTempoLogRedux = (timeId: number) => {
-        return (dispatch: any, getState: any) => {
-            this.preloader(true);
+        return async (dispatch: any, getState: any) => {
             let state = getState() as AppState;
             var oldTime = state.TaskManagementApp.TempoState.TimeLogs.find(x => x.Id == timeId);
             if (oldTime) {
                 // let newTime = new TimeLog();
                 // newTime.Copy(oldTime);
-                this.CreateTimeLog(oldTime.WorkTaskId, oldTime.Comment, oldTime.TimeMinutes,
-                    oldTime.DayOfLog, oldTime.RangeEndOfLog, oldTime.RangeStartOfLog, (error: MainErrorObjectBack, data: IWorkTimeLogDataBack) => {
-                        this.preloader(false);
-                        if (error) {
-                            return;
-                        }
+                this.preloader(true);
+                const backResult = await this.CreateTimeLogAsync(oldTime.WorkTaskId!, oldTime.Comment!, oldTime.TimeMinutes!,
+                    oldTime.DayOfLog!, oldTime.RangeEndOfLog!, oldTime.RangeStartOfLog!);
+                this.preloader(false);
+                if (backResult.Error) {
+                    return;
+                }
 
-                        if (data?.Id) {
-                            let dt = new TimeLog().FillByBackModel(data);
-                            dispatch(AddNewTimeLogTempoActionCreator(dt));
-                        }
-                    });
+                if (backResult.Data?.Id) {
+                    let dt = new TimeLog().FillByBackModel(backResult.Data);
+                    dispatch(AddNewTimeLogTempoActionCreator(dt));
+                }
             }
 
         };
     }
 
-    DeleteTimeLog = (timeId: number, onSuccess: (error: MainErrorObjectBack, data: BoolResultBackNew) => void) => {
+    DeleteTimeLogAsync = async (timeId: number): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
             "id": timeId,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.DeleteHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiWorkTimeUrl}/delete`
 
         });
+        return backResult;
     }
-    LoadTimeLogsForTaskRedux = (taskId: number) => {
-        return (dispatch: any, getState: any) => {
-            this.preloader(true);
-            this.LoadTimeLogsForTask(taskId, (error: MainErrorObjectBack, data: IWorkTimeLogDataBack[]) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
 
-                if (data) {
-                    // console.log(data);
-                    let mapped = data.map(x => new TimeLog().FillByBackModel(x));
-                    // console.log(mapped);
-                    dispatch(SetTaskTimeLogActionCreator({ TaskId: taskId, Time: mapped }));
-                }
-            });
+    LoadTimeLogsForTaskRedux = (taskId: number) => {
+        return async (dispatch: any, getState: any) => {
+            this.preloader(true);
+            const backResult = await this.LoadTimeLogsForTaskAsync(taskId);
+            this.preloader(false);
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data) {
+                // console.log(data);
+                let mapped = backResult.Data.map(x => new TimeLog().FillByBackModel(x));
+                // console.log(mapped);
+                dispatch(SetTaskTimeLogActionCreator({ TaskId: taskId, Time: mapped }));
+            }
         };
     }
 
-    LoadTimeLogsForTask = (taskId: number, onSuccess: (error: MainErrorObjectBack, data: IWorkTimeLogDataBack[]) => void) => {
+    LoadTimeLogsForTaskAsync = async (taskId: number): Promise<ServerResult<IWorkTimeLogDataBack[]>> => {
         let data = {
             "taskId": taskId,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IWorkTimeLogDataBack[]>({
             Data: data,
             Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiWorkTimeUrl}/task-time`
 
         });
+        return backResult;
     }
 
 
     LoadTimeLogsForProjectRedux = (projectId: number, dateFrom: Date, dateTo: Date) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.LoadTimeLogsForProject(projectId, null, dateFrom, dateTo
-                , (error: MainErrorObjectBack, data: IWorkTimeLogDataBack[]) => {
-                    this.preloader(false);
-                    if (error) {
-                        return;
-                    }
+            const backResult = await this.LoadTimeLogsForProjectAsync(projectId, null!, dateFrom, dateTo);
+            this.preloader(false);
+            if (backResult.Error) {
+                return;
+            }
 
-                    if (data) {
-                        let mapped = data.map(x => new TimeLog().FillByBackModel(x));
-                        dispatch(SetProjectTimeLogDataActionCreator(mapped));
-                    }
-                });
+            if (backResult.Data) {
+                let mapped = backResult.Data.map(x => new TimeLog().FillByBackModel(x));
+                dispatch(SetProjectTimeLogDataActionCreator(mapped));
+            }
         };
     }
-    LoadTimeLogsForProject = (projectId: number, userId: number, dateFrom: Date, dateTo: Date
-        , onSuccess: (error: MainErrorObjectBack, data: IWorkTimeLogDataBack[]) => void) => {
+    LoadTimeLogsForProjectAsync = async (projectId: number, userId: number, dateFrom: Date, dateTo: Date): Promise<ServerResult<IWorkTimeLogDataBack[]>> => {
         let data = {
             "id": projectId,
             "dateFrom": new ControllerHelper().ToZeroDate(dateFrom).toISOString(),
             "dateTo": new ControllerHelper().ToZeroDate(dateTo).toISOString(),
             "userId": userId || null
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IWorkTimeLogDataBack[]>({
             Data: data,
             Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiWorkTimeUrl}/project-time`
 
         });
+        return backResult;
     }
 
     LoadTimeLogsForUserRedux = (projectId: number, userId: number, dateFrom: Date, dateTo: Date) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.LoadTimeLogsForUser(projectId, userId, dateFrom, dateTo
-                , (error: MainErrorObjectBack, data: IWorkTimeLogDataBack[]) => {
-                    this.preloader(false);
-                    if (error) {
-                        return;
-                    }
+            const backResult = await this.LoadTimeLogsForUserAsync(projectId, userId, dateFrom, dateTo);
+            this.preloader(false);
+            if (backResult.Error) {
+                return;
+            }
 
-                    if (data) {
-                        let mapped = data.map(x => new TimeLog().FillByBackModel(x));
-                        dispatch(SetUserTimeLogDataActionCreator(mapped));
-                    }
-                });
+            if (backResult.Data) {
+                let mapped = backResult.Data.map(x => new TimeLog().FillByBackModel(x));
+                dispatch(SetUserTimeLogDataActionCreator(mapped));
+            }
         };
     }
 
     LoadTimeLogsForUserTempoRedux = (projectId: number, userId: number, dateFrom: Date, dateTo: Date) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.LoadTimeLogsForUser(projectId, userId, dateFrom, dateTo
-                , (error: MainErrorObjectBack, data: IWorkTimeLogDataBack[]) => {
-                    this.preloader(false);
-                    if (error) {
-                        return;
-                    }
+            const backResult = await this.LoadTimeLogsForUserAsync(projectId, userId, dateFrom, dateTo);
+            this.preloader(false);
+            if (backResult.Error) {
+                return;
+            }
 
-                    if (data) {
-                        let mapped = data.map(x => new TimeLog().FillByBackModel(x));
-                        dispatch(SetUserTempoTimeLogDataActionCreator(mapped));
-                    }
-                });
+            if (backResult.Data) {
+                let mapped = backResult.Data.map(x => new TimeLog().FillByBackModel(x));
+                dispatch(SetUserTempoTimeLogDataActionCreator(mapped));
+            }
         };
     }
 
-    LoadTimeLogsForUser = (projectId: number, userId: number, dateFrom: Date, dateTo: Date
-        , onSuccess: (error: MainErrorObjectBack, data: IWorkTimeLogDataBack[]) => void) => {
+    LoadTimeLogsForUserAsync = async (projectId: number, userId: number, dateFrom: Date, dateTo: Date): Promise<ServerResult<IWorkTimeLogDataBack[]>> => {
         let data = {
             "projectId": projectId || null,
             "dateFrom": new ControllerHelper().ToZeroDate(dateFrom).toISOString(),
             "dateTo": new ControllerHelper().ToZeroDate(dateTo).toISOString(),
             "userId": userId
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IWorkTimeLogDataBack[]>({
             Data: data,
             Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiWorkTimeUrl}/user-time`
 
         });
+        return backResult;
     }
 
 

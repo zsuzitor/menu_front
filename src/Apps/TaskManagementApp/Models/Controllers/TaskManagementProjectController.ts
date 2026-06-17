@@ -1,3 +1,4 @@
+import { ServerResult } from "../../../../Models/AjaxLogic";
 import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
@@ -18,12 +19,6 @@ import { TaskLabel } from "../Entity/State/TaskLabel";
 import { WorkTaskStatus } from "../Entity/State/WorkTaskStatus";
 
 
-
-export type ListOfCardOnReturn = (error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => void;
-export type CreateNewProject = (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => void;
-export type GetProjectInfo = (error: MainErrorObjectBack, data: IOneProjectInfoDataBack) => void;
-export type DeleteProject = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
-
 export interface ITaskManagementProjectController {
     GetUserProjectsRedux: () => void;
     CreateNewProjectRedux: (newProjectName: string,) => void;
@@ -37,186 +32,178 @@ export class TaskManagementProjectController implements ITaskManagementProjectCo
 
 
     DeleteProjectRedux = (projectId: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteProject(projectId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.DeleteProjectAsync(projectId);
+            this.preloader(false);
 
-                if (data?.Result) {
-                    dispatch(DeleteProjectActionCreator(projectId));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data?.Result) {
+                dispatch(DeleteProjectActionCreator(projectId));
+            }
         };
     }
 
-
-    DeleteProject = (projectId: number, onSuccess: DeleteProject) => {
+    DeleteProjectAsync = async (projectId: number): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
             "projectId": projectId,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.DeleteHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiProjectUrl}/delete-project`
-
         });
+
+        return backResult;
     }
 
 
     GetProjectInfoRedux = (projectId: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.GetProjectInfo(projectId, (error: MainErrorObjectBack, data: IOneProjectInfoDataBack) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.GetProjectInfoAsync(projectId);
+            this.preloader(false);
 
-                if (data) {
-                    let dtUsers = data.Users.map(x => {
-                        let u = new ProjectUser();
-                        u.FillByBackModel(x);
-                        return u;
-                    });
+            if (backResult.Error) {
+                return;
+            }
 
-                    let dtStatuses = data.Statuses.map(x => {
-                        let u = new WorkTaskStatus();
-                        u.FillByBackModel(x);
-                        return u;
+            if (backResult.Data) {
+                let dtUsers = backResult.Data.Users.map(x => {
+                    let u = new ProjectUser();
+                    u.FillByBackModel(x);
+                    return u;
+                });
 
-                    });
+                let dtStatuses = backResult.Data.Statuses.map(x => {
+                    let u = new WorkTaskStatus();
+                    u.FillByBackModel(x);
+                    return u;
+                });
 
-                    let dtSprints = data.Sprints.map(x => {
-                        let u = new ProjectSprint();
-                        u.FillByIProjectSprintDataBack(x);
-                        return u;
+                let dtSprints = backResult.Data.Sprints.map(x => {
+                    let u = new ProjectSprint();
+                    u.FillByIProjectSprintDataBack(x);
+                    return u;
+                });
 
-                    });
-                    let dtLabels = data.Labels.map(x => {
-                        let u = new TaskLabel();
-                        u.FillByIProjectLabelDataBack(x);
-                        return u;
+                let dtLabels = backResult.Data.Labels.map(x => {
+                    let u = new TaskLabel();
+                    u.FillByIProjectLabelDataBack(x);
+                    return u;
+                });
 
-                    });
-                    let dtPreset = data.Presets.map(x => {
-                        let u = new Preset();
-                        u.FillByIProjectTaskDataBack(x);
-                        return u;
+                let dtPreset = backResult.Data.Presets.map(x => {
+                    let u = new Preset();
+                    u.FillByIProjectTaskDataBack(x);
+                    return u;
+                });
 
-                    });
-                    dispatch(SetCurrentProjectUsersActionCreator(dtUsers));
-                    dispatch(SetCurrentProjectStatusesActionCreator(dtStatuses));
-                    let spr = new GetProjectSprintsActionType();
-                    // spr.projectId = projectId;
-                    spr.data = dtSprints;
-                    dispatch(GetProjectSprintsActionCreator(spr));
-                    dispatch(GetTaskLabelsActionCreator(dtLabels));
-                    dispatch(LoadPresetsActionCreator(dtPreset));
-                }
-            });
+                dispatch(SetCurrentProjectUsersActionCreator(dtUsers));
+                dispatch(SetCurrentProjectStatusesActionCreator(dtStatuses));
+
+                let spr = new GetProjectSprintsActionType();
+                spr.data = dtSprints;
+                dispatch(GetProjectSprintsActionCreator(spr));
+                dispatch(GetTaskLabelsActionCreator(dtLabels));
+                dispatch(LoadPresetsActionCreator(dtPreset));
+            }
         };
     }
 
-    GetProjectInfo = (projectId: number, onSuccess: GetProjectInfo) => {
+    GetProjectInfoAsync = async (projectId: number): Promise<ServerResult<IOneProjectInfoDataBack>> => {
         let data = {
             "projectId": projectId,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IOneProjectInfoDataBack>({
             Data: data,
             Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiProjectUrl}/get-project-info`
-
         });
-    };
+
+        return backResult;
+    }
 
 
 
     CreateNewProjectRedux = (newProjectName: string) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.CreateNewProject(newProjectName, (error: MainErrorObjectBack, data: IOneProjectInListDataBack) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.CreateNewProjectAsync(newProjectName);
+            this.preloader(false);
 
-                if (data) {
-                    let dt = new OneProjectInList();
-                    dt.FillByBackModel(data);
-                    dispatch(AddNewProjectActionCreator(dt));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data) {
+                let dt = new OneProjectInList();
+                dt.FillByBackModel(backResult.Data);
+                dispatch(AddNewProjectActionCreator(dt));
+            }
         };
     }
 
-
-    CreateNewProject = (newProjectName: string, onSuccess: CreateNewProject) => {
+    CreateNewProjectAsync = async (newProjectName: string): Promise<ServerResult<IOneProjectInListDataBack>> => {
         let data = {
             "projectName": newProjectName,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IOneProjectInListDataBack>({
             Data: data,
-            Type: "PUT",
+            Type: ControllerHelper.PutHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiProjectUrl}/add-new-project`
-
         });
-    };
+
+        return backResult;
+    }
 
 
     GetUserProjectsRedux = () => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.GetUserProjects((error: MainErrorObjectBack, data: IOneProjectInListDataBack[]) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.GetUserProjectsAsync();
+            this.preloader(false);
 
-                if (data) {
-                    // dispatch(SetCurrentProjectIdActionCreator(-1));
-                    let dt = data.map(x => {
-                        let pr = new OneProjectInList();
-                        pr.FillByBackModel(x);
-                        return pr;
-                    });
+            if (backResult.Error) {
+                return;
+            }
 
-                    dispatch(SetProjectsActionCreator(dt));
-                }
-            });
+            if (backResult.Data) {
+                let dt = backResult.Data.map(x => {
+                    let pr = new OneProjectInList();
+                    pr.FillByBackModel(x);
+                    return pr;
+                });
+
+                dispatch(SetProjectsActionCreator(dt));
+            }
         };
     }
 
-    GetUserProjects = (onSuccess: ListOfCardOnReturn) => {
-        G_AjaxHelper.GoAjaxRequest({
+    GetUserProjectsAsync = async (): Promise<ServerResult<IOneProjectInListDataBack[]>> => {
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IOneProjectInListDataBack[]>({
             Data: {},
             Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiProjectUrl}/get-projects`,
-
         });
-    };
+
+        return backResult;
+    }
 
 
     //todo вынести в какой то общий кусок

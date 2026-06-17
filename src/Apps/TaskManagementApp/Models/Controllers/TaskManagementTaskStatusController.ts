@@ -1,3 +1,4 @@
+import { ServerResult } from "../../../../Models/AjaxLogic";
 import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
@@ -8,9 +9,6 @@ import { WorkTaskStatus } from "../Entity/State/WorkTaskStatus";
 
 
 
-export type DeleteStatus = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
-export type CreateStatus = (error: MainErrorObjectBack, data: IWorkTaskStatusDataBack) => void;
-
 
 export interface ITaskManagementTaskStatusController {
     DeleteStatusRedux: (statusId: number) => void;
@@ -20,117 +18,108 @@ export interface ITaskManagementTaskStatusController {
 
 
 export class TaskManagementTaskStatusController implements ITaskManagementTaskStatusController {
+
+
     DeleteStatusRedux = (statusId: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteStatus(statusId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.DeleteStatusAsync(statusId);
+            this.preloader(false);
+            if (backResult.Error) {
+                return;
+            }
 
-                if (data?.Result) {
-                    dispatch(DeleteCurrentProjectTaskStatusActionCreator(statusId));
-                }
-            });
+            if (backResult.Data?.Result) {
+                dispatch(DeleteCurrentProjectTaskStatusActionCreator(statusId));
+            }
         };
-
     }
 
-    DeleteStatus = (statusId: number, onSuccess: DeleteStatus) => {
+    DeleteStatusAsync = async (statusId: number) : Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
             "statusId": statusId,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.DeleteHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiStatusUrl}/delete-status`
-
         });
+
+        return backResult;
     }
 
 
 
     CreateStatusRedux = (name: string, projectId: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.CreateStatus(name, projectId, (error: MainErrorObjectBack, data: IWorkTaskStatusDataBack) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.CreateStatusAsync(name, projectId);
+            this.preloader(false);
+            if (backResult.Error) {
+                return;
+            }
 
-                if (data?.Id) {
-                    let forAdd = new WorkTaskStatus();
-                    forAdd.FillByBackModel(data);
-                    dispatch(CreateCurrentProjectTaskStatusActionCreator(forAdd));
-                }
-            });
+            if (backResult.Data?.Id) {
+                let forAdd = new WorkTaskStatus();
+                forAdd.FillByBackModel(backResult.Data);
+                dispatch(CreateCurrentProjectTaskStatusActionCreator(forAdd));
+            }
         };
+    }
 
-
-    };
-
-
-    CreateStatus = (name: string, projectId: number, onSuccess: CreateStatus) => {
+    CreateStatusAsync = async (name: string, projectId: number): Promise<ServerResult<IWorkTaskStatusDataBack>> => {
         let data = {
             "status": name,
             "projectId": projectId,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IWorkTaskStatusDataBack>({
             Data: data,
             Type: ControllerHelper.PutHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiStatusUrl}/create-status`
-
         });
+
+        return backResult;
     }
 
 
     UpdateStatusRedux = (statusId: number, status: string) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateStatus(statusId, status, (error: MainErrorObjectBack, data: IWorkTaskStatusDataBack) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.UpdateStatusAsync(statusId, status);
+            this.preloader(false);
+            if (backResult.Error) {
+                return;
+            }
 
-                if (data?.Id) {
-                    let st = new WorkTaskStatus();
-                    st.FillByBackModel(data);
-                    dispatch(UpdateCurrentProjectTaskStatusActionCreator(st));
-                }
-            });
+            if (backResult.Data?.Id) {
+                let st = new WorkTaskStatus();
+                st.FillByBackModel(backResult.Data);
+                dispatch(UpdateCurrentProjectTaskStatusActionCreator(st));
+            }
         };
+    }
 
-    };
-
-    UpdateStatus = (statusId: number, status: string, onSuccess: CreateStatus) => {
+    UpdateStatusAsync = async (statusId: number, status: string): Promise<ServerResult<IWorkTaskStatusDataBack>> => {
         let data = {
             "status": status,
             "statusId": statusId,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IWorkTaskStatusDataBack>({
             Data: data,
             Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiStatusUrl}/update-status`
-
         });
+
+        return backResult;
     }
 
 
@@ -142,7 +131,7 @@ export class TaskManagementTaskStatusController implements ITaskManagementTaskSt
     preloader(show: boolean) {
         window.TaskManagementCounter = new ControllerHelper()
             .Preloader(show, TaskManagementPreloader, window.TaskManagementCounter);
-        
+
     }
 
 }

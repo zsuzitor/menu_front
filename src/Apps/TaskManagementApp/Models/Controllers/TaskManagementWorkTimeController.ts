@@ -4,14 +4,10 @@ import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { AppState } from "../../../../Models/Entity/State/AppState";
 import { SetTaskTimeLogActionCreator, SetProjectTimeLogDataActionCreator, SetUserTimeLogDataActionCreator, SetUserTempoTimeLogDataActionCreator, AddNewTimeLogTaskActionCreator, AddNewTimeLogTempoActionCreator, DeleteTimeLogTempoActionCreator, UpdateTimeLogTempoActionCreator, DeleteTimeLogActionCreator, DeleteTimeLogActionParam } from "../Actions/TimeLogAction";
-import { IProjectUserDataBack } from "../BackModels/IProjectUserDataBack";
 import { IWorkTimeLogDataBack } from "../BackModels/IWorkTimeLogDataBack";
 import { TaskManagementApiWorkTimeUrl, TaskManagementPreloader } from "../Consts";
 import { TimeLog } from "../Entity/State/TimeLog";
 
-export type AddNewUserToProject = (error: MainErrorObjectBack, data: IProjectUserDataBack) => void;
-
-export type CreateTime = (error: MainErrorObjectBack, data: IWorkTimeLogDataBack) => void;
 
 
 export interface ITaskManagementWorkTimeController {

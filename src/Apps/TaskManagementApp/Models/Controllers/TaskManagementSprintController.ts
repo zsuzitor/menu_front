@@ -13,12 +13,6 @@ import { ServerResult } from "../../../../Models/AjaxLogic";
 
 
 
-export type GetSprints = (error: MainErrorObjectBack, data: IProjectSprintDataBack[]) => void;
-export type GetTasks = (error: MainErrorObjectBack, data: IProjectTaskDataBack[]) => void;
-export type CreateSprint = (error: MainErrorObjectBack, data: IProjectSprintDataBack) => void;
-export type Delete = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
-export type Update = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
-
 
 
 export interface ITaskManagementSprintController {
@@ -42,311 +36,294 @@ export interface ITaskManagementSprintController {
 
 export class TaskManagementSprintController implements ITaskManagementSprintController {
 
-    GetForProjectRedux = async (projectId: number, dispatch: any): Promise<any> => {
+    GetForProjectRedux = async (projectId: number, dispatch: any): Promise<IProjectSprintDataBack[]> => {
         this.preloader(true);
-        let backResult = await this.GetForProject(projectId);
+        const backResult = await this.GetForProjectAsync(projectId);
         this.preloader(false);
-        if (backResult) {
-            let dt = new GetProjectSprintsActionType();
-            // dt.projectId = projectId;
-            dt.data = backResult.map(x => new ProjectSprint().FillByIProjectSprintDataBack(x));
-            dispatch(GetProjectSprintsActionCreator(dt));
 
+        if (backResult.Error) {
+            return null!;
         }
 
+        if (backResult.Data) {
+            let dt = new GetProjectSprintsActionType();
+            dt.data = backResult.Data.map(x => new ProjectSprint().FillByIProjectSprintDataBack(x));
+            dispatch(GetProjectSprintsActionCreator(dt));
+            return backResult.Data;
+        }
+        return null!;
     }
 
-    GetForProject = async (projectId: number): Promise<IProjectSprintDataBack[]> => {
+    GetForProjectAsync = async (projectId: number): Promise<ServerResult<IProjectSprintDataBack[]>> => {
         let data = {
             "projectId": projectId,
         };
-        let res = await G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IProjectSprintDataBack[]>({
             Data: data,
             Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/get-for-project`
+        });
 
-        }) as ServerResult<any>;
-        return res.Data;
-    };
-
-    // GetForProjectRedux = (projectId: number) => {
-    //     return (dispatch: any, getState: any) => {
-    //         this.preloader(true);
-    //         this.GetForProject(projectId, (error: MainErrorObjectBack, data: IProjectSprintDataBack[]) => {
-    //             this.preloader(false);
-
-
-    //             if (data) {
-    //                 let dt = new GetProjectSprintsActionType();
-    //                 // dt.projectId = projectId;
-    //                 dt.data = data.map(x => new ProjectSprint().FillByIProjectSprintDataBack(x));
-    //                 dispatch(GetProjectSprintsActionCreator(dt));
-
-    //             }
-    //         });
-    //     };
-    // }
-
-    // GetForProject = (projectId: number, onSuccess: GetSprints) => {
-    //     let data = {
-    //         "projectId": projectId,
-    //     };
-    //     G_AjaxHelper.GoAjaxRequest({
-    //         Data: data,
-    //         Type: ControllerHelper.GetHttp,
-    //         FuncSuccess: (xhr, status, jqXHR) => {
-    //             this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-    //         },
-    //         FuncError: (xhr, status, error) => { },
-    //         Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/get-for-project`
-
-    //     });
-    // };
+        return backResult;
+    }
 
 
     GetTasksRedux = (sprintId: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.GetTasks(sprintId, (error: MainErrorObjectBack, data: IProjectTaskDataBack[]) => {
-                this.preloader(false);
+            const backResult = await this.GetTasksAsync(sprintId);
+            this.preloader(false);
 
-                if (data) {
-                    let dt = data.map(x => new OneTask().FillByIProjectTaskDataBack(x));
-                    dispatch(GetSprintsTasksActionCreator(dt));
+            if (backResult.Error) {
+                return;
+            }
 
-                }
-            });
+            if (backResult.Data) {
+                let dt = backResult.Data.map(x => new OneTask().FillByIProjectTaskDataBack(x));
+                dispatch(GetSprintsTasksActionCreator(dt));
+            }
         };
     }
 
-    GetTasks = (sprintId: number, onSuccess: GetTasks) => {
+    GetTasksAsync = async (sprintId: number): Promise<ServerResult<IProjectTaskDataBack[]>> => {
         let data = {
             "sprintId": sprintId,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IProjectTaskDataBack[]>({
             Data: data,
             Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/get-tasks`
-
         });
-    };
+
+        return backResult;
+    }
 
 
     CreateSprintRedux = (req: SprintCreate) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.CreateSprint(req, (error: MainErrorObjectBack, data: IProjectSprintDataBack) => {
-                this.preloader(false);
+            const backResult = await this.CreateSprintAsync(req);
+            this.preloader(false);
 
-                if (data?.Id) {
-                    let dt = new ProjectSprint();
-                    dt.FillByIProjectSprintDataBack(data);
-                    dispatch(CreateSprintActionCreator(dt));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data?.Id) {
+                let dt = new ProjectSprint();
+                dt.FillByIProjectSprintDataBack(backResult.Data);
+                dispatch(CreateSprintActionCreator(dt));
+            }
         };
     }
 
-    CreateSprint = (req: SprintCreate, onSuccess: CreateSprint) => {
+    CreateSprintAsync = async (req: SprintCreate): Promise<ServerResult<IProjectSprintDataBack>> => {
         let data = {
             "ProjectId": req.ProjectId,
             "Name": req.Name,
             "StartDate": new ControllerHelper().ToZeroDate(req.StartDate).toISOString(),
             "EndDate": new ControllerHelper().ToZeroDate(req.EndDate).toISOString()
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IProjectSprintDataBack>({
             Data: data,
             Type: ControllerHelper.PutHttp,
-
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/create`,
             ContentType: 'body'
-
         });
-    };
+
+        return backResult;
+    }
 
     UpdateSprintRedux = (req: SprintUpdate) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateSprint(req, (error: MainErrorObjectBack, data: IProjectSprintDataBack) => {
-                this.preloader(false);
+            const backResult = await this.UpdateSprintAsync(req);
+            this.preloader(false);
 
-                if (data?.Id) {
-                    let dt = new ProjectSprint();
-                    dt.FillByIProjectSprintDataBack(data);
-                    dispatch(UpdateSprintActionCreator(dt));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data?.Id) {
+                let dt = new ProjectSprint();
+                dt.FillByIProjectSprintDataBack(backResult.Data);
+                dispatch(UpdateSprintActionCreator(dt));
+            }
         };
     }
 
-    UpdateSprint = (req: SprintUpdate, onSuccess: CreateSprint) => {
+    UpdateSprintAsync = async (req: SprintUpdate): Promise<ServerResult<IProjectSprintDataBack>> => {
         let data = {
             "Id": req.Id,
             "Name": req.Name,
             "StartDate": new ControllerHelper().ToZeroDate(req.StartDate).toISOString(),
             "EndDate": new ControllerHelper().ToZeroDate(req.EndDate).toISOString()
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IProjectSprintDataBack>({
             Data: data,
             Type: ControllerHelper.PatchHttp,
-
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/update`,
             ContentType: 'body'
-
         });
-    };
+
+        return backResult;
+    }
 
 
 
     DeleteSprintRedux = (id: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteSprint(id, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
+            const backResult = await this.DeleteSprintAsync(id);
+            this.preloader(false);
 
-                if (data.Result) {
-                    dispatch(DeleteSprintActionCreator(id));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data?.Result) {
+                dispatch(DeleteSprintActionCreator(id));
+            }
         };
     }
 
-    DeleteSprint = (id: number, onSuccess: Delete) => {
+    DeleteSprintAsync = async (id: number): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
             "id": id,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.DeleteHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/delete`
-
         });
-    };
+
+        return backResult;
+    }
+
 
     AddTaskToSprintRedux = (sprintId: number, taskId: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.AddTaskToSprint(sprintId, taskId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
+            const backResult = await this.AddTaskToSprintAsync(sprintId, taskId);
+            this.preloader(false);
 
+            if (backResult.Error) {
+                return;
+            }
 
-                if (data?.Result) {
-                    let dt = new TaskIdWithSprintIdActionType();
-                    dt.sprintId = sprintId;
-                    dt.taskId = taskId;
-                    dispatch(AddTaskToSprintActionCreator(dt));
-
-                }
-            });
+            if (backResult.Data?.Result) {
+                let dt = new TaskIdWithSprintIdActionType();
+                dt.sprintId = sprintId;
+                dt.taskId = taskId;
+                dispatch(AddTaskToSprintActionCreator(dt));
+            }
         };
     }
 
-    AddTaskToSprint = (sprintId: number, taskId: number, onSuccess: Delete) => {
+    AddTaskToSprintAsync = async (sprintId: number, taskId: number): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
             "sprintId": sprintId,
             "taskId": taskId,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/add-task-to-sprint`
-
         });
-    };
+
+        return backResult;
+    }
 
     DeleteTaskFromSprintRedux = (taskId: number, sprintId: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteTaskFromSprint(taskId, sprintId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
+            const backResult = await this.DeleteTaskFromSprintAsync(taskId, sprintId);
+            this.preloader(false);
 
-                if (data?.Result) {
-                    let dt = new TaskIdWithSprintIdActionType();
-                    dt.sprintId = null;
-                    dt.taskId = taskId;
-                    dispatch(DeleteTaskFromSprintActionCreator(dt));
+            if (backResult.Error) {
+                return;
+            }
 
-                }
-            });
+            if (backResult.Data?.Result) {
+                let dt = new TaskIdWithSprintIdActionType();
+                dt.sprintId = null;
+                dt.taskId = taskId;
+                dispatch(DeleteTaskFromSprintActionCreator(dt));
+            }
         };
     }
 
-    DeleteTaskFromSprint = (taskId: number, sprintId: number, onSuccess: Delete) => {
+    DeleteTaskFromSprintAsync = async (taskId: number, sprintId: number): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
-            // "sprintId": sprintId,
             "taskId": taskId,
             "sprintId": sprintId
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/delete-task-from-sprint`
-
         });
-    };
+
+        return backResult;
+    }
 
     UpdateTaskFromSprintRedux = (taskId: number, sprintId: number[]) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateTaskFromSprint(taskId, sprintId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
+            const backResult = await this.UpdateTaskFromSprintAsync(taskId, sprintId);
+            this.preloader(false);
 
-                if (data?.Result) {
-                    let dt = new TaskIdWithSprintIdsActionType();
-                    dt.sprintId = sprintId;
-                    dt.taskId = taskId;
-                    dispatch(UpdateTaskSprintActionCreator(dt));
+            if (backResult.Error) {
+                return;
+            }
 
-                }
-            });
+            if (backResult.Data?.Result) {
+                let dt = new TaskIdWithSprintIdsActionType();
+                dt.sprintId = sprintId;
+                dt.taskId = taskId;
+                dispatch(UpdateTaskSprintActionCreator(dt));
+            }
         };
     }
 
-    UpdateTaskFromSprint = (taskId: number, sprintId: number[], onSuccess: Update) => {
+    UpdateTaskFromSprintAsync = async (taskId: number, sprintId: number[]): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
-            // "sprintId": sprintId,
             "taskId": taskId,
             "sprintId": sprintId
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiSprintUrl}/update-task-sprints`,
             ContentType: 'body'
-
         });
-    };
+
+        return backResult;
+    }
 
 
     mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {

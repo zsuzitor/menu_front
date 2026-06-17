@@ -6,6 +6,7 @@
     background-color: dimgray;
     border-radius: 3px;
     padding: 2px;
+    cursor: pointer;
 }
 
 .task-status-elem .status-btn {

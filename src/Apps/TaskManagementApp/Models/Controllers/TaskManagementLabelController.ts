@@ -1,3 +1,4 @@
+import { ServerResult } from "../../../../Models/AjaxLogic";
 import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
@@ -7,9 +8,6 @@ import { TaskManagementApiLabelUrl, TaskManagementPreloader } from "../Consts";
 import { TaskLabel } from "../Entity/State/TaskLabel";
 
 
-export type GetLabels = (error: MainErrorObjectBack, data: ITaskLabelDataBack[]) => void;
-export type CreateLabel = (error: MainErrorObjectBack, data: ITaskLabelDataBack) => void;
-export type Boolres = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
 
 export interface ITaskManagementLabelController {
     GetForProjectRedux: (projectId: number) => void;
@@ -24,242 +22,256 @@ export interface ITaskManagementLabelController {
 export class TaskManagementLabelController implements ITaskManagementLabelController {
 
     GetForProjectRedux = (projectId: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.GetForProject(projectId, (error: MainErrorObjectBack, data: ITaskLabelDataBack[]) => {
-                this.preloader(false);
-                if (data) {
-                    // dt.projectId = projectId;
-                    let dt = data.map(x => new TaskLabel().FillByIProjectLabelDataBack(x));
-                    dispatch(GetTaskLabelsActionCreator(dt));
+            const backResult = await this.GetForProjectAsync(projectId);
+            this.preloader(false);
 
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data) {
+                let dt = backResult.Data.map(x => new TaskLabel().FillByIProjectLabelDataBack(x));
+                dispatch(GetTaskLabelsActionCreator(dt));
+            }
         };
     }
 
-    GetForProject = (projectId: number, onSuccess: GetLabels) => {
+    GetForProjectAsync = async (projectId: number): Promise<ServerResult<ITaskLabelDataBack[]>> => {
         let data = {
             "projectId": projectId,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<ITaskLabelDataBack[]>({
             Data: data,
             Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/get-all`
-
         });
-    };
+
+        return backResult;
+    }
 
 
     CreateLabelRedux = (projectId: number, labelName: string) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.CreateLabel(projectId, labelName, (error: MainErrorObjectBack, data: ITaskLabelDataBack) => {
-                this.preloader(false);
+            const backResult = await this.CreateLabelAsync(projectId, labelName);
+            this.preloader(false);
 
-                if (data?.Id) {
-                    let dt = new TaskLabel().FillByIProjectLabelDataBack(data);
-                    dispatch(CreateProjectLabelActionCreator(dt));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data?.Id) {
+                let dt = new TaskLabel().FillByIProjectLabelDataBack(backResult.Data);
+                dispatch(CreateProjectLabelActionCreator(dt));
+            }
         };
     }
 
-    CreateLabel = (projectId: number, labelName: string, onSuccess: CreateLabel) => {
+    CreateLabelAsync = async (projectId: number, labelName: string): Promise<ServerResult<ITaskLabelDataBack>> => {
         let data = {
             "ProjectId": projectId,
             "Name": labelName,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<ITaskLabelDataBack>({
             Data: data,
             Type: ControllerHelper.PutHttp,
-
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/create`,
             ContentType: 'body'
-
         });
-    };
+
+        return backResult;
+    }
 
     UpdateLabelRedux = (id: number, labelName: string) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateLabel(id, labelName, (error: MainErrorObjectBack, data: ITaskLabelDataBack) => {
-                this.preloader(false);
+            const backResult = await this.UpdateLabelAsync(id, labelName);
+            this.preloader(false);
 
-                if (data?.Id) {
-                    let dt = new TaskLabel().FillByIProjectLabelDataBack(data);
-                    dispatch(UpdateProjectLabelActionCreator(dt));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data?.Id) {
+                let dt = new TaskLabel().FillByIProjectLabelDataBack(backResult.Data);
+                dispatch(UpdateProjectLabelActionCreator(dt));
+            }
         };
     }
 
-    UpdateLabel = (id: number, labelName: string, onSuccess: CreateLabel) => {
+    UpdateLabelAsync = async (id: number, labelName: string): Promise<ServerResult<ITaskLabelDataBack>> => {
         let data = {
             "Id": id,
             "Name": labelName,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<ITaskLabelDataBack>({
             Data: data,
             Type: ControllerHelper.PatchHttp,
-
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/update`,
             ContentType: 'body'
-
         });
-    };
+
+        return backResult;
+    }
 
     DeleteLabelRedux = (id: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteLabel(id, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
+            const backResult = await this.DeleteLabelAsync(id);
+            this.preloader(false);
 
-                if (data?.Result) {
-                    dispatch(DeleteProjectLabelActionCreator(id));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data?.Result) {
+                dispatch(DeleteProjectLabelActionCreator(id));
+            }
         };
     }
 
-    DeleteLabel = (id: number, onSuccess: Boolres) => {
+    DeleteLabelAsync = async (id: number): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
             "Id": id,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.DeleteHttp,
-
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/delete`,
             ContentType: 'body'
-
         });
-    };
+
+        return backResult;
+    }
 
 
     UpdateTaskLabelsRedux = (taskId: number, labelId: number[]) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateTaskLabels(taskId, labelId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
+            const backResult = await this.UpdateTaskLabelsAsync(taskId, labelId);
+            this.preloader(false);
 
-                if (data?.Result) {
-                    let dt = new UpdateTaskLabelsActionDataType();
-                    dt.LabelId = labelId;
-                    dt.TaskId = taskId;
-                    dispatch(UpdateTaskLabelsActionCreator(dt));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data?.Result) {
+                let dt = new UpdateTaskLabelsActionDataType();
+                dt.LabelId = labelId;
+                dt.TaskId = taskId;
+                dispatch(UpdateTaskLabelsActionCreator(dt));
+            }
         };
     }
 
-    UpdateTaskLabels = (taskId: number, labelId: number[], onSuccess: Boolres) => {
+    UpdateTaskLabelsAsync = async (taskId: number, labelId: number[]): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
             "TaskId": taskId,
             "LabelId": labelId
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.PostHttp,
-
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/update-task-labels`,
             ContentType: 'body'
-
         });
-    };
+
+        return backResult;
+    }
 
 
 
     AddLabelToTaskRedux = (taskId: number, labelId: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.AddLabelToTask(taskId, labelId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
+            const backResult = await this.AddLabelToTaskAsync(taskId, labelId);
+            this.preloader(false);
 
-                if (data?.Result) {
-                    let dt = new UpdateTaskLabelActionDataType();
-                    dt.LabelId = labelId;
-                    dt.TaskId = taskId;
-                    dispatch(AddLabelToTaskActionCreator(dt));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data?.Result) {
+                let dt = new UpdateTaskLabelActionDataType();
+                dt.LabelId = labelId;
+                dt.TaskId = taskId;
+                dispatch(AddLabelToTaskActionCreator(dt));
+            }
         };
     }
 
-    AddLabelToTask = (taskId: number, labelId: number, onSuccess: Boolres) => {
+    AddLabelToTaskAsync = async (taskId: number, labelId: number): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
             "LabelId": taskId,
             "TaskId": labelId
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.PostHttp,
-
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/add-to-task`,
             ContentType: 'body'
-
         });
-    };
+
+        return backResult;
+    }
 
 
     DeleteLabelFromTaskRedux = (taskId: number, labelId: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteLabelFromTask(taskId, labelId, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
+            const backResult = await this.DeleteLabelFromTaskAsync(taskId, labelId);
+            this.preloader(false);
 
-                if (data?.Result) {
-                    let dt = new DeleteLabelFromTaskActionDataType();
-                    dt.LabelId = labelId;
-                    dt.TaskId = taskId;
-                    dispatch(DeleteLabelFromTaskActionCreator(dt));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data?.Result) {
+                let dt = new DeleteLabelFromTaskActionDataType();
+                dt.LabelId = labelId;
+                dt.TaskId = taskId;
+                dispatch(DeleteLabelFromTaskActionCreator(dt));
+            }
         };
     }
 
-    DeleteLabelFromTask = (taskId: number, labelId: number, onSuccess: Boolres) => {
+    DeleteLabelFromTaskAsync = async (taskId: number, labelId: number): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
             "LabelId": taskId,
             "TaskId": labelId
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.PostHttp,
-
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiLabelUrl}/delete-from-task`,
             ContentType: 'body'
-
         });
-    };
+
+        return backResult;
+    }
 
 
 

@@ -10,9 +10,6 @@ import { Preset } from "../Entity/State/Preset";
 
 
 
-export type GetSprints = (error: MainErrorObjectBack, data: IProjectSprintDataBack[]) => void;
-
-
 
 export interface ITaskManagementPresetController {
     // GetForProjectRedux: (projectId: number) => void;
@@ -21,86 +18,95 @@ export interface ITaskManagementPresetController {
     CreateRedux: (name: string, projectId: number, dispatch: any) => Promise<any>;
     UpdateRedux: (preset: Preset, dispatch: any) => Promise<any>;
 
-
-
 }
-
 
 
 export class TaskManagementPresetController implements ITaskManagementPresetController {
 
     GetForProjectRedux = async (projectId: number, dispatch: any): Promise<any> => {
         this.preloader(true);
-        let backResult = await this.GetForProject(projectId);
+        const backResult = await this.GetForProjectAsync(projectId);
         this.preloader(false);
-        if (backResult) {
-            // dt.projectId = projectId;
-            let dt = backResult.map(x => new Preset().FillByIProjectTaskDataBack(x));
+
+        if (backResult.Error) {
+            return;
+        }
+
+        if (backResult.Data) {
+            let dt = backResult.Data.map(x => new Preset().FillByIProjectTaskDataBack(x));
             dispatch(LoadPresetsActionCreator(dt));
         }
     }
 
-    GetForProject = async (projectId: number): Promise<IPresetDataBack[]> => {
+    GetForProjectAsync = async (projectId: number): Promise<ServerResult<IPresetDataBack[]>> => {
         let data = {
             "projectId": projectId,
         };
-        let res = await G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IPresetDataBack[]>({
             Data: data,
             Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiPresetUrl}/get-all`
+        });
 
-        }) as ServerResult<IPresetDataBack[]>;
-        return res.Data;
-    };
+        return backResult;
+    }
 
 
     DeleteRedux = async (id: number, dispatch: any): Promise<any> => {
         this.preloader(true);
-        let backResult = await this.Delete(id);
+        const backResult = await this.DeleteAsync(id);
         this.preloader(false);
-        if (backResult?.Result) {
-            // dt.projectId = projectId;
+
+        if (backResult.Error) {
+            return;
+        }
+
+        if (backResult.Data?.Result) {
             dispatch(DeletePresetActionCreator(id));
         }
     }
 
-    Delete = async (id: number): Promise<BoolResultBackNew> => {
+    DeleteAsync = async (id: number): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
             "presetId": id,
         };
-        let res = await G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.DeleteHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiPresetUrl}/delete`
+        });
 
-        }) as ServerResult<BoolResultBackNew>;
-        return res.Data;
-    };
+        return backResult;
+    }
 
 
     CreateRedux = async (name: string, projectId: number, dispatch: any): Promise<any> => {
         this.preloader(true);
-        let backResult = await this.Create(name, projectId);
+        const backResult = await this.CreateAsync(name, projectId);
         this.preloader(false);
-        if (backResult?.Id) {
-            // dt.projectId = projectId;
-            let dt = new Preset().FillByIProjectTaskDataBack(backResult);
+
+        if (backResult.Error) {
+            return;
+        }
+
+        if (backResult.Data?.Id) {
+            let dt = new Preset().FillByIProjectTaskDataBack(backResult.Data);
             dispatch(CreatePresetActionCreator(dt));
         }
     }
 
-    Create = async (name: string, projectId: number): Promise<IPresetDataBack> => {
+    CreateAsync = async (name: string, projectId: number): Promise<ServerResult<IPresetDataBack>> => {
         let data = {
             "name": name,
             "projectId": projectId
         };
-        let res = await G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IPresetDataBack>({
             Data: data,
             Type: ControllerHelper.PutHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
@@ -108,24 +114,27 @@ export class TaskManagementPresetController implements ITaskManagementPresetCont
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiPresetUrl}/create`,
             ContentType: 'body'
+        });
 
-        }) as ServerResult<IPresetDataBack>;
-        return res.Data;
-    };
+        return backResult;
+    }
 
 
     UpdateRedux = async (preset: Preset, dispatch: any): Promise<any> => {
         this.preloader(true);
-        let backResult = await this.Update(preset);
+        const backResult = await this.UpdateAsync(preset);
         this.preloader(false);
-        if (backResult?.Result) {
-            // dt.projectId = projectId;
-            // let dt = new Preset().FillByIProjectTaskDataBack(backResult);
+
+        if (backResult.Error) {
+            return;
+        }
+
+        if (backResult.Data?.Result) {
             dispatch(UpdatePresetActionCreator(preset));
         }
     }
 
-    Update = async (preset: Preset): Promise<BoolResultBackNew> => {
+    UpdateAsync = async (preset: Preset): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
             "id": preset.Id,
             "name": preset.Name,
@@ -135,7 +144,7 @@ export class TaskManagementPresetController implements ITaskManagementPresetCont
             "SprintId": preset.SprintId,
             "Labels": preset.LabelId
         };
-        let res = await G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
@@ -143,10 +152,10 @@ export class TaskManagementPresetController implements ITaskManagementPresetCont
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiPresetUrl}/update`,
             ContentType: 'body'
+        });
 
-        }) as ServerResult<BoolResultBackNew>;
-        return res.Data;
-    };
+        return backResult;
+    }
 
 
 

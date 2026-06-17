@@ -7,7 +7,7 @@ import SaveCancelInputMultiSelectWithSearch from '../../../../components/Body/Sa
 import RouteBuilder from '../../Models/BL/RouteBuilder';
 import { useNavigate } from 'react-router-dom';
 
-require('./TasksUser.css');
+import './TasksUser.css';
 
 
 
@@ -34,22 +34,22 @@ const TasksUser = (props: ITasksUserProps) => {
     const navigate = useNavigate();
 
     //лучше не выводить всех пользаков проекта потому что тогда нужно добавлять функционал команд
-    const uniqueUsers: number[] = [...new Set(newTasks.map(x => x.ExecutorId))];
+    const uniqueUsers = [...new Set(newTasks.map(x => x.ExecutorId))];
 
 
     const renderTasks = (): any => {
         return <div>
             <div className='one-status-line'>
                 <div className='one-status-empty'></div>
-                {props.Statuses.map(s => <div className='one-status-column'>{s.Name}</div>)}
+                {props.Statuses.map(s => <div className='one-status-column' key={s.Id}>{s.Name}</div>)}
             </div>
-            {uniqueUsers.map(u => <div className='one-user-line'>
+            {uniqueUsers.map(u => <div className='one-user-line' key={u}>
                 <div className='user-name'>{props.Users.find(x => x.MainAppUserId === u)?.Name}</div>
-                {props.Statuses.map(s => <div className=''>
+                {props.Statuses.map(s => <div className='' key={s.Id}>
                     {newTasks.filter(t => t.ExecutorId === u && t.StatusId === s.Id).map(t => {
 
                         const taskUrl = new RouteBuilder().TaskUrl(props.ProjectId, t.Id);
-                        return <div className='one-task' title={t.Name}>
+                        return <div className='one-task' title={t.Name} key={t.Id}>
                             <a href={taskUrl} onClick={(e) => {
                                 e.preventDefault();
                                 navigate(taskUrl);

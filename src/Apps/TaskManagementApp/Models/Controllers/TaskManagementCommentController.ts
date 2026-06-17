@@ -9,13 +9,7 @@ import { CommentSet } from "../Entity/CommentSet";
 import { OneWorkTaskComment } from "../Entity/OneTaskWorkComment";
 import { UpdateCommentActionCreator, DeleteCommentActionCreator, AddCommentActionCreator, SetCommentsActionCreator } from "../Actions/CommentActions";
 import { TaskManagementApiCommentUrl, TaskManagementPreloader } from "../Consts";
-
-
-
-export type LoadComments = (error: MainErrorObjectBack, data: IOneWorkTaskCommentDataBack[]) => void;
-export type AddComment = (error: MainErrorObjectBack, data: IOneWorkTaskCommentDataBack) => void;
-export type DeleteComment = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
-export type UpdateComment = (error: MainErrorObjectBack, data: BoolResultBackNew) => void;
+import { ServerResult } from "../../../../Models/AjaxLogic";
 
 
 export interface ITaskManagementCommentController {
@@ -24,9 +18,7 @@ export interface ITaskManagementCommentController {
     DeleteCommentRedux: (data: CommentDelete) => void;
     UpdateCommentRedux: (comment: CommentUpdate) => void;
 
-
 }
-
 
 
 export class TaskManagementCommentController implements ITaskManagementCommentController {
@@ -34,144 +26,143 @@ export class TaskManagementCommentController implements ITaskManagementCommentCo
 
 
     UpdateCommentRedux = (comment: CommentUpdate) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateComment(comment.Id, comment.Text, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.UpdateCommentAsync(comment.Id, comment.Text);
+            this.preloader(false);
 
-                if (data?.Result) {
-                    dispatch(UpdateCommentActionCreator(comment));
+            if (backResult.Error) {
+                return;
+            }
 
-                }
-            });
+            if (backResult.Data?.Result) {
+                dispatch(UpdateCommentActionCreator(comment));
+            }
         };
     }
 
-    UpdateComment = (id: number, text: string, onSuccess: UpdateComment) => {
+    UpdateCommentAsync = async (id: number, text: string): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
             "commentId": id,
             "text": text,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.PatchHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiCommentUrl}/edit-comment`
-
         });
-    };
+
+        return backResult;
+    }
 
 
     DeleteCommentRedux = (dataForDel: CommentDelete) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteComment(dataForDel.Id, (error: MainErrorObjectBack, data: BoolResultBackNew) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.DeleteCommentAsync(dataForDel.Id);
+            this.preloader(false);
 
-                if (data?.Result) {
-                    dispatch(DeleteCommentActionCreator(dataForDel));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data?.Result) {
+                dispatch(DeleteCommentActionCreator(dataForDel));
+            }
         };
     }
 
-    DeleteComment = (id: number, onSuccess: DeleteComment) => {
+    DeleteCommentAsync = async (id: number): Promise<ServerResult<BoolResultBackNew>> => {
         let data = {
             "commentId": id,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
             Data: data,
             Type: ControllerHelper.DeleteHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiCommentUrl}/delete-comment`
-
         });
-    };
+
+        return backResult;
+    }
 
     AddCommentRedux = (taskId: number, text: string) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.AddComment(taskId, text, (error: MainErrorObjectBack, data: IOneWorkTaskCommentDataBack) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.AddCommentAsync(taskId, text);
+            this.preloader(false);
 
-                if (data?.Id) {
-                    let forAdd = new CommentAdd(data, taskId);
-                    dispatch(AddCommentActionCreator(forAdd));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data?.Id) {
+                let forAdd = new CommentAdd(backResult.Data, taskId);
+                dispatch(AddCommentActionCreator(forAdd));
+            }
         };
     }
 
-    AddComment = (taskId: number, text: string, onSuccess: AddComment) => {
+    AddCommentAsync = async (taskId: number, text: string): Promise<ServerResult<IOneWorkTaskCommentDataBack>> => {
         let data = {
             "taskId": taskId,
             "text": text,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IOneWorkTaskCommentDataBack>({
             Data: data,
-            Type: "PUT",
+            Type: ControllerHelper.PutHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiCommentUrl}/create-comment`
-
         });
-    };
+
+        return backResult;
+    }
 
     LoadCommentsRedux = (id: number) => {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.LoadComments(id, (error: MainErrorObjectBack, data: IOneWorkTaskCommentDataBack[]) => {
-                this.preloader(false);
-                if (error) {
-                    return;
-                }
+            const backResult = await this.LoadCommentsAsync(id);
+            this.preloader(false);
 
-                if (data) {
-                    let forSet = new CommentSet();
-                    forSet.Comments = data.map(x => {
-                        let cm = new OneWorkTaskComment();
-                        cm.FillByBackModel(x);
-                        return cm;
-                    });
-                    forSet.TaskId = id;
-                    dispatch(SetCommentsActionCreator(forSet));
-                }
-            });
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data) {
+                let forSet = new CommentSet();
+                forSet.Comments = backResult.Data.map(x => {
+                    let cm = new OneWorkTaskComment();
+                    cm.FillByBackModel(x);
+                    return cm;
+                });
+                forSet.TaskId = id;
+                dispatch(SetCommentsActionCreator(forSet));
+            }
         };
     }
 
-    LoadComments = (id: number, onSuccess: LoadComments) => {
+    LoadCommentsAsync = async (id: number): Promise<ServerResult<IOneWorkTaskCommentDataBack[]>> => {
         let data = {
             "taskId": id,
         };
-        G_AjaxHelper.GoAjaxRequest({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IOneWorkTaskCommentDataBack[]>({
             Data: data,
             Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${TaskManagementApiCommentUrl}/get-comments`
-
         });
-    };
+
+        return backResult;
+    }
 
     mapWithResult<T>(onSuccess: (err: MainErrorObjectBack, data: T) => void) {
         return new ControllerHelper().MapWithResult(onSuccess);

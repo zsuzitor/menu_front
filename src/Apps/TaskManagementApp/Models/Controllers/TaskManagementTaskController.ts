@@ -36,6 +36,7 @@ export interface ITaskManagementTaskController {
 
 
     GetTaskNameUI: (id: number) => Promise<string>;
+    FindTaskUI: (projectId: number, text: string) => Promise<IProjectTaskNameDataBack[]>;
     LoadTasksUI: (taskFilter: ITaskFilter) => Promise<OneTask[]>;
 
 }
@@ -483,6 +484,34 @@ export class TaskManagementTaskController implements ITaskManagementTaskControll
     }
 
 
+
+    FindTaskUI = async (projectId: number, text: string): Promise<IProjectTaskNameDataBack[]> => {
+
+        this.preloader(true);
+        let res = await this.FindTaskAsync(projectId, text);
+
+        this.preloader(false);
+        if (res.Data) {
+            return res.Data;
+        }
+
+        return [];
+    }
+
+    FindTaskAsync = async (projectId: number, text: string): Promise<ServerResult<IProjectTaskNameDataBack[]>> => {
+        let data = {
+            "projectId": projectId,
+            "text": text,
+        };
+        let backResult = await G_AjaxHelper.GoAjaxRequest<IProjectTaskNameDataBack[]>({
+            Data: data,
+            Type: ControllerHelper.GetHttp,
+            FuncSuccess: (xhr, status, jqXHR) => { },
+            FuncError: (xhr, status, error) => { },
+            Url: `${G_PathToServer}${TaskManagementApiTaskUrl}/find-task`,
+        });
+        return backResult;
+    };
 
     GetTaskNameUI = async (id: number): Promise<string> => {
         this.preloader(true);

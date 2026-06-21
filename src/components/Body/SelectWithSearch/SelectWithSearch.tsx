@@ -6,6 +6,7 @@ export interface ISelectWithSearchProps {
     CancelEvent: () => void;
     SaveEvent: (id: number) => boolean;
     ValuesWithId: { Id: number, Text: string }[];
+    //прокидываем и храним элемент целиком что бы избежать кейса когда ValuesWithId - загрузили новый список, потом закрываем, а вернуть прежнее значение не можем, потому что в списке уже его нет
     Selected: { Id: number, Text: string };
     OnSearchChange?: (searchText: string) => void; // Метод для поиска
 }

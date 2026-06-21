@@ -182,7 +182,7 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
                     setSearchTasks(searchTasks.filter(x => x.Id === id));
                     return true;
                 }}
-                Selected={{ Id: taskId, Text: taskName }}
+                Selected={{ Id: taskId, Text: `${taskId}-${taskName}` }}
                 ValuesWithId={searchTasks.map(x => ({ Id: x.Id, Text: `${x.Id}-${x.Name}` }))}
                 OnSearchChange={async (text) => {
                     // setTaskId(-1);

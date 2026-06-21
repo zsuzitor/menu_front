@@ -46,6 +46,9 @@ const ProjectDetail = (props: IProjectDetailProps) => {
 
         return () => {
             props.ClearProjectState();
+            if (loadTasksTimerId) {
+                clearTimeout(loadTasksTimerId);
+            }
 
         };
     }, []);

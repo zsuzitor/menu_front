@@ -1,0 +1,136 @@
+.select-with-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.select-with-search .editable-input-wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.select-with-search .editable-input {
+    width: 100%;
+    padding: 8px 30px 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    height: 36px;
+    box-sizing: border-box;
+}
+
+.select-with-search .input-arrow {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #666;
+    user-select: none;
+    transition: transform 0.2s;
+}
+
+.select-with-search .dropdown-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 40px;
+    margin-top: 4px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.select-with-search .dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.select-with-search .dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+.select-with-search .dropdown-item.selected {
+    background-color: #e3f2fd;
+    font-weight: 500;
+}
+
+.select-with-search .dropdown-item.no-results {
+    color: #999;
+    cursor: default;
+    text-align: center;
+}
+
+.select-with-search .dropdown-item.no-results:hover {
+    background-color: transparent;
+}
+
+/* .action-buttons {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.action-buttons button {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.action-buttons button:hover {
+    background-color: #f0f0f0;
+    border-color: #999;
+}
+
+.save-button {
+    color: #4caf50;
+}
+
+.save-button:hover {
+    background-color: #e8f5e9 !important;
+    border-color: #4caf50 !important;
+}
+
+.cancel-button {
+    color: #f44336;
+}
+
+.cancel-button:hover {
+    background-color: #ffebee !important;
+    border-color: #f44336 !important;
+}
+
+.save-icon,
+.cancel-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+
+.save-icon {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234caf50'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'/%3E%3C/svg%3E") no-repeat center;
+    background-size: contain;
+}
+
+.cancel-icon {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f44336'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z'/%3E%3C/svg%3E") no-repeat center;
+    background-size: contain;
+} */

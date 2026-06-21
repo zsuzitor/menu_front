@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import connectToStore, { IAddWorkTimeLogProps } from './AddWorkTimeLogSetup';
 import { AlertData } from '../../../../Models/Entity/AlertData';
 import { Helper } from '../../../../Models/BL/Helper';
+import SelectWithSearch from '../../../../components/Body/SelectWithSearch/SelectWithSearch';
+import { IProjectTaskNameDataBack } from '../../Models/BackModels/IProjectTaskNameDataBack';
 
 
 
@@ -17,7 +19,7 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
     const [taskName, setTaskName] = useState('');
 
 
-    const [loadTasksTimerId, setLoadTasksTimerId] = useState(null);
+    // const [loadTasksTimerId, setLoadTasksTimerId] = useState(null);
 
     const [timeLogText, setTimeLogText] = useState(props.TimeLog?.Comment || '');
     const [range, setRange] = useState(props.TimeLog?.RangeStartOfLog ? true : false);
@@ -26,6 +28,10 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
     // const [rangeStart, setRangeStart] = useState<Date>(props.DefaultDate || new Date());
     // const [rangeEnd, setRangeEnd] = useState<Date>(props.DefaultDate || new Date());
     // const [timeLogValide, setTimeLogValide] = useState(false);
+
+    const [searchTasks, setSearchTasks] = useState<IProjectTaskNameDataBack[]>([]);
+
+
 
     const [startTime, setStartTime] = useState(helper.DateToGetHMInput(props.TimeLog?.RangeStartOfLog) || '09:00');
     const [endTime, setEndTime] = useState(helper.DateToGetHMInput(props.TimeLog?.RangeEndOfLog) || '18:00');
@@ -60,9 +66,9 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
     // }, [props.TaskName]);
 
     useEffect(() => {
-        if (loadTasksTimerId) {
-            clearTimeout(loadTasksTimerId);
-        }
+        // if (loadTasksTimerId) {
+        //     clearTimeout(loadTasksTimerId);
+        // }
 
         if (props.TaskName != taskName) {
             setTaskName(props.TaskName || '');
@@ -72,13 +78,16 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
 
 
         if (taskId && taskId > 0 && !props.TaskName) {
-            var timerId = setTimeout(async () => {
-                var tName = await props.GetTaskName(taskId);
-                setTaskName(tName || '');
-            }, 1500);
+            let task = searchTasks.find(x => x.Id === taskId);
+            setTaskName(task?.Name || '');
+            // var timerId = setTimeout(async () => {
+            //     var tName = await props.GetTaskName(taskId);
+            //     setTaskName(tName || '');
+            // }, 1500);
 
-            setLoadTasksTimerId(timerId);
+            // setLoadTasksTimerId(timerId);
         }
+
 
     }, [taskId, props.TaskName]);
 
@@ -166,10 +175,26 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
     return <div className='add-work-time-window'>
         {props.TaskId || <div>
             <span>Задача</span>
-            <input className='form-input-v2' type='number'
+            <SelectWithSearch
+                CancelEvent={() => { }}
+                SaveEvent={(id) => {
+                    setTaskId(id);
+                    setSearchTasks(searchTasks.filter(x => x.Id === id));
+                    return true;
+                }}
+                Selected={taskId}
+                ValuesWithId={searchTasks.map(x => ({ Id: x.Id, Text: `${x.Id}-${x.Name}` }))}
+                OnSearchChange={async (text) => {
+                    setTaskId(-1);
+                    let searchTasksBack = await props.FindTask(props.ProjectId, text);
+                    setSearchTasks(searchTasksBack);
+                }}
+            ></SelectWithSearch>
+            {/* <input className='form-input-v2' type='number'
                 onChange={(e) => setTaskId(+e.target.value)}
-                placeholder='Задача' value={taskId}></input>
-        </div>}
+                placeholder='Задача' value={taskId}></input> */}
+        </div>
+        }
         <p>{taskName}</p>
 
         <div>
@@ -179,23 +204,25 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
         </div>
         <span>Интервал:</span>
         <input type="checkbox" defaultChecked={range} onChange={() => setRange(!range)} />
-        {range ?
-            <div>
-                <span>Начало:</span>
-                <input
-                    type="time"
-                    value={startTime}
-                    onChange={(e) => handleStartTimeChange(e.target.value)}
-                />
-                <span>Окончание:</span>
-                <input
-                    type="time"
-                    value={endTime}
-                    onChange={(e) => handleEndTimeChange(e.target.value)}
-                />
-            </div>
-            :
-            <></>}
+        {
+            range ?
+                <div>
+                    <span>Начало:</span>
+                    <input
+                        type="time"
+                        value={startTime}
+                        onChange={(e) => handleStartTimeChange(e.target.value)}
+                    />
+                    <span>Окончание:</span>
+                    <input
+                        type="time"
+                        value={endTime}
+                        onChange={(e) => handleEndTimeChange(e.target.value)}
+                    />
+                </div>
+                :
+                <></>
+        }
         <div>
             <span>Отработано</span>
             <input readOnly={range}
@@ -268,7 +295,7 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
                 onClick={() => props.DeleteTimeLog(props.TimeLog.Id)}>Удалить</button>}
         </div>
 
-    </div>
+    </div >
 }
 
 

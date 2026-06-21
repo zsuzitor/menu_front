@@ -19,6 +19,7 @@ interface IAddWorkTimeLogOwnProps {
 
 
 interface IAddWorkTimeLogStateToProps {
+    ProjectId: number;
 }
 
 interface IAddWorkTimeLogDispatchToProps {
@@ -33,6 +34,7 @@ export interface IAddWorkTimeLogProps extends IAddWorkTimeLogStateToProps, IAddW
 
 const mapStateToProps = (state: AppState, ownProps: IAddWorkTimeLogOwnProps) => {
     let res = {} as IAddWorkTimeLogStateToProps;
+    res.ProjectId = state.TaskManagementApp.CurrentProjectId;
     return res;
 }
 

@@ -188,7 +188,7 @@ export class PlaningPokerController implements IPlaningPokerController {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/PlanitPoker/get-my-rooms',
+            Url: G_PathToServer + 'api/PlaningPoker/get-my-rooms',
 
         });
     }
@@ -227,7 +227,7 @@ export class PlaningPokerController implements IPlaningPokerController {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/PlanitPoker/get-not-actual-stories',
+            Url: G_PathToServer + 'api/PlaningPoker/get-not-actual-stories',
 
         });
     }
@@ -265,7 +265,7 @@ export class PlaningPokerController implements IPlaningPokerController {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/PlanitPoker/change-room-image',
+            Url: G_PathToServer + 'api/PlaningPoker/change-room-image',
 
         }, true);
     }
@@ -304,7 +304,7 @@ export class PlaningPokerController implements IPlaningPokerController {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/PlanitPoker/room-password-change',
+            Url: G_PathToServer + 'api/PlaningPoker/room-password-change',
 
         });
     }
@@ -340,7 +340,7 @@ export class PlaningPokerController implements IPlaningPokerController {
                 this.mapWithResult(onSuccess)(xhr, status, jqXHR);
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/PlanitPoker/get-users-in-room',
+            Url: G_PathToServer + 'api/PlaningPoker/get-users-in-room',
 
         });
     }
@@ -399,7 +399,7 @@ export class PlaningPokerController implements IPlaningPokerController {
 
             },
             FuncError: (xhr, status, error) => { },
-            Url: G_PathToServer + 'api/PlanitPoker/get-room-info',
+            Url: G_PathToServer + 'api/PlaningPoker/get-room-info',
 
         });
     }

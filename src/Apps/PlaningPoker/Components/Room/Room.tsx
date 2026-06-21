@@ -433,7 +433,7 @@ const Room = (props: RoomProps) => {
         }
 
         if (currentUserIsAdmin) {
-            return <div className='planit-room-buttons'>
+            return <div className='planing-room-buttons'>
                 <div className='room-action-btn' onClick={() => tryStartVote()}
                     title='Начать голосование'>
                     <img className='persent-100-width-height' src="/images/vote2.png" />
@@ -553,7 +553,7 @@ const Room = (props: RoomProps) => {
 
 
         <div className="row">
-            <div className="planit-room-left-part col-12 col-md-9">
+            <div className="planing-room-left-part col-12 col-md-9">
                 <div>
                     {renderVotePlaceIfNeed()}
                     {renderVoteResultIfNeed()}
@@ -564,7 +564,7 @@ const Room = (props: RoomProps) => {
                     IsAdmin={currentUserIsAdmin}
                 />
             </div>
-            <div className="planit-room-right-part col-12 col-md-3">
+            <div className="planing-room-right-part col-12 col-md-3">
                 <div>
                     {settingsUpUserListRender()}
                 </div>

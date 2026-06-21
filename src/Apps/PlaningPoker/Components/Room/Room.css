@@ -7,7 +7,7 @@
 
 }
 
-.planit-room-left-part {
+.planing-room-left-part {
     /* border: 2px solid black; */
     /* background: -webkit-gradient(linear, left top, right top, from(transparent), to(#745959));
     background: -o-linear-gradient(left, transparent, #745959);
@@ -16,7 +16,7 @@
     min-height: 500px;
 }
 
-.planit-room-right-part {
+.planing-room-right-part {
     /* border: 2px solid black; */
     /* background: -webkit-gradient(linear, right top, left top, from(transparent), to(gray));
     background: -o-linear-gradient(right, transparent, gray);
@@ -82,7 +82,7 @@
     cursor: pointer;
 }
 
-.planit-room-buttons {
+.planing-room-buttons {
     display: flex;
     justify-content: space-between;
     width: 170px;

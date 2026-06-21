@@ -185,7 +185,7 @@ const AddWorkTimeLog = (props: IAddWorkTimeLogProps) => {
                 Selected={taskId}
                 ValuesWithId={searchTasks.map(x => ({ Id: x.Id, Text: `${x.Id}-${x.Name}` }))}
                 OnSearchChange={async (text) => {
-                    setTaskId(-1);
+                    // setTaskId(-1);
                     let searchTasksBack = await props.FindTask(props.ProjectId, text);
                     setSearchTasks(searchTasksBack);
                 }}

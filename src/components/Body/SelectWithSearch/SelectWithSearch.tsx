@@ -18,6 +18,8 @@ const SelectWithSearch: React.FC<ISelectWithSearchProps> = (props) => {
     const loadTasksTimerId = useRef<NodeJS.Timeout | null>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
+    // console.log(selected);
+
     useEffect(() => {
         setSelected(props.Selected || -1);
     }, [props.Selected]);
@@ -59,6 +61,7 @@ const SelectWithSearch: React.FC<ISelectWithSearchProps> = (props) => {
         const text = e.target.value;
         setSearchText(text);
         setIsOpen(true);
+        setSelected(-1);
 
         // Очищаем предыдущий таймер
         if (loadTasksTimerId.current) {
@@ -114,7 +117,8 @@ const SelectWithSearch: React.FC<ISelectWithSearchProps> = (props) => {
             const selectedItem = props.ValuesWithId.find(item => item.Id === selected);
             if (selectedItem) {
                 setSearchText(selectedItem.Text);
-            } else if (selected === -1) {
+            }
+            else {
                 setSearchText('');
             }
         }

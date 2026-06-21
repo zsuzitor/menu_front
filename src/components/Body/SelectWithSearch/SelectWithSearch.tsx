@@ -6,13 +6,13 @@ export interface ISelectWithSearchProps {
     CancelEvent: () => void;
     SaveEvent: (id: number) => boolean;
     ValuesWithId: { Id: number, Text: string }[];
-    Selected: number;
+    Selected: { Id: number, Text: string };
     OnSearchChange?: (searchText: string) => void; // Метод для поиска
 }
 
 const SelectWithSearch: React.FC<ISelectWithSearchProps> = (props) => {
-    const [selected, setSelected] = useState(-1);
-    const [searchText, setSearchText] = useState('');
+    const [selected, setSelected] = useState(props.Selected?.Id || -1);
+    const [searchText, setSearchText] = useState(props.Selected?.Text || '');
     const [isOpen, setIsOpen] = useState(false);
     const [filteredValues, setFilteredValues] = useState(props.ValuesWithId);
     const loadTasksTimerId = useRef<NodeJS.Timeout | null>(null);
@@ -21,13 +21,40 @@ const SelectWithSearch: React.FC<ISelectWithSearchProps> = (props) => {
     // console.log(selected);
 
     useEffect(() => {
-        setSelected(props.Selected || -1);
-    }, [props.Selected]);
+        setSelected(props.Selected?.Id || -1);
+    }, [props.Selected?.Id]);
+
+    useEffect(() => {
+        setSearchText(props.Selected?.Text || '');
+    }, [props.Selected?.Text]);
+
+
+
 
     // Обновляем отфильтрованные значения при изменении списка
     useEffect(() => {
         setFilteredValues(props.ValuesWithId);
     }, [props.ValuesWithId]);
+
+
+    useEffect(() => {
+        if (!isOpen) {
+            setSelected(props.Selected?.Id || -1);
+            setFilteredValues(props.ValuesWithId);
+            setSearchText(props.Selected?.Text || '');
+            // const selectedItem = props.ValuesWithId.find(item => item.Id === props.Selected?.Id);
+            // if (selectedItem) {
+            //     setSearchText(selectedItem.Text);
+            // }
+            // else {
+            //     setSearchText('');
+            // }
+        }
+
+    }, [isOpen, props.Selected, props.ValuesWithId]);
+
+
+
 
     // Обработка клика вне компонента для закрытия селекта
     useEffect(() => {
@@ -40,6 +67,9 @@ const SelectWithSearch: React.FC<ISelectWithSearchProps> = (props) => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
+            if (loadTasksTimerId.current) {
+                clearTimeout(loadTasksTimerId.current);
+            }
         };
     }, []);
 
@@ -56,7 +86,31 @@ const SelectWithSearch: React.FC<ISelectWithSearchProps> = (props) => {
     //     setFilteredValues(filtered);
     // }, [props.ValuesWithId]);
 
-    // Обработка изменения текста поиска с таймером
+
+    // Отображение выбранного значения в поле ввода
+    useEffect(() => {
+        // console.log(props.ValuesWithId);
+        // console.log(selected);
+        if (selected && selected > 0) {
+            // console.log('!!');
+            //если значение выбрано то меняем текст, иначе нет
+            const selectedItem = props.ValuesWithId.find(item => item.Id === selected);
+            if (selectedItem) {
+                setSearchText(selectedItem.Text);
+            }
+            else if (props.Selected.Id == selected) {
+                setSearchText(props.Selected.Text || '');
+            }
+            else {
+                setSearchText('');
+            }
+        }
+
+    }, [selected, props.ValuesWithId, props.Selected]);
+
+
+
+
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const text = e.target.value;
         setSearchText(text);
@@ -92,38 +146,16 @@ const SelectWithSearch: React.FC<ISelectWithSearchProps> = (props) => {
         }
 
         // Вызываем метод сохранения с ID
-        if (id !== props.Selected) {
+        if (id !== props.Selected?.Id) {
             props.SaveEvent(id);
         } else {
             props.CancelEvent();
         }
     };
 
-    // Очистка таймера при размонтировании
-    useEffect(() => {
-        return () => {
-            if (loadTasksTimerId.current) {
-                clearTimeout(loadTasksTimerId.current);
-            }
-        };
-    }, []);
 
-    // Отображение выбранного значения в поле ввода
-    useEffect(() => {
-        // console.log(props.ValuesWithId);
-        // console.log(selected);
-        if (selected && selected > 0) {
-            //если значение выбрано то меняем текст, иначе нет
-            const selectedItem = props.ValuesWithId.find(item => item.Id === selected);
-            if (selectedItem) {
-                setSearchText(selectedItem.Text);
-            }
-            else {
-                setSearchText('');
-            }
-        }
 
-    }, [selected, props.ValuesWithId]);
+
 
     return (
         <div className="select-with-search" ref={wrapperRef}>

@@ -20,7 +20,7 @@ export interface ITaskManagementWorkTimeController {
     LoadTimeLogsForTaskRedux: (taskId: number) => void;
     LoadTimeLogsForProjectRedux: (projectId: number, dateFrom: Date, dateTo: Date) => void;
     LoadTimeLogsForUserRedux: (projectId: number, userId: number, dateFrom: Date, dateTo: Date) => void;
-    LoadTimeLogsForUserTempoRedux: (projectId: number, userId: number, dateFrom: Date, dateTo: Date) => void;
+    LoadTimeLogsForUserTempoRedux: (userId: number, dateFrom: Date, dateTo: Date) => void;
 }
 
 
@@ -273,7 +273,7 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
     LoadTimeLogsForUserRedux = (projectId: number, userId: number, dateFrom: Date, dateTo: Date) => {
         return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            const backResult = await this.LoadTimeLogsForUserAsync(projectId, userId, dateFrom, dateTo);
+            const backResult = await this.LoadTimeLogsForProjectAsync(projectId, userId, dateFrom, dateTo);
             this.preloader(false);
             if (backResult.Error) {
                 return;
@@ -286,10 +286,10 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
         };
     }
 
-    LoadTimeLogsForUserTempoRedux = (projectId: number, userId: number, dateFrom: Date, dateTo: Date) => {
+    LoadTimeLogsForUserTempoRedux = (userId: number, dateFrom: Date, dateTo: Date) => {
         return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            const backResult = await this.LoadTimeLogsForUserAsync(projectId, userId, dateFrom, dateTo);
+            const backResult = await this.LoadTimeLogsForUserAsync(userId, dateFrom, dateTo);
             this.preloader(false);
             if (backResult.Error) {
                 return;
@@ -302,9 +302,9 @@ export class TaskManagementWorkTimeController implements ITaskManagementWorkTime
         };
     }
 
-    LoadTimeLogsForUserAsync = async (projectId: number, userId: number, dateFrom: Date, dateTo: Date): Promise<ServerResult<IWorkTimeLogDataBack[]>> => {
+    LoadTimeLogsForUserAsync = async (userId: number, dateFrom: Date, dateTo: Date): Promise<ServerResult<IWorkTimeLogDataBack[]>> => {
         let data = {
-            "projectId": projectId || null,
+            // "projectId": projectId || null,
             "dateFrom": new ControllerHelper().ToZeroDate(dateFrom).toISOString(),
             "dateTo": new ControllerHelper().ToZeroDate(dateTo).toISOString(),
             "userId": userId

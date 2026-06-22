@@ -56,7 +56,7 @@ const TempoPage = (props: ITempoPageProps) => {
 
     useEffect(() => {
         if (props.ProjectId > 0)
-            props.LoadTime(props.ProjectId, props.DateFrom, props.DateTo);
+            props.LoadTime( props.DateFrom, props.DateTo);
 
     }, [props.DateFrom.getTime(), props.DateTo.getTime(), props.ProjectId]);
 

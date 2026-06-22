@@ -16,7 +16,7 @@ interface ITempoPageStateToProps {
 }
 
 interface ITempoPageDispatchToProps {
-    LoadTime: (projectId: number, dateFrom: Date, dateTo: Date) => void;
+    LoadTime: ( dateFrom: Date, dateTo: Date) => void;
     SetDateTo: (date: Date) => void;
     SetDateFrom: (date: Date) => void;
     ClearTimeState: () => void;
@@ -47,8 +47,8 @@ const mapDispatchToProps = (dispatch: any, ownProps: ITempoPageOwnProps) => {
     res.SetDateTo = (date: Date) => {
         dispatch(SetUserTempoTimeLogDateToActionCreator(date));
     };
-    res.LoadTime = (projectId: number, dateFrom: Date, dateTo: Date) => {
-        dispatch(window.G_TaskManagementWorkTimeController.LoadTimeLogsForUserTempoRedux(projectId, null, dateFrom, dateTo));
+    res.LoadTime = ( dateFrom: Date, dateTo: Date) => {
+        dispatch(window.G_TaskManagementWorkTimeController.LoadTimeLogsForUserTempoRedux( null, dateFrom, dateTo));
     };
 
     res.ClearTimeState = () => {

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import connectToStore, { IAddTaskRelationProps } from './AddTaskRelationSetup';
 import { TaskRelationType } from '../../Models/Entity/State/TaskRelation';
+import SelectWithSearch from '../../../../components/Body/SelectWithSearch/SelectWithSearch';
+import { IProjectTaskNameDataBack } from '../../Models/BackModels/IProjectTaskNameDataBack';
 
 
 
@@ -11,20 +13,24 @@ require('./AddTaskRelation.css');
 
 const AddTaskRelation = (props: IAddTaskRelationProps) => {
 
-    const [mainTaskId, setMainTaskId] = useState(props.TaskId || 0);
     const [subTaskId, setSubTaskId] = useState(0);
+    const [taskName, setTaskName] = useState('');
     const [type, setType] = useState(0);
+    const [searchTasks, setSearchTasks] = useState<IProjectTaskNameDataBack[]>([]);
+
+
 
     useEffect(() => {
-        setMainTaskId(props.TaskId || 0);
-    }, [props.TaskId]);
+        if (subTaskId && subTaskId > 0) {
+            let task = searchTasks.find(x => x.Id === subTaskId);
+            setTaskName(task?.Name || '');
+        }
+
+    }, [subTaskId]);
+
 
 
     return <div className='add-task-relation'>
-        <span>Задача</span>
-        <input className='form-input-v2' type='number'
-            onChange={(e) => setMainTaskId(+e.target.value)}
-            placeholder='Задача' value={mainTaskId}></input>
 
         <select className="form-control" value={type} onChange={(e) => {
             setType(prevState => {
@@ -39,12 +45,24 @@ const AddTaskRelation = (props: IAddTaskRelationProps) => {
         </select>
 
         <span>Задача</span>
-        <input className='form-input-v2' type='number'
-            onChange={(e) => setSubTaskId(+e.target.value)}
-            placeholder='Задача' value={subTaskId}></input>
+        <SelectWithSearch
+            CancelEvent={() => { }}
+            SaveEvent={(id) => {
+                setSubTaskId(id);
+                setSearchTasks(searchTasks.filter(x => x.Id === id));
+                return true;
+            }}
+            Selected={{ Id: subTaskId, Text: subTaskId > 0 ? `${subTaskId}-${taskName}` : '' }}
+            ValuesWithId={searchTasks.map(x => ({ Id: x.Id, Text: `${x.Id}-${x.Name}` }))}
+            OnSearchChange={async (text) => {
+                // setTaskId(-1);
+                let searchTasksBack = await props.FindTask(props.ProjectId, text);
+                setSearchTasks(searchTasksBack);
+            }}
+        ></SelectWithSearch>
 
 
-        <button className='btn-b btn-border create-new-task-btn' onClick={() => props.Create(mainTaskId, subTaskId, type)}>Связать</button>
+        <button className='btn-b btn-border create-new-task-btn' onClick={() => props.Create(props.TaskId!, subTaskId, type)}>Связать</button>
     </div>
 }
 

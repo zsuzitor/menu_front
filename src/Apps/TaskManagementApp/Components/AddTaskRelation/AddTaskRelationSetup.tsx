@@ -1,11 +1,7 @@
 import { connect } from "react-redux";
-import { IAuthState } from "../../../../Models/Entity/AuthState";
 import { AppState } from "../../../../Models/Entity/State/AppState";
-import { OneTask } from "../../Models/Entity/State/OneTask";
-import { ProjectUser } from "../../Models/Entity/State/ProjectUser";
-import { WorkTaskStatus } from "../../Models/Entity/State/WorkTaskStatus";
-import { TimeLog } from "../../Models/Entity/State/TimeLog";
 import { TaskRelationType } from "../../Models/Entity/State/TaskRelation";
+import { IProjectTaskNameDataBack } from "../../Models/BackModels/IProjectTaskNameDataBack";
 
 
 
@@ -17,11 +13,12 @@ interface IAddTaskRelationOwnProps {
 
 
 interface IAddTaskRelationStateToProps {
+    ProjectId: number;
 }
 
 interface IAddTaskRelationDispatchToProps {
     Create: (mainTaskid: number, subTaskid: number, type: TaskRelationType) => void;
-
+    FindTask: (projectId: number, text: string) => Promise<IProjectTaskNameDataBack[]>;
 }
 
 export interface IAddTaskRelationProps extends IAddTaskRelationStateToProps, IAddTaskRelationOwnProps, IAddTaskRelationDispatchToProps {
@@ -30,6 +27,7 @@ export interface IAddTaskRelationProps extends IAddTaskRelationStateToProps, IAd
 
 const mapStateToProps = (state: AppState, ownProps: IAddTaskRelationOwnProps) => {
     let res = {} as IAddTaskRelationStateToProps;
+    res.ProjectId = state.TaskManagementApp.CurrentProjectId;
     return res;
 }
 
@@ -43,6 +41,11 @@ const mapDispatchToProps = (dispatch: any, ownProps: IAddTaskRelationOwnProps) =
             subTaskid = f;
         }
         await window.G_TaskManagementTaskController.AddTaskRelationRedux(mainTaskid, subTaskid, type, dispatch);
+    };
+
+    res.FindTask = async (projectId: number, text: string): Promise<IProjectTaskNameDataBack[]> => {
+        return await window.G_TaskManagementTaskController.FindTaskUI(projectId, text);
+
     };
     return res;
 };

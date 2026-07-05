@@ -17,22 +17,8 @@ import { VaultUser } from "../Entity/State/VaultUser";
 import { IUpdateSecretEntity } from "../Entity/UpdateSecretEntity";
 import { AlertData } from "../../../../Models/Entity/AlertData";
 import { VaultPreloader } from "../Consts";
+import { ServerResult } from "../../../../Models/AjaxLogic";
 // import { IUpdateSecretReturn } from "../BackModels/IUpdateSecretReturn";
-
-
-
-type SetVaultsReturn = (error: MainErrorObjectBack, data: IOneVaultListReturn[]) => void;
-type SetVaultSecretsReturn = (error: MainErrorObjectBack, data: IOneVaultSecretReturn[]) => void;
-type SetVaultPeopleReturn = (error: MainErrorObjectBack, data: IVaultUserReturn[]) => void;
-type DeleteSecretReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
-type GetOneSecretReturn = (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => void;
-type GetOneVaultReturn = (error: MainErrorObjectBack, data: IOneVaultReturn) => void;
-type CreateVaultReturn = (error: MainErrorObjectBack, data: ICreateVaultReturn) => void;
-type UpdateVaultReturn = (error: MainErrorObjectBack, data: ICreateVaultReturn) => void;
-type DeleteVaultReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
-type UpdateVaultPasswordReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
-type UpdateSecretReturn = (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => void;
-type VaultAuthorizeReturn = (error: MainErrorObjectBack, data: BoolResultBack) => void;
 
 
 
@@ -44,21 +30,19 @@ export interface IVaultController {
     RouteUrlOneSecret: string;
 
 
-    GetVaultsRedux: () => void;
-    GetVaultSecretsRedux: (vaultId: number) => void;
-    GetCurrentVaultRedux: (vaultId: number) => void;
-    LoadVaultPeopleRedux: (vaultId: number) => void;
-    DeleteSecretRedux: (secretId: number, vaultId: number) => void;
-    CreateSecretRedux: (secret: IUpdateSecretEntity, successCallBack: () => void) => void;
-    UpdateSecretRedux: (secret: IUpdateSecretEntity) => void;
-    VaultAuthorizeRedux: (vaultId: number, password: string) => void;
-
-
-    GetSingleSecretRedux: (secretId: number) => void;
-    UpdateVaultRedux: (vault: UpdateVaultEntity, successCallBack?: () => void) => void;
-    CreateVaultRedux: (vault: UpdateVaultEntity, successCallBack?: () => void) => void;
-    DeleteVaultRedux: (vaultId: number) => void;
-    UpdateVaultPasswordRedux: (vaultId: number, password: string) => void;
+    GetVaultsRedux: () => (dispatch: any, getState: any) => Promise<void>;
+    GetVaultSecretsRedux: (vaultId: number) => (dispatch: any, getState: any) => Promise<void>;
+    GetCurrentVaultRedux: (vaultId: number) => (dispatch: any, getState: any) => Promise<void>;
+    LoadVaultPeopleRedux: (vaultId: number) => (dispatch: any, getState: any) => Promise<void>;
+    DeleteSecretRedux: (secretId: number, vaultId: number) => (dispatch: any, getState: any) => Promise<void>;
+    CreateSecretRedux: (secret: IUpdateSecretEntity, successCallBack?: () => void) => (dispatch: any, getState: any) => Promise<void>;
+    UpdateSecretRedux: (secret: IUpdateSecretEntity) => (dispatch: any, getState: any) => Promise<void>;
+    VaultAuthorizeRedux: (vaultId: number, password: string) => (dispatch: any, getState: any) => Promise<void>;
+    GetSingleSecretRedux: (secretId: number) => (dispatch: any, getState: any) => Promise<void>;
+    UpdateVaultRedux: (vault: UpdateVaultEntity, successCallBack?: () => void) => (dispatch: any, getState: any) => Promise<void>;
+    CreateVaultRedux: (vault: UpdateVaultEntity, successCallBack?: () => void) => (dispatch: any, getState: any) => Promise<void>;
+    DeleteVaultRedux: (vaultId: number) => (dispatch: any, getState: any) => Promise<void>;
+    UpdateVaultPasswordRedux: (vaultId: number, password: string) => (dispatch: any, getState: any) => Promise<void>;
     // GetOneSecretAsync: (secretId: number) => IOneVaultSecretReturn;
 }
 
@@ -75,449 +59,406 @@ export class VaultController implements IVaultController {
 
 
     GetVaultsRedux() {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.GetVaults(
-                (error: MainErrorObjectBack, data: IOneVaultListReturn[]) => {
-                    this.preloader(false);
-                    if (data) {
-                        let newData = data.map(x => {
-                            let us = new OneVaultInList();
-                            us.FillByBackModel(x);
-                            return us;
-                        });
-
-                        dispatch(SetVaultsListActionCreator(newData));
-                    }
-                });
+            try {
+                const backResult = await this.GetVaultsAsync();
+                this.preloader(false);
+                if (backResult.Data) {
+                    let newData = backResult.Data.map(x => {
+                        let us = new OneVaultInList();
+                        us.FillByBackModel(x);
+                        return us;
+                    });
+                    dispatch(SetVaultsListActionCreator(newData));
+                }
+            } catch (error) {
+                this.preloader(false);
+                console.error("GetVaultsRedux error:", error);
+            }
         };
     }
 
-    GetVaults(onSuccess: SetVaultsReturn) {
-        G_AjaxHelper.GoAjaxRequest({
-            Data: {
-            },
+    async GetVaultsAsync(): Promise<ServerResult<IOneVaultListReturn[]>> {
+        return await G_AjaxHelper.GoAjaxRequest<IOneVaultListReturn[]>({
+            Data: {},
             Type: ControllerHelper.GetHttp,
-            FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-            },
-            FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/vault/get-my-vaults',
         });
     }
 
     GetVaultSecretsRedux(vaultId: number) {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.GetVaultSecrets(vaultId,
-                (error: MainErrorObjectBack, data: IOneVaultSecretReturn[]) => {
-                    this.preloader(false);
-                    if (data) {
-                        let newData = data.map(x => {
-                            let us = new OneVaultSecret();
-                            us.FillByBackModel(x);
-                            return us;
-                        });
-
-                        dispatch(SetVaultsSecretsActionCreator({ VaultId: vaultId, Secrets: newData }));
-                    }
-                });
+            try {
+                const backResult = await this.GetVaultSecretsAsync(vaultId);
+                this.preloader(false);
+                if (backResult.Data) {
+                    let newData = backResult.Data.map(x => {
+                        let us = new OneVaultSecret();
+                        us.FillByBackModel(x);
+                        return us;
+                    });
+                    dispatch(SetVaultsSecretsActionCreator({ VaultId: vaultId, Secrets: newData }));
+                }
+            } catch (error) {
+                this.preloader(false);
+                console.error("GetVaultSecretsRedux error:", error);
+            }
         };
     }
 
-    GetVaultSecrets(vaultId: number, onSuccess: SetVaultSecretsReturn) {
-
-        G_AjaxHelper.GoAjaxRequest({
-            Data: {
-                'vaultId': vaultId
-            },
+    async GetVaultSecretsAsync(vaultId: number): Promise<ServerResult<IOneVaultSecretReturn[]>> {
+        return await G_AjaxHelper.GoAjaxRequest<IOneVaultSecretReturn[]>({
+            Data: { vaultId: vaultId },
             Type: ControllerHelper.GetHttp,
-            FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-            },
-            FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/VaultSecret/get-vault-secrets',
         });
     }
 
     GetCurrentVaultRedux(vaultId: number) {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.GetVault(vaultId,
-                (error: MainErrorObjectBack, data: IOneVaultReturn) => {
-                    this.preloader(false);
-                    if (data) {
-                        let newData = new OneVault();
-                        newData.FillByBackModel(data);
-                        dispatch(SetCurrentVaultActionCreator(newData));
-                    }
-                });
+            try {
+                const backResult = await this.GetVaultAsync(vaultId);
+                this.preloader(false);
+                if (backResult.Data) {
+                    let newData = new OneVault();
+                    newData.FillByBackModel(backResult.Data);
+                    dispatch(SetCurrentVaultActionCreator(newData));
+                }
+            } catch (error) {
+                this.preloader(false);
+                console.error("GetCurrentVaultRedux error:", error);
+            }
         };
     }
 
-    GetVault(vaultId: number, onSuccess: GetOneVaultReturn) {
-        G_AjaxHelper.GoAjaxRequest({
-            Data: {
-                'vaultId': vaultId
-            },
+    async GetVaultAsync(vaultId: number): Promise<ServerResult<IOneVaultReturn>> {
+        return await G_AjaxHelper.GoAjaxRequest<IOneVaultReturn>({
+            Data: { vaultId: vaultId },
             Type: ControllerHelper.GetHttp,
-            FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-            },
-            FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/vault/get-vault',
         });
     }
 
-
     LoadVaultPeopleRedux(vaultId: number) {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.LoadVaultPeople(vaultId,
-                (error: MainErrorObjectBack, data: IVaultUserReturn[]) => {
-                    this.preloader(false);
-                    if (data) {
-                        let newData = data.map(x => {
-                            let us = new VaultUser();
-                            us.FillByBackModel(x);
-                            return us;
-                        });
-
-                        dispatch(SetVaultsPeopleActionCreator({ VaultId: vaultId, People: newData }));
-                    }
-                });
+            try {
+                const backResult = await this.LoadVaultPeopleAsync(vaultId);
+                this.preloader(false);
+                if (backResult.Data) {
+                    let newData = backResult.Data.map(x => {
+                        let us = new VaultUser();
+                        us.FillByBackModel(x);
+                        return us;
+                    });
+                    dispatch(SetVaultsPeopleActionCreator({ VaultId: vaultId, People: newData }));
+                }
+            } catch (error) {
+                this.preloader(false);
+                console.error("LoadVaultPeopleRedux error:", error);
+            }
         };
     }
 
-    LoadVaultPeople(vaultId: number, onSuccess: SetVaultPeopleReturn) {
-
-        G_AjaxHelper.GoAjaxRequest({
-            Data: {
-                'vaultId': vaultId
-            },
+    async LoadVaultPeopleAsync(vaultId: number): Promise<ServerResult<IVaultUserReturn[]>> {
+        return await G_AjaxHelper.GoAjaxRequest<IVaultUserReturn[]>({
+            Data: { vaultId: vaultId },
             Type: ControllerHelper.GetHttp,
-            FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-            },
-            FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/vault/get-vault-people',
         });
     }
 
 
     DeleteSecretRedux(secretId: number) {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteSecret(secretId,
-                (error: MainErrorObjectBack, data: BoolResultBack) => {
-                    this.preloader(false);
-                    if (data?.result) {
-                        dispatch(DeleteSecretActionCreator({ SecretId: secretId }));
-                    }
-                });
+            try {
+                const backResult = await this.DeleteSecretAsync(secretId);
+                this.preloader(false);
+                if (backResult.Data?.result) {
+                    dispatch(DeleteSecretActionCreator({ SecretId: secretId }));
+                }
+            } catch (error) {
+                this.preloader(false);
+                console.error("DeleteSecretRedux error:", error);
+            }
         };
     }
 
-    DeleteSecret(secretId: number, onSuccess: DeleteSecretReturn) {
-
-        // onSuccess(null, { result: true });
-        G_AjaxHelper.GoAjaxRequest({
-            Data: {
-                'secretId': secretId
-            },
+    async DeleteSecretAsync(secretId: number): Promise<ServerResult<BoolResultBack>> {
+        return await G_AjaxHelper.GoAjaxRequest<BoolResultBack>({
+            Data: { secretId: secretId },
             Type: ControllerHelper.DeleteHttp,
-            FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-            },
-            FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/VaultSecret/delete-secret',
         });
     }
 
-    CreateSecretRedux(secret: IUpdateSecretEntity, successCallBack: () => void) {
-        return (dispatch: any, getState: any) => {
+    CreateSecretRedux(secret: IUpdateSecretEntity, successCallBack?: () => void) {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.CreateSecret(secret,
-                (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => {
-                    this.preloader(false);
-                    if (data) {
-                        let newData = new OneVaultSecret();
-                        newData.FillByBackModel(data);
-                        dispatch(CreateSecretActionCreator(newData));
-                        if (successCallBack) {
-                            successCallBack();
-                        }
+            try {
+                const backResult = await this.CreateSecretAsync(secret);
+                this.preloader(false);
+                if (backResult.Data) {
+                    let newData = new OneVaultSecret();
+                    newData.FillByBackModel(backResult.Data);
+                    dispatch(CreateSecretActionCreator(newData));
+                    if (successCallBack) {
+                        successCallBack();
                     }
-                });
+                }
+            } catch (error) {
+                this.preloader(false);
+                console.error("CreateSecretRedux error:", error);
+            }
         };
     }
 
-    CreateSecret(secret: IUpdateSecretEntity, onSuccess: UpdateSecretReturn) {
+    async CreateSecretAsync(secret: IUpdateSecretEntity): Promise<ServerResult<IOneVaultSecretReturn>> {
         let data = {
-            'VaultId': secret.VaultId,
-            'Key': secret.Key,
-            'Value': secret.Value,
-            'IsCoded': secret.IsCoded,
-            'IsPublic': secret.IsPublic,
+            VaultId: secret.VaultId,
+            Key: secret.Key,
+            Value: secret.Value,
+            IsCoded: secret.IsCoded,
+            IsPublic: secret.IsPublic,
         } as any;
         if (secret.DieDate) {
             data.DieDate = secret.DieDate.toJSON();
         }
 
-        G_AjaxHelper.GoAjaxRequest({
+        return await G_AjaxHelper.GoAjaxRequest<IOneVaultSecretReturn>({
             Data: data,
             Type: "PUT",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-            },
-            FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/VaultSecret/create-secret',
         });
     }
 
     UpdateSecretRedux(secret: IUpdateSecretEntity) {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateSecret(secret,
-                (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => {
-                    this.preloader(false);
-                    if (data) {
-                        let newData = new OneVaultSecret();
-                        newData.FillByBackModel(data);
-                        dispatch(UpdateSecretActionCreator(newData));
-                    }
-                });
+            try {
+                const backResult = await this.UpdateSecretAsync(secret);
+                this.preloader(false);
+                if (backResult.Data) {
+                    let newData = new OneVaultSecret();
+                    newData.FillByBackModel(backResult.Data);
+                    dispatch(UpdateSecretActionCreator(newData));
+                }
+            } catch (error) {
+                this.preloader(false);
+                console.error("UpdateSecretRedux error:", error);
+            }
         };
     }
 
-    UpdateSecret(secret: IUpdateSecretEntity, onSuccess: UpdateSecretReturn) {
+    async UpdateSecretAsync(secret: IUpdateSecretEntity): Promise<ServerResult<IOneVaultSecretReturn>> {
         let data = {
-            'Id': secret.Id,
-            'VaultId': secret.VaultId,
-            'Key': secret.Key,
-            'Value': secret.Value,
-            'IsCoded': secret.IsCoded,
-            'IsPublic': secret.IsPublic,
+            Id: secret.Id,
+            VaultId: secret.VaultId,
+            Key: secret.Key,
+            Value: secret.Value,
+            IsCoded: secret.IsCoded,
+            IsPublic: secret.IsPublic,
         } as any;
         if (secret.DieDate) {
             data.DieDate = secret.DieDate.toJSON();
         }
 
-        G_AjaxHelper.GoAjaxRequest({
+        return await G_AjaxHelper.GoAjaxRequest<IOneVaultSecretReturn>({
             Data: data,
             Type: ControllerHelper.PatchHttp,
-            FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-            },
-            FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/VaultSecret/update-secret',
         });
     }
 
     GetSingleSecretRedux(secretId: number) {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.GetOneSecret(secretId,
-                (error: MainErrorObjectBack, data: IOneVaultSecretReturn) => {
-                    this.preloader(false);
-                    if (data) {
-                        let newData = new OneVaultSecret();
-                        newData.FillByBackModel(data);
-
-                        dispatch(SetSingleSecretActionCreator(newData));
-                    }
-                });
+            try {
+                const backResult = await this.GetOneSecretAsync(secretId);
+                this.preloader(false);
+                if (backResult.Data) {
+                    let newData = new OneVaultSecret();
+                    newData.FillByBackModel(backResult.Data);
+                    dispatch(SetSingleSecretActionCreator(newData));
+                }
+            } catch (error) {
+                this.preloader(false);
+                console.error("GetSingleSecretRedux error:", error);
+            }
         };
     }
 
-    GetOneSecret(secretId: number, onSuccess: GetOneSecretReturn) {
-
-        G_AjaxHelper.GoAjaxRequest({
-            Data: {
-                'secretId': secretId
-            },
+    async GetOneSecretAsync(secretId: number): Promise<ServerResult<IOneVaultSecretReturn>> {
+        return await G_AjaxHelper.GoAjaxRequest<IOneVaultSecretReturn>({
+            Data: { secretId: secretId },
             Type: ControllerHelper.GetHttp,
-            FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-            },
-            FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/VaultSecret/get-secret',
         });
     }
 
 
     UpdateVaultRedux(vault: UpdateVaultEntity, successCallBack?: () => void) {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateVault(vault,
-                (error: MainErrorObjectBack, data: ICreateVaultReturn) => {
-                    this.preloader(false);
-                    if (data) {
-                        let newData = {} as IUpdateVaultActionPayload;
-                        newData.Id = data.id;
-                        newData.Name = data.name;
-                        newData.IsPublic = data.is_public;
-                        dispatch(UpdateVaultActionCreator(newData));
+            try {
+                const backResult = await this.UpdateVaultAsync(vault);
+                this.preloader(false);
+                if (backResult.Data) {
+                    let newData = {} as IUpdateVaultActionPayload;
+                    newData.Id = backResult.Data.id;
+                    newData.Name = backResult.Data.name;
+                    newData.IsPublic = backResult.Data.is_public;
+                    dispatch(UpdateVaultActionCreator(newData));
+                    if (successCallBack) {
                         successCallBack();
                     }
-                });
+                }
+            } catch (error) {
+                this.preloader(false);
+                console.error("UpdateVaultRedux error:", error);
+            }
         };
     }
 
-    UpdateVault(vault: UpdateVaultEntity, onSuccess: UpdateVaultReturn) {
+    async UpdateVaultAsync(vault: UpdateVaultEntity): Promise<ServerResult<ICreateVaultReturn>> {
         let data = new FormData();
         data.append('Id', vault.Id + '');
         data.append('Name', vault.Name);
         data.append('IsPublic', vault.IsPublic + '');
 
         if (vault.UsersForDelete) {
-            vault.UsersForDelete.forEach((item, index) => {
+            vault.UsersForDelete.forEach((item) => {
                 data.append('UsersForDelete', item + '');
             });
         }
 
         if (vault.UsersForAdd) {
-            vault.UsersForAdd.forEach((item, index) => {
+            vault.UsersForAdd.forEach((item) => {
                 data.append('UsersForAdd', item + '');
             });
         }
 
-        G_AjaxHelper.GoAjaxRequest({
+        return await G_AjaxHelper.GoAjaxRequest<ICreateVaultReturn>({
             Data: data,
             Type: ControllerHelper.PatchHttp,
-            FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-            },
-            FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/vault/update-vault',
         });
     }
 
     CreateVaultRedux(vault: UpdateVaultEntity, successCallBack?: () => void) {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.CreateVault(vault,
-                (error: MainErrorObjectBack, data: ICreateVaultReturn) => {
-                    this.preloader(false);
-                    if (data?.id) {
-                        let newdata = {} as ICreateVaultActionPayload;
-                        newdata.Id = data.id;
-                        newdata.IsPublic = data.is_public;
-                        newdata.Name = data.name;
-                        dispatch(CreateVaultActionCreator(newdata));
+            try {
+                const backResult = await this.CreateVaultAsync(vault);
+                this.preloader(false);
+                if (backResult.Data?.id) {
+                    let newData = {} as ICreateVaultActionPayload;
+                    newData.Id = backResult.Data.id;
+                    newData.IsPublic = backResult.Data.is_public;
+                    newData.Name = backResult.Data.name;
+                    dispatch(CreateVaultActionCreator(newData));
+                    if (successCallBack) {
                         successCallBack();
                     }
-                });
+                }
+            } catch (error) {
+                this.preloader(false);
+                console.error("CreateVaultRedux error:", error);
+            }
         };
     }
 
-    CreateVault(vault: UpdateVaultEntity, onSuccess: CreateVaultReturn) {
-
-        G_AjaxHelper.GoAjaxRequest({
+    async CreateVaultAsync(vault: UpdateVaultEntity): Promise<ServerResult<ICreateVaultReturn>> {
+        return await G_AjaxHelper.GoAjaxRequest<ICreateVaultReturn>({
             Data: {
-                'Name': vault.Name,
-                'IsPublic': vault.IsPublic,
-                'Password': vault.Password
+                Name: vault.Name,
+                IsPublic: vault.IsPublic,
+                Password: vault.Password
             },
             Type: "PUT",
-            FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-            },
-            FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/vault/create-vault',
         });
     }
 
     DeleteVaultRedux(vaultId: number) {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.DeleteVault(vaultId,
-                (error: MainErrorObjectBack, data: BoolResultBack) => {
-                    this.preloader(false);
-                    if (data?.result) {
-                        dispatch(DeleteVaultActionCreator(vaultId));
-                    }
-                });
+            try {
+                const backResult = await this.DeleteVaultAsync(vaultId);
+                this.preloader(false);
+                if (backResult.Data?.result) {
+                    dispatch(DeleteVaultActionCreator(vaultId));
+                }
+            } catch (error) {
+                this.preloader(false);
+                console.error("DeleteVaultRedux error:", error);
+            }
         };
     }
 
-    DeleteVault(vaultId: number, onSuccess: DeleteVaultReturn) {
-
-        // onSuccess(null, BoolResultBack.GetTrue());
-        G_AjaxHelper.GoAjaxRequest({
-            Data: {
-                'vaultId': vaultId
-            },
+    async DeleteVaultAsync(vaultId: number): Promise<ServerResult<BoolResultBack>> {
+        return await G_AjaxHelper.GoAjaxRequest<BoolResultBack>({
+            Data: { vaultId: vaultId },
             Type: ControllerHelper.DeleteHttp,
-            FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-            },
-            FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/vault/delete-vault',
         });
     }
 
-    UpdateVaultPasswordRedux(vaultId: number, pwd: string) {
-        return (dispatch: any, getState: any) => {
+    UpdateVaultPasswordRedux(vaultId: number, password: string) {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.UpdateVaultPassword(vaultId, pwd,
-                (error: MainErrorObjectBack, data: BoolResultBack) => {
-                    this.preloader(false);
-                    // if (data?.result) {
-                    //     dispatch(DeleteVaultActionCreator(vaultId));
-                    // }
-                });
+            try {
+                await this.UpdateVaultPasswordAsync(vaultId, password);
+                this.preloader(false);
+            } catch (error) {
+                this.preloader(false);
+                console.error("UpdateVaultPasswordRedux error:", error);
+            }
         };
     }
 
-    UpdateVaultPassword(vaultId: number, pwd: string, onSuccess: UpdateVaultPasswordReturn) {
-
-        // onSuccess(null, BoolResultBack.GetTrue());
-        G_AjaxHelper.GoAjaxRequest({
+    async UpdateVaultPasswordAsync(vaultId: number, password: string): Promise<ServerResult<BoolResultBack>> {
+        return await G_AjaxHelper.GoAjaxRequest<BoolResultBack>({
             Data: {
-                'vaultId': vaultId,
-                'password': pwd
+                vaultId: vaultId,
+                password: password
             },
             Type: ControllerHelper.PatchHttp,
-            FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-            },
-            FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/vault/change-password',
         });
     }
 
     VaultAuthorizeRedux(vaultId: number, password: string) {
-        return (dispatch: any, getState: any) => {
+        return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            this.VaultAuthorize(vaultId, password,
-                (error: MainErrorObjectBack, data: BoolResultBack) => {
-                    this.preloader(false);
-                    if (data?.result) {
-                        dispatch(VaultAuthorizeActionCreator(true));
-                    }
-                    else {
-                        let alertFactory = new AlertData();
-                        let alert = alertFactory.GetDefaultError("Не удалось, проверьте пароль");
-                        window.G_AddAbsoluteAlertToState(alert);
-                    }
-                });
+            try {
+                const backResult = await this.VaultAuthorizeAsync(vaultId, password);
+                this.preloader(false);
+                if (backResult.Data?.result) {
+                    dispatch(VaultAuthorizeActionCreator(true));
+                } else {
+                    let alertFactory = new AlertData();
+                    let alert = alertFactory.GetDefaultError("Не удалось, проверьте пароль");
+                    window.G_AddAbsoluteAlertToState(alert);
+                }
+            } catch (error) {
+                this.preloader(false);
+                console.error("VaultAuthorizeRedux error:", error);
+            }
         };
     }
 
-    VaultAuthorize(vaultId: number, password: string, onSuccess: VaultAuthorizeReturn) {
-
-        // onSuccess(null, BoolResultBack.GetTrue());
-        G_AjaxHelper.GoAjaxRequest({
+    async VaultAuthorizeAsync(vaultId: number, password: string): Promise<ServerResult<BoolResultBack>> {
+        return await G_AjaxHelper.GoAjaxRequest<BoolResultBack>({
             Data: {
-                'password': password,
-                'vaultId': vaultId
+                password: password,
+                vaultId: vaultId
             },
             Type: ControllerHelper.PostHttp,
-            FuncSuccess: (xhr, status, jqXHR) => {
-                this.mapWithResult(onSuccess)(xhr, status, jqXHR);
-            },
-            FuncError: (xhr, status, error) => { },
             Url: G_PathToServer + 'api/vault/authorize',
         });
     }
@@ -529,8 +470,8 @@ export class VaultController implements IVaultController {
 
 
     preloader(show: boolean) {
-            window.VaultCounter = new ControllerHelper()
-                .Preloader(show, VaultPreloader, window.VaultCounter);
+        window.VaultCounter = new ControllerHelper()
+            .Preloader(show, VaultPreloader, window.VaultCounter);
     }
 
 }

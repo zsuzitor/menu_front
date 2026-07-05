@@ -139,9 +139,16 @@ const VaultSecret = (props: IVaultSecretProps) => {
                     </div>
                     <div className='but vault-secret-copy' title='Скопировать значение'
                         onClick={async () => {
-                            await helper.CopyText(secretValue);
-                            G_AddAbsoluteAlertToState(
-                                new AlertData().GetDefaultNotify("Скопировано"));
+                            if (props.Secret?.IsCoded && !props.VaultIsAuthorized) {
+                                G_AddAbsoluteAlertToState(
+                                    new AlertData().GetDefaultError("Vault не авторизован"));
+                            }
+                            else {
+                                await helper.CopyText(secretValue);
+                                G_AddAbsoluteAlertToState(
+                                    new AlertData().GetDefaultNotify("Скопировано"));
+                            }
+
                         }}>
                         <img className='persent-100-width-height' src={"/images/" + 'copy.png'} />
                     </div>

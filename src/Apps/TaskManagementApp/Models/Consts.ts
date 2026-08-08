@@ -4,7 +4,7 @@ export const TaskManagementPreloader: string = 'task_management_preloader';
 
 
 //Routes
-export const TaskManagementAppRute: string = 'task-management';
+export const TaskManagementAppRoute: string = 'task-management';
 export const TaskManagementProjectRoute: string = 'proj-';
 
 export const TaskManagementTaskRoute: string = 'task-';

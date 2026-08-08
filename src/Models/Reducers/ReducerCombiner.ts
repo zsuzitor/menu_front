@@ -8,6 +8,7 @@ import { PlaningPokerReducer } from "../../Apps/PlaningPoker/Models/Reducers/Red
 import { AppReducer } from "./Reducer";
 import { VaultAppReducer } from "../../Apps/Vault/Models/Reducers/Reducer";
 import { TaskManagementAppReducer } from "../../Apps/TaskManagementApp/Models/Reducers/Reducer";
+import { FinancialAssistantAppReducer } from "../../Apps/FinancialAssistantApp/Models/Reducers/Reducer";
 
 export function ReducerCombiner(state: AppState = new AppState(), action: AppAction<any>): AppState {
 
@@ -16,6 +17,7 @@ export function ReducerCombiner(state: AppState = new AppState(), action: AppAct
     st = TaskManagementAppReducer(st, action);
     st = PlaningPokerReducer(st, action);
     st = VaultAppReducer(st, action);
+    st = FinancialAssistantAppReducer(st, action);
 
 
     //...

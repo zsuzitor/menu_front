@@ -13,6 +13,7 @@ import { TaskManagementWorkTimeLogReducer } from './WorkTimeLogReducer';
 import { TaskManagementSprintReducer } from './SprintReducer';
 import { TaskManagementLabelReducer } from './LabelReducer';
 import { TaskManagementPresetReducer } from './PresetReducer';
+import { FinancialAssistantPortfolioReducer } from '../../../FinancialAssistantApp/Models/Reducers/PortfolioReducer';
 
 
 

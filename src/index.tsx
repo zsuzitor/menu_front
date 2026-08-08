@@ -31,6 +31,7 @@ import { TaskManagementWorkTimeController } from "./Apps/TaskManagementApp/Model
 import { TaskManagementSprintController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementSprintController";
 import { TaskManagementLabelController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementLabelController";
 import { TaskManagementPresetController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementPresetController";
+import { FinancialAssistantAppPortfolioController } from "./Apps/FinancialAssistantApp/Models/Controllers/FinancialAssistantAppPortfolioController";
 
 
 require('../style/main.css');
@@ -79,7 +80,7 @@ window.G_TaskManagementSprintController = new TaskManagementSprintController();
 window.G_VaultController = new VaultController();
 window.G_TaskManagementLabelController = new TaskManagementLabelController();
 window.G_TaskManagementPresetController = new TaskManagementPresetController();
-
+window.G_FinancialAssistantAppPortfolioController = new FinancialAssistantAppPortfolioController();
 
 
 

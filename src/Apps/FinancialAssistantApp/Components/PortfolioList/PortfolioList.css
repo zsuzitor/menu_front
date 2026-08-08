@@ -1,0 +1,16 @@
+.portfolio-list-block{
+    display: flex;
+    gap: 5px;
+    justify-content: start;
+    flex-wrap: wrap;
+    padding-top: 10px;
+
+}
+
+.portfolio-list-block .one-portfolio-element {
+
+    width: 200px;
+    height: 200px;
+    border: 2px solid black;
+
+}

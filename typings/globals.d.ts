@@ -31,9 +31,11 @@ declare var G_TaskManagementSprintController: import("../src/Apps/TaskManagement
 declare var G_TaskManagementLabelController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementLabelController").ITaskManagementLabelController;
 declare var G_TaskManagementPresetController: import("../src/Apps/TaskManagementApp/Models/Controllers/TaskManagementPresetController").ITaskManagementPresetController;
 declare var G_VaultController: import("../src/Apps/Vault/Models/Controllers/VaultController").IVaultController;
+declare var G_FinancialAssistantAppPortfolioController: import("../src/Apps/FinancialAssistantApp/Models/Controllers/FinancialAssistantAppPortfolioController").IFinancialAssistantAppPortfolioController;
 
 declare var TaskManagementCounter: number;
 declare var VaultCounter: number;
+declare var FinancialAssistantAppCounter: number;
 
 
 

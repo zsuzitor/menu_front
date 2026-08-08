@@ -2,6 +2,7 @@ import { TaskManagementAppState } from "../../../Apps/TaskManagementApp/Models/E
 import { PlaningPokerAppState } from "../../../Apps/PlaningPoker/Models/Entity/State/PlaningPokerApp";
 import { VaultAppState } from "../../../Apps/Vault/Models/Entity/State/VaultApp";
 import { IAuthState } from "../AuthState";
+import { FinancialAssistantApp } from "../../../Apps/FinancialAssistantApp/Models/Entity/State/FinancialAssistantApp";
 
 
 export class AppState {
@@ -10,6 +11,7 @@ export class AppState {
     TaskManagementApp: TaskManagementAppState;
     PlaningPokerApp: PlaningPokerAppState;
     VaultApp: VaultAppState;
+    FinancialAssistantApp: FinancialAssistantApp;
     constructor() {
         this.Auth = {
             AuthSuccess: false,
@@ -19,5 +21,6 @@ export class AppState {
         this.TaskManagementApp = new TaskManagementAppState();
         this.PlaningPokerApp = new PlaningPokerAppState();
         this.VaultApp = new VaultAppState();
+        this.FinancialAssistantApp = new FinancialAssistantApp();
     }
 }

@@ -1,0 +1,10 @@
+.stock-list-block {
+    padding-top: 15px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.stock-list-block .one-stock-element {
+    border: 2px solid black;
+}

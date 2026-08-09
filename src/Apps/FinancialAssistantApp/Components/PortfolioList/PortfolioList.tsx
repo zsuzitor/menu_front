@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import connectToStore, { IPortfolioListProps } from './PortfolioListSetup';
 import cloneDeep from 'lodash/cloneDeep';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import { FinancialAssistantAppRoute } from '../../Models/Consts';
 import SaveCancelInputText from '../../../../components/Body/SaveCancelInput/SaveCancelInputText';
-import RouteBuilder from '../../Models/BL copy/RouteBuilder';
+import RouteBuilder from '../../Models/BL/RouteBuilder';
 
 
 
@@ -44,7 +43,7 @@ const PortfolioList = (props: IPortfolioListProps) => {
 
                 const portfolioUrl = new RouteBuilder().PortfolioUrl(x.Id);
 
-                return <div className='one-portfolio-element'>
+                return <div className='one-portfolio-element'  key={x.Id}>
                     {editPortfolioId == x.Id ? <>
                         <SaveCancelInputText
                             Text={x.Name}

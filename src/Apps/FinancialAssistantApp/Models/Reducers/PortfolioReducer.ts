@@ -5,8 +5,9 @@ import { AppState } from "../../../../Models/Entity/State/AppState";
 
 import cloneDeep from 'lodash/cloneDeep';
 import { Helper } from "../../../../Models/BL/Helper";
-import { CreatePortfolioActionName, DeletePortfolioActionName, GetPortfolioActionName, UpdatePortfolioActionName } from "../Actions/PortfolioActions";
+import { CreatePortfolioActionName, DeletePortfolioActionName, GetPortfolioActionName, SetCurrentPortfolioActionName, SetCurrentPortfolioElementsActionName, SetCurrentPortfolioIdActionName, UpdatePortfolioActionName } from "../Actions/PortfolioActions";
 import { Portfolio } from "../Entity/State/Portfolio";
+import { StockElement } from "../Entity/State/StockElement";
 
 
 
@@ -17,21 +18,21 @@ export function FinancialAssistantPortfolioReducer(state: AppState = new AppStat
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as Portfolio[];
-                newState.FinancialAssistantApp.Portfolio = [...payload];
+                newState.FinancialAssistantApp.PortfolioList = [...payload];
                 return newState;
             }
         case CreatePortfolioActionName:
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as Portfolio;
-                newState.FinancialAssistantApp.Portfolio.push(payload);
+                newState.FinancialAssistantApp.PortfolioList.push(payload);
                 return newState;
             }
         case UpdatePortfolioActionName:
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as Portfolio;
-                var dt = newState.FinancialAssistantApp.Portfolio.find(x => x.Id == payload.Id);
+                var dt = newState.FinancialAssistantApp.PortfolioList.find(x => x.Id == payload.Id);
                 if (dt) {
                     dt.Name = payload.Name;
                     dt.CurrencyId = payload.CurrencyId;
@@ -44,11 +45,39 @@ export function FinancialAssistantPortfolioReducer(state: AppState = new AppStat
             {
                 let newState = cloneDeep(state);
                 let payload = action.payload as number;
-                newState.FinancialAssistantApp.Portfolio = 
-                newState.FinancialAssistantApp.Portfolio.filter(x => x.Id != payload);
+                newState.FinancialAssistantApp.PortfolioList =
+                    newState.FinancialAssistantApp.PortfolioList.filter(x => x.Id != payload);
 
                 return newState;
             }
+
+        case SetCurrentPortfolioIdActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as number;
+                newState.FinancialAssistantApp.CurrentPortfolioId = payload;
+
+                return newState;
+            }
+
+        case SetCurrentPortfolioElementsActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as StockElement[];
+                newState.FinancialAssistantApp.CurrentPortfolioElements = payload;
+
+                return newState;
+            }
+        case SetCurrentPortfolioActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as Portfolio;
+                newState.FinancialAssistantApp.CurrentPortfolio = payload;
+
+                return newState;
+            }
+
+
 
         default:
             return state;

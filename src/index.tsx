@@ -32,6 +32,9 @@ import { TaskManagementSprintController } from "./Apps/TaskManagementApp/Models/
 import { TaskManagementLabelController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementLabelController";
 import { TaskManagementPresetController } from "./Apps/TaskManagementApp/Models/Controllers/TaskManagementPresetController";
 import { FinancialAssistantAppPortfolioController } from "./Apps/FinancialAssistantApp/Models/Controllers/FinancialAssistantAppPortfolioController";
+import { FinancialAssistantAppStockController } from "./Apps/FinancialAssistantApp/Models/Controllers/FinancialAssistantAppStockController";
+import { FinancialAssistantAppStockElementController } from "./Apps/FinancialAssistantApp/Models/Controllers/FinancialAssistantAppStockElementController";
+import { FinancialAssistantAppStockEventController } from "./Apps/FinancialAssistantApp/Models/Controllers/FinancialAssistantAppStockEventController";
 
 
 require('../style/main.css');
@@ -81,6 +84,9 @@ window.G_VaultController = new VaultController();
 window.G_TaskManagementLabelController = new TaskManagementLabelController();
 window.G_TaskManagementPresetController = new TaskManagementPresetController();
 window.G_FinancialAssistantAppPortfolioController = new FinancialAssistantAppPortfolioController();
+window.G_FinancialAssistantAppStockController = new FinancialAssistantAppStockController();
+window.G_FinancialAssistantAppStockElementController = new FinancialAssistantAppStockElementController();
+window.G_FinancialAssistantAppStockEventController = new FinancialAssistantAppStockEventController();
 
 
 

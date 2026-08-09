@@ -1,5 +1,4 @@
 import { connect } from "react-redux";
-import { IAuthState } from "../../../../Models/Entity/AuthState";
 import { AppState } from "../../../../Models/Entity/State/AppState";
 import { Portfolio } from "../../Models/Entity/State/Portfolio";
 
@@ -26,7 +25,7 @@ export interface IPortfolioListProps extends IPortfolioListStateToProps, IPortfo
 
 const mapStateToProps = (state: AppState, ownProps: IPortfolioListOwnProps) => {
     let res = {} as IPortfolioListStateToProps;
-    res.PortfolioList = state.FinancialAssistantApp.Portfolio;
+    res.PortfolioList = state.FinancialAssistantApp.PortfolioList;
     return res;
 }
 
@@ -45,6 +44,8 @@ const mapDispatchToProps = (dispatch: any, ownProps: IPortfolioListOwnProps) => 
     res.Update = (id: number, name: string, currencyId: number | null) => {
         dispatch(window.G_FinancialAssistantAppPortfolioController.UpdateRedux(id, name, currencyId));
     };
+
+ 
     return res;
 };
 

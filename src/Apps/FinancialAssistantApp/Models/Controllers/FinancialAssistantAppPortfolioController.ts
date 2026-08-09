@@ -1,18 +1,18 @@
 import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
-import { MainErrorObjectBack } from "../../../../Models/BackModel/ErrorBack";
 import { ControllerHelper } from "../../../../Models/Controllers/ControllerHelper";
 import { ServerResult } from "../../../../Models/AjaxLogic";
 import { FinancialAssistantApiPortfolioUrl, FinancialAssistantAppPreloader } from "../Consts";
 import { IPortfolioDataBack } from "../BackModels/IPortfolioDataBack";
 import { Portfolio } from "../Entity/State/Portfolio";
-import { CreatePortfolioActionCreator, DeletePortfolioActionCreator, GetPortfolioActionCreator, UpdatePortfolioActionCreator } from "../Actions/PortfolioActions";
+import { CreatePortfolioActionCreator, DeletePortfolioActionCreator, GetPortfolioActionCreator, SetCurrentPortfolioActionCreator, UpdatePortfolioActionCreator } from "../Actions/PortfolioActions";
 
 
 export interface IFinancialAssistantAppPortfolioController {
-    GetForUserRedux: () => void;
-    CreateRedux: (name: string) => void;
-    UpdateRedux: (id: number, name: string, currencyId: number | null) => void;
-    DeleteRedux: (id: number) => void;
+    GetForUserRedux: () => (dispatch: any, getState: any) => void;
+    CreateRedux: (name: string) => (dispatch: any, getState: any) => void;
+    UpdateRedux: (id: number, name: string, currencyId: number | null) => (dispatch: any, getState: any) => void;
+    DeleteRedux: (id: number) => (dispatch: any, getState: any) => void;
+    GetDetailRedux: (id: number) => (dispatch: any, getState: any) => void;
 
 }
 
@@ -159,7 +159,37 @@ export class FinancialAssistantAppPortfolioController implements IFinancialAssis
         return backResult;
     }
 
+    GetDetailRedux = (id: number) => {
+        return async (dispatch: any, getState: any) => {
+            this.preloader(true);
+            const backResult = await this.GetDetailAsync(id);
+            this.preloader(false);
 
+            if (backResult.Error) {
+                return;
+            }
+
+            if (backResult.Data) {
+                dispatch(SetCurrentPortfolioActionCreator(new Portfolio().FillByIProjectTaskDataBack(backResult.Data)));
+            }
+        };
+    }
+
+    GetDetailAsync = async (id: number): Promise<ServerResult<IPortfolioDataBack>> => {
+        let data = {
+            "Id": id
+        };
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IPortfolioDataBack>({
+            Data: data,
+            Type: ControllerHelper.GetHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: `${G_PathToServer}${FinancialAssistantApiPortfolioUrl}/get`,
+        });
+
+        return backResult;
+    }
 
 
     preloader(show: boolean) {

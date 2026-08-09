@@ -3,6 +3,7 @@ import { AppState } from "../../../../Models/Entity/State/AppState";
 import { Stock } from "../../Models/Entity/State/Stock";
 import { CreateStockRequest } from "../../Models/Entity/DTO/CreateStockRequest";
 import { GetStockActionCreator, LoadCurrentStockActionCreator, SetCurrentStockIdActionCreator } from "../../Models/Actions/StockActions";
+import { StockHistory } from "../../Models/Entity/State/StockHistory";
 
 
 
@@ -13,6 +14,7 @@ interface IStockDetailOwnProps {
 interface IStockDetailStateToProps {
     Stock?: Stock | null;
     StockId: number;
+    StockHistory: StockHistory[];
 }
 
 interface IStockDetailDispatchToProps {
@@ -31,6 +33,7 @@ const mapStateToProps = (state: AppState, ownProps: IStockDetailOwnProps) => {
     let res = {} as IStockDetailStateToProps;
     res.Stock = state.FinancialAssistantApp.CurrentStock;
     res.StockId = state.FinancialAssistantApp.CurrentStockId;
+    res.StockHistory = state.FinancialAssistantApp.CurrentStockHistory;
     return res;
 }
 

@@ -1,5 +1,6 @@
 import { AppAction } from "../../../../Models/Actions/Actions";
 import { Stock } from "../Entity/State/Stock";
+import { StockHistory } from "../Entity/State/StockHistory";
 
 
 
@@ -33,4 +34,9 @@ export function SetCurrentStockIdActionCreator(data: number): AppAction<number> 
 export const LoadCurrentStockActionName: string = 'LoadCurrentStockAction';
 export function LoadCurrentStockActionCreator(data: Stock): AppAction<Stock> {
     return { type: LoadCurrentStockActionName, payload: data };
+};
+
+export const LoadCurrentStockHistoryActionName: string = 'LoadCurrentStockHistoryAction';
+export function LoadCurrentStockHistoryActionCreator(data: StockHistory[]): AppAction<StockHistory[]> {
+    return { type: LoadCurrentStockHistoryActionName, payload: data };
 };

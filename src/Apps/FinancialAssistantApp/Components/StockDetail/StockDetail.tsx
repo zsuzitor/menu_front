@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import connectToStore, { IStockDetailProps } from './StockDetailSetup';
 import cloneDeep from 'lodash/cloneDeep';
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
-import { FinancialAssistantAppStockRoute } from '../../Models/Consts';
 
 
 
@@ -75,7 +74,17 @@ const StockDetail = (props: IStockDetailProps) => {
             <span>{props.Stock.Id}</span>
         </div>
         <div className='stock-block'>
+            <div className='stock-block-history'>
+                <span>история</span>
+                {props.StockHistory.map(x => {
+                    return <div key={x.Id}>
+                        {x.Id}
+                        {x.Price}
+                        {x.CurrencyId}
+                    </div>
 
+                })}
+            </div>
         </div>
 
     </div>

@@ -1,4 +1,4 @@
-import { FinancialAssistantAppPortfolioListRoute, FinancialAssistantAppPortfolioRoute, FinancialAssistantAppRoute, FinancialAssistantAppStockListRoute, FinancialAssistantAppStockRoute } from "../Consts";
+import { FinancialAssistantAppPortfolioEventsRoute, FinancialAssistantAppPortfolioListRoute, FinancialAssistantAppPortfolioRoute, FinancialAssistantAppRoute, FinancialAssistantAppStockListRoute, FinancialAssistantAppStockRoute } from "../Consts";
 
 export default class RouteBuilder {
     //можно сделать полноценный билдер через withApproute.withProject но как будто смысла особо нет
@@ -7,6 +7,9 @@ export default class RouteBuilder {
     }
     PortfolioUrl(portfolioId: number): string {
         return `/${FinancialAssistantAppRoute}/${FinancialAssistantAppPortfolioRoute}${portfolioId}`;
+    }
+    PortfolioHistoryUrl(portfolioId: number): string {
+        return `/${FinancialAssistantAppRoute}/${FinancialAssistantAppPortfolioRoute}${portfolioId}/${FinancialAssistantAppPortfolioEventsRoute}`;
     }
     StockDetailUrl(stockId: number): string {
         return `/${FinancialAssistantAppRoute}/${FinancialAssistantAppStockRoute}${stockId}`;

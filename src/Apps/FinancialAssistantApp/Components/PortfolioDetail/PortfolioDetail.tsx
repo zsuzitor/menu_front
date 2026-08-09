@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import connectToStore, { IPortfolioDetailProps } from './PortfolioDetailSetup';
 import cloneDeep from 'lodash/cloneDeep';
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import RouteBuilder from '../../Models/BL/RouteBuilder';
 
 
 
@@ -35,32 +36,37 @@ const PortfolioDetail = (props: IPortfolioDetailProps) => {
 
 
 
-    const { portfolioId } = useParams();
-    useEffect(() => {
-        if (portfolioId) {
-            const idInt = parseInt(portfolioId, 10);
-            if (props.PortfolioId !== idInt) {
-                props.SetCurrentPortfolioId(idInt);
-            }
-        } else {
-            if (props.PortfolioId > 0) {
-                props.SetCurrentPortfolioId(-1);
-            }
-        }
-    }, [portfolioId, props.PortfolioId]);
-
 
 
     if (!props.Portfolio) {
         return <div></div>
+
     }
+    const portfolioEventsUrl = new RouteBuilder().PortfolioHistoryUrl(props.PortfolioId);
 
     return <div className='portfolio-page'>
         <div>
             <span>{props.Portfolio.Name}</span>
             <span>{props.Portfolio.Id}</span>
         </div>
-        <div className='Portfolio-block'>
+        <div>
+            <div>
+                <a href={portfolioEventsUrl} onClick={(e) => {
+                    e.preventDefault();
+                    navigate(portfolioEventsUrl);
+                }}>История</a>
+            </div>
+            <div>Добавить событие</div>
+        </div>
+        <div className='portfolio-elements-block'>
+            {props.Elements.map(x => {
+                return <div className='portfolio-element' key={x.Id}>
+                    <div>{x.StockId} - {x.Count}
+                    </div>
+                </div>
+
+            })}
+
 
         </div>
 

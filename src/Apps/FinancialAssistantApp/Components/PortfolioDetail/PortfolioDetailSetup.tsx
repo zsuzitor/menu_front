@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 import { AppState } from "../../../../Models/Entity/State/AppState";
 import { Portfolio } from "../../Models/Entity/State/Portfolio";
 import { SetCurrentPortfolioActionCreator, SetCurrentPortfolioElementsActionCreator, SetCurrentPortfolioIdActionCreator } from "../../Models/Actions/PortfolioActions";
+import { StockElement } from "../../Models/Entity/State/StockElement";
 
 
 
@@ -12,6 +13,7 @@ interface IPortfolioDetailOwnProps {
 interface IPortfolioDetailStateToProps {
     Portfolio?: Portfolio | null;
     PortfolioId: number;
+    Elements: StockElement[];
 }
 
 interface IPortfolioDetailDispatchToProps {
@@ -31,6 +33,7 @@ const mapStateToProps = (state: AppState, ownProps: IPortfolioDetailOwnProps) =>
     let res = {} as IPortfolioDetailStateToProps;
     res.Portfolio = state.FinancialAssistantApp.CurrentPortfolio;
     res.PortfolioId = state.FinancialAssistantApp.CurrentPortfolioId;
+    res.Elements = state.FinancialAssistantApp.CurrentPortfolioElements;
     return res;
 }
 

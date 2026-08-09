@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import connectToStore, { IFinancialAssistantMainProps } from './FinancialAssistantMainSetup';
 import cloneDeep from 'lodash/cloneDeep';
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
-import { FinancialAssistantAppPortfolioListRoute, FinancialAssistantAppPortfolioRoute, FinancialAssistantAppRoute, FinancialAssistantAppStockListRoute, FinancialAssistantAppStockRoute } from '../../Models/Consts';
+import { FinancialAssistantAppPortfolioEventsRoute, FinancialAssistantAppPortfolioListRoute, FinancialAssistantAppPortfolioRoute, FinancialAssistantAppRoute, FinancialAssistantAppStockListRoute, FinancialAssistantAppStockRoute } from '../../Models/Consts';
 import PortfolioList from '../PortfolioList/PortfolioList';
 import StockList from '../StockList/StockList';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
 import StockDetail from '../StockDetail/StockDetail';
 import PortfolioDetail from '../PortfolioDetail/PortfolioDetail';
+import PortfolioEvents from '../PortfolioEvents/PortfolioEvents';
+import PortfolioRoute from '../PortfolioRoute/PortfolioRoute';
 
 
 
@@ -71,7 +73,9 @@ const FinancialAssistantMain = (props: IFinancialAssistantMainProps) => {
             <Route path={`${FinancialAssistantAppPortfolioListRoute}`} element={<PortfolioList />} />
             <Route path={`${FinancialAssistantAppStockListRoute}`} element={<StockList />} />
             <Route path={`${FinancialAssistantAppStockRoute}:stockId`} element={<StockDetail />} />
-            <Route path={`${FinancialAssistantAppPortfolioRoute}:portfolioId`} element={<PortfolioDetail />} />
+            {/* <Route path={`${FinancialAssistantAppPortfolioRoute}:portfolioId/${FinancialAssistantAppPortfolioEventsRoute}`} element={<PortfolioEvents />} />
+            <Route path={`${FinancialAssistantAppPortfolioRoute}:portfolioId`} element={<PortfolioDetail />} /> */}
+            <Route path={`${FinancialAssistantAppPortfolioRoute}:portfolioId/*`} element={<PortfolioRoute />} />
 
 
             {/* <Route path={``} element={<PortfolioList />} /> */}

@@ -2,6 +2,7 @@
 import { AppAction } from '../../../../Models/Actions/Actions';
 import { AppState } from '../../../../Models/Entity/State/AppState';
 import { FinancialAssistantPortfolioReducer } from '../../../FinancialAssistantApp/Models/Reducers/PortfolioReducer';
+import { FinancialAssistantStockEventReducer } from './StockEventReducer';
 import { FinancialAssistantStockReducer } from './StockReducer';
 
 
@@ -10,6 +11,7 @@ export function FinancialAssistantAppReducer(state: AppState = new AppState(), a
 
     let st = FinancialAssistantPortfolioReducer(state, action);
     st = FinancialAssistantStockReducer(st, action);
+    st = FinancialAssistantStockEventReducer(st, action);
 
 
 

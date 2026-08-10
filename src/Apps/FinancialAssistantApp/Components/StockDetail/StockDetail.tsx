@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import connectToStore, { IStockDetailProps } from './StockDetailSetup';
 import cloneDeep from 'lodash/cloneDeep';
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import { Helper } from '../../../../Models/BL/Helper';
+import { StockHistory } from '../../Models/Entity/State/StockHistory';
+import { ControllerHelper } from '../../../../Models/Controllers/ControllerHelper';
+import SelectWithSearch from '../../../../components/Body/SelectWithSearch/SelectWithSearch';
+import { Stock } from '../../Models/Entity/State/Stock';
 
 
 
@@ -13,16 +18,29 @@ require('./StockDetail.css');
 const StockDetail = (props: IStockDetailProps) => {
 
 
+    const [newStockHistoryDate, setStockHistoryDate] = useState<Date>(new Date());
+    const [newStockHistoryPrice, setStockHistoryPrice] = useState(0);
+    const [stockCurrency, setStockCurrency] = useState<Stock[]>([]);
 
+    //нужны что бы отрисовать элеммент в пустом списке - тако кейс есть это норм
+    const [newStockHistoryCurrencyId, setStockHistoryCurrencyId] = useState(0);
+    const [stockCurrencyName, setStockCurrencyName] = useState('');
+    //тк запроса на бэк не делаем а просто на фронте фильтруем
+    const [stockCurrencyNameFilter, setStockCurrencyNameFilter] = useState('');
 
 
     const navigate = useNavigate();
 
     useEffect(() => {
+        props.GetCurrency()
+            .then(br => setStockCurrency(br.Data.map(x => new Stock().FillByIProjectTaskDataBack(x))));
+
+
         return () => {
             //если с этой страницы будут переходы на другую с сохранением id  в урле то надо переносить на уровень выше
             props.SetCurrentStockId(-1);
             props.ClearCurrentStock();
+            props.ClearCurrentHistory();
         }
     }, []);
 
@@ -30,6 +48,7 @@ const StockDetail = (props: IStockDetailProps) => {
         if (props.StockId > 0) {
 
             props.GetDetail(props.StockId);
+            props.GetHistory(props.StockId);
         }
 
     }, [props.StockId]);
@@ -61,7 +80,10 @@ const StockDetail = (props: IStockDetailProps) => {
         }
     }, [stockId, props.StockId]);
 
-
+    function formatDateToInput(date: Date): string {
+        const help = new Helper();
+        return help.FormatDateToInputWithTime(date);
+    }
 
     if (!props.Stock) {
         return <div></div>
@@ -74,6 +96,53 @@ const StockDetail = (props: IStockDetailProps) => {
             <span>{props.Stock.Id}</span>
         </div>
         <div className='stock-block'>
+            <div>
+                <span>Добавить запись истории</span>
+                <span>Цена</span>
+                <input type='number' value={newStockHistoryPrice}
+                    onChange={(e) => setStockHistoryPrice(+e.target.value)}></input>
+                <span>Дата</span><input
+                    // type="datetime-local"
+                    type="datetime-local"
+                    // value={timeLogDate.toISOString().slice(0, 16)}
+                    value={formatDateToInput(newStockHistoryDate)}
+                    onChange={(e) => {
+                        if (e.target.value) {
+                            setStockHistoryDate(new Date(e.target.value));
+                        }
+                        else {
+                            setStockHistoryDate(new Date());
+                        }
+
+                    }}></input>
+
+                <SelectWithSearch
+                    CancelEvent={() => { }}
+                    SaveEvent={(id) => {
+                        setStockHistoryCurrencyId(id);
+                        setStockCurrencyName(stockCurrency.find(x => x.Id === id).Name);
+                        // setStockCurrency(stockCurrency.filter(x => x.Id === id));
+                        return true;
+                    }}
+                    Selected={{ Id: newStockHistoryCurrencyId, Text: newStockHistoryCurrencyId > 0 ? `${newStockHistoryCurrencyId}-${stockCurrencyName}` : '' }}
+                    ValuesWithId={stockCurrency.filter(x => !stockCurrencyNameFilter || x.Name.indexOf(stockCurrencyNameFilter) >= 0)
+                        .map(x => ({ Id: x.Id, Text: `${x.Id}-${x.Name}` }))}
+                    OnSearchChange={async (text) => {
+                        // setTaskId(-1);
+                        setStockCurrencyNameFilter(text);
+                    }}
+                ></SelectWithSearch>
+
+                <button onClick={() => {
+                    let dt = new StockHistory();
+                    dt.CurrencyId = newStockHistoryCurrencyId;
+                    dt.Date = new ControllerHelper().ToZeroDate(newStockHistoryDate).toISOString();
+                    dt.Price = newStockHistoryPrice;
+                    dt.StockId = props.StockId;
+                    props.CreateHistory(dt);
+                }}>Создать запись истории</button>
+            </div>
+
             <div className='stock-block-history'>
                 <span>история</span>
                 {props.StockHistory.map(x => {

@@ -5,7 +5,7 @@ import { FinancialAssistantApiPortfolioUrl, FinancialAssistantApiStockUrl, Finan
 import { CreateStockRequest } from "../Entity/DTO/CreateStockRequest";
 import { IStockDataBack } from "../BackModels/IStockDataBack";
 import { Stock } from "../Entity/State/Stock";
-import { CreateStockActionCreator, DeleteStockActionCreator, GetStockActionCreator, LoadCurrentStockActionCreator, LoadCurrentStockHistoryActionCreator, UpdateStockActionCreator } from "../Actions/StockActions";
+import { CreateCurrentStockHistoryActionCreator, CreateStockActionCreator, DeleteStockActionCreator, GetStockActionCreator, LoadCurrentStockActionCreator, LoadCurrentStockHistoryActionCreator, UpdateStockActionCreator } from "../Actions/StockActions";
 import { IStockHistoryDataBack } from "../BackModels/IStockHistoryDataBack";
 import { StockHistory } from "../Entity/State/StockHistory";
 
@@ -19,8 +19,10 @@ export interface IFinancialAssistantAppStockController {
     FindRedux: (text: string) => (dispatch: any, getState: any) => void;
     GetRedux: () => (dispatch: any, getState: any) => void;
     GetCurrencyRedux: () => (dispatch: any, getState: any) => void;
+    GetCurrencyAsync: () => Promise<ServerResult<IStockDataBack[]>>;
     GetByIdRedux: (id: number) => (dispatch: any, getState: any) => void;
     GetHistoryRedux: (id: number) => (dispatch: any, getState: any) => void;
+    CreateHistoryRedux: (req: StockHistory) => (dispatch: any, getState: any) => void;
 }
 
 
@@ -340,6 +342,42 @@ export class FinancialAssistantAppStockController implements IFinancialAssistant
         return backResult;
     }
 
+
+    CreateHistoryRedux = (req: StockHistory) => {
+        return async (dispatch: any, getState: any) => {
+            this.preloader(true);
+            const backResult = await this.CreateHistoryAsync(req);
+            this.preloader(false);
+
+            if (backResult.Error) {
+                return;
+            }
+            if (backResult.Data) {
+                let dt = new StockHistory().FillByIProjectTaskDataBack(backResult.Data);
+                dispatch(CreateCurrentStockHistoryActionCreator(dt));
+            }
+        };
+    }
+
+    CreateHistoryAsync = async (req: StockHistory): Promise<ServerResult<IStockHistoryDataBack>> => {
+        let data = {
+            "Date": req.Date,
+            "Price": req.Price,
+            "StockId": req.StockId,
+            "CurrencyId": req.CurrencyId,
+        };
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IStockHistoryDataBack>({
+            Data: data,
+            Type: ControllerHelper.PutHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: `${this.GetControllerApiUrl()}/create-history`,
+            ContentType: 'body'
+        });
+
+        return backResult;
+    }
 
 
 

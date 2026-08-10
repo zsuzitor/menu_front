@@ -3,6 +3,8 @@ import connectToStore, { IPortfolioDetailProps } from './PortfolioDetailSetup';
 import cloneDeep from 'lodash/cloneDeep';
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
+import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
+import AddStockEvent from '../AddStockEvent/AddStockEvent';
 
 
 
@@ -14,6 +16,7 @@ require('./PortfolioDetail.css');
 const PortfolioDetail = (props: IPortfolioDetailProps) => {
 
 
+    const [showNewEventWindow, setShowNewEventWindow] = useState(false);
 
 
     const navigate = useNavigate();
@@ -45,6 +48,13 @@ const PortfolioDetail = (props: IPortfolioDetailProps) => {
     const portfolioEventsUrl = new RouteBuilder().PortfolioHistoryUrl(props.PortfolioId);
 
     return <div className='portfolio-page'>
+        {
+            showNewEventWindow ? <AdditionalWindow CloseWindow={() => setShowNewEventWindow(false)}
+                IsHeightWindow={false}
+                Title='Новое событие'
+                InnerContent={() => <AddStockEvent
+                />}></AdditionalWindow> : <></>
+        }
         <div>
             <span>{props.Portfolio.Name}</span>
             <span>{props.Portfolio.Id}</span>
@@ -56,7 +66,7 @@ const PortfolioDetail = (props: IPortfolioDetailProps) => {
                     navigate(portfolioEventsUrl);
                 }}>История</a>
             </div>
-            <div>Добавить событие</div>
+            <div><button onClick={() => setShowNewEventWindow(true)}></button></div>
         </div>
         <div className='portfolio-elements-block'>
             {props.Elements.map(x => {

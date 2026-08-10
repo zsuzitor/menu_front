@@ -105,6 +105,14 @@ export class Helper {
         return `${year}-${month}-${day}`;
     }
 
+    FormatDateToInputWithTime(date: Date): string {
+        let ymd = this.FormatDateToInput(date);
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${ymd}T${hours}:${minutes}`;
+    }
+
+
     FormatDateToDM(date: Date): string {
 
         // const year = date.getFullYear();

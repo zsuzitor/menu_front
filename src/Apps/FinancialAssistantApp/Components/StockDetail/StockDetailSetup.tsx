@@ -2,8 +2,10 @@ import { connect } from "react-redux";
 import { AppState } from "../../../../Models/Entity/State/AppState";
 import { Stock } from "../../Models/Entity/State/Stock";
 import { CreateStockRequest } from "../../Models/Entity/DTO/CreateStockRequest";
-import { GetStockActionCreator, LoadCurrentStockActionCreator, SetCurrentStockIdActionCreator } from "../../Models/Actions/StockActions";
+import { GetStockActionCreator, LoadCurrentStockActionCreator, LoadCurrentStockHistoryActionCreator, SetCurrentStockIdActionCreator } from "../../Models/Actions/StockActions";
 import { StockHistory } from "../../Models/Entity/State/StockHistory";
+import { ServerResult } from "../../../../Models/AjaxLogic";
+import { IStockDataBack } from "../../Models/BackModels/IStockDataBack";
 
 
 
@@ -23,6 +25,10 @@ interface IStockDetailDispatchToProps {
     Update: (stock: CreateStockRequest) => void;
     GetDetail: (id: number) => void;
     ClearCurrentStock: () => void;
+    GetHistory: (id: number) => void;
+    CreateHistory: (req: StockHistory) => void;
+    ClearCurrentHistory: () => void;
+    GetCurrency: () => Promise<ServerResult<IStockDataBack[]>>;
 }
 
 export interface IStockDetailProps extends IStockDetailStateToProps, IStockDetailOwnProps, IStockDetailDispatchToProps {
@@ -50,6 +56,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: IStockDetailOwnProps) => {
     res.GetDetail = (id: number) => {
         dispatch(window.G_FinancialAssistantAppStockController.GetByIdRedux(id));
     };
+    res.GetHistory = (id: number) => {
+        dispatch(window.G_FinancialAssistantAppStockController.GetHistoryRedux(id));
+    };
+
     res.SetCurrentStockId = (id: number) => {
         dispatch(SetCurrentStockIdActionCreator(id));
     };
@@ -57,6 +67,16 @@ const mapDispatchToProps = (dispatch: any, ownProps: IStockDetailOwnProps) => {
         dispatch(LoadCurrentStockActionCreator(null));
     };
 
+    res.ClearCurrentHistory = () => {
+        dispatch(LoadCurrentStockHistoryActionCreator([]));
+    };
+    res.CreateHistory = (req: StockHistory) => {
+        dispatch(window.G_FinancialAssistantAppStockController.CreateHistoryRedux(req));
+    };
+
+    res.GetCurrency = async () => {
+        return await window.G_FinancialAssistantAppStockController.GetCurrencyAsync();
+    };
 
 
     return res;

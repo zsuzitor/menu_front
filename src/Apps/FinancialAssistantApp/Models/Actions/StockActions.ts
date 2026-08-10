@@ -40,3 +40,9 @@ export const LoadCurrentStockHistoryActionName: string = 'LoadCurrentStockHistor
 export function LoadCurrentStockHistoryActionCreator(data: StockHistory[]): AppAction<StockHistory[]> {
     return { type: LoadCurrentStockHistoryActionName, payload: data };
 };
+
+export const CreateCurrentStockHistoryActionName: string = 'CreateCurrentStockHistoryAction';
+export function CreateCurrentStockHistoryActionCreator(data: StockHistory): AppAction<StockHistory> {
+    return { type: CreateCurrentStockHistoryActionName, payload: data };
+};
+

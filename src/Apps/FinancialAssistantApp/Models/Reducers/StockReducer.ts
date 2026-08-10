@@ -7,7 +7,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { Helper } from "../../../../Models/BL/Helper";
 import { CreatePortfolioActionName, DeletePortfolioActionName, GetPortfolioActionName, SetCurrentPortfolioIdActionName, UpdatePortfolioActionName } from "../Actions/PortfolioActions";
 import { Portfolio } from "../Entity/State/Portfolio";
-import { CreateStockActionName, DeleteStockActionName, GetStockActionName, LoadCurrentStockActionName, LoadCurrentStockHistoryActionName, SetCurrentStockIdActionName, UpdateStockActionName } from "../Actions/StockActions";
+import { CreateCurrentStockHistoryActionName, CreateStockActionName, DeleteStockActionName, GetStockActionName, LoadCurrentStockActionName, LoadCurrentStockHistoryActionName, SetCurrentStockIdActionName, UpdateStockActionName } from "../Actions/StockActions";
 import { Stock } from "../Entity/State/Stock";
 import { StockHistory } from "../Entity/State/StockHistory";
 
@@ -80,6 +80,16 @@ export function FinancialAssistantStockReducer(state: AppState = new AppState(),
 
                 return newState;
             }
+
+        case CreateCurrentStockHistoryActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as StockHistory;
+                newState.FinancialAssistantApp.CurrentStockHistory.push(payload);
+
+                return newState;
+            }
+
 
 
         default:

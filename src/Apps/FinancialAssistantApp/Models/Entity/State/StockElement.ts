@@ -10,7 +10,7 @@ export class StockElement {
     constructor() {
     }
 
-    FillByIProjectTaskDataBack(data: IStockElementDataBack): StockElement {
+    FillByIStockElementDataBack(data: IStockElementDataBack): StockElement {
     this.Id = data.Id;
     this.StockId = data.StockId;
     this.Count = data.Count;

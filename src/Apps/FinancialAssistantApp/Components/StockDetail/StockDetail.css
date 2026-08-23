@@ -1,0 +1,13 @@
+.stock-block-history .one-history-element {
+    display: flex;
+    flex-direction: row;
+    border: 2px solid black;
+    justify-content: space-between;
+}
+
+.stock-page .stock-name{
+    
+    font-size: 25px;
+    font-weight: 600;
+    padding: 10px;
+}

@@ -74,7 +74,7 @@ export class FinancialAssistantAppStockEventController implements IFinancialAssi
             }
 
             if (backResult.Data) {
-                let dt = backResult.Data.map(x => new StockEvent().FillByIProjectTaskDataBack(x));
+                let dt = backResult.Data.map(x => new StockEvent().FillByIStockEventDataBack(x));
                 dispatch(LoadStockEventForProjectActionCreator(dt));
             }
         };

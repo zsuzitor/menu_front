@@ -3,6 +3,7 @@ import connectToStore, { IPortfolioEventsProps } from './PortfolioEventsSetup';
 import cloneDeep from 'lodash/cloneDeep';
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
+import { StockEventEnum } from '../../Models/Entity/State/Enum/StockEventEnum';
 
 
 
@@ -22,19 +23,35 @@ const PortfolioEvents = (props: IPortfolioEventsProps) => {
 
     const portfolioUrl = new RouteBuilder().PortfolioUrl(props.PortfolioId);
 
-    return <div>HISTORY - {props.PortfolioId}
+    return <div className='portfolio-events'>События портфеля id - {props.PortfolioId}
         <a href={portfolioUrl} onClick={(e) => {
             e.preventDefault();
             navigate(portfolioUrl);
         }}>Вернуться к портфелю</a>
         <div>
             {props.Events.map(x => {
-                return <div key={x.Id}>
-                    {x.Id}
-                    {x.Price}
-                    {x.CurrencyId}
-                    {x.Count}
+                let typeStr = '';
+                switch (x.Type) {
+                    case StockEventEnum.Buy:
+                        typeStr = 'Покупка';
+                        break;
+                    case StockEventEnum.CashReplenishment:
+                        typeStr = 'Пополнение';
+                        break;
+                    case StockEventEnum.Dividends:
+                        typeStr = 'Дивиденды';
+                        break;
+                    case StockEventEnum.Sell:
+                        typeStr = 'Продажа';
+                        break;
+                    case StockEventEnum.WithdrawalCash:
+                        typeStr = 'Вывод средств';
+                        break;
+                }
 
+
+                return <div key={x.Id} className='one-event'>
+                    {x.Date} - {typeStr} - {x.Count} шт {x.StockName} по цене {x.Price} - {x.CurrencyName}
                 </div>
 
             })}

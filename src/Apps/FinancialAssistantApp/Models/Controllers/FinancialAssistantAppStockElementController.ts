@@ -27,7 +27,7 @@ export class FinancialAssistantAppStockElementController implements IFinancialAs
             }
 
             if (backResult.Data) {
-                let dt = backResult.Data.map(x => new StockElement().FillByIProjectTaskDataBack(x));
+                let dt = backResult.Data.map(x => new StockElement().FillByIStockElementDataBack(x));
                 dispatch(SetCurrentPortfolioElementsActionCreator(dt));
             }
         };

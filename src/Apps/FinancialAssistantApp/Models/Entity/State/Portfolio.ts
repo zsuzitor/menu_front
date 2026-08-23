@@ -11,7 +11,7 @@ export class Portfolio {
 
     
 
-    FillByIProjectTaskDataBack(data: IPortfolioDataBack): Portfolio {
+    FillByIPortfolioDataBack(data: IPortfolioDataBack): Portfolio {
         this.Id = data.Id;
         this.Name = data.Name;
         this.UserId = data.UserId;

@@ -32,7 +32,7 @@ export class FinancialAssistantAppPortfolioController implements IFinancialAssis
             }
 
             if (backResult.Data) {
-                let dt = backResult.Data.map(x => new Portfolio().FillByIProjectTaskDataBack(x));
+                let dt = backResult.Data.map(x => new Portfolio().FillByIPortfolioDataBack(x));
                 dispatch(GetPortfolioActionCreator(dt));
             }
         };
@@ -65,7 +65,7 @@ export class FinancialAssistantAppPortfolioController implements IFinancialAssis
             }
 
             if (backResult.Data) {
-                let dt = new Portfolio().FillByIProjectTaskDataBack(backResult.Data);
+                let dt = new Portfolio().FillByIPortfolioDataBack(backResult.Data);
                 dispatch(CreatePortfolioActionCreator(dt));
             }
         };
@@ -100,7 +100,7 @@ export class FinancialAssistantAppPortfolioController implements IFinancialAssis
             }
 
             if (backResult.Data) {
-                let dt = new Portfolio().FillByIProjectTaskDataBack(backResult.Data);
+                let dt = new Portfolio().FillByIPortfolioDataBack(backResult.Data);
                 dispatch(UpdatePortfolioActionCreator(dt));
             }
         };
@@ -170,7 +170,7 @@ export class FinancialAssistantAppPortfolioController implements IFinancialAssis
             }
 
             if (backResult.Data) {
-                dispatch(SetCurrentPortfolioActionCreator(new Portfolio().FillByIProjectTaskDataBack(backResult.Data)));
+                dispatch(SetCurrentPortfolioActionCreator(new Portfolio().FillByIPortfolioDataBack(backResult.Data)));
             }
         };
     }

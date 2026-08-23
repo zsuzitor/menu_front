@@ -12,10 +12,12 @@ export class StockEvent {
     Type: StockEventEnum;
     Price: number;
     CurrencyId: number;
+    CurrencyName: string;
+    StockName: string;
     constructor() {
     }
 
-    FillByIProjectTaskDataBack(data: IStockEventDataBack): StockEvent {
+    FillByIStockEventDataBack(data: IStockEventDataBack): StockEvent {
         this.Id = data.Id;
         this.Date = data.Date;
         this.StockId = data.StockId;
@@ -24,6 +26,8 @@ export class StockEvent {
         this.Type = data.Type;
         this.Price = data.Price;
         this.CurrencyId = data.CurrencyId;
+        this.StockName = data.StockName;
+        this.CurrencyName = data.CurrencyName;
 
 
         return this;

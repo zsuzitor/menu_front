@@ -8,16 +8,17 @@ export class StockHistory {
     Price: number;
     StockId: number;
     CurrencyId: number | null;
+    CurrencyName: string;
     constructor() {
     }
 
-    FillByIProjectTaskDataBack(data: IStockHistoryDataBack): StockHistory {
+    FillByIStockHistoryDataBack(data: IStockHistoryDataBack): StockHistory {
         this.Id = data.Id;
         this.Date = data.Date;
         this.StockId = data.StockId;
         this.Price = data.Price;
         this.CurrencyId = data.CurrencyId;
-
+        this.CurrencyName = data.CurrencyName;
 
         return this;
     }

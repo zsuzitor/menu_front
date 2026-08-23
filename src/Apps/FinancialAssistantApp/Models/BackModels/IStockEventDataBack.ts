@@ -10,5 +10,7 @@ export interface IStockEventDataBack {
     Type: StockEventEnum;
     Price: number;
     CurrencyId: number;
+    CurrencyName: string;
+    StockName: string;
 
 }

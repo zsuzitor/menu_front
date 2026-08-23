@@ -43,7 +43,7 @@ const PortfolioList = (props: IPortfolioListProps) => {
 
                 const portfolioUrl = new RouteBuilder().PortfolioUrl(x.Id);
 
-                return <div className='one-portfolio-element'  key={x.Id}>
+                return <div className='one-portfolio-element' key={x.Id}>
                     {editPortfolioId == x.Id ? <>
                         <SaveCancelInputText
                             Text={x.Name}
@@ -62,7 +62,12 @@ const PortfolioList = (props: IPortfolioListProps) => {
                     </>}
 
                     <div>
-                        <button onClick={() => props.Delete(x.Id)}>Удалить</button>
+                        <button onClick={() => {
+                            if (confirm('Удалить?')) {
+                                props.Delete(x.Id);
+                            }
+
+                        }}>Удалить</button>
                         {/* <button onClick={() => props.Update(x.Id, newPortfolioName, null)}>Обновить</button> */}
                         <a href={portfolioUrl} onClick={(e) => {
                             e.preventDefault();

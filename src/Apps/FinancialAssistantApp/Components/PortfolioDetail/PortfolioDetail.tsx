@@ -56,17 +56,16 @@ const PortfolioDetail = (props: IPortfolioDetailProps) => {
                 />}></AdditionalWindow> : <></>
         }
         <div>
-            <span>{props.Portfolio.Name}</span>
-            <span>{props.Portfolio.Id}</span>
+            <div className='portfolio-name'>{props.Portfolio.Name} - {props.Portfolio.Id}</div>
         </div>
-        <div>
+        <div className='portfolio-main-buttons-block'>
             <div>
                 <a href={portfolioEventsUrl} onClick={(e) => {
                     e.preventDefault();
                     navigate(portfolioEventsUrl);
                 }}>История</a>
             </div>
-            <div><button onClick={() => setShowNewEventWindow(true)}></button></div>
+            <div><button onClick={() => setShowNewEventWindow(true)}>Добавить событие</button></div>
         </div>
         <div className='portfolio-elements-block'>
             {props.Elements.map(x => {

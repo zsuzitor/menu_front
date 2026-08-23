@@ -76,8 +76,14 @@ const StockList = (props: IStockListProps) => {
 
                 return <div className='one-stock-element' key={x.Id}>
                     <div>{x.Name}</div>
+                    <div>{x.IsGlobal?'Глобальная запись':'Локальная запись'}</div>
                     <div>
-                        <button onClick={() => props.Delete(x.Id)}>Удалить</button>
+                        <button onClick={() => {
+                            if (confirm('Удалить?')) {
+                                props.Delete(x.Id);
+                            }
+
+                        }}>Удалить</button>
                         <a href={stockUrl} onClick={(e) => {
                             e.preventDefault();
                             navigate(stockUrl);

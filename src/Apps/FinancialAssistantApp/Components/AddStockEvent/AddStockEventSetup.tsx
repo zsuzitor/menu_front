@@ -17,6 +17,7 @@ interface IAddStockEventStateToProps {
 interface IAddStockEventDispatchToProps {
     Create: (req: CreateStockEventRequest) => void;
     GetCurrency: () => Promise<ServerResult<IStockDataBack[]>>;
+    FindStocks: (text: string) => Promise<ServerResult<IStockDataBack[]>>;
 }
 
 export interface IAddStockEventProps extends IAddStockEventStateToProps, IAddStockEventOwnProps, IAddStockEventDispatchToProps {
@@ -39,9 +40,15 @@ const mapDispatchToProps = (dispatch: any, ownProps: IAddStockEventOwnProps) => 
         return await window.G_FinancialAssistantAppStockController.GetCurrencyAsync();
     };
 
+    res.FindStocks = async (text: string) => {
+        return await window.G_FinancialAssistantAppStockController.FindAsync(text);
+    };
+
     res.Create = async (req: CreateStockEventRequest) => {
         return await window.G_FinancialAssistantAppStockEventController.CreateAsync(req);
     };
+
+
 
     return res;
 };

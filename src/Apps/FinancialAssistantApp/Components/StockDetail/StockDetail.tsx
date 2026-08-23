@@ -33,7 +33,7 @@ const StockDetail = (props: IStockDetailProps) => {
 
     useEffect(() => {
         props.GetCurrency()
-            .then(br => setStockCurrency(br.Data.map(x => new Stock().FillByIProjectTaskDataBack(x))));
+            .then(br => setStockCurrency(br.Data.map(x => new Stock().FillByIStockDataBack(x))));
 
 
         return () => {
@@ -91,16 +91,16 @@ const StockDetail = (props: IStockDetailProps) => {
 
     return <div className='stock-page'>
         <div>
-            <span>{props.Stock.Code}</span>
-            <span>{props.Stock.Name}</span>
-            <span>{props.Stock.Id}</span>
+            <div className='stock-name'>{props.Stock.Code}-{props.Stock.Name}-{props.Stock.Id}</div>
         </div>
         <div className='stock-block'>
             <div>
                 <span>Добавить запись истории</span>
+                <br />
                 <span>Цена</span>
                 <input type='number' value={newStockHistoryPrice}
                     onChange={(e) => setStockHistoryPrice(+e.target.value)}></input>
+                <br />
                 <span>Дата</span><input
                     // type="datetime-local"
                     type="datetime-local"
@@ -115,6 +115,7 @@ const StockDetail = (props: IStockDetailProps) => {
                         }
 
                     }}></input>
+                <br />
 
                 <SelectWithSearch
                     CancelEvent={() => { }}
@@ -133,6 +134,7 @@ const StockDetail = (props: IStockDetailProps) => {
                     }}
                 ></SelectWithSearch>
 
+                <br />
                 <button onClick={() => {
                     let dt = new StockHistory();
                     dt.CurrencyId = newStockHistoryCurrencyId;
@@ -146,10 +148,9 @@ const StockDetail = (props: IStockDetailProps) => {
             <div className='stock-block-history'>
                 <span>история</span>
                 {props.StockHistory.map(x => {
-                    return <div key={x.Id}>
-                        {x.Id}
-                        {x.Price}
-                        {x.CurrencyId}
+                    return <div key={x.Id} className='one-history-element'>
+                        <div>{x.Date}</div>
+                        <div>{x.Price} {x.CurrencyName}</div>
                     </div>
 
                 })}

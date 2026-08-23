@@ -6,6 +6,7 @@ export interface IStockHistoryDataBack {
     Price: number;
     StockId: number;
     CurrencyId: number | null;
+    CurrencyName: string;
 
 
 }

@@ -19,7 +19,7 @@ export class Stock {
 
 
 
-    FillByIProjectTaskDataBack(data: IStockDataBack): Stock {
+    FillByIStockDataBack(data: IStockDataBack): Stock {
         this.Id = data.Id;
         this.Name = data.Name;
         this.Code = data.Code;

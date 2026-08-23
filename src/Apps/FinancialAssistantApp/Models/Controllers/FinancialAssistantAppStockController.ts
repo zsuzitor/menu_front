@@ -17,6 +17,7 @@ export interface IFinancialAssistantAppStockController {
     UpdateRedux: (req: CreateStockRequest) => (dispatch: any, getState: any) => void;
     DeleteRedux: (id: number) => (dispatch: any, getState: any) => void;
     FindRedux: (text: string) => (dispatch: any, getState: any) => void;
+    FindAsync: (text: string) => Promise<ServerResult<Stock[]>>;
     GetRedux: () => (dispatch: any, getState: any) => void;
     GetCurrencyRedux: () => (dispatch: any, getState: any) => void;
     GetCurrencyAsync: () => Promise<ServerResult<IStockDataBack[]>>;
@@ -55,7 +56,7 @@ export class FinancialAssistantAppStockController implements IFinancialAssistant
             FuncSuccess: (xhr, status, jqXHR) => {
             },
             FuncError: (xhr, status, error) => { },
-            Url: `${G_PathToServer}${FinancialAssistantApiPortfolioUrl}/update-global`
+            Url: `${this.GetControllerApiUrl()}/update-global`
         });
 
         return backResult;
@@ -73,7 +74,7 @@ export class FinancialAssistantAppStockController implements IFinancialAssistant
             }
 
             if (backResult.Data) {
-                let dt = new Stock().FillByIProjectTaskDataBack(backResult.Data);
+                let dt = new Stock().FillByIStockDataBack(backResult.Data);
                 // let dt = backResult.Data.map(x => new Stock().FillByIProjectTaskDataBack(x));
                 dispatch(CreateStockActionCreator(dt));
             }
@@ -112,7 +113,7 @@ export class FinancialAssistantAppStockController implements IFinancialAssistant
             }
 
             if (backResult.Data) {
-                let dt = new Stock().FillByIProjectTaskDataBack(backResult.Data);
+                let dt = new Stock().FillByIStockDataBack(backResult.Data);
                 // let dt = backResult.Data.map(x => new Stock().FillByIProjectTaskDataBack(x));
                 dispatch(UpdateStockActionCreator(dt));
             }
@@ -186,7 +187,7 @@ export class FinancialAssistantAppStockController implements IFinancialAssistant
             }
 
             if (backResult.Data) {
-                let dt = backResult.Data.map(x => new Stock().FillByIProjectTaskDataBack(x));
+                let dt = backResult.Data.map(x => new Stock().FillByIStockDataBack(x));
                 dispatch(GetStockActionCreator(dt));
             }
         };
@@ -219,7 +220,7 @@ export class FinancialAssistantAppStockController implements IFinancialAssistant
             }
 
             if (backResult.Data) {
-                let dt = backResult.Data.map(x => new Stock().FillByIProjectTaskDataBack(x));
+                let dt = backResult.Data.map(x => new Stock().FillByIStockDataBack(x));
                 dispatch(GetStockActionCreator(dt));
             }
         };
@@ -252,7 +253,7 @@ export class FinancialAssistantAppStockController implements IFinancialAssistant
             }
 
             if (backResult.Data) {
-                let dt = backResult.Data.map(x => new Stock().FillByIProjectTaskDataBack(x));
+                let dt = backResult.Data.map(x => new Stock().FillByIStockDataBack(x));
                 dispatch(GetStockActionCreator(dt));
             }
         };
@@ -286,7 +287,7 @@ export class FinancialAssistantAppStockController implements IFinancialAssistant
             }
 
             if (backResult.Data) {
-                let dt = new Stock().FillByIProjectTaskDataBack(backResult.Data);
+                let dt = new Stock().FillByIStockDataBack(backResult.Data);
                 dispatch(LoadCurrentStockActionCreator(dt));
             }
         };
@@ -320,7 +321,7 @@ export class FinancialAssistantAppStockController implements IFinancialAssistant
                 return;
             }
             if (backResult.Data) {
-                let dt = backResult.Data.map(x => new StockHistory().FillByIProjectTaskDataBack(x));
+                let dt = backResult.Data.map(x => new StockHistory().FillByIStockHistoryDataBack(x));
                 dispatch(LoadCurrentStockHistoryActionCreator(dt));
             }
         };
@@ -353,7 +354,7 @@ export class FinancialAssistantAppStockController implements IFinancialAssistant
                 return;
             }
             if (backResult.Data) {
-                let dt = new StockHistory().FillByIProjectTaskDataBack(backResult.Data);
+                let dt = new StockHistory().FillByIStockHistoryDataBack(backResult.Data);
                 dispatch(CreateCurrentStockHistoryActionCreator(dt));
             }
         };

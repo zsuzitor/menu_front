@@ -8,6 +8,7 @@ import { CreateStockEventRequest } from '../../Models/Entity/DTO/CreateStockEven
 import { Helper } from '../../../../Models/BL/Helper';
 import { ControllerHelper } from '../../../../Models/Controllers/ControllerHelper';
 import SelectWithSearch from '../../../../components/Body/SelectWithSearch/SelectWithSearch';
+import { StockEventEnum } from '../../Models/Entity/State/Enum/StockEventEnum';
 
 
 
@@ -20,27 +21,34 @@ const AddStockEvent = (props: IAddStockEventProps) => {
 
 
 
-    const [stockCurrency, setStockCurrency] = useState<Stock[]>([]);
-    const [stockId, setStockId] = useState(0);
-    const [count, setCount] = useState(0);
-    const [price, setPrice] = useState(0);
+    const [countStock, setCountStock] = useState(0);
+    const [eventType, setEventType] = useState(0);//StockEventEnum
+    const [priceStock, setPriceStock] = useState(0);
     const [newStockEventDate, setStockEventDate] = useState<Date>(new Date());
 
-    const [newStockPrice, setStockPrice] = useState(0);
+    // const [newStockPrice, setStockPrice] = useState(0);
 
+    //---
+    const [stockCurrency, setStockCurrency] = useState<Stock[]>([]);
     //нужны что бы отрисовать элеммент в пустом списке - тако кейс есть это норм
     const [stockCurrencyId, setStockCurrencyId] = useState(0);
     const [stockCurrencyName, setStockCurrencyName] = useState('');
     //тк запроса на бэк не делаем а просто на фронте фильтруем
     const [stockCurrencyNameFilter, setStockCurrencyNameFilter] = useState('');
+    //----
 
+    //
+    const [stockId, setStockId] = useState(0);
+    const [stockName, setStockName] = useState('');
+    const [stocks, setStocks] = useState<Stock[]>([]);
+    //
 
 
     const navigate = useNavigate();
 
     useEffect(() => {
         props.GetCurrency()
-            .then(br => setStockCurrency(br.Data.map(x => new Stock().FillByIProjectTaskDataBack(x))));
+            .then(br => setStockCurrency(br.Data.map(x => new Stock().FillByIStockDataBack(x))));
         return () => {
         }
     }, []);
@@ -59,7 +67,11 @@ const AddStockEvent = (props: IAddStockEventProps) => {
         return help.FormatDateToInputWithTime(date);
     }
 
-
+    const setClearDate = (dt: Date) => {
+        let newDt = new Date(dt);
+        newDt.setHours(0, 0, 0, 0);
+        return newDt;
+    }
 
     return <div className='portfolio-page'>
         <div>
@@ -69,6 +81,26 @@ const AddStockEvent = (props: IAddStockEventProps) => {
 
             </div>
             <div>
+                <span>stockId</span>
+                <SelectWithSearch
+                    CancelEvent={() => { }}
+                    SaveEvent={(id) => {
+                        setStockId(id);
+                        setStockName(stocks.find(x => x.Id === id).Name);
+                        setStocks(stocks.filter(x => x.Id === id));
+                        return true;
+                    }}
+                    Selected={{ Id: stockId, Text: stockId > 0 ? `${stockId}-${stockName}` : '' }}
+                    ValuesWithId={stocks.map(x => ({ Id: x.Id, Text: `${x.Id}-${x.Name}` }))}
+                    OnSearchChange={async (text) => {
+                        // setTaskId(-1);
+                        let searchBack = await props.FindStocks(text);
+                        setStocks(searchBack.Data.map(x => new Stock().FillByIStockDataBack(x)));
+                    }}
+                ></SelectWithSearch>
+                <br />
+
+                <span>CurrencyId</span>
                 <SelectWithSearch
                     CancelEvent={() => { }}
                     SaveEvent={(id) => {
@@ -77,7 +109,7 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                         // setStockCurrency(stockCurrency.filter(x => x.Id === id));
                         return true;
                     }}
-                    Selected={{ Id: newStockCurrencyId, Text: newStockCurrencyId > 0 ? `${newStockCurrencyId}-${stockCurrencyName}` : '' }}
+                    Selected={{ Id: stockCurrencyId, Text: stockCurrencyId > 0 ? `${stockCurrencyId}-${stockCurrencyName}` : '' }}
                     ValuesWithId={stockCurrency.filter(x => !stockCurrencyNameFilter || x.Name.indexOf(stockCurrencyNameFilter) >= 0)
                         .map(x => ({ Id: x.Id, Text: `${x.Id}-${x.Name}` }))}
                     OnSearchChange={async (text) => {
@@ -85,20 +117,58 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                         setStockCurrencyNameFilter(text);
                     }}
                 ></SelectWithSearch>
+                <br />
+                <span>Количество</span>
+                <input type='number' value={countStock} step="0.01"
+                    onChange={(e) => setCountStock(+e.target.value)}></input>
+                <br />
+                <span>Тип</span>
+                {/* <input type='number' value={eventType}
+                    onChange={(e) => setEventType(+e.target.value)}></input>
+                <br /> */}
+                <select className="form-control" value={eventType} onChange={(e) => {
+                    setEventType(+e.target.value);
+                }}>
+                    <option value={`${+StockEventEnum.Buy}`}>Покупка</option>
+                    <option value={`${+StockEventEnum.CashReplenishment}`}>Пополнение</option>
+                    <option value={`${+StockEventEnum.Dividends}`}>Дивиденды</option>
+                    <option value={`${+StockEventEnum.Sell}`}>Продажа</option>
+                    <option value={`${+StockEventEnum.WithdrawalCash}`}>Вывод средств</option>
+                </select>
+                <br />
+                <span>Цена</span>
+                <input type='number' value={priceStock} step="0.01"
+                    onChange={(e) => setPriceStock(+e.target.value)}></input>
+                <br />
+                <input
+                    className='new-sprint-input'
+                    type="datetime-local"
+                    value={formatDateToInput(newStockEventDate)}
+                    onChange={(e) => {
+                        if (e.target.value) {
+                            let dt = new Date(e.target.value);
+                            setStockEventDate(setClearDate(dt));
+                        }
+                        else {
+                            setStockEventDate(setClearDate(new Date()));
+                        }
+
+                    }}></input>
 
 
 
 
+                <br />
                 <button onClick={() => {
                     let dt = new CreateStockEventRequest();
                     dt.StockId = stockId;
-                    dt.Count = count;
+                    dt.Count = countStock;
                     dt.CurrencyId = stockCurrencyId;
                     dt.Date = new ControllerHelper().ToZeroDate(newStockEventDate).toISOString();
                     dt.PortfolioId = props.PortfolioId;
-                    dt.Price = price;
-                    dt.Type =;
-                    props.Create();
+                    dt.Price = priceStock;
+                    dt.Type = eventType;
+                    props.Create(dt);
                 }}>Добавить событие</button></div>
         </div>
         <div className='portfolio-elements-block'>

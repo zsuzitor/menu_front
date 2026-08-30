@@ -53,6 +53,7 @@ const PortfolioDetail = (props: IPortfolioDetailProps) => {
                 IsHeightWindow={false}
                 Title='Новое событие'
                 InnerContent={() => <AddStockEvent
+                    EventAdded={() => props.LoadPortfolioElements(props.PortfolioId)}
                 />}></AdditionalWindow> : <></>
         }
         <div>
@@ -67,10 +68,11 @@ const PortfolioDetail = (props: IPortfolioDetailProps) => {
             </div>
             <div><button onClick={() => setShowNewEventWindow(true)}>Добавить событие</button></div>
         </div>
+        <p>Состав портфеля</p>
         <div className='portfolio-elements-block'>
             {props.Elements.map(x => {
                 return <div className='portfolio-element' key={x.Id}>
-                    <div>{x.StockId} - {x.Count}
+                    <div>{x.StockName} - {x.Count}
                     </div>
                 </div>
 

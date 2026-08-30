@@ -22,9 +22,10 @@ const AddStockEvent = (props: IAddStockEventProps) => {
 
 
     const [countStock, setCountStock] = useState(0);
-    const [eventType, setEventType] = useState(0);//StockEventEnum
+    const [eventType, setEventType] = useState(+StockEventEnum.Buy);//StockEventEnum
     const [priceStock, setPriceStock] = useState(0);
     const [newStockEventDate, setStockEventDate] = useState<Date>(new Date());
+    const [stockCurrencyActions, setStockCurrencyActions] = useState(true);
 
     // const [newStockPrice, setStockPrice] = useState(0);
 
@@ -49,6 +50,9 @@ const AddStockEvent = (props: IAddStockEventProps) => {
     useEffect(() => {
         props.GetCurrency()
             .then(br => setStockCurrency(br.Data.map(x => new Stock().FillByIStockDataBack(x))));
+
+
+        props.FindStocks('').then(searchBack => setStocks(searchBack.Data.map(x => new Stock().FillByIStockDataBack(x))));
         return () => {
         }
     }, []);
@@ -62,10 +66,16 @@ const AddStockEvent = (props: IAddStockEventProps) => {
 
 
 
-    function formatDateToInput(date: Date): string {
+    function formatDateTimeToInput(date: Date): string {
         const help = new Helper();
         return help.FormatDateToInputWithTime(date);
     }
+
+
+    // function formatDateToInput(date: Date): string {
+    //     const help = new Helper();
+    //     return help.FormatDateToInput(date);
+    // }
 
     const setClearDate = (dt: Date) => {
         let newDt = new Date(dt);
@@ -117,6 +127,10 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                         setStockCurrencyNameFilter(text);
                     }}
                 ></SelectWithSearch>
+
+                <br />
+
+                <input type="checkbox" defaultChecked={stockCurrencyActions} onChange={() => setStockCurrencyActions(prev => !prev)} />
                 <br />
                 <span>Количество</span>
                 <input type='number' value={countStock} step="0.01"
@@ -127,6 +141,7 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                     onChange={(e) => setEventType(+e.target.value)}></input>
                 <br /> */}
                 <select className="form-control" value={eventType} onChange={(e) => {
+
                     setEventType(+e.target.value);
                 }}>
                     <option value={`${+StockEventEnum.Buy}`}>Покупка</option>
@@ -141,9 +156,9 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                     onChange={(e) => setPriceStock(+e.target.value)}></input>
                 <br />
                 <input
-                    className='new-sprint-input'
+                    className=''
                     type="datetime-local"
-                    value={formatDateToInput(newStockEventDate)}
+                    value={formatDateTimeToInput(newStockEventDate)}
                     onChange={(e) => {
                         if (e.target.value) {
                             let dt = new Date(e.target.value);
@@ -168,7 +183,8 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                     dt.PortfolioId = props.PortfolioId;
                     dt.Price = priceStock;
                     dt.Type = eventType;
-                    props.Create(dt);
+                    dt.CurrencyActions = stockCurrencyActions;
+                    props.Create(dt).then(x => props.EventAdded());
                 }}>Добавить событие</button></div>
         </div>
         <div className='portfolio-elements-block'>

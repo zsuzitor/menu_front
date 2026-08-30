@@ -10,7 +10,7 @@ import { LoadStockEventForProjectActionCreator } from "../Actions/StockEventActi
 
 
 export interface IFinancialAssistantAppStockEventController {
-    CreateAsync: (req: CreateStockEventRequest) => void;
+    CreateAsync: (req: CreateStockEventRequest) => Promise<ServerResult<IStockEventDataBack>>;
     GetEventsRedux: (portfolioId: number) => void;
 
 }
@@ -42,10 +42,11 @@ export class FinancialAssistantAppStockEventController implements IFinancialAssi
         let data = {
             "Date": req.Date,
             "Count": req.Count,
-            "Type": req.Type,
+            "Type": +req.Type,
             "StockId": req.StockId,
             "Price": req.Price,
             "CurrencyId": req.CurrencyId,
+            "CurrencyActions": req.CurrencyActions,
             "PortfolioId": req.PortfolioId,
         };
         const backResult = await G_AjaxHelper.GoAjaxRequest<IStockEventDataBack>({

@@ -12,6 +12,7 @@ export class CreateStockEventRequest {
     Type: StockEventEnum;
     Price: number;
     CurrencyId: number;
+    CurrencyActions: boolean;
 
     constructor() {
     }

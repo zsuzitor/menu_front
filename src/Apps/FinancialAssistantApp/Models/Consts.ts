@@ -7,8 +7,8 @@ export const FinancialAssistantAppPreloader: string = 'financial_assistant_prelo
 export const FinancialAssistantApiPrefUrl: string = 'api';
 export const FinancialAssistantAppUrl: string = 'financialassistant';
 export const FinancialAssistantAppPortfolioControllerUrl: string = 'portfolio';
-export const FinancialAssistantAppEventControllerUrl: string = 'stock-event';
-export const FinancialAssistantAppStockElementControllerUrl: string = 'stockelement';
+export const FinancialAssistantAppEventControllerUrl: string = 'stockEvent';
+export const FinancialAssistantAppStockElementControllerUrl: string = 'stockElement';
 export const FinancialAssistantAppStockControllerUrl: string = 'stock';
 
 

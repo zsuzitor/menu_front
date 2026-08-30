@@ -3,10 +3,12 @@ import { AppState } from "../../../../Models/Entity/State/AppState";
 import { ServerResult } from "../../../../Models/AjaxLogic";
 import { IStockDataBack } from "../../Models/BackModels/IStockDataBack";
 import { CreateStockEventRequest } from "../../Models/Entity/DTO/CreateStockEventRequest";
+import { IStockEventDataBack } from "../../Models/BackModels/IStockEventDataBack";
 
 
 
 interface IAddStockEventOwnProps {
+    EventAdded:() => void;
 }
 
 
@@ -15,7 +17,7 @@ interface IAddStockEventStateToProps {
 }
 
 interface IAddStockEventDispatchToProps {
-    Create: (req: CreateStockEventRequest) => void;
+    Create: (req: CreateStockEventRequest) => Promise<ServerResult<IStockEventDataBack>>;
     GetCurrency: () => Promise<ServerResult<IStockDataBack[]>>;
     FindStocks: (text: string) => Promise<ServerResult<IStockDataBack[]>>;
 }

@@ -5,4 +5,5 @@ export interface IPortfolioDataBack {
     Name: string;
     UserId: number;
     CurrencyId?: number;
+    CurrencyName: string;
 }

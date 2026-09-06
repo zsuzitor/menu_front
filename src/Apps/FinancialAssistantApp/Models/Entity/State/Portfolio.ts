@@ -5,18 +5,19 @@ export class Portfolio {
     Name: string;
     UserId: number;
     CurrencyId?: number;
+    CurrencyName: string;
 
     constructor() {
     }
 
-    
+
 
     FillByIPortfolioDataBack(data: IPortfolioDataBack): Portfolio {
         this.Id = data.Id;
         this.Name = data.Name;
         this.UserId = data.UserId;
         this.CurrencyId = data.CurrencyId;
-
+        this.CurrencyName = data.CurrencyName;
         return this;
     }
 }

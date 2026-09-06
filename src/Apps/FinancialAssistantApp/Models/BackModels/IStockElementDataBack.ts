@@ -6,4 +6,8 @@ export interface IStockElementDataBack {
     StockName: string;
     Count: number;
     PortfolioId: number;
+    Price: number;
+    Sum: number;
+    CurrencyId: number | null;
+    CurrencyName: string;
 }

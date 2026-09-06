@@ -11,6 +11,7 @@ export interface IFinancialAssistantAppPortfolioController {
     GetForUserRedux: () => (dispatch: any, getState: any) => void;
     CreateRedux: (name: string) => (dispatch: any, getState: any) => void;
     UpdateRedux: (id: number, name: string, currencyId: number | null) => (dispatch: any, getState: any) => void;
+    UpdateAsync: (id: number, name: string, currencyId: number | null) => Promise<ServerResult<IPortfolioDataBack>>;
     DeleteRedux: (id: number) => (dispatch: any, getState: any) => void;
     GetDetailRedux: (id: number) => (dispatch: any, getState: any) => void;
 

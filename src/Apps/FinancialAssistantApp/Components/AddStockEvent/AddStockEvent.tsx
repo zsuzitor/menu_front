@@ -129,6 +129,8 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                 ></SelectWithSearch>
 
                 <br />
+                <span>Списать\пополнить сумму в CurrencyId</span>
+                <br />
 
                 <input type="checkbox" defaultChecked={stockCurrencyActions} onChange={() => setStockCurrencyActions(prev => !prev)} />
                 <br />

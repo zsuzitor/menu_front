@@ -20,9 +20,9 @@ const StockDetail = (props: IStockDetailProps) => {
 
     const [newStockHistoryDate, setStockHistoryDate] = useState<Date>(new Date());
     const [newStockHistoryPrice, setStockHistoryPrice] = useState(0);
-    const [stockCurrency, setStockCurrency] = useState<Stock[]>([]);
 
-    //нужны что бы отрисовать элеммент в пустом списке - тако кейс есть это норм
+    const [stockCurrency, setStockCurrency] = useState<Stock[]>([]);
+    //нужны что бы отрисовать элеммент в пустом списке - такой кейс есть это норм
     const [newStockHistoryCurrencyId, setStockHistoryCurrencyId] = useState(0);
     const [stockCurrencyName, setStockCurrencyName] = useState('');
     //тк запроса на бэк не делаем а просто на фронте фильтруем
@@ -117,6 +117,7 @@ const StockDetail = (props: IStockDetailProps) => {
                     }}></input>
                 <br />
 
+                <span>Валюта</span>
                 <SelectWithSearch
                     CancelEvent={() => { }}
                     SaveEvent={(id) => {

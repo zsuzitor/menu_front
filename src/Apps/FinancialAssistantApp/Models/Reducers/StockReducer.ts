@@ -5,8 +5,6 @@ import { AppState } from "../../../../Models/Entity/State/AppState";
 
 import cloneDeep from 'lodash/cloneDeep';
 import { Helper } from "../../../../Models/BL/Helper";
-import { CreatePortfolioActionName, DeletePortfolioActionName, GetPortfolioActionName, SetCurrentPortfolioIdActionName, UpdatePortfolioActionName } from "../Actions/PortfolioActions";
-import { Portfolio } from "../Entity/State/Portfolio";
 import { CreateCurrentStockHistoryActionName, CreateStockActionName, DeleteStockActionName, GetStockActionName, LoadCurrentStockActionName, LoadCurrentStockHistoryActionName, SetCurrentStockIdActionName, UpdateStockActionName } from "../Actions/StockActions";
 import { Stock } from "../Entity/State/Stock";
 import { StockHistory } from "../Entity/State/StockHistory";

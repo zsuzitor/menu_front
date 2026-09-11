@@ -47,6 +47,9 @@ const PortfolioEvents = (props: IPortfolioEventsProps) => {
                     case StockEventEnum.WithdrawalCash:
                         typeStr = 'Вывод средств';
                         break;
+                    case StockEventEnum.CountChange:
+                        typeStr = 'Изменение количества';
+                        break;
                 }
 
 

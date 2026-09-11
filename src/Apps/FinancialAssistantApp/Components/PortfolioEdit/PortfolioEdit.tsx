@@ -4,7 +4,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
 import SelectWithSearch from '../../../../components/Body/SelectWithSearch/SelectWithSearch';
-import { Stock } from '../../Models/Entity/State/Stock';
 
 
 
@@ -16,7 +15,7 @@ require('./PortfolioEdit.css');
 const PortfolioEdit = (props: IPortfolioEditProps) => {
 
     //нужны что бы отрисовать элеммент в пустом списке - такой кейс есть это норм
-    const [portfolioCurrencyId, setPortfolioCurrencyId] = useState(-1);
+    const [portfolioCurrencyId, setPortfolioCurrencyId] = useState(-2);
     const [portfolioCurrencyName, setPortfolioCurrencyName] = useState('');
     //тк запроса на бэк не делаем а просто на фронте фильтруем
     const [portfolioCurrencyNameFilter, setPortfolioCurrencyNameFilter] = useState('');
@@ -59,7 +58,7 @@ const PortfolioEdit = (props: IPortfolioEditProps) => {
 
     let currencyForSearch = props.Currency.filter(x => !portfolioCurrencyNameFilter || x.Name.indexOf(portfolioCurrencyNameFilter) >= 0)
         .map(x => ({ Id: x.Id, Text: `${x.Id}-${x.Name}` }));
-    currencyForSearch = [{ Id: -1, Text: 'Не выбрано' }, ...currencyForSearch];
+    currencyForSearch = [{ Id: -2, Text: 'Не выбрано' }, ...currencyForSearch];
     return <div className='portfolio-edit-page'>
         <span>Название</span>
         <br />
@@ -79,7 +78,7 @@ const PortfolioEdit = (props: IPortfolioEditProps) => {
                 // setStockCurrency(stockCurrency.filter(x => x.Id === id));
                 return true;
             }}
-            Selected={{ Id: portfolioCurrencyId, Text: portfolioCurrencyId > 0 ? `${portfolioCurrencyId}-${portfolioCurrencyName}` : '' }}
+            Selected={{ Id: portfolioCurrencyId, Text: `${portfolioCurrencyId}-${portfolioCurrencyName}` }}
             ValuesWithId={currencyForSearch}
             OnSearchChange={async (text) => {
                 // setTaskId(-1);

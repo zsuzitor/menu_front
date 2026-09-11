@@ -83,6 +83,35 @@ const AddStockEvent = (props: IAddStockEventProps) => {
         return newDt;
     }
 
+
+    const showStockBlock = (type: StockEventEnum) => {
+        return (type == StockEventEnum.Buy
+            || type == StockEventEnum.Sell
+            || type == StockEventEnum.Dividends
+            || type == StockEventEnum.CountChange
+        );
+    }
+
+
+    const showCountBlock = (type: StockEventEnum) => {
+        return (type == StockEventEnum.Buy
+            || type == StockEventEnum.Sell
+            || type == StockEventEnum.CountChange
+        );
+    }
+
+
+
+    const showCurrencyBlock = (type: StockEventEnum) => {
+        return (type == StockEventEnum.CashReplenishment
+            || type == StockEventEnum.WithdrawalCash
+            || type == StockEventEnum.Dividends
+            || type == StockEventEnum.Buy
+            || type == StockEventEnum.Sell
+        );
+    }
+
+
     return <div className='portfolio-page'>
         <div>
         </div>
@@ -91,72 +120,125 @@ const AddStockEvent = (props: IAddStockEventProps) => {
 
             </div>
             <div>
-                <span>stockId</span>
-                <SelectWithSearch
-                    CancelEvent={() => { }}
-                    SaveEvent={(id) => {
-                        setStockId(id);
-                        setStockName(stocks.find(x => x.Id === id).Name);
-                        setStocks(stocks.filter(x => x.Id === id));
-                        return true;
-                    }}
-                    Selected={{ Id: stockId, Text: stockId > 0 ? `${stockId}-${stockName}` : '' }}
-                    ValuesWithId={stocks.map(x => ({ Id: x.Id, Text: `${x.Id}-${x.Name}` }))}
-                    OnSearchChange={async (text) => {
-                        // setTaskId(-1);
-                        let searchBack = await props.FindStocks(text);
-                        setStocks(searchBack.Data.map(x => new Stock().FillByIStockDataBack(x)));
-                    }}
-                ></SelectWithSearch>
-                <br />
-
-                <span>CurrencyId</span>
-                <SelectWithSearch
-                    CancelEvent={() => { }}
-                    SaveEvent={(id) => {
-                        setStockCurrencyId(id);
-                        setStockCurrencyName(stockCurrency.find(x => x.Id === id).Name);
-                        // setStockCurrency(stockCurrency.filter(x => x.Id === id));
-                        return true;
-                    }}
-                    Selected={{ Id: stockCurrencyId, Text: stockCurrencyId > 0 ? `${stockCurrencyId}-${stockCurrencyName}` : '' }}
-                    ValuesWithId={stockCurrency.filter(x => !stockCurrencyNameFilter || x.Name.indexOf(stockCurrencyNameFilter) >= 0)
-                        .map(x => ({ Id: x.Id, Text: `${x.Id}-${x.Name}` }))}
-                    OnSearchChange={async (text) => {
-                        // setTaskId(-1);
-                        setStockCurrencyNameFilter(text);
-                    }}
-                ></SelectWithSearch>
-
-                <br />
-                <span>Списать\пополнить сумму в CurrencyId</span>
-                <br />
-
-                <input type="checkbox" defaultChecked={stockCurrencyActions} onChange={() => setStockCurrencyActions(prev => !prev)} />
-                <br />
-                <span>Количество</span>
-                <input type='number' value={countStock} step="0.01"
-                    onChange={(e) => setCountStock(+e.target.value)}></input>
-                <br />
                 <span>Тип</span>
                 {/* <input type='number' value={eventType}
                     onChange={(e) => setEventType(+e.target.value)}></input>
                 <br /> */}
                 <select className="form-control" value={eventType} onChange={(e) => {
+                    const newVal = +e.target.value;
+                    if (!showStockBlock(newVal)) {
+                        setStockId(0);
+                        setStockName('');
+                    }
 
-                    setEventType(+e.target.value);
+                    if (!showCountBlock(newVal)) {
+                        setCountStock(0);
+                    }
+
+                    if (!showCurrencyBlock(newVal)) {
+                        setStockCurrencyId(0);
+                        setStockCurrencyName('');
+                        setStockCurrencyNameFilter('');
+                        setStockCurrencyActions(true);
+                        setPriceStock(0);
+                    }
+
+                    setEventType(newVal);
                 }}>
                     <option value={`${+StockEventEnum.Buy}`}>Покупка</option>
                     <option value={`${+StockEventEnum.CashReplenishment}`}>Пополнение</option>
                     <option value={`${+StockEventEnum.Dividends}`}>Дивиденды</option>
                     <option value={`${+StockEventEnum.Sell}`}>Продажа</option>
                     <option value={`${+StockEventEnum.WithdrawalCash}`}>Вывод средств</option>
+                    <option value={`${+StockEventEnum.CountChange}`}>Изменение количества</option>
                 </select>
                 <br />
-                <span>Цена</span>
-                <input type='number' value={priceStock} step="0.01"
-                    onChange={(e) => setPriceStock(+e.target.value)}></input>
+                {showStockBlock(eventType) ? <>
+                    <span>stockId</span>
+                    <SelectWithSearch
+                        CancelEvent={() => { }}
+                        SaveEvent={(id) => {
+                            setStockId(id);
+                            setStockName(stocks.find(x => x.Id === id).Name);
+                            setStocks(stocks.filter(x => x.Id === id));
+                            return true;
+                        }}
+                        Selected={{ Id: stockId, Text: stockId > 0 ? `${stockId}-${stockName}` : '' }}
+                        ValuesWithId={stocks.map(x => ({ Id: x.Id, Text: `${x.Id}-${x.Name}` }))}
+                        OnSearchChange={async (text) => {
+                            // setTaskId(-1);
+                            let searchBack = await props.FindStocks(text);
+                            setStocks(searchBack.Data.map(x => new Stock().FillByIStockDataBack(x)));
+                        }}
+                    ></SelectWithSearch>
+
+                    <br />
+                    <span>Количество</span>
+                    <input type='number' value={countStock} step="0.01"
+                        onChange={(e) => setCountStock(+e.target.value)}></input>
+
+
+                    <br />
+
+                </> : <></>}
+
+
+                {showCountBlock(eventType) ? <>
+                    <span>Количество</span>
+                    <input type='number' value={countStock} step="0.01"
+                        onChange={(e) => setCountStock(+e.target.value)}></input>
+
+
+                    <br />
+
+                </> : <></>}
+
+
+
+
+
+
+
+                {showCurrencyBlock(eventType) ? <>
+                    <span>CurrencyId</span>
+                    <SelectWithSearch
+                        CancelEvent={() => { }}
+                        SaveEvent={(id) => {
+                            setStockCurrencyId(id);
+                            setStockCurrencyName(stockCurrency.find(x => x.Id === id).Name);
+                            // setStockCurrency(stockCurrency.filter(x => x.Id === id));
+                            return true;
+                        }}
+                        Selected={{ Id: stockCurrencyId, Text: stockCurrencyId > 0 ? `${stockCurrencyId}-${stockCurrencyName}` : '' }}
+                        ValuesWithId={stockCurrency.filter(x => !stockCurrencyNameFilter || x.Name.indexOf(stockCurrencyNameFilter) >= 0)
+                            .map(x => ({ Id: x.Id, Text: `${x.Id}-${x.Name}` }))}
+                        OnSearchChange={async (text) => {
+                            // setTaskId(-1);
+                            setStockCurrencyNameFilter(text);
+                        }}
+                    ></SelectWithSearch>
+
+                    <br />
+
+
+                    <span>Списать\пополнить сумму в CurrencyId</span>
+                    <br />
+
+                    <input type="checkbox" defaultChecked={stockCurrencyActions}
+                        onChange={() => setStockCurrencyActions(prev => !prev)} />
+
+                    <br />
+                    <span>Цена</span>
+                    <input type='number' value={priceStock} step="0.01"
+                        onChange={(e) => setPriceStock(+e.target.value)}></input>
+
+
+
+                </> : <></>}
+
                 <br />
+
+
                 <input
                     className=''
                     type="datetime-local"

@@ -61,6 +61,7 @@ const PortfolioDetail = (props: IPortfolioDetailProps) => {
     }
     const portfolioEventsUrl = new RouteBuilder().PortfolioHistoryUrl(props.PortfolioId);
 
+
     return <div className='portfolio-page'>
         {
             showNewEventWindow ? <AdditionalWindow CloseWindow={() => setShowNewEventWindow(false)}
@@ -100,10 +101,17 @@ const PortfolioDetail = (props: IPortfolioDetailProps) => {
         <p>Состав портфеля</p>
         <div className='portfolio-elements-block'>
             {props.Elements.map(x => {
+
+                const elementUrl = new RouteBuilder().PortfolioStockDetailUrl(props.PortfolioId, x.StockId);
+
                 return <div className='portfolio-element' key={x.Id}>
                     <div>
                         <div>
-                            {x.StockName}
+                            <a href={elementUrl} onClick={(e) => {
+                                e.preventDefault();
+                                navigate(elementUrl);
+                            }}>{x.StockName}</a>
+                            
                         </div>
                         <div>
                             {x.Count} шт. по текущей цене {x.Price} {x.CurrencyName}, всего {x.Sum} {x.CurrencyName}

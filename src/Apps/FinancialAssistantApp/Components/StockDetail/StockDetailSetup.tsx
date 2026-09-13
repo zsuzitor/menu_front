@@ -6,6 +6,7 @@ import { GetStockActionCreator, LoadCurrentStockActionCreator, LoadCurrentStockH
 import { StockHistory } from "../../Models/Entity/State/StockHistory";
 import { ServerResult } from "../../../../Models/AjaxLogic";
 import { IStockDataBack } from "../../Models/BackModels/IStockDataBack";
+import { IStockEventDataBack } from "../../Models/BackModels/IStockEventDataBack";
 
 
 
@@ -17,6 +18,7 @@ interface IStockDetailStateToProps {
     Stock?: Stock | null;
     StockId: number;
     StockHistory: StockHistory[];
+    PortfolioId: number | null;
 }
 
 interface IStockDetailDispatchToProps {
@@ -29,6 +31,7 @@ interface IStockDetailDispatchToProps {
     CreateHistory: (req: StockHistory) => void;
     ClearCurrentHistory: () => void;
     GetCurrency: () => Promise<ServerResult<IStockDataBack[]>>;
+    GetStockEvents: (portfolioId: number, stockId: number) => Promise<ServerResult<IStockEventDataBack[]>>;
 }
 
 export interface IStockDetailProps extends IStockDetailStateToProps, IStockDetailOwnProps, IStockDetailDispatchToProps {
@@ -40,6 +43,7 @@ const mapStateToProps = (state: AppState, ownProps: IStockDetailOwnProps) => {
     res.Stock = state.FinancialAssistantApp.CurrentStock;
     res.StockId = state.FinancialAssistantApp.CurrentStockId;
     res.StockHistory = state.FinancialAssistantApp.CurrentStockHistory;
+    res.PortfolioId = state.FinancialAssistantApp.CurrentPortfolioId;
     return res;
 }
 
@@ -76,6 +80,9 @@ const mapDispatchToProps = (dispatch: any, ownProps: IStockDetailOwnProps) => {
 
     res.GetCurrency = async () => {
         return await window.G_FinancialAssistantAppStockController.GetCurrencyAsync();
+    };
+    res.GetStockEvents = async (portfolioId: number, stockId: number) => {
+        return await window.G_FinancialAssistantAppStockEventController.GetEventsForStockAsync(portfolioId, stockId);
     };
 
 

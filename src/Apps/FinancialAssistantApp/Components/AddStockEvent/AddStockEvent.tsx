@@ -8,7 +8,7 @@ import { CreateStockEventRequest } from '../../Models/Entity/DTO/CreateStockEven
 import { Helper } from '../../../../Models/BL/Helper';
 import { ControllerHelper } from '../../../../Models/Controllers/ControllerHelper';
 import SelectWithSearch from '../../../../components/Body/SelectWithSearch/SelectWithSearch';
-import { StockEventEnum } from '../../Models/Entity/State/Enum/StockEventEnum';
+import { StockEventEnum, StockEventEnumToString } from '../../Models/Entity/State/Enum/StockEventEnum';
 
 
 
@@ -145,12 +145,13 @@ const AddStockEvent = (props: IAddStockEventProps) => {
 
                     setEventType(newVal);
                 }}>
-                    <option value={`${+StockEventEnum.Buy}`}>Покупка</option>
-                    <option value={`${+StockEventEnum.CashReplenishment}`}>Пополнение</option>
-                    <option value={`${+StockEventEnum.Dividends}`}>Дивиденды</option>
-                    <option value={`${+StockEventEnum.Sell}`}>Продажа</option>
-                    <option value={`${+StockEventEnum.WithdrawalCash}`}>Вывод средств</option>
-                    <option value={`${+StockEventEnum.CountChange}`}>Изменение количества</option>
+                    
+                    <option value={`${+StockEventEnum.Buy}`}>{new StockEventEnumToString().ToString(StockEventEnum.Buy)}</option>
+                    <option value={`${+StockEventEnum.CashReplenishment}`}>{new StockEventEnumToString().ToString(StockEventEnum.CashReplenishment)}</option>
+                    <option value={`${+StockEventEnum.Dividends}`}>{new StockEventEnumToString().ToString(StockEventEnum.Dividends)}</option>
+                    <option value={`${+StockEventEnum.Sell}`}>{new StockEventEnumToString().ToString(StockEventEnum.Sell)}</option>
+                    <option value={`${+StockEventEnum.WithdrawalCash}`}>{new StockEventEnumToString().ToString(StockEventEnum.WithdrawalCash)}</option>
+                    <option value={`${+StockEventEnum.CountChange}`}>{new StockEventEnumToString().ToString(StockEventEnum.CountChange)}</option>
                 </select>
                 <br />
                 {showStockBlock(eventType) ? <>
@@ -171,13 +172,6 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                             setStocks(searchBack.Data.map(x => new Stock().FillByIStockDataBack(x)));
                         }}
                     ></SelectWithSearch>
-
-                    <br />
-                    <span>Количество</span>
-                    <input type='number' value={countStock} step="0.01"
-                        onChange={(e) => setCountStock(+e.target.value)}></input>
-
-
                     <br />
 
                 </> : <></>}

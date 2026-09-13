@@ -7,6 +7,10 @@ import { StockHistory } from '../../Models/Entity/State/StockHistory';
 import { ControllerHelper } from '../../../../Models/Controllers/ControllerHelper';
 import SelectWithSearch from '../../../../components/Body/SelectWithSearch/SelectWithSearch';
 import { Stock } from '../../Models/Entity/State/Stock';
+import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
+import AddStockEvent from '../AddStockEvent/AddStockEvent';
+import { StockEvent } from '../../Models/Entity/State/StockEvent';
+import { StockEventEnumToString } from '../../Models/Entity/State/Enum/StockEventEnum';
 
 
 
@@ -29,6 +33,12 @@ const StockDetail = (props: IStockDetailProps) => {
     const [stockCurrencyNameFilter, setStockCurrencyNameFilter] = useState('');
 
 
+    const [showNewEventWindow, setShowNewEventWindow] = useState(false);
+
+    const [events, setEvents] = useState<StockEvent[]>([]);
+
+
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -41,6 +51,7 @@ const StockDetail = (props: IStockDetailProps) => {
             props.SetCurrentStockId(-1);
             props.ClearCurrentStock();
             props.ClearCurrentHistory();
+            setEvents([]);
         }
     }, []);
 
@@ -52,6 +63,17 @@ const StockDetail = (props: IStockDetailProps) => {
         }
 
     }, [props.StockId]);
+
+    useEffect(() => {
+        if (props.StockId > 0 && props.PortfolioId && props.PortfolioId > 0) {
+            props.GetStockEvents(props.PortfolioId, props.StockId).then(x => {
+                if (x.Data) {
+                    setEvents(x.Data.map(d => new StockEvent().FillByIStockEventDataBack(d)));
+                }
+            });
+        }
+
+    }, [props.StockId, props.PortfolioId]);
 
     // const matchStock = window.location.href.match(/stock-(\d+)/);//FinancialAssistantAppStockRoute
     // if (matchStock) {
@@ -66,7 +88,7 @@ const StockDetail = (props: IStockDetailProps) => {
     //     }
     // }
 
-    const { stockId } = useParams();
+    const { stockId } = useParams();//, portfolioId 
     useEffect(() => {
         if (stockId) {
             const idInt = parseInt(stockId, 10);
@@ -90,11 +112,20 @@ const StockDetail = (props: IStockDetailProps) => {
     }
 
     return <div className='stock-page'>
+        {
+            showNewEventWindow ? <AdditionalWindow CloseWindow={() => setShowNewEventWindow(false)}
+                IsHeightWindow={false}
+                Title='Новое событие'
+                InnerContent={() => <AddStockEvent
+                    EventAdded={() => props.LoadPortfolioElements(props.PortfolioId)}
+                />}></AdditionalWindow> : <></>
+        }
+
         <div>
             <div className='stock-name'>{props.Stock.Code}-{props.Stock.Name}-{props.Stock.Id}</div>
         </div>
         <div className='stock-block'>
-            <div>
+            <div className='stock-block-new'>
                 <span>Добавить запись истории</span>
                 <br />
                 <span>Цена</span>
@@ -146,8 +177,24 @@ const StockDetail = (props: IStockDetailProps) => {
                 }}>Создать запись истории</button>
             </div>
 
+            {props.PortfolioId ? <>
+                <div><button onClick={() => setShowNewEventWindow(true)}>Добавить событие</button></div>
+
+                <div className='stock-block-events'>
+                    <span>События</span>
+                    {events.map(x => {
+                        return <div key={x.Id} className='one-event-element'>
+                            <div>{x.Date}</div>
+                            <div>{new StockEventEnumToString().ToString(x.Type)} {x.Count} штук, по цене {x.Price} {x.CurrencyName}</div>
+                        </div>
+
+                    })}
+                </div>
+            </> : <></>}
+
+
             <div className='stock-block-history'>
-                <span>история</span>
+                <span>История изменения цены</span>
                 {props.StockHistory.map(x => {
                     return <div key={x.Id} className='one-history-element'>
                         <div>{x.Date}</div>

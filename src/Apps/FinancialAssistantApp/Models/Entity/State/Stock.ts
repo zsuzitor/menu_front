@@ -1,5 +1,5 @@
 import { IStockDataBack } from "../../BackModels/IStockDataBack";
-import { StockType } from "./Enum/StockType";
+import { StockTypeEnum } from "./Enum/StockType";
 
 export class Stock {
     Id: number;
@@ -7,7 +7,7 @@ export class Stock {
     Code: string;
     ActualizationTime: string | null;
     LastPrice: number | null;
-    Type: StockType;
+    Type: StockTypeEnum;
     IsGlobal: boolean;
     PortfolioId: number | null;
     CurrencyId: number | null;

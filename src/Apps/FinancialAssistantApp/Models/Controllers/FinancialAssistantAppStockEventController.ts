@@ -12,6 +12,7 @@ import { LoadStockEventForProjectActionCreator } from "../Actions/StockEventActi
 export interface IFinancialAssistantAppStockEventController {
     CreateAsync: (req: CreateStockEventRequest) => Promise<ServerResult<IStockEventDataBack>>;
     GetEventsRedux: (portfolioId: number) => void;
+    GetEventsForStockAsync: (portfolioId: number, stockId: number) => Promise<ServerResult<IStockEventDataBack[]>>;
 
 }
 
@@ -87,18 +88,32 @@ export class FinancialAssistantAppStockEventController implements IFinancialAssi
         };
         const backResult = await G_AjaxHelper.GoAjaxRequest<IStockEventDataBack[]>({
             Data: data,
-            Type: ControllerHelper.PutHttp,
+            Type: ControllerHelper.GetHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${FinancialAssistantApiStockEventUrl}/get-events-for-portfolio`,
-            ContentType: 'body'
         });
 
         return backResult;
     }
 
+    GetEventsForStockAsync = async (portfolioId: number, stockId: number): Promise<ServerResult<IStockEventDataBack[]>> => {
+        let data = {
+            "PortfolioId": portfolioId,
+            "StockId": stockId,
+        };
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IStockEventDataBack[]>({
+            Data: data,
+            Type: ControllerHelper.GetHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: `${G_PathToServer}${FinancialAssistantApiStockEventUrl}/get-events-for-stock`,
+        });
 
+        return backResult;
+    }
 
 
 

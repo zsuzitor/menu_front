@@ -1,4 +1,4 @@
-import { StockType } from "../Entity/State/Enum/StockType";
+import { StockTypeEnum } from "../Entity/State/Enum/StockType";
 
 
 export interface IStockDataBack {
@@ -7,7 +7,7 @@ export interface IStockDataBack {
     Code: string;
     ActualizationTime: string | null;
     LastPrice: number | null;
-    Type: StockType;
+    Type: StockTypeEnum;
     IsGlobal: boolean;
     PortfolioId: number | null;
     CurrencyId: number | null;

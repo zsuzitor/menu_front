@@ -8,6 +8,9 @@ export default class RouteBuilder {
     PortfolioUrl(portfolioId: number): string {
         return `/${FinancialAssistantAppRoute}/${FinancialAssistantAppPortfolioRoute}${portfolioId}`;
     }
+    PortfolioStockDetailUrl(portfolioId: number, stockId: number): string {
+        return `/${FinancialAssistantAppRoute}/${FinancialAssistantAppPortfolioRoute}${portfolioId}/${FinancialAssistantAppStockRoute}${stockId}`;
+    }
     PortfolioHistoryUrl(portfolioId: number): string {
         return `/${FinancialAssistantAppRoute}/${FinancialAssistantAppPortfolioRoute}${portfolioId}/${FinancialAssistantAppPortfolioEventsRoute}`;
     }

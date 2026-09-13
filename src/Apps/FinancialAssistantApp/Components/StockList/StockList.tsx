@@ -5,7 +5,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import SaveCancelInputText from '../../../../components/Body/SaveCancelInput/SaveCancelInputText';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
 import { CreateStockRequest } from '../../Models/Entity/DTO/CreateStockRequest';
-import { StockType } from '../../Models/Entity/State/Enum/StockType';
+import { StockTypeEnum, StockTypeEnumToString } from '../../Models/Entity/State/Enum/StockTypeEnum';
 
 
 
@@ -52,11 +52,11 @@ const StockList = (props: IStockListProps) => {
             <select className="form-control" value={newStockType} onChange={(e) => {
                 setNewStockType(+e.target.value);
             }}>
-                <option value={`${+StockType.InvestmentFund}`}>Фонд</option>
-                <option value={`${+StockType.InvestmentStock}`}>Акция</option>
-                <option value={`${+StockType.InvestmentBond}`}>Облигация</option>
-                <option value={`${+StockType.Other}`}>Другой</option>
-                <option value={`${+StockType.Currency}`}>Валюта</option>
+                <option value={`${+StockTypeEnum.InvestmentFund}`}>{new StockTypeEnumToString().ToString(StockTypeEnum.InvestmentFund)}</option>
+                <option value={`${+StockTypeEnum.InvestmentStock}`}>{new StockTypeEnumToString().ToString(StockTypeEnum.InvestmentStock)}</option>
+                <option value={`${+StockTypeEnum.InvestmentBond}`}>{new StockTypeEnumToString().ToString(StockTypeEnum.InvestmentBond)}</option>
+                <option value={`${+StockTypeEnum.Other}`}>{new StockTypeEnumToString().ToString(StockTypeEnum.Other)}</option>
+                <option value={`${+StockTypeEnum.Currency}`}>{new StockTypeEnumToString().ToString(StockTypeEnum.Currency)}</option>
             </select>
             <span>Глобальная</span>
             <input type="checkbox" defaultChecked={newStockIsGlobal} onChange={() => setNewStockIsGlobal(prev => !prev)} />

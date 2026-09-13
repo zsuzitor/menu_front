@@ -1,1 +1,0 @@
-export enum StockType { InvestmentFund = 1, InvestmentStock, InvestmentBond, Other, Currency };

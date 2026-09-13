@@ -1,4 +1,4 @@
-import { StockType } from "../State/Enum/StockType";
+import { StockTypeEnum } from "../State/Enum/StockType";
 
 
 
@@ -6,7 +6,7 @@ export class CreateStockRequest {
     Id: number;
     Name: string;
     Code: string;
-    Type: StockType;
+    Type: StockTypeEnum;
     IsGlobal: boolean;
 
     constructor() {

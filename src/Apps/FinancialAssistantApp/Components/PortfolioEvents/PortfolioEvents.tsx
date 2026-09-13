@@ -3,7 +3,7 @@ import connectToStore, { IPortfolioEventsProps } from './PortfolioEventsSetup';
 import cloneDeep from 'lodash/cloneDeep';
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
-import { StockEventEnum } from '../../Models/Entity/State/Enum/StockEventEnum';
+import { StockEventEnum, StockEventEnumToString } from '../../Models/Entity/State/Enum/StockEventEnum';
 
 
 
@@ -30,29 +30,7 @@ const PortfolioEvents = (props: IPortfolioEventsProps) => {
         }}>Вернуться к портфелю</a>
         <div>
             {props.Events.map(x => {
-                let typeStr = '';
-                switch (x.Type) {
-                    case StockEventEnum.Buy:
-                        typeStr = 'Покупка';
-                        break;
-                    case StockEventEnum.CashReplenishment:
-                        typeStr = 'Пополнение';
-                        break;
-                    case StockEventEnum.Dividends:
-                        typeStr = 'Дивиденды';
-                        break;
-                    case StockEventEnum.Sell:
-                        typeStr = 'Продажа';
-                        break;
-                    case StockEventEnum.WithdrawalCash:
-                        typeStr = 'Вывод средств';
-                        break;
-                    case StockEventEnum.CountChange:
-                        typeStr = 'Изменение количества';
-                        break;
-                }
-
-
+                let typeStr = new StockEventEnumToString().ToString(x.Type);
                 return <div key={x.Id} className='one-event'>
                     {x.Date} - {typeStr} - {x.Count} шт {x.StockName} по цене {x.Price} - {x.CurrencyName}
                 </div>

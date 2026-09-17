@@ -1,5 +1,5 @@
 import { IStockDataBack } from "../../BackModels/IStockDataBack";
-import { StockTypeEnum } from "./Enum/StockType";
+import { StockTypeEnum } from "./Enum/StockTypeEnum";
 
 export class Stock {
     Id: number;

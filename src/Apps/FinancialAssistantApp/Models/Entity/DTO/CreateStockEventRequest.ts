@@ -1,5 +1,5 @@
 import { StockEventEnum } from "../State/Enum/StockEventEnum";
-import { StockTypeEnum } from "../State/Enum/StockType";
+import { StockTypeEnum } from "../State/Enum/StockTypeEnum";
 
 
 

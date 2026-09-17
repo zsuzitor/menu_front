@@ -1,4 +1,4 @@
-import { StockTypeEnum } from "../Entity/State/Enum/StockType";
+import { StockTypeEnum } from "../Entity/State/Enum/StockTypeEnum";
 
 
 export interface IStockDataBack {

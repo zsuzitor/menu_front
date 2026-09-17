@@ -9,6 +9,7 @@ import { Helper } from '../../../../Models/BL/Helper';
 import { ControllerHelper } from '../../../../Models/Controllers/ControllerHelper';
 import SelectWithSearch from '../../../../components/Body/SelectWithSearch/SelectWithSearch';
 import { StockEventEnum, StockEventEnumToString } from '../../Models/Entity/State/Enum/StockEventEnum';
+import { AlertData } from '../../../../Models/Entity/AlertData';
 
 
 
@@ -39,7 +40,7 @@ const AddStockEvent = (props: IAddStockEventProps) => {
     //----
 
     //
-    const [stockId, setStockId] = useState(0);
+    const [stockId, setStockId] = useState(props.StockId || 0);
     const [stockName, setStockName] = useState('');
     const [stocks, setStocks] = useState<Stock[]>([]);
     //
@@ -57,12 +58,20 @@ const AddStockEvent = (props: IAddStockEventProps) => {
         }
     }, []);
 
-    useEffect(() => {
-        if (props.PortfolioId > 0) {
+    // useEffect(() => {
+    //     if (props.PortfolioId > 0) {
 
+    //     }
+
+    // }, [props.PortfolioId]);
+
+    useEffect(() => {
+        if (props.StockId && props.StockId > 0) {
+            setStockId(props.StockId);
         }
 
-    }, [props.PortfolioId]);
+    }, [props.StockId]);
+
 
 
 
@@ -85,6 +94,11 @@ const AddStockEvent = (props: IAddStockEventProps) => {
 
 
     const showStockBlock = (type: StockEventEnum) => {
+        if (props.StockId) {
+            //если мы уже на странице stock то не даем выбирать
+            return false;
+        }
+
         return (type == StockEventEnum.Buy
             || type == StockEventEnum.Sell
             || type == StockEventEnum.Dividends
@@ -145,13 +159,16 @@ const AddStockEvent = (props: IAddStockEventProps) => {
 
                     setEventType(newVal);
                 }}>
-                    
+
                     <option value={`${+StockEventEnum.Buy}`}>{new StockEventEnumToString().ToString(StockEventEnum.Buy)}</option>
-                    <option value={`${+StockEventEnum.CashReplenishment}`}>{new StockEventEnumToString().ToString(StockEventEnum.CashReplenishment)}</option>
                     <option value={`${+StockEventEnum.Dividends}`}>{new StockEventEnumToString().ToString(StockEventEnum.Dividends)}</option>
                     <option value={`${+StockEventEnum.Sell}`}>{new StockEventEnumToString().ToString(StockEventEnum.Sell)}</option>
-                    <option value={`${+StockEventEnum.WithdrawalCash}`}>{new StockEventEnumToString().ToString(StockEventEnum.WithdrawalCash)}</option>
                     <option value={`${+StockEventEnum.CountChange}`}>{new StockEventEnumToString().ToString(StockEventEnum.CountChange)}</option>
+                    {props.StockId ? <></> : <>
+                        <option value={`${+StockEventEnum.WithdrawalCash}`}>{new StockEventEnumToString().ToString(StockEventEnum.WithdrawalCash)}</option>
+                        <option value={`${+StockEventEnum.CashReplenishment}`}>{new StockEventEnumToString().ToString(StockEventEnum.CashReplenishment)}</option>
+                    </>}
+
                 </select>
                 <br />
                 {showStockBlock(eventType) ? <>
@@ -262,7 +279,14 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                     dt.Price = priceStock;
                     dt.Type = eventType;
                     dt.CurrencyActions = stockCurrencyActions;
-                    props.Create(dt).then(x => props.EventAdded());
+                    props.Create(dt).then(x => {
+                        let alertFactory = new AlertData();
+                        let alert = alertFactory.GetDefaultNotify("Событие создано");
+                        window.G_AddAbsoluteAlertToState(alert);
+                        props.EventAdded();
+
+
+                    });
                 }}>Добавить событие</button></div>
         </div>
         <div className='portfolio-elements-block'>

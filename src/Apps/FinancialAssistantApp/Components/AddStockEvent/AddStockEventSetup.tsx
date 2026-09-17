@@ -9,6 +9,7 @@ import { IStockEventDataBack } from "../../Models/BackModels/IStockEventDataBack
 
 interface IAddStockEventOwnProps {
     EventAdded:() => void;
+    StockId: number | null;
 }
 
 

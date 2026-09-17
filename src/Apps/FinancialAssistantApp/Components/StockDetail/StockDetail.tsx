@@ -11,6 +11,7 @@ import AdditionalWindow from '../../../../components/Body/AdditionalWindow/Addit
 import AddStockEvent from '../AddStockEvent/AddStockEvent';
 import { StockEvent } from '../../Models/Entity/State/StockEvent';
 import { StockEventEnumToString } from '../../Models/Entity/State/Enum/StockEventEnum';
+import RouteBuilder from '../../Models/BL/RouteBuilder';
 
 
 
@@ -66,11 +67,7 @@ const StockDetail = (props: IStockDetailProps) => {
 
     useEffect(() => {
         if (props.StockId > 0 && props.PortfolioId && props.PortfolioId > 0) {
-            props.GetStockEvents(props.PortfolioId, props.StockId).then(x => {
-                if (x.Data) {
-                    setEvents(x.Data.map(d => new StockEvent().FillByIStockEventDataBack(d)));
-                }
-            });
+            LoadEvents(props.StockId, props.PortfolioId);
         }
 
     }, [props.StockId, props.PortfolioId]);
@@ -107,9 +104,22 @@ const StockDetail = (props: IStockDetailProps) => {
         return help.FormatDateToInputWithTime(date);
     }
 
+
+    function LoadEvents(stockId: number, portfolioId: number) {
+        props.GetStockEvents(portfolioId, stockId).then(x => {
+            if (x.Data) {
+                setEvents(x.Data.map(d => new StockEvent().FillByIStockEventDataBack(d)));
+            }
+        });
+    }
+
+
     if (!props.Stock) {
         return <div></div>
     }
+
+
+    const portfolioUrl = new RouteBuilder().PortfolioUrl(props.PortfolioId);
 
     return <div className='stock-page'>
         {
@@ -117,11 +127,19 @@ const StockDetail = (props: IStockDetailProps) => {
                 IsHeightWindow={false}
                 Title='Новое событие'
                 InnerContent={() => <AddStockEvent
-                    EventAdded={() => props.LoadPortfolioElements(props.PortfolioId)}
+                    EventAdded={() => { LoadEvents(props.StockId, props.PortfolioId) }}
+                    StockId={props.Stock!.Id}
                 />}></AdditionalWindow> : <></>
         }
 
         <div>
+            {props.PortfolioId ? <>
+                <a href={portfolioUrl} onClick={(e) => {
+                    e.preventDefault();
+                    navigate(portfolioUrl);
+                }}>Вернуться к портфелю</a>
+            </> : <></>}
+
             <div className='stock-name'>{props.Stock.Code}-{props.Stock.Name}-{props.Stock.Id}</div>
         </div>
         <div className='stock-block'>
@@ -185,7 +203,7 @@ const StockDetail = (props: IStockDetailProps) => {
                     {events.map(x => {
                         return <div key={x.Id} className='one-event-element'>
                             <div>{x.Date}</div>
-                            <div>{new StockEventEnumToString().ToString(x.Type)} {x.Count} штук, по цене {x.Price} {x.CurrencyName}</div>
+                            <div>{new StockEventEnumToString().ToString(x.Type)} {x.Count} штук {x.StockName}, по цене {x.Price} {x.CurrencyName}</div>
                         </div>
 
                     })}

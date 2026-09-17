@@ -1,4 +1,4 @@
-import { StockTypeEnum } from "../State/Enum/StockType";
+import { StockTypeEnum } from "../State/Enum/StockTypeEnum";
 
 
 

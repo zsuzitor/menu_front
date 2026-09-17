@@ -69,6 +69,7 @@ const PortfolioDetail = (props: IPortfolioDetailProps) => {
                 Title='Новое событие'
                 InnerContent={() => <AddStockEvent
                     EventAdded={() => props.LoadPortfolioElements(props.PortfolioId)}
+                    StockId={null}
                 />}></AdditionalWindow> : <></>
         }
         {
@@ -111,7 +112,7 @@ const PortfolioDetail = (props: IPortfolioDetailProps) => {
                                 e.preventDefault();
                                 navigate(elementUrl);
                             }}>{x.StockName}</a>
-                            
+
                         </div>
                         <div>
                             {x.Count} шт. по текущей цене {x.Price} {x.CurrencyName}, всего {x.Sum} {x.CurrencyName}

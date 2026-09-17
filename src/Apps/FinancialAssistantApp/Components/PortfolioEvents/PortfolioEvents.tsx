@@ -3,7 +3,7 @@ import connectToStore, { IPortfolioEventsProps } from './PortfolioEventsSetup';
 import cloneDeep from 'lodash/cloneDeep';
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
-import { StockEventEnum, StockEventEnumToString } from '../../Models/Entity/State/Enum/StockEventEnum';
+import { StockEventEnumToString } from '../../Models/Entity/State/Enum/StockEventEnum';
 
 
 
@@ -18,6 +18,18 @@ const PortfolioEvents = (props: IPortfolioEventsProps) => {
 
 
     const navigate = useNavigate();
+
+
+
+    useEffect(() => {
+        if (props.PortfolioId > 0)
+            props.LoadPortfolioEvents(props.PortfolioId);
+
+        return () => {
+            props.ClearPortfolioEvents(props.PortfolioId);
+        }
+    }, [props.PortfolioId]);
+
 
 
 

@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import { AppState } from "../../../../Models/Entity/State/AppState";
 import { StockEvent } from "../../Models/Entity/State/StockEvent";
+import { LoadStockEventForProjectActionCreator } from "../../Models/Actions/StockEventActions";
 
 
 
@@ -15,6 +16,7 @@ interface IPortfolioEventsStateToProps {
 
 interface IPortfolioEventsDispatchToProps {
     LoadPortfolioEvents: (id: number) => void;
+    ClearPortfolioEvents: (id: number) => void;
 }
 
 export interface IPortfolioEventsProps extends IPortfolioEventsStateToProps, IPortfolioEventsOwnProps, IPortfolioEventsDispatchToProps {
@@ -32,6 +34,9 @@ const mapDispatchToProps = (dispatch: any, ownProps: IPortfolioEventsOwnProps) =
     let res = {} as IPortfolioEventsDispatchToProps;
     res.LoadPortfolioEvents = (id: number) => {
         dispatch(window.G_FinancialAssistantAppStockEventController.GetEventsRedux(id));
+    };
+    res.ClearPortfolioEvents = (id: number) => {
+        dispatch(LoadStockEventForProjectActionCreator([]));
     };
     return res;
 };

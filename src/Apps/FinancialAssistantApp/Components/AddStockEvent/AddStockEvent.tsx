@@ -86,11 +86,7 @@ const AddStockEvent = (props: IAddStockEventProps) => {
     //     return help.FormatDateToInput(date);
     // }
 
-    const setClearDate = (dt: Date) => {
-        let newDt = new Date(dt);
-        newDt.setHours(0, 0, 0, 0);
-        return newDt;
-    }
+
 
 
     const showStockBlock = (type: StockEventEnum) => {
@@ -257,10 +253,10 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                     onChange={(e) => {
                         if (e.target.value) {
                             let dt = new Date(e.target.value);
-                            setStockEventDate(setClearDate(dt));
+                            setStockEventDate(new Helper().GetDateWithoutTime(dt));
                         }
                         else {
-                            setStockEventDate(setClearDate(new Date()));
+                            setStockEventDate(new Helper().GetDateWithoutTime(new Date()));
                         }
 
                     }}></input>

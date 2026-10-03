@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import connectToStore, { IFinancialAssistantMainProps } from './FinancialAssistantMainSetup';
 import cloneDeep from 'lodash/cloneDeep';
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
-import { FinancialAssistantAppPortfolioEventsRoute, FinancialAssistantAppPortfolioListRoute, FinancialAssistantAppPortfolioRoute, FinancialAssistantAppRoute, FinancialAssistantAppStockListRoute, FinancialAssistantAppStockRoute } from '../../Models/Consts';
+import { FinancialAssistantAppPortfolioEventsRoute, FinancialAssistantAppPortfolioListRoute, FinancialAssistantAppPortfolioRoute, FinancialAssistantAppRoute, FinancialAssistantAppStatisticRoute, FinancialAssistantAppStockListRoute, FinancialAssistantAppStockRoute } from '../../Models/Consts';
 import PortfolioList from '../PortfolioList/PortfolioList';
 import StockList from '../StockList/StockList';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
@@ -10,6 +10,7 @@ import StockDetail from '../StockDetail/StockDetail';
 import PortfolioDetail from '../PortfolioDetail/PortfolioDetail';
 import PortfolioEvents from '../PortfolioEvents/PortfolioEvents';
 import PortfolioRoute from '../PortfolioRoute/PortfolioRoute';
+import StatisticPage from '../StatisticPage/StatisticPage';
 
 
 
@@ -72,6 +73,9 @@ const FinancialAssistantMain = (props: IFinancialAssistantMainProps) => {
 
             <Route path={`${FinancialAssistantAppPortfolioListRoute}`} element={<PortfolioList />} />
             <Route path={`${FinancialAssistantAppStockListRoute}`} element={<StockList />} />
+            <Route path={`${FinancialAssistantAppStatisticRoute}`} element={<StatisticPage />} />
+
+            
             <Route path={`${FinancialAssistantAppStockRoute}:stockId`} element={<StockDetail />} />
             {/* <Route path={`${FinancialAssistantAppPortfolioRoute}:portfolioId/${FinancialAssistantAppPortfolioEventsRoute}`} element={<PortfolioEvents />} />
             <Route path={`${FinancialAssistantAppPortfolioRoute}:portfolioId`} element={<PortfolioDetail />} /> */}

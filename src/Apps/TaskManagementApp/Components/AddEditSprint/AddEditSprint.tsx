@@ -34,11 +34,7 @@ const AddEditSprint = (props: IAddEditSprintProps) => {
         return help.FormatDateToInput(date);
     }
 
-    const setClearDate = (dt: Date) => {
-        let newDt = new Date(dt);
-        newDt.setHours(0, 0, 0, 0);
-        return newDt;
-    }
+    
 
     return <div className='new-sprint-block'>
         <div className='new-sprint-content'>
@@ -54,10 +50,10 @@ const AddEditSprint = (props: IAddEditSprintProps) => {
                 onChange={(e) => {
                     if (e.target.value) {
                         let dt = new Date(e.target.value);
-                        setDateFrom(setClearDate(dt));
+                        setDateFrom(new Helper().GetDateWithoutTime(dt));
                     }
                     else {
-                        setDateFrom(setClearDate(new Date()));
+                        setDateFrom(new Helper().GetDateWithoutTime(new Date()));
                     }
 
                 }}></input>
@@ -69,10 +65,10 @@ const AddEditSprint = (props: IAddEditSprintProps) => {
                 onChange={(e) => {
                     if (e.target.value) {
                         let dt = new Date(e.target.value);
-                        setDateTo(setClearDate(dt));
+                        setDateTo(new Helper().GetDateWithoutTime(dt));
                     }
                     else {
-                        setDateTo(setClearDate(new Date()));
+                        setDateTo(new Helper().GetDateWithoutTime(new Date()));
                     }
 
                 }}></input>

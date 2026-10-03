@@ -11,6 +11,46 @@ export interface ISelectWithSearchProps {
     OnSearchChange?: (searchText: string) => void; // Метод для поиска
 }
 
+
+//////////применение без запроса на бэк
+
+    // const [currency, setCurrency] = useState<Stock[]>([]);
+    //     //нужны что бы отрисовать элеммент в пустом списке - такой кейс есть это норм
+    //     const [newStockHistoryCurrencyId, setStockHistoryCurrencyId] = useState(0);
+    //     const [stockCurrencyName, setStockCurrencyName] = useState('');
+    //     //тк запроса на бэк не делаем а просто на фронте фильтруем
+    //     const [stockCurrencyNameFilter, setStockCurrencyNameFilter] = useState('');
+    
+    //     <SelectWithSearch
+    //         CancelEvent={() => { }}
+    //         SaveEvent={(id) => {
+    //             setStockHistoryCurrencyId(id);
+    //             setStockCurrencyName(currency.find(x => x.Id === id).Name);
+    //             // setStockCurrency(stockCurrency.filter(x => x.Id === id));
+    //             return true;
+    //         }}
+    //         Selected={{ Id: newStockHistoryCurrencyId, Text: newStockHistoryCurrencyId > 0 ? `${newStockHistoryCurrencyId}-${stockCurrencyName}` : '' }}
+    //         ValuesWithId={currency.filter(x => !stockCurrencyNameFilter || x.Name.indexOf(stockCurrencyNameFilter) >= 0)
+    //             .map(x => ({ Id: x.Id, Text: `${x.Id}-${x.Name}` }))}
+    //         OnSearchChange={async (text) => {
+    //             // setTaskId(-1);
+    //             setStockCurrencyNameFilter(text);
+    //         }}
+    //     ></SelectWithSearch>
+/////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
 const SelectWithSearch: React.FC<ISelectWithSearchProps> = (props) => {
     const [selected, setSelected] = useState(props.Selected?.Id || -1);
     const [searchText, setSearchText] = useState(props.Selected?.Text || '');

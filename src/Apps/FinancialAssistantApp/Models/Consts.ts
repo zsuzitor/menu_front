@@ -19,6 +19,7 @@ export const FinancialAssistantAppPortfolioEventsRoute: string = 'events';
 export const FinancialAssistantAppStockRoute: string = 'stock-';
 export const FinancialAssistantAppPortfolioListRoute: string = 'portfolio-list';
 export const FinancialAssistantAppStockListRoute: string = 'stock-list';
+export const FinancialAssistantAppStatisticRoute: string = 'statistic';
 
 
 export const FinancialAssistantApiUrl: string = `${FinancialAssistantApiPrefUrl}/${FinancialAssistantAppUrl}`;

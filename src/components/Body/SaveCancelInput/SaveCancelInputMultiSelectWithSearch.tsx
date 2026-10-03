@@ -11,6 +11,33 @@ export interface ISaveCancelInputMultiSelectWithSearchProps {
     Selected: number[];
 }
 
+
+
+
+/////////////пример
+    //    <SaveCancelInputMultiSelectWithSearch
+    //         CancelEvent={() => {
+    //             // setTaskLabelEditable(false)
+    //             setSelectedPortfolioId([]);
+    //         }}
+    //         SaveEvent={(id) => {
+    //             // props.UpdateTaskLabels(props.Task.Id, id);
+    //             setSelectedPortfolioId(id);
+    //             return true;
+    //         }}
+    //         CancelOnSaveNoChanges={true}
+    //         Selected={selectedPortfolioId}
+    //         ValuesWithId={props.PortfolioList.map(x => {
+    //             return { Id: x.Id, Text: x.Name };
+    //         })}
+    //     />
+
+        ///////////////
+
+
+
+
+
 const SaveCancelInputMultiSelectWithSearch = (props: ISaveCancelInputMultiSelectWithSearchProps) => {
 
 

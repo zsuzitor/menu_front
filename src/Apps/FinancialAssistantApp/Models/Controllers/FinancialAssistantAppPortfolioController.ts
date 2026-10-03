@@ -5,6 +5,7 @@ import { FinancialAssistantApiPortfolioUrl, FinancialAssistantAppPreloader } fro
 import { IPortfolioDataBack } from "../BackModels/IPortfolioDataBack";
 import { Portfolio } from "../Entity/State/Portfolio";
 import { CreatePortfolioActionCreator, DeletePortfolioActionCreator, GetPortfolioActionCreator, SetCurrentPortfolioActionCreator, UpdatePortfolioActionCreator } from "../Actions/PortfolioActions";
+import { IPortfolioStatisticDataBack } from "../BackModels/IPortfolioStatisticDataBack";
 
 
 export interface IFinancialAssistantAppPortfolioController {
@@ -14,6 +15,7 @@ export interface IFinancialAssistantAppPortfolioController {
     UpdateAsync: (id: number, name: string, currencyId: number | null) => Promise<ServerResult<IPortfolioDataBack>>;
     DeleteRedux: (id: number) => (dispatch: any, getState: any) => void;
     GetDetailRedux: (id: number) => (dispatch: any, getState: any) => void;
+    GetStatisticAsync: (id: number[], start: Date, end: Date, currencyId: number) => Promise<ServerResult<IPortfolioStatisticDataBack>>;
 
 }
 
@@ -191,6 +193,28 @@ export class FinancialAssistantAppPortfolioController implements IFinancialAssis
 
         return backResult;
     }
+
+
+    GetStatisticAsync = async (id: number[], start: Date, end: Date, currencyId: number): Promise<ServerResult<IPortfolioStatisticDataBack>> => {
+        let data = {
+            "PortfolioId": id,
+            "Start": new ControllerHelper().ToZeroDate(start).toISOString(),
+            "End": new ControllerHelper().ToZeroDate(end).toISOString(),
+            "CurrencyId": currencyId,
+        };
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IPortfolioStatisticDataBack>({
+            Data: data,
+            Type: ControllerHelper.PatchHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: `${G_PathToServer}${FinancialAssistantApiPortfolioUrl}/get-statistic`,
+            ContentType: 'body'
+        });
+
+        return backResult;
+    }
+
 
 
     preloader(show: boolean) {

@@ -4,9 +4,6 @@ import React, { useState, useEffect, ReactNode } from 'react';
 import connectToStore, { ILabelsProps } from './LabelsSetup';
 import { useNavigate } from 'react-router-dom';
 import { Helper } from '../../../../Models/BL/Helper';
-import AdditionalWindow from '../../../../components/Body/AdditionalWindow/AdditionalWindow';
-import AddEditSprint from '../AddEditSprint/AddEditSprint';
-import RouteBuilder from '../../Models/BL/RouteBuilder';
 
 require('./Labels.css');
 

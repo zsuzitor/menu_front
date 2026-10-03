@@ -36,6 +36,8 @@ export class Helper {
         return newDate;
     };
 
+
+
     MinutesToHours1(minutes: number): { h: number, m: number } {
         const hours = Math.floor(minutes / 60);
         const remainingMinutes = minutes % 60;
@@ -104,6 +106,7 @@ export class Helper {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
+
 
     FormatDateToInputWithTime(date: Date): string {
         let ymd = this.FormatDateToInput(date);

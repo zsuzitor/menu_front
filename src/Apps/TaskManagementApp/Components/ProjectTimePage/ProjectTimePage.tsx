@@ -41,14 +41,10 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
     }
 
 
-    const setClearDate = (dt: Date) => {
-        let newDt = new Date(dt);
-        newDt.setHours(0, 0, 0, 0);
-        return newDt;
-    }
+    
 
-    const currentDate = setClearDate(props.DateFrom);
-    const lastDate = setClearDate(props.DateTo);
+    const currentDate = new Helper().GetDateWithoutTime(props.DateFrom);
+    const lastDate = new Helper().GetDateWithoutTime(props.DateTo);
     let datesForTable: Date[] = [];
     while (currentDate <= lastDate) {
         datesForTable.push(new Date(currentDate));
@@ -61,7 +57,7 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
         return <div className='one-line-times'>
             {datesForTable.map(x => {
                 let works = props.WorkTimeLog.filter(w => w.UserId == userId
-                    && setClearDate(w.DayOfLog!).getTime() == setClearDate(x).getTime()
+                    && new Helper().GetDateWithoutTime(w.DayOfLog!).getTime() == new Helper().GetDateWithoutTime(x).getTime()
                 );
                 let minuteTotal = 0;
                 let worksId = 'ids-';
@@ -123,15 +119,15 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
                     if (e.target.value) {
                         let dt = new Date(e.target.value);
                         if (dt > props.DateTo)
-                            props.SetDateFrom(setClearDate(props.DateTo));
+                            props.SetDateFrom(new Helper().GetDateWithoutTime(props.DateTo));
                         else
-                            props.SetDateFrom(setClearDate(dt));
+                            props.SetDateFrom(new Helper().GetDateWithoutTime(dt));
                     }
                     else {
                         if (new Date() > props.DateTo)
-                            props.SetDateFrom(setClearDate(props.DateTo));
+                            props.SetDateFrom(new Helper().GetDateWithoutTime(props.DateTo));
                         else
-                            props.SetDateFrom(setClearDate(new Date()));
+                            props.SetDateFrom(new Helper().GetDateWithoutTime(new Date()));
 
                     }
 
@@ -146,15 +142,15 @@ const ProjectTimePage = (props: IProjectTimePageProps) => {
                     if (e.target.value) {
                         let dt = new Date(e.target.value);
                         if (dt < props.DateFrom)
-                            props.SetDateTo(setClearDate(props.DateFrom));
+                            props.SetDateTo(new Helper().GetDateWithoutTime(props.DateFrom));
                         else
-                            props.SetDateTo(setClearDate(dt));
+                            props.SetDateTo(new Helper().GetDateWithoutTime(dt));
                     }
                     else {
                         if (new Date() < props.DateFrom)
-                            props.SetDateTo(setClearDate(props.DateFrom));
+                            props.SetDateTo(new Helper().GetDateWithoutTime(props.DateFrom));
                         else
-                            props.SetDateTo(setClearDate(new Date()));
+                            props.SetDateTo(new Helper().GetDateWithoutTime(new Date()));
 
                     }
 

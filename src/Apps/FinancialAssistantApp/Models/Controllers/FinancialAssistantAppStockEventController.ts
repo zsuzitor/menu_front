@@ -7,11 +7,12 @@ import { CreateStockEventRequest } from "../Entity/DTO/CreateStockEventRequest";
 import { IStockEventDataBack } from "../BackModels/IStockEventDataBack";
 import { StockEvent } from "../Entity/State/StockEvent";
 import { LoadStockEventForProjectActionCreator } from "../Actions/StockEventActions";
+import { IDataBackWithCount } from "../BackModels/IDataBackWithCount";
 
 
 export interface IFinancialAssistantAppStockEventController {
     CreateAsync: (req: CreateStockEventRequest) => Promise<ServerResult<IStockEventDataBack>>;
-    GetEventsRedux: (portfolioId: number) => void;
+    GetEventsRedux: (portfolioId: number, pageSize: number, page: number, type: number) => void;
     GetEventsForStockAsync: (portfolioId: number, stockId: number) => Promise<ServerResult<IStockEventDataBack[]>>;
 
 }
@@ -49,6 +50,7 @@ export class FinancialAssistantAppStockEventController implements IFinancialAssi
             "CurrencyId": req.CurrencyId,
             "CurrencyActions": req.CurrencyActions,
             "PortfolioId": req.PortfolioId,
+            "OutdateForce": req.OutdateForce,
         };
         const backResult = await G_AjaxHelper.GoAjaxRequest<IStockEventDataBack>({
             Data: data,
@@ -65,10 +67,10 @@ export class FinancialAssistantAppStockEventController implements IFinancialAssi
 
 
 
-    GetEventsRedux = (portfolioId: number) => {
+    GetEventsRedux = (portfolioId: number, pageSize: number, page: number, type: number) => {
         return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            const backResult = await this.GetEventsAsync(portfolioId);
+            const backResult = await this.GetEventsAsync(portfolioId, pageSize, page, type);
             this.preloader(false);
 
             if (backResult.Error) {
@@ -82,13 +84,17 @@ export class FinancialAssistantAppStockEventController implements IFinancialAssi
         };
     }
 
-    GetEventsAsync = async (portfolioId: number): Promise<ServerResult<IStockEventDataBack[]>> => {
+    GetEventsAsync = async (portfolioId: number, pageSize: number, page: number, type: number): Promise<ServerResult<IDataBackWithCount<IStockEventDataBack[]>>> => {
         let data = {
             "PortfolioId": portfolioId,
+            "PageSize": pageSize,
+            "Page": page,
+            "Type": type,
+
         };
-        const backResult = await G_AjaxHelper.GoAjaxRequest<IStockEventDataBack[]>({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IDataBackWithCount<IStockEventDataBack[]>>({
             Data: data,
-            Type: ControllerHelper.GetHttp,
+            Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
             },
             FuncError: (xhr, status, error) => { },

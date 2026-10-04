@@ -40,7 +40,7 @@ const PortfolioEvents = (props: IPortfolioEventsProps) => {
             e.preventDefault();
             navigate(portfolioUrl);
         }}>Вернуться к портфелю</a>
-        <div>
+        <div className='events-list'>
             {props.Events.map(x => {
                 let typeStr = new StockEventEnumToString().ToString(x.Type);
                 return <div key={x.Id} className='one-event'>

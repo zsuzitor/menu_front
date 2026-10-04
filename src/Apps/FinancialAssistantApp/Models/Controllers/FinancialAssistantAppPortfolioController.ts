@@ -204,7 +204,7 @@ export class FinancialAssistantAppPortfolioController implements IFinancialAssis
         };
         const backResult = await G_AjaxHelper.GoAjaxRequest<IPortfolioStatisticDataBack>({
             Data: data,
-            Type: ControllerHelper.PatchHttp,
+            Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
             },
             FuncError: (xhr, status, error) => { },

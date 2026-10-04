@@ -1,3 +1,12 @@
 .portfolio-events .one-event {
-    border: 2px solid black;
+    /* border: 2px solid black; */
+    border-radius: 5px;
+    border: 1px solid cadetblue;
+}
+
+.portfolio-events .events-list {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 1px;
 }

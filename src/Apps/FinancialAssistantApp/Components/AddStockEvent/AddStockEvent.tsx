@@ -23,6 +23,7 @@ const AddStockEvent = (props: IAddStockEventProps) => {
 
 
     const [countStock, setCountStock] = useState(0);
+    const [outdateForce, setOutdateForce] = useState(false);
     const [eventType, setEventType] = useState(+StockEventEnum.Buy);//StockEventEnum
     const [priceStock, setPriceStock] = useState(0);
     const [newStockEventDate, setStockEventDate] = useState<Date>(new Date());
@@ -262,8 +263,10 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                     }}></input>
 
 
-
-
+                <br />
+                <span>Форсированное создание ивента задним числом</span>
+                <input type="checkbox" defaultChecked={outdateForce}
+                    onChange={() => setOutdateForce(prev => !prev)} />
                 <br />
                 <button onClick={() => {
                     let dt = new CreateStockEventRequest();
@@ -275,6 +278,7 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                     dt.Price = priceStock;
                     dt.Type = eventType;
                     dt.CurrencyActions = stockCurrencyActions;
+                    dt.OutdateForce = outdateForce;
                     props.Create(dt).then(x => {
                         let alertFactory = new AlertData();
                         let alert = alertFactory.GetDefaultNotify("Событие создано");

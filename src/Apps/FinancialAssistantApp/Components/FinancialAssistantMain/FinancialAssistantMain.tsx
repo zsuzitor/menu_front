@@ -31,6 +31,7 @@ const FinancialAssistantMain = (props: IFinancialAssistantMainProps) => {
 
     const portfolioUrl = new RouteBuilder().PortfolioListUrl();
     const stockUrl = new RouteBuilder().StockListUrl();
+    const statisticUrl = new RouteBuilder().StatisticUrl();
 
 
     // const matchPortfolio = window.location.href.match(/portfolio-(\d+)/);//FinancialAssistantAppPortfolioRoute
@@ -68,6 +69,10 @@ const FinancialAssistantMain = (props: IFinancialAssistantMainProps) => {
                 e.preventDefault();
                 navigate(stockUrl);
             }}>Список Stock</a>
+            <a href={statisticUrl} onClick={(e) => {
+                e.preventDefault();
+                navigate(statisticUrl);
+            }}>Статистика</a>
         </div>
         <Routes>
 
@@ -75,7 +80,7 @@ const FinancialAssistantMain = (props: IFinancialAssistantMainProps) => {
             <Route path={`${FinancialAssistantAppStockListRoute}`} element={<StockList />} />
             <Route path={`${FinancialAssistantAppStatisticRoute}`} element={<StatisticPage />} />
 
-            
+
             <Route path={`${FinancialAssistantAppStockRoute}:stockId`} element={<StockDetail />} />
             {/* <Route path={`${FinancialAssistantAppPortfolioRoute}:portfolioId/${FinancialAssistantAppPortfolioEventsRoute}`} element={<PortfolioEvents />} />
             <Route path={`${FinancialAssistantAppPortfolioRoute}:portfolioId`} element={<PortfolioDetail />} /> */}

@@ -13,6 +13,7 @@ export class CreateStockEventRequest {
     Price: number;
     CurrencyId: number;
     CurrencyActions: boolean;
+    OutdateForce: boolean;
 
     constructor() {
     }

@@ -1,7 +1,8 @@
 import { connect } from "react-redux";
 import { AppState } from "../../../../Models/Entity/State/AppState";
 import { StockEvent } from "../../Models/Entity/State/StockEvent";
-import { LoadStockEventForProjectActionCreator } from "../../Models/Actions/StockEventActions";
+import { LoadStockEventForProjectActionCreator, StockEventForPortfolioFilterPageActionCreator, StockEventForPortfolioFilterTypeActionCreator } from "../../Models/Actions/StockEventActions";
+import { StockEventEnum } from "../../Models/Entity/State/Enum/StockEventEnum";
 
 
 
@@ -12,11 +13,16 @@ interface IPortfolioEventsOwnProps {
 interface IPortfolioEventsStateToProps {
     Events: StockEvent[];
     PortfolioId: number;
+    TotalEvents: number;
+    PageNumber: number;
+    TypeEvents: StockEventEnum | null;
 }
 
 interface IPortfolioEventsDispatchToProps {
-    LoadPortfolioEvents: (id: number) => void;
-    ClearPortfolioEvents: (id: number) => void;
+    LoadPortfolioEvents: (portfolioId: number, pageSize: number, page: number, type: StockEventEnum | null) => void;
+    // ClearPortfolioEvents: (id: number) => void;
+    SetPagePortfolioEvents: (page: number) => void;
+    SetTypePortfolioEvents: (type: number) => void;
 }
 
 export interface IPortfolioEventsProps extends IPortfolioEventsStateToProps, IPortfolioEventsOwnProps, IPortfolioEventsDispatchToProps {
@@ -27,16 +33,25 @@ const mapStateToProps = (state: AppState, ownProps: IPortfolioEventsOwnProps) =>
     let res = {} as IPortfolioEventsStateToProps;
     res.Events = state.FinancialAssistantApp.CurrentPortfolioEvents;
     res.PortfolioId = state.FinancialAssistantApp.CurrentPortfolioId;
+    res.TotalEvents = state.FinancialAssistantApp.CurrentPortfolioEventsTotal;
+    res.PageNumber = state.FinancialAssistantApp.CurrentPortfolioEventsPage;
+    res.TypeEvents = state.FinancialAssistantApp.CurrentPortfolioEventsTypeFilter;
     return res;
 }
 
 const mapDispatchToProps = (dispatch: any, ownProps: IPortfolioEventsOwnProps) => {
     let res = {} as IPortfolioEventsDispatchToProps;
-    res.LoadPortfolioEvents = (id: number) => {
-        dispatch(window.G_FinancialAssistantAppStockEventController.GetEventsRedux(id));
+    res.LoadPortfolioEvents = (portfolioId: number, pageSize: number, page: number, type: StockEventEnum | null) => {
+        dispatch(window.G_FinancialAssistantAppStockEventController.GetEventsRedux(portfolioId, pageSize, page, type));
     };
-    res.ClearPortfolioEvents = (id: number) => {
-        dispatch(LoadStockEventForProjectActionCreator([]));
+    // res.ClearPortfolioEvents = (id: number) => {
+    //     dispatch(LoadStockEventForProjectActionCreator([]));
+    // };
+    res.SetPagePortfolioEvents = (page: number) => {
+        dispatch(StockEventForPortfolioFilterPageActionCreator(page));
+    };
+    res.SetTypePortfolioEvents = (type: number) => {
+        dispatch(StockEventForPortfolioFilterTypeActionCreator(type));
     };
     return res;
 };

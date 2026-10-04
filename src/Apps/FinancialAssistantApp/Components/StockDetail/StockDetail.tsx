@@ -119,6 +119,8 @@ const StockDetail = (props: IStockDetailProps) => {
     }
 
 
+    const openFromPortfolio = props.PortfolioId && props.PortfolioId > 0;
+
     const portfolioUrl = new RouteBuilder().PortfolioUrl(props.PortfolioId);
 
     return <div className='stock-page'>
@@ -133,7 +135,7 @@ const StockDetail = (props: IStockDetailProps) => {
         }
 
         <div>
-            {props.PortfolioId ? <>
+            {openFromPortfolio ? <>
                 <a href={portfolioUrl} onClick={(e) => {
                     e.preventDefault();
                     navigate(portfolioUrl);
@@ -195,7 +197,7 @@ const StockDetail = (props: IStockDetailProps) => {
                 }}>Создать запись истории</button>
             </div>
 
-            {props.PortfolioId ? <>
+            {openFromPortfolio ? <>
                 <div><button onClick={() => setShowNewEventWindow(true)}>Добавить событие</button></div>
 
                 <div className='stock-block-events'>
@@ -223,7 +225,7 @@ const StockDetail = (props: IStockDetailProps) => {
             </div>
         </div>
 
-    </div>
+    </div >
 }
 
 

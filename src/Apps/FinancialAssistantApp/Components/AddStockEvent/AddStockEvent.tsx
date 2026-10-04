@@ -51,10 +51,10 @@ const AddStockEvent = (props: IAddStockEventProps) => {
 
     useEffect(() => {
         props.GetCurrency()
-            .then(br => setStockCurrency(br.Data.map(x => new Stock().FillByIStockDataBack(x))));
+            .then(br => setStockCurrency(br.Data!.map(x => new Stock().FillByIStockDataBack(x))));
 
 
-        props.FindStocks('').then(searchBack => setStocks(searchBack.Data.map(x => new Stock().FillByIStockDataBack(x))));
+        props.FindStocks('').then(searchBack => setStocks(searchBack.Data!.map(x => new Stock().FillByIStockDataBack(x))));
         return () => {
         }
     }, []);
@@ -174,7 +174,7 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                         CancelEvent={() => { }}
                         SaveEvent={(id) => {
                             setStockId(id);
-                            setStockName(stocks.find(x => x.Id === id).Name);
+                            setStockName(stocks.find(x => x.Id === id)!.Name);
                             setStocks(stocks.filter(x => x.Id === id));
                             return true;
                         }}
@@ -183,7 +183,7 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                         OnSearchChange={async (text) => {
                             // setTaskId(-1);
                             let searchBack = await props.FindStocks(text);
-                            setStocks(searchBack.Data.map(x => new Stock().FillByIStockDataBack(x)));
+                            setStocks(searchBack.Data!.map(x => new Stock().FillByIStockDataBack(x)));
                         }}
                     ></SelectWithSearch>
                     <br />
@@ -213,7 +213,7 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                         CancelEvent={() => { }}
                         SaveEvent={(id) => {
                             setStockCurrencyId(id);
-                            setStockCurrencyName(stockCurrency.find(x => x.Id === id).Name);
+                            setStockCurrencyName(stockCurrency.find(x => x.Id === id)!.Name);
                             // setStockCurrency(stockCurrency.filter(x => x.Id === id));
                             return true;
                         }}

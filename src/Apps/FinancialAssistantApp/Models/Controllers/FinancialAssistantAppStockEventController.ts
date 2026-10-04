@@ -6,13 +6,14 @@ import { FinancialAssistantApiStockEventUrl, FinancialAssistantAppPreloader } fr
 import { CreateStockEventRequest } from "../Entity/DTO/CreateStockEventRequest";
 import { IStockEventDataBack } from "../BackModels/IStockEventDataBack";
 import { StockEvent } from "../Entity/State/StockEvent";
-import { LoadStockEventForProjectActionCreator } from "../Actions/StockEventActions";
+import { LoadStockEventForProjectActionCreator, LoadStockEventForProjectActionDataType } from "../Actions/StockEventActions";
 import { IDataBackWithCount } from "../BackModels/IDataBackWithCount";
+import { StockEventEnum } from "../Entity/State/Enum/StockEventEnum";
 
 
 export interface IFinancialAssistantAppStockEventController {
     CreateAsync: (req: CreateStockEventRequest) => Promise<ServerResult<IStockEventDataBack>>;
-    GetEventsRedux: (portfolioId: number, pageSize: number, page: number, type: number) => void;
+    GetEventsRedux: (portfolioId: number, pageSize: number, page: number, type: StockEventEnum | null) => void;
     GetEventsForStockAsync: (portfolioId: number, stockId: number) => Promise<ServerResult<IStockEventDataBack[]>>;
 
 }
@@ -67,7 +68,7 @@ export class FinancialAssistantAppStockEventController implements IFinancialAssi
 
 
 
-    GetEventsRedux = (portfolioId: number, pageSize: number, page: number, type: number) => {
+    GetEventsRedux = (portfolioId: number, pageSize: number, page: number, type: StockEventEnum | null) => {
         return async (dispatch: any, getState: any) => {
             this.preloader(true);
             const backResult = await this.GetEventsAsync(portfolioId, pageSize, page, type);
@@ -78,13 +79,16 @@ export class FinancialAssistantAppStockEventController implements IFinancialAssi
             }
 
             if (backResult.Data) {
-                let dt = backResult.Data.map(x => new StockEvent().FillByIStockEventDataBack(x));
+                let events = backResult.Data.Data.map(x => new StockEvent().FillByIStockEventDataBack(x));
+                let dt = new LoadStockEventForProjectActionDataType();
+                dt.Events = events;
+                dt.TotalCount=backResult.Data.CountTotal;
                 dispatch(LoadStockEventForProjectActionCreator(dt));
             }
         };
     }
 
-    GetEventsAsync = async (portfolioId: number, pageSize: number, page: number, type: number): Promise<ServerResult<IDataBackWithCount<IStockEventDataBack[]>>> => {
+    GetEventsAsync = async (portfolioId: number, pageSize: number, page: number, type: StockEventEnum | null): Promise<ServerResult<IDataBackWithCount<IStockEventDataBack[]>>> => {
         let data = {
             "PortfolioId": portfolioId,
             "PageSize": pageSize,
@@ -99,6 +103,7 @@ export class FinancialAssistantAppStockEventController implements IFinancialAssi
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${FinancialAssistantApiStockEventUrl}/get-events-for-portfolio`,
+            ContentType: 'body'
         });
 
         return backResult;

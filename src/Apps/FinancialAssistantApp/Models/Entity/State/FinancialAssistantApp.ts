@@ -1,3 +1,4 @@
+import { StockEventEnum } from "./Enum/StockEventEnum";
 import { Portfolio } from "./Portfolio";
 import { Stock } from "./Stock";
 import { StockElement } from "./StockElement";
@@ -17,7 +18,12 @@ export class FinancialAssistantApp {
     CurrentPortfolioId: number;
     CurrentPortfolio: Portfolio | null;
     CurrentPortfolioElements: StockElement[];
+
     CurrentPortfolioEvents: StockEvent[];
+    CurrentPortfolioEventsPage: number;//текущая страница
+    CurrentPortfolioEventsTotal: number;//всего штук
+    CurrentPortfolioEventsTypeFilter: StockEventEnum | null;
+
 
     constructor() {
         this.PortfolioList = [];
@@ -29,6 +35,9 @@ export class FinancialAssistantApp {
         this.CurrentPortfolio = null;
         this.CurrentPortfolioEvents = [];
         this.CurrentStockHistory = [];
+        this.CurrentPortfolioEventsPage = 1;
+        this.CurrentPortfolioEventsTotal = -1;
+        this.CurrentPortfolioEventsTypeFilter = null;
     }
 
 

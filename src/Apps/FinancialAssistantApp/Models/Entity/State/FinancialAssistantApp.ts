@@ -12,6 +12,8 @@ export class FinancialAssistantApp {
     CurrentStockId: number;
     CurrentStock: Stock | null;
     CurrentStockHistory: StockHistory[];
+    CurrentStockHistoryPage: number;//текущая страница
+    CurrentStockHistoryTotal: number;//всего штук
 
 
 
@@ -38,6 +40,8 @@ export class FinancialAssistantApp {
         this.CurrentPortfolioEventsPage = 1;
         this.CurrentPortfolioEventsTotal = -1;
         this.CurrentPortfolioEventsTypeFilter = null;
+        this.CurrentStockHistoryPage = 1;
+        this.CurrentStockHistoryTotal = -1;
     }
 
 

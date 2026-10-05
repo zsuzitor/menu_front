@@ -36,8 +36,12 @@ export function LoadCurrentStockActionCreator(data: Stock): AppAction<Stock> {
     return { type: LoadCurrentStockActionName, payload: data };
 };
 
+export class LoadCurrentStockHistoryActionDataType {
+    History: StockHistory[];
+    TotalCount: number;
+}
 export const LoadCurrentStockHistoryActionName: string = 'LoadCurrentStockHistoryAction';
-export function LoadCurrentStockHistoryActionCreator(data: StockHistory[]): AppAction<StockHistory[]> {
+export function LoadCurrentStockHistoryActionCreator(data: LoadCurrentStockHistoryActionDataType): AppAction<LoadCurrentStockHistoryActionDataType> {
     return { type: LoadCurrentStockHistoryActionName, payload: data };
 };
 
@@ -46,3 +50,8 @@ export function CreateCurrentStockHistoryActionCreator(data: StockHistory): AppA
     return { type: CreateCurrentStockHistoryActionName, payload: data };
 };
 
+
+export const SetCurrentStockHistoryPageActionName: string = 'SetCurrentStockHistoryPageAction';
+export function SetCurrentStockHistoryPageActionCreator(data: number): AppAction<number> {
+    return { type: SetCurrentStockHistoryPageActionName, payload: data };
+};

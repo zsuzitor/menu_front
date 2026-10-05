@@ -12,6 +12,7 @@ import AddStockEvent from '../AddStockEvent/AddStockEvent';
 import { StockEvent } from '../../Models/Entity/State/StockEvent';
 import { StockEventEnumToString } from '../../Models/Entity/State/Enum/StockEventEnum';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
+import Paggination from '../../../../components/Body/Paggination/Paggination';
 
 
 
@@ -37,8 +38,11 @@ const StockDetail = (props: IStockDetailProps) => {
     const [showNewEventWindow, setShowNewEventWindow] = useState(false);
 
     const [events, setEvents] = useState<StockEvent[]>([]);
+    const [eventsPage, setEventsPage] = useState<number>(1);
+    const [eventsTotal, setEventsTotal] = useState<number>(-1);
 
 
+    const pageSize = 10;
 
     const navigate = useNavigate();
 
@@ -60,17 +64,25 @@ const StockDetail = (props: IStockDetailProps) => {
         if (props.StockId > 0) {
 
             props.GetDetail(props.StockId);
-            props.GetHistory(props.StockId);
         }
 
     }, [props.StockId]);
 
+
     useEffect(() => {
-        if (props.StockId > 0 && props.PortfolioId && props.PortfolioId > 0) {
-            LoadEvents(props.StockId, props.PortfolioId);
+        if (props.StockId > 0) {
+
+            props.GetHistory(props.StockId, pageSize, props.HistoryPage);
         }
 
-    }, [props.StockId, props.PortfolioId]);
+    }, [props.StockId, props.HistoryPage]);
+
+    useEffect(() => {
+        if (props.StockId > 0 && props.PortfolioId && props.PortfolioId > 0) {
+            LoadEvents(props.StockId, props.PortfolioId, eventsPage);
+        }
+
+    }, [props.StockId, props.PortfolioId, eventsPage]);
 
     // const matchStock = window.location.href.match(/stock-(\d+)/);//FinancialAssistantAppStockRoute
     // if (matchStock) {
@@ -105,10 +117,11 @@ const StockDetail = (props: IStockDetailProps) => {
     }
 
 
-    function LoadEvents(stockId: number, portfolioId: number) {
-        props.GetStockEvents(portfolioId, stockId).then(x => {
+    function LoadEvents(stockId: number, portfolioId: number, pageNumber: number) {
+        props.GetStockEvents(portfolioId, stockId, pageSize, pageNumber).then(x => {
             if (x.Data) {
-                setEvents(x.Data.map(d => new StockEvent().FillByIStockEventDataBack(d)));
+                setEvents(x.Data.Data.map(d => new StockEvent().FillByIStockEventDataBack(d)));
+                setEventsTotal(x.Data.CountTotal);
             }
         });
     }
@@ -121,7 +134,8 @@ const StockDetail = (props: IStockDetailProps) => {
 
     const openFromPortfolio = props.PortfolioId && props.PortfolioId > 0;
 
-    const portfolioUrl = new RouteBuilder().PortfolioUrl(props.PortfolioId);
+    const portfolioUrl = new RouteBuilder().PortfolioUrl(props.PortfolioId!);
+
 
     return <div className='stock-page'>
         {
@@ -129,7 +143,7 @@ const StockDetail = (props: IStockDetailProps) => {
                 IsHeightWindow={false}
                 Title='Новое событие'
                 InnerContent={() => <AddStockEvent
-                    EventAdded={() => { LoadEvents(props.StockId, props.PortfolioId) }}
+                    EventAdded={() => { LoadEvents(props.StockId, props.PortfolioId, eventsPage) }}
                     StockId={props.Stock!.Id}
                 />}></AdditionalWindow> : <></>
         }
@@ -202,6 +216,11 @@ const StockDetail = (props: IStockDetailProps) => {
 
                 <div className='stock-block-events'>
                     <span>События</span>
+                    <Paggination
+                        ElementsCount={eventsTotal}
+                        PageNumber={eventsPage}
+                        ElementsOnPage={pageSize}
+                        SetPageNumber={(x) => setEventsPage(x)}></Paggination>
                     {events.map(x => {
                         return <div key={x.Id} className='one-event-element'>
                             <div>{x.Date}</div>
@@ -215,6 +234,11 @@ const StockDetail = (props: IStockDetailProps) => {
 
             <div className='stock-block-history'>
                 <span>История изменения цены</span>
+                <Paggination
+                    ElementsCount={props.HistoryTotalCount}
+                    PageNumber={props.HistoryPage}
+                    ElementsOnPage={pageSize}
+                    SetPageNumber={(x) => props.SetHistoryPageNumber(x)}></Paggination>
                 {props.StockHistory.map(x => {
                     return <div key={x.Id} className='one-history-element'>
                         <div>{x.Date}</div>

@@ -5,7 +5,7 @@ import { AppState } from "../../../../Models/Entity/State/AppState";
 
 import cloneDeep from 'lodash/cloneDeep';
 import { Helper } from "../../../../Models/BL/Helper";
-import { CreateCurrentStockHistoryActionName, CreateStockActionName, DeleteStockActionName, GetStockActionName, LoadCurrentStockActionName, LoadCurrentStockHistoryActionName, SetCurrentStockIdActionName, UpdateStockActionName } from "../Actions/StockActions";
+import { CreateCurrentStockHistoryActionName, CreateStockActionName, DeleteStockActionName, GetStockActionName, LoadCurrentStockActionName, LoadCurrentStockHistoryActionDataType, LoadCurrentStockHistoryActionName, SetCurrentStockHistoryPageActionName, SetCurrentStockIdActionName, UpdateStockActionName } from "../Actions/StockActions";
 import { Stock } from "../Entity/State/Stock";
 import { StockHistory } from "../Entity/State/StockHistory";
 
@@ -73,8 +73,9 @@ export function FinancialAssistantStockReducer(state: AppState = new AppState(),
         case LoadCurrentStockHistoryActionName:
             {
                 let newState = cloneDeep(state);
-                let payload = action.payload as StockHistory[];
-                newState.FinancialAssistantApp.CurrentStockHistory = payload;
+                let payload = action.payload as LoadCurrentStockHistoryActionDataType;
+                newState.FinancialAssistantApp.CurrentStockHistory = payload.History;
+                newState.FinancialAssistantApp.CurrentStockHistoryTotal = payload.TotalCount;
 
                 return newState;
             }
@@ -84,6 +85,15 @@ export function FinancialAssistantStockReducer(state: AppState = new AppState(),
                 let newState = cloneDeep(state);
                 let payload = action.payload as StockHistory;
                 newState.FinancialAssistantApp.CurrentStockHistory.push(payload);
+
+                return newState;
+            }
+
+        case SetCurrentStockHistoryPageActionName:
+            {
+                let newState = cloneDeep(state);
+                let payload = action.payload as number;
+                newState.FinancialAssistantApp.CurrentStockHistoryPage = payload;
 
                 return newState;
             }

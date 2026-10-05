@@ -14,7 +14,7 @@ import { StockEventEnum } from "../Entity/State/Enum/StockEventEnum";
 export interface IFinancialAssistantAppStockEventController {
     CreateAsync: (req: CreateStockEventRequest) => Promise<ServerResult<IStockEventDataBack>>;
     GetEventsRedux: (portfolioId: number, pageSize: number, page: number, type: StockEventEnum | null) => void;
-    GetEventsForStockAsync: (portfolioId: number, stockId: number) => Promise<ServerResult<IStockEventDataBack[]>>;
+    GetEventsForStockAsync: (portfolioId: number, stockId: number, pageSize: number, pageNumber: number) => Promise<ServerResult<IDataBackWithCount<IStockEventDataBack[]>>>;
 
 }
 
@@ -82,7 +82,7 @@ export class FinancialAssistantAppStockEventController implements IFinancialAssi
                 let events = backResult.Data.Data.map(x => new StockEvent().FillByIStockEventDataBack(x));
                 let dt = new LoadStockEventForProjectActionDataType();
                 dt.Events = events;
-                dt.TotalCount=backResult.Data.CountTotal;
+                dt.TotalCount = backResult.Data.CountTotal;
                 dispatch(LoadStockEventForProjectActionCreator(dt));
             }
         };
@@ -109,18 +109,21 @@ export class FinancialAssistantAppStockEventController implements IFinancialAssi
         return backResult;
     }
 
-    GetEventsForStockAsync = async (portfolioId: number, stockId: number): Promise<ServerResult<IStockEventDataBack[]>> => {
+    GetEventsForStockAsync = async (portfolioId: number, stockId: number, pageSize: number, pageNumber: number): Promise<ServerResult<IDataBackWithCount<IStockEventDataBack[]>>> => {
         let data = {
             "PortfolioId": portfolioId,
             "StockId": stockId,
+            "PageSize": pageSize,
+            "Page": pageNumber,
         };
-        const backResult = await G_AjaxHelper.GoAjaxRequest<IStockEventDataBack[]>({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IDataBackWithCount<IStockEventDataBack[]>>({
             Data: data,
-            Type: ControllerHelper.GetHttp,
+            Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
             },
             FuncError: (xhr, status, error) => { },
             Url: `${G_PathToServer}${FinancialAssistantApiStockEventUrl}/get-events-for-stock`,
+            ContentType: 'body'
         });
 
         return backResult;

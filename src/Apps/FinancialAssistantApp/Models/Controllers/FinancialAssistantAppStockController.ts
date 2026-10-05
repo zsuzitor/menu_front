@@ -5,9 +5,10 @@ import { FinancialAssistantApiPortfolioUrl, FinancialAssistantApiStockUrl, Finan
 import { CreateStockRequest } from "../Entity/DTO/CreateStockRequest";
 import { IStockDataBack } from "../BackModels/IStockDataBack";
 import { Stock } from "../Entity/State/Stock";
-import { CreateCurrentStockHistoryActionCreator, CreateStockActionCreator, DeleteStockActionCreator, GetStockActionCreator, LoadCurrentStockActionCreator, LoadCurrentStockHistoryActionCreator, UpdateStockActionCreator } from "../Actions/StockActions";
+import { CreateCurrentStockHistoryActionCreator, CreateStockActionCreator, DeleteStockActionCreator, GetStockActionCreator, LoadCurrentStockActionCreator, LoadCurrentStockHistoryActionCreator, LoadCurrentStockHistoryActionDataType, UpdateStockActionCreator } from "../Actions/StockActions";
 import { IStockHistoryDataBack } from "../BackModels/IStockHistoryDataBack";
 import { StockHistory } from "../Entity/State/StockHistory";
+import { IDataBackWithCount } from "../BackModels/IDataBackWithCount";
 
 
 export interface IFinancialAssistantAppStockController {
@@ -22,7 +23,7 @@ export interface IFinancialAssistantAppStockController {
     GetCurrencyRedux: () => (dispatch: any, getState: any) => void;
     GetCurrencyAsync: () => Promise<ServerResult<IStockDataBack[]>>;
     GetByIdRedux: (id: number) => (dispatch: any, getState: any) => void;
-    GetHistoryRedux: (id: number) => (dispatch: any, getState: any) => void;
+    GetHistoryRedux: (id: number, pageSize: number, pageNumber: number) => (dispatch: any, getState: any) => void;
     CreateHistoryRedux: (req: StockHistory) => (dispatch: any, getState: any) => void;
 }
 
@@ -311,33 +312,38 @@ export class FinancialAssistantAppStockController implements IFinancialAssistant
 
 
 
-    GetHistoryRedux = (id: number) => {
+    GetHistoryRedux = (id: number, pageSize: number, pageNumber: number) => {
         return async (dispatch: any, getState: any) => {
             this.preloader(true);
-            const backResult = await this.GetHistoryAsync(id);
+            const backResult = await this.GetHistoryAsync(id, pageSize, pageNumber);
             this.preloader(false);
 
             if (backResult.Error) {
                 return;
             }
             if (backResult.Data) {
-                let dt = backResult.Data.map(x => new StockHistory().FillByIStockHistoryDataBack(x));
+                let dt = new LoadCurrentStockHistoryActionDataType();
+                dt.History = backResult.Data.Data.map(x => new StockHistory().FillByIStockHistoryDataBack(x));
+                dt.TotalCount = backResult.Data.CountTotal;
                 dispatch(LoadCurrentStockHistoryActionCreator(dt));
             }
         };
     }
 
-    GetHistoryAsync = async (id: number): Promise<ServerResult<IStockHistoryDataBack[]>> => {
+    GetHistoryAsync = async (id: number, pageSize: number, pageNumber: number): Promise<ServerResult<IDataBackWithCount<IStockHistoryDataBack[]>>> => {
         let data = {
-            "Id": id
+            "StockId": id,
+            "PageSize": pageSize,
+            "Page": pageNumber,
         };
-        const backResult = await G_AjaxHelper.GoAjaxRequest<IStockHistoryDataBack[]>({
+        const backResult = await G_AjaxHelper.GoAjaxRequest<IDataBackWithCount<IStockHistoryDataBack[]>>({
             Data: data,
-            Type: ControllerHelper.GetHttp,
+            Type: ControllerHelper.PostHttp,
             FuncSuccess: (xhr, status, jqXHR) => {
             },
             FuncError: (xhr, status, error) => { },
             Url: `${this.GetControllerApiUrl()}/get-history`,
+            ContentType: 'body'
         });
 
         return backResult;

@@ -13,6 +13,7 @@ import { StockEvent } from '../../Models/Entity/State/StockEvent';
 import { StockEventEnumToString } from '../../Models/Entity/State/Enum/StockEventEnum';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
 import Paggination from '../../../../components/Body/Paggination/Paggination';
+import { AlertData } from '../../../../Models/Entity/AlertData';
 
 
 
@@ -243,8 +244,20 @@ const StockDetail = (props: IStockDetailProps) => {
                     return <div key={x.Id} className='one-history-element'>
                         <div>{x.Date}</div>
                         <div>{x.Price} {x.CurrencyName}</div>
-                    </div>
+                        <div className='delete-history-button' onClick={() => {
+                            if (window.confirm('Удалить?')) {
+                                props.DeleteHistory(x.Id).then(x => {
+                                    if (x.Data?.Result) {
+                                        let alertFactory = new AlertData();
+                                        let alert = alertFactory.GetDefaultNotify("История удалена");
+                                        window.G_AddAbsoluteAlertToState(alert);
+                                    }
 
+                                })
+                            }
+
+                        }}>Удалить историю</div>
+                    </div>
                 })}
             </div>
         </div>

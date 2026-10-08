@@ -25,6 +25,7 @@ export interface IFinancialAssistantAppStockController {
     GetByIdRedux: (id: number) => (dispatch: any, getState: any) => void;
     GetHistoryRedux: (id: number, pageSize: number, pageNumber: number) => (dispatch: any, getState: any) => void;
     CreateHistoryRedux: (req: StockHistory) => (dispatch: any, getState: any) => void;
+    DeleteHstoryAsync: (id: number) => Promise<ServerResult<BoolResultBackNew>>;
 }
 
 
@@ -385,6 +386,26 @@ export class FinancialAssistantAppStockController implements IFinancialAssistant
 
         return backResult;
     }
+
+
+
+    DeleteHstoryAsync = async (id: number): Promise<ServerResult<BoolResultBackNew>> => {
+        let data = {
+            "Id": id
+        };
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
+            Data: data,
+            Type: ControllerHelper.DeleteHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: `${this.GetControllerApiUrl()}/delete-history`,
+            ContentType: 'body'
+        });
+
+        return backResult;
+    }
+
 
 
 

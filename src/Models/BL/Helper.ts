@@ -36,6 +36,12 @@ export class Helper {
         return newDate;
     };
 
+    GetDateWithoutSeconds = (date: Date): Date => {
+        const newDate = new Date(date);
+        newDate.setSeconds(0, 0);
+        return newDate;
+    };
+
 
 
     MinutesToHours1(minutes: number): { h: number, m: number } {

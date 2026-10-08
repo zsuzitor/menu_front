@@ -8,6 +8,7 @@ import { ServerResult } from "../../../../Models/AjaxLogic";
 import { IStockDataBack } from "../../Models/BackModels/IStockDataBack";
 import { IStockEventDataBack } from "../../Models/BackModels/IStockEventDataBack";
 import { IDataBackWithCount } from "../../Models/BackModels/IDataBackWithCount";
+import { BoolResultBackNew } from "../../../../Models/BackModel/BoolResultBack";
 
 
 
@@ -31,6 +32,7 @@ interface IStockDetailDispatchToProps {
     SetCurrentStockId: (id: number) => void;
     Update: (stock: CreateStockRequest) => void;
     GetDetail: (id: number) => void;
+    DeleteHistory: (id: number) => Promise<ServerResult<BoolResultBackNew>>;
     ClearCurrentStock: () => void;
     GetHistory: (id: number, pageSize: number, pageNumber: number) => void;
     CreateHistory: (req: StockHistory) => void;
@@ -98,6 +100,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: IStockDetailOwnProps) => {
 
     res.SetHistoryPageNumber = (num: number) => {
         dispatch(SetCurrentStockHistoryPageActionCreator(num));
+    };
+
+    res.DeleteHistory = (id: number) => {
+        return window.G_FinancialAssistantAppStockController.DeleteHstoryAsync(id);
     };
 
     return res;

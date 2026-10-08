@@ -5,6 +5,7 @@ import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import RouteBuilder from '../../Models/BL/RouteBuilder';
 import { StockEventEnum, StockEventEnumToString } from '../../Models/Entity/State/Enum/StockEventEnum';
 import Paggination from '../../../../components/Body/Paggination/Paggination';
+import { AlertData } from '../../../../Models/Entity/AlertData';
 
 
 
@@ -73,7 +74,20 @@ const PortfolioEvents = (props: IPortfolioEventsProps) => {
             {props.Events.map(x => {
                 let typeStr = new StockEventEnumToString().ToString(x.Type);
                 return <div key={x.Id} className='one-event'>
-                    {x.Date} - {typeStr} - {x.Count} шт {x.StockName} по цене {x.Price} - {x.CurrencyName}
+                    <div>{x.Date} - {typeStr} - {x.Count} шт {x.StockName} по цене {x.Price} - {x.CurrencyName}</div>
+                    <div className='delete-event-button' onClick={() => {
+                        if (window.confirm('Удалить?')) {
+                            props.DeleteEvent(x.Id).then(x => {
+                                if (x.Data?.Result) {
+                                    let alertFactory = new AlertData();
+                                    let alert = alertFactory.GetDefaultNotify("Событие удалено");
+                                    window.G_AddAbsoluteAlertToState(alert);
+                                }
+
+                            })
+                        }
+
+                    }}>Удалить историю</div>
                 </div>
 
             })}

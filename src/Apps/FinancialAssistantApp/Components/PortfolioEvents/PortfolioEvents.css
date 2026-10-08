@@ -4,6 +4,11 @@
     border: 1px solid cadetblue;
 }
 
+
+.portfolio-events .delete-event-button {
+    cursor: pointer;
+}
+
 .portfolio-events .events-list {
     display: flex;
     justify-content: flex-start;

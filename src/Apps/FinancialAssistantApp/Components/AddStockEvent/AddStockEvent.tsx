@@ -161,10 +161,10 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                     <option value={`${+StockEventEnum.Dividends}`}>{new StockEventEnumToString().ToString(StockEventEnum.Dividends)}</option>
                     <option value={`${+StockEventEnum.Sell}`}>{new StockEventEnumToString().ToString(StockEventEnum.Sell)}</option>
                     <option value={`${+StockEventEnum.CountChange}`}>{new StockEventEnumToString().ToString(StockEventEnum.CountChange)}</option>
-                    {props.StockId ? <></> : <>
-                        <option value={`${+StockEventEnum.WithdrawalCash}`}>{new StockEventEnumToString().ToString(StockEventEnum.WithdrawalCash)}</option>
-                        <option value={`${+StockEventEnum.CashReplenishment}`}>{new StockEventEnumToString().ToString(StockEventEnum.CashReplenishment)}</option>
-                    </>}
+                    {/* {props.StockId ? <></> : <> */}
+                    <option value={`${+StockEventEnum.WithdrawalCash}`}>{new StockEventEnumToString().ToString(StockEventEnum.WithdrawalCash)}</option>
+                    <option value={`${+StockEventEnum.CashReplenishment}`}>{new StockEventEnumToString().ToString(StockEventEnum.CashReplenishment)}</option>
+                    {/* </>} */}
 
                 </select>
                 <br />
@@ -254,10 +254,10 @@ const AddStockEvent = (props: IAddStockEventProps) => {
                     onChange={(e) => {
                         if (e.target.value) {
                             let dt = new Date(e.target.value);
-                            setStockEventDate(new Helper().GetDateWithoutTime(dt));
+                            setStockEventDate(new Helper().GetDateWithoutSeconds(dt));
                         }
                         else {
-                            setStockEventDate(new Helper().GetDateWithoutTime(new Date()));
+                            setStockEventDate(new Helper().GetDateWithoutSeconds(new Date()));
                         }
 
                     }}></input>

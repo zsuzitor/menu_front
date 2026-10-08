@@ -5,6 +5,11 @@
     justify-content: space-between;
 }
 
+
+.stock-block-history .delete-history-button {
+    cursor: pointer;
+}
+
 .stock-page .one-event-element {
     display: flex;
     flex-direction: row;

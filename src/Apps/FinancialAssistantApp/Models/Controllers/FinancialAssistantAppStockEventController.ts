@@ -15,7 +15,7 @@ export interface IFinancialAssistantAppStockEventController {
     CreateAsync: (req: CreateStockEventRequest) => Promise<ServerResult<IStockEventDataBack>>;
     GetEventsRedux: (portfolioId: number, pageSize: number, page: number, type: StockEventEnum | null) => void;
     GetEventsForStockAsync: (portfolioId: number, stockId: number, pageSize: number, pageNumber: number) => Promise<ServerResult<IDataBackWithCount<IStockEventDataBack[]>>>;
-
+    DeleteAsync: (id: number) => Promise<ServerResult<BoolResultBackNew>>;
 }
 
 
@@ -129,6 +129,24 @@ export class FinancialAssistantAppStockEventController implements IFinancialAssi
         return backResult;
     }
 
+
+    DeleteAsync = async (id: number): Promise<ServerResult<BoolResultBackNew>> => {
+        let data = {
+            "Id": id,
+            "Force": false,
+        };
+        const backResult = await G_AjaxHelper.GoAjaxRequest<BoolResultBackNew>({
+            Data: data,
+            Type: ControllerHelper.DeleteHttp,
+            FuncSuccess: (xhr, status, jqXHR) => {
+            },
+            FuncError: (xhr, status, error) => { },
+            Url: `${G_PathToServer}${FinancialAssistantApiStockEventUrl}/delete`,
+            ContentType: 'body'
+        });
+
+        return backResult;
+    }
 
 
     preloader(show: boolean) {

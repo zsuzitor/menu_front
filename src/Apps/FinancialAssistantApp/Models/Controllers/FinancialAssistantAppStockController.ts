@@ -58,7 +58,7 @@ export class FinancialAssistantAppStockController implements IFinancialAssistant
             FuncSuccess: (xhr, status, jqXHR) => {
             },
             FuncError: (xhr, status, error) => { },
-            Url: `${this.GetControllerApiUrl()}/update-global`
+            Url: `${this.GetControllerApiUrl()}/fill-all-stock-history`
         });
 
         return backResult;

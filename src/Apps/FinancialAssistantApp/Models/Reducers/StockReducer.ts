@@ -40,6 +40,13 @@ export function FinancialAssistantStockReducer(state: AppState = new AppState(),
                     dt.IsGlobal = payload.IsGlobal;
                 }
 
+                if (newState.FinancialAssistantApp.CurrentStock?.Id == payload.Id) {
+                    newState.FinancialAssistantApp.CurrentStock.Name = payload.Name;
+                    newState.FinancialAssistantApp.CurrentStock.Code = payload.Code;
+                    newState.FinancialAssistantApp.CurrentStock.Type = payload.Type;
+                    newState.FinancialAssistantApp.CurrentStock.IsGlobal = payload.IsGlobal;
+                }
+
                 return newState;
             }
 

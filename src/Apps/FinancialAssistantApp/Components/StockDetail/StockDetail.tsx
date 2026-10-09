@@ -14,6 +14,7 @@ import { StockEventEnumToString } from '../../Models/Entity/State/Enum/StockEven
 import RouteBuilder from '../../Models/BL/RouteBuilder';
 import Paggination from '../../../../components/Body/Paggination/Paggination';
 import { AlertData } from '../../../../Models/Entity/AlertData';
+import { CreateStockRequest } from '../../Models/Entity/DTO/CreateStockRequest';
 
 
 
@@ -37,10 +38,15 @@ const StockDetail = (props: IStockDetailProps) => {
 
 
     const [showNewEventWindow, setShowNewEventWindow] = useState(false);
+    const [showEditWindow, setShowEditWindow] = useState(false);
 
     const [events, setEvents] = useState<StockEvent[]>([]);
     const [eventsPage, setEventsPage] = useState<number>(1);
     const [eventsTotal, setEventsTotal] = useState<number>(-1);
+
+
+    const [editStockName, setEditStockName] = useState(props.Stock?.Name || '');
+    const [editStockCode, setEditStockCode] = useState(props.Stock?.Code || '');
 
 
     const pageSize = 10;
@@ -49,7 +55,7 @@ const StockDetail = (props: IStockDetailProps) => {
 
     useEffect(() => {
         props.GetCurrency()
-            .then(br => setStockCurrency(br.Data.map(x => new Stock().FillByIStockDataBack(x))));
+            .then(br => setStockCurrency(br.Data!.map(x => new Stock().FillByIStockDataBack(x))));
 
 
         return () => {
@@ -69,6 +75,11 @@ const StockDetail = (props: IStockDetailProps) => {
 
     }, [props.StockId]);
 
+    useEffect(() => {
+        setEditStockName(props.Stock?.Name || '');
+        setEditStockCode(props.Stock?.Code || '');
+
+    }, [props.Stock?.Name, props.Stock?.Code]);
 
     useEffect(() => {
         if (props.StockId > 0) {
@@ -144,9 +155,42 @@ const StockDetail = (props: IStockDetailProps) => {
                 IsHeightWindow={false}
                 Title='Новое событие'
                 InnerContent={() => <AddStockEvent
-                    EventAdded={() => { LoadEvents(props.StockId, props.PortfolioId, eventsPage) }}
+                    EventAdded={() => { LoadEvents(props.StockId, props.PortfolioId!, eventsPage) }}
                     StockId={props.Stock!.Id}
                 />}></AdditionalWindow> : <></>
+        }
+
+        {
+            showEditWindow ? <AdditionalWindow CloseWindow={() => {
+                setEditStockName(props.Stock?.Name || '');
+                setEditStockCode(props.Stock?.Code || '');
+                setShowEditWindow(false);
+            }}
+                IsHeightWindow={false}
+                Title='Изменение Stock'
+                InnerContent={() => <>
+                    <input type='text' className='stock-name-input'
+                        placeholder='Введите название'
+                        value={editStockName}
+                        onChange={e => setEditStockName(e.target.value)}></input>
+                        <br/>
+                    <input type='text' className='stock-code-input'
+                        placeholder='Введите код'
+                        value={editStockCode}
+                        onChange={e => setEditStockCode(e.target.value)}></input>
+                        <br/>
+                    <button onClick={() => {
+                        let newData = new CreateStockRequest();
+                        newData.Type = props.Stock!.Type;
+                        newData.Id = props.Stock!.Id;
+                        newData.IsGlobal = props.Stock!.IsGlobal;
+                        newData.Code = editStockCode;
+                        newData.Name = editStockName;
+                        props.Update(newData)
+
+                    }}>Сохранить изменения</button>
+                </>}></AdditionalWindow> : <></>
+
         }
 
         <div>
@@ -160,6 +204,7 @@ const StockDetail = (props: IStockDetailProps) => {
             <div className='stock-name'>{props.Stock.Code}-{props.Stock.Name}-{props.Stock.Id}</div>
         </div>
         <div className='stock-block'>
+            <button onClick={() => setShowEditWindow(true)}>Изменить</button>
             <div className='stock-block-new'>
                 <span>Добавить запись истории</span>
                 <br />
@@ -188,7 +233,7 @@ const StockDetail = (props: IStockDetailProps) => {
                     CancelEvent={() => { }}
                     SaveEvent={(id) => {
                         setStockHistoryCurrencyId(id);
-                        setStockCurrencyName(stockCurrency.find(x => x.Id === id).Name);
+                        setStockCurrencyName(stockCurrency.find(x => x.Id === id)!.Name);
                         // setStockCurrency(stockCurrency.filter(x => x.Id === id));
                         return true;
                     }}

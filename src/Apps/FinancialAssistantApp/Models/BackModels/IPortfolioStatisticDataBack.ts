@@ -1,7 +1,7 @@
 export interface IPortfolioStatisticCurrencyDataBack {
-    CurrencyId: number;
-    CurrencyName: string;
-    CurrencySum: number;
+    StockId: number;
+    StockName: string;
+    Sum: number;
 }
 
 export interface IPortfolioStatisticDataBack {
@@ -14,6 +14,7 @@ export interface IPortfolioStatisticDataBack {
     SumNow: number;
     SumOnStartPeriod: number;
     SumOnEndPeriod: number;
+    TotalStockCount:  IPortfolioStatisticCurrencyDataBack[];
 }
 
 // interface DictionaryNumber<T> {

@@ -172,17 +172,24 @@ const StatisticPage = (props: IStatisticPageProps) => {
             <div>Сумма на  {formatDateToInput(dateEnd)} {statistic.SumOnEndPeriod} {currencyName}</div>
 
             <div>
+                сумма Stock по выбранным портфелям
+                <div>
+                    {statistic.TotalStockCount.map(x => <div key={x.StockId}>{x.Sum} {x.StockName}</div>)}
+                </div>
+            </div>
+
+            <div>
                 Пополнений в запрошенной валюте(конвертация всех событий) {statistic.CashReplenishmentSum} {currencyName}
                 <div>
                     Пополнений по валютам
-                    {statistic.ReplenishmentsByCurrency.map(x => <div key={x.CurrencyId}>{x.CurrencySum} {x.CurrencyName}</div>)}
+                    {statistic.ReplenishmentsByCurrency.map(x => <div key={x.StockId}>{x.Sum} {x.StockName}</div>)}
                 </div>
             </div>
             <div>
                 Выводов в запрошенной валюте(конвертация всех событий) {statistic.WithdrawalCashSum} {currencyName}
                 <div>
                     Выводов по валютам
-                    {statistic.WithdrawalCashByCurrency.map(x => <div key={x.CurrencyId}>{x.CurrencySum} {x.CurrencyName}</div>)}
+                    {statistic.WithdrawalCashByCurrency.map(x => <div key={x.StockId}>{x.Sum} {x.StockName}</div>)}
                 </div>
             </div>
 
@@ -190,7 +197,7 @@ const StatisticPage = (props: IStatisticPageProps) => {
                 Дивиденды в запрошенной валюте(конвертация всех событий) {statistic.DividendsCashSum} {currencyName}
                 <div>
                     Дивиденды по валютам
-                    {statistic.DividendsCashByCurrency.map(x => <div key={x.CurrencyId}>{x.CurrencySum} {x.CurrencyName}</div>)}
+                    {statistic.DividendsCashByCurrency.map(x => <div key={x.StockId}>{x.Sum} {x.StockName}</div>)}
                 </div>
             </div>
         </> : <></>}

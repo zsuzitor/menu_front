@@ -200,6 +200,13 @@ const StatisticPage = (props: IStatisticPageProps) => {
                     {statistic.DividendsCashByCurrency.map(x => <div key={x.StockId}>{x.Sum} {x.StockName}</div>)}
                 </div>
             </div>
+
+            <div>
+                Разбивка по периодам
+                <div>
+                    {statistic.PeriodSums.map(x => <div key={x.Sum}>{x.Sum} {x.Date}</div>)}
+                </div>
+            </div>
         </> : <></>}
 
 

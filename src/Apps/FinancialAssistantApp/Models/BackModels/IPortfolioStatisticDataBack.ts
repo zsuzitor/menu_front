@@ -4,17 +4,23 @@ export interface IPortfolioStatisticCurrencyDataBack {
     Sum: number;
 }
 
+export interface IPortfolioStatisticPeriodSumDataBack {
+    Date: string;
+    Sum: number;
+}
+
 export interface IPortfolioStatisticDataBack {
     CashReplenishmentSum: number;
     ReplenishmentsByCurrency: IPortfolioStatisticCurrencyDataBack[];
     WithdrawalCashSum: number;
     WithdrawalCashByCurrency: IPortfolioStatisticCurrencyDataBack[];
     DividendsCashSum: number;
-    DividendsCashByCurrency:  IPortfolioStatisticCurrencyDataBack[];
+    DividendsCashByCurrency: IPortfolioStatisticCurrencyDataBack[];
     SumNow: number;
     SumOnStartPeriod: number;
     SumOnEndPeriod: number;
-    TotalStockCount:  IPortfolioStatisticCurrencyDataBack[];
+    TotalStockCount: IPortfolioStatisticCurrencyDataBack[];
+    PeriodSums: IPortfolioStatisticPeriodSumDataBack[];
 }
 
 // interface DictionaryNumber<T> {
